@@ -1,10 +1,12 @@
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Menu, MenuItem } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Menu, MenuItem, Paper } from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react';
 
+import HoverPopover from '../HoverPopover';
 import type { IHeaderMenuItem, IMenuItemProps } from './LayoutTopbar';
 
 const HeaderMenuItem: React.FC<IMenuItemProps> = ({ item, isMobile }) => {
@@ -56,7 +58,62 @@ const HeaderMenuItem: React.FC<IMenuItemProps> = ({ item, isMobile }) => {
         </Accordion>
       ) : (
         <>
-          <Button
+          <HoverPopover
+            id="loan-dti-popover"
+            render={
+              <Button
+                id="basic-button"
+                aria-controls={open ? 'basic-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+                onClick={handleClick}
+                disableRipple
+                endIcon={<KeyboardArrowDownIcon />}
+              >
+                {item.label}
+              </Button>
+            }
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'center',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'center',
+            }}
+          >
+            {item?.menu?.map((mItem: IHeaderMenuItem) => (
+              <MenuItem
+                key={mItem.path}
+                onClick={handleClose}
+                sx={{
+                  px: '16px',
+                  py: '12px',
+                  fontSize: '14px',
+                  fontWeight: 400,
+                  textAlign: 'center',
+                  transition: 'all 0.2s linear',
+                  svg: {
+                    mr: '2px',
+                  },
+                  '&:hover': {
+                    color: 'primary.main',
+                    svg: {
+                      ml: '2px',
+                      mr: 0,
+                      color: 'primary.main',
+                    },
+                  },
+                }}
+              >
+                <ChevronRightIcon
+                  sx={{ mr: '4px', color: 'grey.800', fontSize: '16px', transition: 'all 0.2s linear' }}
+                />
+                {mItem.label}
+              </MenuItem>
+            ))}
+          </HoverPopover>
+          {/* <Button
             id="basic-button"
             aria-controls={open ? 'basic-menu' : undefined}
             aria-haspopup="true"
@@ -94,7 +151,7 @@ const HeaderMenuItem: React.FC<IMenuItemProps> = ({ item, isMobile }) => {
                 {mItem.label}
               </MenuItem>
             ))}
-          </Menu>
+          </Menu> */}
         </>
       )}
     </Box>

@@ -1,4 +1,4 @@
-import { IHeaderMenuItem } from '@/components/home/Header/Header.types';
+import { IHeaderMenuItem } from '@/components/common/Layout/LayoutTopbar';
 
 export const HEADER_MENU: IHeaderMenuItem[] = [
   // {
@@ -10,7 +10,23 @@ export const HEADER_MENU: IHeaderMenuItem[] = [
     path: '/',
     menu: [
       {
-        label: 'Who we are',
+        label: 'JNVPJAA',
+        path: '',
+      },
+      {
+        label: 'Vision and Mission',
+        path: '',
+      },
+      {
+        label: 'Message from President',
+        path: '',
+      },
+      {
+        label: 'Message from Secretary',
+        path: '',
+      },
+      {
+        label: 'Message from Principal',
         path: '',
       },
     ],

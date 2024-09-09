@@ -17,6 +17,8 @@ import {
 import Image from 'next/image';
 import React from 'react';
 
+import Logo from '@/components/common/Logo';
+
 import HeaderMenuItem from './HeaderMenuItem';
 
 export interface IMenuItemProps {
@@ -61,12 +63,7 @@ const LayoutTopbar: React.FC = () => {
             px: '0 !important',
           }}
         >
-          <Image
-            src="/assets/branding/logo-full.png"
-            width={isMobile ? 260 : 390}
-            height={isMobile ? 40 : 60}
-            alt="logo"
-          />
+          <Logo width={isMobile ? 260 : 390} height={isMobile ? 40 : 60} />
           <Box display={{ xs: 'flex', md: 'none' }} ml="auto">
             <IconButton
               size="large"

@@ -1,3 +1,4 @@
+import { Box } from '@mui/material';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import Head from 'next/head';
@@ -11,8 +12,8 @@ const LayoutModule: React.FC<Props> = (props) => {
   const {
     children,
     title,
-    disableTopbar,
-    disableFooter,
+    disableTopbar = false,
+    disableFooter = false,
     disableNav,
     disableSearch,
     appBarProps = {},
@@ -29,22 +30,26 @@ const LayoutModule: React.FC<Props> = (props) => {
       <Head>
         <title>{title || 'Untitled'}</title>
       </Head>
-      {!disableTopbar && <LayoutTopbar />}
-      <Container
-        sx={{
-          pt: {
-            xs: disableCover ? 6 : 0,
-            md: disableCover ? 8 : 0,
-          },
-          bgcolor: 'background.paper',
-        }}
-        maxWidth={false}
-        disableGutters
-        {...containerProps}
-      >
-        {children}
-      </Container>
-      {!disableFooter && <LayoutFooter />}
+      <Box minHeight="100vh" display="flex" flexDirection="column" justifyContent="space-between">
+        {!disableTopbar && <LayoutTopbar />}
+
+        <Container
+          sx={{
+            pt: {
+              xs: disableCover ? 6 : 0,
+              md: disableCover ? 8 : 0,
+            },
+            flexGrow: 1,
+            bgcolor: 'background.paper',
+          }}
+          maxWidth={false}
+          disableGutters
+          {...containerProps}
+        >
+          {children}
+        </Container>
+        {!disableFooter && <LayoutFooter />}
+      </Box>
     </>
   );
 };

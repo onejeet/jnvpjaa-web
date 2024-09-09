@@ -1,6 +1,6 @@
 const typography = {
   fontFamily: [
-    'AktivGrotesk',
+    'Ubuntu',
     'BlinkMacSystemFont',
     '"Segoe UI"',
     'Roboto',
