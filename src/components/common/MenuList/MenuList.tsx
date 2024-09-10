@@ -1,3 +1,5 @@
+'use client';
+
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
@@ -6,6 +8,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
+import dynamic from 'next/dynamic';
 import NextLink from 'next/link';
 import React from 'react';
 
@@ -82,4 +85,6 @@ const MenuList: React.FC<MenuListProps> = ({ title, items, offsetTop }) => (
   </Box>
 );
 
-export default MenuList;
+export default dynamic(() => Promise.resolve(MenuList), {
+  ssr: false,
+});

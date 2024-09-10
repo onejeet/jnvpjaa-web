@@ -42,7 +42,7 @@ const LayoutTopbar: React.FC = () => {
       position="sticky"
       elevation={0}
       sx={{
-        backgroundColor: 'transparent',
+        backgroundColor: 'background.paper',
         borderBottom: '0.5px solid',
         borderColor: (theme: Theme) => alpha(theme.palette.primary.main, 0.4),
         p: 0,
