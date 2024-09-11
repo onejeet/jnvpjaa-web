@@ -36,7 +36,7 @@ const About = () => {
           About JNVPJAA
         </MuiLink>
       </Breadcrumbs>
-      <Box component={Paper} p={2} my={2} display="flex" alignItems="center">
+      <Box component={Paper} px={2} py={3} my={2} display="flex" alignItems="center">
         <Box>
           <Typography variant="h1" mb={3}>
             Who We Are

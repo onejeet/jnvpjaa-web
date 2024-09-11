@@ -10,6 +10,7 @@ import {
   Container,
   Drawer,
   IconButton,
+  Link,
   Toolbar,
   useMediaQuery,
   useTheme,
@@ -84,9 +85,16 @@ const LayoutTopbar: React.FC = () => {
             {HEADER_MENU.map((item: IHeaderMenuItem) => (
               <HeaderMenuItem key={item.label} item={item} />
             ))}
-            <Button variant="outlined" sx={{ display: { xs: 'none', md: 'block' }, ml: '8px', whiteSpace: 'nowrap' }}>
-              Contact Us
-            </Button>
+            <NextLink href="/contact-us" passHref style={{ textDecoration: 'none' }}>
+              <Link sx={{ textDecoration: 'none' }}>
+                <Button
+                  variant="outlined"
+                  sx={{ display: { xs: 'none', md: 'block' }, ml: '8px', whiteSpace: 'nowrap' }}
+                >
+                  Contact Us
+                </Button>
+              </Link>
+            </NextLink>
           </Box>
         </Toolbar>
       </Container>
