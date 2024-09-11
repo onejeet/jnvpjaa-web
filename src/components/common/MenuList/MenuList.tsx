@@ -25,7 +25,7 @@ const MenuList: React.FC<MenuListProps> = ({ title, items, offsetTop }) => (
       {items?.length &&
         items.map((item, index) => (
           <ListItem key={`menu-list-${item.label}-${index}`} disablePadding sx={{ mb: '8px' }}>
-            <NextLink href={item?.href} as={item?.href} passHref style={{ textDecoration: 'none' }}>
+            <NextLink href={item?.path || '/'} as={item?.path} passHref style={{ textDecoration: 'none' }}>
               <Link sx={{ textDecoration: 'none' }}>
                 <ListItemButton
                   sx={{
@@ -33,7 +33,7 @@ const MenuList: React.FC<MenuListProps> = ({ title, items, offsetTop }) => (
                     bgcolor: 'transparent !important',
                     textDecoration: 'none',
                   }}
-                  href={item.href}
+                  href={item.path}
                 >
                   <ListItemText
                     primary={

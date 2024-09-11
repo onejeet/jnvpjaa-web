@@ -4,8 +4,9 @@ import { Box, Divider, Typography } from '@mui/material';
 
 const Hero = () => {
   return (
-    <Box>
+    <Box width="100%">
       <Box
+        width="100%"
         position="relative"
         minHeight={500}
         sx={{
@@ -53,7 +54,7 @@ const Hero = () => {
             JNV Paota Almuni Network
           </Typography> */}
         </Box>
-        <Box sx={{ position: 'absolute', bottom: '20px' }}>
+        <Box sx={{ position: 'absolute', bottom: '16px' }}>
           <Typography
             display="flex"
             alignItems="center"

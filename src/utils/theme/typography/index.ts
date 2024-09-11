@@ -1,6 +1,6 @@
 const typography = {
   fontFamily: [
-    'Ubuntu',
+    'DM Sans',
     'BlinkMacSystemFont',
     '"Segoe UI"',
     'Roboto',
@@ -12,14 +12,14 @@ const typography = {
     '"Segoe UI Symbol"',
   ].join(','),
   h1: {
-    fontSize: '20px',
-    lineHeight: '26px',
+    fontSize: '28px',
+    lineHeight: '32px',
     fontWeight: 500,
     letterSpacing: '-0.24%',
   },
   h2: {
-    fontSize: '18px',
-    lineHeight: '24px',
+    fontSize: '24px',
+    lineHeight: '28px',
     fontWeight: 500,
     letterSpacing: '-0.25%',
   },
@@ -30,13 +30,13 @@ const typography = {
     letterSpacing: '-0.25%',
   },
   h4: {
-    fontSize: '15px',
+    fontSize: '16px',
     lineHeight: '20px',
     fontWeight: 500,
     letterSpacing: '-0.24%',
   },
   h5: {
-    fontSize: '14px',
+    fontSize: '16px',
     lineHeight: '20px',
     fontWeight: 500,
     letterSpacing: '-0.24%',
@@ -54,8 +54,8 @@ const typography = {
     letterSpacing: '-0.24%',
   },
   body1: {
-    fontSize: '14px',
-    lineHeight: '20px',
+    fontSize: '16px',
+    lineHeight: '24px',
     fontWeight: 400,
     letterSpacing: '-0.24%',
   },

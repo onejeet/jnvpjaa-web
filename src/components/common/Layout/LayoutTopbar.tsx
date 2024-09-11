@@ -15,6 +15,7 @@ import {
   useTheme,
 } from '@mui/material';
 import Image from 'next/image';
+import NextLink from 'next/link';
 import React from 'react';
 
 import Logo from '@/components/common/Logo';
@@ -63,7 +64,9 @@ const LayoutTopbar: React.FC = () => {
             px: '0 !important',
           }}
         >
-          <Logo width={isMobile ? 260 : 390} height={isMobile ? 40 : 60} />
+          <NextLink href="/">
+            <Logo width={isMobile ? 260 : 390} height={isMobile ? 40 : 60} />
+          </NextLink>
           <Box display={{ xs: 'flex', md: 'none' }} ml="auto">
             <IconButton
               size="large"

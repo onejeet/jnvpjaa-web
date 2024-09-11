@@ -3,6 +3,9 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Menu, MenuItem, Paper } from '@mui/material';
+import Link from '@mui/material/Link';
+import dynamic from 'next/dynamic';
+import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -83,34 +86,45 @@ const HeaderMenuItem: React.FC<IMenuItemProps> = ({ item, isMobile }) => {
             }}
           >
             {item?.menu?.map((mItem: IHeaderMenuItem) => (
-              <MenuItem
-                key={mItem.path}
-                onClick={handleClose}
-                sx={{
-                  px: '16px',
-                  py: '12px',
-                  fontSize: '14px',
-                  fontWeight: 400,
-                  textAlign: 'center',
-                  transition: 'all 0.2s linear',
-                  svg: {
-                    mr: '2px',
-                  },
-                  '&:hover': {
-                    color: 'primary.main',
-                    svg: {
-                      ml: '2px',
-                      mr: 0,
-                      color: 'primary.main',
-                    },
-                  },
-                }}
+              <NextLink
+                key={`menu-${mItem?.path}`}
+                href={mItem?.path || '/'}
+                as={mItem?.path}
+                passHref
+                style={{ textDecoration: 'none' }}
               >
-                <ChevronRightIcon
-                  sx={{ mr: '4px', color: 'grey.800', fontSize: '16px', transition: 'all 0.2s linear' }}
-                />
-                {mItem.label}
-              </MenuItem>
+                <Link sx={{ textDecoration: 'none' }}>
+                  <MenuItem
+                    key={mItem.path}
+                    onClick={handleClose}
+                    sx={{
+                      px: '16px',
+                      py: '12px',
+                      fontSize: '14px',
+                      fontWeight: 400,
+                      textAlign: 'center',
+                      color: 'grey.900',
+                      transition: 'all 0.2s linear',
+                      svg: {
+                        mr: '2px',
+                      },
+                      '&:hover': {
+                        color: 'primary.main',
+                        svg: {
+                          ml: '2px',
+                          mr: 0,
+                          color: 'primary.main',
+                        },
+                      },
+                    }}
+                  >
+                    <ChevronRightIcon
+                      sx={{ mr: '4px', color: 'grey.800', fontSize: '16px', transition: 'all 0.2s linear' }}
+                    />
+                    {mItem.label}
+                  </MenuItem>
+                </Link>
+              </NextLink>
             ))}
           </HoverPopover>
           {/* <Button
@@ -158,4 +172,6 @@ const HeaderMenuItem: React.FC<IMenuItemProps> = ({ item, isMobile }) => {
   );
 };
 
-export default HeaderMenuItem;
+export default dynamic(() => Promise.resolve(HeaderMenuItem), {
+  ssr: false,
+});

@@ -7,27 +7,27 @@ export const HEADER_MENU: IHeaderMenuItem[] = [
   // },
   {
     label: 'About Us',
-    path: '/',
+    path: '/about',
     menu: [
       {
-        label: 'JNVPJAA',
-        path: '',
+        label: 'About JNVPJAA',
+        path: '/about',
       },
       {
         label: 'Vision and Mission',
-        path: '',
+        path: '/vision',
       },
       {
         label: 'Message from President',
-        path: '',
+        path: '/president-message',
       },
       {
         label: 'Message from Secretary',
-        path: '',
+        path: '/secretary-message',
       },
       {
         label: 'Message from Principal',
-        path: '',
+        path: '/principal-message',
       },
     ],
   },
@@ -36,18 +36,30 @@ export const HEADER_MENU: IHeaderMenuItem[] = [
     path: '/',
     menu: [
       {
-        label: 'Who we are',
-        path: '',
+        label: 'Executive-Committee',
+        path: '/executive-committee',
+      },
+      {
+        label: 'Batch Coordinators',
+        path: '/batch-coordinators',
+      },
+      {
+        label: 'Bhamashah Pillars',
+        path: '/bhamashah-pillars',
       },
     ],
   },
   {
-    label: 'Resources',
-    path: '/',
+    label: 'Funds',
+    path: '/funds',
     menu: [
       {
-        label: 'Who we are',
-        path: '',
+        label: 'Donations',
+        path: '/donations',
+      },
+      {
+        label: 'Bhamashah Pillars',
+        path: '/bhamashah-pillars',
       },
     ],
   },
@@ -57,7 +69,7 @@ export const HEADER_MENU: IHeaderMenuItem[] = [
   //   menu: [
   //     {
   //       label: 'Who we are',
-  //       path: '',
+  //       path: '/',
   //     },
   //   ],
   // },

@@ -35,12 +35,14 @@ const LayoutModule: React.FC<Props> = (props) => {
 
         <Container
           sx={{
-            pt: {
-              xs: disableCover ? 6 : 0,
-              md: disableCover ? 8 : 0,
+            py: {
+              xs: disableCover ? 3 : 0,
+              md: disableCover ? 4 : 0,
             },
             flexGrow: 1,
             bgcolor: 'background.paper',
+            maxWidth: disableCover ? { xs: '97%', sm: '95%', md: '90%' } : '100%',
+            margin: disableCover ? 'auto' : undefined,
           }}
           maxWidth={false}
           disableGutters

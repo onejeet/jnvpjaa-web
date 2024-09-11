@@ -1,6 +1,6 @@
 export interface IMenuListItem {
   label: string;
-  href: string;
+  path: string;
 }
 export interface MenuListProps {
   title?: string;

@@ -1,8 +1,5 @@
-import FacebookIcon from '@mui/icons-material/Facebook';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import XIcon from '@mui/icons-material/X';
-import YouTubeIcon from '@mui/icons-material/YouTube';
+import { JNVPJAA_SOCIAL_MEDIA } from '@/constants/General.contants';
+import { getSocialMediaIcon } from '@/utils/helpers';
 import { IconButton, Link, Stack } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -17,52 +14,14 @@ import Logo from '@/components/common/Logo';
 
 import MenuList from '../MenuList';
 
-const items: Record<string, any>[] = [
-  {
-    name: 'facebook',
-    href: 'https://www.facebook.com/#/',
-  },
-  {
-    name: 'instagram',
-    href: 'https://www.instagram.com/#/',
-  },
-  {
-    name: 'twitter',
-    href: 'https://twitter.com/#',
-  },
-  {
-    name: 'linkedin',
-    href: 'https://www.linkedin.com/#',
-  },
-];
-
 const LayoutFooter: React.FC = () => {
-  const getIcon = (iconName: string) => {
-    switch (iconName) {
-      case 'facebook': {
-        return <FacebookIcon />;
-      }
-      case 'instagram': {
-        return <InstagramIcon />;
-      }
-      case 'twitter': {
-        return <XIcon sx={{ fontSize: 22 }} />;
-      }
-      case 'linkedin': {
-        return <LinkedInIcon />;
-      }
-      default: {
-        return <YouTubeIcon />;
-      }
-    }
-  };
-
   return (
     <Box
       sx={{
         flexGrow: 1,
         bgcolor: 'grey.300',
-        maxHeight: '392px',
+        maxHeight: '412px',
+        pb: '20px',
       }}
     >
       <Container sx={{ maxWidth: { xs: '98%', sm: '95%', md: '90%' }, margin: 'auto', p: '0 !important' }}>
@@ -97,23 +56,19 @@ const LayoutFooter: React.FC = () => {
             </Grid>
             <Grid item xs={12} sm={2.25} md={2.25} pt="25px">
               <MenuList
-                title="Quick links"
+                title="About"
                 items={[
                   {
                     label: 'Home',
-                    href: '/',
+                    path: '/',
                   },
                   {
-                    label: 'Features',
-                    href: '/features',
+                    label: 'Abou JVPJAA',
+                    path: '/about',
                   },
                   {
-                    label: 'Contact Us',
-                    href: '/contact-us',
-                  },
-                  {
-                    label: 'Pricing',
-                    href: '/pricing',
+                    label: 'Vision & Mission',
+                    path: '/vision',
                   },
                 ]}
               />
@@ -124,15 +79,15 @@ const LayoutFooter: React.FC = () => {
                 items={[
                   {
                     label: 'Blogs',
-                    href: '#',
+                    path: '#',
                   },
                   {
-                    label: 'About',
-                    href: '#',
+                    label: 'Important Links',
+                    path: '#',
                   },
                   {
-                    label: 'Help Center',
-                    href: '#',
+                    label: 'Directory',
+                    path: '#',
                   },
                 ]}
               />
@@ -143,15 +98,15 @@ const LayoutFooter: React.FC = () => {
                 items={[
                   {
                     label: 'Privacy policy',
-                    href: '/privacy_policy',
+                    path: '/privacy_policy',
                   },
                   {
                     label: 'Terms & conditions',
-                    href: '/terms_of_services',
+                    path: '/terms_condition',
                   },
                   {
                     label: 'Press Relations',
-                    href: '#',
+                    path: '#',
                   },
                 ]}
               />
@@ -160,7 +115,7 @@ const LayoutFooter: React.FC = () => {
               <Divider orientation="horizontal" sx={{ borderColor: '#D9D9D9', opacity: 1 }} />
             </Grid>
           </Grid>
-          <Grid container pb="20px" justifyContent="center" flexDirection="column" alignItems="center">
+          <Grid container justifyContent="center" flexDirection="column" alignItems="center">
             <Grid item xs={12}>
               <Typography
                 sx={{
@@ -176,9 +131,9 @@ const LayoutFooter: React.FC = () => {
             </Grid>
             {/* <Grid item xs={12} md={6} mt={{ xs: '20px' }}> */}
             <Grid item xs={12} display="flex" width="100%" justifyContent="center" mt={2}>
-              <Stack direction="row" spacing="16px">
-                {items?.map(({ href, name }: Record<string, any>, index: number) => (
-                  <Link key={`social-media-item-${index}`} href={href} target="_blank" color="inherit" title={name}>
+              <Stack direction="row" spacing="16px" alignItems="center">
+                {JNVPJAA_SOCIAL_MEDIA?.map(({ path, name }: Record<string, any>, index: number) => (
+                  <Link key={`social-media-item-${index}`} href={path} target="_blank" color="inherit" title={name}>
                     <IconButton
                       sx={{
                         bgcolor: 'transparent',
@@ -187,7 +142,7 @@ const LayoutFooter: React.FC = () => {
                       }}
                       aria-label={name}
                     >
-                      {getIcon(name)}
+                      {getSocialMediaIcon(name)}
                     </IconButton>
                   </Link>
                 ))}
