@@ -15,6 +15,7 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import NextLink from 'next/link';
 import React from 'react';
@@ -120,4 +121,7 @@ const LayoutTopbar: React.FC = () => {
     </AppBar>
   );
 };
-export default LayoutTopbar;
+
+export default dynamic(() => Promise.resolve(LayoutTopbar), {
+  ssr: false,
+});
