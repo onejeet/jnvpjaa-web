@@ -1,24 +1,22 @@
+import { IBhamashahPillar } from '@/containers/Organisation/BhamashahPillars';
+
 import { ProfileCardProps } from '@/components/common/ProfileCard/ProfileCard.types';
 
 export const EXEC_COMMITTEE: ProfileCardProps[] = [
   {
-    name: 'Dr Gaurav Kumar Chhaparwal',
+    name: 'Dr Gaurav K Chhaparwal',
     designation: 'President',
-    email: 'gaurav@jnvpjaa.com',
+    email: 'drgaurav489@gmail.com',
     batch: '2006',
-    profilePicture: 'https://vaave.s3.amazonaws.com/content/151554795_1717808034_Untitled.png',
+    profilePicture: '/assets/people/gaurav-2006.jpg',
     socialMedia: [
       {
         name: 'facebook',
-        url: 'htttps://facebook.com',
+        url: 'https://www.facebook.com/gauravv.k?mibextid=ZbWKwL',
       },
       {
-        name: 'twitter',
-        url: 'htttps://facebook.com',
-      },
-      {
-        name: 'linkedin',
-        url: 'htttps://facebook.com',
+        name: 'email',
+        url: 'mailto: drgaurav489@gmail.com',
       },
     ],
   },
@@ -208,6 +206,39 @@ export const JNVPJAA_SOCIAL_MEDIA: Record<string, any>[] = [
   {
     name: 'linkedin',
     path: 'https://www.linkedin.com/#',
+  },
+];
+
+export const BHAASHAH_PILLARS: IBhamashahPillar[] = [
+  {
+    name: 'Jitendra Dhariwal',
+    batch: '1994',
+    type: 'platinum',
+  },
+  {
+    name: 'Shiv Shankar Vijaya',
+    batch: '1994',
+    type: 'platinum',
+  },
+  {
+    name: 'Rajesh Kumar Rajoria',
+    batch: '1994',
+    type: 'silver',
+  },
+  {
+    name: 'Rajendra Meena',
+    batch: '1993',
+    type: 'silver',
+  },
+  {
+    name: 'Siyaram Meena',
+    batch: '1999',
+    type: 'silver',
+  },
+  {
+    name: 'Ravi Prakash Meena',
+    batch: '1994',
+    type: 'silver',
   },
 ];
 

@@ -1,11 +1,19 @@
 'use client';
 
-import { Breadcrumbs, Paper, Typography } from '@mui/material';
+import { BHAASHAH_PILLARS } from '@/constants/General.contants';
+import { Breadcrumbs, Divider, Grid, Paper, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import MuiLink from '@mui/material/Link';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import NextLink from 'next/link';
+
+import ProfileCard from '@/components/common/ProfileCard';
+import { ProfileCardProps } from '@/components/common/ProfileCard/ProfileCard.types';
+
+export interface IBhamashahPillar extends ProfileCardProps {
+  type: 'platinum' | 'gold' | 'silver';
+}
 
 const BhamashahPillars = () => {
   return (
@@ -53,62 +61,48 @@ const BhamashahPillars = () => {
             />
           </Box>
           <Typography color="grey.800" mt={2}>
-            {`JNVPJAA is an alumni association of ex-students who once studied at the cherished Jawahar Navodaya
-            Vidyalaya, Paota, Jaipur. The school, tucked away in the Paota village of Rajasthan's Jaipur district, is
-            among several hundred JNVs conceptualized, funded and managed by Navodaya Vidyalaya Samiti, a
-            semi-autonomous body under the aegis of federal government's Ministry of Human Resource Development. The
-            JNVs, one mandated for each district, are wonderful examples of state sponsorship of fully-residential
-            quality education at an unprecedented scale.`}
-          </Typography>
-          <Typography color="grey.800" mt={2}>
-            {`Ex-students who hail normally from one district have now gone places, both literally and figuratively. The
-            alumni had a burning desire to re-engage with their batch-mates, seniors and juniors but did not have a
-            platform. The efforts were largely individualistic & therefore sub-optimal. This institutional void led to
-            the genesis of the current alumni association which will anchor all alumni-related activities of JNV Paota,
-            Jaipur. Formation of alumni association feels like building a home for our family members. We, the alumni,
-            hope to re-kindle the same spirit of camaraderie that we used to bubble within our hostel days of the yore!`}
+            {` Welcome to the JNV Paota, Jaipur Alumni Association's esteemed "Bhamashah Pillars" initiative, where we honor the generous contributions of our alumni who continue to support and uplift our community. This distinguished scheme recognizes and celebrates the dedication of those who contribute significantly to our mission. Under the Bhamashah Pillars banner, we proudly acknowledge our Platinum Pillars, whose contributions exceed INR 100,000; our Gold Pillars, who give over INR 50,000; and our Silver Pillars, who support us with amounts surpassing INR 21,000. Your remarkable generosity fuels the growth and success of our association, and we are deeply grateful for your commitment to sustaining the legacy of JNV Paota, Jaipur.`}
           </Typography>
 
-          <Typography color="grey.800" variant="h2" mt={3} mb={2}>
-            Logo Symbolism
+          <Typography color="grey.800" variant="h2" mt={4} mb={2}>
+            Platinum Pillars (Amount more than INR 100,000):
           </Typography>
-          <Box display="flex" flexDirection={{ xs: 'column-reverse', md: 'row' }} gap={2}>
-            <Typography color="grey.800">
-              {`Ring of alumni with different colours holding each other's shoulders: We, the alumni of JNV Paota, Jaipur,
-              despite being from different socio-cultural background, different castes and religions were together, are
-              together and will be together forever supporting each other. Spikes of wheat (symbol of prosperity): We,
-              the alumni of JNV Paota, Jaipur, will work together for prosperity of the society, in general, and of our
-              association, in particular. Book with light flame: We, the alumni of JNV Paota, Jaipur, will work for the
-              enlightenment of the society with our wisdom and knowledge. Hence, the motto:`}
-            </Typography>
-            <img src="/favicon.png" width={100} height={100} alt="logo" />
+          <Box width="100%" component={Grid} container display="flex" gap={2}>
+            {BHAASHAH_PILLARS.filter((pillar: IBhamashahPillar) => pillar.type === 'platinum').map(
+              (pillar: IBhamashahPillar, index: number) => (
+                <Grid key={`bamashah-card-platinum-${index}`} item xs={12} sm={4} md={3}>
+                  <ProfileCard {...pillar} designation={pillar.type} color="#CF7878" />
+                </Grid>
+              )
+            )}
           </Box>
-          <Typography
-            mt={2}
-            fontSize={24}
-            fontWeight={500}
-            textAlign="center"
-            sx={{
-              border: '1px solid',
-              borderColor: 'grey.400',
-              borderRadius: '4px',
-              p: '16px 10px',
-              //   width: 'fit-content',
-            }}
-            color="primary.main"
-          >
-            नभ: स्पृशं दीप्तम् (touching the skies with glory)
-            <br />
-            <Box
-              color="grey.800"
-              component="span"
-              fontSize="16px"
-              fontWeight={400}
-              sx={{ display: 'block', mt: 2, fontStyle: 'italic' }}
-            >
-              The ultimate aim of association is to lead the society with glory.
-            </Box>
+          <Divider sx={{ my: 4 }} />
+          <Typography color="grey.800" variant="h2" mb={2}>
+            Gold Pillars (Amount more than INR 50,000):
           </Typography>
+          <Box display="flex" gap={2}>
+            {/* {BHAASHAH_PILLARS.filter((pillar: IBhamashahPillar) => pillar.type === 'gold').map(
+              (pillar: IBhamashahPillar, index: number) => (
+                <ProfileCard key={`bamashah-card-platinum-${index}`} {...pillar} designation={pillar.type} color="#DAA511" />
+              )
+            )} */}
+            <Typography color="grey.500">
+              {`The spot for Gold "Bhamashah Pillars" is currently available and waiting to be filled.`}
+            </Typography>
+          </Box>
+          <Divider sx={{ my: 4 }} />
+          <Typography color="grey.800" variant="h2" mb={2}>
+            Silver Pillars (Amount more than INR 21,000):
+          </Typography>
+          <Box component={Grid} container display="flex" gap={2}>
+            {BHAASHAH_PILLARS.filter((pillar: IBhamashahPillar) => pillar.type === 'silver').map(
+              (pillar: IBhamashahPillar, index: number) => (
+                <Grid key={`bamashah-card-silver-${index}`} item xs={12} sm={4} md={3}>
+                  <ProfileCard {...pillar} designation={pillar.type} color="#BCB198" />
+                </Grid>
+              )
+            )}
+          </Box>
         </Box>
       </Box>
     </Box>

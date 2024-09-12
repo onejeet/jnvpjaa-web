@@ -23,31 +23,42 @@ const StyledCard = styled(Card)(({ theme }) => ({
 
 // Profile Image with Custom Styling
 const ProfileImage = styled(Avatar)(({ theme }) => ({
-  width: 150,
-  height: 150,
+  width: 200,
+  height: 200,
   border: `4px solid ${theme.palette.primary.main}`,
   boxShadow: `0 4px 8px rgba(0, 0, 0, 0.2)`,
 }));
 
 // Styled Header Section
-const HeaderSection = styled(Box)(({ theme }) => ({
+const HeaderSection = styled(Box)(({ bgColor, theme }) => ({
   padding: theme.spacing(2),
-  backgroundColor: theme.palette.secondary.main,
+  backgroundColor: bgColor || theme.palette.secondary.main,
   color: theme.palette.common.white,
   textAlign: 'center',
 }));
 
-const ProfileCard: React.FC<ProfileCardProps> = ({ profilePicture, name, designation, batch, email, socialMedia }) => {
+const ProfileCard: React.FC<ProfileCardProps> = ({
+  profilePicture,
+  name,
+  designation,
+  batch,
+  email,
+  socialMedia,
+  color,
+}) => {
   return (
     <StyledCard>
-      <HeaderSection>
-        <Typography variant="h3" component="div">
+      <HeaderSection bgColor={color}>
+        <Typography variant="h3" component="div" sx={{ textTransform: 'capitalize' }}>
           {designation}
         </Typography>
       </HeaderSection>
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-        <ProfileImage src={profilePicture} alt={`${name}'s profile picture`} />
-      </Box>
+      {profilePicture && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+          <ProfileImage src={profilePicture} alt={`${name}'s profile picture`} />
+        </Box>
+      )}
+
       <CardContent sx={{ textAlign: 'left' }}>
         <Typography gutterBottom variant="h2" component="div" sx={{ mb: 1, fontWeight: 600 }}>
           {name}
@@ -55,9 +66,12 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ profilePicture, name, designa
         <Typography display="flex" alignItems="center" variant="body1" color="grey.700" sx={{ mb: 1 }}>
           <Diversity3Icon sx={{ mr: '8px', color: 'grey.700', fontSize: '18px' }} /> Passout Year: {batch}
         </Typography>
-        <Typography display="flex" alignItems="center" variant="body1" color="grey.700">
-          <MailIcon sx={{ mr: '8px', color: 'grey.700', fontSize: '18px' }} /> {email}
-        </Typography>
+        {email && (
+          <Typography display="flex" alignItems="center" variant="body1" color="grey.700">
+            <MailIcon sx={{ mr: '8px', color: 'grey.700', fontSize: '18px' }} /> {email}
+          </Typography>
+        )}
+
         {socialMedia && (
           <Stack direction="row" spacing="16px" alignItems="center" mt={2}>
             {socialMedia?.map(({ url, name }: Record<string, any>, index: number) => (

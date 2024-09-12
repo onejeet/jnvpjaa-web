@@ -1,3 +1,4 @@
+import EmailIcon from '@mui/icons-material/Email';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
@@ -17,6 +18,9 @@ export const getSocialMediaIcon = (iconName: string) => {
     }
     case 'linkedin': {
       return <LinkedInIcon />;
+    }
+    case 'email': {
+      return <EmailIcon />;
     }
     default: {
       return <YouTubeIcon />;

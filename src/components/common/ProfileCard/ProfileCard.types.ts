@@ -1,8 +1,9 @@
 export interface ProfileCardProps {
   profilePicture?: string;
   name: string;
-  designation: string;
+  designation?: string;
   batch: string;
-  email: string;
+  email?: string;
   socialMedia?: { name: string; url: string }[];
+  color?: string;
 }

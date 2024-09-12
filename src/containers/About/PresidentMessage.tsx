@@ -5,6 +5,7 @@ import { Breadcrumbs, Paper, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import MuiLink from '@mui/material/Link';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import NextLink from 'next/link';
 
 const PresidentMessage = () => {
@@ -36,11 +37,19 @@ const PresidentMessage = () => {
           Message from president
         </MuiLink>
       </Breadcrumbs>
-      <Box component={Paper} px={2} py={4} my={2} display="flex" alignItems="center">
-        <Box>
+      <Box component={Paper} gap={2} px={2} py={4} my={2} display="flex" alignItems="start">
+        <Box
+          width={{
+            xs: '100%',
+            sm: 'calc(100% - 300px)',
+          }}
+        >
           <Typography variant="h1" mb={3}>
             Message from President
           </Typography>
+          <Box display={{ xs: 'block', sm: 'none' }} sx={{ borderRadius: '10px', width: '100%', overflow: 'hidden' }}>
+            <img src="/assets/people/gaurav-2006.jpg" width="100%" alt="jnv principal" />
+          </Box>
           <Typography color="grey.800" fontWeight={600} display="flex">
             Illuminating Horizons
             <FormatQuoteIcon sx={{ fontSize: '32px', color: 'grey.500', position: 'relative', top: '-10px' }} />
@@ -104,6 +113,12 @@ const PresidentMessage = () => {
             Dr Gaurav Kumar Chhaparwal
           </Typography>
           <Typography color="grey.800">President, JNVPJAA</Typography>
+        </Box>
+        <Box
+          display={{ xs: 'none', sm: 'block' }}
+          sx={{ borderRadius: '10px', width: 250, height: 300, overflow: 'hidden' }}
+        >
+          <Image src="/assets/people/gaurav-2006.jpg" width={250} height={300} alt="jnv principal" />
         </Box>
       </Box>
     </Box>

@@ -115,22 +115,19 @@ const LayoutFooter: React.FC = () => {
               <Divider orientation="horizontal" sx={{ borderColor: '#D9D9D9', opacity: 1 }} />
             </Grid>
           </Grid>
-          <Grid container justifyContent="center" flexDirection="column" alignItems="center">
-            <Grid item xs={12}>
-              <Typography
-                sx={{
-                  color: 'grey.800',
-                  opacity: 0.6,
-                }}
-                variant="body2"
-              >
-                &nbsp; &#169;
-                {new Date().getFullYear()}
-                &nbsp; JNVPJAA &trade; . All Rights Reserved.
-              </Typography>
-            </Grid>
+          <Grid
+            container
+            justifyContent="center"
+            flexDirection={{ xs: 'column', md: 'row' }}
+            pb={{
+              xs: 2,
+              md: 0,
+            }}
+            width="100%"
+            alignItems="center"
+          >
             {/* <Grid item xs={12} md={6} mt={{ xs: '20px' }}> */}
-            <Grid item xs={12} display="flex" width="100%" justifyContent="center" mt={2}>
+            <Grid item xs={12} display="flex" width="100%" justifyContent="center">
               <Stack direction="row" spacing="16px" alignItems="center">
                 {JNVPJAA_SOCIAL_MEDIA?.map(({ path, name }: Record<string, any>, index: number) => (
                   <Link key={`social-media-item-${index}`} href={path} target="_blank" color="inherit" title={name}>
@@ -148,33 +145,57 @@ const LayoutFooter: React.FC = () => {
                 ))}
               </Stack>
             </Grid>
+
+            <Grid item xs={12} md={6} textAlign="left">
+              <Typography
+                sx={{
+                  color: 'grey.800',
+                  opacity: 0.6,
+                  whiteSpace: 'nowrap',
+                }}
+                variant="body2"
+              >
+                &nbsp; &#169;
+                {new Date().getFullYear()}
+                &nbsp; JNVPJAA &trade; . All Rights Reserved.
+              </Typography>
+            </Grid>
             <Grid
               xs={12}
+              md={6}
               display="flex"
-              justifyContent="center"
+              justifyContent="end"
               color="grey.800"
-              mt={2}
               sx={{
-                opacity: 0.7,
+                opacity: 1,
               }}
             >
-              Powered by{' '}
-              <Box
-                ml={1}
-                color="primary.main"
+              <Typography
                 sx={{
-                  borderBottom: '1px dotted',
-                  borderColor: 'primary.main',
-                  cursor: 'pointer',
-                  opacity: 0.7,
-                  '&:hover': {
-                    opacity: 1,
-                  },
+                  color: 'grey.800',
+                  opacity: 0.6,
                 }}
+                variant="body2"
+                display="flex"
               >
-                {' '}
-                Dots Created
-              </Box>
+                Powered by{' '}
+                <Box
+                  ml={1}
+                  color="primary.main"
+                  sx={{
+                    borderBottom: '1px dotted',
+                    borderColor: 'primary.main',
+                    cursor: 'pointer',
+                    opacity: 0.7,
+                    '&:hover': {
+                      opacity: 1,
+                    },
+                  }}
+                >
+                  {' '}
+                  Dots Created
+                </Box>
+              </Typography>
             </Grid>
           </Grid>
         </AppBar>
