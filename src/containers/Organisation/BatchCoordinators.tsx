@@ -32,8 +32,11 @@ const BatchCoordinators = () => {
         columns={columns}
         // loading={loading}
         rowCount={0}
-        pageSize={25}
-        page={0}
+        initialState={{
+          pagination: {
+            paginationModel: { pageSize: 100, page: 0 },
+          },
+        }}
         // initialState={memoizedInitialState}
         // checkboxSelection
         pagination

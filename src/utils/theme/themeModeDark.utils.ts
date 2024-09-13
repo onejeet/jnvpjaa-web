@@ -400,27 +400,27 @@ const lightMode: ThemeOptions = {
         },
       },
     },
-    MuiDataGrid: {
-      styleOverrides: {
-        root: {
-          '& .MuiDataGrid-pinnedColumnHeaders': {
-            background: BACKGROUND_COLOR,
-          },
-          '& .MuiDataGrid-pinnedColumns': {
-            background: BACKGROUND_COLOR,
-          },
-          '& .MuiDataGrid-cell': {
-            borderBottomColor: GREY_COLOR[300],
-          },
-          '& .MuiDataGrid-row.Mui-hovered': {
-            background: GREY_COLOR[300],
-          },
-          '& .MuiDataGrid-columnHeaders': {
-            borderBottomColor: GREY_COLOR[300],
-          },
-        },
-      },
-    },
+    // MuiDataGrid: {
+    //   styleOverrides: {
+    //     root: {
+    //       '& .MuiDataGrid-pinnedColumnHeaders': {
+    //         background: BACKGROUND_COLOR,
+    //       },
+    //       '& .MuiDataGrid-pinnedColumns': {
+    //         background: BACKGROUND_COLOR,
+    //       },
+    //       '& .MuiDataGrid-cell': {
+    //         borderBottomColor: GREY_COLOR[300],
+    //       },
+    //       '& .MuiDataGrid-row.Mui-hovered': {
+    //         background: GREY_COLOR[300],
+    //       },
+    //       '& .MuiDataGrid-columnHeaders': {
+    //         borderBottomColor: GREY_COLOR[300],
+    //       },
+    //     },
+    //   },
+    // },
     MuiDialog: {
       styleOverrides: {
         paper: {

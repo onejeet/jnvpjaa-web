@@ -1,6 +1,10 @@
 const nextConfig = {
-  // output: 'export',
+  output: 'export',
   reactStrictMode: true,
+  exportTrailingSlash: true,
+  images: {
+    unoptimized: true,
+  },
   webpack: (config) => {
     config.resolve.alias.canvas = false;
     return config;

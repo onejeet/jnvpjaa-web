@@ -21,7 +21,7 @@ const MenuList: React.FC<MenuListProps> = ({ title, items, offsetTop }) => (
         {title}
       </Typography>
     )}
-    <List sx={{ mt: offsetTop || '22px' }}>
+    <List>
       {items?.length &&
         items.map((item, index) => (
           <ListItem key={`menu-list-${item.label}-${index}`} disablePadding sx={{ mb: '8px' }}>

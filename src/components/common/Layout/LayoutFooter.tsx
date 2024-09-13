@@ -26,7 +26,7 @@ const LayoutFooter: React.FC = () => {
     >
       <Container sx={{ maxWidth: { xs: '98%', sm: '95%', md: '90%' }, margin: 'auto', p: '0 !important' }}>
         <AppBar position="static" sx={{ bgcolor: 'grey.300' }} elevation={0}>
-          <Grid container>
+          <Grid container p={{ xs: 2, sm: 0 }}>
             <Grid item sm={12} md={4.75} pt="25px">
               <Logo />
               {/* <Box

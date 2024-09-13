@@ -48,13 +48,22 @@ const HeaderMenuItem: React.FC<IMenuItemProps> = ({ item, isMobile }) => {
           {item?.menu && (
             <AccordionDetails>
               {item?.menu?.map((item: IHeaderMenuItem) => (
-                <MenuItem
-                  key={item.path}
-                  onClick={handleClose}
-                  sx={{ px: '10px', pl: '20px', fontSize: '16px', fontWeight: 300, textAlign: 'center' }}
+                <NextLink
+                  key={`menu-${item?.path}`}
+                  href={item?.path || '/'}
+                  as={item?.path}
+                  passHref
+                  style={{ textDecoration: 'none' }}
                 >
-                  {item.label}
-                </MenuItem>
+                  <Link sx={{ textDecoration: 'none' }}>
+                    <MenuItem
+                      key={item.path}
+                      sx={{ px: '10px', pl: '20px', fontSize: '16px', fontWeight: 300, textAlign: 'center' }}
+                    >
+                      {item.label}
+                    </MenuItem>
+                  </Link>
+                </NextLink>
               ))}
             </AccordionDetails>
           )}
@@ -62,7 +71,7 @@ const HeaderMenuItem: React.FC<IMenuItemProps> = ({ item, isMobile }) => {
       ) : (
         <>
           <HoverPopover
-            id="loan-dti-popover"
+            id={`menu-${item.path}`}
             render={
               <Button
                 id="basic-button"

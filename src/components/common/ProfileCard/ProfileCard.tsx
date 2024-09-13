@@ -1,11 +1,15 @@
 import { getSocialMediaIcon } from '@/utils/helpers';
 import Diversity3Icon from '@mui/icons-material/Diversity3';
 import MailIcon from '@mui/icons-material/Mail';
-import { Card, CardContent, Typography, Box, Avatar, Stack, IconButton, Link } from '@mui/material';
+import { Card, CardContent, Typography, Box, Avatar, Stack, IconButton, Link, BoxProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import React from 'react';
 
 import { ProfileCardProps } from './ProfileCard.types';
+
+interface CustomBoxProps extends BoxProps {
+  bgColor?: string;
+}
 
 // Styled Card Component with Gradient Background and Shadow
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -30,12 +34,14 @@ const ProfileImage = styled(Avatar)(({ theme }) => ({
 }));
 
 // Styled Header Section
-const HeaderSection = styled(Box)(({ bgColor, theme }) => ({
-  padding: theme.spacing(2),
-  backgroundColor: bgColor || theme.palette.secondary.main,
-  color: theme.palette.common.white,
-  textAlign: 'center',
-}));
+const HeaderSection = styled(Box, { shouldForwardProp: (prop) => prop !== 'bgColor' })<CustomBoxProps>(
+  ({ bgColor, theme }: Record<string, any>) => ({
+    padding: theme.spacing(2),
+    backgroundColor: bgColor || theme.palette.secondary.main,
+    color: theme.palette.common.white,
+    textAlign: 'center',
+  })
+);
 
 const ProfileCard: React.FC<ProfileCardProps> = ({
   profilePicture,

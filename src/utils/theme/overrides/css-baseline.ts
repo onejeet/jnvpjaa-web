@@ -1,4 +1,4 @@
-import { PaletteMode, alpha } from '@mui/material';
+import { PaletteMode, Theme, alpha } from '@mui/material';
 
 import { OwnerStateThemeType } from '.';
 
@@ -22,7 +22,7 @@ const CssBaseline = (mode: PaletteMode) => {
           backgroundColor:
             mode === 'light'
               ? '#E7E9E9'
-              : (theme) => {
+              : (theme: Theme) => {
                   return alpha(theme.palette.grey[400], 0.2);
                 },
           borderRadius: '12px',
@@ -31,12 +31,10 @@ const CssBaseline = (mode: PaletteMode) => {
           cursor: 'grab !important',
         },
         '*::-webkit-scrollbar-thumb:hover': {
-          backgroundColor:
-            mode === 'light' ? '#E7E9E9' : (theme: OwnerStateThemeType) => alpha(theme.palette.grey[400], 0.2),
+          backgroundColor: mode === 'light' ? '#E7E9E9' : (theme: Theme) => alpha(theme.palette.grey[400], 0.2),
           borderRadius: '12px',
           border: '1px solid',
-          borderColor:
-            mode === 'light' ? '#E7E9E9' : (theme: OwnerStateThemeType) => alpha(theme.palette.grey[400], 0.2),
+          borderColor: mode === 'light' ? '#E7E9E9' : (theme: Theme) => alpha(theme.palette.grey[400], 0.2),
           backgroundClip: 'content-box',
           cursor: 'grab !important',
         },
