@@ -8,7 +8,7 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
     designation: 'President',
     email: 'drgaurav489@gmail.com',
     batch: '2006',
-    profilePicture: '/assets/people/gaurav-2006.jpg',
+    profilePicture: '/assets/people/gaurav_2006.jpg',
     socialMedia: [
       {
         name: 'facebook',

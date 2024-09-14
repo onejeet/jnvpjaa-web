@@ -48,7 +48,7 @@ const PresidentMessage = () => {
             Message from President
           </Typography>
           <Box display={{ xs: 'block', sm: 'none' }} sx={{ borderRadius: '10px', width: '100%', overflow: 'hidden' }}>
-            <img src="/assets/people/gaurav-2006.jpg" width="100%" alt="jnv principal" />
+            <img src="/assets/people/gaurav_2006.jpg" width="100%" alt="jnv principal" />
           </Box>
           <Typography color="grey.800" fontWeight={600} display="flex">
             Illuminating Horizons
@@ -118,7 +118,7 @@ const PresidentMessage = () => {
           display={{ xs: 'none', sm: 'block' }}
           sx={{ borderRadius: '10px', width: 250, height: 300, overflow: 'hidden' }}
         >
-          <Image src="/assets/people/gaurav-2006.jpg" width={250} height={300} alt="jnv principal" />
+          <Image src="/assets/people/gaurav_2006.jpg" width={250} height={300} alt="jnv principal" />
         </Box>
       </Box>
     </Box>
