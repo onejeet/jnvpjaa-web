@@ -16,6 +16,7 @@ const HeaderMenuItem: React.FC<IMenuItemProps> = ({ item, isMobile }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const router = useRouter();
+  const { pathname } = router;
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -53,12 +54,19 @@ const HeaderMenuItem: React.FC<IMenuItemProps> = ({ item, isMobile }) => {
                   href={item?.path || '/'}
                   as={item?.path}
                   passHref
-                  style={{ textDecoration: 'none' }}
+                  style={{ textDecoration: 'none', pointerEvents: pathname.includes(item?.path) ? 'none' : undefined }}
                 >
                   <Link sx={{ textDecoration: 'none' }}>
                     <MenuItem
                       key={item.path}
-                      sx={{ px: '10px', pl: '20px', fontSize: '16px', fontWeight: 300, textAlign: 'center' }}
+                      sx={{
+                        color: pathname.includes(item?.path) ? 'primary.main' : 'grey.800',
+                        px: '10px',
+                        pl: '20px',
+                        fontSize: '16px',
+                        fontWeight: 300,
+                        textAlign: 'center',
+                      }}
                     >
                       {item.label}
                     </MenuItem>
