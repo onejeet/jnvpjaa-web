@@ -8,11 +8,19 @@ const Hero = () => {
       <Box
         width="100%"
         position="relative"
-        minHeight={500}
+        minHeight={{
+          xs: 350,
+          sm: 500,
+          md: 518,
+        }}
         sx={{
           backgroundImage: 'url(/assets/images/cover.png)',
           backgroundRepeat: 'no-repeat',
-          backgroundSize: '100% 100%',
+          backgroundSize: {
+            xs: '100% 100%',
+            sm: '100% 100%',
+            md: '100% 100%',
+          },
         }}
         display="flex"
         justifyContent="center"
@@ -54,15 +62,20 @@ const Hero = () => {
             JNV Paota Almuni Network
           </Typography> */}
         </Box>
-        <Box sx={{ position: 'absolute', bottom: '16px' }}>
+        <Box sx={{ position: 'absolute', bottom: { xs: '-7px', sm: '-10px', md: '16px' } }}>
           <Typography
             display="flex"
             alignItems="center"
             variant="h1"
             fontSize={{
-              xs: 30,
-              sm: 50,
+              xs: 25,
+              sm: 60,
               md: 100,
+            }}
+            lineHeight={{
+              xs: '30px',
+              sm: '60px',
+              md: '35px',
             }}
             textAlign="center"
             color="grey.300"
