@@ -30,7 +30,15 @@ const LayoutModule: React.FC<Props> = (props) => {
       <Head>
         <title>{title || 'Untitled'}</title>
       </Head>
-      <Box minHeight="100vh" overflow="auto" display="flex" flexDirection="column" justifyContent="space-between">
+      <Box
+        minHeight="100vh"
+        width="100%"
+        overflow="auto"
+        display="flex"
+        flexDirection="column"
+        justifyContent="space-between"
+        sx={{ overflowX: 'hidden' }}
+      >
         {!disableTopbar && <LayoutTopbar />}
 
         <Container

@@ -7,7 +7,6 @@ import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import Image from 'next/image';
 import React from 'react';
 
 import Logo from '@/components/common/Logo';
@@ -148,11 +147,20 @@ const LayoutFooter: React.FC = () => {
               </Stack>
             </Grid>
 
-            <Grid item xs={12} md={6} textAlign="left">
+            <Grid
+              item
+              xs={12}
+              md={6}
+              textAlign="left"
+              mt={{
+                xs: '10px',
+                sm: 0,
+              }}
+            >
               <Typography
                 sx={{
                   color: 'grey.800',
-                  opacity: 0.6,
+                  opacity: 1,
                   whiteSpace: 'nowrap',
                 }}
                 variant="body2"
@@ -171,16 +179,20 @@ const LayoutFooter: React.FC = () => {
               sx={{
                 opacity: 1,
               }}
+              mt={{
+                xs: '10px',
+                sm: 0,
+              }}
             >
               <Typography
                 sx={{
                   color: 'grey.800',
-                  opacity: 0.6,
+                  opacity: 1,
                 }}
                 variant="body2"
                 display="flex"
               >
-                Powered by{' '}
+                Designed & Crafted By:{' '}
                 <Box
                   ml={1}
                   color="primary.main"

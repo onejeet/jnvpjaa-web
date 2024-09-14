@@ -8,7 +8,7 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
     designation: 'President',
     email: 'drgaurav489@gmail.com',
     batch: '2006',
-    profilePicture: '/assets/people/gaurav_2006.jpg',
+    profilePicture: '/assets/people/gaurav_2006_passport.jpg',
     socialMedia: [
       {
         name: 'facebook',
@@ -21,11 +21,11 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
     ],
   },
   {
-    name: 'Dr Gaurav Kumar Chhaparwal',
+    name: 'Rajesh Dayma',
     designation: 'Vice President (Male)',
-    email: 'gaurav@jnvpjaa.com',
-    batch: '2006',
-    profilePicture: 'https://vaave.s3.amazonaws.com/content/151554795_1717808034_Untitled.png',
+    email: '-',
+    batch: '2009',
+    profilePicture: '/assets/people/rajesh_2009_passport.jpg',
     socialMedia: [
       {
         name: 'facebook',
@@ -42,11 +42,11 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
     ],
   },
   {
-    name: 'Dr Gaurav Kumar Chhaparwal',
+    name: 'Naresh Choudhary',
     designation: 'Vice President (Female)',
-    email: 'gaurav@jnvpjaa.com',
-    batch: '2006',
-    profilePicture: 'https://vaave.s3.amazonaws.com/content/151554795_1717808034_Untitled.png',
+    email: '-',
+    batch: '2002',
+    profilePicture: '/assets/people/naresh_2002_passport.jpg',
     socialMedia: [
       {
         name: 'facebook',
@@ -62,12 +62,13 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
       },
     ],
   },
+
   {
-    name: 'Dr Gaurav Kumar Chhaparwal',
+    name: 'Dinesh Verma',
     designation: 'Secretary',
-    email: 'gaurav@jnvpjaa.com',
-    batch: '2006',
-    profilePicture: 'https://vaave.s3.amazonaws.com/content/151554795_1717808034_Untitled.png',
+    email: 'bunkardinesh@gmail.com',
+    batch: '2002',
+    profilePicture: '/assets/people/dinesh_2002_passport.jpg',
     socialMedia: [
       {
         name: 'facebook',
@@ -84,11 +85,11 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
     ],
   },
   {
-    name: 'Dr Gaurav Kumar Chhaparwal',
+    name: 'Gayatri Sharma',
     designation: 'Joint secretary',
-    email: 'gaurav@jnvpjaa.com',
-    batch: '2006',
-    profilePicture: 'https://vaave.s3.amazonaws.com/content/151554795_1717808034_Untitled.png',
+    email: '-',
+    batch: '1998',
+    profilePicture: '/assets/images/female_profile_placeholder.png',
     socialMedia: [
       {
         name: 'facebook',
@@ -105,11 +106,74 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
     ],
   },
   {
-    name: 'Dr Gaurav Kumar Chhaparwal',
+    name: 'Mukesh Meena',
+    designation: 'Joint secretary',
+    email: '-',
+    batch: '2005',
+    profilePicture: '/assets/images/male_profile_placeholder.png',
+    socialMedia: [
+      {
+        name: 'facebook',
+        url: 'htttps://facebook.com',
+      },
+      {
+        name: 'twitter',
+        url: 'htttps://facebook.com',
+      },
+      {
+        name: 'linkedin',
+        url: 'htttps://facebook.com',
+      },
+    ],
+  },
+  {
+    name: 'Avnish Choudhary',
     designation: 'Treasurer',
-    email: 'gaurav@jnvpjaa.com',
-    batch: '2006',
-    profilePicture: 'https://vaave.s3.amazonaws.com/content/151554795_1717808034_Untitled.png',
+    email: 'frndparty918@gmail.com',
+    batch: '2012',
+    profilePicture: '/assets/people/avnish_2012_passport.jpg',
+    socialMedia: [
+      {
+        name: 'facebook',
+        url: 'https://www.facebook.com/avnish.choudhary.56?mibextid=ZbWKwL',
+      },
+      // {
+      //   name: 'twitter',
+      //   url: 'htttps://facebook.com',
+      // },
+      // {
+      //   name: 'linkedin',
+      //   url: 'htttps://facebook.com',
+      // },
+    ],
+  },
+  // {
+  //   name: 'Dr Gaurav Kumar Chhaparwal',
+  //   designation: 'Joint Treasurer',
+  //   email: 'gaurav@jnvpjaa.com',
+  //   batch: '2006',
+  //   profilePicture: 'https://vaave.s3.amazonaws.com/content/151554795_1717808034_Untitled.png',
+  //   socialMedia: [
+  //     {
+  //       name: 'facebook',
+  //       url: 'htttps://facebook.com',
+  //     },
+  //     {
+  //       name: 'twitter',
+  //       url: 'htttps://facebook.com',
+  //     },
+  //     {
+  //       name: 'linkedin',
+  //       url: 'htttps://facebook.com',
+  //     },
+  //   ],
+  // },
+  {
+    name: 'Nathuram Pankaj',
+    designation: 'Member',
+    email: '-',
+    batch: '1996',
+    profilePicture: '/assets/images/male_profile_placeholder.png',
     socialMedia: [
       {
         name: 'facebook',
@@ -126,66 +190,87 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
     ],
   },
   {
-    name: 'Dr Gaurav Kumar Chhaparwal',
-    designation: 'Joint Treasurer',
-    email: 'gaurav@jnvpjaa.com',
-    batch: '2006',
-    profilePicture: 'https://vaave.s3.amazonaws.com/content/151554795_1717808034_Untitled.png',
-    socialMedia: [
-      {
-        name: 'facebook',
-        url: 'htttps://facebook.com',
-      },
-      {
-        name: 'twitter',
-        url: 'htttps://facebook.com',
-      },
-      {
-        name: 'linkedin',
-        url: 'htttps://facebook.com',
-      },
-    ],
-  },
-  {
-    name: 'Dr Gaurav Kumar Chhaparwal',
+    name: 'Gajendra Kumar Chatopadhyaya',
     designation: 'Member',
     email: 'gaurav@jnvpjaa.com',
-    batch: '2006',
-    profilePicture: 'https://vaave.s3.amazonaws.com/content/151554795_1717808034_Untitled.png',
+    batch: '2016',
+    profilePicture: '/assets/images/male_profile_placeholder.png',
     socialMedia: [
       {
         name: 'facebook',
         url: 'htttps://facebook.com',
       },
-      {
-        name: 'twitter',
-        url: 'htttps://facebook.com',
-      },
-      {
-        name: 'linkedin',
-        url: 'htttps://facebook.com',
-      },
+      // {
+      //   name: 'twitter',
+      //   url: 'htttps://facebook.com',
+      // },
+      // {
+      //   name: 'linkedin',
+      //   url: 'htttps://facebook.com',
+      // },
     ],
   },
   {
-    name: 'Dr Gaurav Kumar Chhaparwal',
+    name: 'Ritu Sabal',
     designation: 'Member',
-    email: 'gaurav@jnvpjaa.com',
-    batch: '2006',
-    profilePicture: 'https://vaave.s3.amazonaws.com/content/151554795_1717808034_Untitled.png',
+    email: 'ritusabal34@gmail.com',
+    batch: '2015',
+    profilePicture: '/assets/people/ritu_2015_passport.jpg',
     socialMedia: [
       {
         name: 'facebook',
         url: 'htttps://facebook.com',
       },
+      // {
+      //   name: 'twitter',
+      //   url: 'htttps://facebook.com',
+      // },
+      // {
+      //   name: 'linkedin',
+      //   url: 'htttps://facebook.com',
+      // },
+    ],
+  },
+  {
+    name: 'Meena Verma',
+    designation: 'Member',
+    email: 'meenaverma473@gmail.com',
+    batch: '2014',
+    profilePicture: '/assets/people/meena_2014_passport.jpg',
+    socialMedia: [
       {
-        name: 'twitter',
+        name: 'facebook',
         url: 'htttps://facebook.com',
       },
+      // {
+      //   name: 'twitter',
+      //   url: 'htttps://facebook.com',
+      // },
+      // {
+      //   name: 'linkedin',
+      //   url: 'htttps://facebook.com',
+      // },
+    ],
+  },
+  {
+    name: 'Hari Narayan Lakjaran',
+    designation: 'Member',
+    email: '-',
+    batch: '2003',
+    profilePicture: '/assets/images/male_profile_placeholder.png',
+    socialMedia: [
       {
-        name: 'linkedin',
+        name: 'facebook',
         url: 'htttps://facebook.com',
       },
+      // {
+      //   name: 'twitter',
+      //   url: 'htttps://facebook.com',
+      // },
+      // {
+      //   name: 'linkedin',
+      //   url: 'htttps://facebook.com',
+      // },
     ],
   },
 ];
