@@ -76,13 +76,28 @@ const Vision = () => {
           </Typography>
           <Box
             display={{ xs: 'block', sm: 'block' }}
-            sx={{ borderRadius: '10px', maxWidth: '100%', maxHeight: '400px', overflow: 'hidden' }}
+            sx={{
+              borderRadius: '10px',
+              maxWidth: '100%',
+              maxHeight: '400px',
+              overflow: 'hidden',
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center bottom',
+              backgroundSize: 'contain',
+            }}
           >
             <img
               src="/assets/images/slider-2.jpg"
               width="100%"
               alt="mission"
-              style={{ objectFit: 'contain', position: 'relative', top: '-20px' }}
+              style={{
+                objectFit: 'contain',
+                objectPosition: 'bottom',
+                width: '100%',
+                height: '100%',
+                // position: 'relative',
+                // top: '-20px',
+              }}
             />
           </Box>
           <Typography color="grey.800" mt={2}>

@@ -30,7 +30,7 @@ const LayoutModule: React.FC<Props> = (props) => {
       <Head>
         <title>{title || 'Untitled'}</title>
       </Head>
-      <Box minHeight="100vh" display="flex" flexDirection="column" justifyContent="space-between">
+      <Box minHeight="100vh" overflow="auto" display="flex" flexDirection="column" justifyContent="space-between">
         {!disableTopbar && <LayoutTopbar />}
 
         <Container
@@ -39,9 +39,13 @@ const LayoutModule: React.FC<Props> = (props) => {
               xs: disableCover ? 3 : 0,
               md: disableCover ? 4 : 0,
             },
+            px: {
+              xs: '4px',
+              md: 0,
+            },
             flexGrow: 1,
             bgcolor: 'background.paper',
-            maxWidth: disableCover ? { xs: '97%', sm: '95%', md: '90%' } : '100%',
+            maxWidth: disableCover ? { xs: '97%', sm: '95%', md: '90%', xl: '1500px' } : '100%',
             margin: disableCover ? 'auto' : undefined,
           }}
           maxWidth={false}

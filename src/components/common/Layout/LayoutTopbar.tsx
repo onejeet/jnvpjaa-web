@@ -55,7 +55,9 @@ const LayoutTopbar: React.FC = () => {
         },
       }}
     >
-      <Container sx={{ maxWidth: { xs: '98%', sm: '95%', md: '90%' }, margin: 'auto', p: '0 !important' }}>
+      <Container
+        sx={{ maxWidth: { xs: '98%', sm: '95%', md: '90%', xl: '1500px' }, margin: 'auto', p: '0 !important' }}
+      >
         <Toolbar
           sx={{
             width: '100%',
