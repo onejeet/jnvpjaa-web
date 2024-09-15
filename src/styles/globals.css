@@ -9,6 +9,9 @@ body {
   overflow-x: hidden; */
   min-height: 100vh;
 }
+/* p {
+  font-size: 18px;
+} */
 
 .embla {
   max-width: 48rem;

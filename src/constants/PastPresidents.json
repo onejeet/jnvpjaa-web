@@ -6,7 +6,7 @@
     "gender": "male",
     "phone": "",
     "email": "-",
-    "tenure": ""
+    "tenure": "2019 - 2021"
   },
   {
     "id": 2,
@@ -15,7 +15,7 @@
     "gender": "male",
     "phone": "",
     "email": "-",
-    "tenure": ""
+    "tenure": "2021 - 2023"
   },
   {
     "id": 3,
@@ -25,6 +25,6 @@
     "phone": "",
     "email": "drgaurav489@gmail.com",
     "profile_image": "/assets/people/gaurav_2006_passport.jpg",
-    "tenure": "Current"
+    "tenure": "2024 - Current"
   }
 ]

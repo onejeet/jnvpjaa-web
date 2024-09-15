@@ -31,7 +31,7 @@ const HomePage: NextPage = () => (
       ]}
     />
 
-    <LayoutModule title="JNVPJAA • Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur">
+    <LayoutModule disableCover={false} title="JNVPJAA • Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur">
       <Home />
     </LayoutModule>
   </>

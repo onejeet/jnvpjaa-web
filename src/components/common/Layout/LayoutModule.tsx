@@ -19,7 +19,7 @@ const LayoutModule: React.FC<Props> = (props) => {
     appBarProps = {},
     // breadcrumbs = [],
     containerProps = {},
-    disableCover,
+    disableCover = true,
     disableTopbarShadow,
     logoSuffix,
   } = props;
@@ -48,11 +48,16 @@ const LayoutModule: React.FC<Props> = (props) => {
               xs: disableCover ? 3 : 0,
               md: disableCover ? 4 : 0,
             },
+            px: {
+              xs: disableCover ? '10px' : 0,
+              md: disableCover ? '16px' : 0,
+            },
             overflow: 'hidden',
             flexGrow: 1,
             bgcolor: 'background.paper',
-            maxWidth: disableCover ? { xs: '97%', sm: '95%', md: '90%', xl: '1500px' } : '100%',
+            maxWidth: disableCover ? { xs: '98%', sm: '95%', md: '90%', xl: '1500px' } : '100%',
             margin: disableCover ? 'auto' : undefined,
+            minHeight: disableCover ? `calc(100vh - 379px)` : 0,
           }}
           maxWidth={false}
           disableGutters

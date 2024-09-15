@@ -11,7 +11,8 @@ const Hero = () => {
         minHeight={{
           xs: 350,
           sm: 500,
-          md: 518,
+          // md: 518,
+          md: `calc(100vh - 379px)`,
         }}
         sx={{
           backgroundColor: 'common.black',
