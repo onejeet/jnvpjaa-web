@@ -81,7 +81,7 @@ const About = () => {
               association, in particular. Book with light flame: We, the alumni of JNV Paota, Jaipur, will work for the
               enlightenment of the society with our wisdom and knowledge. Hence, the motto:`}
             </Typography>
-            <img src="/favicon.png" width={100} height={100} alt="logo" />
+            <img src="/assets/branding/logo-square-white.jpg" width={150} height={150} alt="logo" />
           </Box>
           <Typography
             mt={2}
