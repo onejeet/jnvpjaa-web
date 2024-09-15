@@ -66,7 +66,7 @@ const LayoutFooter: React.FC = () => {
                     path: '/',
                   },
                   {
-                    label: 'Abou JVPJAA',
+                    label: 'About JVPJAA',
                     path: '/about',
                   },
                   {
