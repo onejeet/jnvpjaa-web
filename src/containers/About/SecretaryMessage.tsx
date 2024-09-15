@@ -47,7 +47,11 @@ const SecretaryMessage = () => {
           <Typography variant="h1" mb={3}>
             Message from Secretary
           </Typography>
-          <Box display={{ xs: 'block', sm: 'none' }} sx={{ borderRadius: '10px', width: '100%', overflow: 'hidden' }}>
+          <Box
+            display={{ xs: 'block', sm: 'none' }}
+            sx={{ borderRadius: '10px', width: '100%', overflow: 'hidden' }}
+            mb={2}
+          >
             <img src="/assets/people/dinesh_2002.jpg" width="100%" alt="JNVPJAA Secretary" />
           </Box>
           <Typography color="grey.800" fontWeight={600} display="flex">

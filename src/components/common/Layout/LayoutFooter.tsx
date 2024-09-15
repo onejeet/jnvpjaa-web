@@ -107,14 +107,14 @@ const LayoutFooter: React.FC = () => {
                     label: 'Terms & conditions',
                     path: '/terms_condition',
                   },
-                  {
-                    label: 'Press Relations',
-                    path: '#',
-                  },
+                  // {
+                  //   label: 'Press Relations',
+                  //   path: '#',
+                  // },
                 ]}
               />
             </Grid>
-            <Grid item xs={12} mt="20px" mb="20px">
+            <Grid item xs={12} mt="10px" mb="20px">
               <Divider orientation="horizontal" sx={{ borderColor: '#D9D9D9', opacity: 1 }} />
             </Grid>
           </Grid>

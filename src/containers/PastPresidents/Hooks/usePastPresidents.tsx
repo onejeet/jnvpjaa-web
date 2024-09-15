@@ -19,7 +19,7 @@ const usePastPresidents = () => {
       {
         field: 'name',
         headerName: 'PRESIDENT',
-        width: 300,
+        width: 250,
         ...commonTableColumnProps,
         sortable: true,
 
@@ -44,21 +44,21 @@ const usePastPresidents = () => {
       {
         field: 'tenure',
         headerName: 'TENURE',
-        width: 270,
+        width: 150,
         ...commonTableColumnProps,
         sortable: true,
       },
       {
         field: 'year',
         headerName: 'BATCH (PASSOUT YEAR)',
-        width: 270,
+        width: 200,
         ...commonTableColumnProps,
         sortable: true,
       },
       {
         field: 'email',
         headerName: 'EMAIL',
-        width: 270,
+        minWidth: 270,
         flex: 1,
         ...commonTableColumnProps,
         sortable: true,

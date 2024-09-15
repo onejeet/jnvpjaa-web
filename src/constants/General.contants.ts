@@ -29,15 +29,7 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
     socialMedia: [
       {
         name: 'facebook',
-        url: 'htttps://facebook.com',
-      },
-      {
-        name: 'twitter',
-        url: 'htttps://facebook.com',
-      },
-      {
-        name: 'linkedin',
-        url: 'htttps://facebook.com',
+        url: 'https://www.facebook.com/rajesh.dayma.33',
       },
     ],
   },
@@ -50,15 +42,7 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
     socialMedia: [
       {
         name: 'facebook',
-        url: 'htttps://facebook.com',
-      },
-      {
-        name: 'twitter',
-        url: 'htttps://facebook.com',
-      },
-      {
-        name: 'linkedin',
-        url: 'htttps://facebook.com',
+        url: 'https://facebook.com',
       },
     ],
   },
@@ -75,12 +59,8 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
         url: 'htttps://facebook.com',
       },
       {
-        name: 'twitter',
-        url: 'htttps://facebook.com',
-      },
-      {
-        name: 'linkedin',
-        url: 'htttps://facebook.com',
+        name: 'email',
+        url: 'mailto: bunkardinesh@gmail.com',
       },
     ],
   },
@@ -93,15 +73,7 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
     socialMedia: [
       {
         name: 'facebook',
-        url: 'htttps://facebook.com',
-      },
-      {
-        name: 'twitter',
-        url: 'htttps://facebook.com',
-      },
-      {
-        name: 'linkedin',
-        url: 'htttps://facebook.com',
+        url: 'https://www.facebook.com/gayatri.sharma.98229241/photos',
       },
     ],
   },
@@ -110,19 +82,11 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
     designation: 'Joint secretary',
     email: '-',
     batch: '2005',
-    profilePicture: '/assets/images/male_profile_placeholder.png',
+    profilePicture: '/assets/people/mukesh_2005_passport.jpeg',
     socialMedia: [
       {
         name: 'facebook',
-        url: 'htttps://facebook.com',
-      },
-      {
-        name: 'twitter',
-        url: 'htttps://facebook.com',
-      },
-      {
-        name: 'linkedin',
-        url: 'htttps://facebook.com',
+        url: 'https://www.facebook.com/mukeshkumar.meena.357',
       },
     ],
   },
@@ -136,6 +100,10 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
       {
         name: 'facebook',
         url: 'https://www.facebook.com/avnish.choudhary.56?mibextid=ZbWKwL',
+      },
+      {
+        name: 'email',
+        url: 'mailto: frndparty918@gmail.com',
       },
       // {
       //   name: 'twitter',
@@ -177,14 +145,6 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
     socialMedia: [
       {
         name: 'facebook',
-        url: 'htttps://facebook.com',
-      },
-      {
-        name: 'twitter',
-        url: 'htttps://facebook.com',
-      },
-      {
-        name: 'linkedin',
         url: 'htttps://facebook.com',
       },
     ],
@@ -253,24 +213,16 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
     ],
   },
   {
-    name: 'Hari Narayan Lakjaran',
+    name: 'Hari Narayan Lakharan',
     designation: 'Member',
     email: '-',
     batch: '2003',
-    profilePicture: '/assets/images/male_profile_placeholder.png',
+    profilePicture: '/assets/people/harinarayan_2003_passport.jpg',
     socialMedia: [
       {
         name: 'facebook',
-        url: 'htttps://facebook.com',
+        url: 'https://www.facebook.com/profile.php?id=100008921682291',
       },
-      // {
-      //   name: 'twitter',
-      //   url: 'htttps://facebook.com',
-      // },
-      // {
-      //   name: 'linkedin',
-      //   url: 'htttps://facebook.com',
-      // },
     ],
   },
 ];

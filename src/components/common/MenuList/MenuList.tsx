@@ -34,6 +34,7 @@ const MenuList: React.FC<MenuListProps> = ({ title, items, offsetTop }) => (
                     textDecoration: 'none',
                   }}
                   href={item.path}
+                  disableGutters
                 >
                   <ListItemText
                     primary={
@@ -41,6 +42,7 @@ const MenuList: React.FC<MenuListProps> = ({ title, items, offsetTop }) => (
                         display="flex"
                         alignItems="center"
                         color="grey.800"
+                        variant="body2"
                         sx={{
                           transition: 'all 0.2s linear',
                           svg: {

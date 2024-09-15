@@ -5,7 +5,8 @@
     "name": "Sukumal Ajmera",
     "gender": "male",
     "phone": "9460846992",
-    "email": "coolguy_ajmera@yahoo.com"
+    "email": "coolguy_ajmera@yahoo.com",
+    "profile_image": "/assets/people/sukumal_1993_passport.jpg"
   },
   {
     "id": 2,
@@ -29,7 +30,8 @@
     "name": "Pradeep Singh Rathore",
     "gender": "male",
     "phone": "7891518400",
-    "email": "pradeep0094.psr@gmail.com"
+    "email": "pradeep0094.psr@gmail.com",
+    "profile_image": "/assets/people/pradeep_1994_passport.jpg"
   },
   {
     "id": 5,
@@ -69,7 +71,8 @@
     "name": "Mukesh Akar",
     "gender": "male",
     "phone": "9828119777",
-    "email": "mukeshakar@gmail.com"
+    "email": "mukeshakar@gmail.com",
+    "profile_image": "/assets/people/mukeshakar_1995_passport.jpeg"
   },
   {
     "id": 10,
@@ -373,7 +376,8 @@
     "name": "Rajesh Dyama",
     "gender": "male",
     "phone": "9694140205",
-    "email": "rajeshdyamaalwaysroxx@gmail.com"
+    "email": "rajeshdyamaalwaysroxx@gmail.com",
+    "profile_image": "/assets/people/rajesh_2009_passport.jpg"
   },
   {
     "id": 51,
@@ -445,7 +449,8 @@
     "name": "Thanveer Yadav",
     "gender": "male",
     "phone": "8586870294",
-    "email": "thanveerjpr@gmail.com"
+    "email": "thanveerjpr@gmail.com",
+    "profile_image": "/assets/people/thanveer_2012_passport.jpg"
   },
   {
     "id": 60,
@@ -485,7 +490,8 @@
     "name": "Meena Verma",
     "gender": "female",
     "phone": "8905560842",
-    "email": "meenaverma473@gmail.com"
+    "email": "meenaverma473@gmail.com",
+    "profile_image": "/assets/people/meena_2014_passport.jpg"
   },
   {
     "id": 65,
@@ -525,7 +531,8 @@
     "name": "Ritu Sabal",
     "gender": "female",
     "phone": "8619144967",
-    "email": "ritusabal34@gmail.com"
+    "email": "ritusabal34@gmail.com",
+    "profile_image": "/assets/people/ritu_2015_passport.jpg"
   },
   {
     "id": 70,
