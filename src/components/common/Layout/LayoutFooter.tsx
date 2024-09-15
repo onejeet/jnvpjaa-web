@@ -8,6 +8,7 @@ import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
+import dynamic from 'next/dynamic';
 import NextLink from 'next/link';
 import React from 'react';
 
@@ -224,4 +225,6 @@ const LayoutFooter: React.FC = () => {
   );
 };
 
-export default LayoutFooter;
+export default dynamic(() => Promise.resolve(LayoutFooter), {
+  ssr: false,
+});
