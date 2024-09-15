@@ -4,6 +4,11 @@
   box-sizing: border-box;
   font-family: 'DM Sans', sans-serif;
 }
+body {
+  /* overflow-y: auto;
+  overflow-x: hidden; */
+  min-height: 100vh;
+}
 
 .embla {
   max-width: 48rem;

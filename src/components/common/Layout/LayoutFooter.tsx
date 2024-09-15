@@ -1,12 +1,14 @@
 import { JNVPJAA_SOCIAL_MEDIA } from '@/constants/General.contants';
 import { getSocialMediaIcon } from '@/utils/helpers';
-import { IconButton, Link, Stack } from '@mui/material';
+import { IconButton, Stack } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
+import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
+import NextLink from 'next/link';
 import React from 'react';
 
 import Logo from '@/components/common/Logo';
@@ -19,7 +21,6 @@ const LayoutFooter: React.FC = () => {
       sx={{
         flexGrow: 1,
         bgcolor: 'grey.300',
-        maxHeight: '412px',
         pb: '20px',
       }}
     >
@@ -28,8 +29,8 @@ const LayoutFooter: React.FC = () => {
       >
         <AppBar position="static" sx={{ bgcolor: 'grey.300' }} elevation={0}>
           <Grid container p={{ xs: 2, sm: 0 }}>
-            <Grid item sm={12} md={4.75} pt="25px">
-              <Logo />
+            <Grid item xs={12} sm={12} md={4.75} pt="25px">
+              <Logo width={325} height={50} />
               {/* <Box
                 display="flex"
                 width={{
@@ -55,7 +56,7 @@ const LayoutFooter: React.FC = () => {
                 </Link>
               </Box> */}
             </Grid>
-            <Grid item xs={12} sm={2.25} md={2.25} pt="25px">
+            <Grid item xs={6} sm={2.25} md={2.25} pt="25px">
               <MenuList
                 title="About"
                 items={[
@@ -74,7 +75,7 @@ const LayoutFooter: React.FC = () => {
                 ]}
               />
             </Grid>
-            <Grid item xs={12} sm={2.25} md={2.25} pt="25px">
+            <Grid item xs={6} sm={2.25} md={2.25} pt="25px">
               <MenuList
                 title="Resources"
                 items={[
@@ -173,6 +174,7 @@ const LayoutFooter: React.FC = () => {
             <Grid
               xs={12}
               md={6}
+              item
               display="flex"
               justifyContent="end"
               color="grey.800"
@@ -193,22 +195,26 @@ const LayoutFooter: React.FC = () => {
                 display="flex"
               >
                 Designed & Crafted By:{' '}
-                <Box
-                  ml={1}
-                  color="primary.main"
-                  sx={{
-                    borderBottom: '1px dotted',
-                    borderColor: 'primary.main',
-                    cursor: 'pointer',
-                    opacity: 0.7,
-                    '&:hover': {
-                      opacity: 1,
-                    },
-                  }}
-                >
-                  {' '}
-                  Dots Created
-                </Box>
+                <NextLink href="https://www.dotscreated.com/" passHref style={{ textDecoration: 'none' }}>
+                  <Link sx={{ textDecoration: 'none' }}>
+                    <Box
+                      ml={1}
+                      color="primary.main"
+                      sx={{
+                        borderBottom: '1px dotted',
+                        borderColor: 'primary.main',
+                        cursor: 'pointer',
+                        opacity: 0.7,
+                        '&:hover': {
+                          opacity: 1,
+                        },
+                      }}
+                    >
+                      {' '}
+                      Dots Created
+                    </Box>
+                  </Link>
+                </NextLink>
               </Typography>
             </Grid>
           </Grid>

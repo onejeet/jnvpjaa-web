@@ -26,18 +26,19 @@ const LayoutModule: React.FC<Props> = (props) => {
 
   return (
     <>
-      <CssBaseline />
+      {/* <CssBaseline /> */}
       <Head>
         <title>{title || 'Untitled'}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
       </Head>
       <Box
-        minHeight="100vh"
+        // minHeight="100vh"
         width="100%"
-        overflow="auto"
-        display="flex"
-        flexDirection="column"
-        justifyContent="space-between"
-        sx={{ overflowX: 'hidden' }}
+        // overflow="auto"
+        // display="flex"
+        // flexDirection="column"
+        // justifyContent="start"
+        // sx={{ overflow: 'hidden' }}
       >
         {!disableTopbar && <LayoutTopbar />}
 
@@ -47,7 +48,7 @@ const LayoutModule: React.FC<Props> = (props) => {
               xs: disableCover ? 3 : 0,
               md: disableCover ? 4 : 0,
             },
-
+            overflow: 'hidden',
             flexGrow: 1,
             bgcolor: 'background.paper',
             maxWidth: disableCover ? { xs: '97%', sm: '95%', md: '90%', xl: '1500px' } : '100%',
@@ -59,8 +60,8 @@ const LayoutModule: React.FC<Props> = (props) => {
         >
           {children}
         </Container>
-        {!disableFooter && <LayoutFooter />}
       </Box>
+      {!disableFooter && <LayoutFooter />}
     </>
   );
 };

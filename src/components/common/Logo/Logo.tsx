@@ -20,7 +20,7 @@ const Logo: React.FC<Props> = ({ width, height, icon, type }) => {
   };
 
   return (
-    <Box display="flex">
+    <Box display="flex" maxWidth="100%">
       <Image src="/assets/branding/logo-full.png" width={width || 390} height={height || 60} alt="JNVPJAA logo" />
     </Box>
   );

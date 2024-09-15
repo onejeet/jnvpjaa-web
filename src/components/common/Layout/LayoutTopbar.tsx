@@ -45,6 +45,7 @@ const LayoutTopbar: React.FC = () => {
       position="sticky"
       elevation={0}
       sx={{
+        top: 0,
         backgroundColor: 'background.paper',
         borderBottom: '0.5px solid',
         borderColor: (theme: Theme) => alpha(theme.palette.primary.main, 0.4),
@@ -108,7 +109,7 @@ const LayoutTopbar: React.FC = () => {
         PaperProps={{ sx: { width: '250px', minWidth: '200px', py: '20px', px: '16px' } }}
       >
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-          <Image src="/assets/branding/logo-full.png" width={195} height={30} alt="logo" />
+          <Logo width={195} height={30} />
           <IconButton onClick={() => setOpenMenu(false)}>
             {' '}
             <CloseIcon />{' '}

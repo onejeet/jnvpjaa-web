@@ -9,6 +9,7 @@ import ProfilePicture from '@/components/common/ProfilePicture';
 
 const useBatchCoordinators = () => {
   const [columns, setColumns] = React.useState<any[]>([]);
+  const [searchQuery, setSearchQuery] = React.useState<string>('');
 
   //   const [state, dispatch] = useImmerReducer(reducer, initialState);
   //   const { replace, query, pathname } = useRouter();
@@ -101,8 +102,15 @@ const useBatchCoordinators = () => {
     setColumns(columns);
   }, []);
 
+  const rows = React.useMemo(() => {
+    if (!searchQuery) return BATCH_COORDINATORS;
+    BATCH_COORDINATORS?.filter(
+      (coord: Record<string, any>) => coord.name?.includes(searchQuery) || coord?.batch?.includes(searchQuery)
+    );
+  }, [searchQuery]);
+
   return {
-    rows: BATCH_COORDINATORS,
+    rows,
     // loading: usersListLoading || ViewSchemaLoading,
     // rows: usersListData,
     columns,

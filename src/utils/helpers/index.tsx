@@ -29,5 +29,7 @@ export const getSocialMediaIcon = (iconName: string) => {
 };
 
 export const getDefaultAvatar = (gender?: string) => {
-  return gender === 'female' ? '/assets/svg/female.svg' : '/assets/svg/male.svg';
+  return gender === 'female'
+    ? '/assets/images/female_profile_placeholder.png'
+    : '/assets/images/male_profile_placeholder.png';
 };
