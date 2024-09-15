@@ -48,7 +48,7 @@ const SecretaryMessage = () => {
             Message from Secretary
           </Typography>
           <Box display={{ xs: 'block', sm: 'none' }} sx={{ borderRadius: '10px', width: '100%', overflow: 'hidden' }}>
-            <img src="/assets/people/dinesh-2002.jpg" width="100%" alt="jnv principal" />
+            <img src="/assets/people/dinesh_2002.jpg" width="100%" alt="JNVPJAA Secretary" />
           </Box>
           <Typography color="grey.800" fontWeight={600} display="flex">
             Embracing Unity, Striving for Excellence
@@ -107,7 +107,7 @@ const SecretaryMessage = () => {
           display={{ xs: 'none', sm: 'block' }}
           sx={{ borderRadius: '10px', width: 250, height: 400, overflow: 'hidden' }}
         >
-          <Image src="/assets/people/dinesh-2002.jpg" width={250} height={400} alt="jnv principal" />
+          <Image src="/assets/people/dinesh_2002.jpg" width={250} height={400} alt="JNVPJAA Secretary" />
         </Box>
       </Box>
     </Box>

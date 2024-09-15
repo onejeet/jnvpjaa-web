@@ -1,5 +1,5 @@
-import BATCH_COORDINATORS from '@/constants/BatchCoordinators.json';
 import { commonTableColumnProps } from '@/constants/General.contants';
+import PAST_PRESIDENTS from '@/constants/PastPresidents.json';
 import { getDefaultAvatar } from '@/utils/helpers';
 import Box from '@mui/material/Box';
 import { GridRowParams } from '@mui/x-data-grid';
@@ -7,7 +7,7 @@ import React from 'react';
 
 import ProfilePicture from '@/components/common/ProfilePicture';
 
-const useBatchCoordinators = () => {
+const usePastPresidents = () => {
   const [columns, setColumns] = React.useState<any[]>([]);
   const [searchQuery, setSearchQuery] = React.useState<string>('');
 
@@ -18,7 +18,7 @@ const useBatchCoordinators = () => {
     const columns = [
       {
         field: 'name',
-        headerName: 'COORDINATOR',
+        headerName: 'PRESIDENT',
         width: 300,
         ...commonTableColumnProps,
         sortable: true,
@@ -40,6 +40,13 @@ const useBatchCoordinators = () => {
             />
           </Box>
         ),
+      },
+      {
+        field: 'tenure',
+        headerName: 'TENURE',
+        width: 270,
+        ...commonTableColumnProps,
+        sortable: true,
       },
       {
         field: 'year',
@@ -103,15 +110,15 @@ const useBatchCoordinators = () => {
     setColumns(columns);
   }, []);
 
-  const rows = React.useMemo(() => {
-    if (!searchQuery) return BATCH_COORDINATORS;
-    BATCH_COORDINATORS?.filter(
-      (coord: Record<string, any>) => coord.name?.includes(searchQuery) || coord?.batch?.includes(searchQuery)
-    );
-  }, [searchQuery]);
+  // const rows = React.useMemo(() => {
+  //   if (!searchQuery) return PAST_PRESIDENTS;
+  //   PAST_PRESIDENTS?.filter(
+  //     (coord: Record<string, any>) => coord.name?.includes(searchQuery) || coord?.batch?.includes(searchQuery)
+  //   );
+  // }, [searchQuery]);
 
   return {
-    rows,
+    rows: PAST_PRESIDENTS,
     // loading: usersListLoading || ViewSchemaLoading,
     // rows: usersListData,
     columns,
@@ -137,4 +144,4 @@ const useBatchCoordinators = () => {
   };
 };
 
-export default useBatchCoordinators;
+export default usePastPresidents;

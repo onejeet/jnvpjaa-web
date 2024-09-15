@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "year": 1994,
+    "name": "Pradeep Rathore",
+    "gender": "male",
+    "phone": "",
+    "email": "-",
+    "tenure": ""
+  },
+  {
+    "id": 2,
+    "year": 2002,
+    "name": "Hemant Jangid",
+    "gender": "male",
+    "phone": "",
+    "email": "-",
+    "tenure": ""
+  },
+  {
+    "id": 3,
+    "year": 2006,
+    "name": "Gaurav Chhaparwal",
+    "gender": "male",
+    "phone": "",
+    "email": "drgaurav489@gmail.com",
+    "profile_image": "/assets/people/gaurav_2006_passport.jpg",
+    "tenure": "Current"
+  }
+]

@@ -36,7 +36,7 @@ export const HEADER_MENU: IHeaderMenuItem[] = [
     path: '/',
     menu: [
       {
-        label: 'Executive-Committee',
+        label: 'Executive Committee',
         path: '/executive-committee',
       },
       {
@@ -46,6 +46,10 @@ export const HEADER_MENU: IHeaderMenuItem[] = [
       {
         label: 'Bhamashah Pillars',
         path: '/bhamashah-pillars',
+      },
+      {
+        label: 'Past Presidents',
+        path: '/past-presidents',
       },
     ],
   },
