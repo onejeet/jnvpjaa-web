@@ -13,6 +13,7 @@ const Home = () => {
         fontWeight={500}
         textAlign="center"
         sx={{
+          lineHeight: 'normal',
           // border: '1px solid',
           // borderColor: 'grey.400',
           // borderRadius: '4px',
@@ -21,7 +22,8 @@ const Home = () => {
         }}
         color="primary.main"
       >
-        नभ: स्पृशं दीप्तम् (touching the skies with glory)
+        नभ: स्पृशं दीप्तम् <br />
+        (touching the skies with glory)
         <br />
         <Box
           color="grey.800"
