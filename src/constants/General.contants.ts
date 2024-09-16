@@ -141,7 +141,7 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
     designation: 'Member',
     email: '-',
     batch: '1996',
-    profilePicture: '/assets/images/male_profile_placeholder.webp',
+    profilePicture: '/assets/people/nathuram_1996_passport.webp',
     socialMedia: [
       {
         name: 'facebook',
