@@ -15,7 +15,7 @@ const HomePage: NextPage = () => (
         description: 'The Official Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur',
         images: [
           {
-            url: '/assets/images/cover-2.jpg',
+            url: '/assets/images/cover-2.webp',
             width: 1280,
             height: 720,
             alt: 'JNVPJAA',

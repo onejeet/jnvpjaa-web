@@ -46,7 +46,7 @@ const About = () => {
             sx={{ borderRadius: '10px', maxWidth: '100%', maxHeight: '400px', overflow: 'hidden' }}
           >
             <img
-              src="/assets/images/cover-2.jpg"
+              src="/assets/images/cover-2.webp"
               width="100%"
               alt="mission"
               style={{ objectFit: 'contain', position: 'relative', top: '-20px' }}

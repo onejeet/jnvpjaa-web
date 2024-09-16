@@ -16,7 +16,7 @@ const Hero = () => {
         }}
         sx={{
           backgroundColor: 'common.black',
-          backgroundImage: 'url(/assets/images/cover.png)',
+          backgroundImage: 'url(/assets/images/cover.webp)',
           backgroundRepeat: 'no-repeat',
           backgroundSize: {
             xs: '100% 100%',
@@ -80,7 +80,7 @@ const Hero = () => {
               md: '35px',
             }}
             textAlign="center"
-            color="grey.300"
+            color="background.paper"
           >
             JNV Paota Almuni Network
           </Typography>

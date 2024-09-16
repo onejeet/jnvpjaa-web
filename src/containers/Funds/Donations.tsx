@@ -52,7 +52,7 @@ const Donations = () => {
             Donations
           </Typography>
           {/* <Box display={{ xs: 'block', sm: 'none' }} sx={{ borderRadius: '10px', width: '100%', overflow: 'hidden' }}>
-            <img src="/assets/people/principal.jpg" width="100%" alt="jnv principal" />
+            <img src="/assets/people/principal.webp" width="100%" alt="jnv principal" />
           </Box> */}
 
           <Typography color="grey.800" mt={2}>
@@ -79,7 +79,7 @@ const Donations = () => {
           display={{ xs: 'none', sm: 'block' }}
           sx={{ borderRadius: '10px', width: 300, height: 400, overflow: 'hidden' }}
         >
-          <Image src="/assets/images/donation.jpg" width={300} height={400} alt="donations" />
+          <Image src="/assets/images/donation.webp" width={300} height={400} alt="donations" />
         </Box>
       </Box>
     </Box>

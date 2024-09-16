@@ -54,7 +54,7 @@ const BhamashahPillars = () => {
             sx={{ borderRadius: '10px', maxWidth: '100%', maxHeight: '400px', overflow: 'hidden' }}
           >
             <img
-              src="/assets/images/star-contributors.jpg"
+              src="/assets/images/star-contributors.webp"
               width="100%"
               alt="mission"
               style={{ objectFit: 'contain', position: 'relative', top: '0px' }}

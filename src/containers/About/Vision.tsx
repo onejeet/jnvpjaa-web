@@ -87,7 +87,7 @@ const Vision = () => {
             }}
           >
             <img
-              src="/assets/images/slider-2.jpg"
+              src="/assets/images/slider-2.webp"
               width="100%"
               alt="mission"
               style={{

@@ -55,7 +55,7 @@ const ContactUs = () => {
             sx={{ borderRadius: '10px', maxWidth: '100%', maxHeight: '400px', overflow: 'hidden' }}
           >
             <img
-              src="/assets/images/contact-us-3.jpg"
+              src="/assets/images/contact-us-3.webp"
               width="100%"
               alt="mission"
               style={{ objectFit: 'scale-down', position: 'relative' }}
