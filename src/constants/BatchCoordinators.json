@@ -96,7 +96,8 @@
     "name": "Nathuram Pankaj",
     "gender": "male",
     "phone": "9602774746",
-    "email": "bookcitytrip@gmail.com"
+    "email": "bookcitytrip@gmail.com",
+    "profile_image": "/assets/people/nathuram_1996_passport.webp"
   },
   {
     "id": 13,
@@ -385,7 +386,8 @@
     "name": "Ruby Athoniya",
     "gender": "female",
     "phone": "7792075417",
-    "email": "athoniyaruby@gmail.com"
+    "email": "athoniyaruby@gmail.com",
+    "profile_image": "/assets/people/ruby_2009_passport.webp"
   },
   {
     "id": 52,
