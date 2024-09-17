@@ -1,7 +1,6 @@
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Menu, MenuItem, Paper } from '@mui/material';
 import Link from '@mui/material/Link';
 import dynamic from 'next/dynamic';

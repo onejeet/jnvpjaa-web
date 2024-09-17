@@ -8,14 +8,9 @@ export interface Props {
   title?: string;
   disableTopbar?: boolean;
   disableFooter?: boolean;
-  disableNav?: boolean;
-  disableSearch?: boolean;
   //   breadcrumbs?: Array<IBreadcrumbsItem>;
   containerProps?: ContainerProps;
-  appBarProps?: AppBarProps;
   disableCover?: boolean;
-  disableTopbarShadow?: boolean;
-  logoSuffix?: React.ReactNode;
 }
 
 export interface AccountDropDownProps {}

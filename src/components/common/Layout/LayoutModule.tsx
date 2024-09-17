@@ -14,14 +14,8 @@ const LayoutModule: React.FC<Props> = (props) => {
     title,
     disableTopbar = false,
     disableFooter = false,
-    disableNav,
-    disableSearch,
-    appBarProps = {},
-    // breadcrumbs = [],
     containerProps = {},
     disableCover = true,
-    disableTopbarShadow,
-    logoSuffix,
   } = props;
 
   return (

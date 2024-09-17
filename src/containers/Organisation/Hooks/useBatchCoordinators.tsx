@@ -22,13 +22,12 @@ const useBatchCoordinators = () => {
         width: 250,
         ...commonTableColumnProps,
         sortable: true,
-
         renderCell: (params: GridRowParams) => (
           <Box display="flex" alignItems="center" height="100%">
             <ProfilePicture
               src={params.row.profile_image || getDefaultAvatar(params.row.gender)}
               title={params.row.name}
-              summary={`${params.row.year} Batch`}
+              summary={`Batch of ${params.row.year}`}
               alt={`${params.row.firstname || ''} ${params.row.lastname || ''}`}
               titleComponentProps={{
                 titleProps: {
@@ -103,10 +102,16 @@ const useBatchCoordinators = () => {
     setColumns(columns);
   }, []);
 
+  const onSearch = React.useCallback((q: string) => {
+    setSearchQuery(q);
+  }, []);
+
   const rows = React.useMemo(() => {
     if (!searchQuery) return BATCH_COORDINATORS;
-    BATCH_COORDINATORS?.filter(
-      (coord: Record<string, any>) => coord.name?.includes(searchQuery) || coord?.batch?.includes(searchQuery)
+
+    return BATCH_COORDINATORS?.filter(
+      (coord: Record<string, any>) =>
+        coord.name?.includes(searchQuery) || coord?.year?.toString()?.includes(searchQuery)
     );
   }, [searchQuery]);
 
@@ -116,7 +121,7 @@ const useBatchCoordinators = () => {
     // rows: usersListData,
     columns,
     // rowCount: total,
-    // onSearch,
+    onSearch,
     // state,
     // users,
     // loadingUsers,

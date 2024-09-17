@@ -1,11 +1,11 @@
 import SearchIcon from '@mui/icons-material/Search';
-import { Box, Grid, OutlinedInput, Typography } from '@mui/material';
+import { Box, Grid, OutlinedInput, Select, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 
 import useBatchCoordinators from './Hooks/useBatchCoordinators';
 
 const BatchCoordinators = () => {
-  const { columns, rows } = useBatchCoordinators();
+  const { columns, rows, onSearch } = useBatchCoordinators();
 
   return (
     <Box>
@@ -23,8 +23,17 @@ const BatchCoordinators = () => {
           <OutlinedInput
             placeholder="Search Coordinators"
             startAdornment={<SearchIcon sx={{ color: 'grey.800', mr: '8px' }} />}
+            onChange={(e) => onSearch(e.target.value)}
           />
         </Grid>
+        {/* <Grid item xs={12} sm={6} md={3}>
+          <Select
+            placeholder="Search Coordinators"
+            startAdornment={<SearchIcon sx={{ color: 'grey.800', mr: '8px' }} />}
+            options={[]}
+            onChange={(e) => onSearch(e.target.value)}
+          />
+        </Grid> */}
       </Box>
       <DataGrid
         // height={tableHeight}
