@@ -106,7 +106,7 @@ const LayoutTopbar: React.FC = () => {
         anchor="right"
         open={openMenu}
         onClose={() => setOpenMenu(false)}
-        PaperProps={{ sx: { width: '250px', minWidth: '200px', py: '20px', px: '16px' } }}
+        PaperProps={{ sx: { width: '250px', minWidth: '200px', py: '20px', px: '16px', overflowX: 'hidden' } }}
       >
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
           <Logo width={195} height={30} />
