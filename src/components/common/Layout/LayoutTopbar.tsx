@@ -27,8 +27,8 @@ import HeaderMenuItem from './HeaderMenuItem';
 export interface IMenuItemProps {
   item: IHeaderMenuItem;
   isMobile?: boolean;
-  expanded: boolean;
-  setExpanded: (arg: boolean) => void;
+  expanded?: boolean;
+  setExpanded?: (arg: string) => void;
 }
 
 export interface IHeaderMenuItem {

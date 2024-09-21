@@ -30,7 +30,7 @@ const HeaderMenuItem: React.FC<IMenuItemProps> = ({ item, isMobile, expanded, se
           elevation={0}
           sx={{ '& .MuiAccordionSummary-root': {} }}
           expanded={expanded}
-          onChange={() => setExpanded(expanded ? '' : item?.path || '')}
+          onChange={() => setExpanded?.(expanded ? '' : item?.path || '')}
         >
           <AccordionSummary
             aria-controls="panel2-content"
