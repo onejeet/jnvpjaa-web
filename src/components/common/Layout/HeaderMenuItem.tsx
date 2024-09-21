@@ -11,7 +11,7 @@ import React from 'react';
 import HoverPopover from '../HoverPopover';
 import type { IHeaderMenuItem, IMenuItemProps } from './LayoutTopbar';
 
-const HeaderMenuItem: React.FC<IMenuItemProps> = ({ item, isMobile }) => {
+const HeaderMenuItem: React.FC<IMenuItemProps> = ({ item, isMobile, expanded, setExpanded }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const router = useRouter();
@@ -26,7 +26,12 @@ const HeaderMenuItem: React.FC<IMenuItemProps> = ({ item, isMobile }) => {
   return (
     <Box component="div">
       {isMobile ? (
-        <Accordion elevation={0} sx={{ '& .MuiAccordionSummary-root': {} }}>
+        <Accordion
+          elevation={0}
+          sx={{ '& .MuiAccordionSummary-root': {} }}
+          expanded={expanded}
+          onChange={() => setExpanded(expanded ? '' : item?.path || '')}
+        >
           <AccordionSummary
             aria-controls="panel2-content"
             id="panel2-header"
@@ -35,10 +40,19 @@ const HeaderMenuItem: React.FC<IMenuItemProps> = ({ item, isMobile }) => {
               '& .MuiAccordionSummary-content': {
                 my: 0,
               },
+              '& .Mui-expanded': {
+                my: '4px',
+              },
             }}
           >
             <Button
-              sx={{ width: '100%', textAlign: 'left', p: 0, justifyContent: 'start' }}
+              sx={{
+                width: '100%',
+                textAlign: 'left',
+                p: 0,
+                justifyContent: 'space-between',
+                minHeight: '20px !important',
+              }}
               endIcon={<ArrowDropDownIcon sx={{ color: 'primary.main' }} />}
             >
               {item.label}
@@ -65,6 +79,7 @@ const HeaderMenuItem: React.FC<IMenuItemProps> = ({ item, isMobile }) => {
                         fontSize: '16px',
                         fontWeight: 300,
                         textAlign: 'center',
+                        minHeight: 20,
                       }}
                     >
                       {item.label}

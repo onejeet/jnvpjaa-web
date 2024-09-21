@@ -27,6 +27,8 @@ import HeaderMenuItem from './HeaderMenuItem';
 export interface IMenuItemProps {
   item: IHeaderMenuItem;
   isMobile?: boolean;
+  expanded: boolean;
+  setExpanded: (arg: boolean) => void;
 }
 
 export interface IHeaderMenuItem {
@@ -36,6 +38,7 @@ export interface IHeaderMenuItem {
 }
 
 const LayoutTopbar: React.FC = () => {
+  const [expanded, setExpanded] = React.useState<string>('');
   const [openMenu, setOpenMenu] = React.useState<boolean>(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -117,7 +120,13 @@ const LayoutTopbar: React.FC = () => {
         </Box>
         <Box width="100%">
           {HEADER_MENU.map((item: IHeaderMenuItem) => (
-            <HeaderMenuItem key={item.label} item={item} isMobile />
+            <HeaderMenuItem
+              key={item.label}
+              item={item}
+              isMobile
+              expanded={expanded === item.path}
+              setExpanded={setExpanded}
+            />
           ))}
         </Box>
       </Drawer>
