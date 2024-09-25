@@ -70,7 +70,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
           {name}
         </Typography>
         <Typography display="flex" alignItems="center" variant="body1" color="grey.700" sx={{ mb: 1 }}>
-          <Diversity3Icon sx={{ mr: '8px', color: 'grey.700', fontSize: '18px' }} /> Passout Year: {batch}
+          <Diversity3Icon sx={{ mr: '8px', color: 'grey.700', fontSize: '18px' }} /> Batch of {batch}
         </Typography>
         {email && (
           <Typography display="flex" alignItems="center" variant="body1" color="grey.700">

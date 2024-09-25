@@ -224,7 +224,7 @@ const LayoutFooter: React.FC = () => {
     </Box>
   );
 };
-
-export default dynamic(() => Promise.resolve(LayoutFooter), {
-  ssr: false,
-});
+export default LayoutFooter;
+// export default dynamic(() => Promise.resolve(LayoutFooter), {
+//   ssr: false,
+// });

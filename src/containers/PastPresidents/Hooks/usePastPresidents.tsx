@@ -28,7 +28,7 @@ const usePastPresidents = () => {
             <ProfilePicture
               src={params.row.profile_image || getDefaultAvatar(params.row.gender)}
               title={params.row.name}
-              summary={`${params.row.year} Batch`}
+              summary={`Batch of ${params.row.year}`}
               alt={`${params.row.firstname || ''} ${params.row.lastname || ''}`}
               titleComponentProps={{
                 titleProps: {

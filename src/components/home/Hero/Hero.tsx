@@ -41,7 +41,7 @@ const Hero = () => {
           <Typography
             variant="h1"
             fontSize={{
-              xs: 20,
+              xs: 24,
               sm: 30,
               md: 50,
             }}
@@ -63,20 +63,24 @@ const Hero = () => {
             JNV Paota Almuni Network
           </Typography> */}
         </Box>
-        <Box sx={{ position: 'absolute', bottom: { xs: '-7px', sm: '-10px', md: '16px' } }}>
+        <Box sx={{ position: 'absolute', bottom: { xs: '-10px', sm: '-10px', md: '-16px' } }}>
           <Typography
             display="flex"
             alignItems="center"
             variant="h1"
             fontSize={{
-              xs: 25,
+              xs: 50,
               sm: 60,
               md: 100,
             }}
             lineHeight={{
-              xs: '30px',
+              xs: '50px',
               sm: '60px',
-              md: '35px',
+              md: '100px',
+            }}
+            maxWidth={{
+              xs: '350px',
+              sm: '100%',
             }}
             textAlign="center"
             color="background.paper"

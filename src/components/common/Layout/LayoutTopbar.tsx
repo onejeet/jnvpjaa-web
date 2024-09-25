@@ -134,6 +134,7 @@ const LayoutTopbar: React.FC = () => {
   );
 };
 
-export default dynamic(() => Promise.resolve(LayoutTopbar), {
-  ssr: false,
-});
+export default LayoutTopbar;
+// export default dynamic(() => Promise.resolve(LayoutTopbar), {
+//   ssr: false,
+// });
