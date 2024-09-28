@@ -1,40 +1,26 @@
-import { Breadcrumbs, Paper, Typography } from '@mui/material';
+import { LinkPreview } from '@dhaiwat10/react-link-preview';
+import { Paper, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
-import MuiLink from '@mui/material/Link';
-import NextLink from 'next/link';
+
+import Breadcrumbs from '@/components/common/Breadcrumbs';
+
+const breadcrumbsList = [
+  {
+    label: 'Home',
+    path: '/',
+  },
+  {
+    label: ' Student Hub',
+  },
+  {
+    label: 'SkillUp Resources',
+  },
+];
 
 const SkillUpResources = () => {
   return (
     <Box>
-      <Breadcrumbs
-        sx={{
-          //   fontSize: '7px',
-          alignItems: 'center',
-          color: 'grey.500',
-        }}
-        // separator=">"
-        aria-label="breadcrumb"
-      >
-        <NextLink
-          href={{
-            pathname: '/',
-          }}
-          as={{
-            pathname: '/',
-          }}
-          passHref
-        >
-          <MuiLink variant="body2" underline="none" color="primary">
-            Home
-          </MuiLink>
-        </NextLink>
-        <MuiLink variant="body2" underline="none" sx={{ color: 'grey.800', pointerEvents: 'none' }}>
-          Student Hub
-        </MuiLink>
-        <MuiLink variant="body2" underline="none" sx={{ color: 'grey.800', pointerEvents: 'none' }}>
-          Important Links
-        </MuiLink>
-      </Breadcrumbs>
+      <Breadcrumbs items={breadcrumbsList} />
       <Box component={Paper} gap={2} px={2} py={4} my={2} width="100%" display="flex" alignItems="start">
         <Box
           width={{
@@ -45,6 +31,7 @@ const SkillUpResources = () => {
           <Typography variant="h1" mb={3}>
             Recommended Learning Resources
           </Typography>
+          <LinkPreview url="https://www.google.com" width="400px" />
           {/* <Box
             display={{ xs: 'block', sm: 'block' }}
             sx={{ borderRadius: '10px', maxWidth: '100%', maxHeight: '400px', overflow: 'hidden' }}

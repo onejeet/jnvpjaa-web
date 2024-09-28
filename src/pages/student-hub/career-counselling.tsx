@@ -7,7 +7,7 @@ import LayoutModule from '@/components/common/Layout';
 const CareerCounsellingPage: NextPage = () => (
   <>
     <NextSeo
-      title="Important Links • Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur"
+      title="Career Counselling • Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur"
       description="The Official Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur"
       openGraph={{
         url: 'https://jnvpjaa.org',
@@ -32,7 +32,7 @@ const CareerCounsellingPage: NextPage = () => (
     />
     <LayoutModule
       disableCover
-      title="SkillUp Resources • Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur"
+      title="Career Counselling • Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur"
       containerProps={{}}
     >
       <CareerCounselling />

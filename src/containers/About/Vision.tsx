@@ -1,14 +1,8 @@
-'use client';
-
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
-import SendIcon from '@mui/icons-material/Send';
-import SubdirectoryArrowRightIcon from '@mui/icons-material/SubdirectoryArrowRight';
-import { Breadcrumbs, List, ListItemIcon, ListItemText, Paper, Typography } from '@mui/material';
+import { List, ListItemIcon, ListItemText, Paper, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
-import MuiLink from '@mui/material/Link';
-import dynamic from 'next/dynamic';
-import Image from 'next/image';
-import NextLink from 'next/link';
+
+import Breadcrumbs from '@/components/common/Breadcrumbs';
 
 const VISION_LIST = [
   'To promote contact & communication between the Association & the School.',
@@ -35,35 +29,20 @@ const VISION_LIST = [
   'To publish advertisements and newspaper articles for creating awareness among general public in related fields.',
 ];
 
+const breadcrumbsList = [
+  {
+    label: 'Home',
+    path: '/',
+  },
+  {
+    label: 'Vision & Mission',
+  },
+];
+
 const Vision = () => {
   return (
     <Box>
-      <Breadcrumbs
-        sx={{
-          //   fontSize: '7px',
-          alignItems: 'center',
-          color: 'grey.500',
-        }}
-        // separator=">"
-        aria-label="breadcrumb"
-      >
-        <NextLink
-          href={{
-            pathname: '/',
-          }}
-          as={{
-            pathname: '/',
-          }}
-          passHref
-        >
-          <MuiLink variant="body2" underline="none" color="primary">
-            Home
-          </MuiLink>
-        </NextLink>
-        <MuiLink variant="body2" underline="none" sx={{ color: 'grey.800', pointerEvents: 'none' }}>
-          Vision & Mission
-        </MuiLink>
-      </Breadcrumbs>
+      <Breadcrumbs items={breadcrumbsList} />
       <Box component={Paper} gap={2} px={2} py={4} my={2} width="100%" display="flex" alignItems="start">
         <Box
           width={{
@@ -74,12 +53,21 @@ const Vision = () => {
           <Typography variant="h1" mb={3}>
             Vision & Mission
           </Typography>
+
+          <Typography color="grey.800" my={2}>
+            Welcome to the JNV Paota Jaipur Alumni Association, where our mission is to strengthen the connection
+            between our association and the school community. We aim to support students and members by facilitating the
+            exchange of ideas, organizing educational events, and providing scholarships. Committed to social
+            responsibility, we also focus on health awareness, social welfare, and cultural development. By leveraging
+            technology and collaborating with various agencies, we strive to enhance both personal and community growth.
+            Join us in making a meaningful impact through our diverse initiatives and programs.
+          </Typography>
           <Box
             display={{ xs: 'block', sm: 'block' }}
             sx={{
               borderRadius: '10px',
               maxWidth: '100%',
-              maxHeight: '400px',
+              maxHeight: '600px',
               overflow: 'hidden',
               backgroundRepeat: 'no-repeat',
               backgroundPosition: 'center bottom',
@@ -100,16 +88,8 @@ const Vision = () => {
               }}
             />
           </Box>
-          <Typography color="grey.800" mt={2}>
-            Welcome to the JNV Paota Jaipur Alumni Association, where our mission is to strengthen the connection
-            between our association and the school community. We aim to support students and members by facilitating the
-            exchange of ideas, organizing educational events, and providing scholarships. Committed to social
-            responsibility, we also focus on health awareness, social welfare, and cultural development. By leveraging
-            technology and collaborating with various agencies, we strive to enhance both personal and community growth.
-            Join us in making a meaningful impact through our diverse initiatives and programs.
-          </Typography>
           <List
-            sx={{ width: '100%', mt: 2, bgcolor: 'background.paper' }}
+            sx={{ width: '100%', mt: 3, bgcolor: 'background.paper' }}
             component="nav"
             aria-labelledby="nested-list-subheader"
             // subheader={
@@ -137,6 +117,4 @@ const Vision = () => {
   );
 };
 
-export default dynamic(() => Promise.resolve(Vision), {
-  ssr: false,
-});
+export default Vision;

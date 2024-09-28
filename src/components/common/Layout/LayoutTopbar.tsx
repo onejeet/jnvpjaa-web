@@ -93,14 +93,11 @@ const LayoutTopbar: React.FC = () => {
               <HeaderMenuItem key={item.label} item={item} />
             ))}
             <NextLink href="/contact-us" passHref style={{ textDecoration: 'none' }}>
-              <Link sx={{ textDecoration: 'none' }}>
-                <Button
-                  variant="outlined"
-                  sx={{ display: { xs: 'none', md: 'block' }, ml: '8px', whiteSpace: 'nowrap' }}
-                >
-                  Contact Us
-                </Button>
-              </Link>
+              {/* <Link sx={{ textDecoration: 'none' }}> */}
+              <Button variant="outlined" sx={{ display: { xs: 'none', md: 'block' }, ml: '8px', whiteSpace: 'nowrap' }}>
+                Contact Us
+              </Button>
+              {/* </Link> */}
             </NextLink>
           </Box>
         </Toolbar>
@@ -135,6 +132,3 @@ const LayoutTopbar: React.FC = () => {
 };
 
 export default LayoutTopbar;
-// export default dynamic(() => Promise.resolve(LayoutTopbar), {
-//   ssr: false,
-// });

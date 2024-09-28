@@ -1,44 +1,50 @@
-import { Breadcrumbs, Paper, Typography } from '@mui/material';
+import { Paper, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
-import MuiLink from '@mui/material/Link';
-import NextLink from 'next/link';
+
+import Breadcrumbs from '@/components/common/Breadcrumbs';
+
+const breadcrumbsList = [
+  {
+    label: 'Home',
+    path: '/',
+  },
+  {
+    label: ' Student Hub',
+  },
+  {
+    label: 'Career Counselling',
+  },
+];
 
 const CareerCounselling = () => {
   return (
     <>
-      <Breadcrumbs
-        sx={{
-          //   fontSize: '7px',
-          alignItems: 'center',
-          color: 'grey.500',
+      <Breadcrumbs items={breadcrumbsList} />
+      <Box
+        component={Paper}
+        width="100%"
+        gap={3}
+        px={2}
+        py={3}
+        my={2}
+        display="flex"
+        flexDirection={{
+          xs: 'column-reverse',
+          md: 'row',
         }}
-        // separator=">"
-        aria-label="breadcrumb"
+        alignItems="center"
       >
-        <NextLink
-          href={{
-            pathname: '/',
+        <Box
+          maxWidth={{
+            xs: '100%',
+            md: '50%',
           }}
-          as={{
-            pathname: '/',
-          }}
-          passHref
         >
-          <MuiLink variant="body2" underline="none" color="primary">
-            Home
-          </MuiLink>
-        </NextLink>
-        <MuiLink variant="body2" underline="none" sx={{ color: 'grey.800', pointerEvents: 'none' }}>
-          Student Hub
-        </MuiLink>
-        <MuiLink variant="body2" underline="none" sx={{ color: 'grey.800', pointerEvents: 'none' }}>
-          Career Counselling
-        </MuiLink>
-      </Breadcrumbs>
-      <Box component={Paper} gap={3} px={2} py={3} my={2} display="flex" alignItems="center">
-        <Box>
           <Typography variant="h1" mb={3}>
             Career Counselling
+          </Typography>
+          <Typography color="grey.800" my={2}>
+            {`“What’s next?” This uncertainty is something nearly everyone experiences.`}
           </Typography>
           <Box
             display={{ xs: 'block', md: 'none' }}
@@ -51,10 +57,8 @@ const CareerCounselling = () => {
               style={{ objectFit: 'contain', position: 'relative' }}
             />
           </Box>
+
           <Typography color="grey.800" mt={3}>
-            {`“What’s next?” This uncertainty is something nearly everyone experiences.`}
-          </Typography>
-          <Typography color="grey.800" mt={2}>
             {`Selecting a career involves careful consideration of many factors. It’s wise to seek insights from those who have successfully navigated their own journeys. While there are plenty of commercial career guidance services out there, they often focus more on profits than on truly helping you make informed decisions. Instead, turn to trusted mentors and fellow alumni who can offer personalized advice and support as you explore your options. Your path is unique, and the right guidance can make all the difference.`}
           </Typography>
           <Typography color="grey.800" mt={2}>

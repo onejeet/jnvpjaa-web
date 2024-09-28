@@ -6,9 +6,7 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
-import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
-import dynamic from 'next/dynamic';
 import NextLink from 'next/link';
 import React from 'react';
 
@@ -133,7 +131,7 @@ const LayoutFooter: React.FC = () => {
             <Grid item xs={12} display="flex" width="100%" justifyContent="center">
               <Stack direction="row" spacing="16px" alignItems="center">
                 {JNVPJAA_SOCIAL_MEDIA?.map(({ path, name }: Record<string, any>, index: number) => (
-                  <Link key={`social-media-item-${index}`} href={path} target="_blank" color="inherit" title={name}>
+                  <NextLink key={`social-media-item-${index}`} href={path} target="_blank" color="inherit" title={name}>
                     <IconButton
                       sx={{
                         bgcolor: 'transparent',
@@ -144,7 +142,7 @@ const LayoutFooter: React.FC = () => {
                     >
                       {getSocialMediaIcon(name)}
                     </IconButton>
-                  </Link>
+                  </NextLink>
                 ))}
               </Stack>
             </Grid>
@@ -196,30 +194,26 @@ const LayoutFooter: React.FC = () => {
                 display="flex"
               >
                 Designed & Crafted By:{' '}
-                <NextLink
-                  href="https://www.dotscreated.com/"
-                  passHref
-                  style={{ textDecoration: 'none' }}
-                  target="_blank"
-                >
-                  <Link sx={{ textDecoration: 'none' }}>
-                    <Box
-                      ml={1}
-                      color="primary.main"
-                      sx={{
-                        borderBottom: '1px dotted',
-                        borderColor: 'primary.main',
-                        cursor: 'pointer',
-                        opacity: 0.7,
-                        '&:hover': {
-                          opacity: 1,
-                        },
-                      }}
-                    >
-                      {' '}
-                      Dots Created
-                    </Box>
-                  </Link>
+                <NextLink href="https://www.dotscreated.com/" style={{ textDecoration: 'none' }} target="_blank">
+                  {/* <Link sx={{ textDecoration: 'none' }}> */}
+                  <Box
+                    component="span"
+                    ml={1}
+                    color="primary.main"
+                    sx={{
+                      borderBottom: '1px dotted',
+                      borderColor: 'primary.main',
+                      cursor: 'pointer',
+                      opacity: 0.7,
+                      '&:hover': {
+                        opacity: 1,
+                      },
+                    }}
+                  >
+                    {' '}
+                    Dots Created
+                  </Box>
+                  {/* </Link> */}
                 </NextLink>
               </Typography>
             </Grid>
@@ -230,6 +224,3 @@ const LayoutFooter: React.FC = () => {
   );
 };
 export default LayoutFooter;
-// export default dynamic(() => Promise.resolve(LayoutFooter), {
-//   ssr: false,
-// });

@@ -1,45 +1,34 @@
-'use client';
-
-import { Breadcrumbs, Paper, Typography } from '@mui/material';
+import { Paper, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
-import MuiLink from '@mui/material/Link';
-import dynamic from 'next/dynamic';
-import Image from 'next/image';
-import NextLink from 'next/link';
+
+import Breadcrumbs from '@/components/common/Breadcrumbs';
+
+const breadcrumbsList = [
+  {
+    label: 'Home',
+    path: '/',
+  },
+  {
+    label: 'About JNVPJAA',
+  },
+];
 
 const About = () => {
   return (
     <Box>
-      <Breadcrumbs
-        sx={{
-          //   fontSize: '7px',
-          alignItems: 'center',
-          color: 'grey.500',
-        }}
-        // separator=">"
-        aria-label="breadcrumb"
-      >
-        <NextLink
-          href={{
-            pathname: '/',
-          }}
-          as={{
-            pathname: '/',
-          }}
-          passHref
-        >
-          <MuiLink variant="body2" underline="none" color="primary">
-            Home
-          </MuiLink>
-        </NextLink>
-        <MuiLink variant="body2" underline="none" sx={{ color: 'grey.800', pointerEvents: 'none' }}>
-          About JNVPJAA
-        </MuiLink>
-      </Breadcrumbs>
+      <Breadcrumbs items={breadcrumbsList} />
       <Box component={Paper} px={2} py={3} my={2} display="flex" alignItems="center">
         <Box>
           <Typography variant="h1" mb={3}>
             Who We Are
+          </Typography>
+          <Typography color="grey.800" my={2}>
+            {`JNVPJAA is an alumni association of ex-students who once studied at the cherished Jawahar Navodaya
+            Vidyalaya, Paota, Jaipur. The school, tucked away in the Paota village of Rajasthan's Jaipur district, is
+            among several hundred JNVs conceptualized, funded and managed by Navodaya Vidyalaya Samiti, a
+            semi-autonomous body under the aegis of federal government's Ministry of Human Resource Development. The
+            JNVs, one mandated for each district, are wonderful examples of state sponsorship of fully-residential
+            quality education at an unprecedented scale.`}
           </Typography>
           <Box
             display={{ xs: 'block', sm: 'block' }}
@@ -52,15 +41,8 @@ const About = () => {
               style={{ objectFit: 'contain', position: 'relative', top: '-20px' }}
             />
           </Box>
-          <Typography color="grey.800" mt={2}>
-            {`JNVPJAA is an alumni association of ex-students who once studied at the cherished Jawahar Navodaya
-            Vidyalaya, Paota, Jaipur. The school, tucked away in the Paota village of Rajasthan's Jaipur district, is
-            among several hundred JNVs conceptualized, funded and managed by Navodaya Vidyalaya Samiti, a
-            semi-autonomous body under the aegis of federal government's Ministry of Human Resource Development. The
-            JNVs, one mandated for each district, are wonderful examples of state sponsorship of fully-residential
-            quality education at an unprecedented scale.`}
-          </Typography>
-          <Typography color="grey.800" mt={2}>
+
+          <Typography color="grey.800" mt={3}>
             {` Ex-students who hail normally from one district have now gone places, both literally and figuratively. The
             alumni had a burning desire to re-engage with their batch-mates, seniors and juniors but did not have a
             platform. The efforts were largely individualistic & therefore sub-optimal. This institutional void led to
@@ -115,6 +97,4 @@ const About = () => {
   );
 };
 
-export default dynamic(() => Promise.resolve(About), {
-  ssr: false,
-});
+export default About;

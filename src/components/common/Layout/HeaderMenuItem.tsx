@@ -3,7 +3,6 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Menu, MenuItem, Paper } from '@mui/material';
 import Link from '@mui/material/Link';
-import dynamic from 'next/dynamic';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -124,85 +123,41 @@ const HeaderMenuItem: React.FC<IMenuItemProps> = ({ item, isMobile, expanded, se
                 passHref
                 style={{ textDecoration: 'none' }}
               >
-                <Link sx={{ textDecoration: 'none' }}>
-                  <MenuItem
-                    key={mItem.path}
-                    onClick={handleClose}
-                    sx={{
-                      px: '16px',
-                      py: '12px',
-                      fontSize: '14px',
-                      fontWeight: 400,
-                      textAlign: 'center',
-                      color: 'grey.900',
-                      transition: 'all 0.2s linear',
+                <MenuItem
+                  key={mItem.path}
+                  onClick={handleClose}
+                  sx={{
+                    px: '16px',
+                    py: '12px',
+                    fontSize: '14px',
+                    fontWeight: 400,
+                    textAlign: 'center',
+                    color: 'grey.900',
+                    transition: 'all 0.2s linear',
+                    svg: {
+                      mr: '2px',
+                    },
+                    '&:hover': {
+                      color: 'primary.main',
                       svg: {
-                        mr: '2px',
-                      },
-                      '&:hover': {
+                        ml: '2px',
+                        mr: 0,
                         color: 'primary.main',
-                        svg: {
-                          ml: '2px',
-                          mr: 0,
-                          color: 'primary.main',
-                        },
                       },
-                    }}
-                  >
-                    <ChevronRightIcon
-                      sx={{ mr: '4px', color: 'grey.800', fontSize: '16px', transition: 'all 0.2s linear' }}
-                    />
-                    {mItem.label}
-                  </MenuItem>
-                </Link>
+                    },
+                  }}
+                >
+                  <ChevronRightIcon
+                    sx={{ mr: '4px', color: 'grey.800', fontSize: '16px', transition: 'all 0.2s linear' }}
+                  />
+                  {mItem.label}
+                </MenuItem>
               </NextLink>
             ))}
           </HoverPopover>
-          {/* <Button
-            id="basic-button"
-            aria-controls={open ? 'basic-menu' : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}
-            onClick={handleClick}
-            disableRipple
-          >
-            {item.label}
-            {item.menu &&
-              (open ? (
-                <KeyboardArrowUpIcon
-                  sx={{ ml: '8px', color: 'primary.main', display: 'block', fontWeight: 400, fontSize: '16px' }}
-                />
-              ) : (
-                <KeyboardArrowDownIcon
-                  sx={{ ml: '8px', color: 'primary.main', display: 'block', fontWeight: 400, fontSize: '16px' }}
-                />
-              ))}
-          </Button>
-          <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            MenuListProps={{
-              'aria-labelledby': 'basic-button',
-            }}
-          >
-            {item?.menu?.map((mItem: IHeaderMenuItem) => (
-              <MenuItem
-                key={mItem.path}
-                onClick={handleClose}
-                sx={{ px: '10px', fontSize: '16px', fontWeight: 300, textAlign: 'center' }}
-              >
-                {mItem.label}
-              </MenuItem>
-            ))}
-          </Menu> */}
         </>
       )}
     </Box>
   );
 };
 export default HeaderMenuItem;
-// export default dynamic(() => Promise.resolve(HeaderMenuItem), {
-//   ssr: false,
-// });

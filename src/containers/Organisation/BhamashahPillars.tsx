@@ -1,13 +1,9 @@
-'use client';
-
 import { BHAASHAH_PILLARS } from '@/constants/General.contants';
-import { Breadcrumbs, Divider, Grid, Paper, Typography } from '@mui/material';
+import { Divider, Grid, Paper, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
-import MuiLink from '@mui/material/Link';
-import dynamic from 'next/dynamic';
-import Image from 'next/image';
 import NextLink from 'next/link';
 
+import Breadcrumbs from '@/components/common/Breadcrumbs';
 import ProfileCard from '@/components/common/ProfileCard';
 import { ProfileCardProps } from '@/components/common/ProfileCard/ProfileCard.types';
 
@@ -15,41 +11,26 @@ export interface IBhamashahPillar extends ProfileCardProps {
   type: 'platinum' | 'gold' | 'silver';
 }
 
+const breadcrumbsList = [
+  {
+    label: 'Home',
+    path: '/',
+  },
+  {
+    label: 'Bhamashah Pillars',
+  },
+];
+
 const BhamashahPillars = () => {
   return (
     <Box>
-      <Breadcrumbs
-        sx={{
-          //   fontSize: '7px',
-          alignItems: 'center',
-          color: 'grey.500',
-        }}
-        // separator=">"
-        aria-label="breadcrumb"
-      >
-        <NextLink
-          href={{
-            pathname: '/',
-          }}
-          as={{
-            pathname: '/',
-          }}
-          passHref
-        >
-          <MuiLink variant="body2" underline="none" color="primary">
-            Home
-          </MuiLink>
-        </NextLink>
-        <MuiLink variant="body2" underline="none" sx={{ color: 'grey.800', pointerEvents: 'none' }}>
-          Bhamashah Pillars
-        </MuiLink>
-      </Breadcrumbs>
+      <Breadcrumbs items={breadcrumbsList} />
       <Box component={Paper} p={2} my={2} display="flex" alignItems="center">
         <Box>
           <Typography variant="h1" mb={3}>
             Bhamashah Pillars
           </Typography>
-          <Box
+          {/* <Box
             display={{ xs: 'block', sm: 'block' }}
             sx={{ borderRadius: '10px', maxWidth: '100%', maxHeight: '400px', overflow: 'hidden' }}
           >
@@ -59,7 +40,7 @@ const BhamashahPillars = () => {
               alt="mission"
               style={{ objectFit: 'contain', position: 'relative', top: '0px' }}
             />
-          </Box>
+          </Box> */}
           <Typography color="grey.800" mt={2}>
             {` Welcome to the JNV Paota, Jaipur Alumni Association's esteemed "Bhamashah Pillars" initiative, where we honor the generous contributions of our alumni who continue to support and uplift our community. This distinguished scheme recognizes and celebrates the dedication of those who contribute significantly to our mission. Under the Bhamashah Pillars banner, we proudly acknowledge our Platinum Pillars, whose contributions exceed INR 100,000; our Gold Pillars, who give over INR 50,000; and our Silver Pillars, who support us with amounts surpassing INR 21,000. Your remarkable generosity fuels the growth and success of our association, and we are deeply grateful for your commitment to sustaining the legacy of JNV Paota, Jaipur.`}
           </Typography>
@@ -109,6 +90,4 @@ const BhamashahPillars = () => {
   );
 };
 
-export default dynamic(() => Promise.resolve(BhamashahPillars), {
-  ssr: false,
-});
+export default BhamashahPillars;

@@ -1,42 +1,23 @@
-'use client';
-
-import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
-import { Breadcrumbs, Paper, Typography } from '@mui/material';
+import { Paper, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
-import MuiLink from '@mui/material/Link';
-import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import NextLink from 'next/link';
+
+import Breadcrumbs from '@/components/common/Breadcrumbs';
+
+const breadcrumbsList = [
+  {
+    label: 'Home',
+    path: '/',
+  },
+  {
+    label: ' Donations',
+  },
+];
 
 const Donations = () => {
   return (
     <Box>
-      <Breadcrumbs
-        sx={{
-          //   fontSize: '7px',
-          alignItems: 'center',
-          color: 'grey.500',
-        }}
-        // separator=">"
-        aria-label="breadcrumb"
-      >
-        <NextLink
-          href={{
-            pathname: '/',
-          }}
-          as={{
-            pathname: '/',
-          }}
-          passHref
-        >
-          <MuiLink variant="body2" underline="none" color="primary">
-            Home
-          </MuiLink>
-        </NextLink>
-        <MuiLink variant="body2" underline="none" sx={{ color: 'grey.800', pointerEvents: 'none' }}>
-          Donations
-        </MuiLink>
-      </Breadcrumbs>
+      <Breadcrumbs items={breadcrumbsList} />
       <Box component={Paper} gap={2} pl={2} py={4} my={2} width="100%" display="flex" alignItems="start">
         <Box
           width={{
@@ -86,6 +67,4 @@ const Donations = () => {
   );
 };
 
-export default dynamic(() => Promise.resolve(Donations), {
-  ssr: false,
-});
+export default Donations;
