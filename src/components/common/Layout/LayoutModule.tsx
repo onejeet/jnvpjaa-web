@@ -1,6 +1,7 @@
 import { Box } from '@mui/material';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
+import { GoogleTagManager } from '@next/third-parties/google';
 import Head from 'next/head';
 import React from 'react';
 

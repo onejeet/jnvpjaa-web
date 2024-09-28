@@ -2,6 +2,7 @@ import '@/styles/globals.css';
 import { LayoutProvider } from '@/context/LayoutCotext';
 import createEmotionCache from '@/utils/theme/createEmotionCache';
 import { CacheProvider } from '@emotion/react';
+import { GoogleTagManager } from '@next/third-parties/google';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 
@@ -17,6 +18,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => (
     <CacheProvider value={clientSideEmotionCache}>
       <LayoutProvider>
         <Component {...pageProps} />
+        <GoogleTagManager gtmId="GTM-W7R5B5JB" />
       </LayoutProvider>
     </CacheProvider>
   </>
