@@ -1,4 +1,4 @@
-import SkillUpResources from '@/containers/Resources/SkillUpResources';
+import SkillUpResources from '@/containers/StudentHub/SkillUpResources';
 import { NextPage } from 'next';
 import { NextSeo } from 'next-seo';
 

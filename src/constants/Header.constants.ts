@@ -73,11 +73,11 @@ export const HEADER_MENU: IHeaderMenuItem[] = [
     menu: [
       {
         label: 'Student Counselling Cell',
-        path: '/counselling-cell',
+        path: '/student-hub/career-counselling',
       },
       {
         label: 'SkillUp Resources',
-        path: '/learning-resources',
+        path: '/student-hub/skillup-resources',
       },
     ],
   },

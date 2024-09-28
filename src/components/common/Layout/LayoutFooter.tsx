@@ -89,8 +89,8 @@ const LayoutFooter: React.FC = () => {
                     path: '/student-hub/skillup-resources',
                   },
                   {
-                    label: 'Directory',
-                    path: '',
+                    label: 'Career Counselling',
+                    path: '/student-hub/career-counselling',
                   },
                 ]}
               />

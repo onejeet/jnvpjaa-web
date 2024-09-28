@@ -1,6 +1,3 @@
-'use client';
-
-import FmdGoodIcon from '@mui/icons-material/FmdGood';
 import { Breadcrumbs, Paper, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import MuiLink from '@mui/material/Link';
