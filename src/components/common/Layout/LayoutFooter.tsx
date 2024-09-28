@@ -78,19 +78,19 @@ const LayoutFooter: React.FC = () => {
             </Grid>
             <Grid item xs={6} sm={2.25} md={2.25} pt="25px">
               <MenuList
-                title="Resources"
+                title="Student Hub"
                 items={[
                   {
-                    label: 'Blogs',
+                    label: 'Blog',
                     path: '/blog',
                   },
                   {
-                    label: 'Important Links',
-                    path: '/resources/important-links',
+                    label: 'SkillUp  Resources',
+                    path: '/student-hub/skillup-resources',
                   },
                   {
                     label: 'Directory',
-                    path: '#',
+                    path: '',
                   },
                 ]}
               />

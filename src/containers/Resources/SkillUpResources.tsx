@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import MuiLink from '@mui/material/Link';
 import NextLink from 'next/link';
 
-const ImportantLinks = () => {
+const SkillUpResources = () => {
   return (
     <Box>
       <Breadcrumbs
@@ -32,7 +32,7 @@ const ImportantLinks = () => {
           </MuiLink>
         </NextLink>
         <MuiLink variant="body2" underline="none" sx={{ color: 'grey.800', pointerEvents: 'none' }}>
-          Resources
+          Student Hub
         </MuiLink>
         <MuiLink variant="body2" underline="none" sx={{ color: 'grey.800', pointerEvents: 'none' }}>
           Important Links
@@ -46,7 +46,7 @@ const ImportantLinks = () => {
           }}
         >
           <Typography variant="h1" mb={3}>
-            Important Links for Students
+            Recommended Learning Resources
           </Typography>
           {/* <Box
             display={{ xs: 'block', sm: 'block' }}
@@ -77,4 +77,4 @@ const ImportantLinks = () => {
   );
 };
 
-export default ImportantLinks;
+export default SkillUpResources;

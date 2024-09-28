@@ -67,6 +67,20 @@ export const HEADER_MENU: IHeaderMenuItem[] = [
       },
     ],
   },
+  {
+    label: 'Student Hub',
+    path: '/student-hub',
+    menu: [
+      {
+        label: 'Student Counselling Cell',
+        path: '/counselling-cell',
+      },
+      {
+        label: 'SkillUp Resources',
+        path: '/learning-resources',
+      },
+    ],
+  },
   // {
   //   label: 'Educational Materials',
   //   path: '/',
