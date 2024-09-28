@@ -82,11 +82,11 @@ const LayoutFooter: React.FC = () => {
                 items={[
                   {
                     label: 'Blogs',
-                    path: '#',
+                    path: '/blog',
                   },
                   {
                     label: 'Important Links',
-                    path: '#',
+                    path: '/resources/important-links',
                   },
                   {
                     label: 'Directory',
