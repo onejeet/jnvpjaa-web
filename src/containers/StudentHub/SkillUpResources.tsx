@@ -1,6 +1,6 @@
-import { LinkPreview } from '@dhaiwat10/react-link-preview';
 import { Paper, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
+import Image from 'next/image';
 
 import Breadcrumbs from '@/components/common/Breadcrumbs';
 
@@ -25,13 +25,21 @@ const SkillUpResources = () => {
         <Box
           width={{
             xs: '100%',
-            // sm: 'calc(100% - 300px)',
           }}
         >
           <Typography variant="h1" mb={3}>
             Recommended Learning Resources
           </Typography>
-          <LinkPreview url="https://www.google.com" width="400px" />
+          <Image
+            src="/assets/svg/under_construction.svg"
+            width={417}
+            height={200}
+            layout="fixed"
+            alt="blog coming soon"
+          />
+          <Typography variant="body1" fontSize={20} color="grey.600" mt={3}>
+            Coming Soon.
+          </Typography>
           {/* <Box
             display={{ xs: 'block', sm: 'block' }}
             sx={{ borderRadius: '10px', maxWidth: '100%', maxHeight: '400px', overflow: 'hidden' }}
