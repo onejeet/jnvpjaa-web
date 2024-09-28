@@ -196,7 +196,12 @@ const LayoutFooter: React.FC = () => {
                 display="flex"
               >
                 Designed & Crafted By:{' '}
-                <NextLink href="https://www.dotscreated.com/" passHref style={{ textDecoration: 'none' }}>
+                <NextLink
+                  href="https://www.dotscreated.com/"
+                  passHref
+                  style={{ textDecoration: 'none' }}
+                  target="_blank"
+                >
                   <Link sx={{ textDecoration: 'none' }}>
                     <Box
                       ml={1}

@@ -230,19 +230,19 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
 export const JNVPJAA_SOCIAL_MEDIA: Record<string, any>[] = [
   {
     name: 'facebook',
-    path: 'https://www.facebook.com/#/',
+    path: 'https://www.facebook.com/JNVPJAA/',
   },
   {
     name: 'instagram',
-    path: 'https://www.instagram.com/#/',
+    path: 'https://www.instagram.com/JNVPJAA/',
   },
   {
     name: 'twitter',
-    path: 'https://twitter.com/#',
+    path: 'https://www.twitter.com/JNVPJAA/',
   },
   {
     name: 'linkedin',
-    path: 'https://www.linkedin.com/#',
+    path: 'https://www.linkedin.com/in/company/JNVPJAA/',
   },
 ];
 

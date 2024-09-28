@@ -1,3 +1,5 @@
+import createCache from '@emotion/cache';
+import { documentGetInitialProps, DocumentHeadTags } from '@mui/material-nextjs/v14-pagesRouter';
 import { Head, Html, Main, NextScript } from 'next/document';
 import React from 'react';
 
@@ -25,5 +27,13 @@ const MyDocument = () => (
     </body>
   </Html>
 );
+
+MyDocument.getInitialProps = async (ctx: any) => {
+  const finalProps = await documentGetInitialProps(ctx, {
+    emotionCache: createCache({ key: 'mui' }),
+  });
+
+  return finalProps;
+};
 
 export default MyDocument;

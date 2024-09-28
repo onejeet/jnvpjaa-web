@@ -202,7 +202,7 @@ const HeaderMenuItem: React.FC<IMenuItemProps> = ({ item, isMobile, expanded, se
     </Box>
   );
 };
-
-export default dynamic(() => Promise.resolve(HeaderMenuItem), {
-  ssr: false,
-});
+export default HeaderMenuItem;
+// export default dynamic(() => Promise.resolve(HeaderMenuItem), {
+//   ssr: false,
+// });

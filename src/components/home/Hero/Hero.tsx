@@ -14,7 +14,7 @@ const Hero = () => {
           md: 518,
         }}
         sx={{
-          backgroundColor: 'common.black',
+          backgroundColor: 'grey.800',
           backgroundImage: 'url(/assets/images/cover.webp)',
           backgroundRepeat: 'no-repeat',
           backgroundSize: {
