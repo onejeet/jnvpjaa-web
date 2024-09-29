@@ -1,10 +1,6 @@
 import { IHeaderMenuItem } from '@/components/common/Layout/LayoutTopbar';
 
 export const HEADER_MENU: IHeaderMenuItem[] = [
-  // {
-  //   label: 'Home',
-  //   path: '/',
-  // },
   {
     label: 'About Us',
     path: '/about',
@@ -54,20 +50,6 @@ export const HEADER_MENU: IHeaderMenuItem[] = [
     ],
   },
   {
-    label: 'Funds',
-    path: '/funds',
-    menu: [
-      {
-        label: 'Donations',
-        path: '/donations',
-      },
-      {
-        label: 'Bhamashah Pillars',
-        path: '/bhamashah-pillars',
-      },
-    ],
-  },
-  {
     label: 'Student Hub',
     path: '/student-hub',
     menu: [
@@ -81,18 +63,18 @@ export const HEADER_MENU: IHeaderMenuItem[] = [
       },
     ],
   },
-  // {
-  //   label: 'Educational Materials',
-  //   path: '/',
-  //   menu: [
-  //     {
-  //       label: 'Who we are',
-  //       path: '/',
-  //     },
-  //   ],
-  // },
-  // {
-  //   label: 'News',
-  //   path: '/',
-  // },
+  {
+    label: 'Funds',
+    path: '/funds',
+    menu: [
+      {
+        label: 'Donations',
+        path: '/donations',
+      },
+      {
+        label: 'Bhamashah Pillars',
+        path: '/bhamashah-pillars',
+      },
+    ],
+  },
 ];
