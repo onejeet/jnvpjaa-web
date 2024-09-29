@@ -16,12 +16,12 @@ const MyApp = ({ Component, pageProps }: AppProps) => (
       <meta charSet="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     </Head>
-    <CacheProvider value={clientSideEmotionCache}>
-      <LayoutProvider>
-        <Component {...pageProps} />
-        <GoogleTagManager gtmId="GTM-W7R5B5JB" />
-      </LayoutProvider>
-    </CacheProvider>
+    {/* <CacheProvider value={clientSideEmotionCache}> */}
+    <LayoutProvider>
+      <Component {...pageProps} />
+      <GoogleTagManager gtmId="GTM-W7R5B5JB" />
+    </LayoutProvider>
+    {/* </CacheProvider> */}
   </AppCacheProvider>
 );
 
