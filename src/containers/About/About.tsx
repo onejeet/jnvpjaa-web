@@ -1,5 +1,6 @@
 import { Paper, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
+import Image from 'next/image';
 
 import Breadcrumbs from '@/components/common/Breadcrumbs';
 
@@ -34,12 +35,20 @@ const About = () => {
             display={{ xs: 'block', sm: 'block' }}
             sx={{ borderRadius: '10px', maxWidth: '100%', maxHeight: '400px', overflow: 'hidden' }}
           >
-            <img
+            <Image
+              src="/assets/images/cover-2.webp"
+              width={1300}
+              height={585}
+              alt="about JNVPJAA"
+              layout="responsive"
+              style={{ objectFit: 'contain', position: 'relative', top: '-20px' }}
+            />
+            {/* <img
               src="/assets/images/cover-2.webp"
               width="100%"
               alt="mission"
               style={{ objectFit: 'contain', position: 'relative', top: '-20px' }}
-            />
+            /> */}
           </Box>
 
           <Typography color="grey.800" mt={3}>
@@ -63,7 +72,14 @@ const About = () => {
               association, in particular. Book with light flame: We, the alumni of JNV Paota, Jaipur, will work for the
               enlightenment of the society with our wisdom and knowledge. Hence, the motto:`}
             </Typography>
-            <img src="/assets/branding/logo-square-white.jpg" width={150} height={150} alt="logo" />
+            <Image
+              src="/assets/branding/logo-square-white.jpg"
+              width={150}
+              height={150}
+              alt="JNVPJAA logo"
+              layout="responsive"
+            />
+            {/* <img src="/assets/branding/logo-square-white.jpg" width={150} height={150} alt="logo" /> */}
           </Box>
           <Typography
             mt={2}

@@ -14,14 +14,14 @@ const Logo: React.FC<Props> = ({ width, height, icon, type }) => {
     switch (type) {
       case 'regular':
         return (
-          <Image src="/assets/branding/logo-full.png" width={width || 390} height={height || 60} alt="JNVPJAA logo" />
+          <Image src="/assets/branding/logo-full.webp" width={width || 390} height={height || 60} alt="JNVPJAA logo" />
         );
     }
   };
 
   return (
     <Box display="flex" maxWidth="100%">
-      <Image src="/assets/branding/logo-full.png" width={width || 390} height={height || 60} alt="JNVPJAA logo" />
+      <Image src="/assets/branding/logo-full.webp" width={width || 390} height={height || 60} alt="JNVPJAA logo" />
     </Box>
   );
 };

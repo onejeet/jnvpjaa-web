@@ -204,7 +204,7 @@ const LayoutFooter: React.FC = () => {
                       borderBottom: '1px dotted',
                       borderColor: 'primary.main',
                       cursor: 'pointer',
-                      opacity: 0.7,
+                      opacity: 0.9,
                       '&:hover': {
                         opacity: 1,
                       },

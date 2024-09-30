@@ -1,6 +1,7 @@
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import { List, ListItemIcon, ListItemText, Paper, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
+import Image from 'next/image';
 
 import Breadcrumbs from '@/components/common/Breadcrumbs';
 
@@ -66,15 +67,23 @@ const Vision = () => {
             display={{ xs: 'block', sm: 'block' }}
             sx={{
               borderRadius: '10px',
-              maxWidth: '100%',
-              maxHeight: '600px',
               overflow: 'hidden',
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'center bottom',
-              backgroundSize: 'contain',
+              maxHeight: '400px',
             }}
           >
-            <img
+            <Image
+              width={760}
+              height={440}
+              src="/assets/images/slider-2.webp"
+              alt="mission"
+              layout="responsive"
+              style={{
+                objectFit: 'contain',
+                objectPosition: 'bottom',
+                // top: '-20px',
+              }}
+            />
+            {/* <img
               src="/assets/images/slider-2.webp"
               width="100%"
               alt="mission"
@@ -86,7 +95,7 @@ const Vision = () => {
                 // position: 'relative',
                 // top: '-20px',
               }}
-            />
+            /> */}
           </Box>
           <List
             sx={{ width: '100%', mt: 3, bgcolor: 'background.paper' }}
