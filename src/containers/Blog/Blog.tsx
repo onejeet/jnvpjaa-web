@@ -14,7 +14,7 @@ const Blog = () => {
         md: 5,
       }}
     >
-      <Image src="/assets/svg/under_construction.svg" width={417} height={200} layout="fixed" alt="blog coming soon" />
+      <Image src="/assets/svg/under_construction.svg" width={417} height={240} layout="fixed" alt="blog coming soon" />
       <Typography variant="body1" fontSize={20} color="grey.600" mt={3}>
         Blog is coming soon.
       </Typography>

@@ -54,7 +54,7 @@ export const HEADER_MENU: IHeaderMenuItem[] = [
     path: '/student-hub',
     menu: [
       {
-        label: 'Student Counselling Cell',
+        label: 'Career Counselling',
         path: '/student-hub/career-counselling',
       },
       {
@@ -64,17 +64,35 @@ export const HEADER_MENU: IHeaderMenuItem[] = [
     ],
   },
   {
-    label: 'Funds',
-    path: '/funds',
+    label: 'Alumni Center',
+    path: '/donations',
     menu: [
       {
-        label: 'Donations',
+        label: 'Donate Now',
         path: '/donations',
       },
       {
-        label: 'Bhamashah Pillars',
-        path: '/bhamashah-pillars',
+        label: 'Alumni Connect',
+        path: '#',
       },
     ],
   },
+  {
+    label: 'Blog',
+    path: '/blog',
+  },
+  // {
+  //   label: 'Funds',
+  //   path: '/funds',
+  //   menu: [
+  //     {
+  //       label: 'Donations',
+  //       path: '/donations',
+  //     },
+  //     {
+  //       label: 'Bhamashah Pillars',
+  //       path: '/bhamashah-pillars',
+  //     },
+  //   ],
+  // },
 ];

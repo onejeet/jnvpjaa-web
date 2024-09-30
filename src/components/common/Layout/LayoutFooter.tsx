@@ -60,16 +60,16 @@ const LayoutFooter: React.FC = () => {
                 title="About"
                 items={[
                   {
-                    label: 'Home',
-                    path: '/',
-                  },
-                  {
                     label: 'About JVPJAA',
                     path: '/about',
                   },
                   {
                     label: 'Vision & Mission',
                     path: '/vision',
+                  },
+                  {
+                    label: 'Privacy policy',
+                    path: '/privacy_policy',
                   },
                 ]}
               />
@@ -93,9 +93,9 @@ const LayoutFooter: React.FC = () => {
                 ]}
               />
             </Grid>
-            <Grid item xs={12} sm={2.25} md={2.25} pt="25px">
+            {/* <Grid item xs={12} sm={2.25} md={2.25} pt="25px">
               <MenuList
-                title="Legal"
+                title="Other"
                 items={[
                   {
                     label: 'Privacy policy',
@@ -111,7 +111,7 @@ const LayoutFooter: React.FC = () => {
                   // },
                 ]}
               />
-            </Grid>
+            </Grid> */}
             <Grid item xs={12} mt="10px" mb="20px">
               <Divider orientation="horizontal" sx={{ borderColor: '#D9D9D9', opacity: 1 }} />
             </Grid>
@@ -167,7 +167,7 @@ const LayoutFooter: React.FC = () => {
               >
                 &nbsp; &#169;
                 {new Date().getFullYear()}
-                &nbsp; JNVPJAA &trade; . All Rights Reserved.
+                &nbsp; JNVPJAA. All Rights Reserved.
               </Typography>
             </Grid>
             <Grid

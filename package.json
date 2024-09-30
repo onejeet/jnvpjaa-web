@@ -1,8 +1,9 @@
 {
-  "name": "jnvp-alumni-association-web",
+  "name": "jnvpjaa-web",
   "version": "0.1.0",
   "description": "",
   "private": true,
+  "author": "Jeet from Dots Created",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

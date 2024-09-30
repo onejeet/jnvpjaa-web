@@ -75,7 +75,7 @@ const LayoutTopbar: React.FC = () => {
           <NextLink href="/">
             <Logo width={isMobile ? 260 : 390} height={isMobile ? 40 : 60} />
           </NextLink>
-          <Box display={{ xs: 'flex', md: 'none' }} ml="auto">
+          <Box display={{ xs: 'flex', lg: 'none' }} ml="auto">
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -88,7 +88,7 @@ const LayoutTopbar: React.FC = () => {
             </IconButton>
           </Box>
 
-          <Box display={{ xs: 'none', md: 'flex' }} ml="auto">
+          <Box display={{ xs: 'none', lg: 'flex' }} ml="auto">
             {HEADER_MENU.map((item: IHeaderMenuItem) => (
               <HeaderMenuItem key={item.label} item={item} />
             ))}
@@ -106,25 +106,37 @@ const LayoutTopbar: React.FC = () => {
         anchor="right"
         open={openMenu}
         onClose={() => setOpenMenu(false)}
-        PaperProps={{ sx: { width: '250px', minWidth: '200px', py: '20px', px: '16px', overflowX: 'hidden' } }}
+        PaperProps={{
+          sx: { height: '100%', width: '250px', minWidth: '200px', py: '20px', px: '16px', overflowX: 'hidden' },
+        }}
       >
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
           <Logo width={195} height={30} />
           <IconButton onClick={() => setOpenMenu(false)}>
-            {' '}
             <CloseIcon />{' '}
           </IconButton>
         </Box>
-        <Box width="100%">
-          {HEADER_MENU.map((item: IHeaderMenuItem) => (
-            <HeaderMenuItem
-              key={item.label}
-              item={item}
-              isMobile
-              expanded={expanded === item.path}
-              setExpanded={setExpanded}
-            />
-          ))}
+        <Box width="100%" height="100%" display="flex" flexDirection="column" justifyContent="space-between">
+          <Box>
+            {HEADER_MENU.map((item: IHeaderMenuItem) => (
+              <HeaderMenuItem
+                key={item.label}
+                item={item}
+                isMobile
+                expanded={expanded === item.path}
+                setExpanded={setExpanded}
+              />
+            ))}
+          </Box>
+          <NextLink href="/contact-us" passHref style={{ textDecoration: 'none' }}>
+            <Button
+              fullWidth
+              variant="outlined"
+              sx={{ display: { xs: 'none', md: 'block' }, ml: '8px', whiteSpace: 'nowrap' }}
+            >
+              Contact Us
+            </Button>
+          </NextLink>
         </Box>
       </Drawer>
     </AppBar>
