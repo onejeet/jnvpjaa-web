@@ -19,14 +19,14 @@ const LayoutFooter: React.FC = () => {
     <Box
       sx={{
         flexGrow: 1,
-        bgcolor: 'grey.300',
+        bgcolor: 'grey.100',
         pb: '20px',
       }}
     >
       <Container
         sx={{ maxWidth: { xs: '98%', sm: '95%', md: '90%', xl: '1500px' }, margin: 'auto', p: '0 !important' }}
       >
-        <AppBar component="footer" position="static" sx={{ bgcolor: 'grey.300' }} elevation={0}>
+        <AppBar component="footer" position="static" sx={{ bgcolor: 'grey.100' }} elevation={0}>
           <Grid container p={{ xs: 2, sm: 0 }}>
             <Grid item xs={12} sm={12} md={4.75} pt="25px">
               <Logo width={325} height={50} />
