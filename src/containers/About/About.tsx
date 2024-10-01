@@ -77,7 +77,7 @@ const About = () => {
               width={150}
               height={150}
               alt="JNVPJAA logo"
-              layout="responsive"
+              layout="fixed"
             />
             {/* <img src="/assets/branding/logo-square-white.jpg" width={150} height={150} alt="logo" /> */}
           </Box>
