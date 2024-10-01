@@ -122,7 +122,7 @@ const HeaderMenuItem: React.FC<IMenuItemProps> = ({ item, isMobile, expanded, se
                   disableRipple
                   endIcon={<KeyboardArrowDownIcon />}
                   sx={{
-                    px: '10px',
+                    // px: '10px',
                     '& span': {
                       ml: '2px',
                     },

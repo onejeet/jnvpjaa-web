@@ -13,7 +13,7 @@ import { MenuListProps } from './types';
 const MenuList: React.FC<MenuListProps> = ({ title, items, offsetTop }) => (
   <Box display="flex" flexDirection="column">
     {title && (
-      <Typography variant="h4" fontWeight={700} color="grey.900">
+      <Typography variant="h6" fontWeight={700} color="grey.900">
         {title}
       </Typography>
     )}

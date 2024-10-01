@@ -4,7 +4,7 @@ import { Head, Html, Main, NextScript } from 'next/document';
 import React from 'react';
 
 const MyDocument = (props: any) => (
-  <Html>
+  <Html lang="en">
     <Head>
       <DocumentHeadTags {...props} />
       <link rel="preconnect" href="https://fonts.googleapis.com" />
