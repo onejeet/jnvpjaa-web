@@ -8,14 +8,10 @@ import LayoutModule from '@/components/common/Layout';
 const PrivacyPage: NextPage = () => (
   <>
     <NextSeo
-      title="JNVPJAA Privacy Policy • Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur"
+      title="JNVPJAA Privacy Policy • Alumni Network of JNV Paota, Jaipur"
       description="The Official Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur"
     />
-    <LayoutModule
-      disableCover
-      title="JNVPJAA Privacy Policy • Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur"
-      containerProps={{}}
-    >
+    <LayoutModule disableCover title="JNVPJAA Privacy Policy • Alumni Network of JNV Paota, Jaipur" containerProps={{}}>
       <Box gap={2}>
         <Typography variant="h1" textAlign="center">
           Privacy Policy

@@ -8,11 +8,11 @@ import LayoutModule from '@/components/common/Layout';
 const ExecutiveCommitteePage: NextPage = () => (
   <>
     <NextSeo
-      title="Executive Committee • Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur"
+      title="Executive Committee • Alumni Network of JNV Paota, Jaipur"
       description="The Official Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur"
       openGraph={{
         url: 'https://jnvpjaa.org',
-        title: 'Executive Committee • Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur',
+        title: 'Executive Committee • Alumni Network of JNV Paota, Jaipur',
         description: 'The Official Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur',
         images: [
           {
@@ -31,11 +31,7 @@ const ExecutiveCommitteePage: NextPage = () => (
         },
       ]}
     />
-    <LayoutModule
-      disableCover
-      title="Executive Committee • Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur"
-      containerProps={{}}
-    >
+    <LayoutModule disableCover title="Executive Committee • Alumni Network of JNV Paota, Jaipur" containerProps={{}}>
       <Organizations />
     </LayoutModule>
   </>

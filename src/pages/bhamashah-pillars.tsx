@@ -7,11 +7,11 @@ import LayoutModule from '@/components/common/Layout';
 const AboutPage: NextPage = () => (
   <>
     <NextSeo
-      title="JNVPJAA Bhamashah Pillars • Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur"
+      title="JNVPJAA Bhamashah Pillars • Alumni Network of JNV Paota, Jaipur"
       description="The Official Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur"
       openGraph={{
         url: 'https://jnvpjaa.org',
-        title: 'JNVPJAA Bhamashah Pillars  • Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur',
+        title: 'JNVPJAA Bhamashah Pillars • Alumni Network of JNV Paota, Jaipur',
         description: 'The Official Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur',
         images: [
           {
@@ -32,7 +32,7 @@ const AboutPage: NextPage = () => (
     />
     <LayoutModule
       disableCover
-      title="JNVPJAA Bhamashah Pillars • Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur"
+      title="JNVPJAA Bhamashah Pillars • Alumni Network of JNV Paota, Jaipur"
       containerProps={{}}
     >
       <BhamashahPillars />

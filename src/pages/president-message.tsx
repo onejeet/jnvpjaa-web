@@ -7,14 +7,10 @@ import LayoutModule from '@/components/common/Layout';
 const PresidentMessagePage: NextPage = () => (
   <>
     <NextSeo
-      title="President's Message • Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur"
+      title="President's Message • Alumni Network of JNV Paota, Jaipur"
       description="The Official Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur"
     />
-    <LayoutModule
-      disableCover
-      title="President's Message • Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur"
-      containerProps={{}}
-    >
+    <LayoutModule disableCover title="President's Message • Alumni Network of JNV Paota, Jaipur" containerProps={{}}>
       <PresidentMessage />
     </LayoutModule>
   </>

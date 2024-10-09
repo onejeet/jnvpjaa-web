@@ -7,11 +7,11 @@ import LayoutModule from '@/components/common/Layout';
 const BatchCoordinatorsPage: NextPage = () => (
   <>
     <NextSeo
-      title="Batch Coordinators • Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur"
+      title="Batch Coordinators • Alumni Network of JNV Paota, Jaipur"
       description="The Official Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur"
       openGraph={{
         url: 'https://jnvpjaa.org',
-        title: 'Batch Coordinators • Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur',
+        title: 'Batch Coordinators • Alumni Network of JNV Paota, Jaipur',
         description: 'The Official Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur',
         images: [
           {
@@ -30,11 +30,7 @@ const BatchCoordinatorsPage: NextPage = () => (
         },
       ]}
     />
-    <LayoutModule
-      disableCover
-      title="Batch Coordinators • Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur"
-      containerProps={{}}
-    >
+    <LayoutModule disableCover title="Batch Coordinators • Alumni Network of JNV Paota, Jaipur" containerProps={{}}>
       <BatchCoordinators />
     </LayoutModule>
   </>
