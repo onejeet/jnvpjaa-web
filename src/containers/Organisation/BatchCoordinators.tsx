@@ -1,5 +1,6 @@
 import SearchIcon from '@mui/icons-material/Search';
-import { Box, Grid, OutlinedInput, Select, Typography } from '@mui/material';
+import { Box, OutlinedInput, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import { DataGrid } from '@mui/x-data-grid';
 
 import useBatchCoordinators from './Hooks/useBatchCoordinators';
@@ -19,7 +20,7 @@ const BatchCoordinators = () => {
         behind the initiatives that keep our alumni network strong and engaged.`}
       </Typography>
       <Box component={Grid} container width="100%" mb={3}>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <OutlinedInput
             placeholder="Search Coordinators"
             startAdornment={<SearchIcon sx={{ color: 'grey.800', mr: '8px' }} />}

@@ -12,7 +12,8 @@
     "prettier:check": "prettier --check \"**/*.{ts,tsx,json}\"",
     "lint": "next lint",
     "eslint:format": "eslint src --fix",
-    "postinstall": "husky install"
+    "postinstall": "husky",
+    "codegen": "graphql-codegen --config codegen/generate.js"
   },
   "engines": {
     "node": ">=20"
@@ -21,6 +22,8 @@
   "dependencies": {
     "@emotion/cache": "^11.13.1",
     "@emotion/css": "^11.13.0",
+    "@apollo/client": "^3.12.7",
+    "@apollo/experimental-nextjs-app-support": "^0.11.7",
     "@emotion/react": "^11.13.3",
     "@emotion/server": "^11.11.0",
     "@emotion/styled": "^11.13.0",
@@ -32,14 +35,19 @@
     "@t3-oss/env-nextjs": "0.11.0",
     "embla-carousel-auto-scroll": "^8.2.1",
     "embla-carousel-react": "^8.2.1",
+    "graphql": "^16.10.0",
+    "graphql-tag": "^2.12.6",
     "material-ui-popup-state": "^5.3.1",
-    "next": "^14.2.8",
+    "next": "^15.1.6",
     "next-seo": "^6.6.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "zod": "3.23.8"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "5.0.3",
+    "@graphql-codegen/schema-ast": "^4.1.0",
+    "@graphql-codegen/typescript-react-apollo": "^4.3.2",
     "@types/node": "22.1.0",
     "@types/react": "18.3.4",
     "@types/react-dom": "18.3.0",
@@ -53,6 +61,7 @@
     "eslint-plugin-prettier": "5.2.1",
     "eslint-plugin-react": "7.35.0",
     "eslint-plugin-react-hooks": "4.6.2",
+    "gql-generator": "^2.0.0",
     "husky": "9.1.5",
     "lint-staged": "15.2.9",
     "pinst": "3.0.0",

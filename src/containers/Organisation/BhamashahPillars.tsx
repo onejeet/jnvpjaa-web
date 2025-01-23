@@ -1,8 +1,7 @@
 import { BHAASHAH_PILLARS } from '@/constants/General.contants';
-import { Divider, Grid, Paper, Typography } from '@mui/material';
+import { Divider, Paper, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
-import NextLink from 'next/link';
-
+import Grid from '@mui/material/Grid2';
 import Breadcrumbs from '@/components/common/Breadcrumbs';
 import ProfileCard from '@/components/common/ProfileCard';
 import { ProfileCardProps } from '@/components/common/ProfileCard/ProfileCard.types';
@@ -51,7 +50,7 @@ const BhamashahPillars = () => {
           <Box width="100%" component={Grid} container display="flex" gap={2}>
             {BHAASHAH_PILLARS.filter((pillar: IBhamashahPillar) => pillar.type === 'platinum').map(
               (pillar: IBhamashahPillar, index: number) => (
-                <Grid key={`bamashah-card-platinum-${index}`} item xs={12} sm={4} md={3}>
+                <Grid key={`bamashah-card-platinum-${index}`} size={{ xs: 12, sm: 4, md: 3 }}>
                   <ProfileCard {...pillar} designation={pillar.type} color="#CF7878" />
                 </Grid>
               )
@@ -78,7 +77,7 @@ const BhamashahPillars = () => {
           <Box component={Grid} container display="flex" gap={2}>
             {BHAASHAH_PILLARS.filter((pillar: IBhamashahPillar) => pillar.type === 'silver').map(
               (pillar: IBhamashahPillar, index: number) => (
-                <Grid key={`bamashah-card-silver-${index}`} item xs={12} sm={4} md={3}>
+                <Grid key={`bamashah-card-silver-${index}`} size={{ xs: 12, sm: 4, md: 3 }}>
                   <ProfileCard {...pillar} designation={pillar.type} color="#BCB198" />
                 </Grid>
               )

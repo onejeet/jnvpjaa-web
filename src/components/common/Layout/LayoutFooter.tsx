@@ -5,8 +5,9 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import Typography from '@mui/material/Typography';
+import Image from 'next/image';
 import NextLink from 'next/link';
 import React from 'react';
 
@@ -28,8 +29,8 @@ const LayoutFooter: React.FC = () => {
       >
         <AppBar component="footer" position="static" sx={{ bgcolor: 'grey.100' }} elevation={0}>
           <Grid container p={{ xs: 2, sm: 0 }}>
-            <Grid item xs={12} sm={12} md={4.75} pt="25px">
-              <Logo width={325} height={50} />
+            <Grid size={{ sm: 12, md: 4.75 }} pt="25px">
+              <Logo />
               {/* <Box
                 display="flex"
                 width={{
@@ -55,10 +56,14 @@ const LayoutFooter: React.FC = () => {
                 </Link>
               </Box> */}
             </Grid>
-            <Grid item xs={6} sm={2.25} md={2.25} pt="25px">
+            <Grid size={{ xs: 12, sm: 2.25, md: 2.25 }} pt="25px">
               <MenuList
                 title="About"
                 items={[
+                  {
+                    label: 'Home',
+                    path: '/',
+                  },
                   {
                     label: 'About JVPJAA',
                     path: '/about',
@@ -74,7 +79,7 @@ const LayoutFooter: React.FC = () => {
                 ]}
               />
             </Grid>
-            <Grid item xs={6} sm={2.25} md={2.25} pt="25px">
+            <Grid size={{ xs: 12, sm: 2.25, md: 2.25 }} pt="25px">
               <MenuList
                 title="Student Hub"
                 items={[
@@ -93,7 +98,7 @@ const LayoutFooter: React.FC = () => {
                 ]}
               />
             </Grid>
-            {/* <Grid item xs={12} sm={2.25} md={2.25} pt="25px">
+            <Grid size={{ xs: 12, sm: 2.25, md: 2.25 }} pt="25px">
               <MenuList
                 title="Other"
                 items={[
@@ -111,8 +116,8 @@ const LayoutFooter: React.FC = () => {
                   // },
                 ]}
               />
-            </Grid> */}
-            <Grid item xs={12} mt="10px" mb="20px">
+            </Grid>
+            <Grid size={{ xs: 12 }} mt="20px" mb="20px">
               <Divider orientation="horizontal" sx={{ borderColor: '#D9D9D9', opacity: 1 }} />
             </Grid>
           </Grid>
@@ -128,10 +133,18 @@ const LayoutFooter: React.FC = () => {
             alignItems="center"
           >
             {/* <Grid item xs={12} md={6} mt={{ xs: '20px' }}> */}
-            <Grid item xs={12} display="flex" width="100%" justifyContent="center">
+            <Grid size={{ xs: 12 }} display="flex" width="100%" justifyContent="center">
               <Stack direction="row" spacing="16px" alignItems="center">
                 {JNVPJAA_SOCIAL_MEDIA?.map(({ path, name }: Record<string, any>, index: number) => (
-                  <NextLink key={`social-media-item-${index}`} href={path} target="_blank" color="inherit" title={name}>
+                  <NextLink
+                    href={path || '/'}
+                    as={path}
+                    passHref
+                    key={`social-media-item-${index}`}
+                    target="_blank"
+                    color="inherit"
+                    title={name}
+                  >
                     <IconButton
                       sx={{
                         bgcolor: 'transparent',
@@ -147,16 +160,7 @@ const LayoutFooter: React.FC = () => {
               </Stack>
             </Grid>
 
-            <Grid
-              item
-              xs={12}
-              md={6}
-              textAlign="left"
-              mt={{
-                xs: '10px',
-                sm: 0,
-              }}
-            >
+            <Grid size={{ xs: 12, md: 6 }} textAlign="left">
               <Typography
                 sx={{
                   color: 'grey.800',
@@ -171,9 +175,10 @@ const LayoutFooter: React.FC = () => {
               </Typography>
             </Grid>
             <Grid
-              xs={12}
-              md={6}
-              item
+              size={{
+                xs: 12,
+                md: 6,
+              }}
               display="flex"
               justifyContent="end"
               color="grey.800"
@@ -193,28 +198,24 @@ const LayoutFooter: React.FC = () => {
                 variant="body2"
                 display="flex"
               >
-                Designed & Crafted By:{' '}
-                <NextLink href="https://www.dotscreated.com/" style={{ textDecoration: 'none' }} target="_blank">
-                  {/* <Link sx={{ textDecoration: 'none' }}> */}
-                  <Box
-                    component="span"
-                    ml={1}
-                    color="primary.main"
-                    sx={{
-                      borderBottom: '1px dotted',
-                      borderColor: 'primary.main',
-                      cursor: 'pointer',
-                      opacity: 0.9,
-                      '&:hover': {
-                        opacity: 1,
-                      },
-                    }}
-                  >
-                    {' '}
-                    Dots Created
-                  </Box>
-                  {/* </Link> */}
-                </NextLink>
+                Powered by{' '}
+                <Box
+                  component="span"
+                  ml={1}
+                  color="primary.main"
+                  sx={{
+                    borderBottom: '1px dotted',
+                    borderColor: 'primary.main',
+                    cursor: 'pointer',
+                    opacity: 0.7,
+                    '&:hover': {
+                      opacity: 1,
+                    },
+                  }}
+                >
+                  {' '}
+                  Dots Created
+                </Box>
               </Typography>
             </Grid>
           </Grid>

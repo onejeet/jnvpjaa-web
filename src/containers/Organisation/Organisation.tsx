@@ -1,5 +1,6 @@
 import { EXEC_COMMITTEE } from '@/constants/General.contants';
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 
 import ProfileCard from '@/components/common/ProfileCard';
 import { ProfileCardProps } from '@/components/common/ProfileCard/ProfileCard.types';
@@ -17,7 +18,14 @@ const Organizations = () => {
       </Typography>
       <Grid container spacing={3} mt={4}>
         {EXEC_COMMITTEE.map((item: ProfileCardProps, index: number) => (
-          <Grid item xs={12} sm={6} md={4} key={`-committee-${item.designation}-${index}`}>
+          <Grid
+            size={{
+              xs: 12,
+              sm: 6,
+              md: 4,
+            }}
+            key={`-committee-${item.designation}-${index}`}
+          >
             <ProfileCard {...item} />
           </Grid>
         ))}

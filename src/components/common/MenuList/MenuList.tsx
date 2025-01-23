@@ -21,14 +21,13 @@ const MenuList: React.FC<MenuListProps> = ({ title, items, offsetTop }) => (
       {items?.length &&
         items.map((item, index) => (
           <ListItem key={`menu-list-${item.label}-${index}`} disablePadding sx={{ mb: '8px' }}>
-            <NextLink href={item?.path || '/'} style={{ textDecoration: 'none' }}>
+            <NextLink href={item?.path || '/'} as={item?.path} style={{ textDecoration: 'none' }}>
               <ListItemButton
                 sx={{
                   p: 0,
                   bgcolor: 'transparent !important',
                   textDecoration: 'none',
                 }}
-                disableGutters
               >
                 <ListItemText
                   primary={
