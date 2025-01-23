@@ -3,6 +3,7 @@ import { NextPage } from 'next';
 import { NextSeo } from 'next-seo';
 
 import LayoutModule from '@/components/common/Layout';
+import Signin from '@/containers/Auth/Signin';
 
 const LoginPage: NextPage = () => (
   <>
@@ -31,11 +32,9 @@ const LoginPage: NextPage = () => (
         },
       ]}
     />
-    <LayoutModule
-      disableCover
-      title="Register & Login • Alumni Network of JNV Paota, Jaipur"
-      containerProps={{}}
-    ></LayoutModule>
+    <LayoutModule disableCover title="Register & Login • Alumni Network of JNV Paota, Jaipur" containerProps={{}}>
+      <Signin />
+    </LayoutModule>
   </>
 );
 

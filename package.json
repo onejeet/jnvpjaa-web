@@ -22,7 +22,6 @@
   "dependencies": {
     "@apollo/client": "^3.12.7",
     "@emotion/cache": "^11.13.1",
-    "@emotion/css": "^11.13.0",
     "@emotion/react": "^11.13.3",
     "@emotion/server": "^11.11.0",
     "@emotion/styled": "^11.13.0",
@@ -37,8 +36,8 @@
     "material-ui-popup-state": "^5.3.1",
     "next": "^15.1.6",
     "next-seo": "^6.6.0",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "zod": "3.23.8"
   },
   "devDependencies": {

@@ -76,7 +76,7 @@ const Vision = () => {
               height={440}
               src="/assets/images/slider-2.webp"
               alt="mission"
-              layout="responsive"
+              // layout="responsive"
               style={{
                 objectFit: 'contain',
                 objectPosition: 'bottom',

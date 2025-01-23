@@ -30,11 +30,12 @@ const authLink = setContext((_, { headers }) => {
 // HTTP link
 const httpLink = new HttpLink({
   uri: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || 'http://localhost:4000/client',
-  credentials: 'same-origin', // or 'include' for cookies
+  credentials: 'include', // or 'include' for cookies
 });
 
 // Apollo Client
 export const apolloClient = new ApolloClient({
   link: ApolloLink.from([errorLink, authLink, httpLink]),
   cache: new InMemoryCache(),
+  connectToDevTools: true,
 });
