@@ -5,8 +5,14 @@ import { onError } from '@apollo/client/link/error';
 // Error handling link
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
-    graphQLErrors.forEach(({ message, locations, path }) => {
-      console.error(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`);
+    // graphQLErrors.forEach(({ message, locations, path }) => {
+    //   console.error(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`);
+    // });
+    graphQLErrors.forEach((graphQLError) => {
+      // @ts-expect-error message
+      const message = graphQLError.extensions?.response?.message || graphQLError.message;
+      console.error(`[GraphQL error]: ${message}`);
+      throw new Error(message);
     });
   }
 

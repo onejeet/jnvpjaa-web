@@ -1,6 +1,6 @@
+import React, { createContext, useContext } from 'react';
 import modes from '@/utils/theme/themeModes.utils';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import React, { createContext } from 'react';
 
 import type { LayoutContextProps, LayoutProviderProps, SettingsProps } from './LayoutContext.types';
 
@@ -32,4 +32,11 @@ const LayoutProvider = ({ children }: LayoutProviderProps) => {
   );
 };
 
-export { LayoutContext, LayoutProvider };
+const useLayout = () => {
+  const context = useContext(LayoutContext);
+  if (!context) throw new Error('Layout context can only be used inside LayoutProvider');
+
+  return context;
+};
+
+export { LayoutContext, LayoutProvider, useLayout };

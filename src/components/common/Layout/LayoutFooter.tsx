@@ -65,7 +65,7 @@ const LayoutFooter: React.FC = () => {
                     path: '/',
                   },
                   {
-                    label: 'About JVPJAA',
+                    label: 'About JNVPJAA',
                     path: '/about',
                   },
                   {
@@ -73,8 +73,8 @@ const LayoutFooter: React.FC = () => {
                     path: '/vision',
                   },
                   {
-                    label: 'Privacy policy',
-                    path: '/privacy_policy',
+                    label: 'Contact Us',
+                    path: '/contact-us',
                   },
                 ]}
               />

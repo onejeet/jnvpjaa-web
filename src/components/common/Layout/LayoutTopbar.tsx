@@ -92,9 +92,13 @@ const LayoutTopbar: React.FC = () => {
             {HEADER_MENU.map((item: IHeaderMenuItem) => (
               <HeaderMenuItem key={item.label} item={item} />
             ))}
-            <NextLink href="/contact-us" passHref style={{ textDecoration: 'none' }}>
-              <Button variant="outlined" sx={{ display: { xs: 'none', md: 'block' }, ml: '8px', whiteSpace: 'nowrap' }}>
-                Contact Us
+            <NextLink href="/login" passHref style={{ textDecoration: 'none' }}>
+              <Button
+                // startIcon={<Login sx={{ fontSize: '14px' }} />}
+                variant="outlined"
+                sx={{ display: { xs: 'none', md: 'block' }, ml: '8px', whiteSpace: 'nowrap' }}
+              >
+                Login
               </Button>
             </NextLink>
           </Box>
@@ -126,13 +130,13 @@ const LayoutTopbar: React.FC = () => {
               />
             ))}
           </Box>
-          <NextLink href="/contact-us" passHref style={{ textDecoration: 'none' }}>
+          <NextLink href="/login" as="/login" passHref style={{ textDecoration: 'none' }}>
             <Button
               fullWidth
               variant="outlined"
               sx={{ display: { xs: 'none', md: 'block' }, ml: '8px', whiteSpace: 'nowrap' }}
             >
-              Contact Us
+              Login
             </Button>
           </NextLink>
         </Box>

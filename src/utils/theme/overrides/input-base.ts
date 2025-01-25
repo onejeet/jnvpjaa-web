@@ -6,11 +6,11 @@ const InputBase = () => {
     MuiInputBase: {
       styleOverrides: {
         root: ({ theme, ownerState }: OwnerStateThemeType) => ({
-          height: '36px',
-          '& .MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': {
-            height: '30px',
-            paddingTop: 0,
-            paddingBottom: 0,
+          // height: '40px',
+          // paddingTop: '8px',
+          height: '40px', // Set your preferred height
+          '& .MuiOutlinedInput-input': {
+            padding: '6px 4px', // Control inner input padding
           },
           '&.Mui-disabled': {
             backgroundColor: `${theme.palette.grey[100]} !important`,
@@ -19,8 +19,10 @@ const InputBase = () => {
             borderWidth: '1px !important',
           },
         }),
-        sizeSmall: {
-          height: '30px',
+        input: {
+          alignItems: 'center',
+          alignSelf: 'stretch',
+          display: 'inline-flex !important', // Fix flicker
         },
       },
     },
