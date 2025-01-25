@@ -1,11 +1,10 @@
-import Vision from '@/containers/About/Vision';
 import { NextPage } from 'next';
 import { NextSeo } from 'next-seo';
 
 import LayoutModule from '@/components/common/Layout';
 import Signin from '@/containers/Auth/Signin';
 
-const LoginPage: NextPage = () => (
+const SigninPage: NextPage = () => (
   <>
     <NextSeo
       title="Register & Login • Alumni Network of JNV Paota, Jaipur"
@@ -38,4 +37,4 @@ const LoginPage: NextPage = () => (
   </>
 );
 
-export default LoginPage;
+export default SigninPage;

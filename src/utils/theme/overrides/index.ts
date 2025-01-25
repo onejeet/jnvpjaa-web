@@ -12,6 +12,7 @@ import MuiDataGrid from './datagrid';
 import MuiDialog from './dialog';
 import MuiIconButton from './icon-button';
 import MuiInputBase from './input-base';
+import MuiFormLabel from './form-label';
 import MuiMenu from './menu';
 import MuiMenuItem from './menu-item';
 import MuiOutlinedInput from './outlined-input';
@@ -35,6 +36,7 @@ const Overrides = (mode: PaletteMode) => {
   const cssBaseline = MuiCssBaseline(mode);
   const iconButton = MuiIconButton();
   const inputBase = MuiInputBase();
+  const formLabel = MuiFormLabel();
   const menuItem = MuiMenuItem();
   const menu = MuiMenu(mode);
   const outlinedInput = MuiOutlinedInput();
@@ -60,6 +62,7 @@ const Overrides = (mode: PaletteMode) => {
     cssBaseline,
     iconButton,
     inputBase,
+    formLabel,
     menuItem,
     menu,
     outlinedInput,

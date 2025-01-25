@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
-import SigninForm from './SigninForm';
+import SigninForm from './SignupForm';
 
-const Signin = () => {
+const Signup = () => {
   return (
     <Box
       sx={{
@@ -18,4 +18,4 @@ const Signin = () => {
   );
 };
 
-export default Signin;
+export default Signup;

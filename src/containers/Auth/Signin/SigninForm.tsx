@@ -3,11 +3,13 @@
 import React from 'react';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
-import { Box, Button, Card, Typography } from '@mui/material';
+import { Box, Card, Typography } from '@mui/material';
 import { useSigninMutation } from 'src/apollo/hooks';
 import { ISigninFormInput } from './Signin.types';
 import FormTextField from '@/components/form/FormTextField';
 import { useAlert } from '@/context/AlertContext';
+import Button from '@/components/core/Button';
+import Link from 'next/link';
 
 const SigninForm = () => {
   const { showAlert } = useAlert();
@@ -17,7 +19,7 @@ const SigninForm = () => {
     formState: { errors },
   } = useForm<ISigninFormInput>();
 
-  const [signin] = useSigninMutation();
+  const [signin, { loading }] = useSigninMutation();
 
   const onSubmit = React.useCallback(
     (data: ISigninFormInput) => {
@@ -31,7 +33,6 @@ const SigninForm = () => {
         },
         onError: (err: Error) => {
           showAlert({
-            visible: true,
             type: 'error',
             message: 'Something went wrong',
           });
@@ -78,8 +79,13 @@ const SigninForm = () => {
           autoFocus
           control={control}
           name="email"
+          size="small"
           rules={{
             required: 'Required',
+            pattern: {
+              value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+              message: 'Invalid email',
+            },
           }}
         />
 
@@ -91,13 +97,22 @@ const SigninForm = () => {
           autoComplete="current-password"
           control={control}
           name="password"
+          size="small"
           rules={{
             required: 'Required',
           }}
         />
-        <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-          Sign In
-        </Button>
+        <Button title=" Sign In" type="submit" fullWidth loading={loading} />
+      </Box>
+      <Box display="flex" mb={2} alignItems="center">
+        <Typography variant="body1" mr={1}>
+          Not Registered yet?{' '}
+        </Typography>
+        <Link href="/signup" as="/signup" style={{ textDecoration: 'none' }}>
+          <Typography variant="body1" component="span" color="primary.main" sx={{ textDecoration: 'underline' }}>
+            Register Now
+          </Typography>
+        </Link>
       </Box>
     </Card>
   );

@@ -1,25 +1,57 @@
+/* REACT */
 import React from 'react';
-import { Button as MuiButton } from '@mui/material';
+
+/* MUI */
+import LoadingButton from '@mui/lab/LoadingButton';
+import { Theme } from '@mui/material/styles';
+import CircularProgress from '@mui/material/CircularProgress';
+
+/* TYPES */
 import { ButtonProps } from './Button.types';
 
-const Button: React.FC<ButtonProps> = ({ title, loading, sx = {}, ...props }) => {
-  return (
-    <MuiButton
-      sx={{
-        borderColor: (theme) => `${theme.palette.common.black} !important`,
-        borderRadius: '100px',
-        border: '1px solid',
-        px: '24px',
-        maxHeight: '30px',
-        fontSize: '14px',
-        textTransform: 'none',
-        ...sx,
-      }}
-      {...props}
-    >
-      {title}
-    </MuiButton>
-  );
-};
+const Button = ({ title, variant = 'contained', color = 'primary', sx = {}, ...restProps }: ButtonProps, ref: any) => (
+  <LoadingButton
+    variant={variant}
+    disableElevation
+    color={color}
+    sx={{
+      // keep the color intact but with opacity
+      '&:disabled': {
+        backgroundColor:
+          variant === 'contained'
+            ? // @ts-expect-error expected
+              sx?.backgroundColor
+              ? // @ts-expect-error expected
+                sx.backgroundColor
+              : // @ts-expect-error expected
+                (theme: Theme) => theme.palette?.[color]?.main
+            : undefined,
+        color: variant === 'contained' ? 'white' : undefined,
+        opacity: 0.6,
+      },
+      // keep the width intact
+      '&.MuiLoadingButton-loading': {
+        color: 'transparent',
+        '& .MuiButton-startIcon': {
+          opacity: 0,
+        },
+      },
+      ...sx,
+    }}
+    loadingIndicator={
+      <CircularProgress
+        sx={{
+          color: variant === 'contained' ? 'white' : 'inherit',
+        }}
+        size={16}
+      />
+    }
+    ref={ref}
+    {...restProps}
+  >
+    {restProps.loading ? '' : title}
+  </LoadingButton>
+);
 
-export default Button;
+const ButtonWithRef = React.forwardRef(Button);
+export default React.memo(ButtonWithRef);

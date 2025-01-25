@@ -3,10 +3,10 @@ const Select = () => {
     MuiSelect: {
       styleOverrides: {
         select: {
-          borderRadius: '6px !important',
-          '&.MuiSelect-root': {
-            borderRadius: '6px !important',
-          },
+          // borderRadius: '6px !important',
+          // '&.MuiSelect-root': {
+          //   borderRadius: '6px !important',
+          // },
         },
       },
     },

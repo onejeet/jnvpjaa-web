@@ -1,7 +1,6 @@
 import React, { createContext, useContext } from 'react';
-import modes from '@/utils/theme/themeModes.utils';
+import modes from '@/utils/theme/ThemeOptions';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
 import type { LayoutContextProps, LayoutProviderProps, SettingsProps } from './LayoutContext.types';
 
 const defaultProvider: LayoutContextProps = {

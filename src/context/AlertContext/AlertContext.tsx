@@ -2,9 +2,9 @@ import React, { createContext, useContext } from 'react';
 import Box from '@mui/material/Box';
 import { WRAPPER_ID } from './AlertContext.constant';
 import CloseIcon from '@mui/icons-material/Close';
-import type { AlertContextProps, AlertProviderProps } from './AlertContext.types';
+import type { AlertContextProps, AlertProviderProps, ToastProps } from './AlertContext.types';
 import toast, { Toast, ToastBar, Toaster } from 'react-hot-toast';
-import { IconButton, useTheme } from '@mui/material';
+import { alpha, IconButton, Typography, useTheme } from '@mui/material';
 
 const defaultProvider: AlertContextProps = {
   showAlert: () => {},
@@ -17,30 +17,40 @@ const AlertProvider = ({ children }: AlertProviderProps) => {
   const theme = useTheme();
 
   // handler to trigger notification
-  const showAlert = React.useCallback((options: Toast) => {
+  const showAlert = React.useCallback((options: ToastProps) => {
     const { type, message, ...other } = options;
     toast.dismiss();
     switch (options.type) {
       case 'success':
-        return toast.success(options.message, { ...other });
+        return toast.success(message, { ...other });
 
       case 'error':
-        return toast.error(options.message, { ...other });
+        return toast.error(message, { ...other });
 
       case 'loading':
-        return toast.loading(options.message, { ...other });
+        return toast.loading(message, { ...other });
 
       case 'custom':
-        return toast.loading(options.message, { ...other });
+        return toast.loading(message, { ...other });
 
       default:
-        return toast.loading(options.message, { ...other });
+        return toast.loading(message, { ...other });
     }
   }, []);
 
   // handler to hide notification
   const hideAlert = React.useCallback(() => {
     toast.dismiss();
+  }, []);
+  const getTextColor = React.useCallback((type: Toast['type']) => {
+    switch (type) {
+      case 'error':
+        return 'error.main';
+      case 'success':
+        return 'success.main';
+      case 'loading':
+        return 'text.primary';
+    }
   }, []);
 
   return (
@@ -64,6 +74,7 @@ const AlertProvider = ({ children }: AlertProviderProps) => {
           style: {
             background: theme.palette.grey[100],
             color: theme.palette.common.black,
+            padding: '10px 20px',
           },
 
           // Default options for specific types
@@ -82,6 +93,7 @@ const AlertProvider = ({ children }: AlertProviderProps) => {
               <>
                 {icon}
                 {message}
+                {/* <Typography color={getTextColor(t.type)}>{message}</Typography> */}
                 {t.type !== 'loading' && (
                   <IconButton onClick={() => toast.dismiss(t.id)} size="small">
                     <CloseIcon sx={{ fontSize: '16px' }} />

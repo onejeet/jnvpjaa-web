@@ -33,3 +33,23 @@ export const getDefaultAvatar = (gender?: string) => {
     ? '/assets/images/female_profile_placeholder.webp'
     : '/assets/images/male_profile_placeholder.webp';
 };
+
+export function startCase(str: string) {
+  if (str.length === 0) return str; // Check for empty string
+
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+export const getBatchOptions = () => {
+  const currentYear = new Date().getFullYear();
+  const yearArray = [];
+
+  for (let year = 1993; year <= currentYear; year++) {
+    yearArray.push({
+      label: year.toString(),
+      value: year,
+    });
+  }
+
+  return yearArray;
+};
