@@ -1,10 +1,9 @@
-import { ToastProps } from '@/components/common/Toast/Toast.types';
 import type React from 'react';
+import type { Toast } from 'react-hot-toast';
 
 export interface AlertContextProps {
-  showAlert: (options: Omit<ToastProps, 'onClose'>, portalId?: string) => void;
+  showAlert: (options: Toast) => void;
   hideAlert: () => void;
-  notification?: any;
 }
 
 export interface AlertProviderProps {
