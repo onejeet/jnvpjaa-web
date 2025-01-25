@@ -46,19 +46,17 @@ const SigninForm = () => {
   return (
     <Card
       elevation={3}
-      sx={{ maxWidth: 400, bgcolor: 'grey.100', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+      sx={{ maxWidth: 400, bgcolor: 'grey.100', display: 'flex', flexDirection: 'column', alignItems: 'center', p: 3 }}
     >
       <Image src={'/assets/svg/profile-website-icon.svg'} width={200} height={100} alt="login" />
       {/* </Box> */}
-      <Typography variant="h3" mb={2}>
-        Alumni Center Access
-      </Typography>
+      <Typography variant="h3">Alumni Center Access</Typography>
       <Box
         component="form"
         onSubmit={handleSubmit(onSubmit)}
         sx={{
           width: 400,
-          mt: 1,
+
           p: 3,
           display: 'flex',
           flexDirection: 'column',
@@ -104,15 +102,22 @@ const SigninForm = () => {
         />
         <Button title=" Sign In" type="submit" fullWidth loading={loading} />
       </Box>
-      <Box display="flex" mb={2} alignItems="center">
-        <Typography variant="body1" mr={1}>
-          Not Registered yet?{' '}
-        </Typography>
-        <Link href="/signup" as="/signup" style={{ textDecoration: 'none' }}>
-          <Typography variant="body1" component="span" color="primary.main" sx={{ textDecoration: 'underline' }}>
-            Register Now
+      <Box display="flex" flexDirection="column" alignItems="center" gap={1.5}>
+        <Link href="/forgot-password" as="/forgot-password" style={{ textDecoration: 'none' }}>
+          <Typography variant="body2" component="span" color="primary.main" sx={{ textDecoration: 'underline' }}>
+            Forgot Password?
           </Typography>
         </Link>
+        <Box display="flex" alignItems="center">
+          <Typography variant="body2" mr={1}>
+            Not registered yet?{' '}
+          </Typography>
+          <Link href="/signup" as="/signup" style={{ textDecoration: 'none' }}>
+            <Typography variant="body2" component="span" color="primary.main" sx={{ textDecoration: 'underline' }}>
+              Register Now
+            </Typography>
+          </Link>
+        </Box>
       </Box>
     </Card>
   );

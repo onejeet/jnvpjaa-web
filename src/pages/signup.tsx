@@ -8,6 +8,7 @@ const meta = {
   title: 'Signup • Alumni Network of JNV Paota, Jaipur',
   description:
     'The Official Alumni Network of Jawahar Navodaya Vidyalaya Paota, Jaipur. JNVs are a testament to innovative state-sponsored education in India. Connect with fellow alumni, share experiences, and stay updated on events that honor our shared journey and the values of our beloved school.',
+  url: 'https://jnvpjaa.org/signup',
 };
 
 const SignupPage: NextPage = () => (
@@ -16,7 +17,7 @@ const SignupPage: NextPage = () => (
       title={meta.title}
       description={meta.description}
       openGraph={{
-        url: 'https://jnvpjaa.org',
+        url: meta.url,
         title: meta.title,
         description: meta.description,
         images: [

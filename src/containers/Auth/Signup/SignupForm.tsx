@@ -62,19 +62,21 @@ const SignupForm = () => {
   return (
     <Card
       elevation={3}
-      sx={{ maxWidth: 400, bgcolor: 'grey.100', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+      sx={{ maxWidth: 700, bgcolor: 'grey.100', display: 'flex', flexDirection: 'column', alignItems: 'center', p: 3 }}
     >
       {/* <Image src={'/assets/svg/profile-website-icon.svg'} width={200} height={100} alt="login" /> */}
 
-      <Typography variant="h3" mt={3}>
-        Register Yourself
+      <Typography variant="h2">JNV Paota Alumni Registration</Typography>
+      <Typography color="grey.500" variant="body2" textAlign="center">
+        The registration will be reviewed and verified by the Alumni Association and batch coordinators,
+        <br /> and will be approved accordingly.
       </Typography>
 
       <Box
         component="form"
         onSubmit={handleSubmit(onSubmit)}
         sx={{
-          width: 400,
+          width: '100%',
           mt: 1,
           p: 3,
           display: 'flex',
@@ -82,7 +84,7 @@ const SignupForm = () => {
           alignItems: 'center',
         }}
       >
-        <Grid container spacing={2.5}>
+        <Grid container spacing={3}>
           <Grid size={{ xs: 12, md: 6 }}>
             <FormTextField
               fullWidth
@@ -137,19 +139,6 @@ const SignupForm = () => {
           </Grid>
 
           <Grid size={{ xs: 12, md: 6 }}>
-            {/* <FormTextField
-              fullWidth
-              id="batch"
-              label="Batch"
-              autoFocus
-              control={control}
-              name="batch"
-              size="small"
-              type="number"
-              rules={{
-                required: 'Required',
-              }}
-            /> */}
             <FormSelectField
               control={control}
               name="batch"
@@ -163,84 +152,95 @@ const SignupForm = () => {
               }}
             />
           </Grid>
-          <FormTextField
-            fullWidth
-            id="email"
-            label="Email Address"
-            autoComplete="email"
-            control={control}
-            name="email"
-            size="small"
-            rules={{
-              required: 'Required',
-              pattern: {
-                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                message: 'Invalid email',
-              },
-            }}
-          />
-          <FormTextField
-            fullWidth
-            id="mobile"
-            label="Mobile"
-            control={control}
-            startAdornment="+91"
-            name="mobile"
-            size="small"
-            type="number"
-            rules={{
-              required: 'Required',
-              maxLength: {
-                value: 10,
-                message: 'Invalid mobile number',
-              },
-            }}
-          />
-          <FormTextField
-            fullWidth
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            control={control}
-            name="password"
-            size="small"
-            rules={{
-              required: 'Required',
-              pattern: {
-                value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-                message: 'Invalid password.',
-              },
-            }}
-          />
-          <Typography variant="body2" color="grey.600">
-            <Info sx={{ fontSize: '14px' }} />
-            Password must be at least 8 characters long, contain one uppercase letter, one lowercase letter, and one
-            number.
-          </Typography>
-          <FormTextField
-            fullWidth
-            label="Confirm Password"
-            type="password"
-            id="confirm-password"
-            autoComplete="current-password"
-            control={control}
-            name="confirm-password"
-            size="small"
-            rules={{
-              required: 'Required',
-              validate: (value) => value === watchPassword || 'Passwords do not match',
-            }}
-          />
+          <Grid size={{ xs: 12, md: 6 }}>
+            <FormTextField
+              fullWidth
+              id="email"
+              label="Email Address"
+              autoComplete="email"
+              control={control}
+              name="email"
+              size="small"
+              rules={{
+                required: 'Required',
+                pattern: {
+                  value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                  message: 'Invalid email',
+                },
+              }}
+            />
+          </Grid>
+          <Grid size={{ xs: 12, md: 6 }}>
+            <FormTextField
+              fullWidth
+              id="mobile"
+              label="Mobile"
+              control={control}
+              startAdornment="+91"
+              name="mobile"
+              size="small"
+              type="number"
+              rules={{
+                required: 'Required',
+                maxLength: {
+                  value: 10,
+                  message: 'Invalid mobile number',
+                },
+              }}
+            />
+          </Grid>
+          <Grid size={{ xs: 12, md: 6 }}>
+            <FormTextField
+              fullWidth
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              control={control}
+              name="password"
+              size="small"
+              rules={{
+                required: 'Required',
+                pattern: {
+                  value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+                  message: 'Invalid password.',
+                },
+              }}
+            />
+          </Grid>
+          <Grid size={{ xs: 12, md: 6 }}>
+            <FormTextField
+              fullWidth
+              label="Confirm Password"
+              type="password"
+              id="confirm-password"
+              autoComplete="current-password"
+              control={control}
+              name="confirm-password"
+              size="small"
+              rules={{
+                required: 'Required',
+                validate: (value) => value === watchPassword || 'Passwords do not match',
+              }}
+            />
+          </Grid>
+          <Grid size={{ xs: 12 }} mt={-1}>
+            <Typography variant="body2" color="grey.600">
+              <Info sx={{ fontSize: '14px' }} />
+              The password must be a minimum of 8 characters in length and include at least one uppercase letter, one
+              lowercase letter, and one numeric digit.
+            </Typography>
+          </Grid>
+
           <Button title="Register" type="submit" fullWidth loading={loading} />
         </Grid>
       </Box>
-      <Box display="flex" mb={2} alignItems="center">
-        <Typography variant="body1" mr={1}>
+      <Box display="flex" alignItems="center">
+        <Typography variant="body2" mr={1}>
           Already have an account?{' '}
         </Typography>
         <Link href="/signin" as="/signin" style={{ textDecoration: 'none' }}>
-          <Typography variant="body1" component="span" color="primary.main" sx={{ textDecoration: 'underline' }}>
+          <Typography variant="body2" component="span" color="primary.main" sx={{ textDecoration: 'underline' }}>
             Signin
           </Typography>
         </Link>
