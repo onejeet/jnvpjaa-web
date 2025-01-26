@@ -3,7 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
-import { Box, Card, Typography } from '@mui/material';
+import { Box, Card, Divider, Typography } from '@mui/material';
 import { useSigninMutation } from 'src/apollo/hooks';
 import { ISigninFormInput } from './Signin.types';
 import FormTextField from '@/components/form/FormTextField';
@@ -29,7 +29,8 @@ const SigninForm = () => {
           password: data?.password,
         },
         onCompleted: (res) => {
-          console.log('COmpleted', res);
+          // localStorage.setItem('', res?.signin);
+          console.log('COmpleted', res?.signin);
         },
         onError: (err: Error) => {
           showAlert({
@@ -44,13 +45,7 @@ const SigninForm = () => {
   );
 
   return (
-    <Card
-      elevation={3}
-      sx={{ maxWidth: 400, bgcolor: 'grey.100', display: 'flex', flexDirection: 'column', alignItems: 'center', p: 3 }}
-    >
-      <Image src={'/assets/svg/profile-website-icon.svg'} width={200} height={100} alt="login" />
-      {/* </Box> */}
-      <Typography variant="h3">Alumni Center Access</Typography>
+    <>
       <Box
         component="form"
         onSubmit={handleSubmit(onSubmit)}
@@ -119,7 +114,7 @@ const SigninForm = () => {
           </Link>
         </Box>
       </Box>
-    </Card>
+    </>
   );
 };
 

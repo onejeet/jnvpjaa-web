@@ -1,18 +1,35 @@
 import { ApolloClient, HttpLink, InMemoryCache, ApolloLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
+import { refreshAccessToken } from './refresh';
 
 // Error handling link
-const errorLink = onError(({ graphQLErrors, networkError }) => {
+const errorLink = onError(({ graphQLErrors, networkError, forward, operation }) => {
   if (graphQLErrors) {
-    // graphQLErrors.forEach(({ message, locations, path }) => {
-    //   console.error(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`);
-    // });
-    graphQLErrors.forEach((graphQLError) => {
-      // @ts-expect-error message
-      const message = graphQLError.extensions?.response?.message || graphQLError.message;
-      console.error(`[GraphQL error]: ${message}`);
-      throw new Error(message);
+    graphQLErrors.forEach(({ message, extensions, locations, path }) => {
+      // Handle 401 Unauthorized (Token Expired)
+      console.error(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`);
+      if (extensions?.code === 'UNAUTHENTICATED') {
+        return refreshAccessToken()
+          .then((newToken: string | null) => {
+            if (newToken) {
+              localStorage.setItem('accessToken', newToken);
+              operation.setContext(({ headers = {} }) => ({
+                headers: {
+                  ...headers,
+                  Authorization: `Bearer ${newToken}`,
+                },
+              }));
+
+              return forward(operation); // Retry the operation with a new token
+            }
+          })
+          .catch(() => {
+            console.error('Token refresh failed');
+            localStorage.removeItem('accessToken');
+            window.location.href = '/login'; // Redirect to login if token refresh fails
+          });
+      }
     });
   }
 

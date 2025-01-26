@@ -13,7 +13,6 @@ const FormSelect: React.FC<FormSelectProps> = ({
   options = [],
   error = false,
   selectProps,
-
   ...rest
 }) => {
   return (

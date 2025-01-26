@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useForm, useWatch } from 'react-hook-form';
-import { Box, Card, Typography } from '@mui/material';
+import { Box, Card, Divider, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useSignupMutation } from 'src/apollo/hooks';
 import { ISignupFormInput } from './Signup.types';
@@ -13,6 +13,7 @@ import FormSelectField from '@/components/form/FormSelectField';
 import { getBatchOptions } from '@/utils/helpers';
 import { Info } from '@mui/icons-material';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const batchList = getBatchOptions();
 
@@ -67,11 +68,19 @@ const SignupForm = () => {
       {/* <Image src={'/assets/svg/profile-website-icon.svg'} width={200} height={100} alt="login" /> */}
 
       <Typography variant="h2">JNV Paota Alumni Registration</Typography>
-      <Typography color="grey.500" variant="body2" textAlign="center">
+      <Typography color="grey.500" variant="body2" textAlign="center" mb={2}>
         The registration will be reviewed and verified by the Alumni Association and batch coordinators,
         <br /> and will be approved accordingly.
       </Typography>
-
+      <Image
+        onClick={() => {}}
+        src="/assets/svg/google-signin.svg"
+        width={300}
+        height={38}
+        alt="Sign in with Google"
+        style={{ cursor: 'pointer' }}
+      />
+      <Divider sx={{ width: '100%', mt: 2 }}>OR</Divider>
       <Box
         component="form"
         onSubmit={handleSubmit(onSubmit)}
@@ -92,6 +101,7 @@ const SignupForm = () => {
               label="First Name"
               autoFocus
               control={control}
+              disabled={loading}
               name="first_name"
               size="small"
               rules={{
@@ -106,6 +116,7 @@ const SignupForm = () => {
               label="Last Name"
               autoFocus
               control={control}
+              disabled={loading}
               name="last_name"
               size="small"
               rules={{
@@ -121,6 +132,7 @@ const SignupForm = () => {
               selectProps={{
                 size: 'small',
                 id: 'gender',
+                disabled: loading,
               }}
               options={[
                 {
@@ -145,6 +157,7 @@ const SignupForm = () => {
               selectProps={{
                 size: 'small',
                 id: 'batch',
+                disabled: loading,
               }}
               options={batchList}
               rules={{
@@ -159,6 +172,7 @@ const SignupForm = () => {
               label="Email Address"
               autoComplete="email"
               control={control}
+              disabled={loading}
               name="email"
               size="small"
               rules={{
@@ -176,6 +190,7 @@ const SignupForm = () => {
               id="mobile"
               label="Mobile"
               control={control}
+              disabled={loading}
               startAdornment="+91"
               name="mobile"
               size="small"
@@ -197,12 +212,13 @@ const SignupForm = () => {
               id="password"
               autoComplete="current-password"
               control={control}
+              disabled={loading}
               name="password"
               size="small"
               rules={{
                 required: 'Required',
                 pattern: {
-                  value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+                  value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/,
                   message: 'Invalid password.',
                 },
               }}
@@ -216,6 +232,7 @@ const SignupForm = () => {
               id="confirm-password"
               autoComplete="current-password"
               control={control}
+              disabled={loading}
               name="confirm-password"
               size="small"
               rules={{

@@ -1,7 +1,15 @@
-import { Box } from '@mui/material';
+import { Box, Card, Divider, Typography } from '@mui/material';
 import SigninForm from './SigninForm';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 const Signin = () => {
+  const router = useRouter();
+  const handleGoogleLogin = () => {
+    // Redirect to the backend Google auth endpoint
+    window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000'}/auth/google`;
+  };
+
   return (
     <Box
       sx={{
@@ -13,7 +21,37 @@ const Signin = () => {
         //  background: 'linear-gradient(45deg, rgba(236,239,241,0.4) 0%, rgba(207,216,220,0.4) 100%)',
       }}
     >
-      <SigninForm />
+      <Card
+        elevation={3}
+        sx={{
+          maxWidth: 400,
+          bgcolor: 'grey.100',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          p: 3,
+        }}
+      >
+        <Image src={'/assets/svg/profile-website-icon.svg'} width={200} height={100} alt="login" />
+        {/* </Box> */}
+        <Typography variant="h3" mb={2}>
+          Alumni Center Access
+        </Typography>
+        <Image
+          onClick={() => {
+            // router.push('/google');
+            handleGoogleLogin();
+          }}
+          src="/assets/svg/google-signin.svg"
+          width={300}
+          height={38}
+          alt="Sign in with Google"
+          style={{ cursor: 'pointer' }}
+        />
+        <Divider sx={{ width: '100%', mt: 2 }}>OR</Divider>
+        {/* <Divider variant="fullWidth">OR</Divider> */}
+        <SigninForm />
+      </Card>
     </Box>
   );
 };
