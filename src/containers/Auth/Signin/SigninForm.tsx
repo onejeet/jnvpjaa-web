@@ -29,15 +29,15 @@ const SigninForm = () => {
           password: data?.password,
         },
         onCompleted: (res) => {
-          // localStorage.setItem('', res?.signin);
-          console.log('COmpleted', res?.signin);
+          // localStorage.setItem('accessToken', res?.signin?.token || '');
+          console.log('Signed in', res?.signin);
         },
         onError: (err: Error) => {
           showAlert({
             type: 'error',
-            message: 'Something went wrong',
+            message: err?.message || 'Something went wrong',
           });
-          console.log('Error: ', err?.message);
+          console.log('Error: ', err);
         },
       });
     },

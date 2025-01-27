@@ -13,11 +13,11 @@ const errorLink = onError(({ graphQLErrors, networkError, forward, operation }) 
         return refreshAccessToken()
           .then((newToken: string | null) => {
             if (newToken) {
-              localStorage.setItem('accessToken', newToken);
+              // localStorage.setItem('accessToken', newToken);
               operation.setContext(({ headers = {} }) => ({
                 headers: {
                   ...headers,
-                  Authorization: `Bearer ${newToken}`,
+                  // Authorization: `Bearer ${newToken}`,
                 },
               }));
 
@@ -45,7 +45,7 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : '',
+      // authorization: token ? `Bearer ${token}` : '',
     },
   };
 });

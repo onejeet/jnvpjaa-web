@@ -73,7 +73,7 @@ const LayoutTopbar: React.FC = () => {
           }}
         >
           <NextLink href="/">
-            <Logo width={isMobile ? 260 : 390} height={isMobile ? 40 : 60} />
+            <Logo width={isMobile ? 260 : 390} height={isMobile ? 40 : 60} priority />
           </NextLink>
           <Box display={{ xs: 'flex', lg: 'none' }} ml="auto">
             <IconButton

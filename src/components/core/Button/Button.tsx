@@ -2,7 +2,7 @@
 import React from 'react';
 
 /* MUI */
-import LoadingButton from '@mui/lab/LoadingButton';
+import LoadingButton from '@mui/material/Button';
 import { Theme } from '@mui/material/styles';
 import CircularProgress from '@mui/material/CircularProgress';
 
