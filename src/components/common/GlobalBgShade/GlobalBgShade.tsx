@@ -1,3 +1,4 @@
+import React from 'react';
 import { alpha, Box, Theme } from '@mui/material';
 
 const GlobalBgShade = () => {
@@ -19,4 +20,4 @@ const GlobalBgShade = () => {
   );
 };
 
-export default GlobalBgShade;
+export default React.memo(GlobalBgShade);

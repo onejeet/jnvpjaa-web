@@ -3,6 +3,7 @@ import SigninForm from './SigninForm';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import GlobalBgShade from '@/components/common/GlobalBgShade';
+import Link from 'next/link';
 
 const Signin = () => {
   const router = useRouter();
@@ -57,9 +58,26 @@ const Signin = () => {
           alt="Sign in with Google"
           style={{ cursor: 'pointer' }}
         />
-        <Divider sx={{ width: '100%', mt: 2 }}>OR</Divider>
+        <Divider sx={{ width: '100%', mt: 2, color: 'grey.500' }}>OR</Divider>
         {/* <Divider variant="fullWidth">OR</Divider> */}
         <SigninForm />
+        <Box display="flex" flexDirection="column" alignItems="center" gap={1.5}>
+          <Link href="/forgot-password" as="/forgot-password" style={{ textDecoration: 'none' }}>
+            <Typography variant="body2" component="span" color="primary.main" sx={{ textDecoration: 'underline' }}>
+              Forgot Password?
+            </Typography>
+          </Link>
+          <Box display="flex" alignItems="center">
+            <Typography variant="body2" mr={1}>
+              Not registered yet?{' '}
+            </Typography>
+            <Link href="/signup" as="/signup" style={{ textDecoration: 'none' }}>
+              <Typography variant="body2" component="span" color="primary.main" sx={{ textDecoration: 'underline' }}>
+                Register Now
+              </Typography>
+            </Link>
+          </Box>
+        </Box>
       </Card>
     </Box>
   );
