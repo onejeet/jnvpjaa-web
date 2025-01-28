@@ -75,6 +75,7 @@ const AlertProvider = ({ children }: AlertProviderProps) => {
             background: theme.palette.grey[100],
             color: theme.palette.common.black,
             padding: '10px 20px',
+            maxWidth: '60%',
           },
 
           // Default options for specific types
