@@ -1,8 +1,7 @@
 import CareerCounselling from '@/containers/StudentHub/CareerCounselling';
+import LayoutModule from '@/layouts/Layout';
 import { NextPage } from 'next';
 import { NextSeo } from 'next-seo';
-
-import LayoutModule from '@/components/common/Layout';
 
 const CareerCounsellingPage: NextPage = () => (
   <>
