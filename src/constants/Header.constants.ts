@@ -1,4 +1,4 @@
-import { IHeaderMenuItem } from '@/components/common/Layout/LayoutTopbar';
+import { IHeaderMenuItem } from 'src/layouts/Layout/LayoutTopbar';
 
 export const HEADER_MENU: IHeaderMenuItem[] = [
   {
@@ -24,6 +24,10 @@ export const HEADER_MENU: IHeaderMenuItem[] = [
       {
         label: 'Message from Principal',
         path: '/principal-message',
+      },
+      {
+        label: 'Contact Us',
+        path: '/contact-us',
       },
     ],
   },

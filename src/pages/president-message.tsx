@@ -2,7 +2,7 @@ import PresidentMessage from '@/containers/About/PresidentMessage';
 import { NextPage } from 'next';
 import { NextSeo } from 'next-seo';
 
-import LayoutModule from '@/components/common/Layout';
+import LayoutModule from '@/layouts/Layout';
 
 const PresidentMessagePage: NextPage = () => (
   <>

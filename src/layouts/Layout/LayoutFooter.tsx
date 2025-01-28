@@ -13,7 +13,7 @@ import React from 'react';
 
 import Logo from '@/components/common/Logo';
 
-import MenuList from '../MenuList';
+import MenuList from '../../components/common/MenuList';
 
 const LayoutFooter: React.FC = () => {
   return (

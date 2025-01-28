@@ -2,7 +2,7 @@ import PastPresidents from '@/containers/PastPresidents/PastPresidents';
 import { NextPage } from 'next';
 import { NextSeo } from 'next-seo';
 
-import LayoutModule from '@/components/common/Layout';
+import LayoutModule from '@/layouts/Layout';
 
 const PastPresidentsPage: NextPage = () => (
   <>

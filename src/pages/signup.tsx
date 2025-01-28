@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import { NextSeo } from 'next-seo';
 
-import LayoutModule from '@/components/common/Layout';
+import LayoutModule from '@/layouts/Layout';
 import Signup from '@/containers/Auth/Signup';
 
 const meta = {
@@ -37,7 +37,7 @@ const SignupPage: NextPage = () => (
         },
       ]}
     />
-    <LayoutModule disableCover title={meta.title} containerProps={{}}>
+    <LayoutModule disableCover disableFooter title={meta.title} containerProps={{}}>
       <Signup />
     </LayoutModule>
   </>

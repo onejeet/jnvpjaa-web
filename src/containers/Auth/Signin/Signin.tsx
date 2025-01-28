@@ -1,7 +1,8 @@
-import { Box, Card, Divider, Typography } from '@mui/material';
+import { alpha, Box, Card, Divider, Theme, Typography } from '@mui/material';
 import SigninForm from './SigninForm';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import GlobalBgShade from '@/components/common/GlobalBgShade';
 
 const Signin = () => {
   const router = useRouter();
@@ -30,9 +31,17 @@ const Signin = () => {
           flexDirection: 'column',
           alignItems: 'center',
           p: 3,
+          position: 'relative',
         }}
       >
-        <Image src={'/assets/svg/profile-website-icon.svg'} width={200} height={100} alt="login" />
+        <GlobalBgShade />
+        <Image
+          src={'/assets/svg/profile-website-icon.svg'}
+          width={200}
+          height={100}
+          alt="login"
+          style={{ zIndex: 1 }}
+        />
         {/* </Box> */}
         <Typography variant="h3" mb={2}>
           Alumni Center Access

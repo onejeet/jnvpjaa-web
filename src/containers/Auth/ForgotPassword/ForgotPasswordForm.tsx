@@ -12,6 +12,7 @@ import Button from '@/components/core/Button';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Info } from '@mui/icons-material';
+import GlobalBgShade from '@/components/common/GlobalBgShade';
 
 const SigninForm = () => {
   const router = useRouter();
@@ -52,9 +53,24 @@ const SigninForm = () => {
   return (
     <Card
       elevation={3}
-      sx={{ maxWidth: 400, bgcolor: 'grey.100', display: 'flex', flexDirection: 'column', alignItems: 'center', p: 3 }}
+      sx={{
+        maxWidth: 400,
+        bgcolor: 'grey.100',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        p: 3,
+        position: 'relative',
+      }}
     >
-      <Image src={'/assets/svg/profile-website-icon.svg'} width={200} height={100} alt="forgot password" />
+      <GlobalBgShade />
+      <Image
+        src={'/assets/svg/profile-website-icon.svg'}
+        width={200}
+        height={100}
+        alt="forgot password"
+        style={{ zIndex: 1 }}
+      />
       <Typography variant="h3">{c && e ? 'Change Password' : 'Forgot Password?'}</Typography>
       {c && e && (
         <Typography color="grey.500" variant="body2" textAlign="center">

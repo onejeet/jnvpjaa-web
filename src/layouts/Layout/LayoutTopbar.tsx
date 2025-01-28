@@ -15,8 +15,6 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import dynamic from 'next/dynamic';
-import Image from 'next/image';
 import NextLink from 'next/link';
 import React from 'react';
 
@@ -98,7 +96,7 @@ const LayoutTopbar: React.FC = () => {
                 variant="outlined"
                 sx={{ display: { xs: 'none', md: 'block' }, ml: '8px', whiteSpace: 'nowrap' }}
               >
-                Login
+                Alumni Login
               </Button>
             </NextLink>
           </Box>
@@ -118,8 +116,8 @@ const LayoutTopbar: React.FC = () => {
             <CloseIcon />{' '}
           </IconButton>
         </Box>
-        <Box width="100%" height="100%" display="flex" flexDirection="column" justifyContent="space-between">
-          <Box>
+        <Box width="100%" height="100%" display="flex" flexDirection="column" justifyContent="start">
+          <Box mb={4}>
             {HEADER_MENU.map((item: IHeaderMenuItem) => (
               <HeaderMenuItem
                 key={item.label}
@@ -130,13 +128,9 @@ const LayoutTopbar: React.FC = () => {
               />
             ))}
           </Box>
-          <NextLink href="/login" as="/login" passHref style={{ textDecoration: 'none' }}>
-            <Button
-              fullWidth
-              variant="outlined"
-              sx={{ display: { xs: 'none', md: 'block' }, ml: '8px', whiteSpace: 'nowrap' }}
-            >
-              Login
+          <NextLink href="/signin" passHref style={{ textDecoration: 'none' }}>
+            <Button fullWidth variant="outlined" sx={{ ml: '8px', whiteSpace: 'nowrap' }}>
+              Alumni Login
             </Button>
           </NextLink>
         </Box>

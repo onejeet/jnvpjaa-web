@@ -3,7 +3,7 @@ import { NextPage } from 'next';
 import { NextSeo } from 'next-seo';
 import Link from 'next/link';
 
-import LayoutModule from '@/components/common/Layout';
+import LayoutModule from '@/layouts/Layout';
 
 const PrivacyPage: NextPage = () => (
   <>

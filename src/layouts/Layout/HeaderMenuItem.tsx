@@ -7,7 +7,7 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import HoverPopover from '../HoverPopover';
+import HoverPopover from '../../components/common/HoverPopover';
 import type { IHeaderMenuItem, IMenuItemProps } from './LayoutTopbar';
 
 const HeaderMenuItem: React.FC<IMenuItemProps> = ({ item, isMobile, expanded, setExpanded }) => {

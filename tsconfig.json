@@ -12,7 +12,8 @@
       "@/mocks/*": ["./__mocks__/*"],
       "@/utils/*": ["./src/utils/*"],
       "@/context/*": ["./src/context/*"],
-      "@/constants/*": ["./src/constants/*"]
+      "@/constants/*": ["./src/constants/*"],
+      "@/layouts/*": ["./src/layouts/*"]
     },
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],

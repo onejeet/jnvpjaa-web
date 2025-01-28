@@ -28,7 +28,7 @@ const ContactUs = () => {
           <Typography variant="h1" mb={3}>
             ContactUs
           </Typography>
-          <Box
+          {/* <Box
             display={{ xs: 'block', sm: 'block' }}
             sx={{ borderRadius: '10px', maxWidth: '100%', maxHeight: '400px', overflow: 'hidden' }}
           >
@@ -38,7 +38,7 @@ const ContactUs = () => {
               alt="mission"
               style={{ objectFit: 'scale-down', position: 'relative' }}
             />
-          </Box>
+          </Box> */}
           <Typography color="grey.800" mt={2} fontSize="20px" display="flex" alignItems="center">
             <FmdGoodIcon sx={{ mr: '10px' }} /> Registered Address
           </Typography>
