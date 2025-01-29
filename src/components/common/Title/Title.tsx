@@ -24,11 +24,18 @@ const Title: React.FC<TitleProps> = ({
         </Box>
       )}
       {title && (
-        <Box display="flex" {...titleContainerProps}>
+        <Box display="flex" width="100%" {...titleContainerProps}>
           {React.isValidElement(title) ? (
             title
           ) : (
-            <Typography variant="h2" {...titleProps}>
+            <Typography
+              variant="body1"
+              m={0}
+              p={0}
+              lineHeight="normal"
+              {...titleProps}
+              sx={{ maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+            >
               {title}
             </Typography>
           )}
@@ -36,11 +43,11 @@ const Title: React.FC<TitleProps> = ({
       )}
 
       {summary && (
-        <Box mt="8px" display="flex" {...summaryContainerProps}>
+        <Box mt="0px" display="flex" {...summaryContainerProps}>
           {React.isValidElement(summary) ? (
             summary
           ) : (
-            <Typography paragraph component="span" variant="body1" mb="0px" {...summaryProps}>
+            <Typography component="span" variant="body2" mb="0px" {...summaryProps}>
               {summary}
             </Typography>
           )}

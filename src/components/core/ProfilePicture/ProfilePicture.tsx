@@ -1,5 +1,5 @@
 import React from 'react';
-import { AvatarProps } from './Avatar.types';
+import { AvatarProps } from './ProfilePicture.types';
 import { Box, Avatar as MuiAvatar, Typography } from '@mui/material';
 
 const ProfilePicture: React.FC<AvatarProps> = ({ containerProps, title, summary, ...rest }) => {

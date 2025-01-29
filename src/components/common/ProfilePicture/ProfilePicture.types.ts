@@ -14,4 +14,5 @@ export interface ProfilePictureProps extends MuiAvatarProps {
   size?: number | string;
   onDelete?: () => void;
   loading?: boolean;
+  maxWidth?: number;
 }

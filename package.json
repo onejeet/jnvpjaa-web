@@ -21,6 +21,8 @@
   "packageManager": "^npm@10.7.0",
   "dependencies": {
     "@apollo/client": "^3.12.7",
+    "@dicebear/collection": "^9.2.2",
+    "@dicebear/core": "^9.2.2",
     "@emotion/cache": "^11.13.1",
     "@emotion/react": "^11.13.3",
     "@emotion/server": "^11.11.0",

@@ -15,6 +15,8 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean };
   Int: { input: number; output: number };
   Float: { input: number; output: number };
+  /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
+  DateTime: { input: any; output: any };
 };
 
 export type AuthPayload = {
@@ -26,13 +28,19 @@ export type AuthPayload = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  approveUserAsAlumni?: Maybe<Scalars['Boolean']['output']>;
   deleteUser?: Maybe<User>;
   forgotPassword?: Maybe<Scalars['Boolean']['output']>;
+  logout?: Maybe<Scalars['String']['output']>;
   refreshToken?: Maybe<AuthPayload>;
   resetPassword?: Maybe<Scalars['Boolean']['output']>;
   signin?: Maybe<AuthPayload>;
   signup?: Maybe<User>;
   updateUser?: Maybe<User>;
+};
+
+export type MutationApproveUserAsAlumniArgs = {
+  user_id: Scalars['String']['input'];
 };
 
 export type MutationDeleteUserArgs = {
@@ -58,7 +66,7 @@ export type MutationSigninArgs = {
 };
 
 export type MutationSignupArgs = {
-  batch: Scalars['Int']['input'];
+  batch?: InputMaybe<Scalars['Int']['input']>;
   email: Scalars['String']['input'];
   firstName: Scalars['String']['input'];
   gender: Scalars['String']['input'];
@@ -75,6 +83,7 @@ export type MutationUpdateUserArgs = {
   emergencyMobile?: InputMaybe<Scalars['String']['input']>;
   firstName?: InputMaybe<Scalars['String']['input']>;
   gender?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
   mobile?: InputMaybe<Scalars['String']['input']>;
   nickName?: InputMaybe<Scalars['String']['input']>;
@@ -87,14 +96,43 @@ export type Query = {
   getUserList?: Maybe<Array<Maybe<User>>>;
 };
 
+export type Role = {
+  __typename?: 'Role';
+  id?: Maybe<Scalars['ID']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+};
+
 export type User = {
   __typename?: 'User';
+  aboutMe?: Maybe<Scalars['String']['output']>;
+  batch?: Maybe<Scalars['Int']['output']>;
+  /** Timestamp when the record was created */
+  createdAt: Scalars['DateTime']['output'];
+  disabled?: Maybe<Scalars['Boolean']['output']>;
+  displayName?: Maybe<Scalars['String']['output']>;
+  dob?: Maybe<Scalars['String']['output']>;
   email?: Maybe<Scalars['String']['output']>;
+  emergency_mobile?: Maybe<Scalars['String']['output']>;
   firstName?: Maybe<Scalars['String']['output']>;
+  gender?: Maybe<Scalars['String']['output']>;
+  google_auth_id?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['ID']['output']>;
+  isVerified?: Maybe<Scalars['Boolean']['output']>;
   lastName?: Maybe<Scalars['String']['output']>;
+  membershipYear?: Maybe<Scalars['Int']['output']>;
+  mobile?: Maybe<Scalars['String']['output']>;
+  nickName?: Maybe<Scalars['String']['output']>;
   profileImage?: Maybe<Scalars['String']['output']>;
+  role?: Maybe<Role>;
+  /** Timestamp when the record was last updated */
+  updatedAt: Scalars['DateTime']['output'];
 };
+
+export type ApproveUserAsAlumniMutationVariables = Exact<{
+  user_id: Scalars['String']['input'];
+}>;
+
+export type ApproveUserAsAlumniMutation = { __typename?: 'Mutation'; approveUserAsAlumni?: boolean | undefined };
 
 export type DeleteUserMutationVariables = Exact<{
   id: Scalars['String']['input'];
@@ -105,11 +143,26 @@ export type DeleteUserMutation = {
   deleteUser?:
     | {
         __typename?: 'User';
+        aboutMe?: string | undefined;
+        batch?: number | undefined;
+        createdAt: any;
+        disabled?: boolean | undefined;
+        displayName?: string | undefined;
+        dob?: string | undefined;
         email?: string | undefined;
+        emergency_mobile?: string | undefined;
         firstName?: string | undefined;
+        gender?: string | undefined;
+        google_auth_id?: string | undefined;
         id?: string | undefined;
+        isVerified?: boolean | undefined;
         lastName?: string | undefined;
+        membershipYear?: number | undefined;
+        mobile?: string | undefined;
+        nickName?: string | undefined;
         profileImage?: string | undefined;
+        updatedAt: any;
+        role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
       }
     | undefined;
 };
@@ -119,6 +172,10 @@ export type ForgotPasswordMutationVariables = Exact<{
 }>;
 
 export type ForgotPasswordMutation = { __typename?: 'Mutation'; forgotPassword?: boolean | undefined };
+
+export type LogoutMutationVariables = Exact<{ [key: string]: never }>;
+
+export type LogoutMutation = { __typename?: 'Mutation'; logout?: string | undefined };
 
 export type RefreshTokenMutationVariables = Exact<{
   token: Scalars['String']['input'];
@@ -134,11 +191,26 @@ export type RefreshTokenMutation = {
         user?:
           | {
               __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: string | undefined;
               email?: string | undefined;
+              emergency_mobile?: string | undefined;
               firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
               id?: string | undefined;
+              isVerified?: boolean | undefined;
               lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
               profileImage?: string | undefined;
+              updatedAt: any;
+              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
             }
           | undefined;
       }
@@ -167,11 +239,26 @@ export type SigninMutation = {
         user?:
           | {
               __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: string | undefined;
               email?: string | undefined;
+              emergency_mobile?: string | undefined;
               firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
               id?: string | undefined;
+              isVerified?: boolean | undefined;
               lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
               profileImage?: string | undefined;
+              updatedAt: any;
+              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
             }
           | undefined;
       }
@@ -179,7 +266,7 @@ export type SigninMutation = {
 };
 
 export type SignupMutationVariables = Exact<{
-  batch: Scalars['Int']['input'];
+  batch?: InputMaybe<Scalars['Int']['input']>;
   email: Scalars['String']['input'];
   firstName: Scalars['String']['input'];
   gender: Scalars['String']['input'];
@@ -193,11 +280,26 @@ export type SignupMutation = {
   signup?:
     | {
         __typename?: 'User';
+        aboutMe?: string | undefined;
+        batch?: number | undefined;
+        createdAt: any;
+        disabled?: boolean | undefined;
+        displayName?: string | undefined;
+        dob?: string | undefined;
         email?: string | undefined;
+        emergency_mobile?: string | undefined;
         firstName?: string | undefined;
+        gender?: string | undefined;
+        google_auth_id?: string | undefined;
         id?: string | undefined;
+        isVerified?: boolean | undefined;
         lastName?: string | undefined;
+        membershipYear?: number | undefined;
+        mobile?: string | undefined;
+        nickName?: string | undefined;
         profileImage?: string | undefined;
+        updatedAt: any;
+        role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
       }
     | undefined;
 };
@@ -210,6 +312,7 @@ export type UpdateUserMutationVariables = Exact<{
   emergencyMobile?: InputMaybe<Scalars['String']['input']>;
   firstName?: InputMaybe<Scalars['String']['input']>;
   gender?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
   mobile?: InputMaybe<Scalars['String']['input']>;
   nickName?: InputMaybe<Scalars['String']['input']>;
@@ -221,11 +324,26 @@ export type UpdateUserMutation = {
   updateUser?:
     | {
         __typename?: 'User';
+        aboutMe?: string | undefined;
+        batch?: number | undefined;
+        createdAt: any;
+        disabled?: boolean | undefined;
+        displayName?: string | undefined;
+        dob?: string | undefined;
         email?: string | undefined;
+        emergency_mobile?: string | undefined;
         firstName?: string | undefined;
+        gender?: string | undefined;
+        google_auth_id?: string | undefined;
         id?: string | undefined;
+        isVerified?: boolean | undefined;
         lastName?: string | undefined;
+        membershipYear?: number | undefined;
+        mobile?: string | undefined;
+        nickName?: string | undefined;
         profileImage?: string | undefined;
+        updatedAt: any;
+        role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
       }
     | undefined;
 };
@@ -237,11 +355,26 @@ export type GetUserDetailsQuery = {
   getUserDetails?:
     | {
         __typename?: 'User';
+        aboutMe?: string | undefined;
+        batch?: number | undefined;
+        createdAt: any;
+        disabled?: boolean | undefined;
+        displayName?: string | undefined;
+        dob?: string | undefined;
         email?: string | undefined;
+        emergency_mobile?: string | undefined;
         firstName?: string | undefined;
+        gender?: string | undefined;
+        google_auth_id?: string | undefined;
         id?: string | undefined;
+        isVerified?: boolean | undefined;
         lastName?: string | undefined;
+        membershipYear?: number | undefined;
+        mobile?: string | undefined;
+        nickName?: string | undefined;
         profileImage?: string | undefined;
+        updatedAt: any;
+        role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
       }
     | undefined;
 };
@@ -254,25 +387,100 @@ export type GetUserListQuery = {
     | Array<
         | {
             __typename?: 'User';
+            aboutMe?: string | undefined;
+            batch?: number | undefined;
+            createdAt: any;
+            disabled?: boolean | undefined;
+            displayName?: string | undefined;
+            dob?: string | undefined;
             email?: string | undefined;
+            emergency_mobile?: string | undefined;
             firstName?: string | undefined;
+            gender?: string | undefined;
+            google_auth_id?: string | undefined;
             id?: string | undefined;
+            isVerified?: boolean | undefined;
             lastName?: string | undefined;
+            membershipYear?: number | undefined;
+            mobile?: string | undefined;
+            nickName?: string | undefined;
             profileImage?: string | undefined;
+            updatedAt: any;
+            role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
           }
         | undefined
       >
     | undefined;
 };
 
+export const ApproveUserAsAlumniDocument = gql`
+  mutation approveUserAsAlumni($user_id: String!) {
+    approveUserAsAlumni(user_id: $user_id)
+  }
+`;
+export type ApproveUserAsAlumniMutationFn = Apollo.MutationFunction<
+  ApproveUserAsAlumniMutation,
+  ApproveUserAsAlumniMutationVariables
+>;
+
+/**
+ * __useApproveUserAsAlumniMutation__
+ *
+ * To run a mutation, you first call `useApproveUserAsAlumniMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useApproveUserAsAlumniMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [approveUserAsAlumniMutation, { data, loading, error }] = useApproveUserAsAlumniMutation({
+ *   variables: {
+ *      user_id: // value for 'user_id'
+ *   },
+ * });
+ */
+export function useApproveUserAsAlumniMutation(
+  baseOptions?: Apollo.MutationHookOptions<ApproveUserAsAlumniMutation, ApproveUserAsAlumniMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<ApproveUserAsAlumniMutation, ApproveUserAsAlumniMutationVariables>(
+    ApproveUserAsAlumniDocument,
+    options
+  );
+}
+export type ApproveUserAsAlumniMutationHookResult = ReturnType<typeof useApproveUserAsAlumniMutation>;
+export type ApproveUserAsAlumniMutationResult = Apollo.MutationResult<ApproveUserAsAlumniMutation>;
+export type ApproveUserAsAlumniMutationOptions = Apollo.BaseMutationOptions<
+  ApproveUserAsAlumniMutation,
+  ApproveUserAsAlumniMutationVariables
+>;
 export const DeleteUserDocument = gql`
   mutation deleteUser($id: String!) {
     deleteUser(id: $id) {
+      aboutMe
+      batch
+      createdAt
+      disabled
+      displayName
+      dob
       email
+      emergency_mobile
       firstName
+      gender
+      google_auth_id
       id
+      isVerified
       lastName
+      membershipYear
+      mobile
+      nickName
       profileImage
+      role {
+        id
+        name
+      }
+      updatedAt
     }
   }
 `;
@@ -299,7 +507,6 @@ export function useDeleteUserMutation(
   baseOptions?: Apollo.MutationHookOptions<DeleteUserMutation, DeleteUserMutationVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-
   return Apollo.useMutation<DeleteUserMutation, DeleteUserMutationVariables>(DeleteUserDocument, options);
 }
 export type DeleteUserMutationHookResult = ReturnType<typeof useDeleteUserMutation>;
@@ -333,7 +540,6 @@ export function useForgotPasswordMutation(
   baseOptions?: Apollo.MutationHookOptions<ForgotPasswordMutation, ForgotPasswordMutationVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-
   return Apollo.useMutation<ForgotPasswordMutation, ForgotPasswordMutationVariables>(ForgotPasswordDocument, options);
 }
 export type ForgotPasswordMutationHookResult = ReturnType<typeof useForgotPasswordMutation>;
@@ -342,17 +548,65 @@ export type ForgotPasswordMutationOptions = Apollo.BaseMutationOptions<
   ForgotPasswordMutation,
   ForgotPasswordMutationVariables
 >;
+export const LogoutDocument = gql`
+  mutation logout {
+    logout
+  }
+`;
+export type LogoutMutationFn = Apollo.MutationFunction<LogoutMutation, LogoutMutationVariables>;
+
+/**
+ * __useLogoutMutation__
+ *
+ * To run a mutation, you first call `useLogoutMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLogoutMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [logoutMutation, { data, loading, error }] = useLogoutMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useLogoutMutation(baseOptions?: Apollo.MutationHookOptions<LogoutMutation, LogoutMutationVariables>) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument, options);
+}
+export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
+export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
+export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
 export const RefreshTokenDocument = gql`
   mutation refreshToken($token: String!) {
     refreshToken(token: $token) {
       refreshToken
       token
       user {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
         email
+        emergency_mobile
         firstName
+        gender
+        google_auth_id
         id
+        isVerified
         lastName
+        membershipYear
+        mobile
+        nickName
         profileImage
+        role {
+          id
+          name
+        }
+        updatedAt
       }
     }
   }
@@ -380,7 +634,6 @@ export function useRefreshTokenMutation(
   baseOptions?: Apollo.MutationHookOptions<RefreshTokenMutation, RefreshTokenMutationVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-
   return Apollo.useMutation<RefreshTokenMutation, RefreshTokenMutationVariables>(RefreshTokenDocument, options);
 }
 export type RefreshTokenMutationHookResult = ReturnType<typeof useRefreshTokenMutation>;
@@ -418,7 +671,6 @@ export function useResetPasswordMutation(
   baseOptions?: Apollo.MutationHookOptions<ResetPasswordMutation, ResetPasswordMutationVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-
   return Apollo.useMutation<ResetPasswordMutation, ResetPasswordMutationVariables>(ResetPasswordDocument, options);
 }
 export type ResetPasswordMutationHookResult = ReturnType<typeof useResetPasswordMutation>;
@@ -433,11 +685,29 @@ export const SigninDocument = gql`
       refreshToken
       token
       user {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
         email
+        emergency_mobile
         firstName
+        gender
+        google_auth_id
         id
+        isVerified
         lastName
+        membershipYear
+        mobile
+        nickName
         profileImage
+        role {
+          id
+          name
+        }
+        updatedAt
       }
     }
   }
@@ -464,7 +734,6 @@ export type SigninMutationFn = Apollo.MutationFunction<SigninMutation, SigninMut
  */
 export function useSigninMutation(baseOptions?: Apollo.MutationHookOptions<SigninMutation, SigninMutationVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-
   return Apollo.useMutation<SigninMutation, SigninMutationVariables>(SigninDocument, options);
 }
 export type SigninMutationHookResult = ReturnType<typeof useSigninMutation>;
@@ -472,7 +741,7 @@ export type SigninMutationResult = Apollo.MutationResult<SigninMutation>;
 export type SigninMutationOptions = Apollo.BaseMutationOptions<SigninMutation, SigninMutationVariables>;
 export const SignupDocument = gql`
   mutation signup(
-    $batch: Int!
+    $batch: Int
     $email: String!
     $firstName: String!
     $gender: String!
@@ -489,11 +758,29 @@ export const SignupDocument = gql`
       mobile: $mobile
       password: $password
     ) {
+      aboutMe
+      batch
+      createdAt
+      disabled
+      displayName
+      dob
       email
+      emergency_mobile
       firstName
+      gender
+      google_auth_id
       id
+      isVerified
       lastName
+      membershipYear
+      mobile
+      nickName
       profileImage
+      role {
+        id
+        name
+      }
+      updatedAt
     }
   }
 `;
@@ -524,7 +811,6 @@ export type SignupMutationFn = Apollo.MutationFunction<SignupMutation, SignupMut
  */
 export function useSignupMutation(baseOptions?: Apollo.MutationHookOptions<SignupMutation, SignupMutationVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-
   return Apollo.useMutation<SignupMutation, SignupMutationVariables>(SignupDocument, options);
 }
 export type SignupMutationHookResult = ReturnType<typeof useSignupMutation>;
@@ -539,6 +825,7 @@ export const UpdateUserDocument = gql`
     $emergencyMobile: String
     $firstName: String
     $gender: String
+    $id: String
     $lastName: String
     $mobile: String
     $nickName: String
@@ -552,16 +839,35 @@ export const UpdateUserDocument = gql`
       emergencyMobile: $emergencyMobile
       firstName: $firstName
       gender: $gender
+      id: $id
       lastName: $lastName
       mobile: $mobile
       nickName: $nickName
       profileImage: $profileImage
     ) {
+      aboutMe
+      batch
+      createdAt
+      disabled
+      displayName
+      dob
       email
+      emergency_mobile
       firstName
+      gender
+      google_auth_id
       id
+      isVerified
       lastName
+      membershipYear
+      mobile
+      nickName
       profileImage
+      role {
+        id
+        name
+      }
+      updatedAt
     }
   }
 `;
@@ -587,6 +893,7 @@ export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, U
  *      emergencyMobile: // value for 'emergencyMobile'
  *      firstName: // value for 'firstName'
  *      gender: // value for 'gender'
+ *      id: // value for 'id'
  *      lastName: // value for 'lastName'
  *      mobile: // value for 'mobile'
  *      nickName: // value for 'nickName'
@@ -598,7 +905,6 @@ export function useUpdateUserMutation(
   baseOptions?: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-
   return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, options);
 }
 export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
@@ -607,11 +913,29 @@ export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMut
 export const GetUserDetailsDocument = gql`
   query getUserDetails {
     getUserDetails {
+      aboutMe
+      batch
+      createdAt
+      disabled
+      displayName
+      dob
       email
+      emergency_mobile
       firstName
+      gender
+      google_auth_id
       id
+      isVerified
       lastName
+      membershipYear
+      mobile
+      nickName
       profileImage
+      role {
+        id
+        name
+      }
+      updatedAt
     }
   }
 `;
@@ -635,21 +959,18 @@ export function useGetUserDetailsQuery(
   baseOptions?: Apollo.QueryHookOptions<GetUserDetailsQuery, GetUserDetailsQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-
   return Apollo.useQuery<GetUserDetailsQuery, GetUserDetailsQueryVariables>(GetUserDetailsDocument, options);
 }
 export function useGetUserDetailsLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<GetUserDetailsQuery, GetUserDetailsQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-
   return Apollo.useLazyQuery<GetUserDetailsQuery, GetUserDetailsQueryVariables>(GetUserDetailsDocument, options);
 }
 export function useGetUserDetailsSuspenseQuery(
   baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetUserDetailsQuery, GetUserDetailsQueryVariables>
 ) {
   const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
-
   return Apollo.useSuspenseQuery<GetUserDetailsQuery, GetUserDetailsQueryVariables>(GetUserDetailsDocument, options);
 }
 export type GetUserDetailsQueryHookResult = ReturnType<typeof useGetUserDetailsQuery>;
@@ -659,11 +980,29 @@ export type GetUserDetailsQueryResult = Apollo.QueryResult<GetUserDetailsQuery, 
 export const GetUserListDocument = gql`
   query getUserList {
     getUserList {
+      aboutMe
+      batch
+      createdAt
+      disabled
+      displayName
+      dob
       email
+      emergency_mobile
       firstName
+      gender
+      google_auth_id
       id
+      isVerified
       lastName
+      membershipYear
+      mobile
+      nickName
       profileImage
+      role {
+        id
+        name
+      }
+      updatedAt
     }
   }
 `;
@@ -687,21 +1026,18 @@ export function useGetUserListQuery(
   baseOptions?: Apollo.QueryHookOptions<GetUserListQuery, GetUserListQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-
   return Apollo.useQuery<GetUserListQuery, GetUserListQueryVariables>(GetUserListDocument, options);
 }
 export function useGetUserListLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<GetUserListQuery, GetUserListQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-
   return Apollo.useLazyQuery<GetUserListQuery, GetUserListQueryVariables>(GetUserListDocument, options);
 }
 export function useGetUserListSuspenseQuery(
   baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetUserListQuery, GetUserListQueryVariables>
 ) {
   const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
-
   return Apollo.useSuspenseQuery<GetUserListQuery, GetUserListQueryVariables>(GetUserListDocument, options);
 }
 export type GetUserListQueryHookResult = ReturnType<typeof useGetUserListQuery>;

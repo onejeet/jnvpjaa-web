@@ -21,6 +21,10 @@ import React from 'react';
 import Logo from '@/components/common/Logo';
 
 import HeaderMenuItem from './HeaderMenuItem';
+import ProfilePicture from '@/components/common/ProfilePicture';
+import ButtonDropdown from '@/components/common/DropdownMenu/DropdownMenu';
+import { useLogoutMutation } from '@/apollo/hooks';
+import { useAuth } from '@/context/AuthContext';
 
 export interface IMenuItemProps {
   item: IHeaderMenuItem;
@@ -40,6 +44,8 @@ const LayoutTopbar: React.FC = () => {
   const [openMenu, setOpenMenu] = React.useState<boolean>(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { user } = useAuth();
+  const [handleLogout] = useLogoutMutation();
 
   return (
     <AppBar
@@ -90,15 +96,47 @@ const LayoutTopbar: React.FC = () => {
             {HEADER_MENU.map((item: IHeaderMenuItem) => (
               <HeaderMenuItem key={item.label} item={item} />
             ))}
-            <NextLink href="/signin" passHref style={{ textDecoration: 'none' }}>
-              <Button
-                // startIcon={<Login sx={{ fontSize: '14px' }} />}
-                variant="outlined"
-                sx={{ display: { xs: 'none', md: 'block' }, ml: '8px', whiteSpace: 'nowrap' }}
+            {user?.id ? (
+              <ButtonDropdown
+                items={[
+                  {
+                    label: 'My Profile',
+                    value: '/profile',
+                    // icon: <BiUserCircle />,
+                  },
+                  {
+                    label: 'Log Out',
+                    // icon: <BiLogOutCircle />,
+                    sx: {
+                      color: 'error.main',
+                    },
+                    onClick: () => handleLogout(),
+                  },
+                ]}
+                menuProps={{
+                  anchorOrigin: {
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                  },
+                  transformOrigin: {
+                    vertical: 'top',
+                    horizontal: 'right',
+                  },
+                }}
               >
-                Alumni Login
-              </Button>
-            </NextLink>
+                <ProfilePicture title="Jeet" summary="Member" maxWidth={150} sx={{ width: 36, height: 36, ml: 1 }} />
+              </ButtonDropdown>
+            ) : (
+              <NextLink href="/signin" passHref style={{ textDecoration: 'none' }}>
+                <Button
+                  // startIcon={<Login sx={{ fontSize: '14px' }} />}
+                  variant="outlined"
+                  sx={{ display: { xs: 'none', md: 'block' }, ml: '8px', whiteSpace: 'nowrap' }}
+                >
+                  Alumni Login
+                </Button>
+              </NextLink>
+            )}
           </Box>
         </Toolbar>
       </Container>
