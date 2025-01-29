@@ -124,7 +124,12 @@ const LayoutTopbar: React.FC = () => {
                   },
                 }}
               >
-                <ProfilePicture title="Jeet" summary="Member" maxWidth={150} sx={{ width: 36, height: 36, ml: 1 }} />
+                <ProfilePicture
+                  title={user?.firstName}
+                  summary="Member"
+                  maxWidth={150}
+                  sx={{ width: 36, height: 36, ml: 1 }}
+                />
               </ButtonDropdown>
             ) : (
               <NextLink href="/signin" passHref style={{ textDecoration: 'none' }}>

@@ -2,21 +2,21 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import LoadingIndicator from '@/components/common/LoadingIndicator';
 import { AuthProviderProps, LoadingDataProps, TAuthContextData } from './AuthContext.types';
-import { useGetUserDetailsQuery } from 'src/apollo/hooks';
+import { useGetUserDetailsQuery, User } from '@/apollo/hooks';
 import { Box } from '@mui/material';
 
 const AuthContext = createContext<TAuthContextData>({} as TAuthContextData);
 
 const AuthProvider: React.FC<AuthProviderProps> = ({ children, checkAuth, isAuthPage }) => {
   const router = useRouter();
-  const [user, setUser] = useState<any>(undefined);
+  const [user, setUser] = useState<User | null>(null);
   const [loadingData, setLoadingData] = useState<LoadingDataProps>({
     loading: checkAuth || isAuthPage,
   });
 
   const { data: userData, refetch } = useGetUserDetailsQuery({
     onCompleted: (data) => {
-      setUser(data?.getUserDetails);
+      setUser(data?.getUserDetails as User);
     },
     notifyOnNetworkStatusChange: true,
   });

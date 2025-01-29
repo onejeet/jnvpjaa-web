@@ -7,6 +7,7 @@ import { AppProps } from 'next/app';
 import { ApolloProvider } from '@apollo/client';
 import { apolloClient } from 'src/apollo/client';
 import { AlertProvider } from '@/context/AlertContext';
+import { AuthProvider } from '@/context/AuthContext';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -14,12 +15,14 @@ const clientSideEmotionCache = createEmotionCache();
 const MyApp = ({ Component, pageProps, emotionCache = clientSideEmotionCache }: AppProps & { emotionCache: any }) => (
   <CacheProvider value={emotionCache}>
     <ApolloProvider client={apolloClient}>
-      <AlertProvider>
-        <LayoutProvider>
-          <Component {...pageProps} />
-          <GoogleTagManager gtmId="GTM-W7R5B5JB" />
-        </LayoutProvider>
-      </AlertProvider>
+      <AuthProvider>
+        <AlertProvider>
+          <LayoutProvider>
+            <Component {...pageProps} />
+            <GoogleTagManager gtmId="GTM-W7R5B5JB" />
+          </LayoutProvider>
+        </AlertProvider>
+      </AuthProvider>
     </ApolloProvider>
   </CacheProvider>
 );
