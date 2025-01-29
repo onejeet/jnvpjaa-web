@@ -8,6 +8,7 @@ import { ISigninFormInput } from './Signin.types';
 import FormTextField from '@/components/form/FormTextField';
 import { useAlert } from '@/context/AlertContext';
 import Button from '@/components/core/Button';
+import { useAuth } from '@/context/AuthContext';
 
 const SigninForm = () => {
   const { showAlert } = useAlert();
@@ -16,6 +17,7 @@ const SigninForm = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<ISigninFormInput>();
+  const { setUser } = useAuth();
 
   const [signin, { loading }] = useSigninMutation();
 
@@ -27,8 +29,7 @@ const SigninForm = () => {
           password: data?.password,
         },
         onCompleted: (res) => {
-          // localStorage.setItem('accessToken', res?.signin?.token || '');
-          console.log('Signed in', res?.signin);
+          setUser(res?.signin?.user);
         },
         onError: (err: Error) => {
           showAlert({
@@ -39,7 +40,7 @@ const SigninForm = () => {
         },
       });
     },
-    [signin, showAlert]
+    [signin, showAlert, setUser]
   );
 
   return (

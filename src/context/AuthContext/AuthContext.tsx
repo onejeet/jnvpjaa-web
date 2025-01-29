@@ -14,7 +14,12 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children, checkAuth, isAuth
     loading: checkAuth || isAuthPage,
   });
 
-  const { data: userData } = useGetUserDetailsQuery();
+  const { data: userData, refetch } = useGetUserDetailsQuery({
+    onCompleted: (data) => {
+      setUser(data?.getUserDetails);
+    },
+    notifyOnNetworkStatusChange: true,
+  });
 
   useEffect(() => {
     window.addEventListener('storage', onLoginStateChange, false);
@@ -71,6 +76,12 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children, checkAuth, isAuth
     loadUserData();
   }, []);
 
+  React.useEffect(() => {
+    if (user?.id && !userData?.getUserDetails) {
+      refetch();
+    }
+  }, [user, userData, refetch]);
+
   // React.useEffect(() => {
   //   const userSelf = userData?.getUserDetails;
 
@@ -101,7 +112,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children, checkAuth, isAuth
   return (
     <AuthContext.Provider
       value={{
-        user,
+        user: userData?.getUserDetails || user,
         checkAuth,
         setUser,
         logoutUser,
