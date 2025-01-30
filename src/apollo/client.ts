@@ -6,10 +6,10 @@ import { refreshAccessToken } from './refresh';
 // Error handling link
 const errorLink = onError(({ graphQLErrors, networkError, forward, operation }) => {
   if (graphQLErrors) {
-    graphQLErrors.forEach(({ message, extensions, locations, path }) => {
+    graphQLErrors.forEach(({ message, code }) => {
       // Handle 401 Unauthorized (Token Expired)
-      console.error(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`);
-      if (extensions?.code === 'UNAUTHENTICATED') {
+      console.error(`[GraphQL error]: Message: ${message}`);
+      if (code === 'NOT_AUTHORISED') {
         return refreshAccessToken()
           .then((newToken: string | null) => {
             if (newToken) {

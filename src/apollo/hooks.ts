@@ -51,10 +51,6 @@ export type MutationForgotPasswordArgs = {
   email: Scalars['String']['input'];
 };
 
-export type MutationRefreshTokenArgs = {
-  token: Scalars['String']['input'];
-};
-
 export type MutationResetPasswordArgs = {
   newPassword: Scalars['String']['input'];
   token: Scalars['String']['input'];
@@ -177,9 +173,7 @@ export type LogoutMutationVariables = Exact<{ [key: string]: never }>;
 
 export type LogoutMutation = { __typename?: 'Mutation'; logout?: string | undefined };
 
-export type RefreshTokenMutationVariables = Exact<{
-  token: Scalars['String']['input'];
-}>;
+export type RefreshTokenMutationVariables = Exact<{ [key: string]: never }>;
 
 export type RefreshTokenMutation = {
   __typename?: 'Mutation';
@@ -579,8 +573,8 @@ export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
 export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
 export const RefreshTokenDocument = gql`
-  mutation refreshToken($token: String!) {
-    refreshToken(token: $token) {
+  mutation refreshToken {
+    refreshToken {
       refreshToken
       token
       user {
@@ -626,7 +620,6 @@ export type RefreshTokenMutationFn = Apollo.MutationFunction<RefreshTokenMutatio
  * @example
  * const [refreshTokenMutation, { data, loading, error }] = useRefreshTokenMutation({
  *   variables: {
- *      token: // value for 'token'
  *   },
  * });
  */

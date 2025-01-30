@@ -3,14 +3,17 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Box, Typography } from '@mui/material';
-import { useSigninMutation } from 'src/apollo/hooks';
 import { ISigninFormInput } from './Signin.types';
 import FormTextField from '@/components/form/FormTextField';
 import { useAlert } from '@/context/AlertContext';
 import Button from '@/components/core/Button';
 import { useAuth } from '@/context/AuthContext';
+import { useRouter } from 'next/router';
+import { paths } from '@/config/paths';
+import { useSigninMutation } from '@/apollo/hooks';
 
 const SigninForm = () => {
+  const router = useRouter();
   const { showAlert } = useAlert();
   const {
     control,
@@ -30,6 +33,7 @@ const SigninForm = () => {
         },
         onCompleted: (res) => {
           setUser(res?.signin?.user);
+          router.push(paths.home);
         },
         onError: (err: Error) => {
           showAlert({
@@ -40,7 +44,7 @@ const SigninForm = () => {
         },
       });
     },
-    [signin, showAlert, setUser]
+    [signin, showAlert, setUser, router]
   );
 
   return (

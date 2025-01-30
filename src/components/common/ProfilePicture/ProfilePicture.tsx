@@ -38,7 +38,7 @@ const ProfilePicture: React.FC<ProfilePictureProps> = ({
       {...containerProps}
     >
       <Box display="flex" {...avatarContainerProps}>
-        <Avatar alt={title} {...restProps} src={restProps?.src || getDefaultAvatarUrl()}>
+        <Avatar alt={title} {...restProps} src={restProps?.src || getDefaultAvatarUrl(title)}>
           {restProps?.src ? null : title}
         </Avatar>
       </Box>
