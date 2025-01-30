@@ -90,6 +90,10 @@ export type Query = {
   getUserList?: Maybe<Array<Maybe<User>>>;
 };
 
+export type QueryGetUserDetailsArgs = {
+  id?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type Role = {
   __typename?: 'Role';
   id?: Maybe<Scalars['ID']['output']>;
@@ -336,7 +340,9 @@ export type UpdateUserMutation = {
     | undefined;
 };
 
-export type GetUserDetailsQueryVariables = Exact<{ [key: string]: never }>;
+export type GetUserDetailsQueryVariables = Exact<{
+  id?: InputMaybe<Scalars['String']['input']>;
+}>;
 
 export type GetUserDetailsQuery = {
   __typename?: 'Query';
@@ -894,8 +900,8 @@ export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutati
 export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
 export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
 export const GetUserDetailsDocument = gql`
-  query getUserDetails {
-    getUserDetails {
+  query getUserDetails($id: String) {
+    getUserDetails(id: $id) {
       aboutMe
       batch
       createdAt
@@ -935,6 +941,7 @@ export const GetUserDetailsDocument = gql`
  * @example
  * const { data, loading, error } = useGetUserDetailsQuery({
  *   variables: {
+ *      id: // value for 'id'
  *   },
  * });
  */

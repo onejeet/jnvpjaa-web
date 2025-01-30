@@ -17,6 +17,8 @@ const LayoutModule: React.FC<Props> = (props) => {
     disableCover = true,
   } = props;
 
+  const { sx: sxContainer = {}, ...restContainerProps } = containerProps;
+
   return (
     <>
       {/* <CssBaseline /> */}
@@ -51,10 +53,11 @@ const LayoutModule: React.FC<Props> = (props) => {
             maxWidth: disableCover ? { xs: '98%', sm: '95%', md: '90%', xl: '1500px' } : '100%',
             margin: disableCover ? 'auto' : undefined,
             minHeight: disableCover ? `calc(100vh - 379px)` : 0,
+            ...sxContainer,
           }}
           maxWidth={false}
           disableGutters
-          {...containerProps}
+          {...restContainerProps}
         >
           {children}
         </Container>

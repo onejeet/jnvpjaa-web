@@ -1,23 +1,14 @@
 import Title from '@/components/common/Title';
-import { useAuth } from '@/context/AuthContext';
-import { botttsNeutral } from '@dicebear/collection';
-import { createAvatar } from '@dicebear/core';
 import { Box, Typography, Avatar } from '@mui/material';
+import { ProfileHeaderProps } from '../Profile.types';
+import ProfilePicture from '@/components/common/ProfilePicture';
 
-const getDefaultAvatarUrl = (title?: string) =>
-  createAvatar(botttsNeutral, {
-    seed: title,
-    flip: true,
-    size: 168,
-  })?.toDataUri();
-
-export default function ProfileHeader() {
-  const { user } = useAuth();
+export default function ProfileHeader({ user, loading }: ProfileHeaderProps) {
   return (
     <Box sx={{ position: 'relative', mb: 4 }}>
       <Box
         component="img"
-        src={`https://picsum.photos/seed/${user?.id}/1200/250`}
+        src={user?.id ? `https://picsum.photos/seed/${user?.id}/1200/250` : undefined}
         alt="Cover"
         sx={{
           width: '100%',
@@ -30,9 +21,9 @@ export default function ProfileHeader() {
           borderColor: 'grey.400',
         }}
       />
-      <Avatar
-        alt={`${user?.firstName} ${user?.lasName}`}
-        src={getDefaultAvatarUrl(user?.id)}
+      <ProfilePicture
+        alt={`${user?.firstName} ${user?.lastName}`}
+        loading={loading}
         sx={{
           width: 168,
           height: 168,

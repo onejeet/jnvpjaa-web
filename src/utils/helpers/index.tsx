@@ -1,3 +1,6 @@
+import { thumbs } from '@dicebear/collection';
+import { createAvatar } from '@dicebear/core';
+import { Options } from '@dicebear/thumbs';
 import EmailIcon from '@mui/icons-material/Email';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
@@ -32,6 +35,15 @@ export const getDefaultAvatar = (gender?: string) => {
   return gender === 'female'
     ? '/assets/images/female_profile_placeholder.webp'
     : '/assets/images/male_profile_placeholder.webp';
+};
+
+export const getAvatarDataUrl = (id?: string, options?: Options) => {
+  return createAvatar(thumbs, {
+    seed: id,
+    flip: false,
+    size: 32,
+    ...(options || {}),
+  })?.toDataUri();
 };
 
 export function startCase(str: string) {

@@ -6,8 +6,8 @@ import LoadingIndicator from '@/components/common/LoadingIndicator';
 import { AuthProviderProps, LoadingDataProps, TAuthContextData } from './AuthContext.types';
 import { Box } from '@mui/material';
 import { paths } from '@/config/paths';
-import { useGetUserDetailsLazyQuery, useLogoutMutation, User } from '@/apollo/hooks';
 import { decodeBase64, encodeBase64 } from '@/utils/index';
+import { useGetUserDetailsLazyQuery, useLogoutMutation, User } from '@/apollo/hooks';
 
 const AuthContext = createContext<TAuthContextData>({} as TAuthContextData);
 
@@ -23,7 +23,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children, checkAuth, isAuth
   const [fetchUserData, { data: userData, refetch }] = useGetUserDetailsLazyQuery({
     onCompleted: (data: User) => {
       setUser(data?.getUserDetails as User);
-      setLoadingData({ loading: false });
+      redirectOnSignin();
     },
     onError: () => {
       if (checkAuth) {
@@ -40,12 +40,21 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children, checkAuth, isAuth
     notifyOnNetworkStatusChange: true,
   });
 
+  const redirectOnSignin = React.useCallback(async () => {
+    if (isAuthPage) {
+      const redirectPath = router?.query?.r ? decodeBase64(router.query.r as string) : router?.query?.r;
+      if (redirectPath) {
+        await router.push(redirectPath as string);
+      } else {
+        await router.push(paths.home);
+      }
+    }
+    setLoadingData({ loading: false });
+  }, [router, isAuthPage]);
+
   React.useEffect(() => {
     if (user?.id && !userData?.getUserDetails) {
       refetch();
-      if (isAuthPage) {
-        redirectOnSignin();
-      }
     }
   }, [user, userData, refetch]);
 
@@ -71,15 +80,6 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children, checkAuth, isAuth
     // const isLoggedIn = localStorage.getItem('logged_in');
     if (event.key === 'logged_in' && (event.newValue === '0' || !event.newValue)) {
       window.location.reload();
-    }
-  };
-
-  const redirectOnSignin = async () => {
-    const redirectPath = router?.query?.r ? decodeBase64(router.query.r as string) : router?.query?.r;
-    if (redirectPath) {
-      await router.push(redirectPath as string);
-    } else {
-      await router.push(paths.home);
     }
   };
 

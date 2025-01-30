@@ -1,3 +1,5 @@
+'use client';
+
 import { HEADER_MENU } from '@/constants/Header.constants';
 import CloseIcon from '@mui/icons-material/Close';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -23,6 +25,7 @@ import HeaderMenuItem from './HeaderMenuItem';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import ButtonDropdown from '@/components/common/DropdownMenu/DropdownMenu';
 import { useAuth } from '@/context/AuthContext';
+import { Router, useRouter } from 'next/router';
 
 export interface IMenuItemProps {
   item: IHeaderMenuItem;
@@ -41,6 +44,7 @@ const LayoutTopbar: React.FC = () => {
   const [expanded, setExpanded] = React.useState<string>('');
   const [openMenu, setOpenMenu] = React.useState<boolean>(false);
   const theme = useTheme();
+  const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { user, handleLogout } = useAuth();
 
@@ -113,6 +117,11 @@ const LayoutTopbar: React.FC = () => {
                     onClick: () => handleLogout(),
                   },
                 ]}
+                onChange={(path: string | number) => {
+                  if (path) {
+                    router.push(path?.toString());
+                  }
+                }}
                 menuProps={{
                   anchorOrigin: {
                     vertical: 'bottom',

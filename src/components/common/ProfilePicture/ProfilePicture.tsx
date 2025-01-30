@@ -3,17 +3,9 @@
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import React from 'react';
-import { createAvatar } from '@dicebear/core';
-import { botttsNeutral } from '@dicebear/collection';
 import Title from '../Title';
 import { ProfilePictureProps } from './ProfilePicture.types';
-
-const getDefaultAvatarUrl = (id?: string) =>
-  createAvatar(botttsNeutral, {
-    seed: id,
-    flip: true,
-    size: 32,
-  })?.toDataUri();
+import { getAvatarDataUrl } from '@/utils/helpers';
 
 const ProfilePicture: React.FC<ProfilePictureProps> = ({
   containerProps,
@@ -39,7 +31,7 @@ const ProfilePicture: React.FC<ProfilePictureProps> = ({
       {...containerProps}
     >
       <Box display="flex" {...avatarContainerProps}>
-        <Avatar alt={title} {...restProps} src={restProps?.src || getDefaultAvatarUrl(id)}>
+        <Avatar alt={title} {...restProps} src={restProps?.src || getAvatarDataUrl(id)}>
           {restProps?.src ? null : title}
         </Avatar>
       </Box>
