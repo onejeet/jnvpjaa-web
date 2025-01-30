@@ -1,52 +1,50 @@
-import { ApolloClient, HttpLink, InMemoryCache, ApolloLink } from '@apollo/client';
+import { ApolloClient, HttpLink, InMemoryCache, ApolloLink, Observable } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-import { onError } from '@apollo/client/link/error';
 import { refreshAccessToken } from './refresh';
-import Cookies from 'universal-cookie';
-
-const cookies = new Cookies(null, { path: '/' });
 
 // Error handling link
-const errorLink = onError(({ graphQLErrors, networkError, forward, operation }) => {
-  if (graphQLErrors) {
-    // @ts-expect-error dff
-    graphQLErrors.forEach(({ message, code }) => {
-      // Handle 401 Unauthorized (Token Expired)
-      console.error(`[GraphQL error]: Message: ${message}`);
-      if (code === 'NOT_AUTHORISED') {
-        const isLoggedIn = localStorage.getItem('logged_in');
-        console.log('ZZ :COOKEIIS', isLoggedIn);
-        if (isLoggedIn === 'true') {
-          return refreshAccessToken()
-            .then(() => {
-              operation.setContext(({ headers = {} }) => ({
-                headers: {
-                  ...headers,
-                },
-              }));
-              console.log('ZZ: operation', operation.operationName);
+const errorLink = new ApolloLink((operation, forward) => {
+  return new Observable((observer) => {
+    forward(operation).subscribe({
+      next: async (result) => {
+        if (result?.errors && result?.errors?.length > 0) {
+          // @ts-expect-error type
+          if (result?.errors?.[0]?.code === 'NOT_AUTHORISED') {
+            const isLoggedIn = localStorage.getItem('logged_in');
+            if (isLoggedIn) {
+              try {
+                // Call the refresh token mutation
+                await refreshAccessToken();
 
-              return forward(operation); // Retry the operation with a new token
-            })
-            .catch(() => {
-              localStorage.removeItem('logged_in');
-              console.error('Token refresh failed');
-              window.location.href = '/signin'; // Redirect to login if token refresh fails
-            });
+                // Retry the operation with the new token
+                forward(operation).subscribe(observer);
+              } catch (refreshError) {
+                localStorage.removeItem('logged_in');
+                observer.error(refreshError);
+                console.log('Error: ', refreshError);
+              }
+            } else {
+              // No refresh token available, force logout
+              observer.error(new Error('No refresh token available'));
+            }
+          } else {
+            observer.error(result?.errors?.[0]);
+            console.log('Error: ', result?.errors?.[0]);
+          }
+        } else {
+          observer.next(result);
         }
-      }
+      },
+      error: async (error) => {
+        observer.error(error);
+        console.log('Error: ', error);
+      },
     });
-  }
-
-  if (networkError) {
-    console.error(`[Network error]: ${networkError.message}`);
-  }
+  });
 });
 
 // Auth link to add tokens
 const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem('accessToken'); // Replace with your token storage logic
-
   return {
     headers: {
       ...headers,

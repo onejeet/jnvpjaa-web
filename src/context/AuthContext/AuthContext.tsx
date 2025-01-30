@@ -26,16 +26,8 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children, checkAuth, isAuth
       redirectOnSignin();
     },
     onError: () => {
-      if (checkAuth) {
-        const rQuery = router?.asPath ? encodeBase64(router.asPath) : '';
-        router.push({
-          pathname: paths.signin,
-          query: {
-            r: rQuery,
-          },
-        });
-      }
-      setLoadingData({ loading: false });
+      console.log('On Error getUser Details');
+      redirectOnFailedSignin();
     },
     notifyOnNetworkStatusChange: true,
   });
@@ -51,6 +43,19 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children, checkAuth, isAuth
     }
     setLoadingData({ loading: false });
   }, [router, isAuthPage]);
+
+  const redirectOnFailedSignin = React.useCallback(async () => {
+    if (checkAuth) {
+      const rQuery = router?.asPath ? encodeBase64(router.asPath) : '';
+      await router.push({
+        pathname: paths.signin,
+        query: {
+          r: rQuery,
+        },
+      });
+    }
+    setLoadingData({ loading: false });
+  }, [router, checkAuth]);
 
   React.useEffect(() => {
     if (user?.id && !userData?.getUserDetails) {
