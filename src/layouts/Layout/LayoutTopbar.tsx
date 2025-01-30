@@ -10,7 +10,6 @@ import {
   Container,
   Drawer,
   IconButton,
-  Link,
   Toolbar,
   useMediaQuery,
   useTheme,
@@ -23,7 +22,6 @@ import Logo from '@/components/common/Logo';
 import HeaderMenuItem from './HeaderMenuItem';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import ButtonDropdown from '@/components/common/DropdownMenu/DropdownMenu';
-import { useLogoutMutation } from '@/apollo/hooks';
 import { useAuth } from '@/context/AuthContext';
 
 export interface IMenuItemProps {
@@ -44,8 +42,7 @@ const LayoutTopbar: React.FC = () => {
   const [openMenu, setOpenMenu] = React.useState<boolean>(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const { user } = useAuth();
-  const [handleLogout] = useLogoutMutation();
+  const { user, handleLogout } = useAuth();
 
   return (
     <AppBar
@@ -74,10 +71,13 @@ const LayoutTopbar: React.FC = () => {
             justifyContent: 'start',
             alignIttems: 'center',
             px: '0 !important',
+            maxHeight: 50,
+            minHeight: '50px !important',
+            height: 50,
           }}
         >
           <NextLink href="/">
-            <Logo width={isMobile ? 260 : 390} height={isMobile ? 40 : 60} priority />
+            <Logo width={isMobile ? 260 : 300} height={isMobile ? 40 : 45} priority />
           </NextLink>
           <Box display={{ xs: 'flex', lg: 'none' }} ml="auto">
             <IconButton
@@ -126,6 +126,7 @@ const LayoutTopbar: React.FC = () => {
               >
                 <ProfilePicture
                   title={user?.firstName}
+                  id={user.id}
                   summary="Member"
                   maxWidth={150}
                   sx={{ width: 36, height: 36, ml: 1 }}

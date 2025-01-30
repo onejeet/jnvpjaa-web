@@ -10,6 +10,7 @@ export interface TAuthContextData {
   checkAuth?: boolean;
   setUser: (user: any) => void;
   logoutUser: () => void;
+  handleLogout: () => void;
   // loadUserData: () => void;
   setLoadingData: React.Dispatch<React.SetStateAction<LoadingDataProps>>;
   // isOnboardingFinished?: boolean;

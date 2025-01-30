@@ -8,8 +8,34 @@ const refreshClient = new ApolloClient({
 });
 
 const REFRESH_TOKEN_MUTATION = gql`
-  mutation RefreshToken {
-    refreshToken
+  mutation refreshToken {
+    refreshToken {
+      user {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergency_mobile
+        firstName
+        gender
+        google_auth_id
+        id
+        isVerified
+        lastName
+        membershipYear
+        mobile
+        nickName
+        profileImage
+        role {
+          id
+          name
+        }
+        updatedAt
+      }
+    }
   }
 `;
 
@@ -22,7 +48,7 @@ export const refreshAccessToken = async (): Promise<string | null> => {
     return response.data?.refreshToken || null;
   } catch (error) {
     console.error('Failed to refresh token', error);
-
+    localStorage.removeItem('logged_in');
     return null;
   }
 };

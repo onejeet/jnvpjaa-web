@@ -49,7 +49,7 @@ const LoadingIndicator: React.FC<LoadingIndicatorProps> = ({ BackdropProps, isBa
       open={isBackdrop}
       sx={{
         zIndex: (theme) => theme.zIndex.drawer + 10,
-        backgroundColor: (theme) => alpha(theme.palette.common.black, 0.5),
+        backgroundColor: (theme) => alpha(theme.palette.common.black, 0.3),
       }}
       {...BackdropProps}
     >

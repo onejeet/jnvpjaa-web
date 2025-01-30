@@ -43,4 +43,10 @@ const SigninPage: NextPage = () => (
   </>
 );
 
+SigninPage.getInitialProps = () => {
+  return {
+    isAuthPage: true,
+  };
+};
+
 export default SigninPage;

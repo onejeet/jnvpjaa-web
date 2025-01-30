@@ -21,8 +21,6 @@ export type Scalars = {
 
 export type AuthPayload = {
   __typename?: 'AuthPayload';
-  refreshToken?: Maybe<Scalars['String']['output']>;
-  token?: Maybe<Scalars['String']['output']>;
   user?: Maybe<User>;
 };
 
@@ -180,8 +178,6 @@ export type RefreshTokenMutation = {
   refreshToken?:
     | {
         __typename?: 'AuthPayload';
-        refreshToken?: string | undefined;
-        token?: string | undefined;
         user?:
           | {
               __typename?: 'User';
@@ -228,8 +224,6 @@ export type SigninMutation = {
   signin?:
     | {
         __typename?: 'AuthPayload';
-        refreshToken?: string | undefined;
-        token?: string | undefined;
         user?:
           | {
               __typename?: 'User';
@@ -575,8 +569,6 @@ export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, L
 export const RefreshTokenDocument = gql`
   mutation refreshToken {
     refreshToken {
-      refreshToken
-      token
       user {
         aboutMe
         batch
@@ -675,8 +667,6 @@ export type ResetPasswordMutationOptions = Apollo.BaseMutationOptions<
 export const SigninDocument = gql`
   mutation signin($email: String!, $password: String!) {
     signin(email: $email, password: $password) {
-      refreshToken
-      token
       user {
         aboutMe
         batch

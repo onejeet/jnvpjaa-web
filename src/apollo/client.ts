@@ -2,33 +2,38 @@ import { ApolloClient, HttpLink, InMemoryCache, ApolloLink } from '@apollo/clien
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
 import { refreshAccessToken } from './refresh';
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies(null, { path: '/' });
 
 // Error handling link
 const errorLink = onError(({ graphQLErrors, networkError, forward, operation }) => {
   if (graphQLErrors) {
+    // @ts-expect-error dff
     graphQLErrors.forEach(({ message, code }) => {
       // Handle 401 Unauthorized (Token Expired)
       console.error(`[GraphQL error]: Message: ${message}`);
       if (code === 'NOT_AUTHORISED') {
-        return refreshAccessToken()
-          .then((newToken: string | null) => {
-            if (newToken) {
-              // localStorage.setItem('accessToken', newToken);
+        const isLoggedIn = localStorage.getItem('logged_in');
+        console.log('ZZ :COOKEIIS', isLoggedIn);
+        if (isLoggedIn === 'true') {
+          return refreshAccessToken()
+            .then(() => {
               operation.setContext(({ headers = {} }) => ({
                 headers: {
                   ...headers,
-                  // Authorization: `Bearer ${newToken}`,
                 },
               }));
+              console.log('ZZ: operation', operation.operationName);
 
               return forward(operation); // Retry the operation with a new token
-            }
-          })
-          .catch(() => {
-            console.error('Token refresh failed');
-            localStorage.removeItem('accessToken');
-            window.location.href = '/login'; // Redirect to login if token refresh fails
-          });
+            })
+            .catch(() => {
+              localStorage.removeItem('logged_in');
+              console.error('Token refresh failed');
+              window.location.href = '/signin'; // Redirect to login if token refresh fails
+            });
+        }
       }
     });
   }

@@ -43,4 +43,10 @@ const ForgotPasswordPage: NextPage = () => (
   </>
 );
 
+ForgotPasswordPage.getInitialProps = () => {
+  return {
+    isAuthPage: true,
+  };
+};
+
 export default ForgotPasswordPage;

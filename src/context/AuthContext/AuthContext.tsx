@@ -1,38 +1,85 @@
+'use client';
+
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import LoadingIndicator from '@/components/common/LoadingIndicator';
 import { AuthProviderProps, LoadingDataProps, TAuthContextData } from './AuthContext.types';
-import { useGetUserDetailsQuery, User } from '@/apollo/hooks';
 import { Box } from '@mui/material';
+import { paths } from '@/config/paths';
+import { useGetUserDetailsLazyQuery, useLogoutMutation, User } from '@/apollo/hooks';
+import { decodeBase64, encodeBase64 } from '@/utils/index';
 
 const AuthContext = createContext<TAuthContextData>({} as TAuthContextData);
 
 const AuthProvider: React.FC<AuthProviderProps> = ({ children, checkAuth, isAuthPage }) => {
   const router = useRouter();
+  const isLoggedInRef = React.useRef(false);
   const [user, setUser] = useState<User | null>(null);
   const [loadingData, setLoadingData] = useState<LoadingDataProps>({
     loading: checkAuth || isAuthPage,
   });
+  const [handleLogout] = useLogoutMutation();
 
-  const { data: userData, refetch } = useGetUserDetailsQuery({
-    onCompleted: (data) => {
+  const [fetchUserData, { data: userData, refetch }] = useGetUserDetailsLazyQuery({
+    onCompleted: (data: User) => {
       setUser(data?.getUserDetails as User);
+      setLoadingData({ loading: false });
+    },
+    onError: () => {
+      if (checkAuth) {
+        const rQuery = router?.asPath ? encodeBase64(router.asPath) : '';
+        router.push({
+          pathname: paths.signin,
+          query: {
+            r: rQuery,
+          },
+        });
+      }
+      setLoadingData({ loading: false });
     },
     notifyOnNetworkStatusChange: true,
   });
 
-  useEffect(() => {
-    window.addEventListener('storage', onLoginStateChange, false);
+  React.useEffect(() => {
+    if (user?.id && !userData?.getUserDetails) {
+      refetch();
+      if (isAuthPage) {
+        redirectOnSignin();
+      }
+    }
+  }, [user, userData, refetch]);
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // Access localStorage here
+      const isLoggedIn = localStorage.getItem('logged_in');
+      if (isLoggedIn === 'true') {
+        isLoggedInRef.current = Boolean(isLoggedIn);
+        fetchUserData();
+      } else if (checkAuth || isAuthPage) {
+        fetchUserData();
+      }
+    }
+
+    window.addEventListener('storage', onLoginStateChange, false);
     return () => {
       window.removeEventListener('storage', onLoginStateChange, false);
     };
   }, []);
 
   const onLoginStateChange = (event: Record<string, any>) => {
-    const isLoggedIn = localStorage.getItem('logged_in');
+    // const isLoggedIn = localStorage.getItem('logged_in');
     if (event.key === 'logged_in' && (event.newValue === '0' || !event.newValue)) {
       window.location.reload();
+    }
+  };
+
+  const redirectOnSignin = async () => {
+    const redirectPath = router?.query?.r ? decodeBase64(router.query.r as string) : router?.query?.r;
+    if (redirectPath) {
+      await router.push(redirectPath as string);
+    } else {
+      await router.push(paths.home);
     }
   };
 
@@ -41,69 +88,10 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children, checkAuth, isAuth
       loading: true,
       type: 'logout',
     });
-    // await Auth.signOut();
-    // setUser(undefined);
-    // localStorage.clear();
-    // if (checkAuth) {
-    //   await router.replace('/sign-in');
-    // }
-    // localStorage.setItem('logged_in', '0');
-    // client.clearStore();
-    // client.cache.reset();
-    // setLoadingData({
-    //   loading: false,
-    // });
+    await handleLogout();
+    localStorage.removeItem('logged_in');
+    window.location.href = paths.home;
   };
-
-  const loadUserData = async () => {
-    if (checkAuth || isAuthPage) {
-      //   const userData = await getCognitoUser();
-      //   if (userData?.username) {
-      //     // redirection will be taken care be use effect
-      //     setUser(userData);
-      //   } else if (checkAuth) {
-      //     // If user is NOT already logged in and tries to access any page that required authentication, we need to redirect him to signin page
-      //     redirectToSigninPage();
-      //   } else if (!loadingData?.type) {
-      //     setLoadingData({
-      //       loading: false,
-      //     });
-      // }
-    }
-  };
-
-  useEffect(() => {
-    loadUserData();
-  }, []);
-
-  React.useEffect(() => {
-    if (user?.id && !userData?.getUserDetails) {
-      refetch();
-    }
-  }, [user, userData, refetch]);
-
-  // React.useEffect(() => {
-  //   const userSelf = userData?.getUserDetails;
-
-  //   // this is fallback to create company and user is
-  //   // failed during CRM onboarding completion
-
-  //   if (user && userSelf) {
-  //     if (isAuthPage || router.pathname.includes('/onboarding')) {
-  //       const redirectPath = router?.query?.redirect
-  //         ? decodeBase64(router.query.redirect as string)
-  //         : router?.query?.redirect;
-  //       if (redirectPath) {
-  //         await router.replace(redirectPath as string);
-  //       } else {
-  //         await router.replace('/');
-  //       }
-  //     }
-  //     setLoadingData({
-  //       loading: false,
-  //     });
-  //   }
-  // }, [userData, user]);
 
   const isLoading = React.useMemo(() => {
     return loadingData?.loading;
@@ -118,11 +106,12 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children, checkAuth, isAuth
         logoutUser,
         isAuthPage,
         setLoadingData,
+        handleLogout: logoutUser,
       }}
     >
       {isLoading ? (
         <Box width="100%" minHeight="100vh" display="flex" justifyContent="center" alignItems="center">
-          <LoadingIndicator />
+          <LoadingIndicator isBackdrop={false} />
         </Box>
       ) : null}
       {/* The Children's will not load while loading is in progress

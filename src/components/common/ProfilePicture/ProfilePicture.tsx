@@ -8,9 +8,9 @@ import { botttsNeutral } from '@dicebear/collection';
 import Title from '../Title';
 import { ProfilePictureProps } from './ProfilePicture.types';
 
-const getDefaultAvatarUrl = (title?: string) =>
+const getDefaultAvatarUrl = (id?: string) =>
   createAvatar(botttsNeutral, {
-    seed: title,
+    seed: id,
     flip: true,
     size: 32,
   })?.toDataUri();
@@ -24,6 +24,7 @@ const ProfilePicture: React.FC<ProfilePictureProps> = ({
   summary,
   loading,
   maxWidth,
+  id,
   ...restProps
 }) => {
   const { titleProps, summaryContainerProps, ...restTitleComponentProps } = titleComponentProps || {};
@@ -38,7 +39,7 @@ const ProfilePicture: React.FC<ProfilePictureProps> = ({
       {...containerProps}
     >
       <Box display="flex" {...avatarContainerProps}>
-        <Avatar alt={title} {...restProps} src={restProps?.src || getDefaultAvatarUrl(title)}>
+        <Avatar alt={title} {...restProps} src={restProps?.src || getDefaultAvatarUrl(id)}>
           {restProps?.src ? null : title}
         </Avatar>
       </Box>

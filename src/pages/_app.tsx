@@ -15,7 +15,7 @@ const clientSideEmotionCache = createEmotionCache();
 const MyApp = ({ Component, pageProps, emotionCache = clientSideEmotionCache }: AppProps & { emotionCache: any }) => (
   <CacheProvider value={emotionCache}>
     <ApolloProvider client={apolloClient}>
-      <AuthProvider>
+      <AuthProvider checkAuth={!!pageProps?.checkAuth} isAuthPage={!!pageProps?.isAuthPage}>
         <AlertProvider>
           <LayoutProvider>
             <Component {...pageProps} />
