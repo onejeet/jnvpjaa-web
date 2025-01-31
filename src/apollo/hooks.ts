@@ -94,6 +94,10 @@ export type QueryGetUserDetailsArgs = {
   id?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type QueryGetUserListArgs = {
+  filter?: InputMaybe<UserFilterInput>;
+};
+
 export type Role = {
   __typename?: 'Role';
   id?: Maybe<Scalars['ID']['output']>;
@@ -124,6 +128,11 @@ export type User = {
   role?: Maybe<Role>;
   /** Timestamp when the record was last updated */
   updatedAt: Scalars['DateTime']['output'];
+};
+
+export type UserFilterInput = {
+  query?: InputMaybe<Scalars['String']['input']>;
+  verified?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type ApproveUserAsAlumniMutationVariables = Exact<{
@@ -373,7 +382,9 @@ export type GetUserDetailsQuery = {
     | undefined;
 };
 
-export type GetUserListQueryVariables = Exact<{ [key: string]: never }>;
+export type GetUserListQueryVariables = Exact<{
+  filter?: InputMaybe<UserFilterInput>;
+}>;
 
 export type GetUserListQuery = {
   __typename?: 'Query';
@@ -968,8 +979,8 @@ export type GetUserDetailsLazyQueryHookResult = ReturnType<typeof useGetUserDeta
 export type GetUserDetailsSuspenseQueryHookResult = ReturnType<typeof useGetUserDetailsSuspenseQuery>;
 export type GetUserDetailsQueryResult = Apollo.QueryResult<GetUserDetailsQuery, GetUserDetailsQueryVariables>;
 export const GetUserListDocument = gql`
-  query getUserList {
-    getUserList {
+  query getUserList($filter: UserFilterInput) {
+    getUserList(filter: $filter) {
       aboutMe
       batch
       createdAt
@@ -1009,6 +1020,7 @@ export const GetUserListDocument = gql`
  * @example
  * const { data, loading, error } = useGetUserListQuery({
  *   variables: {
+ *      filter: // value for 'filter'
  *   },
  * });
  */

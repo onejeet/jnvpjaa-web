@@ -40,6 +40,7 @@ const MembersFilters = () => {
         <TextField
           placeholder="Search by Name, Batch etc..."
           size="small"
+          defaultValue={searchParams.get('q')}
           // value={searchParams.get('q')}
           fullWidth
           onChange={(e) => onSearch('q', e.target.value)}
@@ -51,7 +52,7 @@ const MembersFilters = () => {
           name="is_verified"
           displayEmpty
           size="small"
-          defaultValue=""
+          defaultValue={searchParams.get('verified') || ''}
           onChange={(e) => handleFilterChange('verified', e.target.value)}
         >
           <MenuItem value="">All</MenuItem>

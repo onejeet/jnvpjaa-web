@@ -10,13 +10,21 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import VerifiedBadge from '@/components/common/VerifiedBadge';
 import { formatPhoneNumber } from '@/utils/helpers';
+import { useSearchParams } from 'next/navigation';
 
 const useMembersTable = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [columns, setColumns] = React.useState<any[]>([]);
-  const [searchQuery, setSearchQuery] = React.useState<string>('');
 
-  const { data, loading } = useGetUserListQuery();
+  const { data, loading } = useGetUserListQuery({
+    variables: {
+      filter: {
+        verified: searchParams?.get('verified') ? searchParams?.get('verified') === 'true' : undefined,
+        query: searchParams.get('q') || '',
+      },
+    },
+  });
   //   const [state, dispatch] = useImmerReducer(reducer, initialState);
   //   const { replace, query, pathname } = useRouter();
 
