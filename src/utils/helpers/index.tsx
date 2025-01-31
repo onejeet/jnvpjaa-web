@@ -65,3 +65,17 @@ export const getBatchOptions = () => {
 
   return yearArray;
 };
+
+export function formatPhoneNumber(phoneNumber: string) {
+  // Remove any non-numeric characters
+  const cleaned = phoneNumber.replace(/\D/g, '');
+
+  // Check if the phone number is exactly 10 digits
+  if (cleaned.length !== 10) {
+    throw new Error('Phone number must be 10 digits long');
+  }
+
+  // Format the phone number
+  const formatted = `+91 (${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(6)}`;
+  return formatted;
+}

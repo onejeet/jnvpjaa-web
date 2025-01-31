@@ -12,20 +12,19 @@ import Button from '@/components/core/Button';
 import FormSelectField from '@/components/form/FormSelectField';
 import { getBatchOptions } from '@/utils/helpers';
 import { Info } from '@mui/icons-material';
+import { paths } from '@/config/paths';
+import { useRouter } from 'next/router';
 
 const batchList = getBatchOptions();
 
 const SignupForm = () => {
+  const router = useRouter();
   const { showAlert } = useAlert();
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<ISignupFormInput>({
-    // defaultValues: {
-    //   gender: 'male',
-    // },
-  });
+  } = useForm<ISignupFormInput>({});
 
   const watchPassword = useWatch({ control, name: 'password' });
 
@@ -45,6 +44,7 @@ const SignupForm = () => {
         },
         onCompleted: (res) => {
           console.log('COmpleted', res);
+          router.push(paths.signin);
         },
         onError: (err: Error) => {
           showAlert({
@@ -55,7 +55,7 @@ const SignupForm = () => {
         },
       });
     },
-    [signup, showAlert]
+    [signup, showAlert, router]
   );
 
   return (

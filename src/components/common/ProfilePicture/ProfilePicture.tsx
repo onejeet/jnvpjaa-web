@@ -17,6 +17,7 @@ const ProfilePicture: React.FC<ProfilePictureProps> = ({
   loading,
   maxWidth,
   id,
+  alt,
   ...restProps
 }) => {
   const { titleProps, summaryContainerProps, ...restTitleComponentProps } = titleComponentProps || {};
@@ -31,7 +32,11 @@ const ProfilePicture: React.FC<ProfilePictureProps> = ({
       {...containerProps}
     >
       <Box display="flex" {...avatarContainerProps}>
-        <Avatar alt={title} {...restProps} src={restProps?.src || getAvatarDataUrl(id)}>
+        <Avatar
+          alt={alt || (typeof title === 'string' ? title : 'avatar')}
+          {...restProps}
+          src={restProps?.src || getAvatarDataUrl(id)}
+        >
           {restProps?.src ? null : title}
         </Avatar>
       </Box>

@@ -1,6 +1,6 @@
 'use client';
 
-import { HEADER_MENU } from '@/constants/Header.constants';
+import { getHeaderMenu } from '@/constants/Header.constants';
 import CloseIcon from '@mui/icons-material/Close';
 import MenuIcon from '@mui/icons-material/Menu';
 import type { Theme } from '@mui/material';
@@ -47,6 +47,10 @@ const LayoutTopbar: React.FC = () => {
   const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { user, handleLogout } = useAuth();
+
+  const HEADER_MENU = React.useMemo(() => {
+    return getHeaderMenu(user?.id?.length > 0);
+  }, [user]);
 
   return (
     <AppBar
