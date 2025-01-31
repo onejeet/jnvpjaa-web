@@ -3,7 +3,6 @@
 import React from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { Box, Card, Typography } from '@mui/material';
-import { useSigninMutation } from 'src/apollo/hooks';
 import { IForgotPasswordFormInput } from './ForgotPassword.types';
 import FormTextField from '@/components/form/FormTextField';
 import { useAlert } from '@/context/AlertContext';
@@ -12,6 +11,7 @@ import { useRouter } from 'next/router';
 import { Info } from '@mui/icons-material';
 import { useForgotPasswordMutation, useResetPasswordMutation } from '@/apollo/hooks';
 import Image from 'next/image';
+import { paths } from '@/config/paths';
 
 const SigninForm = () => {
   const [mailSent, setMailSent] = React.useState<boolean>(false);
@@ -35,6 +35,14 @@ const SigninForm = () => {
           variables: {
             token: c as string,
             newPassword: data?.password,
+          },
+          onCompleted: () => {
+            showAlert({
+              visible: true,
+              type: 'success',
+              message: 'Password reset successfully. Please login with your new password.',
+            });
+            router.push(paths.home);
           },
         });
       } else {
