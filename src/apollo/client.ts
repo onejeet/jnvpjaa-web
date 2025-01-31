@@ -25,7 +25,7 @@ const errorLink = new ApolloLink((operation, forward) => {
               }
             } else {
               // No refresh token available, force logout
-              observer.error(new Error('No refresh token available'));
+              observer.error(result?.errors?.[0]);
             }
           } else {
             observer.error(result?.errors?.[0]);

@@ -10,50 +10,82 @@ import { useAlert } from '@/context/AlertContext';
 import Button from '@/components/core/Button';
 import { useRouter } from 'next/router';
 import { Info } from '@mui/icons-material';
+import { useForgotPasswordMutation, useResetPasswordMutation } from '@/apollo/hooks';
+import Image from 'next/image';
 
 const SigninForm = () => {
+  const [mailSent, setMailSent] = React.useState<boolean>(false);
   const router = useRouter();
   const { e = '', c = '' } = router.query;
   const { showAlert } = useAlert();
   const {
     control,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm<IForgotPasswordFormInput>();
 
   const watchPassword = useWatch({ control, name: 'password' });
-
-  const [signin, { loading }] = useSigninMutation();
-
+  const [handlePasswordReset, { loading: resetPasswordLoading }] = useResetPasswordMutation();
+  const [handleForgotPassword, { loading: forgotPassLoading }] = useForgotPasswordMutation();
   const onSubmit = React.useCallback(
     (data: IForgotPasswordFormInput) => {
-      signin({
-        variables: {
-          email: data?.email?.trim(),
-          password: data?.password,
-        },
-        onCompleted: (res) => {
-          console.log('COmpleted', res);
-        },
-        onError: (err: Error) => {
-          showAlert({
-            type: 'error',
-            message: 'Something went wrong',
-          });
-          console.log('Error: ', err?.message);
-        },
-      });
+      if (c) {
+        handlePasswordReset({
+          variables: {
+            token: c as string,
+            newPassword: data?.password,
+          },
+        });
+      } else {
+        handleForgotPassword({
+          variables: {
+            email: data?.email?.trim(),
+          },
+          onCompleted: (res: any) => {
+            console.log('COmpleted', res);
+            setMailSent(true);
+          },
+          onError: (err: Error) => {
+            showAlert({
+              type: 'error',
+              message: 'Something went wrong',
+            });
+            console.log('Error: ', err?.message);
+          },
+        });
+      }
     },
-    [signin, showAlert]
+    [c, handlePasswordReset, showAlert, handlePasswordReset]
   );
 
+  if (mailSent) {
+    return (
+      <Box
+        width={400}
+        my={7}
+        // width="100%"
+        height="100%"
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Image src="/assets/svg/email_sent.svg" width={100} height={100} alt="mail sent immage" />
+        <Typography textAlign="center" color="grey.600" mt={1}>
+          Email sent{getValues('email') ? ` to ${getValues('email')}` : ''}.
+          <br />
+          Please check your email inbox.
+        </Typography>
+      </Box>
+    );
+  }
   return (
     <Box
       component="form"
       onSubmit={handleSubmit(onSubmit)}
       sx={{
         width: 400,
-
         p: 3,
         display: 'flex',
         flexDirection: 'column',
@@ -124,7 +156,12 @@ const SigninForm = () => {
         />
       )}
 
-      <Button title={c ? 'Change Password' : 'Reset Password'} type="submit" fullWidth loading={loading} />
+      <Button
+        title={c ? 'Change Password' : 'Reset Password'}
+        type="submit"
+        fullWidth
+        loading={resetPasswordLoading || forgotPassLoading}
+      />
     </Box>
   );
 };
