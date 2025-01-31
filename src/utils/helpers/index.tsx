@@ -79,3 +79,36 @@ export function formatPhoneNumber(phoneNumber: string) {
   const formatted = `+91 (${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(6)}`;
   return formatted;
 }
+
+/**
+ * Creates a debounced version of the provided function.
+ * @param {Function} func - The function to debounce.
+ * @param {number} wait - The number of milliseconds to delay.
+ * @param {boolean} [immediate=false] - If `true`, triggers the function on the leading edge.
+ * @returns {Function} A debounced version of the provided function.
+ */
+export const debounce = (
+  func: (...args: any[]) => void,
+  wait: number = 300,
+  immediate: boolean = false
+): ((...args: any[]) => void) => {
+  let timeout: ReturnType<typeof setTimeout> | null = null;
+
+  return function (...args: any[]) {
+    const later = () => {
+      timeout = null;
+      if (!immediate) func(...args);
+    };
+
+    const callNow = immediate && !timeout;
+
+    clearTimeout(timeout as NodeJS.Timeout);
+    timeout = setTimeout(later, wait);
+
+    if (callNow) {
+      func(...args);
+    }
+  };
+};
+
+export default debounce;

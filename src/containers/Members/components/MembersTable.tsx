@@ -31,7 +31,7 @@ const MmembersTable = () => {
       // checkboxSelection
       pagination
       paginationMode="server"
-      hideFooter
+      // hideFooter
       /* handlers */
       // onPageChange={loading ? () => null : onPageChange}
       // onPageSizeChange={onPageSizeChange}

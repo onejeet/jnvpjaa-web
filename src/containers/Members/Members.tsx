@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import { useGetUserDetailsQuery } from '@/apollo/hooks';
 import MembersFilters from './components/MembersFilters';
 import MmembersTable from './components/MembersTable';
+import { Typography } from '@mui/material';
 
 export default function Members() {
   const router = useRouter();
@@ -28,12 +29,17 @@ export default function Members() {
     <LayoutModule
       disableCover
       title={`Members • Alumni Network of JNV Paota, Jaipur`}
-      containerProps={{ sx: { py: 0 } }}
+      //   containerProps={{ sx: { py: 2 } }}
     >
-      <Box p={3}>
-        <MembersFilters />
-        <MmembersTable />
-      </Box>
+      <Typography variant="h1" textAlign="center">
+        Alumni Members
+      </Typography>
+      <Typography color="grey.800" mb={3} textAlign="center">
+        List of all the verified and non-verified alumnies registed for JNVPJAA portal.
+      </Typography>
+
+      <MembersFilters />
+      <MmembersTable />
     </LayoutModule>
   );
 }
