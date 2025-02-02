@@ -3,7 +3,7 @@ const Chip = () => {
     MuiChip: {
       styleOverrides: {
         root: {
-          borderRadius: '6px',
+          borderRadius: '20px',
         },
         sizeSmall: {
           fontSize: '13px',

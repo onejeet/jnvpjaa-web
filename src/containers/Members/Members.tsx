@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import Box from '@mui/material/Box';
 import LayoutModule from '@/layouts/Layout';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/router';
@@ -35,7 +34,7 @@ export default function Members() {
         Alumni Members
       </Typography>
       <Typography color="grey.800" mb={3} textAlign="center">
-        List of all the verified and non-verified alumnies registed for JNVPJAA portal.
+        List of all the verified and non-verified users registered for JNVPJAA portal.
       </Typography>
 
       <MembersFilters />

@@ -80,6 +80,7 @@ const useMembersTable = () => {
                   className: 'title-container',
                 },
               }}
+
               // titleProps={{
               //   fontSize: '14px',
               //   lineHeight: '16.41px',

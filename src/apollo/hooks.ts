@@ -24,6 +24,46 @@ export type AuthPayload = {
   user?: Maybe<User>;
 };
 
+export type Event = {
+  __typename?: 'Event';
+  attendees?: Maybe<Array<Maybe<User>>>;
+  category?: Maybe<Scalars['String']['output']>;
+  /** Timestamp when the record was created */
+  createdAt: Scalars['DateTime']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  endDate?: Maybe<Scalars['DateTime']['output']>;
+  hosting: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  image?: Maybe<Scalars['String']['output']>;
+  location?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
+  organizerId?: Maybe<Scalars['String']['output']>;
+  price?: Maybe<Scalars['Float']['output']>;
+  startDate: Scalars['DateTime']['output'];
+  status?: Maybe<Scalars['String']['output']>;
+  tags?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  ticketUrl?: Maybe<Scalars['String']['output']>;
+  /** Timestamp when the record was last updated */
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type FilterInput = {
+  query?: InputMaybe<Scalars['String']['input']>;
+  verified?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type ListInput = {
+  filter?: InputMaybe<FilterInput>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type ListResponse = {
+  __typename?: 'ListResponse';
+  data?: Maybe<Array<Maybe<User>>>;
+  total?: Maybe<Scalars['Int']['output']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   deleteUser?: Maybe<User>;
@@ -88,7 +128,7 @@ export type MutationVerifyUserArgs = {
 export type Query = {
   __typename?: 'Query';
   getUserDetails?: Maybe<User>;
-  getUserList?: Maybe<UserListResponse>;
+  getUserList?: Maybe<ListResponse>;
 };
 
 export type QueryGetUserDetailsArgs = {
@@ -96,7 +136,7 @@ export type QueryGetUserDetailsArgs = {
 };
 
 export type QueryGetUserListArgs = {
-  options?: InputMaybe<UserListInput>;
+  options?: InputMaybe<ListInput>;
 };
 
 export type Role = {
@@ -129,23 +169,6 @@ export type User = {
   role?: Maybe<Role>;
   /** Timestamp when the record was last updated */
   updatedAt: Scalars['DateTime']['output'];
-};
-
-export type UserFilterInput = {
-  query?: InputMaybe<Scalars['String']['input']>;
-  verified?: InputMaybe<Scalars['Boolean']['input']>;
-};
-
-export type UserListInput = {
-  filter?: InputMaybe<UserFilterInput>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-};
-
-export type UserListResponse = {
-  __typename?: 'UserListResponse';
-  data?: Maybe<Array<Maybe<User>>>;
-  total?: Maybe<Scalars['Int']['output']>;
 };
 
 export type DeleteUserMutationVariables = Exact<{
@@ -397,14 +420,14 @@ export type GetUserDetailsQuery = {
 };
 
 export type GetUserListQueryVariables = Exact<{
-  options?: InputMaybe<UserListInput>;
+  options?: InputMaybe<ListInput>;
 }>;
 
 export type GetUserListQuery = {
   __typename?: 'Query';
   getUserList?:
     | {
-        __typename?: 'UserListResponse';
+        __typename?: 'ListResponse';
         total?: number | undefined;
         data?:
           | Array<
@@ -991,7 +1014,7 @@ export type GetUserDetailsLazyQueryHookResult = ReturnType<typeof useGetUserDeta
 export type GetUserDetailsSuspenseQueryHookResult = ReturnType<typeof useGetUserDetailsSuspenseQuery>;
 export type GetUserDetailsQueryResult = Apollo.QueryResult<GetUserDetailsQuery, GetUserDetailsQueryVariables>;
 export const GetUserListDocument = gql`
-  query getUserList($options: UserListInput) {
+  query getUserList($options: ListInput) {
     getUserList(options: $options) {
       data {
         aboutMe

@@ -25,6 +25,31 @@ input[type='number'] {
   -moz-appearance: textfield;
 }
 
+/* Style for the Live Dot */
+.live-dot {
+  width: 6px; /* Size of the dot */
+  height: 6px;
+  border-radius: 50%; /* Make it circular */
+  background-color: #f74a46; /* Color of the dot */
+  animation: pulse 1.5s infinite ease-in-out; /* Animation */
+}
+
+/* Animation for the pulsing effect */
+@keyframes pulse {
+  0% {
+    transform: scale(1); /* Initial size */
+    opacity: 1; /* Fully visible */
+  }
+  50% {
+    transform: scale(1.5); /* Scale up */
+    opacity: 0.7; /* Slightly transparent */
+  }
+  100% {
+    transform: scale(1); /* Return to original size */
+    opacity: 1; /* Fully visible */
+  }
+}
+
 .embla {
   max-width: 48rem;
   margin: auto;

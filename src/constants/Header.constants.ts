@@ -82,6 +82,10 @@ export const HEADER_MENU: IHeaderMenuItem[] = [
     ],
   },
   {
+    label: 'Events',
+    path: '/events',
+  },
+  {
     label: 'Blog',
     path: '/blog',
   },
@@ -157,6 +161,10 @@ export const MEMBER_HEADER_MENU: IHeaderMenuItem[] = [
         path: '#',
       },
     ],
+  },
+  {
+    label: 'Events',
+    path: '/events',
   },
   {
     label: 'Members',

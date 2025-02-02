@@ -1,5 +1,4 @@
-import Members from '@/containers/Members/Members';
-import Profile from '@/containers/Profile';
+import Members from '@/containers/Members';
 import { NextPage } from 'next';
 
 const MembersPage: NextPage = () => <Members />;

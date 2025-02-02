@@ -51,12 +51,12 @@ const ProfilePicture: React.FC<ProfilePictureProps> = ({
               ...titleProps,
             }}
             summaryProps={{
-              fontSize: '10px',
+              fontSize: '12px',
               color: 'grey.600',
+              fontWeight: 400,
             }}
             summaryContainerProps={{
               mt: loading ? '7px' : '0px',
-
               ...summaryContainerProps,
             }}
             {...restTitleComponentProps}

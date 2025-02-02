@@ -94,15 +94,15 @@ const HeaderMenuItem: React.FC<IMenuItemProps> = ({ item, isMobile, expanded, se
             )}
           </Accordion>
         ) : (
-          <NextLink href={item?.path || '/'} as={item?.path} style={{ textDecoration: 'none' }}>
+          <NextLink href={item?.path || '/'} as={item?.path} style={{ textDecoration: 'none', width: '100%' }}>
             <Button
               sx={{
-                width: '100%',
                 textAlign: 'left',
                 py: 0,
                 justifyContent: 'space-between',
                 minHeight: '20px !important',
               }}
+              fullWidth
             >
               {item.label}
             </Button>
@@ -180,17 +180,13 @@ const HeaderMenuItem: React.FC<IMenuItemProps> = ({ item, isMobile, expanded, se
               ))}
             </HoverPopover>
           ) : (
-            <NextLink href={item?.path || '/'} as={item?.path} style={{ textDecoration: 'none' }}>
+            <NextLink href={item?.path || '/'} as={item?.path} style={{ textDecoration: 'none', width: '100%' }}>
               <Button
-                aria-controls={open ? 'basic-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
-                onClick={handleClick}
                 disableRipple
                 sx={{
                   px: '2px',
                 }}
-                // endIcon={<KeyboardArrowDownIcon />}
+                fullWidth
               >
                 {item.label}
               </Button>
