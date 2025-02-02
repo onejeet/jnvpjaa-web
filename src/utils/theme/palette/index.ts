@@ -94,9 +94,10 @@ const DefaultPalette = (mode: PaletteMode): DefaultPaletteOptions => {
       dark: '#1F263F',
     },
     success: {
-      main: '#07B386',
-      dark: '#3c9b09',
-      light: '#e0f7de',
+      main: '#06a178',
+      dark: '#047d5d',
+      light: '#6ad1b6',
+      contrastText: '#ffffff',
     },
     text: isLightMode
       ? {

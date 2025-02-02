@@ -26,7 +26,6 @@ export type AuthPayload = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  approveUserAsAlumni?: Maybe<Scalars['Boolean']['output']>;
   deleteUser?: Maybe<User>;
   forgotPassword?: Maybe<Scalars['Boolean']['output']>;
   logout?: Maybe<Scalars['String']['output']>;
@@ -35,10 +34,7 @@ export type Mutation = {
   signin?: Maybe<AuthPayload>;
   signup?: Maybe<User>;
   updateUser?: Maybe<User>;
-};
-
-export type MutationApproveUserAsAlumniArgs = {
-  user_id: Scalars['String']['input'];
+  verifyUser?: Maybe<Scalars['Boolean']['output']>;
 };
 
 export type MutationDeleteUserArgs = {
@@ -84,10 +80,15 @@ export type MutationUpdateUserArgs = {
   profileImage?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type MutationVerifyUserArgs = {
+  user_id: Scalars['String']['input'];
+  verified: Scalars['Boolean']['input'];
+};
+
 export type Query = {
   __typename?: 'Query';
   getUserDetails?: Maybe<User>;
-  getUserList?: Maybe<Array<Maybe<User>>>;
+  getUserList?: Maybe<UserListResponse>;
 };
 
 export type QueryGetUserDetailsArgs = {
@@ -95,7 +96,7 @@ export type QueryGetUserDetailsArgs = {
 };
 
 export type QueryGetUserListArgs = {
-  filter?: InputMaybe<UserFilterInput>;
+  options?: InputMaybe<UserListInput>;
 };
 
 export type Role = {
@@ -135,11 +136,17 @@ export type UserFilterInput = {
   verified?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
-export type ApproveUserAsAlumniMutationVariables = Exact<{
-  user_id: Scalars['String']['input'];
-}>;
+export type UserListInput = {
+  filter?: InputMaybe<UserFilterInput>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
 
-export type ApproveUserAsAlumniMutation = { __typename?: 'Mutation'; approveUserAsAlumni?: boolean | undefined };
+export type UserListResponse = {
+  __typename?: 'UserListResponse';
+  data?: Maybe<Array<Maybe<User>>>;
+  total?: Maybe<Scalars['Int']['output']>;
+};
 
 export type DeleteUserMutationVariables = Exact<{
   id: Scalars['String']['input'];
@@ -349,6 +356,13 @@ export type UpdateUserMutation = {
     | undefined;
 };
 
+export type VerifyUserMutationVariables = Exact<{
+  user_id: Scalars['String']['input'];
+  verified: Scalars['Boolean']['input'];
+}>;
+
+export type VerifyUserMutation = { __typename?: 'Mutation'; verifyUser?: boolean | undefined };
+
 export type GetUserDetailsQueryVariables = Exact<{
   id?: InputMaybe<Scalars['String']['input']>;
 }>;
@@ -383,83 +397,47 @@ export type GetUserDetailsQuery = {
 };
 
 export type GetUserListQueryVariables = Exact<{
-  filter?: InputMaybe<UserFilterInput>;
+  options?: InputMaybe<UserListInput>;
 }>;
 
 export type GetUserListQuery = {
   __typename?: 'Query';
   getUserList?:
-    | Array<
-        | {
-            __typename?: 'User';
-            aboutMe?: string | undefined;
-            batch?: number | undefined;
-            createdAt: any;
-            disabled?: boolean | undefined;
-            displayName?: string | undefined;
-            dob?: string | undefined;
-            email?: string | undefined;
-            emergency_mobile?: string | undefined;
-            firstName?: string | undefined;
-            gender?: string | undefined;
-            google_auth_id?: string | undefined;
-            id?: string | undefined;
-            isVerified?: boolean | undefined;
-            lastName?: string | undefined;
-            membershipYear?: number | undefined;
-            mobile?: string | undefined;
-            nickName?: string | undefined;
-            profileImage?: string | undefined;
-            updatedAt: any;
-            role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
-          }
-        | undefined
-      >
+    | {
+        __typename?: 'UserListResponse';
+        total?: number | undefined;
+        data?:
+          | Array<
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: string | undefined;
+                  email?: string | undefined;
+                  emergency_mobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  id?: string | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  updatedAt: any;
+                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+      }
     | undefined;
 };
 
-export const ApproveUserAsAlumniDocument = gql`
-  mutation approveUserAsAlumni($user_id: String!) {
-    approveUserAsAlumni(user_id: $user_id)
-  }
-`;
-export type ApproveUserAsAlumniMutationFn = Apollo.MutationFunction<
-  ApproveUserAsAlumniMutation,
-  ApproveUserAsAlumniMutationVariables
->;
-
-/**
- * __useApproveUserAsAlumniMutation__
- *
- * To run a mutation, you first call `useApproveUserAsAlumniMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useApproveUserAsAlumniMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [approveUserAsAlumniMutation, { data, loading, error }] = useApproveUserAsAlumniMutation({
- *   variables: {
- *      user_id: // value for 'user_id'
- *   },
- * });
- */
-export function useApproveUserAsAlumniMutation(
-  baseOptions?: Apollo.MutationHookOptions<ApproveUserAsAlumniMutation, ApproveUserAsAlumniMutationVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<ApproveUserAsAlumniMutation, ApproveUserAsAlumniMutationVariables>(
-    ApproveUserAsAlumniDocument,
-    options
-  );
-}
-export type ApproveUserAsAlumniMutationHookResult = ReturnType<typeof useApproveUserAsAlumniMutation>;
-export type ApproveUserAsAlumniMutationResult = Apollo.MutationResult<ApproveUserAsAlumniMutation>;
-export type ApproveUserAsAlumniMutationOptions = Apollo.BaseMutationOptions<
-  ApproveUserAsAlumniMutation,
-  ApproveUserAsAlumniMutationVariables
->;
 export const DeleteUserDocument = gql`
   mutation deleteUser($id: String!) {
     deleteUser(id: $id) {
@@ -910,6 +888,40 @@ export function useUpdateUserMutation(
 export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
 export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
 export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
+export const VerifyUserDocument = gql`
+  mutation verifyUser($user_id: String!, $verified: Boolean!) {
+    verifyUser(user_id: $user_id, verified: $verified)
+  }
+`;
+export type VerifyUserMutationFn = Apollo.MutationFunction<VerifyUserMutation, VerifyUserMutationVariables>;
+
+/**
+ * __useVerifyUserMutation__
+ *
+ * To run a mutation, you first call `useVerifyUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useVerifyUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [verifyUserMutation, { data, loading, error }] = useVerifyUserMutation({
+ *   variables: {
+ *      user_id: // value for 'user_id'
+ *      verified: // value for 'verified'
+ *   },
+ * });
+ */
+export function useVerifyUserMutation(
+  baseOptions?: Apollo.MutationHookOptions<VerifyUserMutation, VerifyUserMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<VerifyUserMutation, VerifyUserMutationVariables>(VerifyUserDocument, options);
+}
+export type VerifyUserMutationHookResult = ReturnType<typeof useVerifyUserMutation>;
+export type VerifyUserMutationResult = Apollo.MutationResult<VerifyUserMutation>;
+export type VerifyUserMutationOptions = Apollo.BaseMutationOptions<VerifyUserMutation, VerifyUserMutationVariables>;
 export const GetUserDetailsDocument = gql`
   query getUserDetails($id: String) {
     getUserDetails(id: $id) {
@@ -979,31 +991,34 @@ export type GetUserDetailsLazyQueryHookResult = ReturnType<typeof useGetUserDeta
 export type GetUserDetailsSuspenseQueryHookResult = ReturnType<typeof useGetUserDetailsSuspenseQuery>;
 export type GetUserDetailsQueryResult = Apollo.QueryResult<GetUserDetailsQuery, GetUserDetailsQueryVariables>;
 export const GetUserListDocument = gql`
-  query getUserList($filter: UserFilterInput) {
-    getUserList(filter: $filter) {
-      aboutMe
-      batch
-      createdAt
-      disabled
-      displayName
-      dob
-      email
-      emergency_mobile
-      firstName
-      gender
-      google_auth_id
-      id
-      isVerified
-      lastName
-      membershipYear
-      mobile
-      nickName
-      profileImage
-      role {
+  query getUserList($options: UserListInput) {
+    getUserList(options: $options) {
+      data {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergency_mobile
+        firstName
+        gender
+        google_auth_id
         id
-        name
+        isVerified
+        lastName
+        membershipYear
+        mobile
+        nickName
+        profileImage
+        role {
+          id
+          name
+        }
+        updatedAt
       }
-      updatedAt
+      total
     }
   }
 `;
@@ -1020,7 +1035,7 @@ export const GetUserListDocument = gql`
  * @example
  * const { data, loading, error } = useGetUserListQuery({
  *   variables: {
- *      filter: // value for 'filter'
+ *      options: // value for 'options'
  *   },
  * });
  */

@@ -16,12 +16,12 @@ const MyApp = ({ Component, pageProps, emotionCache = clientSideEmotionCache }: 
   <CacheProvider value={emotionCache}>
     <ApolloProvider client={apolloClient}>
       <AuthProvider checkAuth={!!pageProps?.checkAuth} isAuthPage={!!pageProps?.isAuthPage}>
-        <AlertProvider>
-          <LayoutProvider>
+        <LayoutProvider>
+          <AlertProvider>
             <Component {...pageProps} />
             <GoogleTagManager gtmId="GTM-W7R5B5JB" />
-          </LayoutProvider>
-        </AlertProvider>
+          </AlertProvider>
+        </LayoutProvider>
       </AuthProvider>
     </ApolloProvider>
   </CacheProvider>

@@ -1,8 +1,9 @@
+import { AlertDialogProps } from '@/components/common/AlertDialog';
 import type React from 'react';
 import type { Toast } from 'react-hot-toast';
 
 export interface AlertContextProps {
-  showAlert: (options: ToastProps) => void;
+  showAlert: (options: ToastProps, isDialog?: boolean, dialogProps?: Partial<AlertDialogProps>) => void;
   hideAlert: () => void;
 }
 

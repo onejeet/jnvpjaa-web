@@ -25,6 +25,8 @@ import HeaderMenuItem from './HeaderMenuItem';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import ButtonDropdown from '@/components/common/DropdownMenu/DropdownMenu';
 import { useAuth } from '@/context/AuthContext';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { Router, useRouter } from 'next/router';
 
 export interface IMenuItemProps {
@@ -110,11 +112,11 @@ const LayoutTopbar: React.FC = () => {
                   {
                     label: 'My Profile',
                     value: '/profile',
-                    // icon: <BiUserCircle />,
+                    icon: <AssignmentIndIcon sx={{ fontSize: '16px' }} />,
                   },
                   {
                     label: 'Log Out',
-                    // icon: <BiLogOutCircle />,
+                    icon: <LogoutIcon sx={{ fontSize: '16px', color: 'error.main' }} />,
                     sx: {
                       color: 'error.main',
                     },

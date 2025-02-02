@@ -21,7 +21,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children, checkAuth, isAuth
   const [handleLogout] = useLogoutMutation();
 
   const [fetchUserData, { data: userData, refetch }] = useGetUserDetailsLazyQuery({
-    onCompleted: (data: User) => {
+    onCompleted: (data: any) => {
       setUser(data?.getUserDetails as User);
       redirectOnSignin();
     },

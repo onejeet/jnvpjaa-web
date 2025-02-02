@@ -2,28 +2,42 @@ import { commonTableColumnProps } from '@/constants/General.contants';
 import Box from '@mui/material/Box';
 import { GridRowParams } from '@mui/x-data-grid';
 import React from 'react';
-
 import ProfilePicture from '@/components/common/ProfilePicture';
-import { useGetUserListQuery } from '@/apollo/hooks';
-import { Tooltip, Typography } from '@mui/material';
-import Image from 'next/image';
+import { useGetUserListQuery, useVerifyUserMutation } from '@/apollo/hooks';
+import { Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import VerifiedBadge from '@/components/common/VerifiedBadge';
 import { formatPhoneNumber } from '@/utils/helpers';
 import { useSearchParams } from 'next/navigation';
+import Button from '@/components/core/Button';
+import TaskAltIcon from '@mui/icons-material/TaskAlt';
+import CloseIcon from '@mui/icons-material/Close';
+import { useAlert } from '@/context/AlertContext';
+import { useApolloClient } from '@apollo/client';
 
 const useMembersTable = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
   const [columns, setColumns] = React.useState<any[]>([]);
+  const [page, setPage] = React.useState<number>(0);
+  const [pageSize, setPageSize] = React.useState<number>(20);
+  const router = useRouter();
+  const client = useApolloClient();
+  const searchParams = useSearchParams();
 
-  const { data, loading } = useGetUserListQuery({
+  const { showAlert } = useAlert();
+  const [handleUserVerification] = useVerifyUserMutation();
+
+  const { data: userListData, loading } = useGetUserListQuery({
     variables: {
-      filter: {
-        verified: searchParams?.get('verified') ? searchParams?.get('verified') === 'true' : undefined,
-        query: searchParams.get('q') || '',
+      options: {
+        filter: {
+          verified: searchParams?.get('verified') ? searchParams?.get('verified') === 'true' : undefined,
+          query: searchParams.get('q') || '',
+        },
+        offset: page || 0,
+        limit: pageSize || 10,
       },
     },
+    notifyOnNetworkStatusChange: true,
   });
   //   const [state, dispatch] = useImmerReducer(reducer, initialState);
   //   const { replace, query, pathname } = useRouter();
@@ -41,7 +55,13 @@ const useMembersTable = () => {
             display="flex"
             alignItems="center"
             height="100%"
-            sx={{ cursor: 'pointer' }}
+            sx={{
+              cursor: 'pointer',
+              '&:hover .title-container': {
+                transition: 'color 0.2s ease',
+                color: 'primary.main',
+              },
+            }}
             onClick={() => router.push(`/profile/${row.id}`)}
           >
             <ProfilePicture
@@ -55,6 +75,11 @@ const useMembersTable = () => {
               summary={`Batch of ${row.batch}`}
               id={row.id}
               alt={`${row.firstname || ''} ${row.lastname || ''}`}
+              titleComponentProps={{
+                titleContainerProps: {
+                  className: 'title-container',
+                },
+              }}
               // titleProps={{
               //   fontSize: '14px',
               //   lineHeight: '16.41px',
@@ -67,14 +92,14 @@ const useMembersTable = () => {
       {
         field: 'email',
         headerName: 'Email',
-        width: 150,
+        width: 200,
         ...commonTableColumnProps,
         sortable: true,
       },
       {
         field: 'batch',
         headerName: 'Batch',
-        width: 200,
+        width: 100,
         ...commonTableColumnProps,
         sortable: true,
       },
@@ -87,49 +112,112 @@ const useMembersTable = () => {
         sortable: true,
         renderCell: ({ row }: GridRowParams) => formatPhoneNumber(row.mobile),
       },
-
-      // {
-      //   field: 'phone',
-      //   headerName: 'Phone',
-      //   ...commonTableColumnProps,
-      //   sortable: true,
-      //   width: 200,
-      //   renderCell: (params: GridRowParams) => formatPhoneNumber(params?.row?.phone),
-      // },
-      // {
-      //   field: 'user_type',
-      //   headerName: 'User Type',
-      //   sortable: true,
-      //   ...commonTableColumnProps,
-      //   width: 150,
-      //   renderCell: (params: GridRowParams) => {
-      //     if (params.row.user_group === 'Master') {
-      //       return InvitedUserTypesWithValues.OWNER;
-      //     }
-      //     if (
-      //       params.row.user_type &&
-      //       InvitedUserTypesWithValues[params.row.user_type.toUpperCase() as InvitedUserTypes]
-      //     ) {
-      //       return InvitedUserTypesWithValues[params.row.user_type.toUpperCase() as InvitedUserTypes];
-      //     }
-      //     return params.row.metadata?.title;
-      //   },
-      // },
-
-      // {
-      //   field: 'actions',
-      //   type: 'actions',
-      //   headerName: '',
-      //   // headerClassName: 'users-data-grid-header',
-      //   align: 'right',
-      //   sortbale: false,
-      //   resizable: false,
-      //   width: 100,
-      //   minWidth: 100,
-      //   // flex: 1,
-      //   cellClassName: 'actions_cell',
-      //   getActions: (params: GridRowParams) => getActionsList(params.row),
-      // },
+      {
+        field: 'actions',
+        type: 'actions',
+        headerName: '',
+        // headerClassName: 'users-data-grid-header',
+        align: 'right',
+        sortbale: false,
+        resizable: false,
+        width: 250,
+        minWidth: 100,
+        // flex: 1,
+        cellClassName: 'actions_cell',
+        getActions: ({ row }: GridRowParams) =>
+          row?.isVerified
+            ? []
+            : [
+                <Box display="flex" key="buttons" gap={2}>
+                  {' '}
+                  <Button
+                    title="Approve"
+                    size="small"
+                    startIcon={<TaskAltIcon />}
+                    color="success"
+                    onClick={() => {
+                      showAlert(
+                        {
+                          visible: true,
+                          type: 'loading',
+                          message: '',
+                        },
+                        true,
+                        {
+                          open: true,
+                          action: 'approve',
+                          onOkay: () => {
+                            showAlert({
+                              visible: true,
+                              type: 'loading',
+                              message: 'Approval is in progress...',
+                            });
+                            handleUserVerification({
+                              variables: {
+                                user_id: row.id,
+                                verified: true,
+                              },
+                              onCompleted: () => {
+                                showAlert({
+                                  visible: true,
+                                  type: 'success',
+                                  message: `${row?.firstName || ''} ${row?.lastName || ''} is approved. `,
+                                });
+                                client.refetchQueries({
+                                  include: ['getUserList'],
+                                });
+                              },
+                            });
+                          },
+                        }
+                      );
+                    }}
+                  />
+                  <Button
+                    title="Reject"
+                    size="small"
+                    startIcon={<CloseIcon />}
+                    onClick={() => {
+                      showAlert(
+                        {
+                          visible: true,
+                          type: 'error',
+                          message: '',
+                        },
+                        true,
+                        {
+                          open: true,
+                          action: 'reject',
+                          onOkay: () => {
+                            showAlert({
+                              visible: true,
+                              type: 'loading',
+                              message: 'Rejection is in progress...',
+                            });
+                            handleUserVerification({
+                              variables: {
+                                user_id: row.id,
+                                verified: false,
+                              },
+                              onCompleted: () => {
+                                showAlert({
+                                  visible: true,
+                                  type: 'success',
+                                  message: `${row?.firstName || ''} ${row?.lastName || ''} is rejected. `,
+                                });
+                                client.refetchQueries({
+                                  include: ['getUserList'],
+                                });
+                              },
+                            });
+                          },
+                        }
+                      );
+                    }}
+                  />
+                </Box>,
+              ],
+      },
     ];
 
     setColumns(columns);
@@ -142,12 +230,25 @@ const useMembersTable = () => {
   //   );
   // }, [searchQuery]);
 
+  const onPageSizeChange = React.useCallback((size: number) => {
+    console.log('SIZEE', size);
+    setPageSize(size);
+    setPage(0);
+  }, []);
+
+  const onPageChange = React.useCallback((page: number) => {
+    setPage(page);
+  }, []);
+
   return {
-    rows: data?.getUserList || [],
+    rows: userListData?.getUserList?.data || [],
     loading,
-    // rows: usersListData,
     columns,
-    // rowCount: total,
+    rowCount: userListData?.getUserList?.total || 0,
+    page,
+    pageSize,
+    onPageChange,
+    onPageSizeChange,
     // onSearch,
     // state,
     // users,

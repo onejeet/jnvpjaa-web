@@ -4,7 +4,9 @@ import { WRAPPER_ID } from './AlertContext.constant';
 import CloseIcon from '@mui/icons-material/Close';
 import type { AlertContextProps, AlertProviderProps, ToastProps } from './AlertContext.types';
 import toast, { Toast, ToastBar, Toaster } from 'react-hot-toast';
-import { alpha, IconButton, Typography, useTheme } from '@mui/material';
+import { IconButton, useTheme } from '@mui/material';
+
+import AlertDialog, { AlertDialogProps } from '@/components/common/AlertDialog';
 
 const defaultProvider: AlertContextProps = {
   showAlert: () => {},
@@ -14,34 +16,46 @@ const defaultProvider: AlertContextProps = {
 const AlertContext = createContext(defaultProvider);
 
 const AlertProvider = ({ children }: AlertProviderProps) => {
+  const [dialogProps, setDialogProps] = React.useState<Partial<AlertDialogProps>>({});
   const theme = useTheme();
 
   // handler to trigger notification
-  const showAlert = React.useCallback((options: ToastProps) => {
-    const { type, message, ...other } = options;
-    toast.dismiss();
-    switch (options.type) {
-      case 'success':
-        return toast.success(message, { ...other });
+  const showAlert = React.useCallback(
+    (options: ToastProps, isDialog?: boolean, dialogProps?: Partial<AlertDialogProps>) => {
+      if (isDialog) {
+        setDialogProps({ open: true, ...(dialogProps || {}) });
+        return;
+      }
 
-      case 'error':
-        return toast.error(message, { ...other });
+      setDialogProps({});
 
-      case 'loading':
-        return toast.loading(message, { ...other });
+      const { type, message, ...other } = options;
+      toast.dismiss();
+      switch (options.type) {
+        case 'success':
+          return toast.success(message, { ...other });
 
-      case 'custom':
-        return toast.loading(message, { ...other });
+        case 'error':
+          return toast.error(message, { ...other });
 
-      default:
-        return toast.loading(message, { ...other });
-    }
-  }, []);
+        case 'loading':
+          return toast.loading(message, { ...other });
+
+        case 'custom':
+          return toast.loading(message, { ...other });
+
+        default:
+          return toast.loading(message, { ...other });
+      }
+    },
+    []
+  );
 
   // handler to hide notification
   const hideAlert = React.useCallback(() => {
     toast.dismiss();
   }, []);
+
   const getTextColor = React.useCallback((type: Toast['type']) => {
     switch (type) {
       case 'error':
@@ -77,7 +91,6 @@ const AlertProvider = ({ children }: AlertProviderProps) => {
             padding: '10px 20px',
             maxWidth: '60%',
           },
-
           // Default options for specific types
           // success: {
           //   duration: 5000,
@@ -105,6 +118,10 @@ const AlertProvider = ({ children }: AlertProviderProps) => {
           </ToastBar>
         )}
       </Toaster>
+      {dialogProps?.open && (
+        <AlertDialog open={dialogProps?.open} onCancel={() => setDialogProps({})} {...dialogProps} />
+      )}
+
       <Box id={WRAPPER_ID}>{children}</Box>
     </AlertContext.Provider>
   );
