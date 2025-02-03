@@ -1,12 +1,12 @@
-import { DataGrid } from '@mui/x-data-grid';
 import { useSearchParams } from 'next/navigation';
 import useMembersTable from '../hooks/useMembersTable';
 import React from 'react';
+import DataGrid from '@/components/core/DataGrid';
 
 const MmembersTable = () => {
   const searchParams = useSearchParams();
   const filters = Object.fromEntries(searchParams.entries());
-  const { rows, loading, columns, rowCount, page, pageSize, onPageChange, onPageSizeChange } = useMembersTable();
+  const { rows, loading, columns, rowCount, paginationModel, onPaginationModelChange } = useMembersTable();
 
   const handleEdit = (id: string) => {
     console.log('Edit user:', id);
@@ -19,10 +19,8 @@ const MmembersTable = () => {
   return (
     <DataGrid
       // height={tableHeight}
-      // @ts-expect-error ddsdd
       rows={rows || []}
       columns={columns}
-      // loading={loading}
       rowCount={rowCount}
       // initialState={{
       //   pagination: {
@@ -30,15 +28,11 @@ const MmembersTable = () => {
       //   },
       // }}
       pageSizeOptions={[10, 20, 50, 100]}
-      paginationModel={{
-        page,
-        pageSize,
-      }}
+      paginationModel={paginationModel}
       rowSelection={false}
       pagination
       paginationMode="server"
-      onPageChange={onPageChange}
-      onPageSizeChange={onPageSizeChange}
+      onPaginationModelChange={onPaginationModelChange}
       sx={{
         // '& .MuiDataGrid-pinnedColumnHeaders .MuiDataGrid-columnHeader:nth-child(2) svg': {
         //   display: 'none',

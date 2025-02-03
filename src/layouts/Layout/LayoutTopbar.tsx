@@ -95,9 +95,10 @@ const LayoutTopbar: React.FC = () => {
           <NextLink href="/">
             <Logo width={isMobile ? 260 : 300} height={isMobile ? 40 : 45} priority />
           </NextLink>
-          <Box display={{ xs: 'flex', lg: 'none' }} ml="auto">
+          <Box display={{ xs: 'flex', lg: 'none' }} ml="auto" alignItems="center" gap={1}>
+            {user?.id && <HeaderAddButton />}
             <IconButton
-              size="large"
+              // size="large"
               aria-label="account of current user"
               aria-controls="menu-appbar"
               aria-haspopup="true"
@@ -108,12 +109,12 @@ const LayoutTopbar: React.FC = () => {
             </IconButton>
           </Box>
 
-          <Box display={{ xs: 'none', lg: 'flex' }} ml="auto">
+          <Box display={{ xs: 'none', lg: 'flex' }} ml="auto" gap={0}>
             {HEADER_MENU.map((item: IHeaderMenuItem) => (
               <HeaderMenuItem key={item.label} item={item} />
             ))}
             {user?.id ? (
-              <>
+              <Box gap={1} display="flex">
                 <HeaderAddButton />
                 <ButtonDropdown
                   items={[
@@ -177,7 +178,7 @@ const LayoutTopbar: React.FC = () => {
                     sx={{ width: 36, height: 36, ml: 1 }}
                   />
                 </ButtonDropdown>
-              </>
+              </Box>
             ) : (
               <NextLink href="/signin" passHref style={{ textDecoration: 'none' }}>
                 <Button

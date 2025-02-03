@@ -6,6 +6,7 @@ import React from 'react';
 import Title from '../Title';
 import { ProfilePictureProps } from './ProfilePicture.types';
 import { getAvatarDataUrl } from '@/utils/helpers';
+import { Skeleton } from '@mui/material';
 
 const ProfilePicture: React.FC<ProfilePictureProps> = ({
   containerProps,
@@ -14,10 +15,12 @@ const ProfilePicture: React.FC<ProfilePictureProps> = ({
   contentContainerProps,
   titleComponentProps,
   summary,
+  size,
   loading,
   maxWidth,
   id,
   alt,
+  sx,
   ...restProps
 }) => {
   const { titleProps, summaryContainerProps, ...restTitleComponentProps } = titleComponentProps || {};
@@ -32,18 +35,28 @@ const ProfilePicture: React.FC<ProfilePictureProps> = ({
       {...containerProps}
     >
       <Box display="flex" {...avatarContainerProps}>
-        <Avatar
-          alt={alt || (typeof title === 'string' ? title : 'avatar')}
-          {...restProps}
-          src={restProps?.src || getAvatarDataUrl(id)}
-        >
-          {restProps?.src ? null : title}
-        </Avatar>
+        {loading ? (
+          <Skeleton variant="circular" width={size || 36} height={size || 36} />
+        ) : (
+          <Avatar
+            alt={alt || (typeof title === 'string' ? title : 'avatar')}
+            {...restProps}
+            sx={{
+              width: size || 36,
+              height: size || 36,
+              ...sx,
+            }}
+            src={restProps?.src || getAvatarDataUrl(id)}
+          >
+            {restProps?.src ? null : title}
+          </Avatar>
+        )}
       </Box>
       {title && (
         <Box display="flex" ml="10px" width="100%" flexDirection="column" {...contentContainerProps}>
           <Title
             title={title}
+            loading={loading}
             summary={summary}
             titleProps={{
               fontSize: '14px',

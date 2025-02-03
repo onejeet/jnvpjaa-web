@@ -40,7 +40,7 @@ const HeaderAddButton: React.FC = () => {
       <HoverPopover
         id="header-add-btn"
         render={
-          <IconButton>
+          <IconButton sx={{ width: 36, height: 36 }}>
             <AddCircleOutlineIcon sx={{ color: 'primary.main' }} />
           </IconButton>
         }

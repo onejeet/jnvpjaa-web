@@ -18,4 +18,5 @@ export interface IEvent {
 
 export interface EventCardProps {
   event: IEvent;
+  loading?: boolean;
 }

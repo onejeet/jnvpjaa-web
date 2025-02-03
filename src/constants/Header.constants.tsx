@@ -188,12 +188,12 @@ export const getHeaderMenu = (isLoggedIn?: boolean) => {
 export const ADD_ENTITIES: IHeaderMenuItem[] = [
   {
     label: 'Create Blog',
-    path: 'blog',
+    path: '/blogs/new',
     icon: <PostAddIcon />,
   },
   {
     label: 'Create Event',
-    path: 'event',
+    path: '/events/new',
     icon: <ExtensionIcon />,
   },
 ];

@@ -8,6 +8,7 @@ import { Event, useGetEventListQuery, useGetUserDetailsQuery } from '@/apollo/ho
 import { Grid2 as Grid, Typography } from '@mui/material';
 import EventCard from '@/components/common/EventCard/EventCard';
 import { IEvent } from '@/components/common/EventCard/EventCard.types';
+import EmptyView from '@/components/common/EmptyView';
 
 const eventsData: IEvent[] = [
   {
@@ -17,7 +18,7 @@ const eventsData: IEvent[] = [
     startDate: '2025-01-01',
     endDate: '2025-06-03',
     // image: 'https://placehold.co/600x200',
-    hostingMedium: 'Online',
+    medium: 'Online',
     online: true,
     people: [
       { name: 'John Doe', avatar: 'https://randomuser.me/api/portraits/men/1.jpg' },
@@ -33,7 +34,7 @@ const eventsData: IEvent[] = [
     startDate: '2025-07-10',
     endDate: '2025-07-12',
     image: 'https://placehold.co/600x200/ff8a00/ffffff',
-    hostingMedium: 'Offline',
+    medium: 'Offline',
     online: false,
     people: [
       { name: 'Peter Brown', avatar: 'https://randomuser.me/api/portraits/men/3.jpg' },
@@ -48,7 +49,7 @@ const eventsData: IEvent[] = [
     startDate: '2025-08-15',
     endDate: '2025-08-18',
     image: 'https://placehold.co/600x200/0057e7/ffffff',
-    hostingMedium: 'Online',
+    medium: 'Online',
     online: true,
     people: [
       { name: 'Elena Roberts', avatar: 'https://randomuser.me/api/portraits/women/4.jpg' },
@@ -65,7 +66,7 @@ const eventsData: IEvent[] = [
     startDate: '2025-09-01',
     endDate: '2025-09-10',
     image: 'https://placehold.co/600x200/8e44ad/ffffff',
-    hostingMedium: 'Offline',
+    medium: 'Offline',
     online: false,
     people: [
       { name: 'Michael Thomas', avatar: 'https://randomuser.me/api/portraits/men/7.jpg' },
@@ -79,7 +80,7 @@ const eventsData: IEvent[] = [
     startDate: '2025-10-20',
     endDate: '2025-10-22',
     image: 'https://placehold.co/600x200/1e90ff/ffffff',
-    hostingMedium: 'Online',
+    medium: 'Online',
     online: true,
     people: [
       { name: 'Isaac Watson', avatar: 'https://randomuser.me/api/portraits/men/8.jpg' },
@@ -94,7 +95,7 @@ const eventsData: IEvent[] = [
     startDate: '2025-11-05',
     endDate: '2025-11-07',
     image: 'https://placehold.co/600x200/9b59b6/ffffff',
-    hostingMedium: 'Offline',
+    medium: 'Offline',
     online: false,
     people: [
       { name: 'Lucas Green', avatar: 'https://randomuser.me/api/portraits/men/10.jpg' },
@@ -108,7 +109,7 @@ const eventsData: IEvent[] = [
     startDate: '2025-12-01',
     endDate: '2025-12-03',
     image: 'https://placehold.co/600x200/2ecc71/ffffff',
-    hostingMedium: 'Online',
+    medium: 'Online',
     online: true,
     people: [
       { name: 'Grace Lee', avatar: 'https://randomuser.me/api/portraits/women/10.jpg' },
@@ -122,7 +123,7 @@ const eventsData: IEvent[] = [
     startDate: '2026-01-10',
     endDate: '2026-01-12',
     image: 'https://placehold.co/600x200/16a085/ffffff',
-    hostingMedium: 'Offline',
+    medium: 'Offline',
     online: false,
     people: [
       { name: 'Joshua Adams', avatar: 'https://randomuser.me/api/portraits/men/12.jpg' },
@@ -137,7 +138,7 @@ const eventsData: IEvent[] = [
     startDate: '2026-02-05',
     endDate: '2026-02-07',
     image: 'https://placehold.co/600x200/f39c12/ffffff',
-    hostingMedium: 'Online',
+    medium: 'Online',
     online: true,
     people: [
       { name: 'Chloe Harris', avatar: 'https://randomuser.me/api/portraits/women/12.jpg' },
@@ -147,12 +148,14 @@ const eventsData: IEvent[] = [
 ];
 
 export default function Events() {
-  const router = useRouter();
-  const { id } = router.query;
   const { data: eventData, loading } = useGetEventListQuery();
-  const { user } = useAuth();
 
-  console.log('EVEEE', eventData);
+  const listData = React.useMemo(() => {
+    if (loading) {
+      return new Array(6).fill({ id: '', title: '', description: '', startDate: '', medium: 'Online', online: false });
+    }
+    return eventData?.getEventList?.data || [];
+  }, [loading, eventData]);
 
   return (
     <LayoutModule
@@ -167,11 +170,15 @@ export default function Events() {
         List of all the upcoming events.
       </Typography>
       <Grid container spacing={3}>
-        {(eventData?.getEventList?.data || [])?.map((ev: any) => (
-          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={`events-${ev.title}`}>
-            <EventCard event={ev} />
-          </Grid>
-        ))}
+        {listData?.length > 0 ? (
+          listData?.map((ev: any, index) => (
+            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={`events-${ev.title}-${index}`}>
+              <EventCard event={ev} loading={!ev.id} />
+            </Grid>
+          ))
+        ) : (
+          <EmptyView />
+        )}
       </Grid>
     </LayoutModule>
   );

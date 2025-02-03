@@ -13,4 +13,5 @@ export interface TitleProps {
   summary?: string | React.ReactNode;
   summaryProps?: TypographyProps;
   summaryContainerProps?: BoxProps;
+  loading?: boolean;
 }

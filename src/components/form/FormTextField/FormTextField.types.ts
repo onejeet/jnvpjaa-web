@@ -4,6 +4,6 @@ import { Control, FieldValues, InputValidationRules, RegisterOptions } from 'rea
 export interface FormTextFieldProps extends TextFieldProps {
   name: string;
   control: Control<any, any>;
-  rules: RegisterOptions<any>; // Validation rules for react-hook-form
+  rules?: RegisterOptions<any>; // Validation rules for react-hook-form
   defaultValue?: string;
 }
