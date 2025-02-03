@@ -11,7 +11,7 @@ export interface IEvent {
   startDate: string;
   endDate?: string;
   image?: string;
-  hostingMedium: 'Online' | 'Offline';
+  medium: 'Online' | 'Offline';
   online: boolean;
   people: IPerson[];
 }

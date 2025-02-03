@@ -9,6 +9,6 @@ export interface DropdownMenuProps {
   icon?: React.ReactNode;
   menuProps?: Partial<MenuProps>;
   value?: string | number;
-  onChange?: (value: string | number) => void;
+  onChange?: (value?: string | number) => void;
   children?: React.ReactNode;
 }

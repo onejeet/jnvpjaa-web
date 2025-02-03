@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import LayoutModule from '@/layouts/Layout';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/router';
-import { useGetUserDetailsQuery } from '@/apollo/hooks';
+import { Event, useGetEventListQuery, useGetUserDetailsQuery } from '@/apollo/hooks';
 import { Grid2 as Grid, Typography } from '@mui/material';
 import EventCard from '@/components/common/EventCard/EventCard';
 import { IEvent } from '@/components/common/EventCard/EventCard.types';
@@ -149,17 +149,10 @@ const eventsData: IEvent[] = [
 export default function Events() {
   const router = useRouter();
   const { id } = router.query;
-  const { data: userData, loading } = useGetUserDetailsQuery({
-    skip: !id,
-    variables: {
-      id: id as string,
-    },
-  });
+  const { data: eventData, loading } = useGetEventListQuery();
   const { user } = useAuth();
 
-  const userInfo = React.useMemo(() => {
-    return id ? userData?.getUserDetails : user;
-  }, [id, user, userData]);
+  console.log('EVEEE', eventData);
 
   return (
     <LayoutModule
@@ -174,7 +167,7 @@ export default function Events() {
         List of all the upcoming events.
       </Typography>
       <Grid container spacing={3}>
-        {eventsData?.map((ev: IEvent) => (
+        {(eventData?.getEventList?.data || [])?.map((ev: any) => (
           <Grid size={{ xs: 12, sm: 6, md: 4 }} key={`events-${ev.title}`}>
             <EventCard event={ev} />
           </Grid>

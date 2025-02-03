@@ -1,4 +1,6 @@
 import { IHeaderMenuItem } from 'src/layouts/Layout/LayoutTopbar';
+import PostAddIcon from '@mui/icons-material/PostAdd';
+import ExtensionIcon from '@mui/icons-material/Extension';
 
 export const HEADER_MENU: IHeaderMenuItem[] = [
   {
@@ -182,3 +184,16 @@ export const getHeaderMenu = (isLoggedIn?: boolean) => {
   }
   return HEADER_MENU;
 };
+
+export const ADD_ENTITIES: IHeaderMenuItem[] = [
+  {
+    label: 'Create Blog',
+    path: 'blog',
+    icon: <PostAddIcon />,
+  },
+  {
+    label: 'Create Event',
+    path: 'event',
+    icon: <ExtensionIcon />,
+  },
+];

@@ -1,6 +1,6 @@
 'use client';
 
-import { getHeaderMenu } from '@/constants/Header.constants';
+import { ADD_ENTITIES, getHeaderMenu } from '@/constants/Header.constants';
 import CloseIcon from '@mui/icons-material/Close';
 import MenuIcon from '@mui/icons-material/Menu';
 import type { Theme } from '@mui/material';
@@ -12,13 +12,16 @@ import {
   Container,
   Drawer,
   IconButton,
+  MenuItem,
   Toolbar,
+  Tooltip,
+  Typography,
   useMediaQuery,
   useTheme,
 } from '@mui/material';
 import NextLink from 'next/link';
 import React from 'react';
-
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import Logo from '@/components/common/Logo';
 
 import HeaderMenuItem from './HeaderMenuItem';
@@ -28,6 +31,8 @@ import { useAuth } from '@/context/AuthContext';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Router, useRouter } from 'next/router';
+import HoverPopover from '@/components/common/HoverPopover';
+import HeaderAddButton from './HeaderAddButton';
 
 export interface IMenuItemProps {
   item: IHeaderMenuItem;
@@ -40,6 +45,7 @@ export interface IHeaderMenuItem {
   label: string;
   path: string;
   menu?: IHeaderMenuItem[];
+  icon?: React.ReactNode;
 }
 
 const LayoutTopbar: React.FC = () => {
@@ -107,46 +113,71 @@ const LayoutTopbar: React.FC = () => {
               <HeaderMenuItem key={item.label} item={item} />
             ))}
             {user?.id ? (
-              <ButtonDropdown
-                items={[
-                  {
-                    label: 'My Profile',
-                    value: '/profile',
-                    icon: <AssignmentIndIcon sx={{ fontSize: '16px' }} />,
-                  },
-                  {
-                    label: 'Log Out',
-                    icon: <LogoutIcon sx={{ fontSize: '16px', color: 'error.main' }} />,
-                    sx: {
-                      color: 'error.main',
+              <>
+                <HeaderAddButton />
+                <ButtonDropdown
+                  items={[
+                    {
+                      label: (
+                        <Typography
+                          color="text.primary"
+                          textAlign="left"
+                          variant="body1"
+                          fontWeight={500}
+                          sx={{
+                            pr: 4,
+                            background: 'linear-gradient(90deg,#217bfe 0,#078efb 20%,#C62835 100%)',
+                            backgroundClip: 'text',
+                            color: 'transparent',
+                          }}
+                        >
+                          {`Hello ${user?.firstName}`},
+                        </Typography>
+                      ),
+                      disabled: true,
+                      sx: {
+                        opacity: '1 !important',
+                      },
                     },
-                    onClick: () => handleLogout(),
-                  },
-                ]}
-                onChange={(path: string | number) => {
-                  if (path) {
-                    router.push(path?.toString());
-                  }
-                }}
-                menuProps={{
-                  anchorOrigin: {
-                    vertical: 'bottom',
-                    horizontal: 'right',
-                  },
-                  transformOrigin: {
-                    vertical: 'top',
-                    horizontal: 'right',
-                  },
-                }}
-              >
-                <ProfilePicture
-                  title={user?.firstName}
-                  id={user.id}
-                  summary="Member"
-                  maxWidth={150}
-                  sx={{ width: 36, height: 36, ml: 1 }}
-                />
-              </ButtonDropdown>
+                    {
+                      label: 'My Profile',
+                      value: '/profile',
+                      icon: <AssignmentIndIcon sx={{ fontSize: '16px' }} />,
+                    },
+                    {
+                      label: 'Log Out',
+                      icon: <LogoutIcon sx={{ fontSize: '16px', color: 'error.main' }} />,
+                      sx: {
+                        color: 'error.main',
+                      },
+                      onClick: () => handleLogout(),
+                    },
+                  ]}
+                  onChange={(path: string | number) => {
+                    if (path) {
+                      router.push(path?.toString());
+                    }
+                  }}
+                  menuProps={{
+                    anchorOrigin: {
+                      vertical: 'bottom',
+                      horizontal: 'right',
+                    },
+                    transformOrigin: {
+                      vertical: 'top',
+                      horizontal: 'right',
+                    },
+                  }}
+                >
+                  <ProfilePicture
+                    title={user?.firstName}
+                    id={user.id}
+                    summary="Member"
+                    maxWidth={150}
+                    sx={{ width: 36, height: 36, ml: 1 }}
+                  />
+                </ButtonDropdown>
+              </>
             ) : (
               <NextLink href="/signin" passHref style={{ textDecoration: 'none' }}>
                 <Button

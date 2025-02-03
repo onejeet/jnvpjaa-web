@@ -32,17 +32,17 @@ export type Event = {
   createdAt: Scalars['DateTime']['output'];
   description?: Maybe<Scalars['String']['output']>;
   endDate?: Maybe<Scalars['DateTime']['output']>;
-  hosting: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   image?: Maybe<Scalars['String']['output']>;
   location?: Maybe<Scalars['String']['output']>;
-  name: Scalars['String']['output'];
-  organizerId?: Maybe<Scalars['String']['output']>;
+  medium: Scalars['String']['output'];
+  organizers?: Maybe<Array<Maybe<User>>>;
   price?: Maybe<Scalars['Float']['output']>;
   startDate: Scalars['DateTime']['output'];
   status?: Maybe<Scalars['String']['output']>;
   tags?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   ticketUrl?: Maybe<Scalars['String']['output']>;
+  title: Scalars['String']['output'];
   /** Timestamp when the record was last updated */
   updatedAt: Scalars['DateTime']['output'];
 };
@@ -52,14 +52,20 @@ export type FilterInput = {
   verified?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
+export type ListEventResponse = {
+  __typename?: 'ListEventResponse';
+  data?: Maybe<Array<Maybe<Event>>>;
+  total?: Maybe<Scalars['Int']['output']>;
+};
+
 export type ListInput = {
   filter?: InputMaybe<FilterInput>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
-export type ListResponse = {
-  __typename?: 'ListResponse';
+export type ListUserResponse = {
+  __typename?: 'ListUserResponse';
   data?: Maybe<Array<Maybe<User>>>;
   total?: Maybe<Scalars['Int']['output']>;
 };
@@ -127,8 +133,18 @@ export type MutationVerifyUserArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  getEventDetails?: Maybe<Event>;
+  getEventList?: Maybe<ListEventResponse>;
   getUserDetails?: Maybe<User>;
-  getUserList?: Maybe<ListResponse>;
+  getUserList?: Maybe<ListUserResponse>;
+};
+
+export type QueryGetEventDetailsArgs = {
+  id: Scalars['Int']['input'];
+};
+
+export type QueryGetEventListArgs = {
+  options?: InputMaybe<ListInput>;
 };
 
 export type QueryGetUserDetailsArgs = {
@@ -386,6 +402,187 @@ export type VerifyUserMutationVariables = Exact<{
 
 export type VerifyUserMutation = { __typename?: 'Mutation'; verifyUser?: boolean | undefined };
 
+export type GetEventDetailsQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+export type GetEventDetailsQuery = {
+  __typename?: 'Query';
+  getEventDetails?:
+    | {
+        __typename?: 'Event';
+        category?: string | undefined;
+        createdAt: any;
+        description?: string | undefined;
+        endDate?: any | undefined;
+        id: string;
+        image?: string | undefined;
+        location?: string | undefined;
+        medium: string;
+        price?: number | undefined;
+        startDate: any;
+        status?: string | undefined;
+        tags?: Array<string | undefined> | undefined;
+        ticketUrl?: string | undefined;
+        title: string;
+        updatedAt: any;
+        attendees?:
+          | Array<
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: string | undefined;
+                  email?: string | undefined;
+                  emergency_mobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  id?: string | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  updatedAt: any;
+                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+        organizers?:
+          | Array<
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: string | undefined;
+                  email?: string | undefined;
+                  emergency_mobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  id?: string | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  updatedAt: any;
+                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+      }
+    | undefined;
+};
+
+export type GetEventListQueryVariables = Exact<{
+  options?: InputMaybe<ListInput>;
+}>;
+
+export type GetEventListQuery = {
+  __typename?: 'Query';
+  getEventList?:
+    | {
+        __typename?: 'ListEventResponse';
+        total?: number | undefined;
+        data?:
+          | Array<
+              | {
+                  __typename?: 'Event';
+                  category?: string | undefined;
+                  createdAt: any;
+                  description?: string | undefined;
+                  endDate?: any | undefined;
+                  id: string;
+                  image?: string | undefined;
+                  location?: string | undefined;
+                  medium: string;
+                  price?: number | undefined;
+                  startDate: any;
+                  status?: string | undefined;
+                  tags?: Array<string | undefined> | undefined;
+                  ticketUrl?: string | undefined;
+                  title: string;
+                  updatedAt: any;
+                  attendees?:
+                    | Array<
+                        | {
+                            __typename?: 'User';
+                            aboutMe?: string | undefined;
+                            batch?: number | undefined;
+                            createdAt: any;
+                            disabled?: boolean | undefined;
+                            displayName?: string | undefined;
+                            dob?: string | undefined;
+                            email?: string | undefined;
+                            emergency_mobile?: string | undefined;
+                            firstName?: string | undefined;
+                            gender?: string | undefined;
+                            google_auth_id?: string | undefined;
+                            id?: string | undefined;
+                            isVerified?: boolean | undefined;
+                            lastName?: string | undefined;
+                            membershipYear?: number | undefined;
+                            mobile?: string | undefined;
+                            nickName?: string | undefined;
+                            profileImage?: string | undefined;
+                            updatedAt: any;
+                            role?:
+                              | { __typename?: 'Role'; id?: string | undefined; name?: string | undefined }
+                              | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  organizers?:
+                    | Array<
+                        | {
+                            __typename?: 'User';
+                            aboutMe?: string | undefined;
+                            batch?: number | undefined;
+                            createdAt: any;
+                            disabled?: boolean | undefined;
+                            displayName?: string | undefined;
+                            dob?: string | undefined;
+                            email?: string | undefined;
+                            emergency_mobile?: string | undefined;
+                            firstName?: string | undefined;
+                            gender?: string | undefined;
+                            google_auth_id?: string | undefined;
+                            id?: string | undefined;
+                            isVerified?: boolean | undefined;
+                            lastName?: string | undefined;
+                            membershipYear?: number | undefined;
+                            mobile?: string | undefined;
+                            nickName?: string | undefined;
+                            profileImage?: string | undefined;
+                            updatedAt: any;
+                            role?:
+                              | { __typename?: 'Role'; id?: string | undefined; name?: string | undefined }
+                              | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+      }
+    | undefined;
+};
+
 export type GetUserDetailsQueryVariables = Exact<{
   id?: InputMaybe<Scalars['String']['input']>;
 }>;
@@ -427,7 +624,7 @@ export type GetUserListQuery = {
   __typename?: 'Query';
   getUserList?:
     | {
-        __typename?: 'ListResponse';
+        __typename?: 'ListUserResponse';
         total?: number | undefined;
         data?:
           | Array<
@@ -945,6 +1142,230 @@ export function useVerifyUserMutation(
 export type VerifyUserMutationHookResult = ReturnType<typeof useVerifyUserMutation>;
 export type VerifyUserMutationResult = Apollo.MutationResult<VerifyUserMutation>;
 export type VerifyUserMutationOptions = Apollo.BaseMutationOptions<VerifyUserMutation, VerifyUserMutationVariables>;
+export const GetEventDetailsDocument = gql`
+  query getEventDetails($id: Int!) {
+    getEventDetails(id: $id) {
+      attendees {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergency_mobile
+        firstName
+        gender
+        google_auth_id
+        id
+        isVerified
+        lastName
+        membershipYear
+        mobile
+        nickName
+        profileImage
+        role {
+          id
+          name
+        }
+        updatedAt
+      }
+      category
+      createdAt
+      description
+      endDate
+      id
+      image
+      location
+      medium
+      organizers {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergency_mobile
+        firstName
+        gender
+        google_auth_id
+        id
+        isVerified
+        lastName
+        membershipYear
+        mobile
+        nickName
+        profileImage
+        role {
+          id
+          name
+        }
+        updatedAt
+      }
+      price
+      startDate
+      status
+      tags
+      ticketUrl
+      title
+      updatedAt
+    }
+  }
+`;
+
+/**
+ * __useGetEventDetailsQuery__
+ *
+ * To run a query within a React component, call `useGetEventDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEventDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEventDetailsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetEventDetailsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetEventDetailsQuery, GetEventDetailsQueryVariables> &
+    ({ variables: GetEventDetailsQueryVariables; skip?: boolean } | { skip: boolean })
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetEventDetailsQuery, GetEventDetailsQueryVariables>(GetEventDetailsDocument, options);
+}
+export function useGetEventDetailsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetEventDetailsQuery, GetEventDetailsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetEventDetailsQuery, GetEventDetailsQueryVariables>(GetEventDetailsDocument, options);
+}
+export function useGetEventDetailsSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetEventDetailsQuery, GetEventDetailsQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetEventDetailsQuery, GetEventDetailsQueryVariables>(GetEventDetailsDocument, options);
+}
+export type GetEventDetailsQueryHookResult = ReturnType<typeof useGetEventDetailsQuery>;
+export type GetEventDetailsLazyQueryHookResult = ReturnType<typeof useGetEventDetailsLazyQuery>;
+export type GetEventDetailsSuspenseQueryHookResult = ReturnType<typeof useGetEventDetailsSuspenseQuery>;
+export type GetEventDetailsQueryResult = Apollo.QueryResult<GetEventDetailsQuery, GetEventDetailsQueryVariables>;
+export const GetEventListDocument = gql`
+  query getEventList($options: ListInput) {
+    getEventList(options: $options) {
+      data {
+        attendees {
+          aboutMe
+          batch
+          createdAt
+          disabled
+          displayName
+          dob
+          email
+          emergency_mobile
+          firstName
+          gender
+          google_auth_id
+          id
+          isVerified
+          lastName
+          membershipYear
+          mobile
+          nickName
+          profileImage
+          role {
+            id
+            name
+          }
+          updatedAt
+        }
+        category
+        createdAt
+        description
+        endDate
+        id
+        image
+        location
+        medium
+        organizers {
+          aboutMe
+          batch
+          createdAt
+          disabled
+          displayName
+          dob
+          email
+          emergency_mobile
+          firstName
+          gender
+          google_auth_id
+          id
+          isVerified
+          lastName
+          membershipYear
+          mobile
+          nickName
+          profileImage
+          role {
+            id
+            name
+          }
+          updatedAt
+        }
+        price
+        startDate
+        status
+        tags
+        ticketUrl
+        title
+        updatedAt
+      }
+      total
+    }
+  }
+`;
+
+/**
+ * __useGetEventListQuery__
+ *
+ * To run a query within a React component, call `useGetEventListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEventListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEventListQuery({
+ *   variables: {
+ *      options: // value for 'options'
+ *   },
+ * });
+ */
+export function useGetEventListQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetEventListQuery, GetEventListQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetEventListQuery, GetEventListQueryVariables>(GetEventListDocument, options);
+}
+export function useGetEventListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetEventListQuery, GetEventListQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetEventListQuery, GetEventListQueryVariables>(GetEventListDocument, options);
+}
+export function useGetEventListSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetEventListQuery, GetEventListQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetEventListQuery, GetEventListQueryVariables>(GetEventListDocument, options);
+}
+export type GetEventListQueryHookResult = ReturnType<typeof useGetEventListQuery>;
+export type GetEventListLazyQueryHookResult = ReturnType<typeof useGetEventListLazyQuery>;
+export type GetEventListSuspenseQueryHookResult = ReturnType<typeof useGetEventListSuspenseQuery>;
+export type GetEventListQueryResult = Apollo.QueryResult<GetEventListQuery, GetEventListQueryVariables>;
 export const GetUserDetailsDocument = gql`
   query getUserDetails($id: String) {
     getUserDetails(id: $id) {
