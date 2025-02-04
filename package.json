@@ -47,6 +47,7 @@
     "@tiptap/extension-youtube": "^2.11.5",
     "@tiptap/react": "^2.11.5",
     "@tiptap/starter-kit": "^2.11.5",
+    "@tiptap/suggestion": "^2.11.5",
     "axios": "^1.7.9",
     "dayjs": "^1.11.13",
     "embla-carousel-auto-scroll": "^8.2.1",

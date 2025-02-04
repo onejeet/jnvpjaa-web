@@ -1,6 +1,7 @@
 export interface INewEventFormInput {
   title: string;
-  description: string;
+  summary: string;
+  description?: string;
   startDate: string;
   endDate?: string;
   medium: string;

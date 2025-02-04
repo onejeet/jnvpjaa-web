@@ -16,17 +16,18 @@ import {
 import { EventCardProps } from './EventCard.types';
 import Button from '@/components/core/Button';
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
-import { startCase } from '@/utils/helpers';
+import { startCase, valueToLabelFormatter } from '@/utils/helpers';
+import { CalendarDots, Minus } from '@phosphor-icons/react';
 
 const EventCard: React.FC<EventCardProps> = ({ event, loading }) => {
-  const { id, title = '', description = '', startDate, endDate, image, medium = '', online, people } = event;
+  const { id, title = '', summary = '', startDate, endDate, image, medium = '', online, category, people } = event;
 
   const formattedStartDate = React.useMemo(() => {
-    return dayjs(startDate)?.format('MMM DD, YYYY');
+    return dayjs(startDate)?.format('MMM DD, YYYY HH:MM A');
   }, [startDate]);
 
   const formattedEndDate = React.useMemo(() => {
-    return endDate ? dayjs(endDate)?.format('MMM DD, YYYY') : null;
+    return endDate ? dayjs(endDate)?.format('MMM DD, YYYY HH:MM A') : null;
   }, [endDate]);
 
   const isLive = React.useMemo(() => {
@@ -34,7 +35,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, loading }) => {
   }, [startDate, endDate]);
 
   return (
-    <Card sx={{ boxShadow: 3, borderRadius: 2 }}>
+    <Card sx={{ boxShadow: 3, borderRadius: 2, position: 'relative' }}>
       {loading ? (
         <Skeleton variant="rounded" width="100%" height={180} />
       ) : (
@@ -47,7 +48,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, loading }) => {
         />
       )}
 
-      <CardContent>
+      <CardContent sx={{ mt: 0.5 }}>
         {loading ? (
           <Skeleton width="80%" height={34} />
         ) : (
@@ -71,9 +72,22 @@ const EventCard: React.FC<EventCardProps> = ({ event, loading }) => {
             <Skeleton width="60%" height={20} />
           </>
         ) : (
-          <Typography variant="body2" color="text.secondary" mt={1}>
-            {description}
-          </Typography>
+          <>
+            <Typography variant="body2" color="text.secondary" mt={1}>
+              {summary}
+            </Typography>
+            {category && (
+              <Box sx={{ display: 'flex', my: 1 }}>
+                <Chip size="small" color={'grey'} label={valueToLabelFormatter(category)} />
+                <Chip
+                  size="small"
+                  label={startCase(medium)}
+                  color={online ? 'success' : 'info'}
+                  sx={{ fontWeight: 500, ml: 'auto' }}
+                />
+              </Box>
+            )}
+          </>
         )}
 
         <Box mt={2} display="flex" justifyContent="space-between" alignItems="center">
@@ -82,10 +96,11 @@ const EventCard: React.FC<EventCardProps> = ({ event, loading }) => {
           ) : (
             <>
               {' '}
-              <Typography variant="body1" fontWeight={500} color="text.secondary">
-                {formattedStartDate} - {formattedEndDate || 'Ongoing'}
+              <Typography display="flex" alignItems="center" variant="body2" fontWeight={500} color="text.secondary">
+                <CalendarDots size={18} style={{ marginRight: '8px' }} />
+                {formattedStartDate} <Minus size={18} style={{ marginRight: '4px', marginLeft: '4px' }} />{' '}
+                {formattedEndDate || 'Ongoing'}
               </Typography>
-              <Chip label={startCase(medium)} color={online ? 'success' : 'info'} sx={{ fontWeight: 500 }} />
             </>
           )}
         </Box>

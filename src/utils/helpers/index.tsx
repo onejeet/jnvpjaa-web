@@ -116,3 +116,11 @@ export function isURL(str: string | null) {
   const urlRegex = /(?:https?:\/\/|www\d{0,3}[.]|[a-z0-9.-]+\.[a-z]{2,4}\/)(?:[^\s()<>{}[\]]+|\([^\s()]*\))+/gi;
   return urlRegex.test(str);
 }
+
+export function valueToLabelFormatter(str: string) {
+  if (!str) return '';
+  return str
+    .split('_') // Split by underscore
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize the first letter
+    .join(' '); // Join the words back together
+}

@@ -26,25 +26,26 @@ const ButtonDropdown: React.FC<DropdownMenuProps> = ({
 
   return (
     <div>
-      {children ? (
-        <Box component="div" onClick={handleClick}>
-          {children}
-        </Box>
-      ) : (
-        <Button
-          title={value ? items.find((item) => item.value === value)?.label : buttonTitle ? buttonTitle : 'Menu'}
-          endIcon={<KeyboardArrowDownIcon sx={{ fontSize: '14px !important' }} />}
-          {...restButtonProps}
-          id="dropdown-button"
-          aria-controls={open ? 'dropdown-menu' : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? 'true' : undefined}
-          onClick={handleClick}
-        />
-      )}
-
       <Menu
         {...menuProps}
+        render={
+          children ? (
+            <Box component="div" onClick={handleClick}>
+              {children}
+            </Box>
+          ) : (
+            <Button
+              title={value ? items.find((item) => item.value === value)?.label : buttonTitle ? buttonTitle : 'Menu'}
+              endIcon={<KeyboardArrowDownIcon sx={{ fontSize: '14px !important' }} />}
+              {...restButtonProps}
+              id="dropdown-button"
+              aria-controls={open ? 'dropdown-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? 'true' : undefined}
+              onClick={handleClick}
+            />
+          )
+        }
         items={items}
         anchorEl={anchorEl}
         open={open}

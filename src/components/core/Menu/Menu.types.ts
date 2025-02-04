@@ -10,6 +10,7 @@ export interface MenuItemProps extends Omit<MuiMenuItemProps, 'onChange' | 'valu
   value?: string | number;
   onMenuClose?: (event: object, reason: 'backdropClick' | 'escapeKeyDown') => void;
   onChange?: (value?: string | number) => void;
+  render: React.ReactNode;
 }
 
 export interface MenuProps extends Omit<MuiMenuProps, 'onChange'> {

@@ -1,6 +1,4 @@
-/* REACT */
 import React from 'react';
-/* MUI */
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -13,9 +11,7 @@ import { CaretRight } from '@phosphor-icons/react';
 import { bindMenu, bindTrigger, usePopupState } from 'material-ui-popup-state/hooks';
 import HoverPopover from '@/components/common/HoverPopover';
 import Button from '@/components/core/Button';
-
-/* TYPES */
-import type { MenuProps } from './MenuProps.types';
+import { MenuProps } from './Menu.types';
 
 const Menu: React.FC<MenuProps> = ({ id, items, value, render, disabled, children, onChange, ...restProps }) => {
   const popupState = usePopupState({ variant: 'popover', popupId: id || 'hoverPopover' });

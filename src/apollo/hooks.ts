@@ -41,6 +41,7 @@ export type Event = {
   price?: Maybe<Scalars['Float']['output']>;
   startDate: Scalars['DateTime']['output'];
   status?: Maybe<Scalars['String']['output']>;
+  summary: Scalars['String']['output'];
   tags?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   ticketUrl?: Maybe<Scalars['String']['output']>;
   title: Scalars['String']['output'];
@@ -87,12 +88,13 @@ export type Mutation = {
 
 export type MutationCreateEventArgs = {
   category: Scalars['String']['input'];
-  description: Scalars['String']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
   endDate?: InputMaybe<Scalars['String']['input']>;
   isPublish?: InputMaybe<Scalars['Boolean']['input']>;
   medium: Scalars['String']['input'];
   price?: InputMaybe<Scalars['String']['input']>;
   startDate: Scalars['String']['input'];
+  summary: Scalars['String']['input'];
   tags?: InputMaybe<Scalars['String']['input']>;
   title: Scalars['String']['input'];
 };
@@ -203,12 +205,13 @@ export type User = {
 
 export type CreateEventMutationVariables = Exact<{
   category: Scalars['String']['input'];
-  description: Scalars['String']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
   endDate?: InputMaybe<Scalars['String']['input']>;
   isPublish?: InputMaybe<Scalars['Boolean']['input']>;
   medium: Scalars['String']['input'];
   price?: InputMaybe<Scalars['String']['input']>;
   startDate: Scalars['String']['input'];
+  summary: Scalars['String']['input'];
   tags?: InputMaybe<Scalars['String']['input']>;
   title: Scalars['String']['input'];
 }>;
@@ -230,6 +233,7 @@ export type CreateEventMutation = {
         price?: number | undefined;
         startDate: any;
         status?: string | undefined;
+        summary: string;
         tags?: Array<string | undefined> | undefined;
         ticketUrl?: string | undefined;
         title: string;
@@ -530,6 +534,7 @@ export type GetEventDetailsQuery = {
         price?: number | undefined;
         startDate: any;
         status?: string | undefined;
+        summary: string;
         tags?: Array<string | undefined> | undefined;
         ticketUrl?: string | undefined;
         title: string;
@@ -620,6 +625,7 @@ export type GetEventListQuery = {
                   price?: number | undefined;
                   startDate: any;
                   status?: string | undefined;
+                  summary: string;
                   tags?: Array<string | undefined> | undefined;
                   ticketUrl?: string | undefined;
                   title: string;
@@ -770,12 +776,13 @@ export type GetUserListQuery = {
 export const CreateEventDocument = gql`
   mutation createEvent(
     $category: String!
-    $description: String!
+    $description: String
     $endDate: String
     $isPublish: Boolean
     $medium: String!
     $price: String
     $startDate: String!
+    $summary: String!
     $tags: String
     $title: String!
   ) {
@@ -787,6 +794,7 @@ export const CreateEventDocument = gql`
       medium: $medium
       price: $price
       startDate: $startDate
+      summary: $summary
       tags: $tags
       title: $title
     ) {
@@ -852,6 +860,7 @@ export const CreateEventDocument = gql`
       price
       startDate
       status
+      summary
       tags
       ticketUrl
       title
@@ -881,6 +890,7 @@ export type CreateEventMutationFn = Apollo.MutationFunction<CreateEventMutation,
  *      medium: // value for 'medium'
  *      price: // value for 'price'
  *      startDate: // value for 'startDate'
+ *      summary: // value for 'summary'
  *      tags: // value for 'tags'
  *      title: // value for 'title'
  *   },
@@ -1444,6 +1454,7 @@ export const GetEventDetailsDocument = gql`
       price
       startDate
       status
+      summary
       tags
       ticketUrl
       title
@@ -1557,6 +1568,7 @@ export const GetEventListDocument = gql`
         price
         startDate
         status
+        summary
         tags
         ticketUrl
         title

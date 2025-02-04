@@ -7,7 +7,9 @@ export interface IPerson {
 export interface IEvent {
   id: string | number;
   title: string;
-  description: string;
+  summary: string;
+  description?: string;
+  category: string;
   startDate: string;
   endDate?: string;
   image?: string;
