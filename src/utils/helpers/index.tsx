@@ -111,4 +111,8 @@ export const debounce = (
   };
 };
 
-export default debounce;
+export function isURL(str: string | null) {
+  if (!str) return false;
+  const urlRegex = /(?:https?:\/\/|www\d{0,3}[.]|[a-z0-9.-]+\.[a-z]{2,4}\/)(?:[^\s()<>{}[\]]+|\([^\s()]*\))+/gi;
+  return urlRegex.test(str);
+}

@@ -22,6 +22,7 @@ import React from 'react';
 import HoverPopover from '../../components/common/HoverPopover';
 import type { IHeaderMenuItem, IMenuItemProps } from './LayoutTopbar';
 import { ADD_ENTITIES } from '@/constants/Header.constants';
+import { PlusCircle } from '@phosphor-icons/react';
 
 const HeaderAddButton: React.FC = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -40,8 +41,14 @@ const HeaderAddButton: React.FC = () => {
       <HoverPopover
         id="header-add-btn"
         render={
-          <IconButton sx={{ width: 36, height: 36 }}>
-            <AddCircleOutlineIcon sx={{ color: 'primary.main' }} />
+          <IconButton
+            sx={{
+              width: 36,
+              height: 36,
+              color: 'primary.main',
+            }}
+          >
+            <PlusCircle weight="bold" size={36} />
           </IconButton>
         }
         anchorOrigin={{

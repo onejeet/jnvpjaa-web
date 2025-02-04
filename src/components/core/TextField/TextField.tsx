@@ -67,6 +67,7 @@ function TextField(
           minHeight: height,
           // mt: '2px',
         },
+        '& .MuiOutlinedInput-root': { p: restProps?.multiline ? 2 : undefined },
         '& .MuiFormHelperText-root': {
           position: 'absolute',
           left: 0,

@@ -9,12 +9,16 @@ import FormSelectField from '@/components/form/FormSelectField';
 import { INewEventFormInput } from './NewEvent.types';
 import Button from '@/components/core/Button';
 import FormDateTimeField from '@/components/form/FormDateTimeField';
-import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import { useCreateEventMutation } from '@/apollo/hooks';
 import { paths } from '@/config/paths';
+import TipTapTextEditor from '@/modules/TipTapTextEditor';
+import { CurrencyInr, FloppyDiskBack, MapPinLine } from '@phosphor-icons/react';
+import { useApolloClient } from '@apollo/client';
+import { alumniEventCategories, eventHostingmedium } from '@/constants/Events.constants';
 
 const NewEvent = () => {
   const router = useRouter();
+  const client = useApolloClient();
   const { showAlert } = useAlert();
   const saveTypeRef = React.useRef('draft');
 
@@ -22,12 +26,16 @@ const NewEvent = () => {
   const {
     control,
     handleSubmit,
+    setValue,
+    getValues,
     formState: { errors },
   } = useForm<INewEventFormInput>({
     // defaultValues: {
     //   medium: 'online',
     // },
   });
+
+  console.log('Z: getValues', getValues());
 
   const watchMedium = useWatch({ control, name: 'medium' });
 
@@ -39,11 +47,14 @@ const NewEvent = () => {
           isPublish: saveTypeRef.current === 'publish',
         },
         onCompleted: () => {
+          client.refetchQueries({
+            include: ['getUserList'],
+          });
           router.push(paths.events.root);
         },
       });
     },
-    [crateEvent, router]
+    [crateEvent, router, client]
   );
 
   return (
@@ -69,6 +80,7 @@ const NewEvent = () => {
               saveTypeRef.current = 'draft';
               handleSubmit(onSubmit);
             }}
+            startIcon={<FloppyDiskBack size={16} />}
             type="submit"
             variant="outlined"
             disabled={loading}
@@ -81,6 +93,7 @@ const NewEvent = () => {
               saveTypeRef.current = 'publish';
               handleSubmit(onSubmit);
             }}
+            action="save"
             type="submit"
             color="success"
             disabled={loading}
@@ -107,19 +120,28 @@ const NewEvent = () => {
         <Grid size={{ xs: 12 }}>
           <FormTextField
             fullWidth
-            id="description"
-            label="Description"
+            id="summary"
+            label="Summary"
             multiline
-            minRows={6}
+            minRows={3}
             control={control}
             disabled={loading}
-            name="description"
+            name="summary"
+
             // size="small"
 
             // rules={{
             //   required: 'Required',
             // }}
           />
+        </Grid>
+        <Grid size={{ xs: 12 }}>
+          <Box display="flex" flexDirection="column">
+            <Typography color="grey.600" variant="body1" fontSize={14}>
+              Description
+            </Typography>
+            <TipTapTextEditor value="" onChange={(data) => setValue('description', data)} />
+          </Box>
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
           <FormDateTimeField
@@ -148,19 +170,10 @@ const NewEvent = () => {
             name="medium"
             selectProps={{
               size: 'small',
-              id: 'medium',
+              id: 'hosting medium',
               disabled: loading,
             }}
-            options={[
-              {
-                label: 'Online',
-                value: 'online',
-              },
-              {
-                label: 'Offline',
-                value: 'offline',
-              },
-            ]}
+            options={eventHostingmedium}
             rules={{
               required: 'Required',
             }}
@@ -173,7 +186,7 @@ const NewEvent = () => {
             label={watchMedium === 'online' ? 'URL' : 'Location'}
             control={control}
             disabled={loading}
-            startAdornment={watchMedium === 'online' ? 'https://' : undefined}
+            startAdornment={watchMedium === 'online' ? 'https://' : <MapPinLine size={18} />}
             name="location"
             size="small"
             rules={{
@@ -195,16 +208,7 @@ const NewEvent = () => {
               id: 'medium',
               disabled: loading,
             }}
-            options={[
-              {
-                label: 'Online',
-                value: 'online',
-              },
-              {
-                label: 'Offline',
-                value: 'offline',
-              },
-            ]}
+            options={alumniEventCategories}
             rules={{
               required: 'Required',
             }}
@@ -217,14 +221,14 @@ const NewEvent = () => {
             label="Price"
             control={control}
             disabled={loading}
-            startAdornment={<CurrencyRupeeIcon sx={{ fontSize: '18px' }} />}
+            startAdornment={<CurrencyInr size={18} />}
             name="price"
             size="small"
             type="number"
             helperText="Optional"
-            rules={{
-              required: 'Required',
-            }}
+            // rules={{
+            //   required: 'Required',
+            // }}
           />
         </Grid>
       </Grid>

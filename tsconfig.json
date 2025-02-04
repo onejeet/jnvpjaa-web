@@ -15,7 +15,8 @@
       "@/constants/*": ["./src/constants/*"],
       "@/layouts/*": ["./src/layouts/*"],
       "@/apollo/*": ["./src/apollo/*"],
-      "@/config/*": ["./src/config/*"]
+      "@/config/*": ["./src/config/*"],
+      "@/modules/*": ["./src/modules/*"]
     },
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],

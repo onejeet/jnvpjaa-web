@@ -5,7 +5,7 @@ const InputBase = () => {
     MuiInputBase: {
       styleOverrides: {
         root: ({ theme, ownerState }: OwnerStateThemeType) => ({
-          height: '36px !important', // Set the height of the input field
+          height: '36px', // Set the height of the input field
         }),
         // input: {
         //   padding: '6px 0', // Adjust padding inside the input field
@@ -21,7 +21,7 @@ const InputBase = () => {
         height: '40px', // Set your preferred height
       },
       sizeSmall: {
-        height: '36px', // Set your preferred height
+        height: '30px', // Set your preferred height
       },
     },
   };

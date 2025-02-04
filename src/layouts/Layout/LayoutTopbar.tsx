@@ -154,7 +154,7 @@ const LayoutTopbar: React.FC = () => {
                       onClick: () => handleLogout(),
                     },
                   ]}
-                  onChange={(path: string | number) => {
+                  onChange={(path?: string | number) => {
                     if (path) {
                       router.push(path?.toString());
                     }
