@@ -1,12 +1,12 @@
 export const alumniEventCategories = [
-  { label: 'Reunions and Social Events', value: 'reunions_and_social_events' },
-  { label: 'Networking and Professional Events', value: 'networking_and_professional_events' },
+  { label: 'Reunions and Social Event', value: 'reunions_and_social_event' },
+  { label: 'Networking and Professional Event', value: 'networking_and_professional_event' },
   { label: 'Educational, Mentorship and Career Development', value: 'educational_and_career_development' },
   { label: 'Sports and Recreational Activities', value: 'sports_and_recreational_activities' },
-  { label: 'Cultural and Arts Events', value: 'cultural_and_arts_events' },
+  { label: 'Cultural and Arts Event', value: 'cultural_and_arts_event' },
   { label: 'Fundraising and Community Service', value: 'fundraising_and_community_service' },
-  { label: 'Online and Virtual Events', value: 'online_and_virtual_events' },
-  { label: 'Social Cause Related Events', value: 'social_cause_events' },
+  { label: 'Online and Virtual Event', value: 'online_and_virtual_event' },
+  { label: 'Social Cause Related Event', value: 'social_cause_event' },
 ];
 
 export const eventHostingmedium = [
