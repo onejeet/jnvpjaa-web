@@ -70,11 +70,11 @@ const NewEvent = () => {
         // alignItems: 'center',
       }}
     >
-      <Box display="flex" width="100%" mb={3} justifyContent="space-between">
+      <Box display="flex" width="100%" mb={3} justifyContent="space-between" alignItems="center">
         <Typography variant="h2">Create New Event</Typography>
-        <Box display="flex" gap={2}>
+        <Box display="flex" gap={2} alignItems="center">
           <Button
-            size="small"
+            // size="small"
             title="Save Draft"
             onClick={() => {
               saveTypeRef.current = 'draft';
@@ -87,7 +87,7 @@ const NewEvent = () => {
             loading={saveTypeRef.current === 'draft' && loading}
           />
           <Button
-            size="small"
+            // size="small"
             title="Save & Publish"
             onClick={() => {
               saveTypeRef.current = 'publish';

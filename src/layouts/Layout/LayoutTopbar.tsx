@@ -12,6 +12,7 @@ import {
   Container,
   Drawer,
   IconButton,
+  ListItemIcon,
   MenuItem,
   Toolbar,
   Tooltip,
@@ -33,6 +34,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { Router, useRouter } from 'next/router';
 import HoverPopover from '@/components/common/HoverPopover';
 import HeaderAddButton from './HeaderAddButton';
+import { SignOut, User } from '@phosphor-icons/react';
 
 export interface IMenuItemProps {
   item: IHeaderMenuItem;
@@ -59,6 +61,130 @@ const LayoutTopbar: React.FC = () => {
   const HEADER_MENU = React.useMemo(() => {
     return getHeaderMenu(user?.id?.length > 0);
   }, [user]);
+
+  const ACCOUNT_MENU_LIST = React.useMemo(
+    () => [
+      {
+        label: 'My Profile',
+        value: '/profile',
+        icon: <User size={16} />,
+      },
+      {
+        label: 'Log Out',
+        icon: <SignOut size={16} />,
+        sx: {
+          color: 'error.main',
+        },
+        onClick: () => handleLogout(),
+      },
+    ],
+    [handleLogout]
+  );
+
+  const ACCOUNT_COMP = React.useMemo(() => {
+    return (
+      <HoverPopover
+        id={`account-menu-${user.id}`}
+        render={
+          <ProfilePicture
+            title={isMobile ? undefined : user?.firstName}
+            id={user.id}
+            // summary="Member"
+            maxWidth={150}
+            sx={{
+              width: { xs: 28, md: 36 },
+              height: { xs: 28, md: 36 },
+              '&: hover': {
+                bgcolor: 'grey.400',
+              },
+            }}
+          />
+        }
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+      >
+        <MenuItem
+          //  onClick={handleClose}
+          sx={{
+            px: '16px',
+            py: '12px',
+            fontSize: '14px',
+            fontWeight: 400,
+            textAlign: 'center',
+            color: 'grey.900',
+            transition: 'all 0.2s linear',
+            cursor: 'default',
+            pointerEvents: 'none',
+            svg: {
+              mr: '10px',
+              color: 'grey.700',
+              fontSize: '20px',
+            },
+            // '&:hover': {
+            //   color: 'primary.main',
+            //   svg: {
+            //     ml: '2px',
+            //     mr: 0,
+            //     color: 'primary.main',
+            //   },
+            // },
+          }}
+        >
+          <Typography
+            color="text.primary"
+            textAlign="left"
+            variant="body1"
+            fontWeight={500}
+            sx={{
+              pr: 4,
+              background: 'linear-gradient(90deg,#C62835 0,#217bfe 70%, #078efb 100%)',
+              backgroundClip: 'text',
+              color: 'transparent',
+            }}
+          >
+            {`Hello ${user?.firstName}`},
+          </Typography>
+        </MenuItem>
+        {ACCOUNT_MENU_LIST?.map((mItem: Record<string, any>) => (
+          <NextLink
+            key={`menu-${mItem?.value}`}
+            href={mItem?.value || '/'}
+            as={mItem?.value}
+            style={{ textDecoration: 'none' }}
+          >
+            <MenuItem
+              key={mItem.value}
+              // onClick={handleClose}
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                px: '16px',
+                py: '8px',
+                fontSize: '14px',
+                fontWeight: 400,
+                textAlign: 'center',
+                color: 'grey.900',
+                transition: 'all 0.2s linear',
+                svg: {
+                  mr: '8px',
+                },
+                ...(mItem?.sx || {}),
+              }}
+            >
+              {mItem?.icon ? mItem.icon : null}
+              {mItem.label}
+            </MenuItem>
+          </NextLink>
+        ))}
+      </HoverPopover>
+    );
+  }, [ACCOUNT_MENU_LIST, user, isMobile]);
 
   return (
     <AppBar
@@ -96,7 +222,12 @@ const LayoutTopbar: React.FC = () => {
             <Logo width={isMobile ? 260 : 300} height={isMobile ? 40 : 45} priority />
           </NextLink>
           <Box display={{ xs: 'flex', lg: 'none' }} ml="auto" alignItems="center" gap={1}>
-            {user?.id && <HeaderAddButton />}
+            {user?.id && (
+              <Box display="flex" gap={2} alignItems="center">
+                <HeaderAddButton />
+                {ACCOUNT_COMP}
+              </Box>
+            )}
             <IconButton
               // size="large"
               aria-label="account of current user"
@@ -116,68 +247,7 @@ const LayoutTopbar: React.FC = () => {
             {user?.id ? (
               <Box gap={1} display="flex">
                 <HeaderAddButton />
-                <ButtonDropdown
-                  items={[
-                    {
-                      label: (
-                        <Typography
-                          color="text.primary"
-                          textAlign="left"
-                          variant="body1"
-                          fontWeight={500}
-                          sx={{
-                            pr: 4,
-                            background: 'linear-gradient(90deg,#217bfe 0,#078efb 20%,#C62835 100%)',
-                            backgroundClip: 'text',
-                            color: 'transparent',
-                          }}
-                        >
-                          {`Hello ${user?.firstName}`},
-                        </Typography>
-                      ),
-                      disabled: true,
-                      sx: {
-                        opacity: '1 !important',
-                      },
-                    },
-                    {
-                      label: 'My Profile',
-                      value: '/profile',
-                      icon: <AssignmentIndIcon sx={{ fontSize: '16px' }} />,
-                    },
-                    {
-                      label: 'Log Out',
-                      icon: <LogoutIcon sx={{ fontSize: '16px', color: 'error.main' }} />,
-                      sx: {
-                        color: 'error.main',
-                      },
-                      onClick: () => handleLogout(),
-                    },
-                  ]}
-                  onChange={(path?: string | number) => {
-                    if (path) {
-                      router.push(path?.toString());
-                    }
-                  }}
-                  menuProps={{
-                    anchorOrigin: {
-                      vertical: 'bottom',
-                      horizontal: 'right',
-                    },
-                    transformOrigin: {
-                      vertical: 'top',
-                      horizontal: 'right',
-                    },
-                  }}
-                >
-                  <ProfilePicture
-                    title={user?.firstName}
-                    id={user.id}
-                    summary="Member"
-                    maxWidth={150}
-                    sx={{ width: 36, height: 36, ml: 1 }}
-                  />
-                </ButtonDropdown>
+                {ACCOUNT_COMP}
               </Box>
             ) : (
               <NextLink href="/signin" passHref style={{ textDecoration: 'none' }}>

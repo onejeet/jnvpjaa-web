@@ -23,7 +23,7 @@ const Menu: React.FC<MenuProps> = ({ id, items, value, render, disabled, childre
       </Box>
       {!disabled && (
         <MuiMenu
-          id
+          id={id as string}
           {...bindMenu(popupState)}
           anchorOrigin={{
             vertical: 'bottom',
@@ -56,8 +56,8 @@ const Menu: React.FC<MenuProps> = ({ id, items, value, render, disabled, childre
                   subTitleProps = {},
                   isHeading,
                   ...item
-                },
-                index
+                }: any,
+                index: number
               ) =>
                 divider ? (
                   <Divider key={`${id}-menu-divider-${index}`} />
@@ -142,8 +142,8 @@ const Menu: React.FC<MenuProps> = ({ id, items, value, render, disabled, childre
                                 divider,
                                 subTitleProps = {},
                                 ...item
-                              },
-                              index
+                              }: any,
+                              index: number
                             ) => (
                               <React.Fragment key={`${id}-menu-item-${index}`}>
                                 {label ? (

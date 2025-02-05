@@ -1,10 +1,6 @@
 import React from 'react';
-/* MUI */
 import IconButton from '@mui/material/IconButton';
-// hooks
 import { useCurrentEditor } from '@tiptap/react';
-
-/* CONSTANTS */
 import { EDITOR_ICONS } from '../../constants';
 
 export type TAlign = 'left' | 'right' | 'center' | 'justify';

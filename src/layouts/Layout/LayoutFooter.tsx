@@ -160,7 +160,7 @@ const LayoutFooter: React.FC = () => {
               </Stack>
             </Grid>
 
-            <Grid size={{ xs: 12, md: 6 }} textAlign="left">
+            <Grid size={{ xs: 12, md: 6 }} textAlign={{ xs: 'center', md: 'left' }} mt={{ xs: '10px', md: 0 }}>
               <Typography
                 sx={{
                   color: 'grey.800',
@@ -169,7 +169,7 @@ const LayoutFooter: React.FC = () => {
                 }}
                 variant="body2"
               >
-                &nbsp; &#169;
+                &nbsp; &#169; &nbsp;
                 {new Date().getFullYear()}
                 &nbsp; JNVPJAA. All Rights Reserved.
               </Typography>
@@ -180,14 +180,17 @@ const LayoutFooter: React.FC = () => {
                 md: 6,
               }}
               display="flex"
-              justifyContent="end"
+              justifyContent={{
+                xs: 'center',
+                md: 'end',
+              }}
               color="grey.800"
               sx={{
                 opacity: 1,
               }}
               mt={{
                 xs: '10px',
-                sm: 0,
+                md: 0,
               }}
             >
               <Typography
