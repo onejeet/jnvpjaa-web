@@ -10,20 +10,7 @@ export interface TAuthContextData {
   checkAuth?: boolean;
   setUser: (user: any) => void;
   logoutUser: () => void;
-  handleLogout: () => void;
-  // loadUserData: () => void;
   setLoadingData: React.Dispatch<React.SetStateAction<LoadingDataProps>>;
-  // isOnboardingFinished?: boolean;
-  // failedSubscriptions: {
-  //   data?: Record<string, any>[];
-  //   loading: boolean;
-  //   isAccountPaused: boolean;
-  //   isPaymentFailed: boolean;
-  //   openPaymentFailureDialog: () => void;
-  //   closePaymentFailureDialog: (arg?: boolean) => void;
-  //   showPaymentFailedRestoredSuccess?: boolean;
-  //   refetch: () => void;
-  // };
   isAuthPage?: boolean;
 }
 

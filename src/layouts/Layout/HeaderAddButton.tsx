@@ -107,7 +107,7 @@ const HeaderAddButton: React.FC = () => {
                 color: 'grey.900',
                 transition: 'all 0.2s linear',
                 svg: {
-                  mr: '4px',
+                  mr: '8px',
                   color: 'grey.700',
                   fontSize: '20px',
                 },

@@ -1,6 +1,7 @@
 import { IHeaderMenuItem } from 'src/layouts/Layout/LayoutTopbar';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import ExtensionIcon from '@mui/icons-material/Extension';
+import { Article, Ticket } from '@phosphor-icons/react';
 
 export const HEADER_MENU: IHeaderMenuItem[] = [
   {
@@ -189,11 +190,11 @@ export const ADD_ENTITIES: IHeaderMenuItem[] = [
   {
     label: 'Create Blog',
     path: '/blogs/new',
-    icon: <PostAddIcon />,
+    icon: <Article />,
   },
   {
     label: 'Create Event',
     path: '/events/new',
-    icon: <ExtensionIcon />,
+    icon: <Ticket />,
   },
 ];

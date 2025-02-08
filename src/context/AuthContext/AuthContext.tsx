@@ -94,8 +94,13 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children, checkAuth, isAuth
       type: 'logout',
     });
     await handleLogout();
+    setUser(null);
+    setLoadingData({
+      loading: false,
+    });
     localStorage.removeItem('logged_in');
-    window.location.href = paths.home;
+    router.push(paths.home);
+    // window.location.href = paths.home;
   };
 
   const isLoading = React.useMemo(() => {
@@ -111,7 +116,6 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children, checkAuth, isAuth
         logoutUser,
         isAuthPage,
         setLoadingData,
-        handleLogout: logoutUser,
       }}
     >
       {isLoading ? (

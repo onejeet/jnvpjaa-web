@@ -1,6 +1,6 @@
 'use client';
 
-import { ADD_ENTITIES, getHeaderMenu } from '@/constants/Header.constants';
+import { getHeaderMenu } from '@/constants/Header.constants';
 import CloseIcon from '@mui/icons-material/Close';
 import MenuIcon from '@mui/icons-material/Menu';
 import type { Theme } from '@mui/material';
@@ -22,16 +22,12 @@ import {
 } from '@mui/material';
 import NextLink from 'next/link';
 import React from 'react';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import Logo from '@/components/common/Logo';
 
 import HeaderMenuItem from './HeaderMenuItem';
 import ProfilePicture from '@/components/common/ProfilePicture';
-import ButtonDropdown from '@/components/common/DropdownMenu/DropdownMenu';
 import { useAuth } from '@/context/AuthContext';
-import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
-import LogoutIcon from '@mui/icons-material/Logout';
-import { Router, useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import HoverPopover from '@/components/common/HoverPopover';
 import HeaderAddButton from './HeaderAddButton';
 import { SignOut, User } from '@phosphor-icons/react';
@@ -54,9 +50,8 @@ const LayoutTopbar: React.FC = () => {
   const [expanded, setExpanded] = React.useState<string>('');
   const [openMenu, setOpenMenu] = React.useState<boolean>(false);
   const theme = useTheme();
-  const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const { user, handleLogout } = useAuth();
+  const { user, logoutUser } = useAuth();
 
   const HEADER_MENU = React.useMemo(() => {
     return getHeaderMenu(user?.id?.length > 0);
@@ -75,20 +70,20 @@ const LayoutTopbar: React.FC = () => {
         sx: {
           color: 'error.main',
         },
-        onClick: () => handleLogout(),
+        onClick: logoutUser,
       },
     ],
-    [handleLogout]
+    [logoutUser]
   );
 
   const ACCOUNT_COMP = React.useMemo(() => {
     return (
       <HoverPopover
-        id={`account-menu-${user.id}`}
+        id={`account-menu-${user?.id}`}
         render={
           <ProfilePicture
-            title={isMobile ? undefined : user?.firstName}
-            id={user.id}
+            //   title={isMobile ? undefined : user?.firstName}
+            id={user?.id}
             // summary="Member"
             maxWidth={150}
             sx={{
@@ -152,35 +147,28 @@ const LayoutTopbar: React.FC = () => {
           </Typography>
         </MenuItem>
         {ACCOUNT_MENU_LIST?.map((mItem: Record<string, any>) => (
-          <NextLink
+          <MenuItem
             key={`menu-${mItem?.value}`}
-            href={mItem?.value || '/'}
-            as={mItem?.value}
-            style={{ textDecoration: 'none' }}
+            onClick={mItem?.onClick}
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              px: '16px',
+              py: '8px',
+              fontSize: '14px',
+              fontWeight: 400,
+              textAlign: 'center',
+              color: 'grey.900',
+              transition: 'all 0.2s linear',
+              svg: {
+                mr: '8px',
+              },
+              ...(mItem?.sx || {}),
+            }}
           >
-            <MenuItem
-              key={mItem.value}
-              // onClick={handleClose}
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                px: '16px',
-                py: '8px',
-                fontSize: '14px',
-                fontWeight: 400,
-                textAlign: 'center',
-                color: 'grey.900',
-                transition: 'all 0.2s linear',
-                svg: {
-                  mr: '8px',
-                },
-                ...(mItem?.sx || {}),
-              }}
-            >
-              {mItem?.icon ? mItem.icon : null}
-              {mItem.label}
-            </MenuItem>
-          </NextLink>
+            {mItem?.icon ? mItem.icon : null}
+            {mItem.label}
+          </MenuItem>
         ))}
       </HoverPopover>
     );
