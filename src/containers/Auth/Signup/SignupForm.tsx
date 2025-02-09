@@ -23,6 +23,7 @@ const SignupForm = () => {
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<ISignupFormInput>({});
 
@@ -173,6 +174,11 @@ const SignupForm = () => {
             name="mobile"
             size="small"
             type="number"
+            onChange={(e) => {
+              if (e?.target?.value?.length < 11) {
+                setValue('mobile', e?.target?.value);
+              }
+            }}
             rules={{
               required: 'Required',
               maxLength: {
