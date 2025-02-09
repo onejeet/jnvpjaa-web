@@ -37,7 +37,7 @@ const Signup = () => {
           The registration will be reviewed and verified by the Alumni Association and batch coordinators,
           <br /> and will be approved accordingly.
         </Typography>
-        <Image
+        {/* <Image
           onClick={() => {}}
           src="/assets/svg/google-signin.svg"
           width={300}
@@ -45,7 +45,7 @@ const Signup = () => {
           alt="Sign in with Google"
           style={{ cursor: 'pointer' }}
         />
-        <Divider sx={{ width: '100%', mt: 2, color: 'grey.500' }}>OR</Divider>
+        <Divider sx={{ width: '100%', mt: 2, color: 'grey.500' }}>OR</Divider> */}
 
         <SigninForm />
         <Box display="flex" alignItems="center">

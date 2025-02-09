@@ -47,7 +47,7 @@ const Signin = () => {
         <Typography variant="h3" mb={2}>
           Alumni Center Access
         </Typography>
-        <Image
+        {/* <Image
           onClick={() => {
             // router.push('/google');
             handleGoogleLogin();
@@ -58,8 +58,8 @@ const Signin = () => {
           alt="Sign in with Google"
           style={{ cursor: 'pointer' }}
         />
-        <Divider sx={{ width: '100%', mt: 2, color: 'grey.500' }}>OR</Divider>
-        {/* <Divider variant="fullWidth">OR</Divider> */}
+        <Divider sx={{ width: '100%', mt: 2, color: 'grey.500' }}>OR</Divider> */}
+
         <SigninForm />
         <Box display="flex" flexDirection="column" alignItems="center" gap={1.5}>
           <Link href="/forgot-password" as="/forgot-password" style={{ textDecoration: 'none' }}>
