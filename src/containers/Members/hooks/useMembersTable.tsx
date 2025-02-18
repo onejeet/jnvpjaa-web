@@ -24,7 +24,7 @@ const useMembersTable = () => {
   const [columns, setColumns] = React.useState<any[]>([]);
   const [paginationModel, setPaginationModel] = React.useState<GridPaginationModel>({
     page: 0,
-    pageSize: 20,
+    pageSize: 50,
   });
 
   const { showAlert } = useAlert();

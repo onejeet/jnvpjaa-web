@@ -4,6 +4,7 @@ import Grid from '@mui/material/Grid2';
 import { DataGrid } from '@mui/x-data-grid';
 
 import useBatchCoordinators from './Hooks/useBatchCoordinators';
+import { MagnifyingGlass } from '@phosphor-icons/react';
 
 const BatchCoordinators = () => {
   const { columns, rows, onSearch } = useBatchCoordinators();
@@ -20,11 +21,18 @@ const BatchCoordinators = () => {
         behind the initiatives that keep our alumni network strong and engaged.`}
       </Typography>
       <Box component={Grid} container width="100%" mb={3}>
-        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+        <Grid
+          size={{ xs: 12, sm: 6, md: 3 }}
+          sx={{
+            svg: {
+              color: 'grey.600',
+            },
+          }}
+        >
           <OutlinedInput
             size="small"
             placeholder="Search Coordinators"
-            startAdornment={<SearchIcon sx={{ color: 'grey.800', mr: '8px' }} />}
+            startAdornment={<MagnifyingGlass size={24} style={{ marginRight: '8px' }} />}
             onChange={(e) => onSearch(e.target.value)}
           />
         </Grid>

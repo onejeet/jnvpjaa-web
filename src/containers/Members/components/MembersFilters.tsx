@@ -1,6 +1,7 @@
 import TextField from '@/components/core/TextField';
 import { debounce } from '@/utils/helpers';
 import { Box, Grid2 as Grid, MenuItem, Select } from '@mui/material';
+import { MagnifyingGlass } from '@phosphor-icons/react';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -36,7 +37,14 @@ const MembersFilters = () => {
 
   return (
     <Box container component={Grid} mb={2} spacing={2}>
-      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+      <Grid
+        size={{ xs: 12, sm: 6, md: 4 }}
+        sx={{
+          svg: {
+            color: 'grey.600',
+          },
+        }}
+      >
         <TextField
           placeholder="Search by Name, Batch etc..."
           size="small"
@@ -45,6 +53,7 @@ const MembersFilters = () => {
           fullWidth
           onChange={(e) => onSearch('q', e.target.value)}
           variant="outlined"
+          startAdornment={<MagnifyingGlass size={24} style={{ marginRight: '8px' }} />}
         />
       </Grid>
       <Grid size={{ xs: 12, sm: 6, md: 2 }}>
