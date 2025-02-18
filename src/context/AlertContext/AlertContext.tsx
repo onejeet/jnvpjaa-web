@@ -21,9 +21,9 @@ const AlertProvider = ({ children }: AlertProviderProps) => {
 
   // handler to trigger notification
   const showAlert = React.useCallback(
-    (options: ToastProps, isDialog?: boolean, dialogProps?: Partial<AlertDialogProps>) => {
+    (options: ToastProps & Partial<AlertDialogProps>, isDialog?: boolean, dialogProps?: Partial<AlertDialogProps>) => {
       if (isDialog) {
-        setDialogProps({ open: true, ...(dialogProps || {}) });
+        setDialogProps({ open: true, ...(options || {}) });
         return;
       }
 

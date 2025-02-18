@@ -27,6 +27,8 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
       return 'error';
     } else if (action === 'approve') {
       return 'success';
+    } else if (action === 'success') {
+      return 'success';
     }
     return 'error';
   }, [action]);
@@ -44,9 +46,15 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
       return 'Reject';
     } else if (action === 'approve') {
       return 'Approve';
+    } else if (action === 'success') {
+      return 'Okay';
     }
     return 'Yes, Proceed';
   }, [action]);
+
+  const onOKayHandler = React.useMemo(() => {
+    return onOkay || (action === 'success' ? onCancel : () => {});
+  }, [action, onOkay, onCancel]);
 
   return (
     <Dialog
@@ -54,7 +62,7 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
       maxWidth={maxWidth}
       onClose={onClose}
       footerProps={{
-        onOkay: onOkay ? onOkay : () => {},
+        onOkay: onOKayHandler,
         onCancel,
         okayButtonProps: {
           // color,

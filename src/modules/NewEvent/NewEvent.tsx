@@ -46,9 +46,9 @@ const NewEvent = () => {
           ...data,
           isPublish: saveTypeRef.current === 'publish',
         },
-        onCompleted: () => {
+        onCompleted: async () => {
           client.refetchQueries({
-            include: ['getUserList'],
+            include: ['getEventList'],
           });
           router.push(paths.events.root);
         },
@@ -127,12 +127,10 @@ const NewEvent = () => {
             control={control}
             disabled={loading}
             name="summary"
-
             // size="small"
-
-            // rules={{
-            //   required: 'Required',
-            // }}
+            rules={{
+              required: 'Required',
+            }}
           />
         </Grid>
         <Grid size={{ xs: 12 }}>
@@ -191,10 +189,13 @@ const NewEvent = () => {
             size="small"
             rules={{
               required: 'Required',
-              pattern: {
-                value: /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-_]+\.)+[a-zA-Z]{2,}(:\d{1,5})?(\/.*)?$/,
-                message: 'Enter a valid URL',
-              },
+              pattern:
+                watchMedium === 'online'
+                  ? {
+                      value: /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-_]+\.)+[a-zA-Z]{2,}(:\d{1,5})?(\/.*)?$/,
+                      message: 'Enter a valid URL',
+                    }
+                  : undefined,
             }}
           />
         </Grid>

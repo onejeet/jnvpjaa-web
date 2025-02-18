@@ -8,11 +8,13 @@ import { Box } from '@mui/material';
 import { paths } from '@/config/paths';
 import { decodeBase64, encodeBase64 } from '@/utils/index';
 import { useGetUserDetailsLazyQuery, useLogoutMutation, User } from '@/apollo/hooks';
+import { useApolloClient } from '@apollo/client';
 
 const AuthContext = createContext<TAuthContextData>({} as TAuthContextData);
 
 const AuthProvider: React.FC<AuthProviderProps> = ({ children, checkAuth, isAuthPage }) => {
   const router = useRouter();
+  const client = useApolloClient();
   const isLoggedInRef = React.useRef(false);
   const [user, setUser] = useState<User | null>(null);
   const [loadingData, setLoadingData] = useState<LoadingDataProps>({
@@ -27,7 +29,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children, checkAuth, isAuth
     },
     onError: () => {
       console.log('On Error getUser Details');
-      redirectOnFailedSignin();
+      redirectToSignin();
     },
     notifyOnNetworkStatusChange: true,
   });
@@ -44,18 +46,21 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children, checkAuth, isAuth
     setLoadingData({ loading: false });
   }, [router, isAuthPage]);
 
-  const redirectOnFailedSignin = React.useCallback(async () => {
-    if (checkAuth) {
-      const rQuery = router?.asPath ? encodeBase64(router.asPath) : '';
-      await router.push({
-        pathname: paths.signin,
-        query: {
-          r: rQuery,
-        },
-      });
-    }
-    setLoadingData({ loading: false });
-  }, [router, checkAuth]);
+  const redirectToSignin = React.useCallback(
+    async (customPas?: boolean) => {
+      if (checkAuth || customPas) {
+        const rQuery = router?.asPath ? encodeBase64(router.asPath) : '';
+        await router.push({
+          pathname: paths.signin,
+          query: {
+            r: rQuery,
+          },
+        });
+      }
+      setLoadingData({ loading: false });
+    },
+    [router, checkAuth]
+  );
 
   React.useEffect(() => {
     if (user?.id && !userData?.getUserDetails) {
@@ -93,29 +98,41 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children, checkAuth, isAuth
       loading: true,
       type: 'logout',
     });
+    localStorage.clear();
+    client.resetStore();
+    client.cache.reset();
     await handleLogout();
-    setUser(null);
-    setLoadingData({
-      loading: false,
-    });
-    localStorage.removeItem('logged_in');
-    router.push(paths.home);
-    // window.location.href = paths.home;
+    // setUser(null);
+    // setLoadingData({
+    //   loading: false,
+    // });
+
+    if (checkAuth) {
+      window.location.href = paths.home;
+    } else {
+      window.location.reload();
+    }
   };
 
   const isLoading = React.useMemo(() => {
     return loadingData?.loading;
   }, [loadingData?.loading]);
 
+  const isAdmin = React.useMemo(() => {
+    return user?.role?.name === 'admin';
+  }, [user]);
+
   return (
     <AuthContext.Provider
       value={{
-        user: userData?.getUserDetails || user,
+        user,
+        isAdmin,
         checkAuth,
         setUser,
         logoutUser,
         isAuthPage,
         setLoadingData,
+        redirectToSignin,
       }}
     >
       {isLoading ? (

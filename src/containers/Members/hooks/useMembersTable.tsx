@@ -14,9 +14,11 @@ import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import CloseIcon from '@mui/icons-material/Close';
 import { useAlert } from '@/context/AlertContext';
 import { useApolloClient } from '@apollo/client';
+import { useAuth } from '@/context/AuthContext';
 
 const useMembersTable = () => {
   const client = useApolloClient();
+  const { isAdmin, user } = useAuth();
   const searchParams = useSearchParams();
   const router = useRouter();
   const [columns, setColumns] = React.useState<any[]>([]);
@@ -56,13 +58,13 @@ const useMembersTable = () => {
             alignItems="center"
             height="100%"
             sx={{
-              cursor: row?.loading ? 'default' : 'pointer',
+              cursor: row?.loading || !user?.id ? 'default' : 'pointer',
               '&:hover .title-container': {
                 transition: 'color 0.2s ease',
                 color: 'primary.main',
               },
             }}
-            onClick={() => (row?.loading ? () => null : router.push(`/profile/${row.id}`))}
+            onClick={() => (row?.loading || !user?.id ? () => null : router.push(`/profile/${row?.id}`))}
           >
             <ProfilePicture
               loading={row.loading}
@@ -157,7 +159,7 @@ const useMembersTable = () => {
                   <Skeleton width="100%" height={30} />
                 </Box>,
               ]
-            : row?.isVerified
+            : row?.isVerified || !isAdmin
               ? []
               : [
                   <Box display="flex" key="buttons" gap={2}>
@@ -173,9 +175,6 @@ const useMembersTable = () => {
                             visible: true,
                             type: 'loading',
                             message: '',
-                          },
-                          true,
-                          {
                             open: true,
                             action: 'approve',
                             onOkay: () => {
@@ -201,7 +200,8 @@ const useMembersTable = () => {
                                 },
                               });
                             },
-                          }
+                          },
+                          true
                         );
                       }}
                     />
@@ -215,9 +215,6 @@ const useMembersTable = () => {
                             visible: true,
                             type: 'error',
                             message: '',
-                          },
-                          true,
-                          {
                             open: true,
                             action: 'reject',
                             onOkay: () => {
@@ -243,7 +240,8 @@ const useMembersTable = () => {
                                 },
                               });
                             },
-                          }
+                          },
+                          true
                         );
                       }}
                     />
@@ -253,7 +251,7 @@ const useMembersTable = () => {
     ];
 
     setColumns(columns);
-  }, []);
+  }, [isAdmin, user, handleUserVerification]);
 
   const onPaginationModelChange = React.useCallback((model: GridPaginationModel) => {
     setPaginationModel(model);

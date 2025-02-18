@@ -3,10 +3,10 @@ import { NextPage } from 'next';
 
 const EventsPage: NextPage = () => <Events />;
 
-EventsPage.getInitialProps = () => {
-  return {
-    checkAuth: true,
-  };
-};
+// EventsPage.getInitialProps = () => {
+//   return {
+//     checkAuth: true,
+//   };
+// };
 
 export default EventsPage;

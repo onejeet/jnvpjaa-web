@@ -1,4 +1,4 @@
-import { thumbs } from '@dicebear/collection';
+import { adventurerNeutral, bottts, botttsNeutral, thumbs } from '@dicebear/collection';
 import { createAvatar } from '@dicebear/core';
 import { Options } from '@dicebear/thumbs';
 import EmailIcon from '@mui/icons-material/Email';
@@ -37,11 +37,13 @@ export const getDefaultAvatar = (gender?: string) => {
     : '/assets/images/male_profile_placeholder.webp';
 };
 
-export const getAvatarDataUrl = (id?: string, options?: Options) => {
-  return createAvatar(thumbs, {
+export const getAvatarDataUrl = (id?: string, options?: any) => {
+  return createAvatar(botttsNeutral, {
     seed: id,
     flip: false,
     size: 32,
+    // backgroundColor: ['b6e3f4', 'c0aede', 'd1d4f9'],
+    mouth: ['diagram', 'grill01', 'grill02', 'grill03', 'smile01', 'smile02', 'square01', 'square02'],
     ...(options || {}),
   })?.toDataUri();
 };
@@ -67,12 +69,18 @@ export const getBatchOptions = () => {
 };
 
 export function formatPhoneNumber(phoneNumber: string) {
+  if (phoneNumber?.includes('***')) {
+    return `+91 (${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6)}`;
+  }
+  if (!phoneNumber) return phoneNumber;
+
   // Remove any non-numeric characters
-  const cleaned = phoneNumber.replace(/\D/g, '');
+  const cleaned = phoneNumber?.replace(/\D/g, '');
 
   // Check if the phone number is exactly 10 digits
   if (cleaned.length !== 10) {
-    throw new Error('Phone number must be 10 digits long');
+    // throw new Error('Phone number must be 10 digits long');
+    return phoneNumber;
   }
 
   // Format the phone number

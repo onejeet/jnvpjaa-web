@@ -1,7 +1,10 @@
 // Define the types for the event data and props
 export interface IPerson {
-  name: string;
-  avatar: string;
+  id: string;
+  firstName: string;
+  lastName: string;
+  profileImage: string | null;
+  batch?: number;
 }
 
 export interface IEvent {
@@ -15,10 +18,12 @@ export interface IEvent {
   image?: string;
   medium: 'Online' | 'Offline';
   online: boolean;
-  people: IPerson[];
+  attendees: IPerson[];
+  status: 'draft' | 'published';
 }
 
 export interface EventCardProps {
   event: IEvent;
   loading?: boolean;
+  markImGoing: (id: number | string) => void;
 }

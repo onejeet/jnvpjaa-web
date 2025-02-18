@@ -12,6 +12,8 @@ export interface TAuthContextData {
   logoutUser: () => void;
   setLoadingData: React.Dispatch<React.SetStateAction<LoadingDataProps>>;
   isAuthPage?: boolean;
+  isAdmin?: boolean;
+  redirectToSignin: (arg?: boolea) => void;
 }
 
 export interface LoadingDataProps {

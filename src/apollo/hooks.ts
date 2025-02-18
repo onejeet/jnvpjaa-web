@@ -24,6 +24,16 @@ export type AuthPayload = {
   user?: Maybe<User>;
 };
 
+export type BatchCoordinator = {
+  __typename?: 'BatchCoordinator';
+  /** Timestamp when the record was created */
+  assignedAt: Scalars['DateTime']['output'];
+  batch?: Maybe<Scalars['Int']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  user?: Maybe<User>;
+  userId?: Maybe<Scalars['String']['output']>;
+};
+
 export type Event = {
   __typename?: 'Event';
   attendees?: Maybe<Array<Maybe<User>>>;
@@ -74,16 +84,29 @@ export type ListUserResponse = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  assignBatchCoordinator?: Maybe<BatchCoordinator>;
+  attendEvent?: Maybe<Event>;
   createEvent?: Maybe<Event>;
   deleteUser?: Maybe<User>;
   forgotPassword?: Maybe<Scalars['Boolean']['output']>;
   logout?: Maybe<Scalars['String']['output']>;
   refreshToken?: Maybe<AuthPayload>;
+  removeBatchCoordinator?: Maybe<Scalars['Boolean']['output']>;
   resetPassword?: Maybe<Scalars['Boolean']['output']>;
   signin?: Maybe<AuthPayload>;
   signup?: Maybe<User>;
+  updateBatchCoordinator?: Maybe<BatchCoordinator>;
   updateUser?: Maybe<User>;
   verifyUser?: Maybe<Scalars['Boolean']['output']>;
+};
+
+export type MutationAssignBatchCoordinatorArgs = {
+  batch: Scalars['Int']['input'];
+  userId: Scalars['String']['input'];
+};
+
+export type MutationAttendEventArgs = {
+  eventId: Scalars['String']['input'];
 };
 
 export type MutationCreateEventArgs = {
@@ -107,6 +130,11 @@ export type MutationForgotPasswordArgs = {
   email: Scalars['String']['input'];
 };
 
+export type MutationRemoveBatchCoordinatorArgs = {
+  batch: Scalars['Int']['input'];
+  userId: Scalars['String']['input'];
+};
+
 export type MutationResetPasswordArgs = {
   newPassword: Scalars['String']['input'];
   token: Scalars['String']['input'];
@@ -125,6 +153,11 @@ export type MutationSignupArgs = {
   lastName: Scalars['String']['input'];
   mobile: Scalars['String']['input'];
   password: Scalars['String']['input'];
+};
+
+export type MutationUpdateBatchCoordinatorArgs = {
+  newBatch: Scalars['Int']['input'];
+  userId: Scalars['String']['input'];
 };
 
 export type MutationUpdateUserArgs = {
@@ -149,10 +182,21 @@ export type MutationVerifyUserArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  getAllBatchCoordinators?: Maybe<Array<Maybe<BatchCoordinator>>>;
+  getBatchCoordinatorByUserId?: Maybe<BatchCoordinator>;
+  getBatchCoordinatorsByBatch?: Maybe<Array<Maybe<BatchCoordinator>>>;
   getEventDetails?: Maybe<Event>;
   getEventList?: Maybe<ListEventResponse>;
   getUserDetails?: Maybe<User>;
   getUserList?: Maybe<ListUserResponse>;
+};
+
+export type QueryGetBatchCoordinatorByUserIdArgs = {
+  userId: Scalars['String']['input'];
+};
+
+export type QueryGetBatchCoordinatorsByBatchArgs = {
+  batch: Scalars['Int']['input'];
 };
 
 export type QueryGetEventDetailsArgs = {
@@ -201,6 +245,135 @@ export type User = {
   role?: Maybe<Role>;
   /** Timestamp when the record was last updated */
   updatedAt: Scalars['DateTime']['output'];
+};
+
+export type AssignBatchCoordinatorMutationVariables = Exact<{
+  batch: Scalars['Int']['input'];
+  userId: Scalars['String']['input'];
+}>;
+
+export type AssignBatchCoordinatorMutation = {
+  __typename?: 'Mutation';
+  assignBatchCoordinator?:
+    | {
+        __typename?: 'BatchCoordinator';
+        assignedAt: any;
+        batch?: number | undefined;
+        id?: string | undefined;
+        userId?: string | undefined;
+        user?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: string | undefined;
+              email?: string | undefined;
+              emergency_mobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              id?: string | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              updatedAt: any;
+              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
+export type AttendEventMutationVariables = Exact<{
+  eventId: Scalars['String']['input'];
+}>;
+
+export type AttendEventMutation = {
+  __typename?: 'Mutation';
+  attendEvent?:
+    | {
+        __typename?: 'Event';
+        category?: string | undefined;
+        createdAt: any;
+        createdBy: string;
+        description?: string | undefined;
+        endDate?: any | undefined;
+        id: string;
+        image?: string | undefined;
+        location?: string | undefined;
+        medium: string;
+        price?: number | undefined;
+        startDate: any;
+        status?: string | undefined;
+        summary: string;
+        tags?: Array<string | undefined> | undefined;
+        ticketUrl?: string | undefined;
+        title: string;
+        updatedAt: any;
+        attendees?:
+          | Array<
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: string | undefined;
+                  email?: string | undefined;
+                  emergency_mobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  id?: string | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  updatedAt: any;
+                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+        organizers?:
+          | Array<
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: string | undefined;
+                  email?: string | undefined;
+                  emergency_mobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  id?: string | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  updatedAt: any;
+                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+      }
+    | undefined;
 };
 
 export type CreateEventMutationVariables = Exact<{
@@ -377,6 +550,13 @@ export type RefreshTokenMutation = {
     | undefined;
 };
 
+export type RemoveBatchCoordinatorMutationVariables = Exact<{
+  batch: Scalars['Int']['input'];
+  userId: Scalars['String']['input'];
+}>;
+
+export type RemoveBatchCoordinatorMutation = { __typename?: 'Mutation'; removeBatchCoordinator?: boolean | undefined };
+
 export type ResetPasswordMutationVariables = Exact<{
   newPassword: Scalars['String']['input'];
   token: Scalars['String']['input'];
@@ -462,6 +642,49 @@ export type SignupMutation = {
     | undefined;
 };
 
+export type UpdateBatchCoordinatorMutationVariables = Exact<{
+  newBatch: Scalars['Int']['input'];
+  userId: Scalars['String']['input'];
+}>;
+
+export type UpdateBatchCoordinatorMutation = {
+  __typename?: 'Mutation';
+  updateBatchCoordinator?:
+    | {
+        __typename?: 'BatchCoordinator';
+        assignedAt: any;
+        batch?: number | undefined;
+        id?: string | undefined;
+        userId?: string | undefined;
+        user?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: string | undefined;
+              email?: string | undefined;
+              emergency_mobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              id?: string | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              updatedAt: any;
+              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
 export type UpdateUserMutationVariables = Exact<{
   aboutMe?: InputMaybe<Scalars['String']['input']>;
   batch?: InputMaybe<Scalars['Int']['input']>;
@@ -512,6 +735,136 @@ export type VerifyUserMutationVariables = Exact<{
 }>;
 
 export type VerifyUserMutation = { __typename?: 'Mutation'; verifyUser?: boolean | undefined };
+
+export type GetAllBatchCoordinatorsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetAllBatchCoordinatorsQuery = {
+  __typename?: 'Query';
+  getAllBatchCoordinators?:
+    | Array<
+        | {
+            __typename?: 'BatchCoordinator';
+            assignedAt: any;
+            batch?: number | undefined;
+            id?: string | undefined;
+            userId?: string | undefined;
+            user?:
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: string | undefined;
+                  email?: string | undefined;
+                  emergency_mobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  id?: string | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  updatedAt: any;
+                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                }
+              | undefined;
+          }
+        | undefined
+      >
+    | undefined;
+};
+
+export type GetBatchCoordinatorByUserIdQueryVariables = Exact<{
+  userId: Scalars['String']['input'];
+}>;
+
+export type GetBatchCoordinatorByUserIdQuery = {
+  __typename?: 'Query';
+  getBatchCoordinatorByUserId?:
+    | {
+        __typename?: 'BatchCoordinator';
+        assignedAt: any;
+        batch?: number | undefined;
+        id?: string | undefined;
+        userId?: string | undefined;
+        user?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: string | undefined;
+              email?: string | undefined;
+              emergency_mobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              id?: string | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              updatedAt: any;
+              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
+export type GetBatchCoordinatorsByBatchQueryVariables = Exact<{
+  batch: Scalars['Int']['input'];
+}>;
+
+export type GetBatchCoordinatorsByBatchQuery = {
+  __typename?: 'Query';
+  getBatchCoordinatorsByBatch?:
+    | Array<
+        | {
+            __typename?: 'BatchCoordinator';
+            assignedAt: any;
+            batch?: number | undefined;
+            id?: string | undefined;
+            userId?: string | undefined;
+            user?:
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: string | undefined;
+                  email?: string | undefined;
+                  emergency_mobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  id?: string | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  updatedAt: any;
+                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                }
+              | undefined;
+          }
+        | undefined
+      >
+    | undefined;
+};
 
 export type GetEventDetailsQueryVariables = Exact<{
   id: Scalars['Int']['input'];
@@ -773,6 +1126,180 @@ export type GetUserListQuery = {
     | undefined;
 };
 
+export const AssignBatchCoordinatorDocument = gql`
+  mutation assignBatchCoordinator($batch: Int!, $userId: String!) {
+    assignBatchCoordinator(batch: $batch, userId: $userId) {
+      assignedAt
+      batch
+      id
+      user {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergency_mobile
+        firstName
+        gender
+        google_auth_id
+        id
+        isVerified
+        lastName
+        membershipYear
+        mobile
+        nickName
+        profileImage
+        role {
+          id
+          name
+        }
+        updatedAt
+      }
+      userId
+    }
+  }
+`;
+export type AssignBatchCoordinatorMutationFn = Apollo.MutationFunction<
+  AssignBatchCoordinatorMutation,
+  AssignBatchCoordinatorMutationVariables
+>;
+
+/**
+ * __useAssignBatchCoordinatorMutation__
+ *
+ * To run a mutation, you first call `useAssignBatchCoordinatorMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAssignBatchCoordinatorMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [assignBatchCoordinatorMutation, { data, loading, error }] = useAssignBatchCoordinatorMutation({
+ *   variables: {
+ *      batch: // value for 'batch'
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useAssignBatchCoordinatorMutation(
+  baseOptions?: Apollo.MutationHookOptions<AssignBatchCoordinatorMutation, AssignBatchCoordinatorMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<AssignBatchCoordinatorMutation, AssignBatchCoordinatorMutationVariables>(
+    AssignBatchCoordinatorDocument,
+    options
+  );
+}
+export type AssignBatchCoordinatorMutationHookResult = ReturnType<typeof useAssignBatchCoordinatorMutation>;
+export type AssignBatchCoordinatorMutationResult = Apollo.MutationResult<AssignBatchCoordinatorMutation>;
+export type AssignBatchCoordinatorMutationOptions = Apollo.BaseMutationOptions<
+  AssignBatchCoordinatorMutation,
+  AssignBatchCoordinatorMutationVariables
+>;
+export const AttendEventDocument = gql`
+  mutation attendEvent($eventId: String!) {
+    attendEvent(eventId: $eventId) {
+      attendees {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergency_mobile
+        firstName
+        gender
+        google_auth_id
+        id
+        isVerified
+        lastName
+        membershipYear
+        mobile
+        nickName
+        profileImage
+        role {
+          id
+          name
+        }
+        updatedAt
+      }
+      category
+      createdAt
+      createdBy
+      description
+      endDate
+      id
+      image
+      location
+      medium
+      organizers {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergency_mobile
+        firstName
+        gender
+        google_auth_id
+        id
+        isVerified
+        lastName
+        membershipYear
+        mobile
+        nickName
+        profileImage
+        role {
+          id
+          name
+        }
+        updatedAt
+      }
+      price
+      startDate
+      status
+      summary
+      tags
+      ticketUrl
+      title
+      updatedAt
+    }
+  }
+`;
+export type AttendEventMutationFn = Apollo.MutationFunction<AttendEventMutation, AttendEventMutationVariables>;
+
+/**
+ * __useAttendEventMutation__
+ *
+ * To run a mutation, you first call `useAttendEventMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAttendEventMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [attendEventMutation, { data, loading, error }] = useAttendEventMutation({
+ *   variables: {
+ *      eventId: // value for 'eventId'
+ *   },
+ * });
+ */
+export function useAttendEventMutation(
+  baseOptions?: Apollo.MutationHookOptions<AttendEventMutation, AttendEventMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<AttendEventMutation, AttendEventMutationVariables>(AttendEventDocument, options);
+}
+export type AttendEventMutationHookResult = ReturnType<typeof useAttendEventMutation>;
+export type AttendEventMutationResult = Apollo.MutationResult<AttendEventMutation>;
+export type AttendEventMutationOptions = Apollo.BaseMutationOptions<AttendEventMutation, AttendEventMutationVariables>;
 export const CreateEventDocument = gql`
   mutation createEvent(
     $category: String!
@@ -1089,6 +1616,49 @@ export type RefreshTokenMutationOptions = Apollo.BaseMutationOptions<
   RefreshTokenMutation,
   RefreshTokenMutationVariables
 >;
+export const RemoveBatchCoordinatorDocument = gql`
+  mutation removeBatchCoordinator($batch: Int!, $userId: String!) {
+    removeBatchCoordinator(batch: $batch, userId: $userId)
+  }
+`;
+export type RemoveBatchCoordinatorMutationFn = Apollo.MutationFunction<
+  RemoveBatchCoordinatorMutation,
+  RemoveBatchCoordinatorMutationVariables
+>;
+
+/**
+ * __useRemoveBatchCoordinatorMutation__
+ *
+ * To run a mutation, you first call `useRemoveBatchCoordinatorMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveBatchCoordinatorMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeBatchCoordinatorMutation, { data, loading, error }] = useRemoveBatchCoordinatorMutation({
+ *   variables: {
+ *      batch: // value for 'batch'
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useRemoveBatchCoordinatorMutation(
+  baseOptions?: Apollo.MutationHookOptions<RemoveBatchCoordinatorMutation, RemoveBatchCoordinatorMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<RemoveBatchCoordinatorMutation, RemoveBatchCoordinatorMutationVariables>(
+    RemoveBatchCoordinatorDocument,
+    options
+  );
+}
+export type RemoveBatchCoordinatorMutationHookResult = ReturnType<typeof useRemoveBatchCoordinatorMutation>;
+export type RemoveBatchCoordinatorMutationResult = Apollo.MutationResult<RemoveBatchCoordinatorMutation>;
+export type RemoveBatchCoordinatorMutationOptions = Apollo.BaseMutationOptions<
+  RemoveBatchCoordinatorMutation,
+  RemoveBatchCoordinatorMutationVariables
+>;
 export const ResetPasswordDocument = gql`
   mutation resetPassword($newPassword: String!, $token: String!) {
     resetPassword(newPassword: $newPassword, token: $token)
@@ -1261,6 +1831,79 @@ export function useSignupMutation(baseOptions?: Apollo.MutationHookOptions<Signu
 export type SignupMutationHookResult = ReturnType<typeof useSignupMutation>;
 export type SignupMutationResult = Apollo.MutationResult<SignupMutation>;
 export type SignupMutationOptions = Apollo.BaseMutationOptions<SignupMutation, SignupMutationVariables>;
+export const UpdateBatchCoordinatorDocument = gql`
+  mutation updateBatchCoordinator($newBatch: Int!, $userId: String!) {
+    updateBatchCoordinator(newBatch: $newBatch, userId: $userId) {
+      assignedAt
+      batch
+      id
+      user {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergency_mobile
+        firstName
+        gender
+        google_auth_id
+        id
+        isVerified
+        lastName
+        membershipYear
+        mobile
+        nickName
+        profileImage
+        role {
+          id
+          name
+        }
+        updatedAt
+      }
+      userId
+    }
+  }
+`;
+export type UpdateBatchCoordinatorMutationFn = Apollo.MutationFunction<
+  UpdateBatchCoordinatorMutation,
+  UpdateBatchCoordinatorMutationVariables
+>;
+
+/**
+ * __useUpdateBatchCoordinatorMutation__
+ *
+ * To run a mutation, you first call `useUpdateBatchCoordinatorMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateBatchCoordinatorMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateBatchCoordinatorMutation, { data, loading, error }] = useUpdateBatchCoordinatorMutation({
+ *   variables: {
+ *      newBatch: // value for 'newBatch'
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useUpdateBatchCoordinatorMutation(
+  baseOptions?: Apollo.MutationHookOptions<UpdateBatchCoordinatorMutation, UpdateBatchCoordinatorMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<UpdateBatchCoordinatorMutation, UpdateBatchCoordinatorMutationVariables>(
+    UpdateBatchCoordinatorDocument,
+    options
+  );
+}
+export type UpdateBatchCoordinatorMutationHookResult = ReturnType<typeof useUpdateBatchCoordinatorMutation>;
+export type UpdateBatchCoordinatorMutationResult = Apollo.MutationResult<UpdateBatchCoordinatorMutation>;
+export type UpdateBatchCoordinatorMutationOptions = Apollo.BaseMutationOptions<
+  UpdateBatchCoordinatorMutation,
+  UpdateBatchCoordinatorMutationVariables
+>;
 export const UpdateUserDocument = gql`
   mutation updateUser(
     $aboutMe: String
@@ -1389,6 +2032,275 @@ export function useVerifyUserMutation(
 export type VerifyUserMutationHookResult = ReturnType<typeof useVerifyUserMutation>;
 export type VerifyUserMutationResult = Apollo.MutationResult<VerifyUserMutation>;
 export type VerifyUserMutationOptions = Apollo.BaseMutationOptions<VerifyUserMutation, VerifyUserMutationVariables>;
+export const GetAllBatchCoordinatorsDocument = gql`
+  query getAllBatchCoordinators {
+    getAllBatchCoordinators {
+      assignedAt
+      batch
+      id
+      user {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergency_mobile
+        firstName
+        gender
+        google_auth_id
+        id
+        isVerified
+        lastName
+        membershipYear
+        mobile
+        nickName
+        profileImage
+        role {
+          id
+          name
+        }
+        updatedAt
+      }
+      userId
+    }
+  }
+`;
+
+/**
+ * __useGetAllBatchCoordinatorsQuery__
+ *
+ * To run a query within a React component, call `useGetAllBatchCoordinatorsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllBatchCoordinatorsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllBatchCoordinatorsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAllBatchCoordinatorsQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetAllBatchCoordinatorsQuery, GetAllBatchCoordinatorsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetAllBatchCoordinatorsQuery, GetAllBatchCoordinatorsQueryVariables>(
+    GetAllBatchCoordinatorsDocument,
+    options
+  );
+}
+export function useGetAllBatchCoordinatorsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetAllBatchCoordinatorsQuery, GetAllBatchCoordinatorsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetAllBatchCoordinatorsQuery, GetAllBatchCoordinatorsQueryVariables>(
+    GetAllBatchCoordinatorsDocument,
+    options
+  );
+}
+export function useGetAllBatchCoordinatorsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetAllBatchCoordinatorsQuery, GetAllBatchCoordinatorsQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetAllBatchCoordinatorsQuery, GetAllBatchCoordinatorsQueryVariables>(
+    GetAllBatchCoordinatorsDocument,
+    options
+  );
+}
+export type GetAllBatchCoordinatorsQueryHookResult = ReturnType<typeof useGetAllBatchCoordinatorsQuery>;
+export type GetAllBatchCoordinatorsLazyQueryHookResult = ReturnType<typeof useGetAllBatchCoordinatorsLazyQuery>;
+export type GetAllBatchCoordinatorsSuspenseQueryHookResult = ReturnType<typeof useGetAllBatchCoordinatorsSuspenseQuery>;
+export type GetAllBatchCoordinatorsQueryResult = Apollo.QueryResult<
+  GetAllBatchCoordinatorsQuery,
+  GetAllBatchCoordinatorsQueryVariables
+>;
+export const GetBatchCoordinatorByUserIdDocument = gql`
+  query getBatchCoordinatorByUserId($userId: String!) {
+    getBatchCoordinatorByUserId(userId: $userId) {
+      assignedAt
+      batch
+      id
+      user {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergency_mobile
+        firstName
+        gender
+        google_auth_id
+        id
+        isVerified
+        lastName
+        membershipYear
+        mobile
+        nickName
+        profileImage
+        role {
+          id
+          name
+        }
+        updatedAt
+      }
+      userId
+    }
+  }
+`;
+
+/**
+ * __useGetBatchCoordinatorByUserIdQuery__
+ *
+ * To run a query within a React component, call `useGetBatchCoordinatorByUserIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBatchCoordinatorByUserIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBatchCoordinatorByUserIdQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useGetBatchCoordinatorByUserIdQuery(
+  baseOptions: Apollo.QueryHookOptions<GetBatchCoordinatorByUserIdQuery, GetBatchCoordinatorByUserIdQueryVariables> &
+    ({ variables: GetBatchCoordinatorByUserIdQueryVariables; skip?: boolean } | { skip: boolean })
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetBatchCoordinatorByUserIdQuery, GetBatchCoordinatorByUserIdQueryVariables>(
+    GetBatchCoordinatorByUserIdDocument,
+    options
+  );
+}
+export function useGetBatchCoordinatorByUserIdLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetBatchCoordinatorByUserIdQuery, GetBatchCoordinatorByUserIdQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetBatchCoordinatorByUserIdQuery, GetBatchCoordinatorByUserIdQueryVariables>(
+    GetBatchCoordinatorByUserIdDocument,
+    options
+  );
+}
+export function useGetBatchCoordinatorByUserIdSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetBatchCoordinatorByUserIdQuery, GetBatchCoordinatorByUserIdQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetBatchCoordinatorByUserIdQuery, GetBatchCoordinatorByUserIdQueryVariables>(
+    GetBatchCoordinatorByUserIdDocument,
+    options
+  );
+}
+export type GetBatchCoordinatorByUserIdQueryHookResult = ReturnType<typeof useGetBatchCoordinatorByUserIdQuery>;
+export type GetBatchCoordinatorByUserIdLazyQueryHookResult = ReturnType<typeof useGetBatchCoordinatorByUserIdLazyQuery>;
+export type GetBatchCoordinatorByUserIdSuspenseQueryHookResult = ReturnType<
+  typeof useGetBatchCoordinatorByUserIdSuspenseQuery
+>;
+export type GetBatchCoordinatorByUserIdQueryResult = Apollo.QueryResult<
+  GetBatchCoordinatorByUserIdQuery,
+  GetBatchCoordinatorByUserIdQueryVariables
+>;
+export const GetBatchCoordinatorsByBatchDocument = gql`
+  query getBatchCoordinatorsByBatch($batch: Int!) {
+    getBatchCoordinatorsByBatch(batch: $batch) {
+      assignedAt
+      batch
+      id
+      user {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergency_mobile
+        firstName
+        gender
+        google_auth_id
+        id
+        isVerified
+        lastName
+        membershipYear
+        mobile
+        nickName
+        profileImage
+        role {
+          id
+          name
+        }
+        updatedAt
+      }
+      userId
+    }
+  }
+`;
+
+/**
+ * __useGetBatchCoordinatorsByBatchQuery__
+ *
+ * To run a query within a React component, call `useGetBatchCoordinatorsByBatchQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBatchCoordinatorsByBatchQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBatchCoordinatorsByBatchQuery({
+ *   variables: {
+ *      batch: // value for 'batch'
+ *   },
+ * });
+ */
+export function useGetBatchCoordinatorsByBatchQuery(
+  baseOptions: Apollo.QueryHookOptions<GetBatchCoordinatorsByBatchQuery, GetBatchCoordinatorsByBatchQueryVariables> &
+    ({ variables: GetBatchCoordinatorsByBatchQueryVariables; skip?: boolean } | { skip: boolean })
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetBatchCoordinatorsByBatchQuery, GetBatchCoordinatorsByBatchQueryVariables>(
+    GetBatchCoordinatorsByBatchDocument,
+    options
+  );
+}
+export function useGetBatchCoordinatorsByBatchLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetBatchCoordinatorsByBatchQuery, GetBatchCoordinatorsByBatchQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetBatchCoordinatorsByBatchQuery, GetBatchCoordinatorsByBatchQueryVariables>(
+    GetBatchCoordinatorsByBatchDocument,
+    options
+  );
+}
+export function useGetBatchCoordinatorsByBatchSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetBatchCoordinatorsByBatchQuery, GetBatchCoordinatorsByBatchQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetBatchCoordinatorsByBatchQuery, GetBatchCoordinatorsByBatchQueryVariables>(
+    GetBatchCoordinatorsByBatchDocument,
+    options
+  );
+}
+export type GetBatchCoordinatorsByBatchQueryHookResult = ReturnType<typeof useGetBatchCoordinatorsByBatchQuery>;
+export type GetBatchCoordinatorsByBatchLazyQueryHookResult = ReturnType<typeof useGetBatchCoordinatorsByBatchLazyQuery>;
+export type GetBatchCoordinatorsByBatchSuspenseQueryHookResult = ReturnType<
+  typeof useGetBatchCoordinatorsByBatchSuspenseQuery
+>;
+export type GetBatchCoordinatorsByBatchQueryResult = Apollo.QueryResult<
+  GetBatchCoordinatorsByBatchQuery,
+  GetBatchCoordinatorsByBatchQueryVariables
+>;
 export const GetEventDetailsDocument = gql`
   query getEventDetails($id: Int!) {
     getEventDetails(id: $id) {

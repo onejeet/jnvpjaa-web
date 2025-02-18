@@ -8,32 +8,37 @@ import ErrorIcon from '@mui/icons-material/Error';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import DeleteIcon from '@mui/icons-material/Delete';
 import type { AlertContentProps } from './AlertDialog.types';
+import { Spinner } from '@phosphor-icons/react';
 
 const AlertContent: React.FC<AlertContentProps> = ({ title, message, action = 'delete', items = [] }) => {
   const MessageComp = React.useMemo(() => {
     switch (action) {
       case 'approve':
         return (
-          <Typography variant="body2">
-            Do you really want to approve?
-            <br /> once approved, the user will be able to login and access portal.
+          <Typography variant="body1">
+            {message || (
+              <Box component="span">
+                Do you really want to approve?
+                <br /> once approved, the user will be able to login and access portal.
+              </Box>
+            )}
           </Typography>
         );
       case 'reject':
         return (
-          <Typography variant="body2">
+          <Typography variant="body1">
             Do you really want to reject?
             <br /> The registration will be discarded and removed.
           </Typography>
         );
       case 'delete':
         if (items.length === 0) {
-          return <Typography variant="body2">Do you really want to delete this item?</Typography>;
+          return <Typography variant="body1">Do you really want to delete this item?</Typography>;
         } else if (items.length === 1) {
           return (
-            <Typography variant="body2">
+            <Typography variant="body1">
               Do you really want to delete{' '}
-              <Typography variant="body2" component="span" fontWeight={600}>
+              <Typography variant="body1" component="span" fontWeight={600}>
                 {items[0]}
               </Typography>
               ?
@@ -42,7 +47,7 @@ const AlertContent: React.FC<AlertContentProps> = ({ title, message, action = 'd
         }
         return (
           <Box display="flex" flexDirection="column">
-            <Typography variant="body2">Do you really want to delete below items?</Typography>
+            <Typography variant="body1">Do you really want to delete below items?</Typography>
             <List sx={{ mt: 1 }} dense>
               {items.map((item, index) => (
                 <ListItem key={`delete-item-${index}`} disableGutters sx={{ fontSize: '0.9rem', fontWeight: 600 }}>
@@ -55,17 +60,17 @@ const AlertContent: React.FC<AlertContentProps> = ({ title, message, action = 'd
       case 'deleting':
         return <Typography variant="h6">{message || 'Deleting, Please wait...'}</Typography>;
       case 'success':
-        return message ? <Typography variant="body2">{message}</Typography> : null;
+        return message ? <Typography variant="body1">{message}</Typography> : null;
       case 'error':
-        return message ? <Typography variant="body2">{message || 'Completed Successfully'}</Typography> : null;
+        return message ? <Typography variant="body1">{message || 'Completed Successfully'}</Typography> : null;
       case 'unsaved':
         return (
-          <Typography variant="body2">
+          <Typography variant="body1">
             {message || `You have made changes that haven't been saved yet. Are you sure to discard changes?`}
           </Typography>
         );
       default:
-        return '';
+        return <Typography variant="body1">{message || ''}</Typography>;
     }
   }, [message, action, items]);
 
@@ -81,6 +86,8 @@ const AlertContent: React.FC<AlertContentProps> = ({ title, message, action = 'd
       upTitle = title || 'Completed Successfully';
     } else if (action === 'error') {
       upTitle = title || 'An error occurred';
+    } else if (action === 'loading') {
+      upTitle = title || 'Loading...';
     }
 
     return (
@@ -93,6 +100,8 @@ const AlertContent: React.FC<AlertContentProps> = ({ title, message, action = 'd
   const iconComp = React.useMemo(() => {
     if (action === 'delete' || action === 'approve' || action === 'reject') {
       return <HelpIcon sx={{ color: 'grey.700', fontSize: '100px' }} />;
+    } else if (action === 'loading') {
+      return <Spinner fill="grey.700" size={100} />;
     } else if (action === 'success') {
       return <TaskAltIcon sx={{ color: 'success.main', fontSize: '100px' }} />;
     } else if (action === 'error') {

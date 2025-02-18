@@ -45,7 +45,7 @@ const DialogFooter: React.FC<DialogFooterProps> = ({
             <Button
               title="Cancel"
               variant="outlined"
-              size="small"
+              // size="small"
               color="secondary"
               startIcon={cancelButtonProps?.loading ? undefined : <CloseIcon />}
               onClick={() => {
@@ -59,7 +59,7 @@ const DialogFooter: React.FC<DialogFooterProps> = ({
               <Button
                 title="Save"
                 color="success"
-                size="small"
+                // size="small"
                 variant="contained"
                 startIcon={okayButtonProps?.loading ? undefined : <TaskAltIcon sx={{ fontSize: '14px' }} />}
                 onClick={

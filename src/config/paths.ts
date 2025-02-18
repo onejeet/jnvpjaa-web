@@ -4,4 +4,7 @@ export const paths = {
   events: {
     root: '/events',
   },
+  profile: {
+    root: '/profile',
+  },
 };

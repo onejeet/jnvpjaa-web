@@ -10,6 +10,7 @@ import Button from '@/components/core/Button';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/router';
 import { useSigninMutation } from '@/apollo/hooks';
+import { useApolloClient } from '@apollo/client';
 
 const SigninForm = () => {
   const router = useRouter();
@@ -20,11 +21,13 @@ const SigninForm = () => {
     formState: { errors },
   } = useForm<ISigninFormInput>();
   const { setUser } = useAuth();
+  const client = useApolloClient();
 
   const [signin, { loading }] = useSigninMutation();
 
   const onSubmit = React.useCallback(
     (data: ISigninFormInput) => {
+      client.resetStore();
       signin({
         variables: {
           email: data?.email?.trim(),

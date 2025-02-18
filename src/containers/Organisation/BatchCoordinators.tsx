@@ -22,6 +22,7 @@ const BatchCoordinators = () => {
       <Box component={Grid} container width="100%" mb={3}>
         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <OutlinedInput
+            size="small"
             placeholder="Search Coordinators"
             startAdornment={<SearchIcon sx={{ color: 'grey.800', mr: '8px' }} />}
             onChange={(e) => onSearch(e.target.value)}
@@ -50,6 +51,8 @@ const BatchCoordinators = () => {
         // initialState={memoizedInitialState}
         // checkboxSelection
         pagination
+        rowSelection={false}
+        disableRowSelectionOnClick
         paginationMode="server"
         hideFooter
         /* handlers */

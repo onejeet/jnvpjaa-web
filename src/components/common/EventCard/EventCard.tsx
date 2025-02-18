@@ -12,15 +12,28 @@ import {
   AvatarGroup,
   Chip,
   Skeleton,
+  Tooltip,
 } from '@mui/material';
-import { EventCardProps } from './EventCard.types';
+import { EventCardProps, IPerson } from './EventCard.types';
 import Button from '@/components/core/Button';
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
-import { startCase, valueToLabelFormatter } from '@/utils/helpers';
-import { CalendarDots, Minus } from '@phosphor-icons/react';
+import { getAvatarDataUrl, startCase, valueToLabelFormatter } from '@/utils/helpers';
+import { CalendarDots, CalendarHeart, Heart, Minus, NotePencil } from '@phosphor-icons/react';
 
-const EventCard: React.FC<EventCardProps> = ({ event, loading }) => {
-  const { id, title = '', summary = '', startDate, endDate, image, medium = '', online, category, people } = event;
+const EventCard: React.FC<EventCardProps> = ({ event, loading, markImGoing }) => {
+  const {
+    id,
+    title = '',
+    summary = '',
+    startDate,
+    endDate,
+    image,
+    medium = '',
+    online,
+    category,
+    attendees: people,
+    status,
+  } = event;
 
   const formattedStartDate = React.useMemo(() => {
     return dayjs(startDate)?.format('MMM DD, YYYY HH:MM A');
@@ -31,11 +44,21 @@ const EventCard: React.FC<EventCardProps> = ({ event, loading }) => {
   }, [endDate]);
 
   const isLive = React.useMemo(() => {
-    return dayjs(startDate).isBefore(dayjs()) && (!endDate || dayjs(endDate).isAfter(dayjs()));
-  }, [startDate, endDate]);
+    return (
+      status === 'published' && dayjs(startDate).isBefore(dayjs()) && (!endDate || dayjs(endDate).isAfter(dayjs()))
+    );
+  }, [status, startDate, endDate]);
 
   return (
     <Card sx={{ boxShadow: 3, borderRadius: 2, position: 'relative' }}>
+      {status === 'draft' ? (
+        <Chip
+          label="Draft"
+          color="error"
+          size="small"
+          sx={{ ml: 'auto', position: ' absolute', top: '10px', right: '10px', zIndex: 10 }}
+        />
+      ) : null}
       {loading ? (
         <Skeleton variant="rounded" width="100%" height={180} />
       ) : (
@@ -78,7 +101,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, loading }) => {
             </Typography>
             {category && (
               <Box sx={{ display: 'flex', my: 1 }}>
-                <Chip size="small" color={'grey'} label={valueToLabelFormatter(category)} />
+                <Chip size="small" label={valueToLabelFormatter(category)} />
                 <Chip
                   size="small"
                   label={startCase(medium)}
@@ -105,23 +128,60 @@ const EventCard: React.FC<EventCardProps> = ({ event, loading }) => {
           )}
         </Box>
 
-        {/* <Stack direction="row" spacing={1} mt={2}>
-          <AvatarGroup total={people.length}>
-            {people.slice(0, 4).map((person, index) => (
-              <Avatar key={`event-avatar-${title}-${index}`} alt={person.name} src={person.avatar} />
-            ))}
-          </AvatarGroup>
-        </Stack> */}
+        {people?.length > 0 && (
+          <Box mt={2}>
+            <Typography color="grey.600" variant="body2">
+              Going:
+            </Typography>
+            <Stack direction="row" spacing={1}>
+              <AvatarGroup
+                total={people?.length}
+                slotProps={{
+                  surplus: {
+                    sx: {
+                      // cursor: 'pointer',
+                    },
+                    // onClick: () => alert('Hello'),
+                  },
+                }}
+              >
+                {people.slice(0, 4).map((person: IPerson, index) => (
+                  <Tooltip
+                    key={`event-avatar-${title}-${index}`}
+                    placement="top"
+                    title={`${person.firstName} ${person?.lastName} ${person?.batch ? `(${person.batch})` : ''}`}
+                    arrow
+                  >
+                    <Avatar alt={person.firstName} src={person.profileImage || getAvatarDataUrl(person.id)} />
+                  </Tooltip>
+                ))}
+              </AvatarGroup>
+            </Stack>
+          </Box>
+        )}
 
-        <Button
-          title="More Details"
-          variant="outlined"
-          fullWidth
-          disabled={loading}
-          endIcon={<ArrowRightAltIcon />}
-          sx={{ marginTop: 2 }}
-          onClick={() => alert('More Details')}
-        />
+        {status === 'draft' ? (
+          <Button
+            size="small"
+            variant="outlined"
+            disabled={loading}
+            fullWidth
+            title="Edit"
+            startIcon={<NotePencil />}
+            sx={{ ml: 'auto', mt: 2 }}
+          />
+        ) : (
+          <Button
+            title="I'm Going"
+            variant="outlined"
+            fullWidth
+            disabled={loading}
+            // endIcon={<ArrowRightAltIcon />}
+            startIcon={<Heart weight="fill" />}
+            sx={{ marginTop: 2 }}
+            onClick={() => markImGoing(id)}
+          />
+        )}
       </CardContent>
     </Card>
   );

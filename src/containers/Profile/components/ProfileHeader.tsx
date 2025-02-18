@@ -24,6 +24,8 @@ export default function ProfileHeader({ user, loading }: ProfileHeaderProps) {
       />
       <ProfilePicture
         alt={`${user?.firstName} ${user?.lastName}`}
+        id={user?.id}
+        src={user?.profileImage}
         loading={loading}
         sx={{
           width: 168,

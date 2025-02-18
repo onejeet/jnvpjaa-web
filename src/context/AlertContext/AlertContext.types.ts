@@ -3,7 +3,11 @@ import type React from 'react';
 import type { Toast } from 'react-hot-toast';
 
 export interface AlertContextProps {
-  showAlert: (options: ToastProps, isDialog?: boolean, dialogProps?: Partial<AlertDialogProps>) => void;
+  showAlert: (
+    options: ToastProps & Partial<AlertDialogProps>,
+    isDialog?: boolean,
+    dialogProps?: Partial<AlertDialogProps>
+  ) => void;
   hideAlert: () => void;
 }
 

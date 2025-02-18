@@ -31,6 +31,7 @@ import { useRouter } from 'next/router';
 import HoverPopover from '@/components/common/HoverPopover';
 import HeaderAddButton from './HeaderAddButton';
 import { SignOut, User } from '@phosphor-icons/react';
+import { paths } from '@/config/paths';
 
 export interface IMenuItemProps {
   item: IHeaderMenuItem;
@@ -50,11 +51,12 @@ const LayoutTopbar: React.FC = () => {
   const [expanded, setExpanded] = React.useState<string>('');
   const [openMenu, setOpenMenu] = React.useState<boolean>(false);
   const theme = useTheme();
+  const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { user, logoutUser } = useAuth();
 
   const HEADER_MENU = React.useMemo(() => {
-    return getHeaderMenu(user?.id?.length > 0);
+    return getHeaderMenu(Boolean(user?.id));
   }, [user]);
 
   const ACCOUNT_MENU_LIST = React.useMemo(
@@ -63,6 +65,7 @@ const LayoutTopbar: React.FC = () => {
         label: 'My Profile',
         value: '/profile',
         icon: <User size={16} />,
+        onClick: () => router.push(paths.profile.root),
       },
       {
         label: 'Log Out',
@@ -73,7 +76,7 @@ const LayoutTopbar: React.FC = () => {
         onClick: logoutUser,
       },
     ],
-    [logoutUser]
+    [logoutUser, router]
   );
 
   const ACCOUNT_COMP = React.useMemo(() => {
@@ -82,6 +85,7 @@ const LayoutTopbar: React.FC = () => {
         id={`account-menu-${user?.id}`}
         render={
           <ProfilePicture
+            src={user?.profileImage}
             //   title={isMobile ? undefined : user?.firstName}
             id={user?.id}
             // summary="Member"
@@ -233,7 +237,7 @@ const LayoutTopbar: React.FC = () => {
               <HeaderMenuItem key={item.label} item={item} />
             ))}
             {user?.id ? (
-              <Box gap={1} display="flex">
+              <Box gap={2} display="flex">
                 <HeaderAddButton />
                 {ACCOUNT_COMP}
               </Box>
@@ -277,11 +281,13 @@ const LayoutTopbar: React.FC = () => {
               />
             ))}
           </Box>
-          <NextLink href="/signin" passHref style={{ textDecoration: 'none' }}>
-            <Button fullWidth variant="outlined" sx={{ ml: '8px', whiteSpace: 'nowrap' }}>
-              Alumni Login
-            </Button>
-          </NextLink>
+          {!user?.id && (
+            <NextLink href="/signin" passHref style={{ textDecoration: 'none' }}>
+              <Button fullWidth variant="outlined" sx={{ ml: '8px', whiteSpace: 'nowrap' }}>
+                Alumni Login
+              </Button>
+            </NextLink>
+          )}
         </Box>
       </Drawer>
     </AppBar>

@@ -1,6 +1,7 @@
-import { ApolloClient, HttpLink, InMemoryCache, ApolloLink, Observable } from '@apollo/client';
+import { ApolloClient, HttpLink, InMemoryCache, ApolloLink, Observable, from, split } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { refreshAccessToken } from './refresh';
+import { getMainDefinition } from '@apollo/client/utilities';
 
 // Error handling link
 const errorLink = new ApolloLink((operation, forward) => {
@@ -61,7 +62,18 @@ const httpLink = new HttpLink({
 
 // Apollo Client
 export const apolloClient = new ApolloClient({
-  link: ApolloLink.from([errorLink, authLink, httpLink]),
+  link: from([
+    errorLink,
+    split(({ query }: { query: any }) => {
+      // Safely extract the operation name from the query
+      const mainDef = getMainDefinition(query);
+      const operationName = mainDef?.name?.value; // Handle the case where 'name' or 'value' may be undefined
+
+      // Route to 'credential_link' only if operation name is 'bo_signup'
+      return operationName !== 'getEventList' && operationName !== 'getUserList';
+    }, authLink),
+    httpLink,
+  ]),
   cache: new InMemoryCache(),
   connectToDevTools: true,
 });
