@@ -34,6 +34,8 @@ const SigninForm = () => {
           password: data?.password,
         },
         onCompleted: (res: any) => {
+          client.resetStore();
+          client.cache.reset();
           setUser(res?.signin?.user);
           localStorage.setItem('logged_in', 'true');
           // auth redirection will be handled from AuthContext
