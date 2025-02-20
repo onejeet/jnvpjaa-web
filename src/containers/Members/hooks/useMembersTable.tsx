@@ -4,7 +4,7 @@ import { GridPaginationModel, GridRowParams } from '@mui/x-data-grid';
 import React from 'react';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import { useGetUserListQuery, useVerifyUserMutation } from '@/apollo/hooks';
-import { Skeleton, Typography } from '@mui/material';
+import { Chip, Skeleton, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import VerifiedBadge from '@/components/common/VerifiedBadge';
 import { formatPhoneNumber } from '@/utils/helpers';
@@ -50,6 +50,7 @@ const useMembersTable = () => {
         field: 'name',
         headerName: 'Alumni',
         width: 250,
+        flex: 1,
         ...commonTableColumnProps,
         sortable: true,
         renderCell: ({ row }: GridRowParams) => (
@@ -96,7 +97,7 @@ const useMembersTable = () => {
       {
         field: 'email',
         headerName: 'Email',
-        width: 200,
+        width: 250,
         ...commonTableColumnProps,
         sortable: true,
         renderCell: ({ row }: GridRowParams) =>
@@ -120,15 +121,16 @@ const useMembersTable = () => {
             <Box height="100%" display="flex" alignItems="center">
               <Skeleton width="100%" height={30} />
             </Box>
+          ) : row?.batch ? (
+            <Chip label={row?.batch} sx={{ fontWeight: 500 }} />
           ) : (
-            row?.batch || ''
+            ''
           ),
       },
       {
         field: 'mobile',
         headerName: 'Mobile',
-        minWidth: 270,
-        flex: 1,
+        width: 270,
         ...commonTableColumnProps,
         sortable: true,
         renderCell: ({ row }: GridRowParams) =>
@@ -140,7 +142,10 @@ const useMembersTable = () => {
             formatPhoneNumber(row.mobile)
           ),
       },
-      {
+    ];
+
+    if (isAdmin) {
+      columns.push({
         field: 'actions',
         type: 'actions',
         headerName: '',
@@ -148,8 +153,8 @@ const useMembersTable = () => {
         align: 'right',
         sortbale: false,
         resizable: false,
-        width: 250,
-        minWidth: 100,
+        width: !isAdmin ? 0 : 250,
+        minWidth: !isAdmin ? 0 : 100,
         // flex: 1,
         cellClassName: 'actions_cell',
         getActions: ({ row }: GridRowParams) =>
@@ -247,8 +252,8 @@ const useMembersTable = () => {
                     />
                   </Box>,
                 ],
-      },
-    ];
+      });
+    }
 
     setColumns(columns);
   }, [isAdmin, user, handleUserVerification]);
