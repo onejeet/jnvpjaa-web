@@ -7,7 +7,7 @@ interface Props {
 
 const VerifiedBadge: React.FC<Props> = ({ size }) => {
   return (
-    <Tooltip title="User is verified by the admin." arrow placement="top">
+    <Tooltip title="Verified by admin" arrow placement="top">
       <Image src="/assets/svg/verified.svg" width={size || 16} height={size || 16} alt="verified user" />
     </Tooltip>
   );

@@ -17,7 +17,20 @@ import {
 import { EventCardProps, IPerson } from './EventCard.types';
 import Button from '@/components/core/Button';
 import { getAvatarDataUrl, startCase, valueToLabelFormatter } from '@/utils/helpers';
-import { CalendarDots, CalendarHeart, Check, CheckCircle, Heart, Minus, NotePencil } from '@phosphor-icons/react';
+import {
+  ArrowSquareOut,
+  CalendarDots,
+  CalendarHeart,
+  Check,
+  CheckCircle,
+  Globe,
+  Heart,
+  MapPinLine,
+  Minus,
+  NotePencil,
+} from '@phosphor-icons/react';
+import { Maybe, User } from '@/apollo/hooks';
+import ProfilePicture from '../ProfilePicture';
 
 const EventCard: React.FC<EventCardProps> = ({
   user,
@@ -37,8 +50,8 @@ const EventCard: React.FC<EventCardProps> = ({
     endDate,
     image,
     medium = '',
-    online,
     category,
+    location,
     attendees: people,
     status,
     isVerified,
@@ -127,7 +140,7 @@ const EventCard: React.FC<EventCardProps> = ({
                 <Chip
                   size="small"
                   label={startCase(medium)}
-                  color={online ? 'success' : 'info'}
+                  color={medium === 'online' ? 'success' : 'info'}
                   sx={{ fontWeight: 500, ml: 'auto' }}
                 />
               </Box>
@@ -149,8 +162,66 @@ const EventCard: React.FC<EventCardProps> = ({
             </>
           )}
         </Box>
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          {loading ? (
+            <Skeleton width="40%" height={25} sx={{ mt: 2 }} />
+          ) : (
+            location && (
+              <Box
+                mt={2}
+                display="flex"
+                alignItems="center"
+                sx={{
+                  svg: {
+                    color: 'text.secondary',
+                  },
+                }}
+              >
+                {medium === 'online' ? (
+                  <Globe size={18} style={{ marginRight: '8px' }} />
+                ) : (
+                  <MapPinLine size={18} style={{ marginRight: '8px' }} />
+                )}
+                {medium === 'online' && location !== 'protected' ? (
+                  <Typography
+                    component="a"
+                    href={location}
+                    target="_blank"
+                    display="flex"
+                    alignItems="center"
+                    variant="body2"
+                    fontWeight={500}
+                    color="text.secondary"
+                    sx={{
+                      textDecoration: 'none',
+                      '&:hover': {
+                        color: 'primary.main',
+                        svg: {
+                          color: 'primary.main',
+                        },
+                      },
+                    }}
+                  >
+                    {location}
+                    <ArrowSquareOut size={14} style={{ marginLeft: '4px' }} />
+                  </Typography>
+                ) : (
+                  <Typography
+                    display="flex"
+                    alignItems="center"
+                    variant="body2"
+                    fontWeight={500}
+                    color="text.secondary"
+                  >
+                    {location}
+                  </Typography>
+                )}
+              </Box>
+            )
+          )}
+        </Box>
 
-        {people?.length > 0 && (
+        {people && people?.length > 0 && (
           <Box mt={2}>
             <Typography color="grey.600" variant="body2">
               Going:
@@ -167,14 +238,17 @@ const EventCard: React.FC<EventCardProps> = ({
                   },
                 }}
               >
-                {people.slice(0, 4).map((person: IPerson, index) => (
+                {people?.slice(0, 4)?.map((person: Maybe<User>, index: number) => (
                   <Tooltip
                     key={`event-avatar-${title}-${index}`}
                     placement="top"
-                    title={`${person.firstName} ${person?.lastName} ${person?.batch ? `(${person.batch})` : ''}`}
+                    title={`${person?.firstName || 'NA'} ${person?.lastName || ''} ${person?.batch ? `(${person.batch})` : ''}`}
                     arrow
                   >
-                    <Avatar alt={person.firstName} src={person.profileImage || getAvatarDataUrl(person.id)} />
+                    <Avatar
+                      alt={person?.firstName || 'NA'}
+                      src={person?.profileImage || getAvatarDataUrl(person?.id)}
+                    />
                   </Tooltip>
                 ))}
               </AvatarGroup>

@@ -8,9 +8,7 @@ const PastPresidents = () => {
 
   return (
     <Box>
-      <Typography variant="h1" textAlign="center">
-        Past Presidents
-      </Typography>
+      <Typography variant="h1">Past Presidents</Typography>
       <Typography color="grey.800" mt={2}>
         Leadership is the heartbeat of any organization, and it is the pulse that has guided the JNVPJ Alumni
         Association from its humble beginnings to its current grandeur. With a legacy shaped by 3 visionary past

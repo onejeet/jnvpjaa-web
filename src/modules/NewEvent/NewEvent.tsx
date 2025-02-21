@@ -17,7 +17,7 @@ import {
 } from '@/apollo/hooks';
 import { paths } from '@/config/paths';
 import TipTapTextEditor from '@/modules/TipTapTextEditor';
-import { CurrencyInr, FloppyDiskBack, MapPinLine } from '@phosphor-icons/react';
+import { CurrencyInr, FloppyDiskBack, Globe, MapPinLine } from '@phosphor-icons/react';
 import { useApolloClient } from '@apollo/client';
 import { alumniEventCategories, eventHostingmedium } from '@/constants/Events.constants';
 import dayjs from 'dayjs';
@@ -284,7 +284,7 @@ const NewEvent = () => {
             label={watchMedium === 'online' ? 'URL' : 'Location'}
             control={control}
             disabled={saving}
-            startAdornment={watchMedium === 'online' ? 'https://' : <MapPinLine size={18} />}
+            startAdornment={watchMedium === 'online' ? <Globe size={18} /> : <MapPinLine size={18} />}
             name="location"
             size="small"
             rules={{

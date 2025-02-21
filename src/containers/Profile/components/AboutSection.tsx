@@ -52,6 +52,14 @@ export default function AboutSection() {
         </Grid>
         <Grid size={{ xs: 12, sm: 6 }}>
           <Box display="flex" alignItems="center">
+            <Phone size={24} />
+            <Typography sx={{ ml: 1 }}>
+              {formatPhoneNumber(user?.emergencyMobile || '') || '--'} (Emergency Contact)
+            </Typography>
+          </Box>
+        </Grid>
+        <Grid size={{ xs: 12, sm: 6 }}>
+          <Box display="flex" alignItems="center">
             <EnvelopeSimpleOpen size={24} />
             <Typography sx={{ ml: 1 }}>{user?.email || '--'}</Typography>
           </Box>

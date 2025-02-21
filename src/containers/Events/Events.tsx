@@ -9,7 +9,7 @@ import {
   usePublishEventMutation,
   useVerifyEventMutation,
 } from '@/apollo/hooks';
-import { Grid2 as Grid, Typography } from '@mui/material';
+import { Box, Grid2 as Grid, Typography } from '@mui/material';
 import EventCard from '@/components/common/EventCard/EventCard';
 import EmptyView from '@/components/common/EmptyView';
 import { useAlert } from '@/context/AlertContext';
@@ -18,6 +18,7 @@ import { paths } from '@/config/paths';
 import { useRouter } from 'next/router';
 import { Plus, Ticket } from '@phosphor-icons/react';
 import { useApolloClient } from '@apollo/client';
+import Button from '@/components/core/Button';
 
 export default function Events() {
   const { redirectToSignin, user, isAdmin } = useAuth();
@@ -264,12 +265,15 @@ export default function Events() {
       title={`Events • Alumni Network of JNV Paota, Jaipur`}
       //   containerProps={{ sx: { py: 2 } }}
     >
-      <Typography variant="h1" textAlign="center">
-        Events
-      </Typography>
-      <Typography color="grey.800" mb={3} textAlign="center">
-        List of all the upcoming events.
-      </Typography>
+      <Box display="flex" alignItems="center" justifyContent="space-between">
+        <Box>
+          <Typography variant="h1">Events</Typography>
+          <Typography color="grey.800" mb={3}>
+            List of all the ongoing & upcoming events.
+          </Typography>
+        </Box>
+        <Button title="Create Event" startIcon={<Plus size={16} />} onClick={() => router.push(paths.events.new)} />
+      </Box>
       <Grid container spacing={3}>
         {listData?.length > 0 ? (
           listData?.map((ev: any, index) => (

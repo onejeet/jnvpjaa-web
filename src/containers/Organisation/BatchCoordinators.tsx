@@ -11,9 +11,7 @@ const BatchCoordinators = () => {
 
   return (
     <Box>
-      <Typography variant="h1" textAlign="center">
-        Batch Coordinators
-      </Typography>
+      <Typography variant="h1">Batch Coordinators</Typography>
       <Typography color="grey.800" mt={2} mb={3}>
         {`Welcome to the JNVPJAA Executive Committee page! Here, you'll find the dedicated individuals who lead and shape
         our vibrant alumni association. Our committee members bring diverse expertise and a shared passion for fostering
