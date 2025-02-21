@@ -1,7 +1,12 @@
 import Profile from '@/containers/Profile';
+import { ProfileProvider } from '@/context/ProfileContext';
 import { NextPage } from 'next';
 
-const ProfilePage: NextPage = () => <Profile />;
+const ProfilePage: NextPage = () => (
+  <ProfileProvider>
+    <Profile />
+  </ProfileProvider>
+);
 
 ProfilePage.getInitialProps = () => {
   return {

@@ -60,6 +60,8 @@ const httpLink = new HttpLink({
   credentials: 'include', // or 'include' for cookies
 });
 
+const publicOperations = ['signin', 'getEventList', 'getUserList', 'signup'];
+
 // Apollo Client
 export const apolloClient = new ApolloClient({
   link: from([
@@ -70,7 +72,7 @@ export const apolloClient = new ApolloClient({
       const operationName = mainDef?.name?.value; // Handle the case where 'name' or 'value' may be undefined
 
       // Route to 'credential_link' only if operation name is 'bo_signup'
-      return operationName !== 'getEventList' && operationName !== 'getUserList';
+      return operationName ? !publicOperations?.includes(operationName) : true;
     }, authLink),
     httpLink,
   ]),

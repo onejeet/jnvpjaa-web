@@ -132,3 +132,14 @@ export function valueToLabelFormatter(str: string) {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize the first letter
     .join(' '); // Join the words back together
 }
+
+export const titleCase = (str: string) => {
+  if (!str) return str;
+  return str
+    .toLowerCase()
+    .split(' ')
+    .map(function (word) {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join(' ');
+};

@@ -1,27 +1,47 @@
 import Title from '@/components/common/Title';
-import { Box, Typography, Avatar } from '@mui/material';
+import { Box, Typography, Avatar, Skeleton } from '@mui/material';
 import { ProfileHeaderProps } from '../Profile.types';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import VerifiedBadge from '@/components/common/VerifiedBadge';
+import Button from '@/components/core/Button';
+import { Notches, PencilSimple } from '@phosphor-icons/react';
+import { useProfile } from '@/context/ProfileContext';
 
-export default function ProfileHeader({ user, loading }: ProfileHeaderProps) {
+const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
+  const { user, loading, isProfileEditable, editingProfile, setEditingProfile } = useProfile();
   return (
     <Box sx={{ position: 'relative', mb: 4 }}>
-      <Box
-        component="img"
-        src={user?.id ? `https://picsum.photos/seed/${user?.id}/1200/250` : undefined}
-        alt="Cover"
-        sx={{
-          width: '100%',
-          minWidth: '100%',
-          height: 250,
-          minHeight: 250,
-          objectFit: 'cover',
-          borderRadius: 2,
-          border: '1px dashed',
-          borderColor: 'grey.400',
-        }}
-      />
+      {loading ? (
+        <Box>
+          <Skeleton
+            width="100%"
+            height={250}
+            sx={{
+              width: '100%',
+              minWidth: '100%',
+              height: 250,
+              minHeight: 250,
+            }}
+          />
+        </Box>
+      ) : (
+        <Box
+          component="img"
+          src={user?.id ? `https://picsum.photos/seed/${user?.id}/1200/250` : undefined}
+          alt="Cover"
+          sx={{
+            width: '100%',
+            minWidth: '100%',
+            height: 250,
+            minHeight: 250,
+            objectFit: 'cover',
+            borderRadius: 2,
+            border: '1px dashed',
+            borderColor: 'grey.400',
+          }}
+        />
+      )}
+
       <ProfilePicture
         alt={`${user?.firstName} ${user?.lastName}`}
         id={user?.id}
@@ -36,8 +56,9 @@ export default function ProfileHeader({ user, loading }: ProfileHeaderProps) {
           left: 32,
         }}
       />
-      <Box sx={{ mt: 1, ml: '200px' }}>
+      <Box display="flex" justifyContent="space-between" sx={{ mt: 1, ml: '200px' }}>
         <Title
+          loading={loading}
           title={
             <Box display="flex" alignItems="center">
               <Typography
@@ -50,10 +71,24 @@ export default function ProfileHeader({ user, loading }: ProfileHeaderProps) {
             </Box>
           }
           titleProps={{ fontWeight: 600, fontSize: '30px' }}
-          summary=" Web Developer | Coffee Enthusiast"
-          summaryProps={{ color: 'grey.600' }}
+          summary={user?.batch ? `Batch of ${user?.batch}` : ''}
+          summaryProps={{ color: 'grey.600', fontSize: '14px', mt: 1 }}
         />
+        {isProfileEditable && !editingProfile && (
+          <Button
+            disabled={loading}
+            title="Edit Profile"
+            size="small"
+            onClick={() => setEditingProfile(true)}
+            startIcon={<PencilSimple size={16} />}
+            sx={{
+              whiteSpace: 'nowrap',
+            }}
+          />
+        )}
       </Box>
     </Box>
   );
-}
+};
+
+export default ProfileHeader;

@@ -25,5 +25,5 @@ export interface IEvent {
 export interface EventCardProps {
   event: IEvent;
   loading?: boolean;
-  markImGoing: (id: number | string) => void;
+  markImGoing?: (id: number | string) => void;
 }

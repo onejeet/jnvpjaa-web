@@ -1,4 +1,4 @@
-import { Box, Typography, Grid, Card, CardContent, CardMedia } from '@mui/material';
+import { Box, Typography, Grid2 as Grid, Card, CardContent, CardMedia } from '@mui/material';
 
 const blogPosts = [
   {
@@ -25,7 +25,10 @@ export default function BlogsSection() {
         Recent Blog Posts
       </Typography>
       <Grid container spacing={3}>
-        {blogPosts.map((post, index) => (
+        <Typography my={3} color="grey.500">
+          Coming soon
+        </Typography>
+        {/* {blogPosts.map((post, index) => (
           <Grid item xs={12} sm={6} md={4} key={index}>
             <Card>
               <CardMedia component="img" height="140" image={post.image} alt={post.title} />
@@ -39,7 +42,7 @@ export default function BlogsSection() {
               </CardContent>
             </Card>
           </Grid>
-        ))}
+        ))} */}
       </Grid>
     </Box>
   );

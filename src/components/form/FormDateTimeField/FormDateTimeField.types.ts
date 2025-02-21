@@ -11,4 +11,5 @@ export interface FormDateTimeFieldProps<TFieldValues extends FieldValues = Field
   helperText?: string;
   dateTimePickerProps?: DateTimePickerProps<Dayjs, false>;
   inputProps?: Partial<TextFieldProps>;
+  isDateOnly?: boolean;
 }

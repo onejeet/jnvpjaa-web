@@ -17,6 +17,36 @@ export type Scalars = {
   Float: { input: number; output: number };
   /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
   DateTime: { input: any; output: any };
+  /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
+  JSON: { input: any; output: any };
+};
+
+export type Address = {
+  __typename?: 'Address';
+  address?: Maybe<Scalars['String']['output']>;
+  city?: Maybe<Scalars['String']['output']>;
+  country?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  postalCode?: Maybe<Scalars['String']['output']>;
+  state?: Maybe<Scalars['String']['output']>;
+  type?: Maybe<Scalars['String']['output']>;
+  userId?: Maybe<Scalars['String']['output']>;
+};
+
+export type AddressInput = {
+  address?: InputMaybe<Scalars['String']['input']>;
+  city?: InputMaybe<Scalars['String']['input']>;
+  country?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  postalCode?: InputMaybe<Scalars['String']['input']>;
+  state?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type AddressListResponse = {
+  __typename?: 'AddressListResponse';
+  data?: Maybe<Array<Maybe<Address>>>;
+  total?: Maybe<Scalars['Int']['output']>;
 };
 
 export type AuthPayload = {
@@ -27,11 +57,39 @@ export type AuthPayload = {
 export type BatchCoordinator = {
   __typename?: 'BatchCoordinator';
   /** Timestamp when the record was created */
-  assignedAt: Scalars['DateTime']['output'];
+  assignedAt?: Maybe<Scalars['DateTime']['output']>;
   batch?: Maybe<Scalars['Int']['output']>;
   id?: Maybe<Scalars['String']['output']>;
   user?: Maybe<User>;
   userId?: Maybe<Scalars['String']['output']>;
+};
+
+export type CompanyInfo = {
+  __typename?: 'CompanyInfo';
+  companyName?: Maybe<Scalars['String']['output']>;
+  endedWorking?: Maybe<Scalars['DateTime']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  isCurrent?: Maybe<Scalars['Boolean']['output']>;
+  location?: Maybe<Scalars['String']['output']>;
+  position?: Maybe<Scalars['String']['output']>;
+  startedWorking?: Maybe<Scalars['DateTime']['output']>;
+  userId?: Maybe<Scalars['String']['output']>;
+};
+
+export type CompanyInfoInput = {
+  companyName?: InputMaybe<Scalars['String']['input']>;
+  endedWorking?: InputMaybe<Scalars['DateTime']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  isCurrent?: InputMaybe<Scalars['Boolean']['input']>;
+  location?: InputMaybe<Scalars['String']['input']>;
+  position?: InputMaybe<Scalars['String']['input']>;
+  startedWorking?: InputMaybe<Scalars['DateTime']['input']>;
+};
+
+export type CompanyInfoListResponse = {
+  __typename?: 'CompanyInfoListResponse';
+  data?: Maybe<Array<Maybe<CompanyInfo>>>;
+  total?: Maybe<Scalars['Int']['output']>;
 };
 
 export type Event = {
@@ -43,7 +101,7 @@ export type Event = {
   createdBy: Scalars['String']['output'];
   description?: Maybe<Scalars['String']['output']>;
   endDate?: Maybe<Scalars['DateTime']['output']>;
-  id: Scalars['ID']['output'];
+  id: Scalars['Int']['output'];
   image?: Maybe<Scalars['String']['output']>;
   location?: Maybe<Scalars['String']['output']>;
   medium: Scalars['String']['output'];
@@ -61,6 +119,7 @@ export type Event = {
 
 export type FilterInput = {
   query?: InputMaybe<Scalars['String']['input']>;
+  userId?: InputMaybe<Scalars['String']['input']>;
   verified?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
@@ -74,12 +133,6 @@ export type ListInput = {
   filter?: InputMaybe<FilterInput>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
-};
-
-export type ListUserResponse = {
-  __typename?: 'ListUserResponse';
-  data?: Maybe<Array<Maybe<User>>>;
-  total?: Maybe<Scalars['Int']['output']>;
 };
 
 export type Mutation = {
@@ -166,6 +219,7 @@ export type MutationUpdateUserArgs = {
   displayName?: InputMaybe<Scalars['String']['input']>;
   dob?: InputMaybe<Scalars['String']['input']>;
   emergencyMobile?: InputMaybe<Scalars['String']['input']>;
+  extraMobile?: InputMaybe<Scalars['String']['input']>;
   firstName?: InputMaybe<Scalars['String']['input']>;
   gender?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
@@ -173,6 +227,8 @@ export type MutationUpdateUserArgs = {
   mobile?: InputMaybe<Scalars['String']['input']>;
   nickName?: InputMaybe<Scalars['String']['input']>;
   profileImage?: InputMaybe<Scalars['String']['input']>;
+  sociaMedia?: InputMaybe<Scalars['JSON']['input']>;
+  whatsAppMobile?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type MutationVerifyUserArgs = {
@@ -187,8 +243,14 @@ export type Query = {
   getBatchCoordinatorsByBatch?: Maybe<Array<Maybe<BatchCoordinator>>>;
   getEventDetails?: Maybe<Event>;
   getEventList?: Maybe<ListEventResponse>;
+  getUserAddresses?: Maybe<AddressListResponse>;
+  getUserCompaniesInfo?: Maybe<CompanyInfoListResponse>;
   getUserDetails?: Maybe<User>;
-  getUserList?: Maybe<ListUserResponse>;
+  getUserList?: Maybe<UserListResponse>;
+};
+
+export type QueryGetAllBatchCoordinatorsArgs = {
+  options?: InputMaybe<ListInput>;
 };
 
 export type QueryGetBatchCoordinatorByUserIdArgs = {
@@ -231,7 +293,9 @@ export type User = {
   displayName?: Maybe<Scalars['String']['output']>;
   dob?: Maybe<Scalars['String']['output']>;
   email?: Maybe<Scalars['String']['output']>;
-  emergency_mobile?: Maybe<Scalars['String']['output']>;
+  emergencyMobile?: Maybe<Scalars['String']['output']>;
+  extraEmail?: Maybe<Scalars['String']['output']>;
+  extraMobile?: Maybe<Scalars['String']['output']>;
   firstName?: Maybe<Scalars['String']['output']>;
   gender?: Maybe<Scalars['String']['output']>;
   google_auth_id?: Maybe<Scalars['String']['output']>;
@@ -243,8 +307,16 @@ export type User = {
   nickName?: Maybe<Scalars['String']['output']>;
   profileImage?: Maybe<Scalars['String']['output']>;
   role?: Maybe<Role>;
+  socialMedia?: Maybe<Scalars['JSON']['output']>;
   /** Timestamp when the record was last updated */
   updatedAt: Scalars['DateTime']['output'];
+  whatsAppMobile?: Maybe<Scalars['String']['output']>;
+};
+
+export type UserListResponse = {
+  __typename?: 'UserListResponse';
+  data?: Maybe<Array<Maybe<User>>>;
+  total?: Maybe<Scalars['Int']['output']>;
 };
 
 export type AssignBatchCoordinatorMutationVariables = Exact<{
@@ -257,7 +329,7 @@ export type AssignBatchCoordinatorMutation = {
   assignBatchCoordinator?:
     | {
         __typename?: 'BatchCoordinator';
-        assignedAt: any;
+        assignedAt?: any | undefined;
         batch?: number | undefined;
         id?: string | undefined;
         userId?: string | undefined;
@@ -271,7 +343,9 @@ export type AssignBatchCoordinatorMutation = {
               displayName?: string | undefined;
               dob?: string | undefined;
               email?: string | undefined;
-              emergency_mobile?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
               firstName?: string | undefined;
               gender?: string | undefined;
               google_auth_id?: string | undefined;
@@ -282,7 +356,9 @@ export type AssignBatchCoordinatorMutation = {
               mobile?: string | undefined;
               nickName?: string | undefined;
               profileImage?: string | undefined;
+              socialMedia?: any | undefined;
               updatedAt: any;
+              whatsAppMobile?: string | undefined;
               role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
             }
           | undefined;
@@ -304,7 +380,7 @@ export type AttendEventMutation = {
         createdBy: string;
         description?: string | undefined;
         endDate?: any | undefined;
-        id: string;
+        id: number;
         image?: string | undefined;
         location?: string | undefined;
         medium: string;
@@ -327,7 +403,9 @@ export type AttendEventMutation = {
                   displayName?: string | undefined;
                   dob?: string | undefined;
                   email?: string | undefined;
-                  emergency_mobile?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
                   firstName?: string | undefined;
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
@@ -338,7 +416,9 @@ export type AttendEventMutation = {
                   mobile?: string | undefined;
                   nickName?: string | undefined;
                   profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
                   updatedAt: any;
+                  whatsAppMobile?: string | undefined;
                   role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
                 }
               | undefined
@@ -355,7 +435,9 @@ export type AttendEventMutation = {
                   displayName?: string | undefined;
                   dob?: string | undefined;
                   email?: string | undefined;
-                  emergency_mobile?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
                   firstName?: string | undefined;
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
@@ -366,7 +448,9 @@ export type AttendEventMutation = {
                   mobile?: string | undefined;
                   nickName?: string | undefined;
                   profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
                   updatedAt: any;
+                  whatsAppMobile?: string | undefined;
                   role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
                 }
               | undefined
@@ -399,7 +483,7 @@ export type CreateEventMutation = {
         createdBy: string;
         description?: string | undefined;
         endDate?: any | undefined;
-        id: string;
+        id: number;
         image?: string | undefined;
         location?: string | undefined;
         medium: string;
@@ -422,7 +506,9 @@ export type CreateEventMutation = {
                   displayName?: string | undefined;
                   dob?: string | undefined;
                   email?: string | undefined;
-                  emergency_mobile?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
                   firstName?: string | undefined;
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
@@ -433,7 +519,9 @@ export type CreateEventMutation = {
                   mobile?: string | undefined;
                   nickName?: string | undefined;
                   profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
                   updatedAt: any;
+                  whatsAppMobile?: string | undefined;
                   role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
                 }
               | undefined
@@ -450,7 +538,9 @@ export type CreateEventMutation = {
                   displayName?: string | undefined;
                   dob?: string | undefined;
                   email?: string | undefined;
-                  emergency_mobile?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
                   firstName?: string | undefined;
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
@@ -461,7 +551,9 @@ export type CreateEventMutation = {
                   mobile?: string | undefined;
                   nickName?: string | undefined;
                   profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
                   updatedAt: any;
+                  whatsAppMobile?: string | undefined;
                   role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
                 }
               | undefined
@@ -487,7 +579,9 @@ export type DeleteUserMutation = {
         displayName?: string | undefined;
         dob?: string | undefined;
         email?: string | undefined;
-        emergency_mobile?: string | undefined;
+        emergencyMobile?: string | undefined;
+        extraEmail?: string | undefined;
+        extraMobile?: string | undefined;
         firstName?: string | undefined;
         gender?: string | undefined;
         google_auth_id?: string | undefined;
@@ -498,7 +592,9 @@ export type DeleteUserMutation = {
         mobile?: string | undefined;
         nickName?: string | undefined;
         profileImage?: string | undefined;
+        socialMedia?: any | undefined;
         updatedAt: any;
+        whatsAppMobile?: string | undefined;
         role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
       }
     | undefined;
@@ -531,7 +627,9 @@ export type RefreshTokenMutation = {
               displayName?: string | undefined;
               dob?: string | undefined;
               email?: string | undefined;
-              emergency_mobile?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
               firstName?: string | undefined;
               gender?: string | undefined;
               google_auth_id?: string | undefined;
@@ -542,7 +640,9 @@ export type RefreshTokenMutation = {
               mobile?: string | undefined;
               nickName?: string | undefined;
               profileImage?: string | undefined;
+              socialMedia?: any | undefined;
               updatedAt: any;
+              whatsAppMobile?: string | undefined;
               role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
             }
           | undefined;
@@ -584,7 +684,9 @@ export type SigninMutation = {
               displayName?: string | undefined;
               dob?: string | undefined;
               email?: string | undefined;
-              emergency_mobile?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
               firstName?: string | undefined;
               gender?: string | undefined;
               google_auth_id?: string | undefined;
@@ -595,7 +697,9 @@ export type SigninMutation = {
               mobile?: string | undefined;
               nickName?: string | undefined;
               profileImage?: string | undefined;
+              socialMedia?: any | undefined;
               updatedAt: any;
+              whatsAppMobile?: string | undefined;
               role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
             }
           | undefined;
@@ -625,7 +729,9 @@ export type SignupMutation = {
         displayName?: string | undefined;
         dob?: string | undefined;
         email?: string | undefined;
-        emergency_mobile?: string | undefined;
+        emergencyMobile?: string | undefined;
+        extraEmail?: string | undefined;
+        extraMobile?: string | undefined;
         firstName?: string | undefined;
         gender?: string | undefined;
         google_auth_id?: string | undefined;
@@ -636,7 +742,9 @@ export type SignupMutation = {
         mobile?: string | undefined;
         nickName?: string | undefined;
         profileImage?: string | undefined;
+        socialMedia?: any | undefined;
         updatedAt: any;
+        whatsAppMobile?: string | undefined;
         role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
       }
     | undefined;
@@ -652,7 +760,7 @@ export type UpdateBatchCoordinatorMutation = {
   updateBatchCoordinator?:
     | {
         __typename?: 'BatchCoordinator';
-        assignedAt: any;
+        assignedAt?: any | undefined;
         batch?: number | undefined;
         id?: string | undefined;
         userId?: string | undefined;
@@ -666,7 +774,9 @@ export type UpdateBatchCoordinatorMutation = {
               displayName?: string | undefined;
               dob?: string | undefined;
               email?: string | undefined;
-              emergency_mobile?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
               firstName?: string | undefined;
               gender?: string | undefined;
               google_auth_id?: string | undefined;
@@ -677,7 +787,9 @@ export type UpdateBatchCoordinatorMutation = {
               mobile?: string | undefined;
               nickName?: string | undefined;
               profileImage?: string | undefined;
+              socialMedia?: any | undefined;
               updatedAt: any;
+              whatsAppMobile?: string | undefined;
               role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
             }
           | undefined;
@@ -691,6 +803,7 @@ export type UpdateUserMutationVariables = Exact<{
   displayName?: InputMaybe<Scalars['String']['input']>;
   dob?: InputMaybe<Scalars['String']['input']>;
   emergencyMobile?: InputMaybe<Scalars['String']['input']>;
+  extraMobile?: InputMaybe<Scalars['String']['input']>;
   firstName?: InputMaybe<Scalars['String']['input']>;
   gender?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
@@ -698,6 +811,8 @@ export type UpdateUserMutationVariables = Exact<{
   mobile?: InputMaybe<Scalars['String']['input']>;
   nickName?: InputMaybe<Scalars['String']['input']>;
   profileImage?: InputMaybe<Scalars['String']['input']>;
+  sociaMedia?: InputMaybe<Scalars['JSON']['input']>;
+  whatsAppMobile?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 export type UpdateUserMutation = {
@@ -712,7 +827,9 @@ export type UpdateUserMutation = {
         displayName?: string | undefined;
         dob?: string | undefined;
         email?: string | undefined;
-        emergency_mobile?: string | undefined;
+        emergencyMobile?: string | undefined;
+        extraEmail?: string | undefined;
+        extraMobile?: string | undefined;
         firstName?: string | undefined;
         gender?: string | undefined;
         google_auth_id?: string | undefined;
@@ -723,7 +840,9 @@ export type UpdateUserMutation = {
         mobile?: string | undefined;
         nickName?: string | undefined;
         profileImage?: string | undefined;
+        socialMedia?: any | undefined;
         updatedAt: any;
+        whatsAppMobile?: string | undefined;
         role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
       }
     | undefined;
@@ -736,7 +855,9 @@ export type VerifyUserMutationVariables = Exact<{
 
 export type VerifyUserMutation = { __typename?: 'Mutation'; verifyUser?: boolean | undefined };
 
-export type GetAllBatchCoordinatorsQueryVariables = Exact<{ [key: string]: never }>;
+export type GetAllBatchCoordinatorsQueryVariables = Exact<{
+  options?: InputMaybe<ListInput>;
+}>;
 
 export type GetAllBatchCoordinatorsQuery = {
   __typename?: 'Query';
@@ -744,7 +865,7 @@ export type GetAllBatchCoordinatorsQuery = {
     | Array<
         | {
             __typename?: 'BatchCoordinator';
-            assignedAt: any;
+            assignedAt?: any | undefined;
             batch?: number | undefined;
             id?: string | undefined;
             userId?: string | undefined;
@@ -758,7 +879,9 @@ export type GetAllBatchCoordinatorsQuery = {
                   displayName?: string | undefined;
                   dob?: string | undefined;
                   email?: string | undefined;
-                  emergency_mobile?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
                   firstName?: string | undefined;
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
@@ -769,7 +892,9 @@ export type GetAllBatchCoordinatorsQuery = {
                   mobile?: string | undefined;
                   nickName?: string | undefined;
                   profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
                   updatedAt: any;
+                  whatsAppMobile?: string | undefined;
                   role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
                 }
               | undefined;
@@ -788,7 +913,7 @@ export type GetBatchCoordinatorByUserIdQuery = {
   getBatchCoordinatorByUserId?:
     | {
         __typename?: 'BatchCoordinator';
-        assignedAt: any;
+        assignedAt?: any | undefined;
         batch?: number | undefined;
         id?: string | undefined;
         userId?: string | undefined;
@@ -802,7 +927,9 @@ export type GetBatchCoordinatorByUserIdQuery = {
               displayName?: string | undefined;
               dob?: string | undefined;
               email?: string | undefined;
-              emergency_mobile?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
               firstName?: string | undefined;
               gender?: string | undefined;
               google_auth_id?: string | undefined;
@@ -813,7 +940,9 @@ export type GetBatchCoordinatorByUserIdQuery = {
               mobile?: string | undefined;
               nickName?: string | undefined;
               profileImage?: string | undefined;
+              socialMedia?: any | undefined;
               updatedAt: any;
+              whatsAppMobile?: string | undefined;
               role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
             }
           | undefined;
@@ -831,7 +960,7 @@ export type GetBatchCoordinatorsByBatchQuery = {
     | Array<
         | {
             __typename?: 'BatchCoordinator';
-            assignedAt: any;
+            assignedAt?: any | undefined;
             batch?: number | undefined;
             id?: string | undefined;
             userId?: string | undefined;
@@ -845,7 +974,9 @@ export type GetBatchCoordinatorsByBatchQuery = {
                   displayName?: string | undefined;
                   dob?: string | undefined;
                   email?: string | undefined;
-                  emergency_mobile?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
                   firstName?: string | undefined;
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
@@ -856,7 +987,9 @@ export type GetBatchCoordinatorsByBatchQuery = {
                   mobile?: string | undefined;
                   nickName?: string | undefined;
                   profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
                   updatedAt: any;
+                  whatsAppMobile?: string | undefined;
                   role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
                 }
               | undefined;
@@ -880,7 +1013,7 @@ export type GetEventDetailsQuery = {
         createdBy: string;
         description?: string | undefined;
         endDate?: any | undefined;
-        id: string;
+        id: number;
         image?: string | undefined;
         location?: string | undefined;
         medium: string;
@@ -903,7 +1036,9 @@ export type GetEventDetailsQuery = {
                   displayName?: string | undefined;
                   dob?: string | undefined;
                   email?: string | undefined;
-                  emergency_mobile?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
                   firstName?: string | undefined;
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
@@ -914,7 +1049,9 @@ export type GetEventDetailsQuery = {
                   mobile?: string | undefined;
                   nickName?: string | undefined;
                   profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
                   updatedAt: any;
+                  whatsAppMobile?: string | undefined;
                   role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
                 }
               | undefined
@@ -931,7 +1068,9 @@ export type GetEventDetailsQuery = {
                   displayName?: string | undefined;
                   dob?: string | undefined;
                   email?: string | undefined;
-                  emergency_mobile?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
                   firstName?: string | undefined;
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
@@ -942,7 +1081,9 @@ export type GetEventDetailsQuery = {
                   mobile?: string | undefined;
                   nickName?: string | undefined;
                   profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
                   updatedAt: any;
+                  whatsAppMobile?: string | undefined;
                   role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
                 }
               | undefined
@@ -971,7 +1112,7 @@ export type GetEventListQuery = {
                   createdBy: string;
                   description?: string | undefined;
                   endDate?: any | undefined;
-                  id: string;
+                  id: number;
                   image?: string | undefined;
                   location?: string | undefined;
                   medium: string;
@@ -994,7 +1135,9 @@ export type GetEventListQuery = {
                             displayName?: string | undefined;
                             dob?: string | undefined;
                             email?: string | undefined;
-                            emergency_mobile?: string | undefined;
+                            emergencyMobile?: string | undefined;
+                            extraEmail?: string | undefined;
+                            extraMobile?: string | undefined;
                             firstName?: string | undefined;
                             gender?: string | undefined;
                             google_auth_id?: string | undefined;
@@ -1005,7 +1148,9 @@ export type GetEventListQuery = {
                             mobile?: string | undefined;
                             nickName?: string | undefined;
                             profileImage?: string | undefined;
+                            socialMedia?: any | undefined;
                             updatedAt: any;
+                            whatsAppMobile?: string | undefined;
                             role?:
                               | { __typename?: 'Role'; id?: string | undefined; name?: string | undefined }
                               | undefined;
@@ -1024,7 +1169,9 @@ export type GetEventListQuery = {
                             displayName?: string | undefined;
                             dob?: string | undefined;
                             email?: string | undefined;
-                            emergency_mobile?: string | undefined;
+                            emergencyMobile?: string | undefined;
+                            extraEmail?: string | undefined;
+                            extraMobile?: string | undefined;
                             firstName?: string | undefined;
                             gender?: string | undefined;
                             google_auth_id?: string | undefined;
@@ -1035,7 +1182,9 @@ export type GetEventListQuery = {
                             mobile?: string | undefined;
                             nickName?: string | undefined;
                             profileImage?: string | undefined;
+                            socialMedia?: any | undefined;
                             updatedAt: any;
+                            whatsAppMobile?: string | undefined;
                             role?:
                               | { __typename?: 'Role'; id?: string | undefined; name?: string | undefined }
                               | undefined;
@@ -1043,6 +1192,62 @@ export type GetEventListQuery = {
                         | undefined
                       >
                     | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+      }
+    | undefined;
+};
+
+export type GetUserAddressesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetUserAddressesQuery = {
+  __typename?: 'Query';
+  getUserAddresses?:
+    | {
+        __typename?: 'AddressListResponse';
+        total?: number | undefined;
+        data?:
+          | Array<
+              | {
+                  __typename?: 'Address';
+                  address?: string | undefined;
+                  city?: string | undefined;
+                  country?: string | undefined;
+                  id?: string | undefined;
+                  postalCode?: string | undefined;
+                  state?: string | undefined;
+                  type?: string | undefined;
+                  userId?: string | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+      }
+    | undefined;
+};
+
+export type GetUserCompaniesInfoQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetUserCompaniesInfoQuery = {
+  __typename?: 'Query';
+  getUserCompaniesInfo?:
+    | {
+        __typename?: 'CompanyInfoListResponse';
+        total?: number | undefined;
+        data?:
+          | Array<
+              | {
+                  __typename?: 'CompanyInfo';
+                  companyName?: string | undefined;
+                  endedWorking?: any | undefined;
+                  id?: string | undefined;
+                  isCurrent?: boolean | undefined;
+                  location?: string | undefined;
+                  position?: string | undefined;
+                  startedWorking?: any | undefined;
+                  userId?: string | undefined;
                 }
               | undefined
             >
@@ -1067,7 +1272,9 @@ export type GetUserDetailsQuery = {
         displayName?: string | undefined;
         dob?: string | undefined;
         email?: string | undefined;
-        emergency_mobile?: string | undefined;
+        emergencyMobile?: string | undefined;
+        extraEmail?: string | undefined;
+        extraMobile?: string | undefined;
         firstName?: string | undefined;
         gender?: string | undefined;
         google_auth_id?: string | undefined;
@@ -1078,7 +1285,9 @@ export type GetUserDetailsQuery = {
         mobile?: string | undefined;
         nickName?: string | undefined;
         profileImage?: string | undefined;
+        socialMedia?: any | undefined;
         updatedAt: any;
+        whatsAppMobile?: string | undefined;
         role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
       }
     | undefined;
@@ -1092,7 +1301,7 @@ export type GetUserListQuery = {
   __typename?: 'Query';
   getUserList?:
     | {
-        __typename?: 'ListUserResponse';
+        __typename?: 'UserListResponse';
         total?: number | undefined;
         data?:
           | Array<
@@ -1105,7 +1314,9 @@ export type GetUserListQuery = {
                   displayName?: string | undefined;
                   dob?: string | undefined;
                   email?: string | undefined;
-                  emergency_mobile?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
                   firstName?: string | undefined;
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
@@ -1116,7 +1327,9 @@ export type GetUserListQuery = {
                   mobile?: string | undefined;
                   nickName?: string | undefined;
                   profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
                   updatedAt: any;
+                  whatsAppMobile?: string | undefined;
                   role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
                 }
               | undefined
@@ -1140,7 +1353,9 @@ export const AssignBatchCoordinatorDocument = gql`
         displayName
         dob
         email
-        emergency_mobile
+        emergencyMobile
+        extraEmail
+        extraMobile
         firstName
         gender
         google_auth_id
@@ -1155,7 +1370,9 @@ export const AssignBatchCoordinatorDocument = gql`
           id
           name
         }
+        socialMedia
         updatedAt
+        whatsAppMobile
       }
       userId
     }
@@ -1210,7 +1427,9 @@ export const AttendEventDocument = gql`
         displayName
         dob
         email
-        emergency_mobile
+        emergencyMobile
+        extraEmail
+        extraMobile
         firstName
         gender
         google_auth_id
@@ -1225,7 +1444,9 @@ export const AttendEventDocument = gql`
           id
           name
         }
+        socialMedia
         updatedAt
+        whatsAppMobile
       }
       category
       createdAt
@@ -1244,7 +1465,9 @@ export const AttendEventDocument = gql`
         displayName
         dob
         email
-        emergency_mobile
+        emergencyMobile
+        extraEmail
+        extraMobile
         firstName
         gender
         google_auth_id
@@ -1259,7 +1482,9 @@ export const AttendEventDocument = gql`
           id
           name
         }
+        socialMedia
         updatedAt
+        whatsAppMobile
       }
       price
       startDate
@@ -1333,7 +1558,9 @@ export const CreateEventDocument = gql`
         displayName
         dob
         email
-        emergency_mobile
+        emergencyMobile
+        extraEmail
+        extraMobile
         firstName
         gender
         google_auth_id
@@ -1348,7 +1575,9 @@ export const CreateEventDocument = gql`
           id
           name
         }
+        socialMedia
         updatedAt
+        whatsAppMobile
       }
       category
       createdAt
@@ -1367,7 +1596,9 @@ export const CreateEventDocument = gql`
         displayName
         dob
         email
-        emergency_mobile
+        emergencyMobile
+        extraEmail
+        extraMobile
         firstName
         gender
         google_auth_id
@@ -1382,7 +1613,9 @@ export const CreateEventDocument = gql`
           id
           name
         }
+        socialMedia
         updatedAt
+        whatsAppMobile
       }
       price
       startDate
@@ -1442,7 +1675,9 @@ export const DeleteUserDocument = gql`
       displayName
       dob
       email
-      emergency_mobile
+      emergencyMobile
+      extraEmail
+      extraMobile
       firstName
       gender
       google_auth_id
@@ -1457,7 +1692,9 @@ export const DeleteUserDocument = gql`
         id
         name
       }
+      socialMedia
       updatedAt
+      whatsAppMobile
     }
   }
 `;
@@ -1566,7 +1803,9 @@ export const RefreshTokenDocument = gql`
         displayName
         dob
         email
-        emergency_mobile
+        emergencyMobile
+        extraEmail
+        extraMobile
         firstName
         gender
         google_auth_id
@@ -1581,7 +1820,9 @@ export const RefreshTokenDocument = gql`
           id
           name
         }
+        socialMedia
         updatedAt
+        whatsAppMobile
       }
     }
   }
@@ -1707,7 +1948,9 @@ export const SigninDocument = gql`
         displayName
         dob
         email
-        emergency_mobile
+        emergencyMobile
+        extraEmail
+        extraMobile
         firstName
         gender
         google_auth_id
@@ -1722,7 +1965,9 @@ export const SigninDocument = gql`
           id
           name
         }
+        socialMedia
         updatedAt
+        whatsAppMobile
       }
     }
   }
@@ -1780,7 +2025,9 @@ export const SignupDocument = gql`
       displayName
       dob
       email
-      emergency_mobile
+      emergencyMobile
+      extraEmail
+      extraMobile
       firstName
       gender
       google_auth_id
@@ -1795,7 +2042,9 @@ export const SignupDocument = gql`
         id
         name
       }
+      socialMedia
       updatedAt
+      whatsAppMobile
     }
   }
 `;
@@ -1845,7 +2094,9 @@ export const UpdateBatchCoordinatorDocument = gql`
         displayName
         dob
         email
-        emergency_mobile
+        emergencyMobile
+        extraEmail
+        extraMobile
         firstName
         gender
         google_auth_id
@@ -1860,7 +2111,9 @@ export const UpdateBatchCoordinatorDocument = gql`
           id
           name
         }
+        socialMedia
         updatedAt
+        whatsAppMobile
       }
       userId
     }
@@ -1911,6 +2164,7 @@ export const UpdateUserDocument = gql`
     $displayName: String
     $dob: String
     $emergencyMobile: String
+    $extraMobile: String
     $firstName: String
     $gender: String
     $id: String
@@ -1918,6 +2172,8 @@ export const UpdateUserDocument = gql`
     $mobile: String
     $nickName: String
     $profileImage: String
+    $sociaMedia: JSON
+    $whatsAppMobile: String
   ) {
     updateUser(
       aboutMe: $aboutMe
@@ -1925,6 +2181,7 @@ export const UpdateUserDocument = gql`
       displayName: $displayName
       dob: $dob
       emergencyMobile: $emergencyMobile
+      extraMobile: $extraMobile
       firstName: $firstName
       gender: $gender
       id: $id
@@ -1932,6 +2189,8 @@ export const UpdateUserDocument = gql`
       mobile: $mobile
       nickName: $nickName
       profileImage: $profileImage
+      sociaMedia: $sociaMedia
+      whatsAppMobile: $whatsAppMobile
     ) {
       aboutMe
       batch
@@ -1940,7 +2199,9 @@ export const UpdateUserDocument = gql`
       displayName
       dob
       email
-      emergency_mobile
+      emergencyMobile
+      extraEmail
+      extraMobile
       firstName
       gender
       google_auth_id
@@ -1955,7 +2216,9 @@ export const UpdateUserDocument = gql`
         id
         name
       }
+      socialMedia
       updatedAt
+      whatsAppMobile
     }
   }
 `;
@@ -1979,6 +2242,7 @@ export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, U
  *      displayName: // value for 'displayName'
  *      dob: // value for 'dob'
  *      emergencyMobile: // value for 'emergencyMobile'
+ *      extraMobile: // value for 'extraMobile'
  *      firstName: // value for 'firstName'
  *      gender: // value for 'gender'
  *      id: // value for 'id'
@@ -1986,6 +2250,8 @@ export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, U
  *      mobile: // value for 'mobile'
  *      nickName: // value for 'nickName'
  *      profileImage: // value for 'profileImage'
+ *      sociaMedia: // value for 'sociaMedia'
+ *      whatsAppMobile: // value for 'whatsAppMobile'
  *   },
  * });
  */
@@ -2033,8 +2299,8 @@ export type VerifyUserMutationHookResult = ReturnType<typeof useVerifyUserMutati
 export type VerifyUserMutationResult = Apollo.MutationResult<VerifyUserMutation>;
 export type VerifyUserMutationOptions = Apollo.BaseMutationOptions<VerifyUserMutation, VerifyUserMutationVariables>;
 export const GetAllBatchCoordinatorsDocument = gql`
-  query getAllBatchCoordinators {
-    getAllBatchCoordinators {
+  query getAllBatchCoordinators($options: ListInput) {
+    getAllBatchCoordinators(options: $options) {
       assignedAt
       batch
       id
@@ -2046,7 +2312,9 @@ export const GetAllBatchCoordinatorsDocument = gql`
         displayName
         dob
         email
-        emergency_mobile
+        emergencyMobile
+        extraEmail
+        extraMobile
         firstName
         gender
         google_auth_id
@@ -2061,7 +2329,9 @@ export const GetAllBatchCoordinatorsDocument = gql`
           id
           name
         }
+        socialMedia
         updatedAt
+        whatsAppMobile
       }
       userId
     }
@@ -2080,6 +2350,7 @@ export const GetAllBatchCoordinatorsDocument = gql`
  * @example
  * const { data, loading, error } = useGetAllBatchCoordinatorsQuery({
  *   variables: {
+ *      options: // value for 'options'
  *   },
  * });
  */
@@ -2133,7 +2404,9 @@ export const GetBatchCoordinatorByUserIdDocument = gql`
         displayName
         dob
         email
-        emergency_mobile
+        emergencyMobile
+        extraEmail
+        extraMobile
         firstName
         gender
         google_auth_id
@@ -2148,7 +2421,9 @@ export const GetBatchCoordinatorByUserIdDocument = gql`
           id
           name
         }
+        socialMedia
         updatedAt
+        whatsAppMobile
       }
       userId
     }
@@ -2224,7 +2499,9 @@ export const GetBatchCoordinatorsByBatchDocument = gql`
         displayName
         dob
         email
-        emergency_mobile
+        emergencyMobile
+        extraEmail
+        extraMobile
         firstName
         gender
         google_auth_id
@@ -2239,7 +2516,9 @@ export const GetBatchCoordinatorsByBatchDocument = gql`
           id
           name
         }
+        socialMedia
         updatedAt
+        whatsAppMobile
       }
       userId
     }
@@ -2312,7 +2591,9 @@ export const GetEventDetailsDocument = gql`
         displayName
         dob
         email
-        emergency_mobile
+        emergencyMobile
+        extraEmail
+        extraMobile
         firstName
         gender
         google_auth_id
@@ -2327,7 +2608,9 @@ export const GetEventDetailsDocument = gql`
           id
           name
         }
+        socialMedia
         updatedAt
+        whatsAppMobile
       }
       category
       createdAt
@@ -2346,7 +2629,9 @@ export const GetEventDetailsDocument = gql`
         displayName
         dob
         email
-        emergency_mobile
+        emergencyMobile
+        extraEmail
+        extraMobile
         firstName
         gender
         google_auth_id
@@ -2361,7 +2646,9 @@ export const GetEventDetailsDocument = gql`
           id
           name
         }
+        socialMedia
         updatedAt
+        whatsAppMobile
       }
       price
       startDate
@@ -2426,7 +2713,9 @@ export const GetEventListDocument = gql`
           displayName
           dob
           email
-          emergency_mobile
+          emergencyMobile
+          extraEmail
+          extraMobile
           firstName
           gender
           google_auth_id
@@ -2441,7 +2730,9 @@ export const GetEventListDocument = gql`
             id
             name
           }
+          socialMedia
           updatedAt
+          whatsAppMobile
         }
         category
         createdAt
@@ -2460,7 +2751,9 @@ export const GetEventListDocument = gql`
           displayName
           dob
           email
-          emergency_mobile
+          emergencyMobile
+          extraEmail
+          extraMobile
           firstName
           gender
           google_auth_id
@@ -2475,7 +2768,9 @@ export const GetEventListDocument = gql`
             id
             name
           }
+          socialMedia
           updatedAt
+          whatsAppMobile
         }
         price
         startDate
@@ -2529,6 +2824,135 @@ export type GetEventListQueryHookResult = ReturnType<typeof useGetEventListQuery
 export type GetEventListLazyQueryHookResult = ReturnType<typeof useGetEventListLazyQuery>;
 export type GetEventListSuspenseQueryHookResult = ReturnType<typeof useGetEventListSuspenseQuery>;
 export type GetEventListQueryResult = Apollo.QueryResult<GetEventListQuery, GetEventListQueryVariables>;
+export const GetUserAddressesDocument = gql`
+  query getUserAddresses {
+    getUserAddresses {
+      data {
+        address
+        city
+        country
+        id
+        postalCode
+        state
+        type
+        userId
+      }
+      total
+    }
+  }
+`;
+
+/**
+ * __useGetUserAddressesQuery__
+ *
+ * To run a query within a React component, call `useGetUserAddressesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserAddressesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserAddressesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetUserAddressesQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetUserAddressesQuery, GetUserAddressesQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetUserAddressesQuery, GetUserAddressesQueryVariables>(GetUserAddressesDocument, options);
+}
+export function useGetUserAddressesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetUserAddressesQuery, GetUserAddressesQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetUserAddressesQuery, GetUserAddressesQueryVariables>(GetUserAddressesDocument, options);
+}
+export function useGetUserAddressesSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetUserAddressesQuery, GetUserAddressesQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetUserAddressesQuery, GetUserAddressesQueryVariables>(
+    GetUserAddressesDocument,
+    options
+  );
+}
+export type GetUserAddressesQueryHookResult = ReturnType<typeof useGetUserAddressesQuery>;
+export type GetUserAddressesLazyQueryHookResult = ReturnType<typeof useGetUserAddressesLazyQuery>;
+export type GetUserAddressesSuspenseQueryHookResult = ReturnType<typeof useGetUserAddressesSuspenseQuery>;
+export type GetUserAddressesQueryResult = Apollo.QueryResult<GetUserAddressesQuery, GetUserAddressesQueryVariables>;
+export const GetUserCompaniesInfoDocument = gql`
+  query getUserCompaniesInfo {
+    getUserCompaniesInfo {
+      data {
+        companyName
+        endedWorking
+        id
+        isCurrent
+        location
+        position
+        startedWorking
+        userId
+      }
+      total
+    }
+  }
+`;
+
+/**
+ * __useGetUserCompaniesInfoQuery__
+ *
+ * To run a query within a React component, call `useGetUserCompaniesInfoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserCompaniesInfoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserCompaniesInfoQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetUserCompaniesInfoQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetUserCompaniesInfoQuery, GetUserCompaniesInfoQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetUserCompaniesInfoQuery, GetUserCompaniesInfoQueryVariables>(
+    GetUserCompaniesInfoDocument,
+    options
+  );
+}
+export function useGetUserCompaniesInfoLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetUserCompaniesInfoQuery, GetUserCompaniesInfoQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetUserCompaniesInfoQuery, GetUserCompaniesInfoQueryVariables>(
+    GetUserCompaniesInfoDocument,
+    options
+  );
+}
+export function useGetUserCompaniesInfoSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetUserCompaniesInfoQuery, GetUserCompaniesInfoQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetUserCompaniesInfoQuery, GetUserCompaniesInfoQueryVariables>(
+    GetUserCompaniesInfoDocument,
+    options
+  );
+}
+export type GetUserCompaniesInfoQueryHookResult = ReturnType<typeof useGetUserCompaniesInfoQuery>;
+export type GetUserCompaniesInfoLazyQueryHookResult = ReturnType<typeof useGetUserCompaniesInfoLazyQuery>;
+export type GetUserCompaniesInfoSuspenseQueryHookResult = ReturnType<typeof useGetUserCompaniesInfoSuspenseQuery>;
+export type GetUserCompaniesInfoQueryResult = Apollo.QueryResult<
+  GetUserCompaniesInfoQuery,
+  GetUserCompaniesInfoQueryVariables
+>;
 export const GetUserDetailsDocument = gql`
   query getUserDetails($id: String) {
     getUserDetails(id: $id) {
@@ -2539,7 +2963,9 @@ export const GetUserDetailsDocument = gql`
       displayName
       dob
       email
-      emergency_mobile
+      emergencyMobile
+      extraEmail
+      extraMobile
       firstName
       gender
       google_auth_id
@@ -2554,7 +2980,9 @@ export const GetUserDetailsDocument = gql`
         id
         name
       }
+      socialMedia
       updatedAt
+      whatsAppMobile
     }
   }
 `;
@@ -2608,7 +3036,9 @@ export const GetUserListDocument = gql`
         displayName
         dob
         email
-        emergency_mobile
+        emergencyMobile
+        extraEmail
+        extraMobile
         firstName
         gender
         google_auth_id
@@ -2623,7 +3053,9 @@ export const GetUserListDocument = gql`
           id
           name
         }
+        socialMedia
         updatedAt
+        whatsAppMobile
       }
       total
     }

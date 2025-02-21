@@ -50,6 +50,7 @@
     "@tiptap/suggestion": "^2.11.5",
     "axios": "^1.7.9",
     "dayjs": "^1.11.13",
+    "dompurify": "^3.2.4",
     "embla-carousel-auto-scroll": "^8.2.1",
     "embla-carousel-react": "^8.2.1",
     "graphql": "^16.10.0",

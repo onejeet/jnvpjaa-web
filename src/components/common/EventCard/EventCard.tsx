@@ -171,16 +171,18 @@ const EventCard: React.FC<EventCardProps> = ({ event, loading, markImGoing }) =>
             sx={{ ml: 'auto', mt: 2 }}
           />
         ) : (
-          <Button
-            title="I'm Going"
-            variant="outlined"
-            fullWidth
-            disabled={loading}
-            // endIcon={<ArrowRightAltIcon />}
-            startIcon={<Heart weight="fill" />}
-            sx={{ marginTop: 2 }}
-            onClick={() => markImGoing(id)}
-          />
+          markImGoing && (
+            <Button
+              title="I'm Going"
+              variant="outlined"
+              fullWidth
+              disabled={loading}
+              // endIcon={<ArrowRightAltIcon />}
+              startIcon={<Heart weight="fill" />}
+              sx={{ marginTop: 2 }}
+              onClick={() => markImGoing(id)}
+            />
+          )
         )}
       </CardContent>
     </Card>

@@ -10,6 +10,7 @@ export default function ProfileTabs({ activeTab, onTabChange }: ProfileTabsProps
     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
       <Tabs value={activeTab} onChange={(_, newValue) => onTabChange(newValue)} aria-label="Profile tabs">
         <Tab label="About" value="about" />
+        <Tab label="Events" value="events" />
         <Tab label="Blogs" value="blogs" />
       </Tabs>
     </Box>
