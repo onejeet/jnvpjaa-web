@@ -20,6 +20,7 @@ import TipTapTextEditor from '@/modules/TipTapTextEditor';
 import { CurrencyInr, FloppyDiskBack, MapPinLine } from '@phosphor-icons/react';
 import { useApolloClient } from '@apollo/client';
 import { alumniEventCategories, eventHostingmedium } from '@/constants/Events.constants';
+import dayjs from 'dayjs';
 
 const NewEvent = () => {
   const router = useRouter();
@@ -49,9 +50,6 @@ const NewEvent = () => {
     defaultValues: {
       medium: 'online',
       description: '',
-      startDate: null,
-
-      endDate: null,
     },
   });
 
@@ -61,9 +59,10 @@ const NewEvent = () => {
         title: eventData?.getEventDetails?.title,
         summary: eventData?.getEventDetails?.summary,
         description: eventData?.getEventDetails?.description,
-        startDate: eventData?.getEventDetails?.startDate,
-        endDate: eventData?.getEventDetails?.endDate,
+        startDate: dayjs(eventData?.getEventDetails?.startDate),
+        endDate: dayjs(eventData?.getEventDetails?.endDate),
         medium: eventData?.getEventDetails?.medium,
+        location: eventData?.getEventDetails?.location,
         category: eventData?.getEventDetails?.category,
         tags: eventData?.getEventDetails?.tags?.join(','),
         price: eventData?.getEventDetails?.price,
@@ -82,6 +81,8 @@ const NewEvent = () => {
           variables: {
             eventId: parseInt(eventId as string, 0),
             ...data,
+            startDate: data?.startDate?.toISOString(),
+            endDate: data?.endDate?.toISOString(),
           },
           onCompleted: () => {
             if (saveTypeRef.current === 'publish') {
@@ -119,7 +120,10 @@ const NewEvent = () => {
       crateEvent({
         variables: {
           ...data,
+          image: `https://jnvpjaa.org/assets/events/${data?.category}.jpg`,
           price: data?.price || 0,
+          startDate: data?.startDate?.toISOString(),
+          endDate: data?.endDate?.toISOString(),
           isPublish: saveTypeRef.current === 'publish',
         },
         onCompleted: async () => {
@@ -137,7 +141,7 @@ const NewEvent = () => {
         },
       });
     },
-    [crateEvent, router, client, eventId]
+    [crateEvent, router, client, eventId, publishEvent, updateEvent]
   );
 
   const saving = React.useMemo(() => {
