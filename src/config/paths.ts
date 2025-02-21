@@ -3,6 +3,7 @@ export const paths = {
   signin: '/signin',
   events: {
     root: '/events',
+    new: '/events/new',
   },
   profile: {
     root: '/profile',

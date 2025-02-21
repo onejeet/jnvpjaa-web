@@ -1,3 +1,5 @@
+import { User } from '@/apollo/hooks';
+
 // Define the types for the event data and props
 export interface IPerson {
   id: string;
@@ -8,7 +10,7 @@ export interface IPerson {
 }
 
 export interface IEvent {
-  id: string | number;
+  id: number;
   title: string;
   summary: string;
   description?: string;
@@ -20,10 +22,15 @@ export interface IEvent {
   online: boolean;
   attendees: IPerson[];
   status: 'draft' | 'published';
+  isVerified?: boolean;
+  createdBy: string;
 }
 
 export interface EventCardProps {
   event: IEvent;
   loading?: boolean;
-  markImGoing?: (id: number | string) => void;
+  markImGoing?: (id: number) => void;
+  user?: User;
+  isAdmin?: boolean;
+  verifyEvent?: (id: number) => void;
 }

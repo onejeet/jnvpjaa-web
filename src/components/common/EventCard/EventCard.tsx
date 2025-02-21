@@ -16,11 +16,10 @@ import {
 } from '@mui/material';
 import { EventCardProps, IPerson } from './EventCard.types';
 import Button from '@/components/core/Button';
-import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import { getAvatarDataUrl, startCase, valueToLabelFormatter } from '@/utils/helpers';
-import { CalendarDots, CalendarHeart, Heart, Minus, NotePencil } from '@phosphor-icons/react';
+import { CalendarDots, CalendarHeart, Check, CheckCircle, Heart, Minus, NotePencil } from '@phosphor-icons/react';
 
-const EventCard: React.FC<EventCardProps> = ({ event, loading, markImGoing }) => {
+const EventCard: React.FC<EventCardProps> = ({ user, isAdmin, verifyEvent, event, loading, markImGoing }) => {
   const {
     id,
     title = '',
@@ -33,6 +32,8 @@ const EventCard: React.FC<EventCardProps> = ({ event, loading, markImGoing }) =>
     category,
     attendees: people,
     status,
+    isVerified,
+    createdBy,
   } = event;
 
   const formattedStartDate = React.useMemo(() => {
@@ -45,13 +46,25 @@ const EventCard: React.FC<EventCardProps> = ({ event, loading, markImGoing }) =>
 
   const isLive = React.useMemo(() => {
     return (
-      status === 'published' && dayjs(startDate).isBefore(dayjs()) && (!endDate || dayjs(endDate).isAfter(dayjs()))
+      status === 'published' &&
+      isVerified &&
+      dayjs(startDate).isBefore(dayjs()) &&
+      (!endDate || dayjs(endDate).isAfter(dayjs()))
     );
-  }, [status, startDate, endDate]);
+  }, [status, startDate, endDate, isVerified]);
 
   return (
-    <Card sx={{ boxShadow: 3, borderRadius: 2, position: 'relative' }}>
-      {status === 'draft' ? (
+    <Card
+      sx={{ boxShadow: 3, borderRadius: 2, position: 'relative', borderColor: isVerified ? 'inherit' : 'error.main' }}
+    >
+      {!loading && !isVerified && status === 'published' && (
+        <Box bgcolor="error.main" sx={{ py: '4px', position: 'absolute', top: 0, width: '100%' }}>
+          <Typography variant="h5" width="100%" textAlign="center" color="common.white">
+            Pending approval
+          </Typography>
+        </Box>
+      )}
+      {!loading && status === 'draft' ? (
         <Chip
           label="Draft"
           color="error"
@@ -160,29 +173,53 @@ const EventCard: React.FC<EventCardProps> = ({ event, loading, markImGoing }) =>
           </Box>
         )}
 
-        {status === 'draft' ? (
+        {loading ? null : status === 'draft' ? (
           <Button
             size="small"
             variant="outlined"
             disabled={loading}
             fullWidth
             title="Edit"
-            startIcon={<NotePencil />}
+            startIcon={<NotePencil size={16} />}
             sx={{ ml: 'auto', mt: 2 }}
           />
         ) : (
-          markImGoing && (
-            <Button
-              title="I'm Going"
-              variant="outlined"
-              fullWidth
-              disabled={loading}
-              // endIcon={<ArrowRightAltIcon />}
-              startIcon={<Heart weight="fill" />}
-              sx={{ marginTop: 2 }}
-              onClick={() => markImGoing(id)}
-            />
-          )
+          <Box width="100%" display="flex" gap={2}>
+            {(createdBy === user?.id || isAdmin) && (
+              <Button
+                variant="outlined"
+                disabled={loading}
+                fullWidth
+                title="Edit"
+                startIcon={<NotePencil size={16} />}
+                sx={{ ml: 'auto', mt: 2 }}
+              />
+            )}
+            {!isVerified && isAdmin ? (
+              <Button
+                variant="contained"
+                disabled={loading}
+                fullWidth
+                title="Approve & Publish"
+                startIcon={<CheckCircle size={16} />}
+                sx={{ ml: 'auto', mt: 2, whiteSpace: 'nowrap' }}
+                onClick={() => verifyEvent?.(id)}
+              />
+            ) : (
+              markImGoing && (
+                <Button
+                  title="I'm Going"
+                  variant="outlined"
+                  fullWidth
+                  disabled={loading}
+                  // endIcon={<ArrowRightAltIcon />}
+                  startIcon={<Heart size={20} weight="fill" />}
+                  sx={{ marginTop: 2 }}
+                  onClick={() => markImGoing(id)}
+                />
+              )
+            )}
+          </Box>
         )}
       </CardContent>
     </Card>

@@ -103,6 +103,7 @@ export type Event = {
   endDate?: Maybe<Scalars['DateTime']['output']>;
   id: Scalars['Int']['output'];
   image?: Maybe<Scalars['String']['output']>;
+  isVerified?: Maybe<Scalars['Boolean']['output']>;
   location?: Maybe<Scalars['String']['output']>;
   medium: Scalars['String']['output'];
   organizers?: Maybe<Array<Maybe<User>>>;
@@ -150,6 +151,7 @@ export type Mutation = {
   signup?: Maybe<User>;
   updateBatchCoordinator?: Maybe<BatchCoordinator>;
   updateUser?: Maybe<User>;
+  verifyEvent?: Maybe<Scalars['Boolean']['output']>;
   verifyUser?: Maybe<Scalars['Boolean']['output']>;
 };
 
@@ -159,7 +161,7 @@ export type MutationAssignBatchCoordinatorArgs = {
 };
 
 export type MutationAttendEventArgs = {
-  eventId: Scalars['String']['input'];
+  eventId: Scalars['Int']['input'];
 };
 
 export type MutationCreateEventArgs = {
@@ -229,6 +231,11 @@ export type MutationUpdateUserArgs = {
   profileImage?: InputMaybe<Scalars['String']['input']>;
   sociaMedia?: InputMaybe<Scalars['JSON']['input']>;
   whatsAppMobile?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type MutationVerifyEventArgs = {
+  eventId: Scalars['Int']['input'];
+  verified: Scalars['Boolean']['input'];
 };
 
 export type MutationVerifyUserArgs = {
@@ -367,7 +374,7 @@ export type AssignBatchCoordinatorMutation = {
 };
 
 export type AttendEventMutationVariables = Exact<{
-  eventId: Scalars['String']['input'];
+  eventId: Scalars['Int']['input'];
 }>;
 
 export type AttendEventMutation = {
@@ -382,6 +389,7 @@ export type AttendEventMutation = {
         endDate?: any | undefined;
         id: number;
         image?: string | undefined;
+        isVerified?: boolean | undefined;
         location?: string | undefined;
         medium: string;
         price?: number | undefined;
@@ -485,6 +493,7 @@ export type CreateEventMutation = {
         endDate?: any | undefined;
         id: number;
         image?: string | undefined;
+        isVerified?: boolean | undefined;
         location?: string | undefined;
         medium: string;
         price?: number | undefined;
@@ -848,6 +857,13 @@ export type UpdateUserMutation = {
     | undefined;
 };
 
+export type VerifyEventMutationVariables = Exact<{
+  eventId: Scalars['Int']['input'];
+  verified: Scalars['Boolean']['input'];
+}>;
+
+export type VerifyEventMutation = { __typename?: 'Mutation'; verifyEvent?: boolean | undefined };
+
 export type VerifyUserMutationVariables = Exact<{
   user_id: Scalars['String']['input'];
   verified: Scalars['Boolean']['input'];
@@ -1015,6 +1031,7 @@ export type GetEventDetailsQuery = {
         endDate?: any | undefined;
         id: number;
         image?: string | undefined;
+        isVerified?: boolean | undefined;
         location?: string | undefined;
         medium: string;
         price?: number | undefined;
@@ -1114,6 +1131,7 @@ export type GetEventListQuery = {
                   endDate?: any | undefined;
                   id: number;
                   image?: string | undefined;
+                  isVerified?: boolean | undefined;
                   location?: string | undefined;
                   medium: string;
                   price?: number | undefined;
@@ -1417,7 +1435,7 @@ export type AssignBatchCoordinatorMutationOptions = Apollo.BaseMutationOptions<
   AssignBatchCoordinatorMutationVariables
 >;
 export const AttendEventDocument = gql`
-  mutation attendEvent($eventId: String!) {
+  mutation attendEvent($eventId: Int!) {
     attendEvent(eventId: $eventId) {
       attendees {
         aboutMe
@@ -1455,6 +1473,7 @@ export const AttendEventDocument = gql`
       endDate
       id
       image
+      isVerified
       location
       medium
       organizers {
@@ -1586,6 +1605,7 @@ export const CreateEventDocument = gql`
       endDate
       id
       image
+      isVerified
       location
       medium
       organizers {
@@ -2264,6 +2284,40 @@ export function useUpdateUserMutation(
 export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
 export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
 export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
+export const VerifyEventDocument = gql`
+  mutation verifyEvent($eventId: Int!, $verified: Boolean!) {
+    verifyEvent(eventId: $eventId, verified: $verified)
+  }
+`;
+export type VerifyEventMutationFn = Apollo.MutationFunction<VerifyEventMutation, VerifyEventMutationVariables>;
+
+/**
+ * __useVerifyEventMutation__
+ *
+ * To run a mutation, you first call `useVerifyEventMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useVerifyEventMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [verifyEventMutation, { data, loading, error }] = useVerifyEventMutation({
+ *   variables: {
+ *      eventId: // value for 'eventId'
+ *      verified: // value for 'verified'
+ *   },
+ * });
+ */
+export function useVerifyEventMutation(
+  baseOptions?: Apollo.MutationHookOptions<VerifyEventMutation, VerifyEventMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<VerifyEventMutation, VerifyEventMutationVariables>(VerifyEventDocument, options);
+}
+export type VerifyEventMutationHookResult = ReturnType<typeof useVerifyEventMutation>;
+export type VerifyEventMutationResult = Apollo.MutationResult<VerifyEventMutation>;
+export type VerifyEventMutationOptions = Apollo.BaseMutationOptions<VerifyEventMutation, VerifyEventMutationVariables>;
 export const VerifyUserDocument = gql`
   mutation verifyUser($user_id: String!, $verified: Boolean!) {
     verifyUser(user_id: $user_id, verified: $verified)
@@ -2619,6 +2673,7 @@ export const GetEventDetailsDocument = gql`
       endDate
       id
       image
+      isVerified
       location
       medium
       organizers {
@@ -2741,6 +2796,7 @@ export const GetEventListDocument = gql`
         endDate
         id
         image
+        isVerified
         location
         medium
         organizers {

@@ -44,6 +44,7 @@ const ProfileForm = () => {
           gender: data?.gender,
           mobile: data?.mobile,
           aboutMe: data?.aboutMe,
+          // @ts-expect-error type error
           dob: data?.dob ? dayjs(data?.dob)?.toISOString() : null,
           whatsAppMobile: data?.whatsAppMobile,
           extraMobile: data?.extraMobile,
