@@ -7,6 +7,6 @@ export interface INewEventFormInput {
   medium: string;
   category: string;
   tags?: string;
-  price?: string;
+  price?: number;
   isPublish?: boolean;
 }

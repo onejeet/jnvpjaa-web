@@ -6,6 +6,7 @@ import {
   useAttendEventMutation,
   useGetEventListQuery,
   useGetUserDetailsQuery,
+  usePublishEventMutation,
   useVerifyEventMutation,
 } from '@/apollo/hooks';
 import { Grid2 as Grid, Typography } from '@mui/material';
@@ -27,6 +28,7 @@ export default function Events() {
 
   const [handleRSVP] = useAttendEventMutation();
   const [handleVerifyEvent] = useVerifyEventMutation();
+  const [publishEvent, { loading: publishEventLoading }] = usePublishEventMutation();
 
   const listData = React.useMemo(() => {
     if (loading) {
@@ -74,6 +76,18 @@ export default function Events() {
                     title: `You're on the list!`,
                     message: `You're on the list! Get ready for an amazing event.`,
                     action: 'success',
+                  },
+                  true
+                );
+              },
+              onError: (err) => {
+                showAlert(
+                  {
+                    visible: true,
+                    type: 'error',
+                    title: `RSVP failed. Try again`,
+                    message: err?.message || 'Something went wrong.',
+                    action: 'error',
                   },
                   true
                 );
@@ -143,13 +157,105 @@ export default function Events() {
                   true
                 );
               },
+              onError: (err) => {
+                showAlert(
+                  {
+                    visible: true,
+                    type: 'error',
+                    title: `Event publishing failed. Try again`,
+                    message: err?.message || 'Something went wrong.',
+                    action: 'error',
+                  },
+                  true
+                );
+              },
             });
           },
         },
         true
       );
     },
-    [handleVerifyEvent, user?.id, isAdmin, redirectToSignin, showAlert]
+    [handleVerifyEvent, user?.id, client, isAdmin, redirectToSignin, showAlert]
+  );
+
+  const onEditEvent = React.useCallback(
+    (id: number) => {
+      router.push({
+        pathname: paths.events.new,
+        query: {
+          eventId: id,
+        },
+      });
+    },
+    [router]
+  );
+
+  const onPublishEvent = React.useCallback(
+    (id: number) => {
+      if (!user?.id) {
+        redirectToSignin(true);
+        return;
+      }
+      showAlert(
+        {
+          visible: true,
+          title: `Publish the Event`,
+          type: 'loading',
+          message: `The event is in draft mode. Once published the admins will be notified for apporval.`,
+          action: 'approve',
+          okayButtonProps: {
+            title: `Publish Now`,
+          },
+          onOkay: () => {
+            showAlert(
+              {
+                visible: true,
+                //  title: 'Are you Going?',
+                type: 'loading',
+                message: 'Please Wait, The status is being updated.',
+                action: 'loading',
+              },
+              true
+            );
+            publishEvent({
+              variables: {
+                eventId: id,
+                status: 'published',
+              },
+              onCompleted: () => {
+                client.refetchQueries({
+                  include: ['getEventDetails'],
+                });
+                showAlert(
+                  {
+                    visible: true,
+                    type: 'success',
+                    title: `Published. Awaiting admin approval`,
+                    message: `The event has been published and sent for apporval to admin. Once apporved, wll be visible to all the alumni.`,
+                    action: 'success',
+                  },
+                  true
+                );
+              },
+              onError: (err) => {
+                showAlert(
+                  {
+                    visible: true,
+                    type: 'error',
+                    title: `Event publishing failed. Try again`,
+                    message: err?.message || 'Something went wrong.',
+                    action: 'error',
+                  },
+                  true
+                );
+              },
+            });
+          },
+        },
+        true
+      );
+    },
+    [publishEvent, user?.id, redirectToSignin, client, showAlert]
   );
 
   return (
@@ -175,6 +281,8 @@ export default function Events() {
                 user={user}
                 isAdmin={isAdmin}
                 verifyEvent={verifyEvent}
+                onEdit={onEditEvent}
+                onPublish={onPublishEvent}
               />
             </Grid>
           ))

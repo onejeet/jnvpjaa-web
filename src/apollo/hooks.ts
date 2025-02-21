@@ -144,12 +144,14 @@ export type Mutation = {
   deleteUser?: Maybe<User>;
   forgotPassword?: Maybe<Scalars['Boolean']['output']>;
   logout?: Maybe<Scalars['String']['output']>;
+  publishEvent?: Maybe<Event>;
   refreshToken?: Maybe<AuthPayload>;
   removeBatchCoordinator?: Maybe<Scalars['Boolean']['output']>;
   resetPassword?: Maybe<Scalars['Boolean']['output']>;
   signin?: Maybe<AuthPayload>;
   signup?: Maybe<User>;
   updateBatchCoordinator?: Maybe<BatchCoordinator>;
+  updateEvent?: Maybe<Event>;
   updateUser?: Maybe<User>;
   verifyEvent?: Maybe<Scalars['Boolean']['output']>;
   verifyUser?: Maybe<Scalars['Boolean']['output']>;
@@ -170,7 +172,7 @@ export type MutationCreateEventArgs = {
   endDate?: InputMaybe<Scalars['String']['input']>;
   isPublish?: InputMaybe<Scalars['Boolean']['input']>;
   medium: Scalars['String']['input'];
-  price?: InputMaybe<Scalars['String']['input']>;
+  price?: InputMaybe<Scalars['Float']['input']>;
   startDate: Scalars['String']['input'];
   summary: Scalars['String']['input'];
   tags?: InputMaybe<Scalars['String']['input']>;
@@ -183,6 +185,11 @@ export type MutationDeleteUserArgs = {
 
 export type MutationForgotPasswordArgs = {
   email: Scalars['String']['input'];
+};
+
+export type MutationPublishEventArgs = {
+  eventId: Scalars['Int']['input'];
+  status: Scalars['String']['input'];
 };
 
 export type MutationRemoveBatchCoordinatorArgs = {
@@ -213,6 +220,20 @@ export type MutationSignupArgs = {
 export type MutationUpdateBatchCoordinatorArgs = {
   newBatch: Scalars['Int']['input'];
   userId: Scalars['String']['input'];
+};
+
+export type MutationUpdateEventArgs = {
+  category: Scalars['String']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
+  endDate?: InputMaybe<Scalars['String']['input']>;
+  eventId: Scalars['Int']['input'];
+  location?: InputMaybe<Scalars['String']['input']>;
+  medium: Scalars['String']['input'];
+  price?: InputMaybe<Scalars['Float']['input']>;
+  startDate: Scalars['String']['input'];
+  summary: Scalars['String']['input'];
+  tags?: InputMaybe<Array<Scalars['String']['input']>>;
+  title: Scalars['String']['input'];
 };
 
 export type MutationUpdateUserArgs = {
@@ -474,7 +495,7 @@ export type CreateEventMutationVariables = Exact<{
   endDate?: InputMaybe<Scalars['String']['input']>;
   isPublish?: InputMaybe<Scalars['Boolean']['input']>;
   medium: Scalars['String']['input'];
-  price?: InputMaybe<Scalars['String']['input']>;
+  price?: InputMaybe<Scalars['Float']['input']>;
   startDate: Scalars['String']['input'];
   summary: Scalars['String']['input'];
   tags?: InputMaybe<Scalars['String']['input']>;
@@ -618,6 +639,102 @@ export type ForgotPasswordMutation = { __typename?: 'Mutation'; forgotPassword?:
 export type LogoutMutationVariables = Exact<{ [key: string]: never }>;
 
 export type LogoutMutation = { __typename?: 'Mutation'; logout?: string | undefined };
+
+export type PublishEventMutationVariables = Exact<{
+  eventId: Scalars['Int']['input'];
+  status: Scalars['String']['input'];
+}>;
+
+export type PublishEventMutation = {
+  __typename?: 'Mutation';
+  publishEvent?:
+    | {
+        __typename?: 'Event';
+        category?: string | undefined;
+        createdAt: any;
+        createdBy: string;
+        description?: string | undefined;
+        endDate?: any | undefined;
+        id: number;
+        image?: string | undefined;
+        isVerified?: boolean | undefined;
+        location?: string | undefined;
+        medium: string;
+        price?: number | undefined;
+        startDate: any;
+        status?: string | undefined;
+        summary: string;
+        tags?: Array<string | undefined> | undefined;
+        ticketUrl?: string | undefined;
+        title: string;
+        updatedAt: any;
+        attendees?:
+          | Array<
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: string | undefined;
+                  email?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  id?: string | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
+                  updatedAt: any;
+                  whatsAppMobile?: string | undefined;
+                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+        organizers?:
+          | Array<
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: string | undefined;
+                  email?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  id?: string | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
+                  updatedAt: any;
+                  whatsAppMobile?: string | undefined;
+                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+      }
+    | undefined;
+};
 
 export type RefreshTokenMutationVariables = Exact<{ [key: string]: never }>;
 
@@ -801,6 +918,111 @@ export type UpdateBatchCoordinatorMutation = {
               whatsAppMobile?: string | undefined;
               role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
             }
+          | undefined;
+      }
+    | undefined;
+};
+
+export type UpdateEventMutationVariables = Exact<{
+  category: Scalars['String']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
+  endDate?: InputMaybe<Scalars['String']['input']>;
+  eventId: Scalars['Int']['input'];
+  location?: InputMaybe<Scalars['String']['input']>;
+  medium: Scalars['String']['input'];
+  price?: InputMaybe<Scalars['Float']['input']>;
+  startDate: Scalars['String']['input'];
+  summary: Scalars['String']['input'];
+  tags?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
+  title: Scalars['String']['input'];
+}>;
+
+export type UpdateEventMutation = {
+  __typename?: 'Mutation';
+  updateEvent?:
+    | {
+        __typename?: 'Event';
+        category?: string | undefined;
+        createdAt: any;
+        createdBy: string;
+        description?: string | undefined;
+        endDate?: any | undefined;
+        id: number;
+        image?: string | undefined;
+        isVerified?: boolean | undefined;
+        location?: string | undefined;
+        medium: string;
+        price?: number | undefined;
+        startDate: any;
+        status?: string | undefined;
+        summary: string;
+        tags?: Array<string | undefined> | undefined;
+        ticketUrl?: string | undefined;
+        title: string;
+        updatedAt: any;
+        attendees?:
+          | Array<
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: string | undefined;
+                  email?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  id?: string | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
+                  updatedAt: any;
+                  whatsAppMobile?: string | undefined;
+                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+        organizers?:
+          | Array<
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: string | undefined;
+                  email?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  id?: string | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
+                  updatedAt: any;
+                  whatsAppMobile?: string | undefined;
+                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                }
+              | undefined
+            >
           | undefined;
       }
     | undefined;
@@ -1551,7 +1773,7 @@ export const CreateEventDocument = gql`
     $endDate: String
     $isPublish: Boolean
     $medium: String!
-    $price: String
+    $price: Float
     $startDate: String!
     $summary: String!
     $tags: String
@@ -1812,6 +2034,120 @@ export function useLogoutMutation(baseOptions?: Apollo.MutationHookOptions<Logou
 export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
 export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
+export const PublishEventDocument = gql`
+  mutation publishEvent($eventId: Int!, $status: String!) {
+    publishEvent(eventId: $eventId, status: $status) {
+      attendees {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        id
+        isVerified
+        lastName
+        membershipYear
+        mobile
+        nickName
+        profileImage
+        role {
+          id
+          name
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      category
+      createdAt
+      createdBy
+      description
+      endDate
+      id
+      image
+      isVerified
+      location
+      medium
+      organizers {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        id
+        isVerified
+        lastName
+        membershipYear
+        mobile
+        nickName
+        profileImage
+        role {
+          id
+          name
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      price
+      startDate
+      status
+      summary
+      tags
+      ticketUrl
+      title
+      updatedAt
+    }
+  }
+`;
+export type PublishEventMutationFn = Apollo.MutationFunction<PublishEventMutation, PublishEventMutationVariables>;
+
+/**
+ * __usePublishEventMutation__
+ *
+ * To run a mutation, you first call `usePublishEventMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePublishEventMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [publishEventMutation, { data, loading, error }] = usePublishEventMutation({
+ *   variables: {
+ *      eventId: // value for 'eventId'
+ *      status: // value for 'status'
+ *   },
+ * });
+ */
+export function usePublishEventMutation(
+  baseOptions?: Apollo.MutationHookOptions<PublishEventMutation, PublishEventMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<PublishEventMutation, PublishEventMutationVariables>(PublishEventDocument, options);
+}
+export type PublishEventMutationHookResult = ReturnType<typeof usePublishEventMutation>;
+export type PublishEventMutationResult = Apollo.MutationResult<PublishEventMutation>;
+export type PublishEventMutationOptions = Apollo.BaseMutationOptions<
+  PublishEventMutation,
+  PublishEventMutationVariables
+>;
 export const RefreshTokenDocument = gql`
   mutation refreshToken {
     refreshToken {
@@ -2177,6 +2513,150 @@ export type UpdateBatchCoordinatorMutationOptions = Apollo.BaseMutationOptions<
   UpdateBatchCoordinatorMutation,
   UpdateBatchCoordinatorMutationVariables
 >;
+export const UpdateEventDocument = gql`
+  mutation updateEvent(
+    $category: String!
+    $description: String
+    $endDate: String
+    $eventId: Int!
+    $location: String
+    $medium: String!
+    $price: Float
+    $startDate: String!
+    $summary: String!
+    $tags: [String!]
+    $title: String!
+  ) {
+    updateEvent(
+      category: $category
+      description: $description
+      endDate: $endDate
+      eventId: $eventId
+      location: $location
+      medium: $medium
+      price: $price
+      startDate: $startDate
+      summary: $summary
+      tags: $tags
+      title: $title
+    ) {
+      attendees {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        id
+        isVerified
+        lastName
+        membershipYear
+        mobile
+        nickName
+        profileImage
+        role {
+          id
+          name
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      category
+      createdAt
+      createdBy
+      description
+      endDate
+      id
+      image
+      isVerified
+      location
+      medium
+      organizers {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        id
+        isVerified
+        lastName
+        membershipYear
+        mobile
+        nickName
+        profileImage
+        role {
+          id
+          name
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      price
+      startDate
+      status
+      summary
+      tags
+      ticketUrl
+      title
+      updatedAt
+    }
+  }
+`;
+export type UpdateEventMutationFn = Apollo.MutationFunction<UpdateEventMutation, UpdateEventMutationVariables>;
+
+/**
+ * __useUpdateEventMutation__
+ *
+ * To run a mutation, you first call `useUpdateEventMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateEventMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateEventMutation, { data, loading, error }] = useUpdateEventMutation({
+ *   variables: {
+ *      category: // value for 'category'
+ *      description: // value for 'description'
+ *      endDate: // value for 'endDate'
+ *      eventId: // value for 'eventId'
+ *      location: // value for 'location'
+ *      medium: // value for 'medium'
+ *      price: // value for 'price'
+ *      startDate: // value for 'startDate'
+ *      summary: // value for 'summary'
+ *      tags: // value for 'tags'
+ *      title: // value for 'title'
+ *   },
+ * });
+ */
+export function useUpdateEventMutation(
+  baseOptions?: Apollo.MutationHookOptions<UpdateEventMutation, UpdateEventMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<UpdateEventMutation, UpdateEventMutationVariables>(UpdateEventDocument, options);
+}
+export type UpdateEventMutationHookResult = ReturnType<typeof useUpdateEventMutation>;
+export type UpdateEventMutationResult = Apollo.MutationResult<UpdateEventMutation>;
+export type UpdateEventMutationOptions = Apollo.BaseMutationOptions<UpdateEventMutation, UpdateEventMutationVariables>;
 export const UpdateUserDocument = gql`
   mutation updateUser(
     $aboutMe: String

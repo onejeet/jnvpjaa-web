@@ -19,7 +19,16 @@ import Button from '@/components/core/Button';
 import { getAvatarDataUrl, startCase, valueToLabelFormatter } from '@/utils/helpers';
 import { CalendarDots, CalendarHeart, Check, CheckCircle, Heart, Minus, NotePencil } from '@phosphor-icons/react';
 
-const EventCard: React.FC<EventCardProps> = ({ user, isAdmin, verifyEvent, event, loading, markImGoing }) => {
+const EventCard: React.FC<EventCardProps> = ({
+  user,
+  isAdmin,
+  verifyEvent,
+  onEdit,
+  onPublish,
+  event,
+  loading,
+  markImGoing,
+}) => {
   const {
     id,
     title = '',
@@ -174,15 +183,28 @@ const EventCard: React.FC<EventCardProps> = ({ user, isAdmin, verifyEvent, event
         )}
 
         {loading ? null : status === 'draft' ? (
-          <Button
-            size="small"
-            variant="outlined"
-            disabled={loading}
-            fullWidth
-            title="Edit"
-            startIcon={<NotePencil size={16} />}
-            sx={{ ml: 'auto', mt: 2 }}
-          />
+          <Box width="100%" display="flex" gap={2}>
+            <Button
+              variant="outlined"
+              disabled={loading}
+              fullWidth
+              title="Edit"
+              startIcon={<NotePencil size={16} />}
+              sx={{ ml: 'auto', mt: 2 }}
+              onClick={() => onEdit?.(id)}
+            />
+            {(createdBy === user?.id || isAdmin) && (
+              <Button
+                variant="outlined"
+                disabled={loading}
+                fullWidth
+                title="Publish"
+                startIcon={<CheckCircle size={16} />}
+                sx={{ ml: 'auto', mt: 2 }}
+                onClick={() => onPublish?.(id)}
+              />
+            )}
+          </Box>
         ) : (
           <Box width="100%" display="flex" gap={2}>
             {(createdBy === user?.id || isAdmin) && (
@@ -193,6 +215,7 @@ const EventCard: React.FC<EventCardProps> = ({ user, isAdmin, verifyEvent, event
                 title="Edit"
                 startIcon={<NotePencil size={16} />}
                 sx={{ ml: 'auto', mt: 2 }}
+                onClick={() => onEdit?.(id)}
               />
             )}
             {!isVerified && isAdmin ? (

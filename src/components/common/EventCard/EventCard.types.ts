@@ -33,4 +33,6 @@ export interface EventCardProps {
   user?: User;
   isAdmin?: boolean;
   verifyEvent?: (id: number) => void;
+  onEdit?: (id: number) => void;
+  onPublish?: (id: number) => void;
 }

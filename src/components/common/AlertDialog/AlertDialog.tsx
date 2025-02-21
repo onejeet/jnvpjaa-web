@@ -20,7 +20,7 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
     } else if (action === 'unsaved') {
       return 'error';
     } else if (action === 'loading') {
-      return 'Loading...';
+      return 'success';
     } else if (action === 'deleting') {
       return 'Deleting...';
     } else if (action === 'reject') {
@@ -68,6 +68,7 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
           // color,
           disabled: action === 'deleting',
           title: btnText,
+          loading: action === 'loading',
           // @ts-expect-error sdsd
           color: btnColor,
           ...okayButtonProps,
