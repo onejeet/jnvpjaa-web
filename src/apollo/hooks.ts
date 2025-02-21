@@ -170,6 +170,7 @@ export type MutationCreateEventArgs = {
   category: Scalars['String']['input'];
   description?: InputMaybe<Scalars['String']['input']>;
   endDate?: InputMaybe<Scalars['String']['input']>;
+  image?: InputMaybe<Scalars['String']['input']>;
   isPublish?: InputMaybe<Scalars['Boolean']['input']>;
   medium: Scalars['String']['input'];
   price?: InputMaybe<Scalars['Float']['input']>;
@@ -493,6 +494,7 @@ export type CreateEventMutationVariables = Exact<{
   category: Scalars['String']['input'];
   description?: InputMaybe<Scalars['String']['input']>;
   endDate?: InputMaybe<Scalars['String']['input']>;
+  image?: InputMaybe<Scalars['String']['input']>;
   isPublish?: InputMaybe<Scalars['Boolean']['input']>;
   medium: Scalars['String']['input'];
   price?: InputMaybe<Scalars['Float']['input']>;
@@ -1771,6 +1773,7 @@ export const CreateEventDocument = gql`
     $category: String!
     $description: String
     $endDate: String
+    $image: String
     $isPublish: Boolean
     $medium: String!
     $price: Float
@@ -1783,6 +1786,7 @@ export const CreateEventDocument = gql`
       category: $category
       description: $description
       endDate: $endDate
+      image: $image
       isPublish: $isPublish
       medium: $medium
       price: $price
@@ -1888,6 +1892,7 @@ export type CreateEventMutationFn = Apollo.MutationFunction<CreateEventMutation,
  *      category: // value for 'category'
  *      description: // value for 'description'
  *      endDate: // value for 'endDate'
+ *      image: // value for 'image'
  *      isPublish: // value for 'isPublish'
  *      medium: // value for 'medium'
  *      price: // value for 'price'

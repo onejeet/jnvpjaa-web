@@ -171,7 +171,7 @@ const NewEvent = () => {
       }}
     >
       <Box display="flex" width="100%" mb={3} justifyContent="space-between" alignItems="center">
-        <Typography variant="h2">Create New Event</Typography>
+        <Typography variant="h2">{eventId ? 'Edit Event' : 'Create New Event'}</Typography>
         <Box display="flex" gap={2} alignItems="center">
           <Button
             // size="small"
