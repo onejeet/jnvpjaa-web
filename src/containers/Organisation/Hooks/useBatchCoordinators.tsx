@@ -11,14 +11,27 @@ import { Skeleton, Typography } from '@mui/material';
 import VerifiedBadge from '@/components/common/VerifiedBadge';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/router';
+import { useSearchParams } from 'next/navigation';
 
 const useBatchCoordinators = () => {
   const { user } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [columns, setColumns] = React.useState<any[]>([]);
   const [searchQuery, setSearchQuery] = React.useState<string>('');
 
-  const { data: coordinators, loading } = useGetAllBatchCoordinatorsQuery();
+  const { data: coordinators, loading } = useGetAllBatchCoordinatorsQuery({
+    variables: {
+      options: {
+        filter: {
+          verified: searchParams?.get('verified') ? searchParams?.get('verified') === 'true' : undefined,
+          query: searchParams.get('q') || '',
+          batch: searchParams?.get('batch') ? parseInt(searchParams.get('batch') || '', 10) : undefined,
+        },
+      },
+    },
+    notifyOnNetworkStatusChange: true,
+  });
 
   //   const [state, dispatch] = useImmerReducer(reducer, initialState);
   //   const { replace, query, pathname } = useRouter();
@@ -29,6 +42,7 @@ const useBatchCoordinators = () => {
         field: 'name',
         headerName: 'COORDINATOR',
         width: 250,
+        flex: 1,
         ...commonTableColumnProps,
         sortable: true,
         renderCell: ({ row }: GridRowParams) => (
@@ -91,8 +105,7 @@ const useBatchCoordinators = () => {
       {
         field: 'email',
         headerName: 'EMAIL',
-        minWidth: 270,
-        flex: 1,
+        minWidth: 250,
         ...commonTableColumnProps,
         sortable: true,
         renderCell: ({ row }: GridRowParams) =>
@@ -108,8 +121,7 @@ const useBatchCoordinators = () => {
       {
         field: 'mobile',
         headerName: 'Mobile',
-        minWidth: 270,
-        flex: 1,
+        minWidth: 150,
         ...commonTableColumnProps,
         sortable: true,
         renderCell: ({ row }: GridRowParams) =>
@@ -119,6 +131,36 @@ const useBatchCoordinators = () => {
             </Box>
           ) : (
             formatPhoneNumber(row?.user?.mobile)?.international
+          ),
+      },
+      {
+        field: 'whatsappMobile',
+        headerName: 'WhatsApp Number',
+        width: 150,
+        ...commonTableColumnProps,
+        sortable: true,
+        renderCell: ({ row }: GridRowParams) =>
+          row.loading ? (
+            <Box height="100%" display="flex" alignItems="center">
+              <Skeleton width="100%" height={30} />
+            </Box>
+          ) : (
+            formatPhoneNumber(row.whatsappMobile)?.international
+          ),
+      },
+      {
+        field: 'emergencyMobile',
+        headerName: 'Emergency Contact',
+        width: 150,
+        ...commonTableColumnProps,
+        sortable: true,
+        renderCell: ({ row }: GridRowParams) =>
+          row.loading ? (
+            <Box height="100%" display="flex" alignItems="center">
+              <Skeleton width="100%" height={30} />
+            </Box>
+          ) : (
+            formatPhoneNumber(row.emergencyMobile)?.international
           ),
       },
       // {

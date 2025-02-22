@@ -5,6 +5,7 @@ import { DataGrid } from '@mui/x-data-grid';
 
 import useBatchCoordinators from './Hooks/useBatchCoordinators';
 import { MagnifyingGlass } from '@phosphor-icons/react';
+import BatchCoordinatorFilters from './components/BatchCoordinatorFilters';
 
 const BatchCoordinators = () => {
   const { columns, rows, onSearch } = useBatchCoordinators();
@@ -18,33 +19,10 @@ const BatchCoordinators = () => {
         community and connection among JNVPJAA alumni. Meet the team driving our mission forward and discover the faces
         behind the initiatives that keep our alumni network strong and engaged.`}
       </Typography>
-      <Box component={Grid} container width="100%" mb={3}>
-        <Grid
-          size={{ xs: 12, sm: 6, md: 3 }}
-          sx={{
-            svg: {
-              color: 'grey.600',
-            },
-          }}
-        >
-          <OutlinedInput
-            size="small"
-            placeholder="Search Coordinators"
-            startAdornment={<MagnifyingGlass size={24} style={{ marginRight: '8px' }} />}
-            onChange={(e) => onSearch(e.target.value)}
-          />
-        </Grid>
-        {/* <Grid item xs={12} sm={6} md={3}>
-          <Select
-            placeholder="Search Coordinators"
-            startAdornment={<SearchIcon sx={{ color: 'grey.800', mr: '8px' }} />}
-            options={[]}
-            onChange={(e) => onSearch(e.target.value)}
-          />
-        </Grid> */}
-      </Box>
+      <BatchCoordinatorFilters />
       <DataGrid
         // height={tableHeight}
+        // @ts-expect-error type error
         rows={rows}
         columns={columns}
         // loading={loading}

@@ -26,6 +26,7 @@ const useMembersTable = () => {
     page: 0,
     pageSize: 50,
   });
+  console.log('ZZ: SWARCH PARAMS', searchParams?.get('batch'));
 
   const { showAlert } = useAlert();
   const [handleUserVerification] = useVerifyUserMutation();
@@ -36,6 +37,7 @@ const useMembersTable = () => {
         filter: {
           verified: searchParams?.get('verified') ? searchParams?.get('verified') === 'true' : undefined,
           query: searchParams.get('q') || '',
+          batch: searchParams?.get('batch') ? parseInt(searchParams.get('batch') || '', 10) : undefined,
         },
         offset: paginationModel?.page || 0,
         limit: paginationModel?.pageSize || 10,
@@ -97,7 +99,7 @@ const useMembersTable = () => {
       {
         field: 'email',
         headerName: 'Email',
-        width: 250,
+        width: 230,
         ...commonTableColumnProps,
         sortable: true,
         renderCell: ({ row }: GridRowParams) =>
@@ -113,7 +115,7 @@ const useMembersTable = () => {
       {
         field: 'batch',
         headerName: 'Batch',
-        width: 100,
+        width: 80,
         ...commonTableColumnProps,
         sortable: true,
         renderCell: ({ row }: GridRowParams) =>
@@ -130,7 +132,7 @@ const useMembersTable = () => {
       {
         field: 'mobile',
         headerName: 'Mobile',
-        width: 270,
+        width: 150,
         ...commonTableColumnProps,
         sortable: true,
         renderCell: ({ row }: GridRowParams) =>
@@ -142,21 +144,50 @@ const useMembersTable = () => {
             formatPhoneNumber(row.mobile)?.international
           ),
       },
+      {
+        field: 'whatsappMobile',
+        headerName: 'WhatsApp Number',
+        width: 150,
+        ...commonTableColumnProps,
+        sortable: true,
+        renderCell: ({ row }: GridRowParams) =>
+          row.loading ? (
+            <Box height="100%" display="flex" alignItems="center">
+              <Skeleton width="100%" height={30} />
+            </Box>
+          ) : (
+            formatPhoneNumber(row.whatsappMobile)?.international
+          ),
+      },
+      {
+        field: 'emergencyMobile',
+        headerName: 'Emergency Contact',
+        width: 150,
+        ...commonTableColumnProps,
+        sortable: true,
+        renderCell: ({ row }: GridRowParams) =>
+          row.loading ? (
+            <Box height="100%" display="flex" alignItems="center">
+              <Skeleton width="100%" height={30} />
+            </Box>
+          ) : (
+            formatPhoneNumber(row.emergencyMobile)?.international
+          ),
+      },
     ];
 
     if (isAdmin) {
       columns.push({
         field: 'actions',
+        // @ts-expect-error type error
         type: 'actions',
         headerName: '',
         // headerClassName: 'users-data-grid-header',
         align: 'right',
-        sortbale: false,
+        sortable: false,
         resizable: false,
-        width: !isAdmin ? 0 : 250,
-        minWidth: !isAdmin ? 0 : 100,
+        width: 250,
         // flex: 1,
-        cellClassName: 'actions_cell',
         getActions: ({ row }: GridRowParams) =>
           row.loading
             ? [

@@ -119,6 +119,7 @@ export type Event = {
 };
 
 export type FilterInput = {
+  batch?: InputMaybe<Scalars['Int']['input']>;
   query?: InputMaybe<Scalars['String']['input']>;
   userId?: InputMaybe<Scalars['String']['input']>;
   verified?: InputMaybe<Scalars['Boolean']['input']>;
@@ -172,6 +173,7 @@ export type MutationCreateEventArgs = {
   endDate?: InputMaybe<Scalars['String']['input']>;
   image?: InputMaybe<Scalars['String']['input']>;
   isPublish?: InputMaybe<Scalars['Boolean']['input']>;
+  location?: InputMaybe<Scalars['String']['input']>;
   medium: Scalars['String']['input'];
   price?: InputMaybe<Scalars['Float']['input']>;
   startDate: Scalars['String']['input'];
@@ -496,6 +498,7 @@ export type CreateEventMutationVariables = Exact<{
   endDate?: InputMaybe<Scalars['String']['input']>;
   image?: InputMaybe<Scalars['String']['input']>;
   isPublish?: InputMaybe<Scalars['Boolean']['input']>;
+  location?: InputMaybe<Scalars['String']['input']>;
   medium: Scalars['String']['input'];
   price?: InputMaybe<Scalars['Float']['input']>;
   startDate: Scalars['String']['input'];
@@ -1775,6 +1778,7 @@ export const CreateEventDocument = gql`
     $endDate: String
     $image: String
     $isPublish: Boolean
+    $location: String
     $medium: String!
     $price: Float
     $startDate: String!
@@ -1788,6 +1792,7 @@ export const CreateEventDocument = gql`
       endDate: $endDate
       image: $image
       isPublish: $isPublish
+      location: $location
       medium: $medium
       price: $price
       startDate: $startDate
@@ -1894,6 +1899,7 @@ export type CreateEventMutationFn = Apollo.MutationFunction<CreateEventMutation,
  *      endDate: // value for 'endDate'
  *      image: // value for 'image'
  *      isPublish: // value for 'isPublish'
+ *      location: // value for 'location'
  *      medium: // value for 'medium'
  *      price: // value for 'price'
  *      startDate: // value for 'startDate'
