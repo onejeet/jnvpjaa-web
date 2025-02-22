@@ -1,4 +1,3 @@
-import BATCH_COORDINATORS from '@/constants/BatchCoordinators.json';
 import { commonTableColumnProps } from '@/constants/General.contants';
 import { formatPhoneNumber, getDefaultAvatar } from '@/utils/helpers';
 import Box from '@mui/material/Box';
@@ -145,7 +144,7 @@ const useBatchCoordinators = () => {
               <Skeleton width="100%" height={30} />
             </Box>
           ) : (
-            formatPhoneNumber(row.whatsappMobile)?.international
+            formatPhoneNumber(row.whatsappMobile)?.international || '--'
           ),
       },
       {
@@ -160,7 +159,7 @@ const useBatchCoordinators = () => {
               <Skeleton width="100%" height={30} />
             </Box>
           ) : (
-            formatPhoneNumber(row.emergencyMobile)?.international
+            formatPhoneNumber(row.emergencyMobile)?.international || '--'
           ),
       },
       // {

@@ -156,7 +156,7 @@ const useMembersTable = () => {
               <Skeleton width="100%" height={30} />
             </Box>
           ) : (
-            formatPhoneNumber(row.whatsappMobile)?.international
+            formatPhoneNumber(row.whatsappMobile)?.international || '--'
           ),
       },
       {
@@ -171,7 +171,7 @@ const useMembersTable = () => {
               <Skeleton width="100%" height={30} />
             </Box>
           ) : (
-            formatPhoneNumber(row.emergencyMobile)?.international
+            formatPhoneNumber(row.emergencyMobile)?.international || '--'
           ),
       },
     ];

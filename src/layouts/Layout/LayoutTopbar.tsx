@@ -147,7 +147,7 @@ const LayoutTopbar: React.FC = () => {
               color: 'transparent',
             }}
           >
-            {`Hello ${user?.firstName}`},
+            {`Hello ${user?.firstName} 👋`}
           </Typography>
         </MenuItem>
         {ACCOUNT_MENU_LIST?.map((mItem: Record<string, any>) => (
