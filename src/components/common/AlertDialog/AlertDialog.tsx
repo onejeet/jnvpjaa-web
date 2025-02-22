@@ -2,6 +2,7 @@ import React from 'react';
 import Dialog from '@/components/core/Dialog';
 import AlertContent from './AlertContent';
 import type { AlertDialogProps } from './AlertDialog.types';
+import { Box } from '@mui/material';
 
 const AlertDialog: React.FC<AlertDialogProps> = ({
   open,
@@ -22,7 +23,7 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
     } else if (action === 'loading') {
       return 'success';
     } else if (action === 'deleting') {
-      return 'Deleting...';
+      return 'error';
     } else if (action === 'reject') {
       return 'error';
     } else if (action === 'approve') {
@@ -75,6 +76,7 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
         },
         cancelButtonProps: {
           ...cancelButtonProps,
+          disabled: action === 'loading' || action === 'deleting',
         },
       }}
       hideHeader

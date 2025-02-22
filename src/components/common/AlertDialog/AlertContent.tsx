@@ -9,6 +9,12 @@ import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import DeleteIcon from '@mui/icons-material/Delete';
 import type { AlertContentProps } from './AlertDialog.types';
 import { Spinner } from '@phosphor-icons/react';
+import Image from 'next/image';
+import Lottie from 'lottie-react';
+import successLottieIcon from '@/utils/lottie/success_icon.json';
+import deleteLottieIcon from '@/utils/lottie/delete_icon.json';
+import errorLottieIcon from '@/utils/lottie/error_icon.json';
+import loadingLottieIcon from '@/utils/lottie/loading_icon.json';
 
 const AlertContent: React.FC<AlertContentProps> = ({ title, message, action = 'delete', items = [] }) => {
   const MessageComp = React.useMemo(() => {
@@ -58,9 +64,9 @@ const AlertContent: React.FC<AlertContentProps> = ({ title, message, action = 'd
           </Box>
         );
       case 'deleting':
-        return <Typography variant="h6">{message || 'Deleting, Please wait...'}</Typography>;
+        return <Typography variant="body1">{message || 'Deleting, Please wait...'}</Typography>;
       case 'success':
-        return message ? <Typography variant="body1">{message}</Typography> : null;
+        return message ? <Typography variant="body1">{message || 'Request completed successfully.'}</Typography> : null;
       case 'error':
         return message ? <Typography variant="body1">{message || 'Completed Successfully'}</Typography> : null;
       case 'unsaved':
@@ -79,11 +85,11 @@ const AlertContent: React.FC<AlertContentProps> = ({ title, message, action = 'd
     if (action === 'delete' || action === 'approve' || action === 'reject') {
       upTitle = title || 'Are you sure?';
     } else if (action === 'deleting') {
-      return null;
+      upTitle = title || 'Deleting...';
     } else if (action === 'unsaved') {
       upTitle = title || 'Discard changes?';
     } else if (action === 'success') {
-      upTitle = title || 'Completed Successfully';
+      upTitle = title || 'Completed Successfully!';
     } else if (action === 'error') {
       upTitle = title || 'An error occurred';
     } else if (action === 'loading') {
@@ -98,16 +104,24 @@ const AlertContent: React.FC<AlertContentProps> = ({ title, message, action = 'd
   }, [action, title]);
 
   const iconComp = React.useMemo(() => {
-    if (action === 'delete' || action === 'approve' || action === 'reject') {
+    if (action === 'delete' || action === 'approve' || action === 'reject' || action === 'request') {
       return <HelpIcon sx={{ color: 'grey.700', fontSize: '100px' }} />;
     } else if (action === 'loading') {
-      return <Spinner fill="grey.700" size={100} />;
+      return <Lottie animationData={loadingLottieIcon} loop={true} style={{ width: '130px', height: '130px' }} />;
+      // return <Image width={60} height={60} src="/assets/svg/loading_animation.svg" alt="loading" />;
+      // return <Spinner fill="grey.700" size={100} />;
     } else if (action === 'success') {
-      return <TaskAltIcon sx={{ color: 'success.main', fontSize: '100px' }} />;
+      return <Lottie animationData={successLottieIcon} loop={true} style={{ width: '100px', height: '100px' }} />;
+      // return <Image width={60} height={60} src="/assets/svg/success_animation.svg" alt="success" />;
+      // return <TaskAltIcon sx={{ color: 'success.main', fontSize: '100px' }} />;
     } else if (action === 'error') {
-      return <ErrorIcon sx={{ color: 'error.main', fontSize: '100px' }} />;
+      return <Lottie animationData={errorLottieIcon} loop={true} style={{ width: '100px', height: '100px' }} />;
+      // return <Image width={60} height={60} src="/assets/svg/error_animation.svg" alt="success" />;
+      // return <ErrorIcon sx={{ color: 'error.main', fontSize: '100px' }} />;
     } else if (action === 'deleting') {
-      return <DeleteIcon sx={{ color: 'error.main', fontSize: '100px' }} />;
+      return <Lottie animationData={deleteLottieIcon} loop={true} style={{ width: '100px', height: '100px' }} />;
+      // return <Image width={60} height={60} src="/assets/svg/delete_animation.svg" alt="deleting" />;
+      // return <DeleteIcon sx={{ color: 'error.main', fontSize: '100px' }} />;
     } else if (action === 'unsaved') {
       return <HelpIcon sx={{ color: 'grey.700', fontSize: '100px' }} />;
     }
@@ -117,7 +131,7 @@ const AlertContent: React.FC<AlertContentProps> = ({ title, message, action = 'd
     <Box
       color="var(--mui-palette-text-secondary)"
       px={2}
-      py={3}
+      py={5}
       gap={1.5}
       textAlign="center"
       display="flex"
@@ -125,7 +139,7 @@ const AlertContent: React.FC<AlertContentProps> = ({ title, message, action = 'd
       flexDirection="column"
       width="100%"
     >
-      {iconComp}
+      <Box mb={2}>{iconComp}</Box>
       {titleComp}
       {MessageComp}
     </Box>

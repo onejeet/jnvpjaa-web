@@ -9,12 +9,15 @@ import { paths } from '@/config/paths';
 import { decodeBase64, encodeBase64 } from '@/utils/index';
 import { useGetUserDetailsLazyQuery, useLogoutMutation, User } from '@/apollo/hooks';
 import { useApolloClient } from '@apollo/client';
+import { useAlert } from '../AlertContext';
 
 const AuthContext = createContext<TAuthContextData>({} as TAuthContextData);
 
 const AuthProvider: React.FC<AuthProviderProps> = ({ children, checkAuth, isAuthPage }) => {
   const router = useRouter();
+  const { pathname } = router;
   const client = useApolloClient();
+  const { showAlert } = useAlert();
   const isLoggedInRef = React.useRef(false);
   const [user, setUser] = useState<User | null>(null);
   const [loadingData, setLoadingData] = useState<LoadingDataProps>({
@@ -67,6 +70,30 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children, checkAuth, isAuth
       refetch();
     }
   }, [user, userData, refetch]);
+
+  React.useEffect(() => {
+    if (!user?.id && !loadingData?.loading && checkAuth) {
+      redirectToSignin();
+    }
+  }, [pathname]);
+
+  // useEffect(() => {
+  //   // Handler to check authentication on route change
+  //   const handleRouteChange = (url: string) => {
+  //     if (!loadingData?.loading && !user?.id && checkAuth) {
+  //       // If user is not authenticated and the URL is not '/login', redirect to '/login'
+  //       redirectToSignin();
+  //     }
+  //   };
+
+  //   // Listen to route changes
+  //   router.events.on('routeChangeStart', handleRouteChange);
+
+  //   // Cleanup event listener on component unmount
+  //   return () => {
+  //     router.events.off('routeChangeStart', handleRouteChange);
+  //   };
+  // }, [user, loadingData, router]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {

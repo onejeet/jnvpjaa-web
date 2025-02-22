@@ -4,7 +4,7 @@ import type React from 'react';
 export interface AlertContentProps {
   title?: string;
   message?: string | React.ReactNode;
-  action?: 'approve' | 'reject' | 'delete' | 'unsaved' | 'loading' | 'deleting' | 'success' | 'error';
+  action?: 'approve' | 'reject' | 'delete' | 'unsaved' | 'loading' | 'deleting' | 'success' | 'error' | 'request';
   items?: string[];
 }
 

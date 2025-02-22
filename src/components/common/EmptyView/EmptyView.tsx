@@ -3,6 +3,8 @@ import { ButtonProps } from '@/components/core/Button/Button.types';
 import { titleCase } from '@/utils/helpers';
 import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
+import doggieLottieIcon from '@/utils/lottie/doggie_art.json';
+import Lottie from 'lottie-react';
 
 interface IProps {
   type?: string;
@@ -13,7 +15,7 @@ interface IProps {
 const EmptyView = ({ type, message, buttonProps }: IProps) => {
   return (
     <Box
-      mt={2}
+      mt={-10}
       mb={4}
       display="flex"
       flexDirection="column"
@@ -21,12 +23,16 @@ const EmptyView = ({ type, message, buttonProps }: IProps) => {
       height="100%"
       justifyContent="center"
       alignItems="center"
+      overflow="hidden"
     >
-      <Image src="/assets/svg/empty_data.svg" alt="empty" width={300} height={100} />
-      <Typography variant="body1" color="grey.500" my={2}>
-        {message || `No ${type || ''} data is available.`}
-      </Typography>
-      {buttonProps ? <Button {...(buttonProps || {})} /> : null}
+      <Lottie animationData={doggieLottieIcon} loop={true} style={{ width: '400px', height: '400px' }} />
+      {/* <Image src="/assets/svg/doggie.svg" alt="empty" width={500} height={300} /> */}
+      <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" mt={-10}>
+        <Typography variant="body1" color="grey.500" mb={2}>
+          {message || `No ${type || ''} data is available.`}
+        </Typography>
+        {buttonProps ? <Button {...(buttonProps || {})} /> : null}
+      </Box>
     </Box>
   );
 };

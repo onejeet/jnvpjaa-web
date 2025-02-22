@@ -272,7 +272,9 @@ export default function Events() {
             List of all the ongoing & upcoming events.
           </Typography>
         </Box>
-        <Button title="Create Event" startIcon={<Plus size={16} />} onClick={() => router.push(paths.events.new)} />
+        {user?.id && (
+          <Button title="Create Event" startIcon={<Plus size={16} />} onClick={() => router.push(paths.events.new)} />
+        )}
       </Box>
       <Grid container spacing={3}>
         {listData?.length > 0 ? (
@@ -293,11 +295,15 @@ export default function Events() {
         ) : (
           <EmptyView
             message="No events available"
-            buttonProps={{
-              title: 'Create New Event',
-              startIcon: <Plus size={16} />,
-              onClick: () => router.push(paths.events.new),
-            }}
+            buttonProps={
+              user?.id
+                ? {
+                    title: 'Create New Event',
+                    startIcon: <Plus size={16} />,
+                    onClick: () => router.push(paths.events.new),
+                  }
+                : undefined
+            }
           />
         )}
       </Grid>
