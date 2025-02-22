@@ -118,7 +118,7 @@ const useBatchCoordinators = () => {
               <Skeleton width="100%" height={30} />
             </Box>
           ) : (
-            formatPhoneNumber(row?.user?.mobile)
+            formatPhoneNumber(row?.user?.mobile)?.international
           ),
       },
       // {

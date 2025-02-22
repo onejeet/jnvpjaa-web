@@ -10,10 +10,11 @@ import FormTextField from '@/components/form/FormTextField';
 import { useAlert } from '@/context/AlertContext';
 import Button from '@/components/core/Button';
 import FormSelectField from '@/components/form/FormSelectField';
-import { getBatchOptions } from '@/utils/helpers';
+import { getBatchOptions, phoneNumberStringConverter, removeSpaces } from '@/utils/helpers';
 import { Info } from '@mui/icons-material';
 import { paths } from '@/config/paths';
 import { useRouter } from 'next/router';
+import FormPhoneField from '@/components/form/FormPhoneField';
 
 const batchList = getBatchOptions();
 
@@ -24,10 +25,13 @@ const SignupForm = () => {
     control,
     handleSubmit,
     setValue,
+    getValues,
     formState: { errors },
   } = useForm<ISignupFormInput>({});
 
   const watchPassword = useWatch({ control, name: 'password' });
+
+  console.log('ZZ: getValues', getValues());
 
   const [signup, { loading }] = useSignupMutation();
 
@@ -40,7 +44,7 @@ const SignupForm = () => {
           email: data?.email?.trim(),
           password: data?.password,
           gender: data?.gender,
-          mobile: data?.mobile,
+          mobile: data?.mobile ? phoneNumberStringConverter(data?.mobile) : data?.mobile,
           batch: data?.batch,
         },
         onCompleted: (res) => {
@@ -164,7 +168,7 @@ const SignupForm = () => {
           />
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
-          <FormTextField
+          <FormPhoneField
             fullWidth
             id="mobile"
             label="Mobile"
@@ -173,7 +177,6 @@ const SignupForm = () => {
             startAdornment="+91"
             name="mobile"
             size="small"
-            type="number"
             onChange={(e) => {
               if (e?.target?.value?.length < 11) {
                 setValue('mobile', e?.target?.value);
@@ -181,10 +184,6 @@ const SignupForm = () => {
             }}
             rules={{
               required: 'Required',
-              maxLength: {
-                value: 10,
-                message: 'Invalid mobile number',
-              },
             }}
           />
         </Grid>

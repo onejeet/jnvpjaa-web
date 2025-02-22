@@ -41,20 +41,22 @@ export default function AboutSection() {
         <Grid size={{ xs: 12, sm: 6 }}>
           <Box display="flex" alignItems="center">
             <Phone size={24} />
-            <Typography sx={{ ml: 1 }}>{formatPhoneNumber(user?.mobile || '') || '--'}</Typography>
+            <Typography sx={{ ml: 1 }}>{formatPhoneNumber(user?.mobile || '')?.international || '--'}</Typography>
           </Box>
         </Grid>
         <Grid size={{ xs: 12, sm: 6 }}>
           <Box display="flex" alignItems="center">
             <WhatsappLogo size={24} />
-            <Typography sx={{ ml: 1 }}>{formatPhoneNumber(user?.whatsAppMobile || '') || '--'}</Typography>
+            <Typography sx={{ ml: 1 }}>
+              {formatPhoneNumber(user?.whatsAppMobile || '')?.international || '--'}
+            </Typography>
           </Box>
         </Grid>
         <Grid size={{ xs: 12, sm: 6 }}>
           <Box display="flex" alignItems="center">
             <Phone size={24} />
             <Typography sx={{ ml: 1 }}>
-              {formatPhoneNumber(user?.emergencyMobile || '') || '--'} (Emergency Contact)
+              {formatPhoneNumber(user?.emergencyMobile || '')?.international || '--'} (Emergency Contact)
             </Typography>
           </Box>
         </Grid>

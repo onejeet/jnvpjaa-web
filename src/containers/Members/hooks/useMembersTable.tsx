@@ -139,7 +139,7 @@ const useMembersTable = () => {
               <Skeleton width="100%" height={30} />
             </Box>
           ) : (
-            formatPhoneNumber(row.mobile)
+            formatPhoneNumber(row.mobile)?.international
           ),
       },
     ];

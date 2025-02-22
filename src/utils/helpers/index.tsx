@@ -7,6 +7,7 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import XIcon from '@mui/icons-material/X';
 import YouTubeIcon from '@mui/icons-material/YouTube';
+import parsePhoneNumber from 'libphonenumber-js';
 
 export const getSocialMediaIcon = (iconName: string) => {
   switch (iconName) {
@@ -68,24 +69,27 @@ export const getBatchOptions = () => {
   return yearArray;
 };
 
-export function formatPhoneNumber(phoneNumber: string) {
-  if (phoneNumber?.includes('***')) {
-    return `+91 (${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6)}`;
+export function formatPhoneNumber(phoneNumber: string): { international: string; national: string; uri: string } {
+  if (!phoneNumber)
+    return {
+      international: '',
+      national: '',
+      uri: '',
+    };
+  if (phoneNumber?.length === 10) {
+    phoneNumber = `+91${phoneNumber}`;
   }
-  if (!phoneNumber) return phoneNumber;
+  const parsedPhonenumber = parsePhoneNumber(phoneNumber);
 
-  // Remove any non-numeric characters
-  const cleaned = phoneNumber?.replace(/\D/g, '');
+  return {
+    international: parsedPhonenumber?.formatInternational() || phoneNumber,
+    national: parsedPhonenumber?.formatNational() || phoneNumber,
+    uri: parsedPhonenumber?.getURI() || '',
+  };
+  // const countryCode = phoneNumber?.split('-')[0] || '+91';
+  // const number = removeSpaces(removeSpaces(phoneNumber?.split('-')[1])) || '';
 
-  // Check if the phone number is exactly 10 digits
-  if (cleaned.length !== 10) {
-    // throw new Error('Phone number must be 10 digits long');
-    return phoneNumber;
-  }
-
-  // Format the phone number
-  const formatted = `+91 (${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(6)}`;
-  return formatted;
+  // return `${countryCode} (${number.slice(0, 3)}) ${number.slice(3, 6)}-${number.slice(6)}`;
 }
 
 /**
@@ -142,4 +146,35 @@ export const titleCase = (str: string) => {
       return word.charAt(0).toUpperCase() + word.slice(1);
     })
     .join(' ');
+};
+
+export const phoneNumberJSONConverter = (phoneNumber?: string) => {
+  if (!phoneNumber)
+    return {
+      countryCode: '',
+      phoneNumber: '',
+    };
+
+  const parts = phoneNumber?.split(' ');
+  const countryCode = parts[0];
+  parts.splice(0, 1);
+  const number = removeSpaces(parts.join(''));
+  return {
+    countryCode,
+    phoneNumber: number || '',
+  };
+};
+
+export const phoneNumberStringConverter = (phoneNumber: string) => {
+  if (!phoneNumber) return '';
+
+  const phoneData = phoneNumberJSONConverter(phoneNumber);
+
+  return `${phoneData?.countryCode || '+91'}${removeSpaces(phoneData?.phoneNumber || '')}`;
+};
+
+export const removeSpaces = (st: string) => {
+  if (!st) return st;
+  // Step 1: Remove spaces
+  return st.replace(/\s+/g, '');
 };

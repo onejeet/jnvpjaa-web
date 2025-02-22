@@ -13,6 +13,8 @@ import FormDateTimeField from '@/components/form/FormDateTimeField';
 import TipTapTextEditor from '@/modules/TipTapTextEditor';
 import dayjs from 'dayjs';
 import { useApolloClient } from '@apollo/client';
+import FormPhoneField from '@/components/form/FormPhoneField';
+import { phoneNumberStringConverter } from '@/utils/helpers';
 
 const ProfileForm = () => {
   const client = useApolloClient();
@@ -42,13 +44,17 @@ const ProfileForm = () => {
           firstName: data?.firstName?.trim(),
           lastName: data?.lastName?.trim(),
           gender: data?.gender,
-          mobile: data?.mobile,
           aboutMe: data?.aboutMe,
           // @ts-expect-error type error
           dob: data?.dob ? dayjs(data?.dob)?.toISOString() : null,
-          whatsAppMobile: data?.whatsAppMobile,
-          extraMobile: data?.extraMobile,
-          emergencyMobile: data?.emergencyMobile,
+          whatsAppMobile: data?.whatsAppMobile
+            ? phoneNumberStringConverter(data?.whatsAppMobile)
+            : data?.whatsAppMobile,
+          mobile: data?.mobile ? phoneNumberStringConverter(data?.mobile) : data?.mobile,
+          extraMobile: data?.extraMobile ? phoneNumberStringConverter(data?.extraMobile) : data?.extraMobile,
+          emergencyMobile: data?.emergencyMobile
+            ? phoneNumberStringConverter(data?.emergencyMobile)
+            : data?.emergencyMobile,
           //   batch: data?.batch,
         },
         onCompleted: (res) => {
@@ -116,22 +122,20 @@ const ProfileForm = () => {
         </Grid>
 
         <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-          <FormTextField
+          <FormPhoneField
             fullWidth
             id="mobile"
             label="Primary Mobile"
             placeholder="Mobile"
             control={control}
             disabled={loading}
-            startAdornment="+91"
             name="mobile"
             size="small"
-            type="number"
-            onChange={(e) => {
-              if (e?.target?.value?.length < 11) {
-                setValue('mobile', e?.target?.value);
-              }
-            }}
+            // onChange={(e) => {
+            //   if (e?.target?.value?.length < 11) {
+            //     setValue('mobile', e?.target?.value);
+            //   }
+            // }}
             onBlur={(e) => {
               if (e?.target?.value?.length < 11) {
                 setValue('whatsAppMobile', e?.target?.value);
@@ -139,30 +143,24 @@ const ProfileForm = () => {
             }}
             rules={{
               required: 'Required',
-              maxLength: {
-                value: 10,
-                message: 'Invalid mobile number',
-              },
             }}
           />
         </Grid>
         <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-          <FormTextField
+          <FormPhoneField
             fullWidth
             id="WhatsAppMobile"
             label="WhatsApp Mobile"
             placeholder="WhatsApp Mobile"
             control={control}
             disabled={loading}
-            startAdornment="+91"
             name="whatsAppMobile"
             size="small"
-            type="number"
-            onChange={(e) => {
-              if (e?.target?.value?.length < 11) {
-                setValue('extraMobile', e?.target?.value);
-              }
-            }}
+            // onChange={(e) => {
+            //   if (e?.target?.value?.length < 11) {
+            //     setValue('extraMobile', e?.target?.value);
+            //   }
+            // }}
             // rules={{
             //   required: 'Required',
             //   maxLength: {
@@ -173,29 +171,23 @@ const ProfileForm = () => {
           />
         </Grid>
         <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-          <FormTextField
+          <FormPhoneField
             fullWidth
             id="mobile2"
             label="Emergency Mobile"
             placeholder="Emergency Mobile"
             control={control}
             disabled={loading}
-            startAdornment="+91"
             name="emergencyMobile"
             size="small"
-            type="number"
-            onChange={(e) => {
-              if (e?.target?.value?.length < 11) {
-                setValue('emergencyMobile', e?.target?.value);
-              }
-            }}
+            // onChange={(e) => {
+            //   if (e?.target?.value?.length < 11) {
+            //     setValue('emergencyMobile', e?.target?.value);
+            //   }
+            // }}
             helperText="Family member's mobile for emergency cases"
             rules={{
               required: 'Required',
-              maxLength: {
-                value: 10,
-                message: 'Invalid mobile number',
-              },
             }}
           />
         </Grid>

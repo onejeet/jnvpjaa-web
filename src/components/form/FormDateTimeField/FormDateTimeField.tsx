@@ -35,26 +35,27 @@ const FormDateTimeField: React.FC<FormDateTimeFieldProps> = ({
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Box
-        sx={{
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-          position: 'relative',
-        }}
-      >
-        <Controller
-          name={name}
-          control={control}
-          rules={rules}
-          defaultValue={defaultValue}
-          render={({ field, fieldState: { error } }) =>
-            isDateOnly ? (
+      <Controller
+        name={name}
+        control={control}
+        rules={rules}
+        defaultValue={defaultValue}
+        render={({ field, fieldState: { error } }) =>
+          isDateOnly ? (
+            <Box
+              sx={{
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                position: 'relative',
+              }}
+            >
               <DesktopDatePicker
                 {...field}
                 {...dateTimePickerProps}
                 onChange={(newValue: Dayjs | null) => field.onChange(newValue)}
+                format="DD/MM/YYYY"
                 slots={{
                   textField: (params) => (
                     <TextField
@@ -72,29 +73,30 @@ const FormDateTimeField: React.FC<FormDateTimeFieldProps> = ({
                   field: { clearable: true, onClear: () => setCleared(true) },
                 }}
               />
-            ) : (
-              <MobileDateTimePicker
-                {...field}
-                {...dateTimePickerProps}
-                onChange={(newValue: Dayjs | null) => field.onChange(newValue)}
-                slots={{
-                  textField: (params) => (
-                    <TextField
-                      fullWidth
-                      endAdornment={<ScheduleIcon />}
-                      size="small"
-                      {...params}
-                      {...inputProps}
-                      error={!!error}
-                      helperText={error ? error.message : helperText}
-                    />
-                  ),
-                }}
-              />
-            )
-          }
-        />
-      </Box>
+            </Box>
+          ) : (
+            <MobileDateTimePicker
+              {...field}
+              {...dateTimePickerProps}
+              format="DD/MM/YYYY"
+              onChange={(newValue: Dayjs | null) => field.onChange(newValue)}
+              slots={{
+                textField: (params) => (
+                  <TextField
+                    fullWidth
+                    endAdornment={<ScheduleIcon />}
+                    size="small"
+                    {...params}
+                    {...inputProps}
+                    error={!!error}
+                    helperText={error ? error.message : helperText}
+                  />
+                ),
+              }}
+            />
+          )
+        }
+      />
     </LocalizationProvider>
   );
 };

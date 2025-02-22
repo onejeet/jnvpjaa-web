@@ -1,3 +1,5 @@
+/** @type {import('next').NextConfig} */
+
 const nextConfig = {
   output: 'export',
   reactStrictMode: true,
@@ -5,6 +7,7 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  transpilePackages: ['mui-tel-input'],
   webpack: (config) => {
     config.resolve.alias.canvas = false;
 
