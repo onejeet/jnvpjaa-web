@@ -61,10 +61,6 @@ const LayoutFooter: React.FC = () => {
                 title="About"
                 items={[
                   {
-                    label: 'Home',
-                    path: '/',
-                  },
-                  {
                     label: 'About JNVPJAA',
                     path: '/about',
                   },

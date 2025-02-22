@@ -15,10 +15,13 @@ import { Info } from '@mui/icons-material';
 import { paths } from '@/config/paths';
 import { useRouter } from 'next/router';
 import FormPhoneField from '@/components/form/FormPhoneField';
+import Lottie from 'lottie-react';
+import successLottieIcon from '@/utils/lottie/success_icon.json';
 
 const batchList = getBatchOptions();
 
 const SignupForm = () => {
+  const [signupSuccess, setSignupSuccess] = React.useState<boolean>(true);
   const router = useRouter();
   const { showAlert } = useAlert();
   const {
@@ -49,7 +52,8 @@ const SignupForm = () => {
         },
         onCompleted: (res) => {
           console.log('COmpleted', res);
-          router.push(paths.signin);
+          // router.push(paths.signin);
+          setSignupSuccess(true);
         },
         onError: (err: Error) => {
           showAlert({
@@ -62,6 +66,28 @@ const SignupForm = () => {
     },
     [signup, showAlert, router]
   );
+
+  if (signupSuccess) {
+    return (
+      <Box
+        sx={{
+          width: '100%',
+          my: 2,
+          p: 3,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Lottie animationData={successLottieIcon} loop={true} style={{ width: '100px', height: '100px' }} />
+        <Typography variant="h2">Signup Successful!</Typography>
+        <Typography variant="body1" mt={1} textAlign="center" width="60%">
+          The request email has been sent to the admins and upon approval you should be able to login.{' '}
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box
