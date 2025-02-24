@@ -14,7 +14,7 @@ export interface TAuthContextData {
   isAuthPage?: boolean;
   isAdmin?: boolean;
   redirectToSignin: (arg?: boolean, targetPath?: string) => void;
-  redirectOnSignin: () => void;
+  redirectOnSignin: (arg?: boolean) => void;
 }
 
 export interface LoadingDataProps {

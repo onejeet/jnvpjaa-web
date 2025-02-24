@@ -8,6 +8,7 @@ const FormSelect: React.FC<FormSelectProps> = ({
   name,
   control,
   rules,
+  disabled,
   defaultValue = '',
   helperText = '',
   options = [],
@@ -32,6 +33,7 @@ const FormSelect: React.FC<FormSelectProps> = ({
             labelId={`${name}-label`}
             variant="outlined" // Ensure the Select has the outlined variant
             displayEmpty
+            disabled={disabled}
             // renderValue={(selected: unknown) => {
             //   return selected ? String(selected) : name;
             // }}

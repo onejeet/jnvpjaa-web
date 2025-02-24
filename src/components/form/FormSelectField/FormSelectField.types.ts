@@ -12,4 +12,5 @@ export interface FormSelectProps {
   onChange?: (event: React.ChangeEvent<{ value: unknown }>) => void;
   // MUI SelectProps we want to extend
   selectProps?: MUISelectProps;
+  disabled?: boolean;
 }

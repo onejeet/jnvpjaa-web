@@ -17,11 +17,12 @@ import { useRouter } from 'next/router';
 import FormPhoneField from '@/components/form/FormPhoneField';
 import Lottie from 'lottie-react';
 import successLottieIcon from '@/utils/lottie/success_icon.json';
+import FormCheckbox from '@/components/form/FormCheckboxField/FormCheckboxField';
 
 const batchList = getBatchOptions();
 
 const SignupForm = () => {
-  const [signupSuccess, setSignupSuccess] = React.useState<boolean>(true);
+  const [signupSuccess, setSignupSuccess] = React.useState<boolean>(false);
   const router = useRouter();
   const { showAlert } = useAlert();
   const {
@@ -33,6 +34,7 @@ const SignupForm = () => {
   } = useForm<ISignupFormInput>({});
 
   const watchPassword = useWatch({ control, name: 'password' });
+  const watchIsFaculty = useWatch({ control, name: 'isFaculty' });
 
   console.log('ZZ: getValues', getValues());
 
@@ -48,7 +50,8 @@ const SignupForm = () => {
           password: data?.password,
           gender: data?.gender,
           mobile: data?.mobile ? phoneNumberStringConverter(data?.mobile) : data?.mobile,
-          batch: data?.batch,
+          batch: data?.isFaculty ? 0 : data?.batch,
+          isFaculty: data?.isFaculty,
         },
         onCompleted: (res) => {
           console.log('COmpleted', res);
@@ -103,6 +106,19 @@ const SignupForm = () => {
       }}
     >
       <Grid container spacing={3}>
+        <Grid size={{ xs: 12 }}>
+          <FormCheckbox
+            fullWidth
+            id="isFaculty"
+            label="Are you a registering as faculty in JNV Paota?"
+            autoFocus
+            control={control}
+            disabled={loading}
+            name="isFaculty"
+            size="small"
+          />
+        </Grid>
+
         <Grid size={{ xs: 12, md: 6 }}>
           <FormTextField
             fullWidth
@@ -134,7 +150,7 @@ const SignupForm = () => {
           />
         </Grid>
 
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: watchIsFaculty ? 12 : 6 }}>
           <FormSelectField
             control={control}
             name="gender"
@@ -159,21 +175,25 @@ const SignupForm = () => {
           />
         </Grid>
 
-        <Grid size={{ xs: 12, md: 6 }}>
-          <FormSelectField
-            control={control}
-            name="batch"
-            selectProps={{
-              size: 'small',
-              id: 'batch',
-              disabled: loading,
-            }}
-            options={batchList}
-            rules={{
-              required: 'Required',
-            }}
-          />
-        </Grid>
+        {!watchIsFaculty && (
+          <Grid size={{ xs: 12, md: 6 }}>
+            <FormSelectField
+              control={control}
+              name="batch"
+              selectProps={{
+                size: 'small',
+                id: 'batch',
+                disabled: loading,
+              }}
+              disabled={watchIsFaculty}
+              options={batchList}
+              rules={{
+                required: watchIsFaculty ? false : 'Required',
+              }}
+            />
+          </Grid>
+        )}
+
         <Grid size={{ xs: 12, md: 6 }}>
           <FormTextField
             fullWidth

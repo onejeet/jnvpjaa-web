@@ -215,6 +215,7 @@ export type MutationSignupArgs = {
   email: Scalars['String']['input'];
   firstName: Scalars['String']['input'];
   gender: Scalars['String']['input'];
+  isFaculty?: InputMaybe<Scalars['Boolean']['input']>;
   lastName: Scalars['String']['input'];
   mobile: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -331,6 +332,7 @@ export type User = {
   gender?: Maybe<Scalars['String']['output']>;
   google_auth_id?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['ID']['output']>;
+  isFaculty?: Maybe<Scalars['Boolean']['output']>;
   isVerified?: Maybe<Scalars['Boolean']['output']>;
   lastName?: Maybe<Scalars['String']['output']>;
   membershipYear?: Maybe<Scalars['Int']['output']>;
@@ -381,6 +383,7 @@ export type AssignBatchCoordinatorMutation = {
               gender?: string | undefined;
               google_auth_id?: string | undefined;
               id?: string | undefined;
+              isFaculty?: boolean | undefined;
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
               membershipYear?: number | undefined;
@@ -442,6 +445,7 @@ export type AttendEventMutation = {
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
                   id?: string | undefined;
+                  isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
                   membershipYear?: number | undefined;
@@ -474,6 +478,7 @@ export type AttendEventMutation = {
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
                   id?: string | undefined;
+                  isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
                   membershipYear?: number | undefined;
@@ -548,6 +553,7 @@ export type CreateEventMutation = {
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
                   id?: string | undefined;
+                  isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
                   membershipYear?: number | undefined;
@@ -580,6 +586,7 @@ export type CreateEventMutation = {
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
                   id?: string | undefined;
+                  isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
                   membershipYear?: number | undefined;
@@ -621,6 +628,7 @@ export type DeleteUserMutation = {
         gender?: string | undefined;
         google_auth_id?: string | undefined;
         id?: string | undefined;
+        isFaculty?: boolean | undefined;
         isVerified?: boolean | undefined;
         lastName?: string | undefined;
         membershipYear?: number | undefined;
@@ -691,6 +699,7 @@ export type PublishEventMutation = {
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
                   id?: string | undefined;
+                  isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
                   membershipYear?: number | undefined;
@@ -723,6 +732,7 @@ export type PublishEventMutation = {
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
                   id?: string | undefined;
+                  isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
                   membershipYear?: number | undefined;
@@ -765,6 +775,7 @@ export type RefreshTokenMutation = {
               gender?: string | undefined;
               google_auth_id?: string | undefined;
               id?: string | undefined;
+              isFaculty?: boolean | undefined;
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
               membershipYear?: number | undefined;
@@ -822,6 +833,7 @@ export type SigninMutation = {
               gender?: string | undefined;
               google_auth_id?: string | undefined;
               id?: string | undefined;
+              isFaculty?: boolean | undefined;
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
               membershipYear?: number | undefined;
@@ -843,6 +855,7 @@ export type SignupMutationVariables = Exact<{
   email: Scalars['String']['input'];
   firstName: Scalars['String']['input'];
   gender: Scalars['String']['input'];
+  isFaculty?: InputMaybe<Scalars['Boolean']['input']>;
   lastName: Scalars['String']['input'];
   mobile: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -867,6 +880,7 @@ export type SignupMutation = {
         gender?: string | undefined;
         google_auth_id?: string | undefined;
         id?: string | undefined;
+        isFaculty?: boolean | undefined;
         isVerified?: boolean | undefined;
         lastName?: string | undefined;
         membershipYear?: number | undefined;
@@ -912,6 +926,7 @@ export type UpdateBatchCoordinatorMutation = {
               gender?: string | undefined;
               google_auth_id?: string | undefined;
               id?: string | undefined;
+              isFaculty?: boolean | undefined;
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
               membershipYear?: number | undefined;
@@ -983,6 +998,7 @@ export type UpdateEventMutation = {
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
                   id?: string | undefined;
+                  isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
                   membershipYear?: number | undefined;
@@ -1015,6 +1031,7 @@ export type UpdateEventMutation = {
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
                   id?: string | undefined;
+                  isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
                   membershipYear?: number | undefined;
@@ -1070,6 +1087,7 @@ export type UpdateUserMutation = {
         gender?: string | undefined;
         google_auth_id?: string | undefined;
         id?: string | undefined;
+        isFaculty?: boolean | undefined;
         isVerified?: boolean | undefined;
         lastName?: string | undefined;
         membershipYear?: number | undefined;
@@ -1129,6 +1147,7 @@ export type GetAllBatchCoordinatorsQuery = {
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
                   id?: string | undefined;
+                  isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
                   membershipYear?: number | undefined;
@@ -1177,6 +1196,7 @@ export type GetBatchCoordinatorByUserIdQuery = {
               gender?: string | undefined;
               google_auth_id?: string | undefined;
               id?: string | undefined;
+              isFaculty?: boolean | undefined;
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
               membershipYear?: number | undefined;
@@ -1224,6 +1244,7 @@ export type GetBatchCoordinatorsByBatchQuery = {
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
                   id?: string | undefined;
+                  isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
                   membershipYear?: number | undefined;
@@ -1287,6 +1308,7 @@ export type GetEventDetailsQuery = {
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
                   id?: string | undefined;
+                  isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
                   membershipYear?: number | undefined;
@@ -1319,6 +1341,7 @@ export type GetEventDetailsQuery = {
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
                   id?: string | undefined;
+                  isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
                   membershipYear?: number | undefined;
@@ -1387,6 +1410,7 @@ export type GetEventListQuery = {
                             gender?: string | undefined;
                             google_auth_id?: string | undefined;
                             id?: string | undefined;
+                            isFaculty?: boolean | undefined;
                             isVerified?: boolean | undefined;
                             lastName?: string | undefined;
                             membershipYear?: number | undefined;
@@ -1421,6 +1445,7 @@ export type GetEventListQuery = {
                             gender?: string | undefined;
                             google_auth_id?: string | undefined;
                             id?: string | undefined;
+                            isFaculty?: boolean | undefined;
                             isVerified?: boolean | undefined;
                             lastName?: string | undefined;
                             membershipYear?: number | undefined;
@@ -1524,6 +1549,7 @@ export type GetUserDetailsQuery = {
         gender?: string | undefined;
         google_auth_id?: string | undefined;
         id?: string | undefined;
+        isFaculty?: boolean | undefined;
         isVerified?: boolean | undefined;
         lastName?: string | undefined;
         membershipYear?: number | undefined;
@@ -1566,6 +1592,7 @@ export type GetUserListQuery = {
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
                   id?: string | undefined;
+                  isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
                   membershipYear?: number | undefined;
@@ -1605,6 +1632,7 @@ export const AssignBatchCoordinatorDocument = gql`
         gender
         google_auth_id
         id
+        isFaculty
         isVerified
         lastName
         membershipYear
@@ -1679,6 +1707,7 @@ export const AttendEventDocument = gql`
         gender
         google_auth_id
         id
+        isFaculty
         isVerified
         lastName
         membershipYear
@@ -1718,6 +1747,7 @@ export const AttendEventDocument = gql`
         gender
         google_auth_id
         id
+        isFaculty
         isVerified
         lastName
         membershipYear
@@ -1815,6 +1845,7 @@ export const CreateEventDocument = gql`
         gender
         google_auth_id
         id
+        isFaculty
         isVerified
         lastName
         membershipYear
@@ -1854,6 +1885,7 @@ export const CreateEventDocument = gql`
         gender
         google_auth_id
         id
+        isFaculty
         isVerified
         lastName
         membershipYear
@@ -1935,6 +1967,7 @@ export const DeleteUserDocument = gql`
       gender
       google_auth_id
       id
+      isFaculty
       isVerified
       lastName
       membershipYear
@@ -2063,6 +2096,7 @@ export const PublishEventDocument = gql`
         gender
         google_auth_id
         id
+        isFaculty
         isVerified
         lastName
         membershipYear
@@ -2102,6 +2136,7 @@ export const PublishEventDocument = gql`
         gender
         google_auth_id
         id
+        isFaculty
         isVerified
         lastName
         membershipYear
@@ -2177,6 +2212,7 @@ export const RefreshTokenDocument = gql`
         gender
         google_auth_id
         id
+        isFaculty
         isVerified
         lastName
         membershipYear
@@ -2322,6 +2358,7 @@ export const SigninDocument = gql`
         gender
         google_auth_id
         id
+        isFaculty
         isVerified
         lastName
         membershipYear
@@ -2372,6 +2409,7 @@ export const SignupDocument = gql`
     $email: String!
     $firstName: String!
     $gender: String!
+    $isFaculty: Boolean
     $lastName: String!
     $mobile: String!
     $password: String!
@@ -2381,6 +2419,7 @@ export const SignupDocument = gql`
       email: $email
       firstName: $firstName
       gender: $gender
+      isFaculty: $isFaculty
       lastName: $lastName
       mobile: $mobile
       password: $password
@@ -2399,6 +2438,7 @@ export const SignupDocument = gql`
       gender
       google_auth_id
       id
+      isFaculty
       isVerified
       lastName
       membershipYear
@@ -2434,6 +2474,7 @@ export type SignupMutationFn = Apollo.MutationFunction<SignupMutation, SignupMut
  *      email: // value for 'email'
  *      firstName: // value for 'firstName'
  *      gender: // value for 'gender'
+ *      isFaculty: // value for 'isFaculty'
  *      lastName: // value for 'lastName'
  *      mobile: // value for 'mobile'
  *      password: // value for 'password'
@@ -2468,6 +2509,7 @@ export const UpdateBatchCoordinatorDocument = gql`
         gender
         google_auth_id
         id
+        isFaculty
         isVerified
         lastName
         membershipYear
@@ -2566,6 +2608,7 @@ export const UpdateEventDocument = gql`
         gender
         google_auth_id
         id
+        isFaculty
         isVerified
         lastName
         membershipYear
@@ -2605,6 +2648,7 @@ export const UpdateEventDocument = gql`
         gender
         google_auth_id
         id
+        isFaculty
         isVerified
         lastName
         membershipYear
@@ -2717,6 +2761,7 @@ export const UpdateUserDocument = gql`
       gender
       google_auth_id
       id
+      isFaculty
       isVerified
       lastName
       membershipYear
@@ -2864,6 +2909,7 @@ export const GetAllBatchCoordinatorsDocument = gql`
         gender
         google_auth_id
         id
+        isFaculty
         isVerified
         lastName
         membershipYear
@@ -2956,6 +3002,7 @@ export const GetBatchCoordinatorByUserIdDocument = gql`
         gender
         google_auth_id
         id
+        isFaculty
         isVerified
         lastName
         membershipYear
@@ -3051,6 +3098,7 @@ export const GetBatchCoordinatorsByBatchDocument = gql`
         gender
         google_auth_id
         id
+        isFaculty
         isVerified
         lastName
         membershipYear
@@ -3143,6 +3191,7 @@ export const GetEventDetailsDocument = gql`
         gender
         google_auth_id
         id
+        isFaculty
         isVerified
         lastName
         membershipYear
@@ -3182,6 +3231,7 @@ export const GetEventDetailsDocument = gql`
         gender
         google_auth_id
         id
+        isFaculty
         isVerified
         lastName
         membershipYear
@@ -3266,6 +3316,7 @@ export const GetEventListDocument = gql`
           gender
           google_auth_id
           id
+          isFaculty
           isVerified
           lastName
           membershipYear
@@ -3305,6 +3356,7 @@ export const GetEventListDocument = gql`
           gender
           google_auth_id
           id
+          isFaculty
           isVerified
           lastName
           membershipYear
@@ -3517,6 +3569,7 @@ export const GetUserDetailsDocument = gql`
       gender
       google_auth_id
       id
+      isFaculty
       isVerified
       lastName
       membershipYear
@@ -3590,6 +3643,7 @@ export const GetUserListDocument = gql`
         gender
         google_auth_id
         id
+        isFaculty
         isVerified
         lastName
         membershipYear

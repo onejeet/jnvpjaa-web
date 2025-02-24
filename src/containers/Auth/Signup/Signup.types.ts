@@ -6,4 +6,5 @@ export interface ISignupFormInput {
   gender: string;
   mobile: string;
   batch: number;
+  isFaculty?: boolean;
 }
