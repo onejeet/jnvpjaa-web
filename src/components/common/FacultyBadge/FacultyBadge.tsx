@@ -8,7 +8,7 @@ interface Props {
 
 const FacultyBadge: React.FC<Props> = ({ size }) => {
   return (
-    <Tooltip title="Faculty of JNV Paota" arrow placement="top">
+    <Tooltip title="Faculty of JNV Paota, Jaipur" arrow placement="top">
       <StarFour size={size || 16} weight="fill" fill="#F2C6A0" style={{ marginLeft: '4px' }} />
     </Tooltip>
   );
