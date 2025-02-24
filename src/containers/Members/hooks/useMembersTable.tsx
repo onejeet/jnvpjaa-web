@@ -15,6 +15,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useAlert } from '@/context/AlertContext';
 import { useApolloClient } from '@apollo/client';
 import { useAuth } from '@/context/AuthContext';
+import { StarFour } from '@phosphor-icons/react';
+import FacultyBadge from '@/components/common/FacultyBadge/FacultyBadge';
 
 const useMembersTable = () => {
   const client = useApolloClient();
@@ -76,9 +78,10 @@ const useMembersTable = () => {
                 <Box display="flex" alignItems="center">
                   <Typography mr={0.5}>{`${row.firstName} ${row.lastName}`}</Typography>
                   {row.isVerified && <VerifiedBadge />}
+                  {row.batch === 0 && <FacultyBadge />}
                 </Box>
               }
-              summary={`Batch of ${row.batch}`}
+              summary={row?.batch === 0 ? 'Faculty' : `Batch of ${row?.batch}`}
               id={row.id}
               alt={`${row.firstname || ''} ${row.lastname || ''}`}
               titleComponentProps={{
@@ -115,7 +118,7 @@ const useMembersTable = () => {
       {
         field: 'batch',
         headerName: 'Batch',
-        width: 80,
+        width: 120,
         ...commonTableColumnProps,
         sortable: true,
         renderCell: ({ row }: GridRowParams) =>
@@ -123,8 +126,8 @@ const useMembersTable = () => {
             <Box height="100%" display="flex" alignItems="center">
               <Skeleton width="100%" height={30} />
             </Box>
-          ) : row?.batch ? (
-            <Chip label={row?.batch} sx={{ fontWeight: 500 }} />
+          ) : row?.batch >= 0 ? (
+            <Chip label={row?.batch === 0 ? 'Faculty' : row?.batch} sx={{ fontWeight: 500 }} />
           ) : (
             ''
           ),
@@ -305,6 +308,7 @@ const useMembersTable = () => {
     return userListData?.getUserList?.data || [];
   }, [loading, userListData, paginationModel]);
 
+  console.log('ZZ: rows', rows);
   return {
     rows,
     loading,

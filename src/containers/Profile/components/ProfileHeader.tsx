@@ -6,6 +6,7 @@ import VerifiedBadge from '@/components/common/VerifiedBadge';
 import Button from '@/components/core/Button';
 import { Notches, PencilSimple } from '@phosphor-icons/react';
 import { useProfile } from '@/context/ProfileContext';
+import FacultyBadge from '@/components/common/FacultyBadge/FacultyBadge';
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
   const { user, loading, isProfileEditable, editingProfile, setEditingProfile } = useProfile();
@@ -68,10 +69,11 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
                 mr={0.5}
               >{`${user?.firstName} ${user?.lastName || ''}`}</Typography>
               {user?.isVerified && <VerifiedBadge size={24} />}
+              {user?.batch === 0 && <FacultyBadge size={24} />}
             </Box>
           }
           titleProps={{ fontWeight: 600, fontSize: '30px' }}
-          summary={user?.batch ? `Batch of ${user?.batch}` : ''}
+          summary={user?.batch === 0 ? 'Faculty' : user?.batch ? `Batch of ${user?.batch}` : ''}
           summaryProps={{ color: 'grey.600', fontSize: '14px', mt: 1 }}
         />
         {isProfileEditable && !editingProfile && (

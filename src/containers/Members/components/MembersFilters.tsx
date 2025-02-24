@@ -16,10 +16,10 @@ const MembersFilters = () => {
       const params = new URLSearchParams(searchParams.toString());
 
       // Set or remove the key-value pair
-      if (value) {
-        params.set(key, value);
-      } else {
+      if (!value || value === 'null' || value === 'undefined') {
         params.delete(key); // Remove the key if value is null
+      } else {
+        params.set(key, value);
       }
 
       // Push the new query string to the URL
@@ -64,7 +64,7 @@ const MembersFilters = () => {
           displayEmpty
           size="small"
           defaultValue={searchParams.get('batch') || ''}
-          onChange={(e) => handleFilterChange('batch', e.target.value)}
+          onChange={(e) => handleFilterChange('batch', e.target.value?.toString())}
         >
           <MenuItem value="">All Batches</MenuItem>
           {getBatchOptions()?.map((batch) => (

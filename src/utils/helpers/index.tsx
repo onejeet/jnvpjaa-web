@@ -57,7 +57,12 @@ export function startCase(str: string) {
 
 export const getBatchOptions = () => {
   const currentYear = new Date().getFullYear();
-  const yearArray = [];
+  const yearArray = [
+    {
+      label: 'Faculty Members',
+      value: 0,
+    },
+  ];
 
   for (let year = 1993; year <= currentYear; year++) {
     yearArray.push({

@@ -13,7 +13,8 @@ export interface TAuthContextData {
   setLoadingData: React.Dispatch<React.SetStateAction<LoadingDataProps>>;
   isAuthPage?: boolean;
   isAdmin?: boolean;
-  redirectToSignin: (arg?: boolea) => void;
+  redirectToSignin: (arg?: boolean, targetPath?: string) => void;
+  redirectOnSignin: () => void;
 }
 
 export interface LoadingDataProps {

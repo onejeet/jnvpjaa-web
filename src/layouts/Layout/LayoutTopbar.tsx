@@ -30,7 +30,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/router';
 import HoverPopover from '@/components/common/HoverPopover';
 import HeaderAddButton from './HeaderAddButton';
-import { SignOut, User } from '@phosphor-icons/react';
+import { Password, SignOut, User } from '@phosphor-icons/react';
 import { paths } from '@/config/paths';
 
 export interface IMenuItemProps {
@@ -53,7 +53,7 @@ const LayoutTopbar: React.FC = () => {
   const theme = useTheme();
   const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const { user, logoutUser } = useAuth();
+  const { user, logoutUser, redirectToSignin } = useAuth();
 
   const HEADER_MENU = React.useMemo(() => {
     return getHeaderMenu(Boolean(user?.id));
@@ -66,6 +66,12 @@ const LayoutTopbar: React.FC = () => {
         value: '/profile',
         icon: <User size={16} />,
         onClick: () => router.push(paths.profile.root),
+      },
+      {
+        label: 'Change Password',
+        value: '/change-password',
+        icon: <Password size={16} />,
+        onClick: () => redirectToSignin(true, paths.auth.change_password),
       },
       {
         label: 'Log Out',

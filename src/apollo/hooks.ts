@@ -202,7 +202,7 @@ export type MutationRemoveBatchCoordinatorArgs = {
 
 export type MutationResetPasswordArgs = {
   newPassword: Scalars['String']['input'];
-  token: Scalars['String']['input'];
+  token?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type MutationSigninArgs = {
@@ -790,7 +790,7 @@ export type RemoveBatchCoordinatorMutation = { __typename?: 'Mutation'; removeBa
 
 export type ResetPasswordMutationVariables = Exact<{
   newPassword: Scalars['String']['input'];
-  token: Scalars['String']['input'];
+  token?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 export type ResetPasswordMutation = { __typename?: 'Mutation'; resetPassword?: boolean | undefined };
@@ -2268,7 +2268,7 @@ export type RemoveBatchCoordinatorMutationOptions = Apollo.BaseMutationOptions<
   RemoveBatchCoordinatorMutationVariables
 >;
 export const ResetPasswordDocument = gql`
-  mutation resetPassword($newPassword: String!, $token: String!) {
+  mutation resetPassword($newPassword: String!, $token: String) {
     resetPassword(newPassword: $newPassword, token: $token)
   }
 `;

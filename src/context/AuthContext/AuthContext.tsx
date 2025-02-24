@@ -37,24 +37,27 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children, checkAuth, isAuth
     notifyOnNetworkStatusChange: true,
   });
 
-  const redirectOnSignin = React.useCallback(async () => {
-    if (isAuthPage) {
-      const redirectPath = router?.query?.r ? decodeBase64(router.query.r as string) : router?.query?.r;
-      if (redirectPath) {
-        await router.push(redirectPath as string);
-      } else {
-        await router.push(paths.home);
+  const redirectOnSignin = React.useCallback(
+    async (customPass?: boolean) => {
+      if (isAuthPage || customPass) {
+        const redirectPath = router?.query?.r ? decodeBase64(router.query.r as string) : router?.query?.r;
+        if (redirectPath) {
+          await router.push(redirectPath as string);
+        } else {
+          await router.push(paths.home);
+        }
       }
-    }
-    setLoadingData({ loading: false });
-  }, [router, isAuthPage]);
+      setLoadingData({ loading: false });
+    },
+    [router, isAuthPage]
+  );
 
   const redirectToSignin = React.useCallback(
-    async (customPas?: boolean) => {
+    async (customPas?: boolean, targetPath?: string) => {
       if (checkAuth || customPas) {
         const rQuery = router?.asPath ? encodeBase64(router.asPath) : '';
         await router.push({
-          pathname: paths.signin,
+          pathname: targetPath || paths.signin,
           query: {
             r: rQuery,
           },
@@ -160,6 +163,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children, checkAuth, isAuth
         isAuthPage,
         setLoadingData,
         redirectToSignin,
+        redirectOnSignin,
       }}
     >
       {isLoading ? (
