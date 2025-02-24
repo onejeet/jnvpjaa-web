@@ -213,7 +213,7 @@ const EventCard: React.FC<EventCardProps> = ({
                     fontWeight={500}
                     color="text.secondary"
                   >
-                    {location}
+                    {location === 'protected' ? '******' : location}
                   </Typography>
                 )}
               </Box>

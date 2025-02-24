@@ -74,6 +74,14 @@ const NewEvent = () => {
 
   const watchMedium = useWatch({ control, name: 'medium' });
 
+  React.useEffect(() => {
+    if (eventData && watchMedium === eventData?.getEventDetails?.medium) {
+      setValue('location', eventData?.getEventDetails?.location || (watchMedium === 'online' ? 'http://' : ''));
+    } else {
+      setValue('location', watchMedium === 'online' ? 'http://' : '');
+    }
+  }, [watchMedium, eventData]);
+
   const onSubmit = React.useCallback(
     (data: INewEventFormInput) => {
       if (eventId) {
@@ -279,6 +287,7 @@ const NewEvent = () => {
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
           <FormTextField
+            key={watchMedium}
             fullWidth
             id="location"
             label={watchMedium === 'online' ? 'URL' : 'Location'}

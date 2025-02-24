@@ -75,7 +75,7 @@ export const HEADER_MENU: IHeaderMenuItem[] = [
     path: '/donations',
     menu: [
       {
-        label: 'Members',
+        label: 'Member Directory',
         path: '/members',
       },
       {
