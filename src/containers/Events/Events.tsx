@@ -9,7 +9,7 @@ import {
   usePublishEventMutation,
   useVerifyEventMutation,
 } from '@/apollo/hooks';
-import { Box, Grid2 as Grid, Typography } from '@mui/material';
+import { Box, Checkbox, FormControlLabel, Grid2 as Grid, Typography } from '@mui/material';
 import EventCard from '@/components/common/EventCard/EventCard';
 import EmptyView from '@/components/common/EmptyView';
 import { useAlert } from '@/context/AlertContext';
@@ -19,13 +19,24 @@ import { useRouter } from 'next/router';
 import { Plus, Ticket } from '@phosphor-icons/react';
 import { useApolloClient } from '@apollo/client';
 import Button from '@/components/core/Button';
+import { isDefined } from '@/utils/helpers';
 
 export default function Events() {
+  const [isPendingApporvalOnly, setIsPendingApporvalOnly] = React.useState<boolean>(false);
   const { redirectToSignin, user, isAdmin } = useAuth();
   const { showAlert } = useAlert();
   const router = useRouter();
   const client = useApolloClient();
-  const { data: eventData, loading } = useGetEventListQuery();
+  const { data: eventData, loading } = useGetEventListQuery({
+    variables: {
+      options: {
+        filter: {
+          verified: isPendingApporvalOnly ? false : undefined,
+        },
+      },
+    },
+    notifyOnNetworkStatusChange: true,
+  });
 
   const [handleRSVP] = useAttendEventMutation();
   const [handleVerifyEvent] = useVerifyEventMutation();
@@ -276,6 +287,24 @@ export default function Events() {
           <Button title="Create Event" startIcon={<Plus size={16} />} onClick={() => router.push(paths.events.new)} />
         )}
       </Box>
+      {isAdmin && (
+        <Box display="flex" alignItems="center" mb={1}>
+          <FormControlLabel
+            label="Filter pending apporval events"
+            control={
+              <Checkbox
+                checked={isPendingApporvalOnly}
+                // indeterminate={checked[0] !== checked[1]}
+                onChange={(e, checked) => setIsPendingApporvalOnly(checked)}
+              />
+            }
+            sx={{
+              color: 'grey.800',
+            }}
+          />
+        </Box>
+      )}
+
       <Grid container spacing={3}>
         {listData?.length > 0 ? (
           listData?.map((ev: any, index) => (

@@ -183,3 +183,5 @@ export const removeSpaces = (st: string) => {
   // Step 1: Remove spaces
   return st.replace(/\s+/g, '');
 };
+
+export const isDefined = (value: any) => value !== undefined && value !== null;
