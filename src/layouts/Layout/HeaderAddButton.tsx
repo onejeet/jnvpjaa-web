@@ -93,7 +93,7 @@ const HeaderAddButton: React.FC = () => {
             key={`menu-${mItem?.path}`}
             href={mItem?.path || '/'}
             as={mItem?.path}
-            style={{ textDecoration: 'none' }}
+            style={{ textDecoration: 'none', pointerEvents: mItem?.disabled ? 'none' : 'all' }}
           >
             <MenuItem
               key={mItem.path}

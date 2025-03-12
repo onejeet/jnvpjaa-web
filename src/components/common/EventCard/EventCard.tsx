@@ -1,5 +1,6 @@
 import React from 'react';
 import dayjs from 'dayjs';
+import DOMPurify from 'dompurify';
 import {
   Card,
   CardContent,
@@ -70,6 +71,10 @@ const EventCard: React.FC<EventCardProps> = ({
   const formattedStartDate = React.useMemo(() => {
     return dayjs(startDate)?.format('MMM DD, YYYY HH:MM A');
   }, [startDate]);
+
+  const descriptionContent = React.useMemo(() => {
+    return DOMPurify.sanitize(description);
+  }, [description]);
 
   const formattedEndDate = React.useMemo(() => {
     return endDate ? dayjs(endDate)?.format('MMM DD, YYYY HH:MM A') : null;
@@ -181,10 +186,14 @@ const EventCard: React.FC<EventCardProps> = ({
             <Typography variant="body2" color="text.secondary" mt={1}>
               {summary}
             </Typography>
-            {showDescription && description && (
-              <Typography variant="body2" color="text.secondary" mt={1}>
-                {description}
-              </Typography>
+            {showDescription && descriptionContent && (
+              <Typography
+                variant="body1"
+                color="text.primary"
+                mt={1}
+                mb={2}
+                dangerouslySetInnerHTML={{ __html: descriptionContent }}
+              />
             )}
             {category && (
               <Box sx={{ display: 'flex', my: 1 }}>
