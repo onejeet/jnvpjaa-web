@@ -8,10 +8,11 @@ const errorLink = new ApolloLink((operation, forward) => {
   return new Observable((observer) => {
     forward(operation).subscribe({
       next: async (result) => {
+        console.log('~~ CLIENT ~~ ERRORS', result?.errors, result?.errors?.[0]?.code);
         if (result?.errors && result?.errors?.length > 0) {
           // @ts-expect-error type
           if (result?.errors?.[0]?.code === 'NOT_AUTHORISED') {
-            const isLoggedIn = localStorage.getItem('logged_in');
+            const isLoggedIn = localStorage.getItem('logged_in') === 'true';
             if (isLoggedIn) {
               try {
                 // Call the refresh token mutation

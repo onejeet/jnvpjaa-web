@@ -34,10 +34,10 @@ const SigninForm = () => {
           password: data?.password,
         },
         onCompleted: (res: any) => {
+          localStorage.setItem('logged_in', 'true');
           client.resetStore();
           client.cache.reset();
           setUser(res?.signin?.user);
-          localStorage.setItem('logged_in', 'true');
           // auth redirection will be handled from AuthContext
         },
         onError: (err: Error) => {

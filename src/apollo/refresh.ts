@@ -18,11 +18,14 @@ const REFRESH_TOKEN_MUTATION = gql`
         displayName
         dob
         email
-        emergency_mobile
+        emergencyMobile
+        extraEmail
+        extraMobile
         firstName
         gender
         google_auth_id
         id
+        isFaculty
         isVerified
         lastName
         membershipYear
@@ -33,7 +36,9 @@ const REFRESH_TOKEN_MUTATION = gql`
           id
           name
         }
+        socialMedia
         updatedAt
+        whatsAppMobile
       }
     }
   }

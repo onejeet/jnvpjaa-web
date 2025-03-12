@@ -73,7 +73,7 @@ const EventCard: React.FC<EventCardProps> = ({
   }, [startDate]);
 
   const descriptionContent = React.useMemo(() => {
-    return DOMPurify.sanitize(description);
+    return description ? DOMPurify.sanitize(description || '') : null;
   }, [description]);
 
   const formattedEndDate = React.useMemo(() => {
