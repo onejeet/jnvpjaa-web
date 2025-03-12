@@ -59,7 +59,7 @@ const ChangePasswordForm = () => {
     >
       <FormTextField
         fullWidth
-        label="Password"
+        label="New Password"
         type="password"
         id="password"
         autoComplete="current-password"
@@ -74,14 +74,10 @@ const ChangePasswordForm = () => {
           },
         }}
       />
-      <Typography variant="body2" color="grey.600">
-        <Info sx={{ fontSize: '14px' }} />
-        The password must be a minimum of 8 characters in length and include at least one uppercase letter, one
-        lowercase letter, and one numeric digit.
-      </Typography>
+
       <FormTextField
         fullWidth
-        label="Confirm Password"
+        label="Confirm New Password"
         type="password"
         id="confirm-password"
         autoComplete="current-password"
@@ -93,6 +89,12 @@ const ChangePasswordForm = () => {
           validate: (value) => value === watchPassword || 'Passwords do not match',
         }}
       />
+
+      <Typography variant="body2" color="grey.600">
+        <Info sx={{ fontSize: '14px' }} />
+        The password must be a minimum of 8 characters in length and include at least one uppercase letter, one
+        lowercase letter, and one numeric digit.
+      </Typography>
 
       <Button title="Change Password" type="submit" fullWidth loading={resetPasswordLoading} />
     </Box>

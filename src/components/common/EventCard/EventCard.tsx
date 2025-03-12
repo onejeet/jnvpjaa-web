@@ -19,6 +19,7 @@ import Button from '@/components/core/Button';
 import { getAvatarDataUrl, startCase, valueToLabelFormatter } from '@/utils/helpers';
 import {
   ArrowSquareOut,
+  ArrowUpRight,
   CalendarDots,
   CalendarHeart,
   Check,
@@ -56,7 +57,7 @@ const EventCard: React.FC<EventCardProps> = ({
     status,
     isVerified,
     createdBy,
-  } = event;
+  } = event || {};
 
   const formattedStartDate = React.useMemo(() => {
     return dayjs(startDate)?.format('MMM DD, YYYY HH:MM A');
@@ -203,7 +204,7 @@ const EventCard: React.FC<EventCardProps> = ({
                     }}
                   >
                     {location}
-                    <ArrowSquareOut size={14} style={{ marginLeft: '4px' }} />
+                    <ArrowUpRight size={14} style={{ marginLeft: '4px' }} weight="bold" />
                   </Typography>
                 ) : (
                   <Typography
