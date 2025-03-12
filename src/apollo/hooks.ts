@@ -108,6 +108,7 @@ export type Event = {
   medium: Scalars['String']['output'];
   organizers?: Maybe<Array<Maybe<User>>>;
   price?: Maybe<Scalars['Float']['output']>;
+  short_url?: Maybe<Scalars['String']['output']>;
   startDate: Scalars['DateTime']['output'];
   status?: Maybe<Scalars['String']['output']>;
   summary: Scalars['String']['output'];
@@ -420,6 +421,7 @@ export type AttendEventMutation = {
         location?: string | undefined;
         medium: string;
         price?: number | undefined;
+        short_url?: string | undefined;
         startDate: any;
         status?: string | undefined;
         summary: string;
@@ -528,6 +530,7 @@ export type CreateEventMutation = {
         location?: string | undefined;
         medium: string;
         price?: number | undefined;
+        short_url?: string | undefined;
         startDate: any;
         status?: string | undefined;
         summary: string;
@@ -674,6 +677,7 @@ export type PublishEventMutation = {
         location?: string | undefined;
         medium: string;
         price?: number | undefined;
+        short_url?: string | undefined;
         startDate: any;
         status?: string | undefined;
         summary: string;
@@ -973,6 +977,7 @@ export type UpdateEventMutation = {
         location?: string | undefined;
         medium: string;
         price?: number | undefined;
+        short_url?: string | undefined;
         startDate: any;
         status?: string | undefined;
         summary: string;
@@ -1283,6 +1288,7 @@ export type GetEventDetailsQuery = {
         location?: string | undefined;
         medium: string;
         price?: number | undefined;
+        short_url?: string | undefined;
         startDate: any;
         status?: string | undefined;
         summary: string;
@@ -1385,6 +1391,7 @@ export type GetEventListQuery = {
                   location?: string | undefined;
                   medium: string;
                   price?: number | undefined;
+                  short_url?: string | undefined;
                   startDate: any;
                   status?: string | undefined;
                   summary: string;
@@ -1763,6 +1770,7 @@ export const AttendEventDocument = gql`
         whatsAppMobile
       }
       price
+      short_url
       startDate
       status
       summary
@@ -1901,6 +1909,7 @@ export const CreateEventDocument = gql`
         whatsAppMobile
       }
       price
+      short_url
       startDate
       status
       summary
@@ -2152,6 +2161,7 @@ export const PublishEventDocument = gql`
         whatsAppMobile
       }
       price
+      short_url
       startDate
       status
       summary
@@ -2664,6 +2674,7 @@ export const UpdateEventDocument = gql`
         whatsAppMobile
       }
       price
+      short_url
       startDate
       status
       summary
@@ -3247,6 +3258,7 @@ export const GetEventDetailsDocument = gql`
         whatsAppMobile
       }
       price
+      short_url
       startDate
       status
       summary
@@ -3372,6 +3384,7 @@ export const GetEventListDocument = gql`
           whatsAppMobile
         }
         price
+        short_url
         startDate
         status
         summary

@@ -18,7 +18,11 @@ const EventDetails = () => {
 
   return (
     <LayoutModule disableCover title={`${event?.title || 'Event'} • Alumni Network of JNV Paota, Jaipur`}>
-      {loading || event?.id ? <EventCard event={event} loading={loading} /> : <EmptyView message="No event found!" />}
+      {loading || event?.id ? (
+        <EventCard event={event} showDescription loading={loading} />
+      ) : (
+        <EmptyView message="No event found!" />
+      )}
     </LayoutModule>
   );
 };

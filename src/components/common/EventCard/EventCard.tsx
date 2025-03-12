@@ -18,6 +18,7 @@ import { EventCardProps, IPerson } from './EventCard.types';
 import Button from '@/components/core/Button';
 import { getAvatarDataUrl, startCase, valueToLabelFormatter } from '@/utils/helpers';
 import {
+  ArrowRight,
   ArrowSquareOut,
   ArrowUpRight,
   CalendarDots,
@@ -32,6 +33,9 @@ import {
 } from '@phosphor-icons/react';
 import { Maybe, User } from '@/apollo/hooks';
 import ProfilePicture from '../ProfilePicture';
+import { paths } from '@/config/paths';
+import { useRouter } from 'next/router';
+import CopyContentButton from '@/components/common/CopyContentButton';
 
 const EventCard: React.FC<EventCardProps> = ({
   user,
@@ -42,11 +46,14 @@ const EventCard: React.FC<EventCardProps> = ({
   event,
   loading,
   markImGoing,
+  showDescription,
 }) => {
+  const router = useRouter();
   const {
     id,
     title = '',
     summary = '',
+    description = '',
     startDate,
     endDate,
     image,
@@ -57,6 +64,7 @@ const EventCard: React.FC<EventCardProps> = ({
     status,
     isVerified,
     createdBy,
+    short_url = '',
   } = event || {};
 
   const formattedStartDate = React.useMemo(() => {
@@ -111,8 +119,37 @@ const EventCard: React.FC<EventCardProps> = ({
         {loading ? (
           <Skeleton width="80%" height={34} />
         ) : (
-          <Typography variant="h2" component="div" fontWeight="bold" sx={{ display: 'flex', alignItems: 'center' }}>
-            {title}
+          <Box display="flex" alignItems="center">
+            <Typography
+              variant="h2"
+              component="div"
+              fontWeight="bold"
+              onClick={() => {
+                if (showDescription) return;
+
+                router.push(paths.events.getEventDetailUrl(id));
+              }}
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                transition: 'all 0.2s ease',
+                svg: {
+                  ml: '10px',
+                  transition: 'all 0.2s linear',
+                },
+                '&:hover': {
+                  cursor: showDescription ? 'default' : 'pointer',
+                  color: showDescription ? 'inherit' : 'primary.main',
+                  svg: {
+                    ml: '4px',
+                  },
+                },
+              }}
+            >
+              {title}
+              {!showDescription && <ArrowRight weight="bold" />}
+            </Typography>
+
             {isLive && (
               <Box display="flex" alignItems="center" ml="auto">
                 <div className="live-dot"></div>
@@ -121,7 +158,16 @@ const EventCard: React.FC<EventCardProps> = ({
                 </Typography>
               </Box>
             )}
-          </Typography>
+            {short_url && (
+              <Box ml={isLive ? '10px' : 'auto'}>
+                <CopyContentButton
+                  buttonType={showDescription ? 'button' : 'icon'}
+                  copiedMessageProps={{ hide: true }}
+                  content={short_url}
+                />
+              </Box>
+            )}
+          </Box>
         )}
 
         {loading ? (
@@ -135,6 +181,11 @@ const EventCard: React.FC<EventCardProps> = ({
             <Typography variant="body2" color="text.secondary" mt={1}>
               {summary}
             </Typography>
+            {showDescription && description && (
+              <Typography variant="body2" color="text.secondary" mt={1}>
+                {description}
+              </Typography>
+            )}
             {category && (
               <Box sx={{ display: 'flex', my: 1 }}>
                 <Chip size="small" label={valueToLabelFormatter(category)} />
@@ -204,7 +255,7 @@ const EventCard: React.FC<EventCardProps> = ({
                     }}
                   >
                     {location}
-                    <ArrowUpRight size={14} style={{ marginLeft: '4px' }} weight="bold" />
+                    <ArrowUpRight size={14} style={{ marginLeft: '4px', marginTop: '2px' }} weight="bold" />
                   </Typography>
                 ) : (
                   <Typography
