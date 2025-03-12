@@ -98,6 +98,7 @@ const HeaderAddButton: React.FC = () => {
             <MenuItem
               key={mItem.path}
               onClick={handleClose}
+              disabled={mItem?.disabled}
               sx={{
                 px: '16px',
                 py: '12px',

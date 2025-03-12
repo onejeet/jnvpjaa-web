@@ -45,6 +45,7 @@ export interface IHeaderMenuItem {
   path: string;
   menu?: IHeaderMenuItem[];
   icon?: React.ReactNode;
+  disabled?: boolean;
 }
 
 const LayoutTopbar: React.FC = () => {

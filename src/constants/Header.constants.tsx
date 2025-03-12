@@ -195,6 +195,7 @@ export const ADD_ENTITIES: IHeaderMenuItem[] = [
     label: 'Create Blog',
     path: '/blogs/new',
     icon: <Article />,
+    disabled: true,
   },
   {
     label: 'Create Event',
