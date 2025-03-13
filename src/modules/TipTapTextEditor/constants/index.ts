@@ -22,7 +22,6 @@ import {
   TextUnderline,
   YoutubeLogo,
 } from '@phosphor-icons/react';
-import { IconH1, IconH2, IconH3, IconH4, IconH5, IconH6, IconH } from '@tabler/icons-react';
 
 export const EDITOR_ICONS = {
   bold: TextB,

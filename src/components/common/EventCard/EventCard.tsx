@@ -66,7 +66,7 @@ const EventCard: React.FC<EventCardProps> = ({
     isVerified,
     createdBy,
     short_url = '',
-  } = event || {};
+  } = event;
 
   const formattedStartDate = React.useMemo(() => {
     return dayjs(startDate)?.format('MMM DD, YYYY HH:MM A');

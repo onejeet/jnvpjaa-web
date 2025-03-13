@@ -2,22 +2,18 @@ import { commonTableColumnProps } from '@/constants/General.contants';
 import Box from '@mui/material/Box';
 import { GridPaginationModel, GridRowParams } from '@mui/x-data-grid';
 import React from 'react';
-import ProfilePicture from '@/components/common/ProfilePicture';
-import { useGetUserListQuery, useVerifyUserMutation } from '@/apollo/hooks';
-import { Chip, Skeleton, Stack, Typography } from '@mui/material';
+import { useGetTransactionsQuery } from '@/apollo/hooks';
+import { Skeleton, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
-import VerifiedBadge from '@/components/common/VerifiedBadge';
-import { formatPhoneNumber } from '@/utils/helpers';
+
 import { useSearchParams } from 'next/navigation';
-import Button from '@/components/core/Button';
-import TaskAltIcon from '@mui/icons-material/TaskAlt';
-import CloseIcon from '@mui/icons-material/Close';
+
 import { useAlert } from '@/context/AlertContext';
 import { useApolloClient } from '@apollo/client';
 import { useAuth } from '@/context/AuthContext';
-import { StarFour } from '@phosphor-icons/react';
-import FacultyBadge from '@/components/common/FacultyBadge/FacultyBadge';
+
 import dayjs from 'dayjs';
+import { getCurrencySymbol } from '@/utils/helpers';
 
 const useTransactionsTable = () => {
   const client = useApolloClient();
@@ -29,19 +25,12 @@ const useTransactionsTable = () => {
     page: 0,
     pageSize: 50,
   });
-  console.log('ZZ: SWARCH PARAMS', searchParams?.get('batch'));
 
   const { showAlert } = useAlert();
-  const [handleUserVerification] = useVerifyUserMutation();
 
-  const { data: userListData, loading } = useGetUserListQuery({
+  const { data: transactionsData, loading } = useGetTransactionsQuery({
     variables: {
       options: {
-        filter: {
-          verified: searchParams?.get('verified') ? searchParams?.get('verified') === 'true' : undefined,
-          query: searchParams.get('q') || '',
-          batch: searchParams?.get('batch') ? parseInt(searchParams.get('batch') || '', 10) : undefined,
-        },
         offset: paginationModel?.page || 0,
         limit: paginationModel?.pageSize || 10,
       },
@@ -64,19 +53,35 @@ const useTransactionsTable = () => {
               <Skeleton width="100%" height={30} />
             </Box>
           ) : (
-            <Box mt={0.5} wheight="100%" display="flex" flexDirection="column" justifyContent="center">
+            <Box mt={0.5} height="100%" display="flex" flexDirection="column" justifyContent="center">
               <Box gap={0.5} textTransform="uppercase" textAlign="center" alignItems="center" display="flex">
                 <Typography fontSize="0.7rem" variant="body2">
-                  {dayjs(row?.createdAt).format('MMM').toString()}
+                  {dayjs(row?.transactionDate).format('MMM').toString()}
                 </Typography>
                 <Typography fontSize="0.9rem" variant="subtitle1">
-                  {dayjs(row?.createdAt).format('DD').toString()}
+                  {dayjs(row?.transactionDate).format('DD').toString()}
                 </Typography>
               </Box>
               <Typography fontSize="1rem" variant="body2">
-                {dayjs(row?.createdAt).format('YYYY').toString()}
+                {dayjs(row?.transactionDate).format('YYYY').toString()}
               </Typography>
             </Box>
+          ),
+      },
+      {
+        field: 'type',
+        headerName: 'type',
+        width: 150,
+        ...commonTableColumnProps,
+        sortable: true,
+        renderCell: ({ row }: GridRowParams) =>
+          row.loading ? (
+            <Box width="100%" height="100%" display="flex" alignItems="center">
+              {' '}
+              <Skeleton width="100%" height={30} />
+            </Box>
+          ) : (
+            row?.type || ''
           ),
       },
       {
@@ -96,10 +101,44 @@ const useTransactionsTable = () => {
             row?.title || ''
           ),
       },
+      {
+        field: 'amount',
+        headerName: 'Amount',
+        width: 230,
+        flex: 1,
+        ...commonTableColumnProps,
+        sortable: true,
+        renderCell: ({ row }: GridRowParams) =>
+          row.loading ? (
+            <Box width="100%" height="100%" display="flex" alignItems="center">
+              {' '}
+              <Skeleton width="100%" height={30} />
+            </Box>
+          ) : (
+            `${getCurrencySymbol(row?.currency || 'INR')}${row?.amount || ''}` || ''
+          ),
+      },
+      {
+        field: 'user',
+        headerName: 'Member',
+        width: 230,
+        flex: 1,
+        ...commonTableColumnProps,
+        sortable: true,
+        renderCell: ({ row }: GridRowParams) =>
+          row.loading ? (
+            <Box width="100%" height="100%" display="flex" alignItems="center">
+              {' '}
+              <Skeleton width="100%" height={30} />
+            </Box>
+          ) : (
+            `${row?.user?.firstName || ''} ${row?.user?.lasteName || ''}` || ''
+          ),
+      },
     ];
 
     setColumns(columns);
-  }, [isAdmin, user, handleUserVerification]);
+  }, [isAdmin, user]);
 
   const onPaginationModelChange = React.useCallback((model: GridPaginationModel) => {
     setPaginationModel(model);
@@ -114,15 +153,15 @@ const useTransactionsTable = () => {
         };
       });
     }
-    return userListData?.getUserList?.data || [];
-  }, [loading, userListData, paginationModel]);
+    return transactionsData?.getTransactions?.data || [];
+  }, [loading, transactionsData, paginationModel]);
 
   console.log('ZZ: rows', rows);
   return {
     rows,
     loading,
     columns,
-    rowCount: userListData?.getUserList?.total || 0,
+    rowCount: transactionsData?.getTransactions?.total || 0,
     paginationModel,
     onPaginationModelChange,
     // state,

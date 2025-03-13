@@ -9,7 +9,7 @@ const NoRowsOverlay: React.FC = () => {
       display="flex"
       width="100%"
       height="100%"
-      minHeight={400}
+      minHeight={350}
       alignItems="center"
       justifyContent="center"
       flexDirection="column"

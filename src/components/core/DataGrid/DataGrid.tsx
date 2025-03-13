@@ -15,7 +15,7 @@ const DataGrid: React.FC<DataGridProps> = ({
   ...restProps
 }) => {
   return (
-    <Box sx={{ height: !rows || rows?.length === 0 ? '400px' : 'auto', minHeight: '300px' }}>
+    <Box sx={{ height: !rows || rows?.length === 0 ? '400px' : 'auto', minHeight: '400px' }}>
       <MuiDataGrid
         // height={tableHeight}
 

@@ -17,6 +17,8 @@ export type Scalars = {
   Float: { input: number; output: number };
   /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
   DateTime: { input: any; output: any };
+  /** A custom scalar to handle decimal values */
+  Decimal: { input: any; output: any };
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: { input: any; output: any };
 };
@@ -92,13 +94,19 @@ export type CompanyInfoListResponse = {
   total?: Maybe<Scalars['Int']['output']>;
 };
 
+export enum Currency {
+  Eur = 'EUR',
+  Inr = 'INR',
+  Usd = 'USD',
+}
+
 export type Event = {
   __typename?: 'Event';
   attendees?: Maybe<Array<Maybe<User>>>;
   category?: Maybe<Scalars['String']['output']>;
   /** Timestamp when the record was created */
   createdAt: Scalars['DateTime']['output'];
-  createdBy: Scalars['String']['output'];
+  createdBy?: Maybe<Scalars['String']['output']>;
   description?: Maybe<Scalars['String']['output']>;
   endDate?: Maybe<Scalars['DateTime']['output']>;
   id: Scalars['Int']['output'];
@@ -143,6 +151,8 @@ export type Mutation = {
   assignBatchCoordinator?: Maybe<BatchCoordinator>;
   attendEvent?: Maybe<Event>;
   createEvent?: Maybe<Event>;
+  createTransaction?: Maybe<Transaction>;
+  deleteTransaction?: Maybe<Transaction>;
   deleteUser?: Maybe<User>;
   forgotPassword?: Maybe<Scalars['Boolean']['output']>;
   logout?: Maybe<Scalars['String']['output']>;
@@ -154,6 +164,7 @@ export type Mutation = {
   signup?: Maybe<User>;
   updateBatchCoordinator?: Maybe<BatchCoordinator>;
   updateEvent?: Maybe<Event>;
+  updateTransaction?: Maybe<Transaction>;
   updateUser?: Maybe<User>;
   verifyEvent?: Maybe<Scalars['Boolean']['output']>;
   verifyUser?: Maybe<Scalars['Boolean']['output']>;
@@ -181,6 +192,23 @@ export type MutationCreateEventArgs = {
   summary: Scalars['String']['input'];
   tags?: InputMaybe<Scalars['String']['input']>;
   title: Scalars['String']['input'];
+};
+
+export type MutationCreateTransactionArgs = {
+  amount: Scalars['Float']['input'];
+  currency: Currency;
+  description?: InputMaybe<Scalars['String']['input']>;
+  isDonation?: InputMaybe<Scalars['Boolean']['input']>;
+  method?: InputMaybe<Scalars['String']['input']>;
+  referenceId?: InputMaybe<Scalars['String']['input']>;
+  status: TransactionStatus;
+  title: Scalars['String']['input'];
+  type: TransactionType;
+  userId: Scalars['String']['input'];
+};
+
+export type MutationDeleteTransactionArgs = {
+  id: Scalars['String']['input'];
 };
 
 export type MutationDeleteUserArgs = {
@@ -241,6 +269,11 @@ export type MutationUpdateEventArgs = {
   title: Scalars['String']['input'];
 };
 
+export type MutationUpdateTransactionArgs = {
+  id: Scalars['String']['input'];
+  status: TransactionStatus;
+};
+
 export type MutationUpdateUserArgs = {
   aboutMe?: InputMaybe<Scalars['String']['input']>;
   batch?: InputMaybe<Scalars['Int']['input']>;
@@ -276,6 +309,8 @@ export type Query = {
   getBatchCoordinatorsByBatch?: Maybe<Array<Maybe<BatchCoordinator>>>;
   getEventDetails?: Maybe<Event>;
   getEventList?: Maybe<ListEventResponse>;
+  getTransaction?: Maybe<Transaction>;
+  getTransactions?: Maybe<TransactionListResponse>;
   getUserAddresses?: Maybe<AddressListResponse>;
   getUserCompaniesInfo?: Maybe<CompanyInfoListResponse>;
   getUserDetails?: Maybe<User>;
@@ -302,6 +337,14 @@ export type QueryGetEventListArgs = {
   options?: InputMaybe<ListInput>;
 };
 
+export type QueryGetTransactionArgs = {
+  id: Scalars['String']['input'];
+};
+
+export type QueryGetTransactionsArgs = {
+  options?: InputMaybe<ListInput>;
+};
+
 export type QueryGetUserDetailsArgs = {
   id?: InputMaybe<Scalars['String']['input']>;
 };
@@ -315,6 +358,43 @@ export type Role = {
   id?: Maybe<Scalars['ID']['output']>;
   name?: Maybe<Scalars['String']['output']>;
 };
+
+export type Transaction = {
+  __typename?: 'Transaction';
+  amount?: Maybe<Scalars['Decimal']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  currency?: Maybe<Currency>;
+  description?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  isDonation?: Maybe<Scalars['Boolean']['output']>;
+  method?: Maybe<Scalars['String']['output']>;
+  referenceId?: Maybe<Scalars['String']['output']>;
+  status?: Maybe<TransactionStatus>;
+  title?: Maybe<Scalars['String']['output']>;
+  transactionDate?: Maybe<Scalars['DateTime']['output']>;
+  type?: Maybe<TransactionType>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  user?: Maybe<User>;
+  userId?: Maybe<Scalars['String']['output']>;
+};
+
+export type TransactionListResponse = {
+  __typename?: 'TransactionListResponse';
+  data?: Maybe<Array<Maybe<Transaction>>>;
+  total?: Maybe<Scalars['Int']['output']>;
+};
+
+export enum TransactionStatus {
+  Completed = 'COMPLETED',
+  Failed = 'FAILED',
+  Pending = 'PENDING',
+  Refunded = 'REFUNDED',
+}
+
+export enum TransactionType {
+  Credit = 'CREDIT',
+  Debit = 'DEBIT',
+}
 
 export type User = {
   __typename?: 'User';
@@ -345,6 +425,21 @@ export type User = {
   /** Timestamp when the record was last updated */
   updatedAt: Scalars['DateTime']['output'];
   whatsAppMobile?: Maybe<Scalars['String']['output']>;
+};
+
+export type UserBasic = {
+  __typename?: 'UserBasic';
+  batch?: Maybe<Scalars['Int']['output']>;
+  disabled?: Maybe<Scalars['Boolean']['output']>;
+  email?: Maybe<Scalars['String']['output']>;
+  firstName?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  isFaculty?: Maybe<Scalars['Boolean']['output']>;
+  isVerified?: Maybe<Scalars['Boolean']['output']>;
+  lastName?: Maybe<Scalars['String']['output']>;
+  mobile?: Maybe<Scalars['String']['output']>;
+  profileImage?: Maybe<Scalars['String']['output']>;
+  role?: Maybe<Role>;
 };
 
 export type UserListResponse = {
@@ -412,7 +507,7 @@ export type AttendEventMutation = {
         __typename?: 'Event';
         category?: string | undefined;
         createdAt: any;
-        createdBy: string;
+        createdBy?: string | undefined;
         description?: string | undefined;
         endDate?: any | undefined;
         id: number;
@@ -521,7 +616,7 @@ export type CreateEventMutation = {
         __typename?: 'Event';
         category?: string | undefined;
         createdAt: any;
-        createdBy: string;
+        createdBy?: string | undefined;
         description?: string | undefined;
         endDate?: any | undefined;
         id: number;
@@ -608,6 +703,129 @@ export type CreateEventMutation = {
     | undefined;
 };
 
+export type CreateTransactionMutationVariables = Exact<{
+  amount: Scalars['Float']['input'];
+  currency: Currency;
+  description?: InputMaybe<Scalars['String']['input']>;
+  isDonation?: InputMaybe<Scalars['Boolean']['input']>;
+  method?: InputMaybe<Scalars['String']['input']>;
+  referenceId?: InputMaybe<Scalars['String']['input']>;
+  status: TransactionStatus;
+  title: Scalars['String']['input'];
+  type: TransactionType;
+  userId: Scalars['String']['input'];
+}>;
+
+export type CreateTransactionMutation = {
+  __typename?: 'Mutation';
+  createTransaction?:
+    | {
+        __typename?: 'Transaction';
+        amount?: any | undefined;
+        createdAt?: any | undefined;
+        currency?: Currency | undefined;
+        description?: string | undefined;
+        id?: string | undefined;
+        isDonation?: boolean | undefined;
+        method?: string | undefined;
+        referenceId?: string | undefined;
+        status?: TransactionStatus | undefined;
+        title?: string | undefined;
+        transactionDate?: any | undefined;
+        type?: TransactionType | undefined;
+        updatedAt?: any | undefined;
+        userId?: string | undefined;
+        user?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: string | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              id?: string | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
+export type DeleteTransactionMutationVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+export type DeleteTransactionMutation = {
+  __typename?: 'Mutation';
+  deleteTransaction?:
+    | {
+        __typename?: 'Transaction';
+        amount?: any | undefined;
+        createdAt?: any | undefined;
+        currency?: Currency | undefined;
+        description?: string | undefined;
+        id?: string | undefined;
+        isDonation?: boolean | undefined;
+        method?: string | undefined;
+        referenceId?: string | undefined;
+        status?: TransactionStatus | undefined;
+        title?: string | undefined;
+        transactionDate?: any | undefined;
+        type?: TransactionType | undefined;
+        updatedAt?: any | undefined;
+        userId?: string | undefined;
+        user?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: string | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              id?: string | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
 export type DeleteUserMutationVariables = Exact<{
   id: Scalars['String']['input'];
 }>;
@@ -668,7 +886,7 @@ export type PublishEventMutation = {
         __typename?: 'Event';
         category?: string | undefined;
         createdAt: any;
-        createdBy: string;
+        createdBy?: string | undefined;
         description?: string | undefined;
         endDate?: any | undefined;
         id: number;
@@ -968,7 +1186,7 @@ export type UpdateEventMutation = {
         __typename?: 'Event';
         category?: string | undefined;
         createdAt: any;
-        createdBy: string;
+        createdBy?: string | undefined;
         description?: string | undefined;
         endDate?: any | undefined;
         id: number;
@@ -1050,6 +1268,64 @@ export type UpdateEventMutation = {
                 }
               | undefined
             >
+          | undefined;
+      }
+    | undefined;
+};
+
+export type UpdateTransactionMutationVariables = Exact<{
+  id: Scalars['String']['input'];
+  status: TransactionStatus;
+}>;
+
+export type UpdateTransactionMutation = {
+  __typename?: 'Mutation';
+  updateTransaction?:
+    | {
+        __typename?: 'Transaction';
+        amount?: any | undefined;
+        createdAt?: any | undefined;
+        currency?: Currency | undefined;
+        description?: string | undefined;
+        id?: string | undefined;
+        isDonation?: boolean | undefined;
+        method?: string | undefined;
+        referenceId?: string | undefined;
+        status?: TransactionStatus | undefined;
+        title?: string | undefined;
+        transactionDate?: any | undefined;
+        type?: TransactionType | undefined;
+        updatedAt?: any | undefined;
+        userId?: string | undefined;
+        user?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: string | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              id?: string | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+            }
           | undefined;
       }
     | undefined;
@@ -1279,7 +1555,7 @@ export type GetEventDetailsQuery = {
         __typename?: 'Event';
         category?: string | undefined;
         createdAt: any;
-        createdBy: string;
+        createdBy?: string | undefined;
         description?: string | undefined;
         endDate?: any | undefined;
         id: number;
@@ -1382,7 +1658,7 @@ export type GetEventListQuery = {
                   __typename?: 'Event';
                   category?: string | undefined;
                   createdAt: any;
-                  createdBy: string;
+                  createdBy?: string | undefined;
                   description?: string | undefined;
                   endDate?: any | undefined;
                   id: number;
@@ -1468,6 +1744,129 @@ export type GetEventListQuery = {
                           }
                         | undefined
                       >
+                    | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+      }
+    | undefined;
+};
+
+export type GetTransactionQueryVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+export type GetTransactionQuery = {
+  __typename?: 'Query';
+  getTransaction?:
+    | {
+        __typename?: 'Transaction';
+        amount?: any | undefined;
+        createdAt?: any | undefined;
+        currency?: Currency | undefined;
+        description?: string | undefined;
+        id?: string | undefined;
+        isDonation?: boolean | undefined;
+        method?: string | undefined;
+        referenceId?: string | undefined;
+        status?: TransactionStatus | undefined;
+        title?: string | undefined;
+        transactionDate?: any | undefined;
+        type?: TransactionType | undefined;
+        updatedAt?: any | undefined;
+        userId?: string | undefined;
+        user?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: string | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              id?: string | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
+export type GetTransactionsQueryVariables = Exact<{
+  options?: InputMaybe<ListInput>;
+}>;
+
+export type GetTransactionsQuery = {
+  __typename?: 'Query';
+  getTransactions?:
+    | {
+        __typename?: 'TransactionListResponse';
+        total?: number | undefined;
+        data?:
+          | Array<
+              | {
+                  __typename?: 'Transaction';
+                  amount?: any | undefined;
+                  createdAt?: any | undefined;
+                  currency?: Currency | undefined;
+                  description?: string | undefined;
+                  id?: string | undefined;
+                  isDonation?: boolean | undefined;
+                  method?: string | undefined;
+                  referenceId?: string | undefined;
+                  status?: TransactionStatus | undefined;
+                  title?: string | undefined;
+                  transactionDate?: any | undefined;
+                  type?: TransactionType | undefined;
+                  updatedAt?: any | undefined;
+                  userId?: string | undefined;
+                  user?:
+                    | {
+                        __typename?: 'User';
+                        aboutMe?: string | undefined;
+                        batch?: number | undefined;
+                        createdAt: any;
+                        disabled?: boolean | undefined;
+                        displayName?: string | undefined;
+                        dob?: string | undefined;
+                        email?: string | undefined;
+                        emergencyMobile?: string | undefined;
+                        extraEmail?: string | undefined;
+                        extraMobile?: string | undefined;
+                        firstName?: string | undefined;
+                        gender?: string | undefined;
+                        google_auth_id?: string | undefined;
+                        id?: string | undefined;
+                        isFaculty?: boolean | undefined;
+                        isVerified?: boolean | undefined;
+                        lastName?: string | undefined;
+                        membershipYear?: number | undefined;
+                        mobile?: string | undefined;
+                        nickName?: string | undefined;
+                        profileImage?: string | undefined;
+                        socialMedia?: any | undefined;
+                        updatedAt: any;
+                        whatsAppMobile?: string | undefined;
+                        role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                      }
                     | undefined;
                 }
               | undefined
@@ -1959,6 +2358,211 @@ export function useCreateEventMutation(
 export type CreateEventMutationHookResult = ReturnType<typeof useCreateEventMutation>;
 export type CreateEventMutationResult = Apollo.MutationResult<CreateEventMutation>;
 export type CreateEventMutationOptions = Apollo.BaseMutationOptions<CreateEventMutation, CreateEventMutationVariables>;
+export const CreateTransactionDocument = gql`
+  mutation createTransaction(
+    $amount: Float!
+    $currency: Currency!
+    $description: String
+    $isDonation: Boolean
+    $method: String
+    $referenceId: String
+    $status: TransactionStatus!
+    $title: String!
+    $type: TransactionType!
+    $userId: String!
+  ) {
+    createTransaction(
+      amount: $amount
+      currency: $currency
+      description: $description
+      isDonation: $isDonation
+      method: $method
+      referenceId: $referenceId
+      status: $status
+      title: $title
+      type: $type
+      userId: $userId
+    ) {
+      amount
+      createdAt
+      currency
+      description
+      id
+      isDonation
+      method
+      referenceId
+      status
+      title
+      transactionDate
+      type
+      updatedAt
+      user {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        id
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        mobile
+        nickName
+        profileImage
+        role {
+          id
+          name
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      userId
+    }
+  }
+`;
+export type CreateTransactionMutationFn = Apollo.MutationFunction<
+  CreateTransactionMutation,
+  CreateTransactionMutationVariables
+>;
+
+/**
+ * __useCreateTransactionMutation__
+ *
+ * To run a mutation, you first call `useCreateTransactionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateTransactionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createTransactionMutation, { data, loading, error }] = useCreateTransactionMutation({
+ *   variables: {
+ *      amount: // value for 'amount'
+ *      currency: // value for 'currency'
+ *      description: // value for 'description'
+ *      isDonation: // value for 'isDonation'
+ *      method: // value for 'method'
+ *      referenceId: // value for 'referenceId'
+ *      status: // value for 'status'
+ *      title: // value for 'title'
+ *      type: // value for 'type'
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useCreateTransactionMutation(
+  baseOptions?: Apollo.MutationHookOptions<CreateTransactionMutation, CreateTransactionMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<CreateTransactionMutation, CreateTransactionMutationVariables>(
+    CreateTransactionDocument,
+    options
+  );
+}
+export type CreateTransactionMutationHookResult = ReturnType<typeof useCreateTransactionMutation>;
+export type CreateTransactionMutationResult = Apollo.MutationResult<CreateTransactionMutation>;
+export type CreateTransactionMutationOptions = Apollo.BaseMutationOptions<
+  CreateTransactionMutation,
+  CreateTransactionMutationVariables
+>;
+export const DeleteTransactionDocument = gql`
+  mutation deleteTransaction($id: String!) {
+    deleteTransaction(id: $id) {
+      amount
+      createdAt
+      currency
+      description
+      id
+      isDonation
+      method
+      referenceId
+      status
+      title
+      transactionDate
+      type
+      updatedAt
+      user {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        id
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        mobile
+        nickName
+        profileImage
+        role {
+          id
+          name
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      userId
+    }
+  }
+`;
+export type DeleteTransactionMutationFn = Apollo.MutationFunction<
+  DeleteTransactionMutation,
+  DeleteTransactionMutationVariables
+>;
+
+/**
+ * __useDeleteTransactionMutation__
+ *
+ * To run a mutation, you first call `useDeleteTransactionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteTransactionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteTransactionMutation, { data, loading, error }] = useDeleteTransactionMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteTransactionMutation(
+  baseOptions?: Apollo.MutationHookOptions<DeleteTransactionMutation, DeleteTransactionMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<DeleteTransactionMutation, DeleteTransactionMutationVariables>(
+    DeleteTransactionDocument,
+    options
+  );
+}
+export type DeleteTransactionMutationHookResult = ReturnType<typeof useDeleteTransactionMutation>;
+export type DeleteTransactionMutationResult = Apollo.MutationResult<DeleteTransactionMutation>;
+export type DeleteTransactionMutationOptions = Apollo.BaseMutationOptions<
+  DeleteTransactionMutation,
+  DeleteTransactionMutationVariables
+>;
 export const DeleteUserDocument = gql`
   mutation deleteUser($id: String!) {
     deleteUser(id: $id) {
@@ -2723,6 +3327,94 @@ export function useUpdateEventMutation(
 export type UpdateEventMutationHookResult = ReturnType<typeof useUpdateEventMutation>;
 export type UpdateEventMutationResult = Apollo.MutationResult<UpdateEventMutation>;
 export type UpdateEventMutationOptions = Apollo.BaseMutationOptions<UpdateEventMutation, UpdateEventMutationVariables>;
+export const UpdateTransactionDocument = gql`
+  mutation updateTransaction($id: String!, $status: TransactionStatus!) {
+    updateTransaction(id: $id, status: $status) {
+      amount
+      createdAt
+      currency
+      description
+      id
+      isDonation
+      method
+      referenceId
+      status
+      title
+      transactionDate
+      type
+      updatedAt
+      user {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        id
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        mobile
+        nickName
+        profileImage
+        role {
+          id
+          name
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      userId
+    }
+  }
+`;
+export type UpdateTransactionMutationFn = Apollo.MutationFunction<
+  UpdateTransactionMutation,
+  UpdateTransactionMutationVariables
+>;
+
+/**
+ * __useUpdateTransactionMutation__
+ *
+ * To run a mutation, you first call `useUpdateTransactionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateTransactionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateTransactionMutation, { data, loading, error }] = useUpdateTransactionMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      status: // value for 'status'
+ *   },
+ * });
+ */
+export function useUpdateTransactionMutation(
+  baseOptions?: Apollo.MutationHookOptions<UpdateTransactionMutation, UpdateTransactionMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<UpdateTransactionMutation, UpdateTransactionMutationVariables>(
+    UpdateTransactionDocument,
+    options
+  );
+}
+export type UpdateTransactionMutationHookResult = ReturnType<typeof useUpdateTransactionMutation>;
+export type UpdateTransactionMutationResult = Apollo.MutationResult<UpdateTransactionMutation>;
+export type UpdateTransactionMutationOptions = Apollo.BaseMutationOptions<
+  UpdateTransactionMutation,
+  UpdateTransactionMutationVariables
+>;
 export const UpdateUserDocument = gql`
   mutation updateUser(
     $aboutMe: String
@@ -3436,6 +4128,188 @@ export type GetEventListQueryHookResult = ReturnType<typeof useGetEventListQuery
 export type GetEventListLazyQueryHookResult = ReturnType<typeof useGetEventListLazyQuery>;
 export type GetEventListSuspenseQueryHookResult = ReturnType<typeof useGetEventListSuspenseQuery>;
 export type GetEventListQueryResult = Apollo.QueryResult<GetEventListQuery, GetEventListQueryVariables>;
+export const GetTransactionDocument = gql`
+  query getTransaction($id: String!) {
+    getTransaction(id: $id) {
+      amount
+      createdAt
+      currency
+      description
+      id
+      isDonation
+      method
+      referenceId
+      status
+      title
+      transactionDate
+      type
+      updatedAt
+      user {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        id
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        mobile
+        nickName
+        profileImage
+        role {
+          id
+          name
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      userId
+    }
+  }
+`;
+
+/**
+ * __useGetTransactionQuery__
+ *
+ * To run a query within a React component, call `useGetTransactionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTransactionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTransactionQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetTransactionQuery(
+  baseOptions: Apollo.QueryHookOptions<GetTransactionQuery, GetTransactionQueryVariables> &
+    ({ variables: GetTransactionQueryVariables; skip?: boolean } | { skip: boolean })
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetTransactionQuery, GetTransactionQueryVariables>(GetTransactionDocument, options);
+}
+export function useGetTransactionLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetTransactionQuery, GetTransactionQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetTransactionQuery, GetTransactionQueryVariables>(GetTransactionDocument, options);
+}
+export function useGetTransactionSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetTransactionQuery, GetTransactionQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetTransactionQuery, GetTransactionQueryVariables>(GetTransactionDocument, options);
+}
+export type GetTransactionQueryHookResult = ReturnType<typeof useGetTransactionQuery>;
+export type GetTransactionLazyQueryHookResult = ReturnType<typeof useGetTransactionLazyQuery>;
+export type GetTransactionSuspenseQueryHookResult = ReturnType<typeof useGetTransactionSuspenseQuery>;
+export type GetTransactionQueryResult = Apollo.QueryResult<GetTransactionQuery, GetTransactionQueryVariables>;
+export const GetTransactionsDocument = gql`
+  query getTransactions($options: ListInput) {
+    getTransactions(options: $options) {
+      data {
+        amount
+        createdAt
+        currency
+        description
+        id
+        isDonation
+        method
+        referenceId
+        status
+        title
+        transactionDate
+        type
+        updatedAt
+        user {
+          aboutMe
+          batch
+          createdAt
+          disabled
+          displayName
+          dob
+          email
+          emergencyMobile
+          extraEmail
+          extraMobile
+          firstName
+          gender
+          google_auth_id
+          id
+          isFaculty
+          isVerified
+          lastName
+          membershipYear
+          mobile
+          nickName
+          profileImage
+          role {
+            id
+            name
+          }
+          socialMedia
+          updatedAt
+          whatsAppMobile
+        }
+        userId
+      }
+      total
+    }
+  }
+`;
+
+/**
+ * __useGetTransactionsQuery__
+ *
+ * To run a query within a React component, call `useGetTransactionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTransactionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTransactionsQuery({
+ *   variables: {
+ *      options: // value for 'options'
+ *   },
+ * });
+ */
+export function useGetTransactionsQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetTransactionsQuery, GetTransactionsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetTransactionsQuery, GetTransactionsQueryVariables>(GetTransactionsDocument, options);
+}
+export function useGetTransactionsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetTransactionsQuery, GetTransactionsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetTransactionsQuery, GetTransactionsQueryVariables>(GetTransactionsDocument, options);
+}
+export function useGetTransactionsSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetTransactionsQuery, GetTransactionsQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetTransactionsQuery, GetTransactionsQueryVariables>(GetTransactionsDocument, options);
+}
+export type GetTransactionsQueryHookResult = ReturnType<typeof useGetTransactionsQuery>;
+export type GetTransactionsLazyQueryHookResult = ReturnType<typeof useGetTransactionsLazyQuery>;
+export type GetTransactionsSuspenseQueryHookResult = ReturnType<typeof useGetTransactionsSuspenseQuery>;
+export type GetTransactionsQueryResult = Apollo.QueryResult<GetTransactionsQuery, GetTransactionsQueryVariables>;
 export const GetUserAddressesDocument = gql`
   query getUserAddresses {
     getUserAddresses {

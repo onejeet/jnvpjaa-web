@@ -185,3 +185,13 @@ export const removeSpaces = (st: string) => {
 };
 
 export const isDefined = (value: any) => value !== undefined && value !== null;
+
+export const getCurrencySymbol = (currency: string) => {
+  if (!currency) return '₹';
+  switch (currency) {
+    case 'INR':
+      return '₹';
+    case 'USD':
+      return '$';
+  }
+};

@@ -5,8 +5,12 @@ import LayoutModule from '@/layouts/Layout';
 import TransactionsFilters from './components/TransactionsFilters';
 import TransactionsTable from './components/TransactionsTable';
 import { Box, Typography } from '@mui/material';
+import Button from '@/components/core/Button';
+import { Plus } from '@phosphor-icons/react';
+import { useAuth } from '@/context/AuthContext';
 
 export default function Transactions() {
+  const { isAdmin } = useAuth();
   return (
     <LayoutModule
       disableCover
@@ -17,9 +21,10 @@ export default function Transactions() {
         <Box>
           <Typography variant="h1">Billing & Transactions</Typography>
           <Typography color="grey.800" mb={3}>
-            List of all the verified and non-verified users registered for JNVPJAA portal.
+            List of all the transactions from JNVPJAA Fund.
           </Typography>
         </Box>
+        {isAdmin && <Button title="Add Record" startIcon={<Plus size={16} weight="bold" />} />}
       </Box>
       {/* <TransactionsFilters /> */}
       <TransactionsTable />
