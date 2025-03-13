@@ -128,10 +128,11 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children, checkAuth, isAuth
       loading: true,
       type: 'logout',
     });
+
+    await handleLogout();
     localStorage.clear();
     client.resetStore();
     client.cache.reset();
-    await handleLogout();
     // setUser(null);
     // setLoadingData({
     //   loading: false,

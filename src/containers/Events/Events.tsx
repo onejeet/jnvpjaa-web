@@ -276,12 +276,12 @@ export default function Events() {
       title={`Events • Alumni Network of JNV Paota, Jaipur`}
       //   containerProps={{ sx: { py: 2 } }}
     >
-      <Box display="flex" alignItems="center" justifyContent="space-between">
+      <Box display="flex" alignItems="center" justifyContent="space-between" mb={1}>
         <Box>
-          <Typography variant="h1">Events</Typography>
-          <Typography color="grey.800" mb={3}>
-            List of all the ongoing & upcoming events.
+          <Typography variant="h1" mb={1}>
+            Events
           </Typography>
+          <Typography color="grey.800">List of all the ongoing & upcoming events.</Typography>
         </Box>
         {user?.id && (
           <Button title="Create Event" startIcon={<Plus size={16} />} onClick={() => router.push(paths.events.new)} />
@@ -290,7 +290,7 @@ export default function Events() {
       {isAdmin && (
         <Box display="flex" alignItems="center" mb={1}>
           <FormControlLabel
-            label="Filter pending apporval events"
+            label="Pending apporval events only"
             control={
               <Checkbox
                 checked={isPendingApporvalOnly}

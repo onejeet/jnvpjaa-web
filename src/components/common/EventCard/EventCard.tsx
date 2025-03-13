@@ -91,7 +91,13 @@ const EventCard: React.FC<EventCardProps> = ({
 
   return (
     <Card
-      sx={{ boxShadow: 3, borderRadius: 2, position: 'relative', borderColor: isVerified ? 'inherit' : 'error.main' }}
+      sx={{
+        boxShadow: 3,
+        borderRadius: 2,
+        position: 'relative',
+        borderColor: isVerified ? 'inherit' : 'error.main',
+        height: '100%',
+      }}
     >
       {!loading && !isVerified && status === 'published' && (
         <Box bgcolor="error.main" sx={{ py: '4px', position: 'absolute', top: 0, width: '100%' }}>
@@ -120,7 +126,9 @@ const EventCard: React.FC<EventCardProps> = ({
         />
       )}
 
-      <CardContent sx={{ mt: 0.5 }}>
+      <CardContent
+        sx={{ mt: 0.5, flexGrow: 1, display: 'flex', flexDirection: 'column', height: 'calc(100% - 180px)' }}
+      >
         {loading ? (
           <Skeleton width="80%" height={34} />
         ) : (
@@ -318,7 +326,7 @@ const EventCard: React.FC<EventCardProps> = ({
         )}
 
         {loading ? null : status === 'draft' ? (
-          <Box width="100%" display="flex" gap={2}>
+          <Box width="100%" display="flex" gap={2} mt="auto">
             <Button
               variant="outlined"
               disabled={loading}
@@ -341,7 +349,7 @@ const EventCard: React.FC<EventCardProps> = ({
             )}
           </Box>
         ) : (
-          <Box width="100%" display="flex" gap={2}>
+          <Box width="100%" display="flex" gap={2} mt="auto" pt={2}>
             {(createdBy === user?.id || isAdmin) && (
               <Button
                 variant="outlined"
@@ -349,7 +357,6 @@ const EventCard: React.FC<EventCardProps> = ({
                 fullWidth
                 title="Edit"
                 startIcon={<NotePencil size={16} />}
-                sx={{ ml: 'auto', mt: 2 }}
                 onClick={() => onEdit?.(id)}
               />
             )}
@@ -360,7 +367,7 @@ const EventCard: React.FC<EventCardProps> = ({
                 fullWidth
                 title="Approve & Publish"
                 startIcon={<CheckCircle size={16} />}
-                sx={{ ml: 'auto', mt: 2, whiteSpace: 'nowrap' }}
+                sx={{ whiteSpace: 'nowrap' }}
                 onClick={() => verifyEvent?.(id)}
               />
             ) : (
@@ -372,7 +379,6 @@ const EventCard: React.FC<EventCardProps> = ({
                   disabled={loading}
                   // endIcon={<ArrowRightAltIcon />}
                   startIcon={<Heart size={20} weight="fill" />}
-                  sx={{ marginTop: 2 }}
                   onClick={() => markImGoing(id)}
                 />
               )
