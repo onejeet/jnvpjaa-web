@@ -74,12 +74,6 @@ const BatchCoordinators = () => {
             maxHeight: 40,
             backgroundColor: 'primary.main',
           },
-          '& .MuiDataGrid-columnHeader': {
-            fontWeight: 400,
-            backgroundColor: 'primary.main',
-            color: 'common.white',
-            maxHeight: 40,
-          },
         }}
       />
     </Box>

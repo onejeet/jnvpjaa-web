@@ -8,8 +8,10 @@ import { Box, Typography } from '@mui/material';
 import Button from '@/components/core/Button';
 import { Plus } from '@phosphor-icons/react';
 import { useAuth } from '@/context/AuthContext';
+import AddTransactionRecordModule from '@/modules/AddTransactionRecordModule';
 
 export default function Transactions() {
+  const [addRecord, setAddRecord] = React.useState<boolean>(false);
   const { isAdmin } = useAuth();
   return (
     <LayoutModule
@@ -24,10 +26,13 @@ export default function Transactions() {
             List of all the transactions from JNVPJAA Fund.
           </Typography>
         </Box>
-        {isAdmin && <Button title="Add Record" startIcon={<Plus size={16} weight="bold" />} />}
+        {isAdmin && (
+          <Button title="Add Record" onClick={() => setAddRecord(true)} startIcon={<Plus size={16} weight="bold" />} />
+        )}
       </Box>
       {/* <TransactionsFilters /> */}
       <TransactionsTable />
+      {addRecord && <AddTransactionRecordModule onClose={() => setAddRecord(false)} />}
     </LayoutModule>
   );
 }

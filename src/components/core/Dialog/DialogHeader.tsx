@@ -40,7 +40,7 @@ const DialogHeader: React.FC<DialogHeaderProps> = ({
               title
             ) : (
               <Box display="flex" flexDirection="column">
-                <Typography variant="h6" {...titleProps}>
+                <Typography variant="h3" fontSize="20px" {...titleProps}>
                   {title}
                 </Typography>
               </Box>

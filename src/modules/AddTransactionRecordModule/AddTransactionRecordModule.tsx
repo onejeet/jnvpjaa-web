@@ -1,0 +1,208 @@
+import Dialog from '@/components/core/Dialog';
+import { useAlert } from '@/context/AlertContext';
+import { useRouter } from 'next/router';
+import { useForm, useWatch } from 'react-hook-form';
+import { Box, CircularProgress, Grid2 as Grid, Typography } from '@mui/material';
+import FormTextField from '@/components/form/FormTextField';
+import FormSelectField from '@/components/form/FormSelectField';
+import Button from '@/components/core/Button';
+import FormDateTimeField from '@/components/form/FormDateTimeField';
+import {
+  Currency,
+  TransactionStatus,
+  TransactionType,
+  useCreateEventMutation,
+  useCreateTransactionMutation,
+  useGetEventDetailsQuery,
+  usePublishEventMutation,
+  useUpdateEventMutation,
+} from '@/apollo/hooks';
+import { paths } from '@/config/paths';
+import TipTapTextEditor from '@/modules/TipTapTextEditor';
+import { CurrencyInr, FloppyDiskBack, Globe, MapPinLine } from '@phosphor-icons/react';
+import { useApolloClient } from '@apollo/client';
+import { alumniEventCategories, eventHostingmedium } from '@/constants/Events.constants';
+import dayjs from 'dayjs';
+import { IAddTransactionRecordInput } from './AddTransactionRecordModule.types';
+import React from 'react';
+import { useAuth } from '@/context/AuthContext';
+
+const AddTransactionRecordModule: React.FC<any> = ({ onClose }) => {
+  const { user } = useAuth();
+  const client = useApolloClient();
+  const { showAlert } = useAlert();
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    reset,
+    getValues,
+    formState: { errors },
+  } = useForm<IAddTransactionRecordInput>({
+    defaultValues: {
+      type: TransactionType.Debit,
+      transactionDate: dayjs(),
+    },
+  });
+
+  const [createTransaction, { loading: saving }] = useCreateTransactionMutation();
+
+  const onSubmit = React.useCallback(
+    (data: IAddTransactionRecordInput) => {
+      createTransaction({
+        variables: {
+          ...data,
+          status: TransactionStatus.Completed,
+          userId: user?.id,
+          amount: parseFloat(data?.amount),
+          currency: Currency.Inr,
+        },
+        onCompleted: () => {
+          client.refetchQueries({
+            include: ['getTransactions'],
+          });
+          showAlert({
+            visible: true,
+            type: 'success',
+            message: 'Transaction added successfully.',
+          });
+          reset({
+            type: TransactionType.Debit,
+            transactionDate: dayjs(),
+          });
+        },
+        onError: (err) => {
+          showAlert({
+            visible: true,
+            type: 'error',
+            message: err?.message || 'Something went wrong.',
+          });
+        },
+      });
+    },
+    [user, showAlert, client, createTransaction, reset]
+  );
+
+  return (
+    <Dialog
+      open
+      title="Add Transaction"
+      disableBackdropClick
+      onClose={onClose}
+      footerProps={{
+        onOkay: handleSubmit(onSubmit),
+        okayButtonProps: {
+          title: 'Add Record',
+          loading: saving,
+        },
+        onCancel: onClose,
+        cancelButtonProps: {
+          disabled: saving,
+        },
+      }}
+    >
+      <Box
+        component="form"
+        onSubmit={handleSubmit(onSubmit)}
+        sx={{
+          width: '100%',
+          p: 2,
+          // p: 3,
+          // display: 'flex',
+          // flexDirection: 'column',
+          // alignItems: 'center',
+        }}
+      >
+        <Grid container spacing={3}>
+          <Grid size={{ xs: 12, sm: 3 }}>
+            <FormSelectField
+              control={control}
+              name="type"
+              selectProps={{
+                size: 'small',
+                id: 'type',
+                disabled: saving,
+              }}
+              options={[
+                {
+                  label: TransactionType.Debit,
+                  value: TransactionType.Debit,
+                },
+                {
+                  label: TransactionType.Credit,
+                  value: TransactionType.Credit,
+                },
+              ]}
+              rules={{
+                required: 'Required',
+              }}
+            />
+          </Grid>
+          <Grid size={{ xs: 12, sm: 9 }}>
+            <FormTextField
+              fullWidth
+              id="title"
+              label="Title"
+              autoFocus
+              control={control}
+              disabled={saving}
+              name="title"
+              size="small"
+              rules={{
+                required: 'Required',
+              }}
+            />
+          </Grid>
+
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <FormDateTimeField
+              control={control}
+              name="transactionDate"
+              inputProps={{
+                label: 'Transaction Date',
+                size: 'small',
+              }}
+              isDateOnly
+              rules={{
+                required: 'Required',
+              }}
+            />
+          </Grid>
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <FormTextField
+              fullWidth
+              id="amount"
+              label="Amount"
+              control={control}
+              disabled={saving}
+              startAdornment={<CurrencyInr size={18} />}
+              name="amount"
+              size="small"
+              type="number"
+              rules={{
+                required: 'Required',
+              }}
+            />
+          </Grid>
+
+          <Grid size={{ xs: 12 }}>
+            <FormTextField
+              fullWidth
+              id="description"
+              label="Description"
+              multiline
+              minRows={2}
+              control={control}
+              disabled={saving}
+              size="small"
+              name="description"
+              // size="small"
+            />
+          </Grid>
+        </Grid>
+      </Box>
+    </Dialog>
+  );
+};
+
+export default AddTransactionRecordModule;

@@ -33,32 +33,6 @@ const TransactionsTable = () => {
       pagination
       paginationMode="server"
       onPaginationModelChange={onPaginationModelChange}
-      sx={{
-        // '& .MuiDataGrid-pinnedColumnHeaders .MuiDataGrid-columnHeader:nth-child(2) svg': {
-        //   display: 'none',
-        // },
-        // '& .MuiDataGrid-pinnedColumns .MuiDataGrid-row .MuiDataGrid-cell:nth-child(2) svg': {
-        //   display: 'none',
-        // },
-        // '@media (max-width: 1200px)': {
-        //   '& .MuiPaginationItem-page, .MuiPaginationItem-ellipsis': {
-        //     display: 'none',
-        //   },
-        // },
-        // '& .MuiDataGrid-topContainer': {
-        //   backgroundColor: 'primary.main',
-        // },
-        // '& .MuiDataGrid-columnHeaders': {
-        //   maxHeight: 40,
-        //   backgroundColor: 'primary.main',
-        // },
-        '& .MuiDataGrid-columnHeader': {
-          fontWeight: 400,
-          backgroundColor: 'primary.main',
-          color: 'common.white',
-          maxHeight: 40,
-        },
-      }}
     />
   );
 };

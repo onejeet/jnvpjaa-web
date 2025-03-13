@@ -13,7 +13,10 @@ import { useApolloClient } from '@apollo/client';
 import { useAuth } from '@/context/AuthContext';
 
 import dayjs from 'dayjs';
-import { getCurrencySymbol } from '@/utils/helpers';
+import { formatCurrency, getCurrencySymbol } from '@/utils/helpers';
+import ProfilePicture from '@/components/common/ProfilePicture';
+import VerifiedBadge from '@/components/common/FacultyBadge';
+import { ArrowDown, ArrowUp } from '@phosphor-icons/react';
 
 const useTransactionsTable = () => {
   const client = useApolloClient();
@@ -53,7 +56,7 @@ const useTransactionsTable = () => {
               <Skeleton width="100%" height={30} />
             </Box>
           ) : (
-            <Box mt={0.5} height="100%" display="flex" flexDirection="column" justifyContent="center">
+            <Box height="100%" display="flex" flexDirection="column" justifyContent="center">
               <Box gap={0.5} textTransform="uppercase" textAlign="center" alignItems="center" display="flex">
                 <Typography fontSize="0.7rem" variant="body2">
                   {dayjs(row?.transactionDate).format('MMM').toString()}
@@ -66,22 +69,6 @@ const useTransactionsTable = () => {
                 {dayjs(row?.transactionDate).format('YYYY').toString()}
               </Typography>
             </Box>
-          ),
-      },
-      {
-        field: 'type',
-        headerName: 'type',
-        width: 150,
-        ...commonTableColumnProps,
-        sortable: true,
-        renderCell: ({ row }: GridRowParams) =>
-          row.loading ? (
-            <Box width="100%" height="100%" display="flex" alignItems="center">
-              {' '}
-              <Skeleton width="100%" height={30} />
-            </Box>
-          ) : (
-            row?.type || ''
           ),
       },
       {
@@ -98,13 +85,45 @@ const useTransactionsTable = () => {
               <Skeleton width="100%" height={30} />
             </Box>
           ) : (
-            row?.title || ''
+            <Box height="100%" display="flex" alignItems="center">
+              <Typography variant="body1">{row?.title || ''}</Typography>
+            </Box>
+          ),
+      },
+      {
+        field: 'type',
+        headerName: 'Type',
+        width: 150,
+        ...commonTableColumnProps,
+        sortable: true,
+        renderCell: ({ row }: GridRowParams) =>
+          row.loading ? (
+            <Box width="100%" height="100%" display="flex" alignItems="center">
+              {' '}
+              <Skeleton width="100%" height={30} />
+            </Box>
+          ) : (
+            <Box
+              height="100%"
+              display="flex"
+              alignItems="center"
+              sx={{
+                svg: {
+                  color: row?.type === 'DEBIT' ? 'error.main' : 'success.main',
+                },
+              }}
+            >
+              {row?.type === 'DEBIT' ? <ArrowDown size={16} weight="bold" /> : <ArrowUp size={16} weight="bold" />}
+              <Typography variant="h5" color={row?.type === 'DEBIT' ? 'error.main' : 'success.main'} ml={0.5}>
+                {row?.type || ''}
+              </Typography>
+            </Box>
           ),
       },
       {
         field: 'amount',
         headerName: 'Amount',
-        width: 230,
+        width: 150,
         flex: 1,
         ...commonTableColumnProps,
         sortable: true,
@@ -115,12 +134,19 @@ const useTransactionsTable = () => {
               <Skeleton width="100%" height={30} />
             </Box>
           ) : (
-            `${getCurrencySymbol(row?.currency || 'INR')}${row?.amount || ''}` || ''
+            <Box
+              height="100%"
+              display="flex"
+              alignItems="center"
+              color={row?.type === 'DEBIT' ? 'error.main' : 'success.main'}
+            >
+              <Typography variant="h5">{`${formatCurrency(row?.amount)}` || ''}</Typography>
+            </Box>
           ),
       },
       {
         field: 'user',
-        headerName: 'Member',
+        headerName: 'Added By',
         width: 230,
         flex: 1,
         ...commonTableColumnProps,
@@ -132,7 +158,27 @@ const useTransactionsTable = () => {
               <Skeleton width="100%" height={30} />
             </Box>
           ) : (
-            `${row?.user?.firstName || ''} ${row?.user?.lasteName || ''}` || ''
+            <Box height="100%" display="flex" alignItems="center">
+              <ProfilePicture
+                loading={row.loading}
+                src={row?.user?.profileImage}
+                title={`${row.user.firstName} ${row?.user?.lastName}`}
+                summary={row?.user?.batch === 0 ? 'Faculty' : `Batch of ${row?.user?.batch}`}
+                id={row?.user?.id}
+                alt={`${row?.user?.firstname || ''} ${row?.user?.lastname || ''}`}
+                titleComponentProps={{
+                  titleContainerProps: {
+                    className: 'title-container',
+                  },
+                }}
+
+                // titleProps={{
+                //   fontSize: '14px',
+                //   lineHeight: '16.41px',
+                //   bgcolor: 'none',
+                // }}
+              />
+            </Box>
           ),
       },
     ];

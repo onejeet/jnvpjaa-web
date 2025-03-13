@@ -4,9 +4,8 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { DIALOG_OKAY_BUTTON_WRAPPER_ID } from '.';
 import type { DialogFooterProps } from './Dialog.types';
-import CloseIcon from '@mui/icons-material/Close';
-import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import Button from '../Button';
+import { CheckCircle, X } from '@phosphor-icons/react';
 
 const DialogFooter: React.FC<DialogFooterProps> = ({
   title,
@@ -47,7 +46,7 @@ const DialogFooter: React.FC<DialogFooterProps> = ({
               variant="outlined"
               // size="small"
               color="secondary"
-              startIcon={cancelButtonProps?.loading ? undefined : <CloseIcon />}
+              startIcon={cancelButtonProps?.loading ? undefined : <X size={16} />}
               onClick={() => {
                 onCancel();
               }}
@@ -61,7 +60,7 @@ const DialogFooter: React.FC<DialogFooterProps> = ({
                 color="success"
                 // size="small"
                 variant="contained"
-                startIcon={okayButtonProps?.loading ? undefined : <TaskAltIcon sx={{ fontSize: '14px' }} />}
+                startIcon={okayButtonProps?.loading ? undefined : <CheckCircle size={16} />}
                 onClick={
                   onOkay
                     ? () => {

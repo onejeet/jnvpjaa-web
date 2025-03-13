@@ -66,7 +66,7 @@ const DataGrid: React.FC<DataGridProps> = ({
           // },
           '& .MuiDataGrid-columnHeader': {
             fontWeight: 400,
-            backgroundColor: 'primary.main',
+            backgroundColor: 'grey.700',
             color: 'common.white',
             maxHeight: 40,
           },
