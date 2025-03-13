@@ -164,6 +164,10 @@ export const MEMBER_HEADER_MENU: IHeaderMenuItem[] = [
         path: '/members',
       },
       {
+        label: 'Billing & Transactions',
+        path: '/transactions',
+      },
+      {
         label: 'Donate Now',
         path: '/donations',
       },

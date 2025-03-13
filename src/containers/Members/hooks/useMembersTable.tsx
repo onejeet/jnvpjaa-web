@@ -53,7 +53,7 @@ const useMembersTable = () => {
       {
         field: 'name',
         headerName: 'Alumni',
-        width: 250,
+        width: 300,
         flex: 1,
         ...commonTableColumnProps,
         sortable: true,
@@ -102,7 +102,7 @@ const useMembersTable = () => {
       {
         field: 'email',
         headerName: 'Email',
-        width: 230,
+        width: 200,
         ...commonTableColumnProps,
         sortable: true,
         renderCell: ({ row }: GridRowParams) =>
@@ -118,7 +118,7 @@ const useMembersTable = () => {
       {
         field: 'batch',
         headerName: 'Batch',
-        width: 120,
+        width: 100,
         ...commonTableColumnProps,
         sortable: true,
         renderCell: ({ row }: GridRowParams) =>
