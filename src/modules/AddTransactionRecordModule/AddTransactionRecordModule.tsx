@@ -42,8 +42,11 @@ const AddTransactionRecordModule: React.FC<any> = ({ onClose }) => {
     defaultValues: {
       type: TransactionType.Debit,
       transactionDate: dayjs(),
+      method: 'BankTransfer',
     },
   });
+
+  console.log('PP: getValues', getValues());
 
   const [createTransaction, { loading: saving }] = useCreateTransactionMutation();
 
@@ -56,6 +59,7 @@ const AddTransactionRecordModule: React.FC<any> = ({ onClose }) => {
           userId: user?.id,
           amount: parseFloat(data?.amount),
           currency: Currency.Inr,
+          transactionDate: data?.transactionDate?.toISOString(),
         },
         onCompleted: () => {
           client.refetchQueries({
@@ -159,6 +163,7 @@ const AddTransactionRecordModule: React.FC<any> = ({ onClose }) => {
               control={control}
               name="transactionDate"
               inputProps={{
+                name: 'transactionDate',
                 label: 'Transaction Date',
                 size: 'small',
               }}
@@ -182,6 +187,50 @@ const AddTransactionRecordModule: React.FC<any> = ({ onClose }) => {
               rules={{
                 required: 'Required',
               }}
+            />
+          </Grid>
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <FormTextField
+              fullWidth
+              id="referenceId"
+              label="Transaction Id (if any)"
+              control={control}
+              disabled={saving}
+              name="referenceId"
+              size="small"
+            />
+          </Grid>
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <FormSelectField
+              control={control}
+              name="method"
+              selectProps={{
+                size: 'small',
+                id: 'method',
+                disabled: saving,
+              }}
+              options={[
+                {
+                  label: 'Cash',
+                  value: 'Cash',
+                },
+                {
+                  label: 'UPI',
+                  value: 'UPI',
+                },
+                {
+                  label: 'Bank Transfer',
+                  value: 'BankTransfer',
+                },
+                {
+                  label: 'Credit Card',
+                  value: 'CreditCard',
+                },
+                {
+                  label: 'Debit Card',
+                  value: 'DebitCard',
+                },
+              ]}
             />
           </Grid>
 

@@ -86,7 +86,7 @@ const useTransactionsTable = () => {
             </Box>
           ) : (
             <Box height="100%" display="flex" alignItems="center">
-              <Typography variant="body1">{row?.title || ''}</Typography>
+              <Typography variant="body1">{row?.title || '--'}</Typography>
             </Box>
           ),
       },

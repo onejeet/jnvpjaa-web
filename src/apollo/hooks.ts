@@ -203,6 +203,7 @@ export type MutationCreateTransactionArgs = {
   referenceId?: InputMaybe<Scalars['String']['input']>;
   status: TransactionStatus;
   title: Scalars['String']['input'];
+  transactionDate: Scalars['String']['input'];
   type: TransactionType;
   userId: Scalars['String']['input'];
 };
@@ -712,6 +713,7 @@ export type CreateTransactionMutationVariables = Exact<{
   referenceId?: InputMaybe<Scalars['String']['input']>;
   status: TransactionStatus;
   title: Scalars['String']['input'];
+  transactionDate: Scalars['String']['input'];
   type: TransactionType;
   userId: Scalars['String']['input'];
 }>;
@@ -2368,6 +2370,7 @@ export const CreateTransactionDocument = gql`
     $referenceId: String
     $status: TransactionStatus!
     $title: String!
+    $transactionDate: String!
     $type: TransactionType!
     $userId: String!
   ) {
@@ -2380,6 +2383,7 @@ export const CreateTransactionDocument = gql`
       referenceId: $referenceId
       status: $status
       title: $title
+      transactionDate: $transactionDate
       type: $type
       userId: $userId
     ) {
@@ -2456,6 +2460,7 @@ export type CreateTransactionMutationFn = Apollo.MutationFunction<
  *      referenceId: // value for 'referenceId'
  *      status: // value for 'status'
  *      title: // value for 'title'
+ *      transactionDate: // value for 'transactionDate'
  *      type: // value for 'type'
  *      userId: // value for 'userId'
  *   },
