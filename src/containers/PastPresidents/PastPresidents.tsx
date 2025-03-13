@@ -1,7 +1,7 @@
 import { Box, Grid, Typography } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
 
 import useBatchCoordinators from './Hooks/usePastPresidents';
+import DataGrid from '@/components/core/DataGrid';
 
 const PastPresidents = () => {
   const { columns, rows } = useBatchCoordinators();
@@ -58,26 +58,6 @@ const PastPresidents = () => {
         // isRowSelectable={isRowSelectable}
         // sortModel={sortModel || []}
         // defaultGroupingExpansionDepth={1}
-        sx={{
-          '& .MuiDataGrid-pinnedColumnHeaders .MuiDataGrid-columnHeader:nth-child(2) svg': {
-            display: 'none',
-          },
-          '& .MuiDataGrid-pinnedColumns .MuiDataGrid-row .MuiDataGrid-cell:nth-child(2) svg': {
-            display: 'none',
-          },
-          '@media (max-width: 1200px)': {
-            '& .MuiPaginationItem-page, .MuiPaginationItem-ellipsis': {
-              display: 'none',
-            },
-          },
-          '& .MuiDataGrid-topContainer': {
-            backgroundColor: 'primary.main',
-          },
-          '& .MuiDataGrid-columnHeaders': {
-            maxHeight: 40,
-            backgroundColor: 'primary.main',
-          },
-        }}
       />
     </Box>
   );

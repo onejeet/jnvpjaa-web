@@ -1,11 +1,9 @@
-import SearchIcon from '@mui/icons-material/Search';
 import { Box, OutlinedInput, Typography } from '@mui/material';
-import Grid from '@mui/material/Grid2';
-import { DataGrid } from '@mui/x-data-grid';
 
 import useBatchCoordinators from './Hooks/useBatchCoordinators';
 import { MagnifyingGlass } from '@phosphor-icons/react';
 import BatchCoordinatorFilters from './components/BatchCoordinatorFilters';
+import DataGrid from '@/components/core/DataGrid';
 
 const BatchCoordinators = () => {
   const { columns, rows, onSearch } = useBatchCoordinators();
@@ -22,7 +20,6 @@ const BatchCoordinators = () => {
       <BatchCoordinatorFilters />
       <DataGrid
         // height={tableHeight}
-        // @ts-expect-error type error
         rows={rows}
         columns={columns}
         // loading={loading}
@@ -55,26 +52,6 @@ const BatchCoordinators = () => {
         // isRowSelectable={isRowSelectable}
         // sortModel={sortModel || []}
         // defaultGroupingExpansionDepth={1}
-        sx={{
-          '& .MuiDataGrid-pinnedColumnHeaders .MuiDataGrid-columnHeader:nth-child(2) svg': {
-            display: 'none',
-          },
-          '& .MuiDataGrid-pinnedColumns .MuiDataGrid-row .MuiDataGrid-cell:nth-child(2) svg': {
-            display: 'none',
-          },
-          '@media (max-width: 1200px)': {
-            '& .MuiPaginationItem-page, .MuiPaginationItem-ellipsis': {
-              display: 'none',
-            },
-          },
-          '& .MuiDataGrid-topContainer': {
-            backgroundColor: 'primary.main',
-          },
-          '& .MuiDataGrid-columnHeaders': {
-            maxHeight: 40,
-            backgroundColor: 'primary.main',
-          },
-        }}
       />
     </Box>
   );
