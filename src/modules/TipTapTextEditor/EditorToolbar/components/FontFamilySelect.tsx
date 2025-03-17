@@ -10,32 +10,42 @@ import Menu from '@/components/core/Menu';
 import { FONT_FAMILY_LIST } from '../../constants';
 /* ICONS */
 import ToolIcon from './ToolIcon';
+import Button from '@/components/core/Button';
 
 const FontFamilySelect: React.FC<any> = ({ toggleBlock }) => {
   const { editor } = useCurrentEditor();
 
   return (
     <Menu
+      // open
       onChange={(val) =>
         editor
           ?.chain()
-          .focus()
-          .setFontFamily(val as string)
-          .run()
+          ?.focus()
+          ?.setFontFamily(val as string)
+          ?.run()
       }
       value={editor?.getAttributes('textStyle')?.fontFamily}
       items={FONT_FAMILY_LIST.map((hItem) => ({
         ...hItem,
       }))}
       render={
-        <IconButton
+        <Button
+          variant="text"
+          title={editor?.getAttributes('textStyle')?.fontFamily || 'Font Family'}
           size="small"
           sx={{
-            color: editor?.getAttributes('textStyle')?.fontFamily ? 'primary.main' : 'text.primary',
+            color: editor?.getAttributes('textStyle')?.fontFamily ? 'primary.main' : 'grey.800',
           }}
-        >
-          <ToolIcon icon="font_family" />
-        </IconButton>
+        />
+        // <IconButton
+        //   size="small"
+        //   sx={{
+        //     color: editor?.getAttributes('textStyle')?.fontFamily ? 'primary.main' : 'text.primary',
+        //   }}
+        // >
+        //   <ToolIcon icon="font_family" />
+        // </IconButton>
       }
     />
   );

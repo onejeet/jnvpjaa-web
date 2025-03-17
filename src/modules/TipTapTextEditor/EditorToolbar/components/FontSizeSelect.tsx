@@ -23,7 +23,7 @@ const FontSizeSelect: React.FC<any> = ({ toggleBlock }) => {
         value: hItem,
       }))}
       render={
-        <IconButton size="small">
+        <IconButton size="small" sx={{ color: 'grey.800' }}>
           <ToolIcon icon="font_size" />
         </IconButton>
       }

@@ -14,8 +14,9 @@ const HeadingDropdown: React.FC = () => {
       onChange={(val) => editor?.commands.toggleHeading({ level: val as Level })}
       value={editor?.getAttributes('heading')?.level}
       items={HEADINGS_LIST.map((hItem: any) => ({
+        label: hItem?.label,
         value: hItem?.value,
-        icon: React.createElement(hItem?.icon, { size: 20, weight: 'bold' }),
+        icon: React.createElement(hItem?.icon, { size: 18, weight: 'bold' }),
       }))}
       render={
         <IconButton

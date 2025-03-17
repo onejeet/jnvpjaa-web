@@ -191,7 +191,7 @@ const Menu: React.FC<MenuProps> = ({ id, items, value, render, disabled, childre
                               ...titleProps,
                               ...(isHeading && {
                                 color: 'var(--mui-palette-text-disabled)',
-                                fontSize: '12px',
+                                fontSize: '14px',
                                 fontWeight: 500,
                               }),
                             }}

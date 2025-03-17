@@ -49,60 +49,70 @@ export const EDITOR_ICONS = {
 
 export const FONT_FAMILY_LIST = [
   {
-    label: 'Arial',
-    value: 'Arial',
+    label: 'DM Sans',
+    value: 'DM Sans',
   },
   {
-    label: 'Georgia',
-    value: 'Georgia',
+    label: 'Mukta Hindi',
+    value: 'Mukta',
   },
-  {
-    label: 'Helvetica',
-    value: 'Helvetica',
-  },
-  {
-    label: 'Sans Serif',
-    value: 'Sans Serif',
-  },
-  {
-    label: 'Tahoma',
-    value: 'Tahoma',
-  },
-  {
-    label: 'Times New Roman',
-    value: 'Times New Roman',
-  },
-  {
-    label: 'Trebuchet',
-    value: 'Trebuchet',
-  },
-  {
-    label: 'Verdana',
-    value: 'Verdana',
-  },
+  // {
+  //   label: 'Georgia',
+  //   value: 'Georgia',
+  // },
+  // {
+  //   label: 'Helvetica',
+  //   value: 'Helvetica',
+  // },
+  // {
+  //   label: 'Sans Serif',
+  //   value: 'Sans Serif',
+  // },
+  // {
+  //   label: 'Tahoma',
+  //   value: 'Tahoma',
+  // },
+  // {
+  //   label: 'Times New Roman',
+  //   value: 'Times New Roman',
+  // },
+  // {
+  //   label: 'Trebuchet',
+  //   value: 'Trebuchet',
+  // },
+  // {
+  //   label: 'Verdana',
+  //   value: 'Verdana',
+  // },
 ];
 export const HEADINGS_LIST = [
   {
+    label: 'Heading 1',
     icon: EDITOR_ICONS.heading_1,
     value: 1,
   },
   {
+    label: 'Heading 2',
     icon: EDITOR_ICONS.heading_2,
     value: 2,
   },
   {
+    label: 'Heading 3',
     icon: EDITOR_ICONS.heading_3,
     value: 3,
   },
   {
+    label: 'Heading 4',
     icon: EDITOR_ICONS.heading_4,
     value: 4,
   },
   {
+    label: 'Heading 5',
     icon: EDITOR_ICONS.heading_5,
     value: 5,
   },
   {
+    label: 'Heading 6',
     icon: EDITOR_ICONS.heading_6,
     value: 6,
   },

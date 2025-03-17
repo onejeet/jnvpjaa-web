@@ -1,3 +1,4 @@
+import EmptyView from '@/components/common/EmptyView';
 import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
 
@@ -14,10 +15,7 @@ const Blog = () => {
         md: 5,
       }}
     >
-      <Image src="/assets/svg/under_construction.svg" width={417} height={240} layout="fixed" alt="blog coming soon" />
-      <Typography variant="body1" fontSize={20} color="grey.600" mt={3}>
-        Blog is coming soon.
-      </Typography>
+      <EmptyView message="Blog is coming soon." />
     </Box>
   );
 };

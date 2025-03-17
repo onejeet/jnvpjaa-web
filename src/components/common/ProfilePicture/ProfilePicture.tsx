@@ -24,7 +24,7 @@ const ProfilePicture: React.FC<ProfilePictureProps> = ({
   ...restProps
 }) => {
   const { titleProps, summaryContainerProps, ...restTitleComponentProps } = titleComponentProps || {};
-
+  console.log('BB: Profile', restProps?.src);
   return (
     <Box
       display="flex"
@@ -47,9 +47,7 @@ const ProfilePicture: React.FC<ProfilePictureProps> = ({
               ...sx,
             }}
             src={restProps?.src || getAvatarDataUrl(id)}
-          >
-            {restProps?.src ? null : title}
-          </Avatar>
+          />
         )}
       </Box>
       {title && (

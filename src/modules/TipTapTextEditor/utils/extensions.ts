@@ -12,6 +12,12 @@ export const FontSize = Extension.create({
       {
         types: this.options.types,
         attributes: {
+          fontFamily: {
+            default: 'DM Sans',
+            renderHTML: (attributes) => ({
+              style: `font-family: ${attributes.fontFamily}`,
+            }),
+          },
           fontSize: {
             default: null,
             parseHTML: (element) => element.style.fontSize.replace(/['"]+/g, ''),
