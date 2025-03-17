@@ -167,7 +167,7 @@ const LayoutFooter: React.FC = () => {
               >
                 &nbsp; &#169; &nbsp;
                 {new Date().getFullYear()}
-                &nbsp; JNVPJAA. All Rights Reserved.
+                &nbsp;JNVPJAA. All Rights Reserved.
               </Typography>
             </Grid>
             <Grid
@@ -197,7 +197,7 @@ const LayoutFooter: React.FC = () => {
                 variant="body2"
                 display="flex"
               >
-                Powered by{' '}
+                Crafted By{' '}
                 <Box
                   component="span"
                   ml={1}

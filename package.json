@@ -5,9 +5,9 @@
   "private": true,
   "author": "Jeet from Dots Created",
   "scripts": {
-    "dev": "next dev -p 3890",
-    "build": "next build",
-    "start": "next start",
+    "dev": "NODE_ENV=development NODE_ENV=development next dev -p 3890",
+    "build": "NODE_ENV=production GRAPHQL_ENDPOINT=https://jnvpjaa-backend.fly.dev/client next build",
+    "start": "NODE_ENV=production GRAPHQL_ENDPOINT=https://jnvpjaa-backend.fly.dev/client next start",
     "prettier:format": "prettier --write .",
     "prettier:check": "prettier --check \"**/*.{ts,tsx,json}\"",
     "lint": "next lint",

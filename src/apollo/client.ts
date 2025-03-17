@@ -55,9 +55,11 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
+console.log('ZZ: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT', process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT);
+
 // HTTP link
 const httpLink = new HttpLink({
-  uri: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || 'http://localhost:4000/client',
+  uri: process.env.GRAPHQL_ENDPOINT || 'http://localhost:4000/client',
   credentials: 'include', // or 'include' for cookies
 });
 

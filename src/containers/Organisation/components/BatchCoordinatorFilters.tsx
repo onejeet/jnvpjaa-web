@@ -11,13 +11,13 @@ const BatchCoordinatorFilters = () => {
   const router = useRouter();
 
   const handleFilterChange = React.useCallback(
-    (key: string, value: string | null) => {
+    (key: string, value: string | number | null) => {
       // Create a new URLSearchParams object from the current query string
       const params = new URLSearchParams(searchParams.toString());
 
       // Set or remove the key-value pair
-      if (value) {
-        params.set(key, value);
+      if (value || (key === 'batch' && value === 0)) {
+        params.set(key, `${value}`);
       } else {
         params.delete(key); // Remove the key if value is null
       }

@@ -9,7 +9,7 @@ const Signin = () => {
   const router = useRouter();
   const handleGoogleLogin = () => {
     // Redirect to the backend Google auth endpoint
-    window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000'}/auth/google`;
+    window.location.href = `${process.env.GRAPHQL_ENDPOINT || 'http://localhost:4000'}/auth/google`;
   };
 
   return (
