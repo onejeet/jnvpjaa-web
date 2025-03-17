@@ -283,7 +283,7 @@ export default function Events() {
           </Typography>
           <Typography color="grey.800">List of all the ongoing & upcoming events.</Typography>
         </Box>
-        {user?.id && (
+        {user?.id && isAdmin && (
           <Button title="Create Event" startIcon={<Plus size={16} />} onClick={() => router.push(paths.events.new)} />
         )}
       </Box>

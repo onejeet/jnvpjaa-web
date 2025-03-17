@@ -56,20 +56,20 @@ export const HEADER_MENU: IHeaderMenuItem[] = [
       },
     ],
   },
-  {
-    label: 'Student Hub',
-    path: '/student-hub',
-    menu: [
-      {
-        label: 'Career Counselling',
-        path: '/student-hub/career-counselling',
-      },
-      {
-        label: 'SkillUp Resources',
-        path: '/student-hub/skillup-resources',
-      },
-    ],
-  },
+  // {
+  //   label: 'Student Hub',
+  //   path: '/student-hub',
+  //   menu: [
+  //     {
+  //       label: 'Career Counselling',
+  //       path: '/student-hub/career-counselling',
+  //     },
+  //     {
+  //       label: 'SkillUp Resources',
+  //       path: '/student-hub/skillup-resources',
+  //     },
+  //   ],
+  // },
   {
     label: 'Alumni Center',
     path: '/donations',
@@ -82,10 +82,10 @@ export const HEADER_MENU: IHeaderMenuItem[] = [
         label: 'Donate Now',
         path: '/donations',
       },
-      {
-        label: 'Alumni Connect',
-        path: '#',
-      },
+      // {
+      //   label: 'Alumni Connect',
+      //   path: '#',
+      // },
     ],
   },
   {

@@ -66,7 +66,7 @@ const useMembersTable = () => {
               cursor: row?.loading || !user?.id ? 'default' : 'pointer',
               '&:hover .title-container': {
                 transition: 'color 0.2s ease',
-                color: 'primary.main',
+                color: user?.id ? 'primary.main' : 'inherit',
               },
             }}
             onClick={() => (row?.loading || !user?.id ? () => null : router.push(`/profile/${row?.id}`))}

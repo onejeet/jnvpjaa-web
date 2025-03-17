@@ -243,22 +243,23 @@ const LayoutTopbar: React.FC = () => {
             {HEADER_MENU.map((item: IHeaderMenuItem) => (
               <HeaderMenuItem key={item.label} item={item} />
             ))}
-            {user?.id ? (
-              <Box gap={2} display="flex">
-                <HeaderAddButton />
-                {ACCOUNT_COMP}
-              </Box>
-            ) : (
-              <NextLink href="/signin" passHref style={{ textDecoration: 'none' }}>
-                <Button
-                  // startIcon={<Login sx={{ fontSize: '14px' }} />}
-                  variant="outlined"
-                  sx={{ display: { xs: 'none', md: 'block' }, ml: '8px', whiteSpace: 'nowrap' }}
-                >
-                  Alumni Login
-                </Button>
-              </NextLink>
-            )}
+            {
+              user?.id ? (
+                <Box gap={2} display="flex">
+                  <HeaderAddButton />
+                  {ACCOUNT_COMP}
+                </Box>
+              ) : null
+              // <NextLink href="/signin" passHref style={{ textDecoration: 'none' }}>
+              //   <Button
+              //     // startIcon={<Login sx={{ fontSize: '14px' }} />}
+              //     variant="outlined"
+              //     sx={{ display: { xs: 'none', md: 'block' }, ml: '8px', whiteSpace: 'nowrap' }}
+              //   >
+              //     Alumni Login
+              //   </Button>
+              // </NextLink>
+            }
           </Box>
         </Toolbar>
       </Container>
@@ -288,13 +289,13 @@ const LayoutTopbar: React.FC = () => {
               />
             ))}
           </Box>
-          {!user?.id && (
+          {/* {!user?.id && (
             <NextLink href="/signin" passHref style={{ textDecoration: 'none' }}>
               <Button fullWidth variant="outlined" sx={{ ml: '8px', whiteSpace: 'nowrap' }}>
                 Alumni Login
               </Button>
             </NextLink>
-          )}
+          )} */}
         </Box>
       </Drawer>
     </AppBar>
