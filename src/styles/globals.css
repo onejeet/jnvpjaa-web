@@ -54,6 +54,36 @@ input[type='number'] {
   }
 }
 
+.single-blog a {
+  color: #c62835;
+  text-decoration: none;
+  transition: all 0.4s linear;
+}
+/* .single-blog a::after{
+  
+} */
+.single-blog a:hover {
+  text-decoration: underline;
+}
+
+.ProseMirror {
+  font-size: 20px; /* Change this to your desired font size */
+}
+
+.ProseMirror p.is-empty::before {
+  content: attr(data-placeholder);
+  color: #a8afac;
+  font-style: italic;
+  pointer-events: none;
+  font-family: 'DM Sans';
+  position: absolute;
+  left: 16px; /* Adjust if needed */
+}
+
+.ProseMirror p.is-empty:not(:first-child)::before {
+  display: none; /* Hides placeholder on additional empty lines */
+}
+
 blockquote {
   /* border-left: 4px solid #007bff; */
   padding: 10px;

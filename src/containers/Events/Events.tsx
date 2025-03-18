@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import LayoutModule from '@/layouts/Layout';
 import {
+  EventStatus,
   useAttendEventMutation,
   useGetEventListQuery,
   useGetUserDetailsQuery,
@@ -232,7 +233,7 @@ export default function Events() {
             publishEvent({
               variables: {
                 eventId: id,
-                status: 'published',
+                status: EventStatus.Published,
               },
               onCompleted: () => {
                 client.refetchQueries({

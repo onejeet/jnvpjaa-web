@@ -16,18 +16,21 @@ const typography = {
     lineHeight: '32px',
     fontWeight: 500,
     letterSpacing: '-0.24%',
+    fontFamily: 'Playfair Display',
   },
   h2: {
     fontSize: '24px',
     lineHeight: '28px',
     fontWeight: 500,
     letterSpacing: '-0.25%',
+    fontFamily: 'Playfair Display',
   },
   h3: {
     fontSize: '16px',
     lineHeight: '22px',
     fontWeight: 500,
     letterSpacing: '-0.25%',
+    fontFamily: 'Playfair Display',
   },
   h4: {
     fontSize: '16px',

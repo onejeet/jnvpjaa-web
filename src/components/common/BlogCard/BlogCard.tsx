@@ -2,8 +2,13 @@ import { Box, Divider, Grid2 as Grid, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 import ProfilePicture from '../ProfilePicture';
 import { ArrowRight } from '@phosphor-icons/react';
+import { useRouter } from 'next/router';
+import { paths } from '@/config/paths';
+import { IBlogCardProps } from './BlogCard.types';
 
-const BlogCard = () => {
+const BlogCard: React.FC<IBlogCardProps> = ({ blog, loading }) => {
+  const { slug, title, createdAt, author } = blog;
+  const router = useRouter();
   return (
     <Box
       component={Grid}
@@ -12,6 +17,7 @@ const BlogCard = () => {
       bgcolor="grey.100"
       borderRadius={4}
       display="flex"
+      onClick={() => (slug ? router.push(paths.blog.getBlogPostUrl(slug)) : null)}
       p={{
         xs: 3,
         md: 4,
@@ -76,7 +82,7 @@ const BlogCard = () => {
       </Box>
       <Box component={Grid} size={{ xs: 12, md: 9.5 }} display="flex" flexDirection="column">
         <Typography variant="h1" sx={{ display: 'flex', alignItems: 'center' }}>
-          New York Design Week <ArrowRight size={32} weight="bold" />
+          {title} <ArrowRight size={32} weight="bold" />
         </Typography>
         <Typography variant="body1">We bring to life the most complex projects, specialize</Typography>
       </Box>

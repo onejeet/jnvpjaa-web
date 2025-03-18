@@ -1,7 +1,7 @@
-import EventDetails from '@/containers/EventDetails';
+import SingleBlog from '@/containers/SingleBlog';
 import { NextPage } from 'next';
 
-const SingleBlogPage: NextPage = () => <EventDetails />;
+const SingleBlogPage: NextPage = () => <SingleBlog />;
 
 // EventDetailsPage.getInitialProps = () => {
 //   return {

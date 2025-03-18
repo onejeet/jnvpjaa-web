@@ -197,7 +197,7 @@ export const getHeaderMenu = (isLoggedIn?: boolean) => {
 export const ADD_ENTITIES: IHeaderMenuItem[] = [
   {
     label: 'New Blog Post',
-    path: '/blogs/new',
+    path: '/blog/new',
     icon: <ArticleNyTimes />,
     // disabled: true,
   },

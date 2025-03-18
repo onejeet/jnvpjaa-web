@@ -69,7 +69,7 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ toolsHidden = [], default
           <MarkButton format="italic" />
           <HeadingDropdown />
           <BlockquoteButton />
-          <FontSizeSelect />
+          {/* <FontSizeSelect /> */}
           <Divider orientation="vertical" />
           <IconButton
             aria-describedby={id}

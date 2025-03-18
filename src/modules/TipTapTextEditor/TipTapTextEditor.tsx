@@ -15,6 +15,7 @@ import TextAlign from '@tiptap/extension-text-align';
 import TextStyle from '@tiptap/extension-text-style';
 import Underline from '@tiptap/extension-underline';
 import Youtube from '@tiptap/extension-youtube';
+import Placeholder from '@tiptap/extension-placeholder';
 import Blockquote from '@tiptap/extension-blockquote';
 import { EditorProvider } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -29,7 +30,15 @@ import { FontSize } from './utils/extensions';
 import HeaderMenuItem from '@/layouts/Layout/HeaderMenuItem';
 import { Indentation } from './components/Indentation';
 
-const TipTapTextEditor = ({ value, onChange, sx = {}, disabled, height, id }: TipTapTextEditorProps) => {
+const TipTapTextEditor = ({
+  value = '',
+  onChange,
+  sx = {},
+  disabled,
+  height,
+  id,
+  toolbarProps = {},
+}: TipTapTextEditorProps) => {
   // paragraph extension
   const CustomParagraph = Paragraph.extend({
     addAttributes() {
@@ -124,6 +133,11 @@ const TipTapTextEditor = ({ value, onChange, sx = {}, disabled, height, id }: Ti
             alignments: ['left', 'right', 'center', 'justify'],
             types: ['heading', 'paragraph'],
           }),
+          Placeholder.configure({
+            placeholder: 'Start writing here...',
+            showOnlyCurrent: false,
+            emptyEditorClass: 'is-empty',
+          }),
           TextStyle,
           Color.configure({
             types: ['textStyle'],
@@ -143,7 +157,7 @@ const TipTapTextEditor = ({ value, onChange, sx = {}, disabled, height, id }: Ti
             modestBranding: true,
           }),
         ]}
-        slotBefore={<EditorToolbarVertical toolsHidden={['chatbot', 'transcribe']} />}
+        slotAfter={<EditorToolbarVertical toolsHidden={['chatbot', 'transcribe']} {...toolbarProps} />}
       >
         <TipTapTextEditorWrapper disabled={disabled} value={value}>
           {null}

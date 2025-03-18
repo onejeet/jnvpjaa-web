@@ -66,6 +66,61 @@ export type BatchCoordinator = {
   userId?: Maybe<Scalars['String']['output']>;
 };
 
+export type Blog = {
+  __typename?: 'Blog';
+  author?: Maybe<UserBasic>;
+  authorId?: Maybe<Scalars['String']['output']>;
+  comments?: Maybe<Array<Maybe<Comment>>>;
+  content?: Maybe<Scalars['String']['output']>;
+  /** Timestamp when the record was created */
+  createdAt: Scalars['DateTime']['output'];
+  id?: Maybe<Scalars['String']['output']>;
+  slug?: Maybe<Scalars['String']['output']>;
+  summary?: Maybe<Scalars['String']['output']>;
+  title?: Maybe<Scalars['String']['output']>;
+  /** Timestamp when the record was last updated */
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type BlogBasic = {
+  __typename?: 'BlogBasic';
+  author?: Maybe<UserBasic>;
+  authorId?: Maybe<Scalars['String']['output']>;
+  /** Timestamp when the record was created */
+  createdAt: Scalars['DateTime']['output'];
+  id?: Maybe<Scalars['String']['output']>;
+  slug?: Maybe<Scalars['String']['output']>;
+  summary?: Maybe<Scalars['String']['output']>;
+  title?: Maybe<Scalars['String']['output']>;
+  /** Timestamp when the record was last updated */
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type BlogListResponse = {
+  __typename?: 'BlogListResponse';
+  data?: Maybe<Array<Maybe<BlogBasic>>>;
+  total?: Maybe<Scalars['Int']['output']>;
+};
+
+export type Comment = {
+  __typename?: 'Comment';
+  author?: Maybe<UserBasic>;
+  authorId?: Maybe<Scalars['String']['output']>;
+  blogId?: Maybe<Scalars['String']['output']>;
+  content?: Maybe<Scalars['String']['output']>;
+  /** Timestamp when the record was created */
+  createdAt: Scalars['DateTime']['output'];
+  id?: Maybe<Scalars['String']['output']>;
+  /** Timestamp when the record was last updated */
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type CommentListResponse = {
+  __typename?: 'CommentListResponse';
+  data?: Maybe<Array<Maybe<Comment>>>;
+  total?: Maybe<Scalars['Int']['output']>;
+};
+
 export type CompanyInfo = {
   __typename?: 'CompanyInfo';
   companyName?: Maybe<Scalars['String']['output']>;
@@ -127,8 +182,15 @@ export type Event = {
   updatedAt: Scalars['DateTime']['output'];
 };
 
+export enum EventStatus {
+  Closed = 'CLOSED',
+  Draft = 'DRAFT',
+  Published = 'PUBLISHED',
+}
+
 export type FilterInput = {
   batch?: InputMaybe<Scalars['Int']['input']>;
+  blogId?: InputMaybe<Scalars['String']['input']>;
   query?: InputMaybe<Scalars['String']['input']>;
   userId?: InputMaybe<Scalars['String']['input']>;
   verified?: InputMaybe<Scalars['Boolean']['input']>;
@@ -150,8 +212,12 @@ export type Mutation = {
   __typename?: 'Mutation';
   assignBatchCoordinator?: Maybe<BatchCoordinator>;
   attendEvent?: Maybe<Event>;
+  createBlog?: Maybe<Blog>;
+  createComment?: Maybe<Comment>;
   createEvent?: Maybe<Event>;
   createTransaction?: Maybe<Transaction>;
+  deleteBlog?: Maybe<Blog>;
+  deleteComment?: Maybe<Comment>;
   deleteTransaction?: Maybe<Transaction>;
   deleteUser?: Maybe<User>;
   forgotPassword?: Maybe<Scalars['Boolean']['output']>;
@@ -163,6 +229,7 @@ export type Mutation = {
   signin?: Maybe<AuthPayload>;
   signup?: Maybe<User>;
   updateBatchCoordinator?: Maybe<BatchCoordinator>;
+  updateBlog?: Maybe<Blog>;
   updateEvent?: Maybe<Event>;
   updateTransaction?: Maybe<Transaction>;
   updateUser?: Maybe<User>;
@@ -177,6 +244,20 @@ export type MutationAssignBatchCoordinatorArgs = {
 
 export type MutationAttendEventArgs = {
   eventId: Scalars['Int']['input'];
+};
+
+export type MutationCreateBlogArgs = {
+  authorId: Scalars['String']['input'];
+  categoryId: Scalars['String']['input'];
+  content: Scalars['String']['input'];
+  summary: Scalars['String']['input'];
+  title: Scalars['String']['input'];
+};
+
+export type MutationCreateCommentArgs = {
+  authorId: Scalars['String']['input'];
+  blogId: Scalars['String']['input'];
+  content: Scalars['String']['input'];
 };
 
 export type MutationCreateEventArgs = {
@@ -208,6 +289,14 @@ export type MutationCreateTransactionArgs = {
   userId: Scalars['String']['input'];
 };
 
+export type MutationDeleteBlogArgs = {
+  id: Scalars['String']['input'];
+};
+
+export type MutationDeleteCommentArgs = {
+  id: Scalars['String']['input'];
+};
+
 export type MutationDeleteTransactionArgs = {
   id: Scalars['String']['input'];
 };
@@ -222,7 +311,7 @@ export type MutationForgotPasswordArgs = {
 
 export type MutationPublishEventArgs = {
   eventId: Scalars['Int']['input'];
-  status: Scalars['String']['input'];
+  status: EventStatus;
 };
 
 export type MutationRemoveBatchCoordinatorArgs = {
@@ -254,6 +343,14 @@ export type MutationSignupArgs = {
 export type MutationUpdateBatchCoordinatorArgs = {
   newBatch: Scalars['Int']['input'];
   userId: Scalars['String']['input'];
+};
+
+export type MutationUpdateBlogArgs = {
+  content?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
+  slug?: InputMaybe<Scalars['String']['input']>;
+  summary: Scalars['String']['input'];
+  title?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type MutationUpdateEventArgs = {
@@ -308,6 +405,9 @@ export type Query = {
   getAllBatchCoordinators?: Maybe<Array<Maybe<BatchCoordinator>>>;
   getBatchCoordinatorByUserId?: Maybe<BatchCoordinator>;
   getBatchCoordinatorsByBatch?: Maybe<Array<Maybe<BatchCoordinator>>>;
+  getBlog?: Maybe<Blog>;
+  getBlogList?: Maybe<BlogListResponse>;
+  getCommentList?: Maybe<CommentListResponse>;
   getEventDetails?: Maybe<Event>;
   getEventList?: Maybe<ListEventResponse>;
   getTransaction?: Maybe<Transaction>;
@@ -328,6 +428,18 @@ export type QueryGetBatchCoordinatorByUserIdArgs = {
 
 export type QueryGetBatchCoordinatorsByBatchArgs = {
   batch: Scalars['Int']['input'];
+};
+
+export type QueryGetBlogArgs = {
+  id: Scalars['String']['input'];
+};
+
+export type QueryGetBlogListArgs = {
+  options?: InputMaybe<ListInput>;
+};
+
+export type QueryGetCommentListArgs = {
+  options?: InputMaybe<ListInput>;
 };
 
 export type QueryGetEventDetailsArgs = {
@@ -414,6 +526,7 @@ export type User = {
   gender?: Maybe<Scalars['String']['output']>;
   google_auth_id?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['ID']['output']>;
+  isConfidential?: Maybe<Scalars['Boolean']['output']>;
   isFaculty?: Maybe<Scalars['Boolean']['output']>;
   isVerified?: Maybe<Scalars['Boolean']['output']>;
   lastName?: Maybe<Scalars['String']['output']>;
@@ -432,13 +545,11 @@ export type UserBasic = {
   __typename?: 'UserBasic';
   batch?: Maybe<Scalars['Int']['output']>;
   disabled?: Maybe<Scalars['Boolean']['output']>;
-  email?: Maybe<Scalars['String']['output']>;
   firstName?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['ID']['output']>;
   isFaculty?: Maybe<Scalars['Boolean']['output']>;
   isVerified?: Maybe<Scalars['Boolean']['output']>;
   lastName?: Maybe<Scalars['String']['output']>;
-  mobile?: Maybe<Scalars['String']['output']>;
   profileImage?: Maybe<Scalars['String']['output']>;
   role?: Maybe<Role>;
 };
@@ -480,6 +591,7 @@ export type AssignBatchCoordinatorMutation = {
               gender?: string | undefined;
               google_auth_id?: string | undefined;
               id?: string | undefined;
+              isConfidential?: boolean | undefined;
               isFaculty?: boolean | undefined;
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
@@ -543,6 +655,7 @@ export type AttendEventMutation = {
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
                   id?: string | undefined;
+                  isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
@@ -576,6 +689,7 @@ export type AttendEventMutation = {
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
                   id?: string | undefined;
+                  isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
@@ -590,6 +704,107 @@ export type AttendEventMutation = {
                 }
               | undefined
             >
+          | undefined;
+      }
+    | undefined;
+};
+
+export type CreateBlogMutationVariables = Exact<{
+  authorId: Scalars['String']['input'];
+  categoryId: Scalars['String']['input'];
+  content: Scalars['String']['input'];
+  summary: Scalars['String']['input'];
+  title: Scalars['String']['input'];
+}>;
+
+export type CreateBlogMutation = {
+  __typename?: 'Mutation';
+  createBlog?:
+    | {
+        __typename?: 'Blog';
+        authorId?: string | undefined;
+        content?: string | undefined;
+        createdAt: any;
+        id?: string | undefined;
+        slug?: string | undefined;
+        summary?: string | undefined;
+        title?: string | undefined;
+        updatedAt: any;
+        author?:
+          | {
+              __typename?: 'UserBasic';
+              batch?: number | undefined;
+              disabled?: boolean | undefined;
+              firstName?: string | undefined;
+              id?: string | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              profileImage?: string | undefined;
+              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+            }
+          | undefined;
+        comments?:
+          | Array<
+              | {
+                  __typename?: 'Comment';
+                  authorId?: string | undefined;
+                  blogId?: string | undefined;
+                  content?: string | undefined;
+                  createdAt: any;
+                  id?: string | undefined;
+                  updatedAt: any;
+                  author?:
+                    | {
+                        __typename?: 'UserBasic';
+                        batch?: number | undefined;
+                        disabled?: boolean | undefined;
+                        firstName?: string | undefined;
+                        id?: string | undefined;
+                        isFaculty?: boolean | undefined;
+                        isVerified?: boolean | undefined;
+                        lastName?: string | undefined;
+                        profileImage?: string | undefined;
+                      }
+                    | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+      }
+    | undefined;
+};
+
+export type CreateCommentMutationVariables = Exact<{
+  authorId: Scalars['String']['input'];
+  blogId: Scalars['String']['input'];
+  content: Scalars['String']['input'];
+}>;
+
+export type CreateCommentMutation = {
+  __typename?: 'Mutation';
+  createComment?:
+    | {
+        __typename?: 'Comment';
+        authorId?: string | undefined;
+        blogId?: string | undefined;
+        content?: string | undefined;
+        createdAt: any;
+        id?: string | undefined;
+        updatedAt: any;
+        author?:
+          | {
+              __typename?: 'UserBasic';
+              batch?: number | undefined;
+              disabled?: boolean | undefined;
+              firstName?: string | undefined;
+              id?: string | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              profileImage?: string | undefined;
+              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+            }
           | undefined;
       }
     | undefined;
@@ -652,6 +867,7 @@ export type CreateEventMutation = {
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
                   id?: string | undefined;
+                  isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
@@ -685,6 +901,7 @@ export type CreateEventMutation = {
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
                   id?: string | undefined;
+                  isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
@@ -754,6 +971,7 @@ export type CreateTransactionMutation = {
               gender?: string | undefined;
               google_auth_id?: string | undefined;
               id?: string | undefined;
+              isConfidential?: boolean | undefined;
               isFaculty?: boolean | undefined;
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
@@ -764,6 +982,101 @@ export type CreateTransactionMutation = {
               socialMedia?: any | undefined;
               updatedAt: any;
               whatsAppMobile?: string | undefined;
+              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
+export type DeleteBlogMutationVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+export type DeleteBlogMutation = {
+  __typename?: 'Mutation';
+  deleteBlog?:
+    | {
+        __typename?: 'Blog';
+        authorId?: string | undefined;
+        content?: string | undefined;
+        createdAt: any;
+        id?: string | undefined;
+        slug?: string | undefined;
+        summary?: string | undefined;
+        title?: string | undefined;
+        updatedAt: any;
+        author?:
+          | {
+              __typename?: 'UserBasic';
+              batch?: number | undefined;
+              disabled?: boolean | undefined;
+              firstName?: string | undefined;
+              id?: string | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              profileImage?: string | undefined;
+              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+            }
+          | undefined;
+        comments?:
+          | Array<
+              | {
+                  __typename?: 'Comment';
+                  authorId?: string | undefined;
+                  blogId?: string | undefined;
+                  content?: string | undefined;
+                  createdAt: any;
+                  id?: string | undefined;
+                  updatedAt: any;
+                  author?:
+                    | {
+                        __typename?: 'UserBasic';
+                        batch?: number | undefined;
+                        disabled?: boolean | undefined;
+                        firstName?: string | undefined;
+                        id?: string | undefined;
+                        isFaculty?: boolean | undefined;
+                        isVerified?: boolean | undefined;
+                        lastName?: string | undefined;
+                        profileImage?: string | undefined;
+                      }
+                    | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+      }
+    | undefined;
+};
+
+export type DeleteCommentMutationVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+export type DeleteCommentMutation = {
+  __typename?: 'Mutation';
+  deleteComment?:
+    | {
+        __typename?: 'Comment';
+        authorId?: string | undefined;
+        blogId?: string | undefined;
+        content?: string | undefined;
+        createdAt: any;
+        id?: string | undefined;
+        updatedAt: any;
+        author?:
+          | {
+              __typename?: 'UserBasic';
+              batch?: number | undefined;
+              disabled?: boolean | undefined;
+              firstName?: string | undefined;
+              id?: string | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              profileImage?: string | undefined;
               role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
             }
           | undefined;
@@ -811,6 +1124,7 @@ export type DeleteTransactionMutation = {
               gender?: string | undefined;
               google_auth_id?: string | undefined;
               id?: string | undefined;
+              isConfidential?: boolean | undefined;
               isFaculty?: boolean | undefined;
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
@@ -851,6 +1165,7 @@ export type DeleteUserMutation = {
         gender?: string | undefined;
         google_auth_id?: string | undefined;
         id?: string | undefined;
+        isConfidential?: boolean | undefined;
         isFaculty?: boolean | undefined;
         isVerified?: boolean | undefined;
         lastName?: string | undefined;
@@ -878,7 +1193,7 @@ export type LogoutMutation = { __typename?: 'Mutation'; logout?: string | undefi
 
 export type PublishEventMutationVariables = Exact<{
   eventId: Scalars['Int']['input'];
-  status: Scalars['String']['input'];
+  status: EventStatus;
 }>;
 
 export type PublishEventMutation = {
@@ -923,6 +1238,7 @@ export type PublishEventMutation = {
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
                   id?: string | undefined;
+                  isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
@@ -956,6 +1272,7 @@ export type PublishEventMutation = {
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
                   id?: string | undefined;
+                  isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
@@ -999,6 +1316,7 @@ export type RefreshTokenMutation = {
               gender?: string | undefined;
               google_auth_id?: string | undefined;
               id?: string | undefined;
+              isConfidential?: boolean | undefined;
               isFaculty?: boolean | undefined;
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
@@ -1057,6 +1375,7 @@ export type SigninMutation = {
               gender?: string | undefined;
               google_auth_id?: string | undefined;
               id?: string | undefined;
+              isConfidential?: boolean | undefined;
               isFaculty?: boolean | undefined;
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
@@ -1104,6 +1423,7 @@ export type SignupMutation = {
         gender?: string | undefined;
         google_auth_id?: string | undefined;
         id?: string | undefined;
+        isConfidential?: boolean | undefined;
         isFaculty?: boolean | undefined;
         isVerified?: boolean | undefined;
         lastName?: string | undefined;
@@ -1150,6 +1470,7 @@ export type UpdateBatchCoordinatorMutation = {
               gender?: string | undefined;
               google_auth_id?: string | undefined;
               id?: string | undefined;
+              isConfidential?: boolean | undefined;
               isFaculty?: boolean | undefined;
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
@@ -1162,6 +1483,72 @@ export type UpdateBatchCoordinatorMutation = {
               whatsAppMobile?: string | undefined;
               role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
             }
+          | undefined;
+      }
+    | undefined;
+};
+
+export type UpdateBlogMutationVariables = Exact<{
+  content?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
+  slug?: InputMaybe<Scalars['String']['input']>;
+  summary: Scalars['String']['input'];
+  title?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type UpdateBlogMutation = {
+  __typename?: 'Mutation';
+  updateBlog?:
+    | {
+        __typename?: 'Blog';
+        authorId?: string | undefined;
+        content?: string | undefined;
+        createdAt: any;
+        id?: string | undefined;
+        slug?: string | undefined;
+        summary?: string | undefined;
+        title?: string | undefined;
+        updatedAt: any;
+        author?:
+          | {
+              __typename?: 'UserBasic';
+              batch?: number | undefined;
+              disabled?: boolean | undefined;
+              firstName?: string | undefined;
+              id?: string | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              profileImage?: string | undefined;
+              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+            }
+          | undefined;
+        comments?:
+          | Array<
+              | {
+                  __typename?: 'Comment';
+                  authorId?: string | undefined;
+                  blogId?: string | undefined;
+                  content?: string | undefined;
+                  createdAt: any;
+                  id?: string | undefined;
+                  updatedAt: any;
+                  author?:
+                    | {
+                        __typename?: 'UserBasic';
+                        batch?: number | undefined;
+                        disabled?: boolean | undefined;
+                        firstName?: string | undefined;
+                        id?: string | undefined;
+                        isFaculty?: boolean | undefined;
+                        isVerified?: boolean | undefined;
+                        lastName?: string | undefined;
+                        profileImage?: string | undefined;
+                      }
+                    | undefined;
+                }
+              | undefined
+            >
           | undefined;
       }
     | undefined;
@@ -1223,6 +1610,7 @@ export type UpdateEventMutation = {
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
                   id?: string | undefined;
+                  isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
@@ -1256,6 +1644,7 @@ export type UpdateEventMutation = {
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
                   id?: string | undefined;
+                  isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
@@ -1316,6 +1705,7 @@ export type UpdateTransactionMutation = {
               gender?: string | undefined;
               google_auth_id?: string | undefined;
               id?: string | undefined;
+              isConfidential?: boolean | undefined;
               isFaculty?: boolean | undefined;
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
@@ -1370,6 +1760,7 @@ export type UpdateUserMutation = {
         gender?: string | undefined;
         google_auth_id?: string | undefined;
         id?: string | undefined;
+        isConfidential?: boolean | undefined;
         isFaculty?: boolean | undefined;
         isVerified?: boolean | undefined;
         lastName?: string | undefined;
@@ -1430,6 +1821,7 @@ export type GetAllBatchCoordinatorsQuery = {
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
                   id?: string | undefined;
+                  isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
@@ -1479,6 +1871,7 @@ export type GetBatchCoordinatorByUserIdQuery = {
               gender?: string | undefined;
               google_auth_id?: string | undefined;
               id?: string | undefined;
+              isConfidential?: boolean | undefined;
               isFaculty?: boolean | undefined;
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
@@ -1527,6 +1920,7 @@ export type GetBatchCoordinatorsByBatchQuery = {
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
                   id?: string | undefined;
+                  isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
@@ -1543,6 +1937,153 @@ export type GetBatchCoordinatorsByBatchQuery = {
           }
         | undefined
       >
+    | undefined;
+};
+
+export type GetBlogQueryVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+export type GetBlogQuery = {
+  __typename?: 'Query';
+  getBlog?:
+    | {
+        __typename?: 'Blog';
+        authorId?: string | undefined;
+        content?: string | undefined;
+        createdAt: any;
+        id?: string | undefined;
+        slug?: string | undefined;
+        summary?: string | undefined;
+        title?: string | undefined;
+        updatedAt: any;
+        author?:
+          | {
+              __typename?: 'UserBasic';
+              batch?: number | undefined;
+              disabled?: boolean | undefined;
+              firstName?: string | undefined;
+              id?: string | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              profileImage?: string | undefined;
+              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+            }
+          | undefined;
+        comments?:
+          | Array<
+              | {
+                  __typename?: 'Comment';
+                  authorId?: string | undefined;
+                  blogId?: string | undefined;
+                  content?: string | undefined;
+                  createdAt: any;
+                  id?: string | undefined;
+                  updatedAt: any;
+                  author?:
+                    | {
+                        __typename?: 'UserBasic';
+                        batch?: number | undefined;
+                        disabled?: boolean | undefined;
+                        firstName?: string | undefined;
+                        id?: string | undefined;
+                        isFaculty?: boolean | undefined;
+                        isVerified?: boolean | undefined;
+                        lastName?: string | undefined;
+                        profileImage?: string | undefined;
+                      }
+                    | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+      }
+    | undefined;
+};
+
+export type GetBlogListQueryVariables = Exact<{
+  options?: InputMaybe<ListInput>;
+}>;
+
+export type GetBlogListQuery = {
+  __typename?: 'Query';
+  getBlogList?:
+    | {
+        __typename?: 'BlogListResponse';
+        total?: number | undefined;
+        data?:
+          | Array<
+              | {
+                  __typename?: 'BlogBasic';
+                  authorId?: string | undefined;
+                  createdAt: any;
+                  id?: string | undefined;
+                  slug?: string | undefined;
+                  summary?: string | undefined;
+                  title?: string | undefined;
+                  updatedAt: any;
+                  author?:
+                    | {
+                        __typename?: 'UserBasic';
+                        batch?: number | undefined;
+                        disabled?: boolean | undefined;
+                        firstName?: string | undefined;
+                        id?: string | undefined;
+                        isFaculty?: boolean | undefined;
+                        isVerified?: boolean | undefined;
+                        lastName?: string | undefined;
+                        profileImage?: string | undefined;
+                        role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                      }
+                    | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+      }
+    | undefined;
+};
+
+export type GetCommentListQueryVariables = Exact<{
+  options?: InputMaybe<ListInput>;
+}>;
+
+export type GetCommentListQuery = {
+  __typename?: 'Query';
+  getCommentList?:
+    | {
+        __typename?: 'CommentListResponse';
+        total?: number | undefined;
+        data?:
+          | Array<
+              | {
+                  __typename?: 'Comment';
+                  authorId?: string | undefined;
+                  blogId?: string | undefined;
+                  content?: string | undefined;
+                  createdAt: any;
+                  id?: string | undefined;
+                  updatedAt: any;
+                  author?:
+                    | {
+                        __typename?: 'UserBasic';
+                        batch?: number | undefined;
+                        disabled?: boolean | undefined;
+                        firstName?: string | undefined;
+                        id?: string | undefined;
+                        isFaculty?: boolean | undefined;
+                        isVerified?: boolean | undefined;
+                        lastName?: string | undefined;
+                        profileImage?: string | undefined;
+                        role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                      }
+                    | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+      }
     | undefined;
 };
 
@@ -1592,6 +2133,7 @@ export type GetEventDetailsQuery = {
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
                   id?: string | undefined;
+                  isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
@@ -1625,6 +2167,7 @@ export type GetEventDetailsQuery = {
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
                   id?: string | undefined;
+                  isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
@@ -1695,6 +2238,7 @@ export type GetEventListQuery = {
                             gender?: string | undefined;
                             google_auth_id?: string | undefined;
                             id?: string | undefined;
+                            isConfidential?: boolean | undefined;
                             isFaculty?: boolean | undefined;
                             isVerified?: boolean | undefined;
                             lastName?: string | undefined;
@@ -1730,6 +2274,7 @@ export type GetEventListQuery = {
                             gender?: string | undefined;
                             google_auth_id?: string | undefined;
                             id?: string | undefined;
+                            isConfidential?: boolean | undefined;
                             isFaculty?: boolean | undefined;
                             isVerified?: boolean | undefined;
                             lastName?: string | undefined;
@@ -1795,6 +2340,7 @@ export type GetTransactionQuery = {
               gender?: string | undefined;
               google_auth_id?: string | undefined;
               id?: string | undefined;
+              isConfidential?: boolean | undefined;
               isFaculty?: boolean | undefined;
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
@@ -1857,6 +2403,7 @@ export type GetTransactionsQuery = {
                         gender?: string | undefined;
                         google_auth_id?: string | undefined;
                         id?: string | undefined;
+                        isConfidential?: boolean | undefined;
                         isFaculty?: boolean | undefined;
                         isVerified?: boolean | undefined;
                         lastName?: string | undefined;
@@ -1957,6 +2504,7 @@ export type GetUserDetailsQuery = {
         gender?: string | undefined;
         google_auth_id?: string | undefined;
         id?: string | undefined;
+        isConfidential?: boolean | undefined;
         isFaculty?: boolean | undefined;
         isVerified?: boolean | undefined;
         lastName?: string | undefined;
@@ -2000,6 +2548,7 @@ export type GetUserListQuery = {
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
                   id?: string | undefined;
+                  isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
@@ -2040,6 +2589,7 @@ export const AssignBatchCoordinatorDocument = gql`
         gender
         google_auth_id
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -2115,6 +2665,7 @@ export const AttendEventDocument = gql`
         gender
         google_auth_id
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -2155,6 +2706,7 @@ export const AttendEventDocument = gql`
         gender
         google_auth_id
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -2210,6 +2762,143 @@ export function useAttendEventMutation(
 export type AttendEventMutationHookResult = ReturnType<typeof useAttendEventMutation>;
 export type AttendEventMutationResult = Apollo.MutationResult<AttendEventMutation>;
 export type AttendEventMutationOptions = Apollo.BaseMutationOptions<AttendEventMutation, AttendEventMutationVariables>;
+export const CreateBlogDocument = gql`
+  mutation createBlog($authorId: String!, $categoryId: String!, $content: String!, $summary: String!, $title: String!) {
+    createBlog(authorId: $authorId, categoryId: $categoryId, content: $content, summary: $summary, title: $title) {
+      author {
+        batch
+        disabled
+        firstName
+        id
+        isFaculty
+        isVerified
+        lastName
+        profileImage
+        role {
+          id
+          name
+        }
+      }
+      authorId
+      comments {
+        author {
+          batch
+          disabled
+          firstName
+          id
+          isFaculty
+          isVerified
+          lastName
+          profileImage
+        }
+        authorId
+        blogId
+        content
+        createdAt
+        id
+        updatedAt
+      }
+      content
+      createdAt
+      id
+      slug
+      summary
+      title
+      updatedAt
+    }
+  }
+`;
+export type CreateBlogMutationFn = Apollo.MutationFunction<CreateBlogMutation, CreateBlogMutationVariables>;
+
+/**
+ * __useCreateBlogMutation__
+ *
+ * To run a mutation, you first call `useCreateBlogMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateBlogMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createBlogMutation, { data, loading, error }] = useCreateBlogMutation({
+ *   variables: {
+ *      authorId: // value for 'authorId'
+ *      categoryId: // value for 'categoryId'
+ *      content: // value for 'content'
+ *      summary: // value for 'summary'
+ *      title: // value for 'title'
+ *   },
+ * });
+ */
+export function useCreateBlogMutation(
+  baseOptions?: Apollo.MutationHookOptions<CreateBlogMutation, CreateBlogMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<CreateBlogMutation, CreateBlogMutationVariables>(CreateBlogDocument, options);
+}
+export type CreateBlogMutationHookResult = ReturnType<typeof useCreateBlogMutation>;
+export type CreateBlogMutationResult = Apollo.MutationResult<CreateBlogMutation>;
+export type CreateBlogMutationOptions = Apollo.BaseMutationOptions<CreateBlogMutation, CreateBlogMutationVariables>;
+export const CreateCommentDocument = gql`
+  mutation createComment($authorId: String!, $blogId: String!, $content: String!) {
+    createComment(authorId: $authorId, blogId: $blogId, content: $content) {
+      author {
+        batch
+        disabled
+        firstName
+        id
+        isFaculty
+        isVerified
+        lastName
+        profileImage
+        role {
+          id
+          name
+        }
+      }
+      authorId
+      blogId
+      content
+      createdAt
+      id
+      updatedAt
+    }
+  }
+`;
+export type CreateCommentMutationFn = Apollo.MutationFunction<CreateCommentMutation, CreateCommentMutationVariables>;
+
+/**
+ * __useCreateCommentMutation__
+ *
+ * To run a mutation, you first call `useCreateCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCommentMutation, { data, loading, error }] = useCreateCommentMutation({
+ *   variables: {
+ *      authorId: // value for 'authorId'
+ *      blogId: // value for 'blogId'
+ *      content: // value for 'content'
+ *   },
+ * });
+ */
+export function useCreateCommentMutation(
+  baseOptions?: Apollo.MutationHookOptions<CreateCommentMutation, CreateCommentMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<CreateCommentMutation, CreateCommentMutationVariables>(CreateCommentDocument, options);
+}
+export type CreateCommentMutationHookResult = ReturnType<typeof useCreateCommentMutation>;
+export type CreateCommentMutationResult = Apollo.MutationResult<CreateCommentMutation>;
+export type CreateCommentMutationOptions = Apollo.BaseMutationOptions<
+  CreateCommentMutation,
+  CreateCommentMutationVariables
+>;
 export const CreateEventDocument = gql`
   mutation createEvent(
     $category: String!
@@ -2254,6 +2943,7 @@ export const CreateEventDocument = gql`
         gender
         google_auth_id
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -2294,6 +2984,7 @@ export const CreateEventDocument = gql`
         gender
         google_auth_id
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -2415,6 +3106,7 @@ export const CreateTransactionDocument = gql`
         gender
         google_auth_id
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -2481,6 +3173,137 @@ export type CreateTransactionMutationOptions = Apollo.BaseMutationOptions<
   CreateTransactionMutation,
   CreateTransactionMutationVariables
 >;
+export const DeleteBlogDocument = gql`
+  mutation deleteBlog($id: String!) {
+    deleteBlog(id: $id) {
+      author {
+        batch
+        disabled
+        firstName
+        id
+        isFaculty
+        isVerified
+        lastName
+        profileImage
+        role {
+          id
+          name
+        }
+      }
+      authorId
+      comments {
+        author {
+          batch
+          disabled
+          firstName
+          id
+          isFaculty
+          isVerified
+          lastName
+          profileImage
+        }
+        authorId
+        blogId
+        content
+        createdAt
+        id
+        updatedAt
+      }
+      content
+      createdAt
+      id
+      slug
+      summary
+      title
+      updatedAt
+    }
+  }
+`;
+export type DeleteBlogMutationFn = Apollo.MutationFunction<DeleteBlogMutation, DeleteBlogMutationVariables>;
+
+/**
+ * __useDeleteBlogMutation__
+ *
+ * To run a mutation, you first call `useDeleteBlogMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteBlogMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteBlogMutation, { data, loading, error }] = useDeleteBlogMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteBlogMutation(
+  baseOptions?: Apollo.MutationHookOptions<DeleteBlogMutation, DeleteBlogMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<DeleteBlogMutation, DeleteBlogMutationVariables>(DeleteBlogDocument, options);
+}
+export type DeleteBlogMutationHookResult = ReturnType<typeof useDeleteBlogMutation>;
+export type DeleteBlogMutationResult = Apollo.MutationResult<DeleteBlogMutation>;
+export type DeleteBlogMutationOptions = Apollo.BaseMutationOptions<DeleteBlogMutation, DeleteBlogMutationVariables>;
+export const DeleteCommentDocument = gql`
+  mutation deleteComment($id: String!) {
+    deleteComment(id: $id) {
+      author {
+        batch
+        disabled
+        firstName
+        id
+        isFaculty
+        isVerified
+        lastName
+        profileImage
+        role {
+          id
+          name
+        }
+      }
+      authorId
+      blogId
+      content
+      createdAt
+      id
+      updatedAt
+    }
+  }
+`;
+export type DeleteCommentMutationFn = Apollo.MutationFunction<DeleteCommentMutation, DeleteCommentMutationVariables>;
+
+/**
+ * __useDeleteCommentMutation__
+ *
+ * To run a mutation, you first call `useDeleteCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCommentMutation, { data, loading, error }] = useDeleteCommentMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteCommentMutation(
+  baseOptions?: Apollo.MutationHookOptions<DeleteCommentMutation, DeleteCommentMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<DeleteCommentMutation, DeleteCommentMutationVariables>(DeleteCommentDocument, options);
+}
+export type DeleteCommentMutationHookResult = ReturnType<typeof useDeleteCommentMutation>;
+export type DeleteCommentMutationResult = Apollo.MutationResult<DeleteCommentMutation>;
+export type DeleteCommentMutationOptions = Apollo.BaseMutationOptions<
+  DeleteCommentMutation,
+  DeleteCommentMutationVariables
+>;
 export const DeleteTransactionDocument = gql`
   mutation deleteTransaction($id: String!) {
     deleteTransaction(id: $id) {
@@ -2512,6 +3335,7 @@ export const DeleteTransactionDocument = gql`
         gender
         google_auth_id
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -2585,6 +3409,7 @@ export const DeleteUserDocument = gql`
       gender
       google_auth_id
       id
+      isConfidential
       isFaculty
       isVerified
       lastName
@@ -2697,7 +3522,7 @@ export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
 export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
 export const PublishEventDocument = gql`
-  mutation publishEvent($eventId: Int!, $status: String!) {
+  mutation publishEvent($eventId: Int!, $status: EventStatus!) {
     publishEvent(eventId: $eventId, status: $status) {
       attendees {
         aboutMe
@@ -2714,6 +3539,7 @@ export const PublishEventDocument = gql`
         gender
         google_auth_id
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -2754,6 +3580,7 @@ export const PublishEventDocument = gql`
         gender
         google_auth_id
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -2831,6 +3658,7 @@ export const RefreshTokenDocument = gql`
         gender
         google_auth_id
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -2977,6 +3805,7 @@ export const SigninDocument = gql`
         gender
         google_auth_id
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -3057,6 +3886,7 @@ export const SignupDocument = gql`
       gender
       google_auth_id
       id
+      isConfidential
       isFaculty
       isVerified
       lastName
@@ -3128,6 +3958,7 @@ export const UpdateBatchCoordinatorDocument = gql`
         gender
         google_auth_id
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -3185,6 +4016,84 @@ export type UpdateBatchCoordinatorMutationOptions = Apollo.BaseMutationOptions<
   UpdateBatchCoordinatorMutation,
   UpdateBatchCoordinatorMutationVariables
 >;
+export const UpdateBlogDocument = gql`
+  mutation updateBlog($content: String, $id: String!, $slug: String, $summary: String!, $title: String) {
+    updateBlog(content: $content, id: $id, slug: $slug, summary: $summary, title: $title) {
+      author {
+        batch
+        disabled
+        firstName
+        id
+        isFaculty
+        isVerified
+        lastName
+        profileImage
+        role {
+          id
+          name
+        }
+      }
+      authorId
+      comments {
+        author {
+          batch
+          disabled
+          firstName
+          id
+          isFaculty
+          isVerified
+          lastName
+          profileImage
+        }
+        authorId
+        blogId
+        content
+        createdAt
+        id
+        updatedAt
+      }
+      content
+      createdAt
+      id
+      slug
+      summary
+      title
+      updatedAt
+    }
+  }
+`;
+export type UpdateBlogMutationFn = Apollo.MutationFunction<UpdateBlogMutation, UpdateBlogMutationVariables>;
+
+/**
+ * __useUpdateBlogMutation__
+ *
+ * To run a mutation, you first call `useUpdateBlogMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateBlogMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateBlogMutation, { data, loading, error }] = useUpdateBlogMutation({
+ *   variables: {
+ *      content: // value for 'content'
+ *      id: // value for 'id'
+ *      slug: // value for 'slug'
+ *      summary: // value for 'summary'
+ *      title: // value for 'title'
+ *   },
+ * });
+ */
+export function useUpdateBlogMutation(
+  baseOptions?: Apollo.MutationHookOptions<UpdateBlogMutation, UpdateBlogMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<UpdateBlogMutation, UpdateBlogMutationVariables>(UpdateBlogDocument, options);
+}
+export type UpdateBlogMutationHookResult = ReturnType<typeof useUpdateBlogMutation>;
+export type UpdateBlogMutationResult = Apollo.MutationResult<UpdateBlogMutation>;
+export type UpdateBlogMutationOptions = Apollo.BaseMutationOptions<UpdateBlogMutation, UpdateBlogMutationVariables>;
 export const UpdateEventDocument = gql`
   mutation updateEvent(
     $category: String!
@@ -3227,6 +4136,7 @@ export const UpdateEventDocument = gql`
         gender
         google_auth_id
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -3267,6 +4177,7 @@ export const UpdateEventDocument = gql`
         gender
         google_auth_id
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -3363,6 +4274,7 @@ export const UpdateTransactionDocument = gql`
         gender
         google_auth_id
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -3469,6 +4381,7 @@ export const UpdateUserDocument = gql`
       gender
       google_auth_id
       id
+      isConfidential
       isFaculty
       isVerified
       lastName
@@ -3617,6 +4530,7 @@ export const GetAllBatchCoordinatorsDocument = gql`
         gender
         google_auth_id
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -3710,6 +4624,7 @@ export const GetBatchCoordinatorByUserIdDocument = gql`
         gender
         google_auth_id
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -3806,6 +4721,7 @@ export const GetBatchCoordinatorsByBatchDocument = gql`
         gender
         google_auth_id
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -3881,6 +4797,227 @@ export type GetBatchCoordinatorsByBatchQueryResult = Apollo.QueryResult<
   GetBatchCoordinatorsByBatchQuery,
   GetBatchCoordinatorsByBatchQueryVariables
 >;
+export const GetBlogDocument = gql`
+  query getBlog($id: String!) {
+    getBlog(id: $id) {
+      author {
+        batch
+        disabled
+        firstName
+        id
+        isFaculty
+        isVerified
+        lastName
+        profileImage
+        role {
+          id
+          name
+        }
+      }
+      authorId
+      comments {
+        author {
+          batch
+          disabled
+          firstName
+          id
+          isFaculty
+          isVerified
+          lastName
+          profileImage
+        }
+        authorId
+        blogId
+        content
+        createdAt
+        id
+        updatedAt
+      }
+      content
+      createdAt
+      id
+      slug
+      summary
+      title
+      updatedAt
+    }
+  }
+`;
+
+/**
+ * __useGetBlogQuery__
+ *
+ * To run a query within a React component, call `useGetBlogQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBlogQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBlogQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetBlogQuery(
+  baseOptions: Apollo.QueryHookOptions<GetBlogQuery, GetBlogQueryVariables> &
+    ({ variables: GetBlogQueryVariables; skip?: boolean } | { skip: boolean })
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetBlogQuery, GetBlogQueryVariables>(GetBlogDocument, options);
+}
+export function useGetBlogLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBlogQuery, GetBlogQueryVariables>) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetBlogQuery, GetBlogQueryVariables>(GetBlogDocument, options);
+}
+export function useGetBlogSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetBlogQuery, GetBlogQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetBlogQuery, GetBlogQueryVariables>(GetBlogDocument, options);
+}
+export type GetBlogQueryHookResult = ReturnType<typeof useGetBlogQuery>;
+export type GetBlogLazyQueryHookResult = ReturnType<typeof useGetBlogLazyQuery>;
+export type GetBlogSuspenseQueryHookResult = ReturnType<typeof useGetBlogSuspenseQuery>;
+export type GetBlogQueryResult = Apollo.QueryResult<GetBlogQuery, GetBlogQueryVariables>;
+export const GetBlogListDocument = gql`
+  query getBlogList($options: ListInput) {
+    getBlogList(options: $options) {
+      data {
+        author {
+          batch
+          disabled
+          firstName
+          id
+          isFaculty
+          isVerified
+          lastName
+          profileImage
+          role {
+            id
+            name
+          }
+        }
+        authorId
+        createdAt
+        id
+        slug
+        summary
+        title
+        updatedAt
+      }
+      total
+    }
+  }
+`;
+
+/**
+ * __useGetBlogListQuery__
+ *
+ * To run a query within a React component, call `useGetBlogListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBlogListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBlogListQuery({
+ *   variables: {
+ *      options: // value for 'options'
+ *   },
+ * });
+ */
+export function useGetBlogListQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetBlogListQuery, GetBlogListQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetBlogListQuery, GetBlogListQueryVariables>(GetBlogListDocument, options);
+}
+export function useGetBlogListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetBlogListQuery, GetBlogListQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetBlogListQuery, GetBlogListQueryVariables>(GetBlogListDocument, options);
+}
+export function useGetBlogListSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetBlogListQuery, GetBlogListQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetBlogListQuery, GetBlogListQueryVariables>(GetBlogListDocument, options);
+}
+export type GetBlogListQueryHookResult = ReturnType<typeof useGetBlogListQuery>;
+export type GetBlogListLazyQueryHookResult = ReturnType<typeof useGetBlogListLazyQuery>;
+export type GetBlogListSuspenseQueryHookResult = ReturnType<typeof useGetBlogListSuspenseQuery>;
+export type GetBlogListQueryResult = Apollo.QueryResult<GetBlogListQuery, GetBlogListQueryVariables>;
+export const GetCommentListDocument = gql`
+  query getCommentList($options: ListInput) {
+    getCommentList(options: $options) {
+      data {
+        author {
+          batch
+          disabled
+          firstName
+          id
+          isFaculty
+          isVerified
+          lastName
+          profileImage
+          role {
+            id
+            name
+          }
+        }
+        authorId
+        blogId
+        content
+        createdAt
+        id
+        updatedAt
+      }
+      total
+    }
+  }
+`;
+
+/**
+ * __useGetCommentListQuery__
+ *
+ * To run a query within a React component, call `useGetCommentListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCommentListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCommentListQuery({
+ *   variables: {
+ *      options: // value for 'options'
+ *   },
+ * });
+ */
+export function useGetCommentListQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetCommentListQuery, GetCommentListQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetCommentListQuery, GetCommentListQueryVariables>(GetCommentListDocument, options);
+}
+export function useGetCommentListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetCommentListQuery, GetCommentListQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetCommentListQuery, GetCommentListQueryVariables>(GetCommentListDocument, options);
+}
+export function useGetCommentListSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCommentListQuery, GetCommentListQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetCommentListQuery, GetCommentListQueryVariables>(GetCommentListDocument, options);
+}
+export type GetCommentListQueryHookResult = ReturnType<typeof useGetCommentListQuery>;
+export type GetCommentListLazyQueryHookResult = ReturnType<typeof useGetCommentListLazyQuery>;
+export type GetCommentListSuspenseQueryHookResult = ReturnType<typeof useGetCommentListSuspenseQuery>;
+export type GetCommentListQueryResult = Apollo.QueryResult<GetCommentListQuery, GetCommentListQueryVariables>;
 export const GetEventDetailsDocument = gql`
   query getEventDetails($id: Int!) {
     getEventDetails(id: $id) {
@@ -3899,6 +5036,7 @@ export const GetEventDetailsDocument = gql`
         gender
         google_auth_id
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -3939,6 +5077,7 @@ export const GetEventDetailsDocument = gql`
         gender
         google_auth_id
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -4025,6 +5164,7 @@ export const GetEventListDocument = gql`
           gender
           google_auth_id
           id
+          isConfidential
           isFaculty
           isVerified
           lastName
@@ -4065,6 +5205,7 @@ export const GetEventListDocument = gql`
           gender
           google_auth_id
           id
+          isConfidential
           isFaculty
           isVerified
           lastName
@@ -4164,6 +5305,7 @@ export const GetTransactionDocument = gql`
         gender
         google_auth_id
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -4255,6 +5397,7 @@ export const GetTransactionsDocument = gql`
           gender
           google_auth_id
           id
+          isConfidential
           isFaculty
           isVerified
           lastName
@@ -4461,6 +5604,7 @@ export const GetUserDetailsDocument = gql`
       gender
       google_auth_id
       id
+      isConfidential
       isFaculty
       isVerified
       lastName
@@ -4535,6 +5679,7 @@ export const GetUserListDocument = gql`
         gender
         google_auth_id
         id
+        isConfidential
         isFaculty
         isVerified
         lastName

@@ -32,7 +32,7 @@ import {
   Minus,
   NotePencil,
 } from '@phosphor-icons/react';
-import { Maybe, User } from '@/apollo/hooks';
+import { EventStatus, Maybe, User } from '@/apollo/hooks';
 import ProfilePicture from '../ProfilePicture';
 import { paths } from '@/config/paths';
 import { useRouter } from 'next/router';
@@ -82,7 +82,7 @@ const EventCard: React.FC<EventCardProps> = ({
 
   const isLive = React.useMemo(() => {
     return (
-      status === 'published' &&
+      status === EventStatus.Published &&
       isVerified &&
       dayjs(startDate).isBefore(dayjs()) &&
       (!endDate || dayjs(endDate).isAfter(dayjs()))
@@ -99,14 +99,14 @@ const EventCard: React.FC<EventCardProps> = ({
         height: '100%',
       }}
     >
-      {!loading && !isVerified && status === 'published' && (
+      {!loading && !isVerified && status === EventStatus.Published && (
         <Box bgcolor="error.main" sx={{ py: '4px', position: 'absolute', top: 0, width: '100%' }}>
           <Typography variant="h5" width="100%" textAlign="center" color="common.white">
             Pending approval
           </Typography>
         </Box>
       )}
-      {!loading && status === 'draft' ? (
+      {!loading && status === EventStatus.Draft ? (
         <Chip
           label="Draft"
           color="error"
@@ -325,7 +325,7 @@ const EventCard: React.FC<EventCardProps> = ({
           </Box>
         )}
 
-        {loading ? null : status === 'draft' ? (
+        {loading ? null : status === EventStatus.Draft ? (
           <Box width="100%" display="flex" gap={2} mt="auto">
             <Button
               variant="outlined"

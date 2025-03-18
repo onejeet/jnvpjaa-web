@@ -1,3 +1,4 @@
+import { BlogBasic, useGetBlogListQuery } from '@/apollo/hooks';
 import BlogCard from '@/components/common/BlogCard';
 import EmptyView from '@/components/common/EmptyView';
 import Button from '@/components/core/Button';
@@ -10,17 +11,47 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
 
+const blogsData = [
+  {
+    title: 'This is a dummy blog post',
+    slug: 'blog-post',
+    content: `<p>Cupidatat officia eu mollit eiusmod nostrud aliquip enim in. Esse sit ipsum veniam eu ullamco anim minim id. Nostrud cupidatat officia ad commodo eiusmod velit dolore est nostrud. Ipsum esse non laboris enim. Ea mollit aliquip nulla irure eiusmod sint deserunt.</p>
+
+<p>Tempor sunt nisi minim ipsum culpa labore laboris sunt eiusmod. Et Lorem laboris elit ex. Sunt duis deserunt occaecat ex proident id veniam exercitation. Occaecat irure aliquip consectetur Lorem esse. Qui aute laboris exercitation ipsum ea pariatur excepteur exercitation ullamco.</p>
+
+<blockquote>Tempor sunt nisi minim ipsum culpa labore laboris sunt eiusmod.</blockquote>
+
+<p>Aliqua pariatur veniam cillum quis. Enim adipisicing est aute Lorem ipsum dolor reprehenderit. Reprehenderit quis pariatur fugiat commodo. Quis laboris amet sit sit ullamco reprehenderit non qui tempor.</p>
+
+<p>Id qui aute est id. Anim eiusmod deserunt et tempor occaecat sit est veniam. In enim consectetur nisi laboris officia ut sint ea. Dolor et quis duis sint mollit cillum proident amet. Aliqua sunt reprehenderit magna ex cupidatat laboris.</p>
+
+<p>Consectetur minim eu officia commodo minim reprehenderit id. Tempor pariatur consectetur dolore irure excepteur pariatur minim exercitation. Eu officia pariatur sit occaecat sint ex deserunt dolor amet.</p>`,
+  },
+];
+
 const Blog = () => {
+  const [isPendingApporvalOnly, setIsPendingApporvalOnly] = React.useState<boolean>(false);
   const router = useRouter();
   const { user, isAdmin } = useAuth();
 
+  const { data: blogs, loading } = useGetBlogListQuery({
+    variables: {
+      options: {
+        filter: {
+          verified: isPendingApporvalOnly ? false : undefined,
+        },
+      },
+    },
+    notifyOnNetworkStatusChange: true,
+  });
+
   const listData = React.useMemo(() => {
-    return new Array(6).fill({ id: '', title: '', description: '', startDate: '', medium: 'Online', online: false });
-    // if (loading) {
-    //   return new Array(6).fill({ id: '', title: '', description: '', startDate: '', medium: 'Online', online: false });
-    // }
-    // return eventData?.getEventList?.data || [];
-  }, []);
+    if (loading) {
+      return blogsData;
+      // return new Array(6).fill({ id: '', loading: true, title: '', summary: '', content: '', author: {} });
+    }
+    return blogs?.getBlogList?.data || blogsData;
+  }, [loading, blogs]);
 
   return (
     <LayoutModule
@@ -64,21 +95,21 @@ const Blog = () => {
       <Grid container spacing={2} width="100%" display="flex" alignItems="start" mt={2}>
         <Grid container size={{ xs: 12, md: 12 }} spacing={1}>
           {listData?.length > 0 ? (
-            listData?.map((ev: any, index) => (
-              <Grid size={{ xs: 12 }} key={`events-${ev.title}-${index}`}>
-                <BlogCard />
+            listData?.map((blog: BlogBasic, index) => (
+              <Grid size={{ xs: 12 }} key={`events-${blog.id}-${index}`}>
+                <BlogCard blog={blog} loading={blog.loading} />
               </Grid>
             ))
           ) : (
             <Grid size={{ xs: 12 }}>
               <EmptyView
-                message="No events available"
+                message="No blogs. Write one."
                 buttonProps={
                   user?.id
                     ? {
-                        title: 'Create New Event',
+                        title: 'Create New Post',
                         startIcon: <Plus size={16} />,
-                        onClick: () => router.push(paths.events.new),
+                        onClick: () => router.push(paths.blog.new),
                       }
                     : undefined
                 }
