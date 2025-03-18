@@ -1,9 +1,6 @@
 import React from 'react';
 import { rgbToHex } from '@mui/system';
 import { useCurrentEditor } from '@tiptap/react';
-
-/* LIB */
-
 import ColorPickerInput from '@/components/common/ColorPickerInput';
 
 const ColorPicker: React.FC<any> = ({ defaultColors }) => {

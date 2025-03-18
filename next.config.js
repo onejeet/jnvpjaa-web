@@ -6,6 +6,16 @@ const nextConfig = {
   trailingSlash: true,
   images: {
     unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'jnvpjaa.org',
+      },
+      {
+        protocol: 'https',
+        hostname: 'unsplash.com',
+      },
+    ],
   },
   transpilePackages: ['mui-tel-input'],
   webpack: (config) => {

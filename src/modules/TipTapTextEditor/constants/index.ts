@@ -17,7 +17,9 @@ import {
   TextHSix,
   TextHThree,
   TextHTwo,
+  TextIndent,
   TextItalic,
+  TextOutdent,
   TextT,
   TextUnderline,
   YoutubeLogo,
@@ -45,6 +47,8 @@ export const EDITOR_ICONS = {
   heading_4: TextHFour,
   heading_5: TextHFive,
   heading_6: TextHSix,
+  indent_in: TextIndent,
+  indent_out: TextOutdent,
 } as Record<string, Icon>;
 
 export const FONT_FAMILY_LIST = [

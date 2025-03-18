@@ -24,6 +24,7 @@ import HeadingDropdown from './components/HeadingDropdown';
 import MarkButton from './components/MarkButton';
 import ToolIcon from './components/ToolIcon';
 import VideoButton from './components/VideoButton';
+import IndentationButtons from './components/IndentationButtons';
 
 const EditorToolbar: React.FC<EditorToolbarProps> = ({ toolsHidden = [], defaultColors, ...restProps }) => {
   const { editor } = useCurrentEditor();
@@ -61,11 +62,14 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ toolsHidden = [], default
       >
         <Stack direction="row" spacing={2.5} alignItems="center">
           {/* <FontFamilySelect /> */}
-          <FontSizeSelect />
+
           <MarkButton format="bold" />
           <MarkButton format="underline" />
           <MarkButton format="italic" />
           <HeadingDropdown />
+          <FontSizeSelect />
+          <Divider orientation="vertical" />
+          <ColorPicker />
           <Divider orientation="vertical" />
           <IconButton
             aria-describedby={id}

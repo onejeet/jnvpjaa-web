@@ -26,6 +26,7 @@ import TipTapTextEditorWrapper from './TipTapTextEditorWrapper';
 /* UTILS */
 import { FontSize } from './utils/extensions';
 import HeaderMenuItem from '@/layouts/Layout/HeaderMenuItem';
+import { Indentation } from './components/Indentation';
 
 const TipTapTextEditor = ({ value, onChange, sx = {}, disabled, height, id }: TipTapTextEditorProps) => {
   // paragraph extension
@@ -113,6 +114,7 @@ const TipTapTextEditor = ({ value, onChange, sx = {}, disabled, height, id }: Ti
           OrderedList,
           BulletList,
           ListItem,
+          Indentation,
           // CustomParagraph,
           // CustomHeading,
           Underline,

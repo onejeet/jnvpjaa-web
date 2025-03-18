@@ -30,16 +30,18 @@ const VideoButton: React.FC = (props) => {
   const open = Boolean(anchorEl);
   const id = open ? 'video-url-popover' : undefined;
 
-  const editorSelection = React.useRef(editor.selection);
+  // @ts-expect-error type-error
+  const editorSelection = React.useRef(editor?.selection);
 
   React.useEffect(() => {
     if (open) {
-      editorSelection.current = editor.selection;
+      // @ts-expect-error type-error
+      editorSelection.current = editor?.selection;
     }
   }, [open]);
 
   const setLink = React.useCallback(
-    (href) => {
+    (href: string) => {
       const url = href;
 
       // cancelled
@@ -47,10 +49,10 @@ const VideoButton: React.FC = (props) => {
         return;
       }
 
-      editor.commands.setYoutubeVideo({
+      editor?.commands?.setYoutubeVideo({
         src: href,
-        width: Math.max(320, parseInt(width, 10)) || 640,
-        height: Math.max(180, parseInt(height, 10)) || 480,
+        width: Math.max(320, parseInt(width?.toString(), 10)) || 640,
+        height: Math.max(180, parseInt(height?.toString(), 10)) || 480,
       });
     },
     [width, height]
@@ -140,15 +142,19 @@ const VideoButton: React.FC = (props) => {
                 }}
                 action="cancel"
                 size="small"
+                title="Cancel"
               />
               <Button
                 onClick={() => {
-                  setLink(url);
-                  setAnchorEl(null);
+                  if (url) {
+                    setLink(url);
+                    setAnchorEl(null);
+                  }
                 }}
                 action="save"
                 size="small"
                 disabled={!isURL(url)}
+                title="Add"
               />
             </Box>
           </Box>
