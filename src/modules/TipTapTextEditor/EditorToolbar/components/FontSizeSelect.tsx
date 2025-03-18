@@ -4,6 +4,7 @@ import { useCurrentEditor } from '@tiptap/react';
 import Menu from '@/components/core/Menu';
 import { FONT_SIZE_LIST } from '../../constants';
 import ToolIcon from './ToolIcon';
+import { Tooltip } from '@mui/material';
 
 const FontSizeSelect: React.FC<any> = ({ toggleBlock }) => {
   const { editor } = useCurrentEditor();
@@ -14,6 +15,7 @@ const FontSizeSelect: React.FC<any> = ({ toggleBlock }) => {
         editor
           ?.chain()
           .focus()
+          // @ts-expect-error type error
           .setFontSize(val as string)
           .run()
       }
@@ -23,9 +25,11 @@ const FontSizeSelect: React.FC<any> = ({ toggleBlock }) => {
         value: hItem,
       }))}
       render={
-        <IconButton size="small" sx={{ color: 'grey.800' }}>
-          <ToolIcon icon="font_size" />
-        </IconButton>
+        <Tooltip title="Font Size" arrow>
+          <IconButton size="small" sx={{ color: 'grey.800' }}>
+            <ToolIcon icon="font_size" />
+          </IconButton>
+        </Tooltip>
       }
       MenuListProps={{
         sx: {

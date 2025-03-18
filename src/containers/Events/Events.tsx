@@ -284,7 +284,18 @@ export default function Events() {
           <Typography color="grey.800">List of all the ongoing & upcoming events.</Typography>
         </Box>
         {user?.id && isAdmin && (
-          <Button title="Create Event" startIcon={<Plus size={16} />} onClick={() => router.push(paths.events.new)} />
+          <Button
+            title="Create Event"
+            startIcon={<Plus size={16} />}
+            onClick={() => router.push(paths.events.new)}
+            sx={{
+              width: '150px',
+              display: {
+                xs: 'none',
+                md: 'flex',
+              },
+            }}
+          />
         )}
       </Box>
       {isAdmin && (

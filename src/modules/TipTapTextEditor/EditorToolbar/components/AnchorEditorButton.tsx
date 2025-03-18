@@ -12,6 +12,7 @@ import Button from '@/components/core/Button';
 import { EDITOR_ICONS } from '../../constants';
 import ToolIcon from './ToolIcon';
 import { isURL } from '@/utils/helpers';
+import { Tooltip } from '@mui/material';
 
 const AnchorEditorButton: React.FC = (props) => {
   const { editor = {} } = useCurrentEditor();
@@ -63,21 +64,21 @@ const AnchorEditorButton: React.FC = (props) => {
     return null;
   }
 
-  const Icon = EDITOR_ICONS['link'];
-
   return (
     <>
-      <IconButton
-        id="anchor_tool_button"
-        aria-describedby={id}
-        onClick={handleClick}
-        sx={{
-          color: editor?.isActive('link') ? 'primary.main' : 'text.primary',
-        }}
-        size="small"
-      >
-        <ToolIcon icon="link" />
-      </IconButton>
+      <Tooltip title="Add Link" arrow>
+        <IconButton
+          id="anchor_tool_button"
+          aria-describedby={id}
+          onClick={handleClick}
+          sx={{
+            color: editor?.isActive('link') ? 'primary.main' : 'text.primary',
+          }}
+          size="small"
+        >
+          <ToolIcon icon="link" />
+        </IconButton>
+      </Tooltip>
       <Popover
         id={id}
         open={open}

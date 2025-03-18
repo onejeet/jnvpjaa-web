@@ -54,6 +54,20 @@ input[type='number'] {
   }
 }
 
+blockquote {
+  /* border-left: 4px solid #007bff; */
+  padding: 10px;
+  margin: 10px 0;
+  /* font-style: italic; */
+  display: flex;
+  justify-content: 'start';
+  gap: 20px;
+}
+blockquote::before {
+  content: '❝';
+  font-size: 30px;
+}
+
 .embla {
   max-width: 48rem;
   margin: auto;

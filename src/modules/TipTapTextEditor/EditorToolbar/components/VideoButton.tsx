@@ -8,6 +8,7 @@ import { useCurrentEditor } from '@tiptap/react';
 import ToolIcon from './ToolIcon';
 import { isURL } from '@/utils/helpers';
 import Button from '@/components/core/Button';
+import { Tooltip } from '@mui/material';
 
 const VideoButton: React.FC = (props) => {
   const { editor } = useCurrentEditor();
@@ -64,17 +65,19 @@ const VideoButton: React.FC = (props) => {
 
   return (
     <>
-      <IconButton
-        id="video_tool_button"
-        aria-describedby={id}
-        onClick={handleClick}
-        sx={{
-          color: editor?.isActive('link') ? 'primary.main' : 'text.primary',
-        }}
-        size="small"
-      >
-        <ToolIcon icon="video" />
-      </IconButton>
+      <Tooltip title="Video" arrow>
+        <IconButton
+          id="video_tool_button"
+          aria-describedby={id}
+          onClick={handleClick}
+          sx={{
+            color: editor?.isActive('link') ? 'primary.main' : 'text.primary',
+          }}
+          size="small"
+        >
+          <ToolIcon icon="video" />
+        </IconButton>
+      </Tooltip>
       <Popover
         id={id}
         open={open}

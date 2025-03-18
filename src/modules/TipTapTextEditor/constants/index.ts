@@ -4,6 +4,7 @@ import {
   LinkSimpleHorizontal,
   ListBullets,
   ListNumbers,
+  Quotes,
   TextAa,
   TextAlignCenter,
   TextAlignJustify,
@@ -49,6 +50,7 @@ export const EDITOR_ICONS = {
   heading_6: TextHSix,
   indent_in: TextIndent,
   indent_out: TextOutdent,
+  blockquote: Quotes,
 } as Record<string, Icon>;
 
 export const FONT_FAMILY_LIST = [

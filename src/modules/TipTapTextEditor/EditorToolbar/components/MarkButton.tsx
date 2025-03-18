@@ -8,6 +8,8 @@ import { useCurrentEditor } from '@tiptap/react';
 import { EDITOR_ICONS } from '../../constants';
 /* LOCAL */
 import ToolIcon from './ToolIcon';
+import { startCase } from '@/utils/helpers';
+import { Tooltip } from '@mui/material';
 
 const MarkButton: React.FC<any> = ({ format, icon }) => {
   const { editor } = useCurrentEditor();
@@ -34,18 +36,20 @@ const MarkButton: React.FC<any> = ({ format, icon }) => {
   };
 
   return (
-    <IconButton
-      sx={{
-        color: editor?.isActive(format) ? 'primary.main' : 'text.primary',
-      }}
-      size="small"
-      onClick={(event) => {
-        event.preventDefault();
-        handleMark(format);
-      }}
-    >
-      <ToolIcon icon={format} />
-    </IconButton>
+    <Tooltip title={startCase(format)} arrow>
+      <IconButton
+        sx={{
+          color: editor?.isActive(format) ? 'primary.main' : 'text.primary',
+        }}
+        size="small"
+        onClick={(event) => {
+          event.preventDefault();
+          handleMark(format);
+        }}
+      >
+        <ToolIcon icon={format} />
+      </IconButton>
+    </Tooltip>
   );
 };
 

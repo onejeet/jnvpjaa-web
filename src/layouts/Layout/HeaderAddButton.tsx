@@ -12,6 +12,7 @@ import {
   MenuItem,
   Paper,
   Tooltip,
+  Typography,
 } from '@mui/material';
 import Link from '@mui/material/Link';
 import NextLink from 'next/link';
@@ -69,24 +70,16 @@ const HeaderAddButton: React.FC = () => {
             fontSize: '14px',
             fontWeight: 400,
             textAlign: 'center',
-            color: 'grey.900',
+            color: 'grey.900 !important',
             transition: 'all 0.2s linear',
             svg: {
               mr: '4px',
-              color: 'grey.700',
+              color: 'grey.800',
               fontSize: '20px',
             },
-            // '&:hover': {
-            //   color: 'primary.main',
-            //   svg: {
-            //     ml: '2px',
-            //     mr: 0,
-            //     color: 'primary.main',
-            //   },
-            // },
           }}
         >
-          Create new blog and events.
+          <Typography sx={{ fontSize: '16px', fontWeight: 400 }}>Have something to share?</Typography>
         </MenuItem>
         {ADD_ENTITIES?.map((mItem: IHeaderMenuItem) => (
           <NextLink

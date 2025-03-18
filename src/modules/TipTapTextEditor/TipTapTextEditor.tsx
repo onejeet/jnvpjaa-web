@@ -15,6 +15,7 @@ import TextAlign from '@tiptap/extension-text-align';
 import TextStyle from '@tiptap/extension-text-style';
 import Underline from '@tiptap/extension-underline';
 import Youtube from '@tiptap/extension-youtube';
+import Blockquote from '@tiptap/extension-blockquote';
 import { EditorProvider } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 
@@ -111,6 +112,7 @@ const TipTapTextEditor = ({ value, onChange, sx = {}, disabled, height, id }: Ti
         }}
         extensions={[
           StarterKit,
+          Blockquote,
           OrderedList,
           BulletList,
           ListItem,

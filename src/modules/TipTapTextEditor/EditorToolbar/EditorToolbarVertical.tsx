@@ -25,6 +25,7 @@ import MarkButton from './components/MarkButton';
 import ToolIcon from './components/ToolIcon';
 import VideoButton from './components/VideoButton';
 import IndentationButtons from './components/IndentationButtons';
+import BlockquoteButton from './components/BlockquoteButton';
 
 const EditorToolbar: React.FC<EditorToolbarProps> = ({ toolsHidden = [], defaultColors, ...restProps }) => {
   const { editor } = useCurrentEditor();
@@ -67,9 +68,8 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ toolsHidden = [], default
           <MarkButton format="underline" />
           <MarkButton format="italic" />
           <HeadingDropdown />
+          <BlockquoteButton />
           <FontSizeSelect />
-          <Divider orientation="vertical" />
-          <ColorPicker />
           <Divider orientation="vertical" />
           <IconButton
             aria-describedby={id}
@@ -86,6 +86,8 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ toolsHidden = [], default
           <MarkButton format="bulletList" />
           <Divider orientation="vertical" />
           <AnchorEditorButton />
+          <Divider orientation="vertical" />
+          <ColorPicker />
           <Divider orientation="vertical" />
           <VideoButton />
           <Divider orientation="vertical" />

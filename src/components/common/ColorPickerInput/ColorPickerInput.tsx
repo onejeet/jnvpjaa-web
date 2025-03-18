@@ -16,6 +16,7 @@ import { HexColorPicker } from 'react-colorful';
 
 /* TYPES */
 import type { ColorPickerInputProps } from './ColorPickerInput.types';
+import { Tooltip } from '@mui/material';
 
 const ColorPickerInput: React.FC<ColorPickerInputProps> = ({
   // default colors are - primary, secondary, text, background
@@ -102,7 +103,11 @@ const ColorPickerInput: React.FC<ColorPickerInputProps> = ({
               }}
             />
           ) : (
-            <Palette color="inherit" size={18} />
+            <Tooltip title="Text Color" arrow>
+              <IconButton size="small">
+                <Palette color="inherit" size={20} />
+              </IconButton>
+            </Tooltip>
           )}
         </IconButton>
       </Stack>

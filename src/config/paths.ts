@@ -11,6 +11,11 @@ export const paths = {
     new: '/events/new',
     getEventDetailUrl: (id: number) => `/events/${id}`,
   },
+  blog: {
+    root: '/blog',
+    new: '/blog/new',
+    getBlogPostUrl: (id: number) => `/blog/${id}`,
+  },
   profile: {
     root: '/profile',
   },
