@@ -1,27 +1,13 @@
 import Dialog from '@/components/core/Dialog';
 import { useAlert } from '@/context/AlertContext';
-import { useRouter } from 'next/router';
 import { useForm, useWatch } from 'react-hook-form';
-import { Box, CircularProgress, Grid2 as Grid, Typography } from '@mui/material';
+import { Box, Grid2 as Grid } from '@mui/material';
 import FormTextField from '@/components/form/FormTextField';
 import FormSelectField from '@/components/form/FormSelectField';
-import Button from '@/components/core/Button';
 import FormDateTimeField from '@/components/form/FormDateTimeField';
-import {
-  Currency,
-  TransactionStatus,
-  TransactionType,
-  useCreateEventMutation,
-  useCreateTransactionMutation,
-  useGetEventDetailsQuery,
-  usePublishEventMutation,
-  useUpdateEventMutation,
-} from '@/apollo/hooks';
-import { paths } from '@/config/paths';
-import TipTapTextEditor from '@/modules/TipTapTextEditor';
-import { CurrencyInr, FloppyDiskBack, Globe, MapPinLine } from '@phosphor-icons/react';
+import { Currency, TransactionStatus, TransactionType, useCreateTransactionMutation } from '@/apollo/hooks';
+import { CurrencyInr } from '@phosphor-icons/react';
 import { useApolloClient } from '@apollo/client';
-import { alumniEventCategories, eventHostingmedium } from '@/constants/Events.constants';
 import dayjs from 'dayjs';
 import { IAddTransactionRecordInput } from './AddTransactionRecordModule.types';
 import React from 'react';

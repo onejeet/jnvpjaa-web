@@ -47,10 +47,10 @@ const Blog = () => {
 
   const listData = React.useMemo(() => {
     if (loading) {
-      return blogsData;
-      // return new Array(6).fill({ id: '', loading: true, title: '', summary: '', content: '', author: {} });
+      return new Array(6).fill({ id: '', loading: true, title: '', summary: '', content: '', author: {} });
     }
-    return blogs?.getBlogList?.data || blogsData;
+    // return blogs?.getBlogList?.data || blogsData;
+    return blogsData;
   }, [loading, blogs]);
 
   return (
@@ -97,7 +97,7 @@ const Blog = () => {
           {listData?.length > 0 ? (
             listData?.map((blog: BlogBasic, index) => (
               <Grid size={{ xs: 12 }} key={`events-${blog.id}-${index}`}>
-                <BlogCard blog={blog} loading={blog.loading} />
+                <BlogCard blog={blog} loading={loading} />
               </Grid>
             ))
           ) : (

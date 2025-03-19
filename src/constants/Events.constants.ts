@@ -1,4 +1,4 @@
-export const alumniEventCategories = [
+export const EVENT_CATEGORIES = [
   { label: 'Reunions and Social Event', value: 'reunions_and_social_event' },
   { label: 'Networking and Professional Event', value: 'networking_and_professional_event' },
   { label: 'Educational, Mentorship and Career Development', value: 'educational_and_career_development' },

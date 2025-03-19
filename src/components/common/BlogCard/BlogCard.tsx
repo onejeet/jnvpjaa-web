@@ -1,4 +1,4 @@
-import { Box, Divider, Grid2 as Grid, Typography } from '@mui/material';
+import { Box, Divider, Grid2 as Grid, Skeleton, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 import ProfilePicture from '../ProfilePicture';
 import { ArrowRight } from '@phosphor-icons/react';
@@ -7,7 +7,7 @@ import { paths } from '@/config/paths';
 import { IBlogCardProps } from './BlogCard.types';
 
 const BlogCard: React.FC<IBlogCardProps> = ({ blog, loading }) => {
-  const { slug, title, createdAt, author } = blog;
+  const { slug, title, summary, createdAt, author } = blog;
   const router = useRouter();
   return (
     <Box
@@ -69,22 +69,38 @@ const BlogCard: React.FC<IBlogCardProps> = ({ blog, loading }) => {
         // justifyContent="center"
       >
         <Box gap={0.5} textTransform="uppercase" textAlign="center" alignItems="center" display="flex">
-          <Typography fontSize="0.7rem" variant="body2">
-            {dayjs().format('MMM').toString()}
-          </Typography>
-          <Typography fontSize="0.9rem" variant="subtitle1">
-            {dayjs().format('DD').toString()}
-          </Typography>
+          {loading ? (
+            <Skeleton width={50} height={20} />
+          ) : (
+            <>
+              {' '}
+              <Typography fontSize="0.7rem" variant="body2">
+                {dayjs().format('MMM').toString()}
+              </Typography>
+              <Typography fontSize="0.9rem" variant="subtitle1">
+                {dayjs().format('DD').toString()}
+              </Typography>
+            </>
+          )}
         </Box>
-        <Typography fontSize="1rem" variant="body2" ml={{ xs: 1, md: 0 }}>
-          {dayjs().format('YYYY').toString()}
-        </Typography>
+        {loading ? (
+          <Skeleton width={50} height={20} />
+        ) : (
+          <Typography fontSize="1rem" variant="body2" ml={{ xs: 1, md: 0 }}>
+            {dayjs().format('YYYY').toString()}
+          </Typography>
+        )}
       </Box>
       <Box component={Grid} size={{ xs: 12, md: 9.5 }} display="flex" flexDirection="column">
-        <Typography variant="h1" sx={{ display: 'flex', alignItems: 'center' }}>
-          {title} <ArrowRight size={32} weight="bold" />
-        </Typography>
-        <Typography variant="body1">We bring to life the most complex projects, specialize</Typography>
+        {loading ? (
+          <Skeleton width="80%" height={32} />
+        ) : (
+          <Typography variant="h1" sx={{ display: 'flex', alignItems: 'center' }}>
+            {title} <ArrowRight size={28} weight="bold" />
+          </Typography>
+        )}
+
+        {summary && <Typography variant="body1">{summary}</Typography>}
       </Box>
       <Box
         component={Grid}
@@ -98,7 +114,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({ blog, loading }) => {
           md: 0,
         }}
       >
-        <ProfilePicture title="Jeet Sharma" summary="Batch of 2009" />
+        <ProfilePicture title="Jeet Sharma" loading={loading} summary="Batch of 2009" />
       </Box>
     </Box>
   );

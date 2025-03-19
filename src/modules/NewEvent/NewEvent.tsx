@@ -19,7 +19,7 @@ import { paths } from '@/config/paths';
 import TipTapTextEditor from '@/modules/TipTapTextEditor';
 import { CurrencyInr, FloppyDiskBack, Globe, MapPinLine } from '@phosphor-icons/react';
 import { useApolloClient } from '@apollo/client';
-import { alumniEventCategories, eventHostingmedium } from '@/constants/Events.constants';
+import { EVENT_CATEGORIES, eventHostingmedium } from '@/constants/Events.constants';
 import dayjs from 'dayjs';
 
 const NewEvent = () => {
@@ -318,7 +318,7 @@ const NewEvent = () => {
               id: 'medium',
               disabled: saving,
             }}
-            options={alumniEventCategories}
+            options={EVENT_CATEGORIES}
             rules={{
               required: 'Required',
             }}

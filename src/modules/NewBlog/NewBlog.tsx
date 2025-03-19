@@ -8,7 +8,6 @@ import FormTextField from '@/components/form/FormTextField';
 import FormSelectField from '@/components/form/FormSelectField';
 import { INewEventFormInput } from './NewBlog.types';
 import Button from '@/components/core/Button';
-import FormDateTimeField from '@/components/form/FormDateTimeField';
 import {
   EventStatus,
   useCreateEventMutation,
@@ -18,10 +17,10 @@ import {
 } from '@/apollo/hooks';
 import { paths } from '@/config/paths';
 import TipTapTextEditor from '@/modules/TipTapTextEditor';
-import { CurrencyInr, FloppyDiskBack, Globe, MapPinLine } from '@phosphor-icons/react';
+import { FloppyDiskBack } from '@phosphor-icons/react';
 import { useApolloClient } from '@apollo/client';
-import { alumniEventCategories, eventHostingmedium } from '@/constants/Events.constants';
 import dayjs from 'dayjs';
+import { BLOG_CATEGORIES } from '@/constants/Blog.constants';
 
 const NewBlog = () => {
   const router = useRouter();
@@ -179,8 +178,24 @@ const NewBlog = () => {
         // alignItems: 'center',
       }}
     >
-      <Box display="flex" width="100%" mb={3} justifyContent="space-between" alignItems="center">
-        <Box display="flex" gap={2} alignItems="center">
+      <Grid container spacing={3}>
+        <Grid size={{ xs: 12, md: 6 }}>
+          <FormSelectField
+            control={control}
+            name="category"
+            selectProps={{
+              //label: 'Category',
+              size: 'small',
+              id: 'medium',
+              disabled: saving,
+            }}
+            options={BLOG_CATEGORIES}
+            rules={{
+              required: 'Required',
+            }}
+          />
+        </Grid>
+        <Box component={Grid} size={{ xs: 12, md: 6 }} display="flex" gap={2} alignItems="center" justifyContent="end">
           <Button
             // size="small"
             title="Save Draft"
@@ -208,8 +223,6 @@ const NewBlog = () => {
             loading={saveTypeRef.current === 'publish' && saving}
           />
         </Box>
-      </Box>
-      <Grid container spacing={3}>
         <Grid size={{ xs: 12 }}>
           <FormTextField
             fullWidth
@@ -249,104 +262,12 @@ const NewBlog = () => {
                 '& .tiptap': {
                   px: 2,
                   outline: 'none',
-                  minHeight: 200,
+                  minHeight: 300,
                 },
               }}
               toolbarProps={{ sx: { borderRadius: '40px' } }}
             />
           </Box>
-        </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
-          <FormDateTimeField
-            control={control}
-            name="startDate"
-            inputProps={{
-              label: 'Start Date',
-            }}
-            rules={{
-              required: 'Required',
-            }}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
-          <FormDateTimeField
-            control={control}
-            name="endDate"
-            inputProps={{
-              label: 'End Date',
-            }}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
-          <FormSelectField
-            control={control}
-            name="medium"
-            selectProps={{
-              size: 'small',
-              id: 'hosting medium',
-              disabled: saving,
-            }}
-            options={eventHostingmedium}
-            rules={{
-              required: 'Required',
-            }}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
-          <FormTextField
-            key={watchMedium}
-            fullWidth
-            id="location"
-            label={watchMedium === 'online' ? 'URL' : 'Location'}
-            control={control}
-            disabled={saving}
-            startAdornment={watchMedium === 'online' ? <Globe size={18} /> : <MapPinLine size={18} />}
-            name="location"
-            size="small"
-            rules={{
-              required: 'Required',
-              pattern:
-                watchMedium === 'online'
-                  ? {
-                      value: /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-_]+\.)+[a-zA-Z]{2,}(:\d{1,5})?(\/.*)?$/,
-                      message: 'Enter a valid URL',
-                    }
-                  : undefined,
-            }}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
-          <FormSelectField
-            control={control}
-            name="category"
-            selectProps={{
-              //label: 'Category',
-              size: 'small',
-              id: 'medium',
-              disabled: saving,
-            }}
-            options={alumniEventCategories}
-            rules={{
-              required: 'Required',
-            }}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
-          <FormTextField
-            fullWidth
-            id="price"
-            label="Price"
-            control={control}
-            disabled={saving}
-            startAdornment={<CurrencyInr size={18} />}
-            name="price"
-            size="small"
-            type="number"
-            helperText="Optional"
-            // rules={{
-            //   required: 'Required',
-            // }}
-          />
         </Grid>
       </Grid>
     </Box>
