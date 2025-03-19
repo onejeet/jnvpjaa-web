@@ -49,8 +49,7 @@ const Blog = () => {
     if (loading) {
       return new Array(6).fill({ id: '', loading: true, title: '', summary: '', content: '', author: {} });
     }
-    // return blogs?.getBlogList?.data || blogsData;
-    return blogsData;
+    return blogs?.getBlogList?.data || [];
   }, [loading, blogs]);
 
   return (

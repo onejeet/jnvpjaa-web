@@ -176,7 +176,7 @@ const NewBlog = () => {
         <Grid size={{ xs: 12, md: 6 }}>
           <FormSelectField
             control={control}
-            name="category"
+            name="categoryId"
             selectProps={{
               //label: 'Category',
               size: 'small',

@@ -68,6 +68,7 @@ export type BatchCoordinator = {
 
 export type Blog = {
   __typename?: 'Blog';
+  adminRemark?: Maybe<Scalars['String']['output']>;
   author?: Maybe<UserBasic>;
   authorId?: Maybe<Scalars['String']['output']>;
   categoryId?: Maybe<Scalars['String']['output']>;
@@ -269,7 +270,7 @@ export type MutationAttendEventArgs = {
 export type MutationCreateBlogArgs = {
   authorId: Scalars['String']['input'];
   categoryId: Scalars['String']['input'];
-  content: Scalars['String']['input'];
+  content?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<BlogStatus>;
   title: Scalars['String']['input'];
 };
@@ -340,6 +341,7 @@ export type MutationRemoveBatchCoordinatorArgs = {
 };
 
 export type MutationRequestChangesBlogArgs = {
+  adminRemark?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['String']['input'];
 };
 
@@ -596,6 +598,7 @@ export type ApproveBlogMutation = {
   approveBlog?:
     | {
         __typename?: 'Blog';
+        adminRemark?: string | undefined;
         authorId?: string | undefined;
         categoryId?: string | undefined;
         content?: string | undefined;
@@ -769,7 +772,7 @@ export type AttendEventMutation = {
 export type CreateBlogMutationVariables = Exact<{
   authorId: Scalars['String']['input'];
   categoryId: Scalars['String']['input'];
-  content: Scalars['String']['input'];
+  content?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<BlogStatus>;
   title: Scalars['String']['input'];
 }>;
@@ -779,6 +782,7 @@ export type CreateBlogMutation = {
   createBlog?:
     | {
         __typename?: 'Blog';
+        adminRemark?: string | undefined;
         authorId?: string | undefined;
         categoryId?: string | undefined;
         content?: string | undefined;
@@ -1023,6 +1027,7 @@ export type DeleteBlogMutation = {
   deleteBlog?:
     | {
         __typename?: 'Blog';
+        adminRemark?: string | undefined;
         authorId?: string | undefined;
         categoryId?: string | undefined;
         content?: string | undefined;
@@ -1335,6 +1340,7 @@ export type RemoveBatchCoordinatorMutationVariables = Exact<{
 export type RemoveBatchCoordinatorMutation = { __typename?: 'Mutation'; removeBatchCoordinator?: boolean | undefined };
 
 export type RequestChangesBlogMutationVariables = Exact<{
+  adminRemark?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['String']['input'];
 }>;
 
@@ -1343,6 +1349,7 @@ export type RequestChangesBlogMutation = {
   requestChangesBlog?:
     | {
         __typename?: 'Blog';
+        adminRemark?: string | undefined;
         authorId?: string | undefined;
         categoryId?: string | undefined;
         content?: string | undefined;
@@ -1558,6 +1565,7 @@ export type UpdateBlogMutation = {
   updateBlog?:
     | {
         __typename?: 'Blog';
+        adminRemark?: string | undefined;
         authorId?: string | undefined;
         categoryId?: string | undefined;
         content?: string | undefined;
@@ -1977,6 +1985,7 @@ export type GetBlogQuery = {
   getBlog?:
     | {
         __typename?: 'Blog';
+        adminRemark?: string | undefined;
         authorId?: string | undefined;
         categoryId?: string | undefined;
         content?: string | undefined;
@@ -2535,6 +2544,7 @@ export type GetUserListQuery = {
 export const ApproveBlogDocument = gql`
   mutation approveBlog($id: String!) {
     approveBlog(id: $id) {
+      adminRemark
       author {
         batch
         disabled
@@ -2772,11 +2782,12 @@ export const CreateBlogDocument = gql`
   mutation createBlog(
     $authorId: String!
     $categoryId: String!
-    $content: String!
+    $content: String
     $status: BlogStatus
     $title: String!
   ) {
     createBlog(authorId: $authorId, categoryId: $categoryId, content: $content, status: $status, title: $title) {
+      adminRemark
       author {
         batch
         disabled
@@ -3156,6 +3167,7 @@ export type CreateTransactionMutationOptions = Apollo.BaseMutationOptions<
 export const DeleteBlogDocument = gql`
   mutation deleteBlog($id: String!) {
     deleteBlog(id: $id) {
+      adminRemark
       author {
         batch
         disabled
@@ -3699,8 +3711,9 @@ export type RemoveBatchCoordinatorMutationOptions = Apollo.BaseMutationOptions<
   RemoveBatchCoordinatorMutationVariables
 >;
 export const RequestChangesBlogDocument = gql`
-  mutation requestChangesBlog($id: String!) {
-    requestChangesBlog(id: $id) {
+  mutation requestChangesBlog($adminRemark: String, $id: String!) {
+    requestChangesBlog(adminRemark: $adminRemark, id: $id) {
+      adminRemark
       author {
         batch
         disabled
@@ -3764,6 +3777,7 @@ export type RequestChangesBlogMutationFn = Apollo.MutationFunction<
  * @example
  * const [requestChangesBlogMutation, { data, loading, error }] = useRequestChangesBlogMutation({
  *   variables: {
+ *      adminRemark: // value for 'adminRemark'
  *      id: // value for 'id'
  *   },
  * });
@@ -4052,6 +4066,7 @@ export type UpdateBatchCoordinatorMutationOptions = Apollo.BaseMutationOptions<
 export const UpdateBlogDocument = gql`
   mutation updateBlog($content: String, $id: String!, $slug: String, $status: BlogStatus!, $title: String) {
     updateBlog(content: $content, id: $id, slug: $slug, status: $status, title: $title) {
+      adminRemark
       author {
         batch
         disabled
@@ -4805,6 +4820,7 @@ export type GetBatchCoordinatorsByBatchQueryResult = Apollo.QueryResult<
 export const GetBlogDocument = gql`
   query getBlog($id: String, $slug: String) {
     getBlog(id: $id, slug: $slug) {
+      adminRemark
       author {
         batch
         disabled

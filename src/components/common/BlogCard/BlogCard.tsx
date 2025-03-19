@@ -1,14 +1,29 @@
-import { Box, Divider, Grid2 as Grid, Skeleton, Typography } from '@mui/material';
+import { Box, Chip, Divider, Grid2 as Grid, Skeleton, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 import ProfilePicture from '../ProfilePicture';
 import { ArrowRight } from '@phosphor-icons/react';
 import { useRouter } from 'next/router';
 import { paths } from '@/config/paths';
 import { IBlogCardProps } from './BlogCard.types';
+import { BlogStatus } from '@/apollo/hooks';
+import { startCase } from '@/utils/helpers';
+import React from 'react';
 
 const BlogCard: React.FC<IBlogCardProps> = ({ blog, loading }) => {
-  const { slug, title, summary, createdAt, author } = blog;
+  const { slug, title, summary, status, createdAt, updatedAt, author } = blog;
   const router = useRouter();
+
+  const statusColor = React.useMemo(() => {
+    switch (status) {
+      case BlogStatus.Draft:
+        return 'error';
+      case BlogStatus.PendingApproval:
+        return 'error';
+      case BlogStatus.RequestChanges:
+        return 'error';
+    }
+  }, [status]);
+
   return (
     <Box
       component={Grid}
@@ -27,6 +42,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({ blog, loading }) => {
       justifyContent="start"
       //   gap={5}
       sx={{
+        position: 'relative',
         cursor: 'pointer',
         transition: 'all 0.4s ease',
         svg: {
@@ -75,10 +91,10 @@ const BlogCard: React.FC<IBlogCardProps> = ({ blog, loading }) => {
             <>
               {' '}
               <Typography fontSize="0.7rem" variant="body2">
-                {dayjs().format('MMM').toString()}
+                {dayjs(updatedAt).format('MMM').toString()}
               </Typography>
               <Typography fontSize="0.9rem" variant="subtitle1">
-                {dayjs().format('DD').toString()}
+                {dayjs(updatedAt).format('DD').toString()}
               </Typography>
             </>
           )}
@@ -96,7 +112,11 @@ const BlogCard: React.FC<IBlogCardProps> = ({ blog, loading }) => {
           <Skeleton width="80%" height={32} />
         ) : (
           <Typography variant="h1" sx={{ display: 'flex', alignItems: 'center' }}>
-            {title} <ArrowRight size={28} weight="bold" />
+            {title}{' '}
+            {status !== BlogStatus.Published && (
+              <Chip size="small" label={startCase(status)} color={statusColor} sx={{ ml: 1 }} />
+            )}{' '}
+            <ArrowRight size={28} weight="bold" />
           </Typography>
         )}
 
@@ -114,7 +134,13 @@ const BlogCard: React.FC<IBlogCardProps> = ({ blog, loading }) => {
           md: 0,
         }}
       >
-        <ProfilePicture title="Jeet Sharma" loading={loading} summary="Batch of 2009" />
+        <ProfilePicture
+          title={`${author?.firstName || ''} ${author?.lastName || ''}`}
+          loading={loading}
+          id={author?.id}
+          src={author?.profileImage}
+          summary={author?.isFaculty ? 'Faculty' : author?.batch ? `Batch of ${author?.batch}` : ''}
+        />
       </Box>
     </Box>
   );

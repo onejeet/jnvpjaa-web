@@ -14,7 +14,6 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, loading }) => {
         //   fontSize: '7px',
         alignItems: 'center',
         color: 'grey.500',
-        pb: 1,
       }}
       // separator=">"
       aria-label="breadcrumb"
