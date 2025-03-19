@@ -70,6 +70,7 @@ export type Blog = {
   __typename?: 'Blog';
   author?: Maybe<UserBasic>;
   authorId?: Maybe<Scalars['String']['output']>;
+  categoryId?: Maybe<Scalars['String']['output']>;
   comments?: Maybe<Array<Maybe<Comment>>>;
   content?: Maybe<Scalars['String']['output']>;
   /** Timestamp when the record was created */
@@ -87,6 +88,7 @@ export type BlogBasic = {
   __typename?: 'BlogBasic';
   author?: Maybe<UserBasic>;
   authorId: Scalars['String']['output'];
+  categoryId?: Maybe<Scalars['String']['output']>;
   /** Timestamp when the record was created */
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['String']['output'];
@@ -167,7 +169,8 @@ export enum Currency {
 
 export type Event = {
   __typename?: 'Event';
-  attendees?: Maybe<Array<Maybe<User>>>;
+  adminRemark?: Maybe<Scalars['String']['output']>;
+  attendees?: Maybe<Array<Maybe<UserBasic>>>;
   category?: Maybe<Scalars['String']['output']>;
   /** Timestamp when the record was created */
   createdAt: Scalars['DateTime']['output'];
@@ -176,14 +179,13 @@ export type Event = {
   endDate?: Maybe<Scalars['DateTime']['output']>;
   id: Scalars['Int']['output'];
   image?: Maybe<Scalars['String']['output']>;
-  isVerified?: Maybe<Scalars['Boolean']['output']>;
   location?: Maybe<Scalars['String']['output']>;
   medium: Scalars['String']['output'];
-  organizers?: Maybe<Array<Maybe<User>>>;
+  organizers?: Maybe<Array<Maybe<UserBasic>>>;
   price?: Maybe<Scalars['Float']['output']>;
   short_url?: Maybe<Scalars['String']['output']>;
   startDate: Scalars['DateTime']['output'];
-  status?: Maybe<Scalars['String']['output']>;
+  status?: Maybe<EventStatus>;
   summary: Scalars['String']['output'];
   tags?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   ticketUrl?: Maybe<Scalars['String']['output']>;
@@ -195,7 +197,9 @@ export type Event = {
 export enum EventStatus {
   Closed = 'CLOSED',
   Draft = 'DRAFT',
+  PendingApproval = 'PENDING_APPROVAL',
   Published = 'PUBLISHED',
+  RequestChanges = 'REQUEST_CHANGES',
 }
 
 export type FilterInput = {
@@ -281,11 +285,11 @@ export type MutationCreateEventArgs = {
   description?: InputMaybe<Scalars['String']['input']>;
   endDate?: InputMaybe<Scalars['String']['input']>;
   image?: InputMaybe<Scalars['String']['input']>;
-  isPublish?: InputMaybe<Scalars['Boolean']['input']>;
   location?: InputMaybe<Scalars['String']['input']>;
   medium: Scalars['String']['input'];
   price?: InputMaybe<Scalars['Float']['input']>;
   startDate: Scalars['String']['input'];
+  status: EventStatus;
   summary: Scalars['String']['input'];
   tags?: InputMaybe<Scalars['String']['input']>;
   title: Scalars['String']['input'];
@@ -382,6 +386,7 @@ export type MutationUpdateEventArgs = {
   medium: Scalars['String']['input'];
   price?: InputMaybe<Scalars['Float']['input']>;
   startDate: Scalars['String']['input'];
+  status?: InputMaybe<EventStatus>;
   summary: Scalars['String']['input'];
   tags?: InputMaybe<Array<Scalars['String']['input']>>;
   title: Scalars['String']['input'];
@@ -411,8 +416,9 @@ export type MutationUpdateUserArgs = {
 };
 
 export type MutationVerifyEventArgs = {
+  adminRemark?: InputMaybe<Scalars['String']['input']>;
   eventId: Scalars['Int']['input'];
-  verified: Scalars['Boolean']['input'];
+  status: EventStatus;
 };
 
 export type MutationVerifyUserArgs = {
@@ -451,7 +457,8 @@ export type QueryGetBatchCoordinatorsByBatchArgs = {
 };
 
 export type QueryGetBlogArgs = {
-  id: Scalars['String']['input'];
+  id?: InputMaybe<Scalars['String']['input']>;
+  slug?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type QueryGetBlogListArgs = {
@@ -590,6 +597,7 @@ export type ApproveBlogMutation = {
     | {
         __typename?: 'Blog';
         authorId?: string | undefined;
+        categoryId?: string | undefined;
         content?: string | undefined;
         createdAt: any;
         id: string;
@@ -701,6 +709,7 @@ export type AttendEventMutation = {
   attendEvent?:
     | {
         __typename?: 'Event';
+        adminRemark?: string | undefined;
         category?: string | undefined;
         createdAt: any;
         createdBy?: string | undefined;
@@ -708,13 +717,12 @@ export type AttendEventMutation = {
         endDate?: any | undefined;
         id: number;
         image?: string | undefined;
-        isVerified?: boolean | undefined;
         location?: string | undefined;
         medium: string;
         price?: number | undefined;
         short_url?: string | undefined;
         startDate: any;
-        status?: string | undefined;
+        status?: EventStatus | undefined;
         summary: string;
         tags?: Array<string | undefined> | undefined;
         ticketUrl?: string | undefined;
@@ -723,32 +731,15 @@ export type AttendEventMutation = {
         attendees?:
           | Array<
               | {
-                  __typename?: 'User';
-                  aboutMe?: string | undefined;
+                  __typename?: 'UserBasic';
                   batch?: number | undefined;
-                  createdAt: any;
                   disabled?: boolean | undefined;
-                  displayName?: string | undefined;
-                  dob?: string | undefined;
-                  email?: string | undefined;
-                  emergencyMobile?: string | undefined;
-                  extraEmail?: string | undefined;
-                  extraMobile?: string | undefined;
                   firstName?: string | undefined;
-                  gender?: string | undefined;
-                  google_auth_id?: string | undefined;
                   id?: string | undefined;
-                  isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
-                  membershipYear?: number | undefined;
-                  mobile?: string | undefined;
-                  nickName?: string | undefined;
                   profileImage?: string | undefined;
-                  socialMedia?: any | undefined;
-                  updatedAt: any;
-                  whatsAppMobile?: string | undefined;
                   role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
                 }
               | undefined
@@ -757,32 +748,15 @@ export type AttendEventMutation = {
         organizers?:
           | Array<
               | {
-                  __typename?: 'User';
-                  aboutMe?: string | undefined;
+                  __typename?: 'UserBasic';
                   batch?: number | undefined;
-                  createdAt: any;
                   disabled?: boolean | undefined;
-                  displayName?: string | undefined;
-                  dob?: string | undefined;
-                  email?: string | undefined;
-                  emergencyMobile?: string | undefined;
-                  extraEmail?: string | undefined;
-                  extraMobile?: string | undefined;
                   firstName?: string | undefined;
-                  gender?: string | undefined;
-                  google_auth_id?: string | undefined;
                   id?: string | undefined;
-                  isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
-                  membershipYear?: number | undefined;
-                  mobile?: string | undefined;
-                  nickName?: string | undefined;
                   profileImage?: string | undefined;
-                  socialMedia?: any | undefined;
-                  updatedAt: any;
-                  whatsAppMobile?: string | undefined;
                   role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
                 }
               | undefined
@@ -806,6 +780,7 @@ export type CreateBlogMutation = {
     | {
         __typename?: 'Blog';
         authorId?: string | undefined;
+        categoryId?: string | undefined;
         content?: string | undefined;
         createdAt: any;
         id: string;
@@ -899,11 +874,11 @@ export type CreateEventMutationVariables = Exact<{
   description?: InputMaybe<Scalars['String']['input']>;
   endDate?: InputMaybe<Scalars['String']['input']>;
   image?: InputMaybe<Scalars['String']['input']>;
-  isPublish?: InputMaybe<Scalars['Boolean']['input']>;
   location?: InputMaybe<Scalars['String']['input']>;
   medium: Scalars['String']['input'];
   price?: InputMaybe<Scalars['Float']['input']>;
   startDate: Scalars['String']['input'];
+  status: EventStatus;
   summary: Scalars['String']['input'];
   tags?: InputMaybe<Scalars['String']['input']>;
   title: Scalars['String']['input'];
@@ -914,6 +889,7 @@ export type CreateEventMutation = {
   createEvent?:
     | {
         __typename?: 'Event';
+        adminRemark?: string | undefined;
         category?: string | undefined;
         createdAt: any;
         createdBy?: string | undefined;
@@ -921,13 +897,12 @@ export type CreateEventMutation = {
         endDate?: any | undefined;
         id: number;
         image?: string | undefined;
-        isVerified?: boolean | undefined;
         location?: string | undefined;
         medium: string;
         price?: number | undefined;
         short_url?: string | undefined;
         startDate: any;
-        status?: string | undefined;
+        status?: EventStatus | undefined;
         summary: string;
         tags?: Array<string | undefined> | undefined;
         ticketUrl?: string | undefined;
@@ -936,32 +911,15 @@ export type CreateEventMutation = {
         attendees?:
           | Array<
               | {
-                  __typename?: 'User';
-                  aboutMe?: string | undefined;
+                  __typename?: 'UserBasic';
                   batch?: number | undefined;
-                  createdAt: any;
                   disabled?: boolean | undefined;
-                  displayName?: string | undefined;
-                  dob?: string | undefined;
-                  email?: string | undefined;
-                  emergencyMobile?: string | undefined;
-                  extraEmail?: string | undefined;
-                  extraMobile?: string | undefined;
                   firstName?: string | undefined;
-                  gender?: string | undefined;
-                  google_auth_id?: string | undefined;
                   id?: string | undefined;
-                  isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
-                  membershipYear?: number | undefined;
-                  mobile?: string | undefined;
-                  nickName?: string | undefined;
                   profileImage?: string | undefined;
-                  socialMedia?: any | undefined;
-                  updatedAt: any;
-                  whatsAppMobile?: string | undefined;
                   role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
                 }
               | undefined
@@ -970,32 +928,15 @@ export type CreateEventMutation = {
         organizers?:
           | Array<
               | {
-                  __typename?: 'User';
-                  aboutMe?: string | undefined;
+                  __typename?: 'UserBasic';
                   batch?: number | undefined;
-                  createdAt: any;
                   disabled?: boolean | undefined;
-                  displayName?: string | undefined;
-                  dob?: string | undefined;
-                  email?: string | undefined;
-                  emergencyMobile?: string | undefined;
-                  extraEmail?: string | undefined;
-                  extraMobile?: string | undefined;
                   firstName?: string | undefined;
-                  gender?: string | undefined;
-                  google_auth_id?: string | undefined;
                   id?: string | undefined;
-                  isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
-                  membershipYear?: number | undefined;
-                  mobile?: string | undefined;
-                  nickName?: string | undefined;
                   profileImage?: string | undefined;
-                  socialMedia?: any | undefined;
-                  updatedAt: any;
-                  whatsAppMobile?: string | undefined;
                   role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
                 }
               | undefined
@@ -1083,6 +1024,7 @@ export type DeleteBlogMutation = {
     | {
         __typename?: 'Blog';
         authorId?: string | undefined;
+        categoryId?: string | undefined;
         content?: string | undefined;
         createdAt: any;
         id: string;
@@ -1286,6 +1228,7 @@ export type PublishEventMutation = {
   publishEvent?:
     | {
         __typename?: 'Event';
+        adminRemark?: string | undefined;
         category?: string | undefined;
         createdAt: any;
         createdBy?: string | undefined;
@@ -1293,13 +1236,12 @@ export type PublishEventMutation = {
         endDate?: any | undefined;
         id: number;
         image?: string | undefined;
-        isVerified?: boolean | undefined;
         location?: string | undefined;
         medium: string;
         price?: number | undefined;
         short_url?: string | undefined;
         startDate: any;
-        status?: string | undefined;
+        status?: EventStatus | undefined;
         summary: string;
         tags?: Array<string | undefined> | undefined;
         ticketUrl?: string | undefined;
@@ -1308,32 +1250,15 @@ export type PublishEventMutation = {
         attendees?:
           | Array<
               | {
-                  __typename?: 'User';
-                  aboutMe?: string | undefined;
+                  __typename?: 'UserBasic';
                   batch?: number | undefined;
-                  createdAt: any;
                   disabled?: boolean | undefined;
-                  displayName?: string | undefined;
-                  dob?: string | undefined;
-                  email?: string | undefined;
-                  emergencyMobile?: string | undefined;
-                  extraEmail?: string | undefined;
-                  extraMobile?: string | undefined;
                   firstName?: string | undefined;
-                  gender?: string | undefined;
-                  google_auth_id?: string | undefined;
                   id?: string | undefined;
-                  isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
-                  membershipYear?: number | undefined;
-                  mobile?: string | undefined;
-                  nickName?: string | undefined;
                   profileImage?: string | undefined;
-                  socialMedia?: any | undefined;
-                  updatedAt: any;
-                  whatsAppMobile?: string | undefined;
                   role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
                 }
               | undefined
@@ -1342,32 +1267,15 @@ export type PublishEventMutation = {
         organizers?:
           | Array<
               | {
-                  __typename?: 'User';
-                  aboutMe?: string | undefined;
+                  __typename?: 'UserBasic';
                   batch?: number | undefined;
-                  createdAt: any;
                   disabled?: boolean | undefined;
-                  displayName?: string | undefined;
-                  dob?: string | undefined;
-                  email?: string | undefined;
-                  emergencyMobile?: string | undefined;
-                  extraEmail?: string | undefined;
-                  extraMobile?: string | undefined;
                   firstName?: string | undefined;
-                  gender?: string | undefined;
-                  google_auth_id?: string | undefined;
                   id?: string | undefined;
-                  isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
-                  membershipYear?: number | undefined;
-                  mobile?: string | undefined;
-                  nickName?: string | undefined;
                   profileImage?: string | undefined;
-                  socialMedia?: any | undefined;
-                  updatedAt: any;
-                  whatsAppMobile?: string | undefined;
                   role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
                 }
               | undefined
@@ -1436,6 +1344,7 @@ export type RequestChangesBlogMutation = {
     | {
         __typename?: 'Blog';
         authorId?: string | undefined;
+        categoryId?: string | undefined;
         content?: string | undefined;
         createdAt: any;
         id: string;
@@ -1650,6 +1559,7 @@ export type UpdateBlogMutation = {
     | {
         __typename?: 'Blog';
         authorId?: string | undefined;
+        categoryId?: string | undefined;
         content?: string | undefined;
         createdAt: any;
         id: string;
@@ -1712,6 +1622,7 @@ export type UpdateEventMutationVariables = Exact<{
   medium: Scalars['String']['input'];
   price?: InputMaybe<Scalars['Float']['input']>;
   startDate: Scalars['String']['input'];
+  status?: InputMaybe<EventStatus>;
   summary: Scalars['String']['input'];
   tags?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
   title: Scalars['String']['input'];
@@ -1722,6 +1633,7 @@ export type UpdateEventMutation = {
   updateEvent?:
     | {
         __typename?: 'Event';
+        adminRemark?: string | undefined;
         category?: string | undefined;
         createdAt: any;
         createdBy?: string | undefined;
@@ -1729,13 +1641,12 @@ export type UpdateEventMutation = {
         endDate?: any | undefined;
         id: number;
         image?: string | undefined;
-        isVerified?: boolean | undefined;
         location?: string | undefined;
         medium: string;
         price?: number | undefined;
         short_url?: string | undefined;
         startDate: any;
-        status?: string | undefined;
+        status?: EventStatus | undefined;
         summary: string;
         tags?: Array<string | undefined> | undefined;
         ticketUrl?: string | undefined;
@@ -1744,32 +1655,15 @@ export type UpdateEventMutation = {
         attendees?:
           | Array<
               | {
-                  __typename?: 'User';
-                  aboutMe?: string | undefined;
+                  __typename?: 'UserBasic';
                   batch?: number | undefined;
-                  createdAt: any;
                   disabled?: boolean | undefined;
-                  displayName?: string | undefined;
-                  dob?: string | undefined;
-                  email?: string | undefined;
-                  emergencyMobile?: string | undefined;
-                  extraEmail?: string | undefined;
-                  extraMobile?: string | undefined;
                   firstName?: string | undefined;
-                  gender?: string | undefined;
-                  google_auth_id?: string | undefined;
                   id?: string | undefined;
-                  isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
-                  membershipYear?: number | undefined;
-                  mobile?: string | undefined;
-                  nickName?: string | undefined;
                   profileImage?: string | undefined;
-                  socialMedia?: any | undefined;
-                  updatedAt: any;
-                  whatsAppMobile?: string | undefined;
                   role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
                 }
               | undefined
@@ -1778,32 +1672,15 @@ export type UpdateEventMutation = {
         organizers?:
           | Array<
               | {
-                  __typename?: 'User';
-                  aboutMe?: string | undefined;
+                  __typename?: 'UserBasic';
                   batch?: number | undefined;
-                  createdAt: any;
                   disabled?: boolean | undefined;
-                  displayName?: string | undefined;
-                  dob?: string | undefined;
-                  email?: string | undefined;
-                  emergencyMobile?: string | undefined;
-                  extraEmail?: string | undefined;
-                  extraMobile?: string | undefined;
                   firstName?: string | undefined;
-                  gender?: string | undefined;
-                  google_auth_id?: string | undefined;
                   id?: string | undefined;
-                  isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
-                  membershipYear?: number | undefined;
-                  mobile?: string | undefined;
-                  nickName?: string | undefined;
                   profileImage?: string | undefined;
-                  socialMedia?: any | undefined;
-                  updatedAt: any;
-                  whatsAppMobile?: string | undefined;
                   role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
                 }
               | undefined
@@ -1926,8 +1803,9 @@ export type UpdateUserMutation = {
 };
 
 export type VerifyEventMutationVariables = Exact<{
+  adminRemark?: InputMaybe<Scalars['String']['input']>;
   eventId: Scalars['Int']['input'];
-  verified: Scalars['Boolean']['input'];
+  status: EventStatus;
 }>;
 
 export type VerifyEventMutation = { __typename?: 'Mutation'; verifyEvent?: boolean | undefined };
@@ -2090,7 +1968,8 @@ export type GetBatchCoordinatorsByBatchQuery = {
 };
 
 export type GetBlogQueryVariables = Exact<{
-  id: Scalars['String']['input'];
+  id?: InputMaybe<Scalars['String']['input']>;
+  slug?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 export type GetBlogQuery = {
@@ -2099,6 +1978,7 @@ export type GetBlogQuery = {
     | {
         __typename?: 'Blog';
         authorId?: string | undefined;
+        categoryId?: string | undefined;
         content?: string | undefined;
         createdAt: any;
         id: string;
@@ -2167,6 +2047,7 @@ export type GetBlogListQuery = {
               | {
                   __typename?: 'BlogBasic';
                   authorId: string;
+                  categoryId?: string | undefined;
                   createdAt: any;
                   id: string;
                   slug: string;
@@ -2247,6 +2128,7 @@ export type GetEventDetailsQuery = {
   getEventDetails?:
     | {
         __typename?: 'Event';
+        adminRemark?: string | undefined;
         category?: string | undefined;
         createdAt: any;
         createdBy?: string | undefined;
@@ -2254,13 +2136,12 @@ export type GetEventDetailsQuery = {
         endDate?: any | undefined;
         id: number;
         image?: string | undefined;
-        isVerified?: boolean | undefined;
         location?: string | undefined;
         medium: string;
         price?: number | undefined;
         short_url?: string | undefined;
         startDate: any;
-        status?: string | undefined;
+        status?: EventStatus | undefined;
         summary: string;
         tags?: Array<string | undefined> | undefined;
         ticketUrl?: string | undefined;
@@ -2269,32 +2150,15 @@ export type GetEventDetailsQuery = {
         attendees?:
           | Array<
               | {
-                  __typename?: 'User';
-                  aboutMe?: string | undefined;
+                  __typename?: 'UserBasic';
                   batch?: number | undefined;
-                  createdAt: any;
                   disabled?: boolean | undefined;
-                  displayName?: string | undefined;
-                  dob?: string | undefined;
-                  email?: string | undefined;
-                  emergencyMobile?: string | undefined;
-                  extraEmail?: string | undefined;
-                  extraMobile?: string | undefined;
                   firstName?: string | undefined;
-                  gender?: string | undefined;
-                  google_auth_id?: string | undefined;
                   id?: string | undefined;
-                  isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
-                  membershipYear?: number | undefined;
-                  mobile?: string | undefined;
-                  nickName?: string | undefined;
                   profileImage?: string | undefined;
-                  socialMedia?: any | undefined;
-                  updatedAt: any;
-                  whatsAppMobile?: string | undefined;
                   role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
                 }
               | undefined
@@ -2303,32 +2167,15 @@ export type GetEventDetailsQuery = {
         organizers?:
           | Array<
               | {
-                  __typename?: 'User';
-                  aboutMe?: string | undefined;
+                  __typename?: 'UserBasic';
                   batch?: number | undefined;
-                  createdAt: any;
                   disabled?: boolean | undefined;
-                  displayName?: string | undefined;
-                  dob?: string | undefined;
-                  email?: string | undefined;
-                  emergencyMobile?: string | undefined;
-                  extraEmail?: string | undefined;
-                  extraMobile?: string | undefined;
                   firstName?: string | undefined;
-                  gender?: string | undefined;
-                  google_auth_id?: string | undefined;
                   id?: string | undefined;
-                  isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
-                  membershipYear?: number | undefined;
-                  mobile?: string | undefined;
-                  nickName?: string | undefined;
                   profileImage?: string | undefined;
-                  socialMedia?: any | undefined;
-                  updatedAt: any;
-                  whatsAppMobile?: string | undefined;
                   role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
                 }
               | undefined
@@ -2352,6 +2199,7 @@ export type GetEventListQuery = {
           | Array<
               | {
                   __typename?: 'Event';
+                  adminRemark?: string | undefined;
                   category?: string | undefined;
                   createdAt: any;
                   createdBy?: string | undefined;
@@ -2359,13 +2207,12 @@ export type GetEventListQuery = {
                   endDate?: any | undefined;
                   id: number;
                   image?: string | undefined;
-                  isVerified?: boolean | undefined;
                   location?: string | undefined;
                   medium: string;
                   price?: number | undefined;
                   short_url?: string | undefined;
                   startDate: any;
-                  status?: string | undefined;
+                  status?: EventStatus | undefined;
                   summary: string;
                   tags?: Array<string | undefined> | undefined;
                   ticketUrl?: string | undefined;
@@ -2374,32 +2221,15 @@ export type GetEventListQuery = {
                   attendees?:
                     | Array<
                         | {
-                            __typename?: 'User';
-                            aboutMe?: string | undefined;
+                            __typename?: 'UserBasic';
                             batch?: number | undefined;
-                            createdAt: any;
                             disabled?: boolean | undefined;
-                            displayName?: string | undefined;
-                            dob?: string | undefined;
-                            email?: string | undefined;
-                            emergencyMobile?: string | undefined;
-                            extraEmail?: string | undefined;
-                            extraMobile?: string | undefined;
                             firstName?: string | undefined;
-                            gender?: string | undefined;
-                            google_auth_id?: string | undefined;
                             id?: string | undefined;
-                            isConfidential?: boolean | undefined;
                             isFaculty?: boolean | undefined;
                             isVerified?: boolean | undefined;
                             lastName?: string | undefined;
-                            membershipYear?: number | undefined;
-                            mobile?: string | undefined;
-                            nickName?: string | undefined;
                             profileImage?: string | undefined;
-                            socialMedia?: any | undefined;
-                            updatedAt: any;
-                            whatsAppMobile?: string | undefined;
                             role?:
                               | { __typename?: 'Role'; id?: string | undefined; name?: string | undefined }
                               | undefined;
@@ -2410,32 +2240,15 @@ export type GetEventListQuery = {
                   organizers?:
                     | Array<
                         | {
-                            __typename?: 'User';
-                            aboutMe?: string | undefined;
+                            __typename?: 'UserBasic';
                             batch?: number | undefined;
-                            createdAt: any;
                             disabled?: boolean | undefined;
-                            displayName?: string | undefined;
-                            dob?: string | undefined;
-                            email?: string | undefined;
-                            emergencyMobile?: string | undefined;
-                            extraEmail?: string | undefined;
-                            extraMobile?: string | undefined;
                             firstName?: string | undefined;
-                            gender?: string | undefined;
-                            google_auth_id?: string | undefined;
                             id?: string | undefined;
-                            isConfidential?: boolean | undefined;
                             isFaculty?: boolean | undefined;
                             isVerified?: boolean | undefined;
                             lastName?: string | undefined;
-                            membershipYear?: number | undefined;
-                            mobile?: string | undefined;
-                            nickName?: string | undefined;
                             profileImage?: string | undefined;
-                            socialMedia?: any | undefined;
-                            updatedAt: any;
-                            whatsAppMobile?: string | undefined;
                             role?:
                               | { __typename?: 'Role'; id?: string | undefined; name?: string | undefined }
                               | undefined;
@@ -2737,6 +2550,7 @@ export const ApproveBlogDocument = gql`
         }
       }
       authorId
+      categoryId
       comments {
         author {
           batch
@@ -2876,36 +2690,20 @@ export type AssignBatchCoordinatorMutationOptions = Apollo.BaseMutationOptions<
 export const AttendEventDocument = gql`
   mutation attendEvent($eventId: Int!) {
     attendEvent(eventId: $eventId) {
+      adminRemark
       attendees {
-        aboutMe
         batch
-        createdAt
         disabled
-        displayName
-        dob
-        email
-        emergencyMobile
-        extraEmail
-        extraMobile
         firstName
-        gender
-        google_auth_id
         id
-        isConfidential
         isFaculty
         isVerified
         lastName
-        membershipYear
-        mobile
-        nickName
         profileImage
         role {
           id
           name
         }
-        socialMedia
-        updatedAt
-        whatsAppMobile
       }
       category
       createdAt
@@ -2914,39 +2712,21 @@ export const AttendEventDocument = gql`
       endDate
       id
       image
-      isVerified
       location
       medium
       organizers {
-        aboutMe
         batch
-        createdAt
         disabled
-        displayName
-        dob
-        email
-        emergencyMobile
-        extraEmail
-        extraMobile
         firstName
-        gender
-        google_auth_id
         id
-        isConfidential
         isFaculty
         isVerified
         lastName
-        membershipYear
-        mobile
-        nickName
         profileImage
         role {
           id
           name
         }
-        socialMedia
-        updatedAt
-        whatsAppMobile
       }
       price
       short_url
@@ -3012,6 +2792,7 @@ export const CreateBlogDocument = gql`
         }
       }
       authorId
+      categoryId
       comments {
         author {
           batch
@@ -3138,11 +2919,11 @@ export const CreateEventDocument = gql`
     $description: String
     $endDate: String
     $image: String
-    $isPublish: Boolean
     $location: String
     $medium: String!
     $price: Float
     $startDate: String!
+    $status: EventStatus!
     $summary: String!
     $tags: String
     $title: String!
@@ -3152,45 +2933,29 @@ export const CreateEventDocument = gql`
       description: $description
       endDate: $endDate
       image: $image
-      isPublish: $isPublish
       location: $location
       medium: $medium
       price: $price
       startDate: $startDate
+      status: $status
       summary: $summary
       tags: $tags
       title: $title
     ) {
+      adminRemark
       attendees {
-        aboutMe
         batch
-        createdAt
         disabled
-        displayName
-        dob
-        email
-        emergencyMobile
-        extraEmail
-        extraMobile
         firstName
-        gender
-        google_auth_id
         id
-        isConfidential
         isFaculty
         isVerified
         lastName
-        membershipYear
-        mobile
-        nickName
         profileImage
         role {
           id
           name
         }
-        socialMedia
-        updatedAt
-        whatsAppMobile
       }
       category
       createdAt
@@ -3199,39 +2964,21 @@ export const CreateEventDocument = gql`
       endDate
       id
       image
-      isVerified
       location
       medium
       organizers {
-        aboutMe
         batch
-        createdAt
         disabled
-        displayName
-        dob
-        email
-        emergencyMobile
-        extraEmail
-        extraMobile
         firstName
-        gender
-        google_auth_id
         id
-        isConfidential
         isFaculty
         isVerified
         lastName
-        membershipYear
-        mobile
-        nickName
         profileImage
         role {
           id
           name
         }
-        socialMedia
-        updatedAt
-        whatsAppMobile
       }
       price
       short_url
@@ -3264,11 +3011,11 @@ export type CreateEventMutationFn = Apollo.MutationFunction<CreateEventMutation,
  *      description: // value for 'description'
  *      endDate: // value for 'endDate'
  *      image: // value for 'image'
- *      isPublish: // value for 'isPublish'
  *      location: // value for 'location'
  *      medium: // value for 'medium'
  *      price: // value for 'price'
  *      startDate: // value for 'startDate'
+ *      status: // value for 'status'
  *      summary: // value for 'summary'
  *      tags: // value for 'tags'
  *      title: // value for 'title'
@@ -3424,6 +3171,7 @@ export const DeleteBlogDocument = gql`
         }
       }
       authorId
+      categoryId
       comments {
         author {
           batch
@@ -3758,36 +3506,20 @@ export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, L
 export const PublishEventDocument = gql`
   mutation publishEvent($eventId: Int!, $status: EventStatus!) {
     publishEvent(eventId: $eventId, status: $status) {
+      adminRemark
       attendees {
-        aboutMe
         batch
-        createdAt
         disabled
-        displayName
-        dob
-        email
-        emergencyMobile
-        extraEmail
-        extraMobile
         firstName
-        gender
-        google_auth_id
         id
-        isConfidential
         isFaculty
         isVerified
         lastName
-        membershipYear
-        mobile
-        nickName
         profileImage
         role {
           id
           name
         }
-        socialMedia
-        updatedAt
-        whatsAppMobile
       }
       category
       createdAt
@@ -3796,39 +3528,21 @@ export const PublishEventDocument = gql`
       endDate
       id
       image
-      isVerified
       location
       medium
       organizers {
-        aboutMe
         batch
-        createdAt
         disabled
-        displayName
-        dob
-        email
-        emergencyMobile
-        extraEmail
-        extraMobile
         firstName
-        gender
-        google_auth_id
         id
-        isConfidential
         isFaculty
         isVerified
         lastName
-        membershipYear
-        mobile
-        nickName
         profileImage
         role {
           id
           name
         }
-        socialMedia
-        updatedAt
-        whatsAppMobile
       }
       price
       short_url
@@ -4002,6 +3716,7 @@ export const RequestChangesBlogDocument = gql`
         }
       }
       authorId
+      categoryId
       comments {
         author {
           batch
@@ -4352,6 +4067,7 @@ export const UpdateBlogDocument = gql`
         }
       }
       authorId
+      categoryId
       comments {
         author {
           batch
@@ -4423,6 +4139,7 @@ export const UpdateEventDocument = gql`
     $medium: String!
     $price: Float
     $startDate: String!
+    $status: EventStatus
     $summary: String!
     $tags: [String!]
     $title: String!
@@ -4436,40 +4153,25 @@ export const UpdateEventDocument = gql`
       medium: $medium
       price: $price
       startDate: $startDate
+      status: $status
       summary: $summary
       tags: $tags
       title: $title
     ) {
+      adminRemark
       attendees {
-        aboutMe
         batch
-        createdAt
         disabled
-        displayName
-        dob
-        email
-        emergencyMobile
-        extraEmail
-        extraMobile
         firstName
-        gender
-        google_auth_id
         id
-        isConfidential
         isFaculty
         isVerified
         lastName
-        membershipYear
-        mobile
-        nickName
         profileImage
         role {
           id
           name
         }
-        socialMedia
-        updatedAt
-        whatsAppMobile
       }
       category
       createdAt
@@ -4478,39 +4180,21 @@ export const UpdateEventDocument = gql`
       endDate
       id
       image
-      isVerified
       location
       medium
       organizers {
-        aboutMe
         batch
-        createdAt
         disabled
-        displayName
-        dob
-        email
-        emergencyMobile
-        extraEmail
-        extraMobile
         firstName
-        gender
-        google_auth_id
         id
-        isConfidential
         isFaculty
         isVerified
         lastName
-        membershipYear
-        mobile
-        nickName
         profileImage
         role {
           id
           name
         }
-        socialMedia
-        updatedAt
-        whatsAppMobile
       }
       price
       short_url
@@ -4547,6 +4231,7 @@ export type UpdateEventMutationFn = Apollo.MutationFunction<UpdateEventMutation,
  *      medium: // value for 'medium'
  *      price: // value for 'price'
  *      startDate: // value for 'startDate'
+ *      status: // value for 'status'
  *      summary: // value for 'summary'
  *      tags: // value for 'tags'
  *      title: // value for 'title'
@@ -4761,8 +4446,8 @@ export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutati
 export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
 export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
 export const VerifyEventDocument = gql`
-  mutation verifyEvent($eventId: Int!, $verified: Boolean!) {
-    verifyEvent(eventId: $eventId, verified: $verified)
+  mutation verifyEvent($adminRemark: String, $eventId: Int!, $status: EventStatus!) {
+    verifyEvent(adminRemark: $adminRemark, eventId: $eventId, status: $status)
   }
 `;
 export type VerifyEventMutationFn = Apollo.MutationFunction<VerifyEventMutation, VerifyEventMutationVariables>;
@@ -4780,8 +4465,9 @@ export type VerifyEventMutationFn = Apollo.MutationFunction<VerifyEventMutation,
  * @example
  * const [verifyEventMutation, { data, loading, error }] = useVerifyEventMutation({
  *   variables: {
+ *      adminRemark: // value for 'adminRemark'
  *      eventId: // value for 'eventId'
- *      verified: // value for 'verified'
+ *      status: // value for 'status'
  *   },
  * });
  */
@@ -5117,8 +4803,8 @@ export type GetBatchCoordinatorsByBatchQueryResult = Apollo.QueryResult<
   GetBatchCoordinatorsByBatchQueryVariables
 >;
 export const GetBlogDocument = gql`
-  query getBlog($id: String!) {
-    getBlog(id: $id) {
+  query getBlog($id: String, $slug: String) {
+    getBlog(id: $id, slug: $slug) {
       author {
         batch
         disabled
@@ -5134,6 +4820,7 @@ export const GetBlogDocument = gql`
         }
       }
       authorId
+      categoryId
       comments {
         author {
           batch
@@ -5177,13 +4864,11 @@ export const GetBlogDocument = gql`
  * const { data, loading, error } = useGetBlogQuery({
  *   variables: {
  *      id: // value for 'id'
+ *      slug: // value for 'slug'
  *   },
  * });
  */
-export function useGetBlogQuery(
-  baseOptions: Apollo.QueryHookOptions<GetBlogQuery, GetBlogQueryVariables> &
-    ({ variables: GetBlogQueryVariables; skip?: boolean } | { skip: boolean })
-) {
+export function useGetBlogQuery(baseOptions?: Apollo.QueryHookOptions<GetBlogQuery, GetBlogQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<GetBlogQuery, GetBlogQueryVariables>(GetBlogDocument, options);
 }
@@ -5220,6 +4905,7 @@ export const GetBlogListDocument = gql`
           }
         }
         authorId
+        categoryId
         createdAt
         id
         slug
@@ -5342,36 +5028,20 @@ export type GetCommentListQueryResult = Apollo.QueryResult<GetCommentListQuery, 
 export const GetEventDetailsDocument = gql`
   query getEventDetails($id: Int!) {
     getEventDetails(id: $id) {
+      adminRemark
       attendees {
-        aboutMe
         batch
-        createdAt
         disabled
-        displayName
-        dob
-        email
-        emergencyMobile
-        extraEmail
-        extraMobile
         firstName
-        gender
-        google_auth_id
         id
-        isConfidential
         isFaculty
         isVerified
         lastName
-        membershipYear
-        mobile
-        nickName
         profileImage
         role {
           id
           name
         }
-        socialMedia
-        updatedAt
-        whatsAppMobile
       }
       category
       createdAt
@@ -5380,39 +5050,21 @@ export const GetEventDetailsDocument = gql`
       endDate
       id
       image
-      isVerified
       location
       medium
       organizers {
-        aboutMe
         batch
-        createdAt
         disabled
-        displayName
-        dob
-        email
-        emergencyMobile
-        extraEmail
-        extraMobile
         firstName
-        gender
-        google_auth_id
         id
-        isConfidential
         isFaculty
         isVerified
         lastName
-        membershipYear
-        mobile
-        nickName
         profileImage
         role {
           id
           name
         }
-        socialMedia
-        updatedAt
-        whatsAppMobile
       }
       price
       short_url
@@ -5470,36 +5122,20 @@ export const GetEventListDocument = gql`
   query getEventList($options: ListInput) {
     getEventList(options: $options) {
       data {
+        adminRemark
         attendees {
-          aboutMe
           batch
-          createdAt
           disabled
-          displayName
-          dob
-          email
-          emergencyMobile
-          extraEmail
-          extraMobile
           firstName
-          gender
-          google_auth_id
           id
-          isConfidential
           isFaculty
           isVerified
           lastName
-          membershipYear
-          mobile
-          nickName
           profileImage
           role {
             id
             name
           }
-          socialMedia
-          updatedAt
-          whatsAppMobile
         }
         category
         createdAt
@@ -5508,39 +5144,21 @@ export const GetEventListDocument = gql`
         endDate
         id
         image
-        isVerified
         location
         medium
         organizers {
-          aboutMe
           batch
-          createdAt
           disabled
-          displayName
-          dob
-          email
-          emergencyMobile
-          extraEmail
-          extraMobile
           firstName
-          gender
-          google_auth_id
           id
-          isConfidential
           isFaculty
           isVerified
           lastName
-          membershipYear
-          mobile
-          nickName
           profileImage
           role {
             id
             name
           }
-          socialMedia
-          updatedAt
-          whatsAppMobile
         }
         price
         short_url

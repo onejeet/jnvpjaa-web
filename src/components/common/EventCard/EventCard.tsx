@@ -32,7 +32,7 @@ import {
   Minus,
   NotePencil,
 } from '@phosphor-icons/react';
-import { EventStatus, Maybe, User } from '@/apollo/hooks';
+import { EventStatus, Maybe, User, UserBasic } from '@/apollo/hooks';
 import ProfilePicture from '../ProfilePicture';
 import { paths } from '@/config/paths';
 import { useRouter } from 'next/router';
@@ -59,14 +59,19 @@ const EventCard: React.FC<EventCardProps> = ({
     endDate,
     image,
     medium = '',
+    attendees,
     category,
     location,
     attendees: people,
     status,
-    isVerified,
     createdBy,
     short_url = '',
   } = event;
+
+  const isRSVPDone = React.useMemo(() => {
+    // @ts-expect-error type error
+    return attendees && attendees?.findIndex((att: UserBasic) => att?.id === user?.id) !== -1;
+  }, [attendees, user]);
 
   const formattedStartDate = React.useMemo(() => {
     return dayjs(startDate)?.format('MMM DD, YYYY HH:MM A');
@@ -83,11 +88,10 @@ const EventCard: React.FC<EventCardProps> = ({
   const isLive = React.useMemo(() => {
     return (
       status === EventStatus.Published &&
-      isVerified &&
       dayjs(startDate).isBefore(dayjs()) &&
       (!endDate || dayjs(endDate).isAfter(dayjs()))
     );
-  }, [status, startDate, endDate, isVerified]);
+  }, [status, startDate, endDate]);
 
   return (
     <Card
@@ -95,11 +99,11 @@ const EventCard: React.FC<EventCardProps> = ({
         boxShadow: 3,
         borderRadius: 2,
         position: 'relative',
-        borderColor: isVerified ? 'inherit' : 'error.main',
+        borderColor: status === EventStatus.PendingApproval ? 'error.main' : 'inherit',
         height: '100%',
       }}
     >
-      {!loading && !isVerified && status === EventStatus.Published && (
+      {!loading && status === EventStatus.PendingApproval && (
         <Box bgcolor="error.main" sx={{ py: '4px', position: 'absolute', top: 0, width: '100%' }}>
           <Typography variant="h5" width="100%" textAlign="center" color="common.white">
             Pending approval
@@ -147,14 +151,16 @@ const EventCard: React.FC<EventCardProps> = ({
                 alignItems: 'center',
                 transition: 'all 0.2s ease',
                 svg: {
-                  ml: '10px',
+                  ml: '4px',
                   transition: 'all 0.2s linear',
+                  opacity: 0,
                 },
                 '&:hover': {
                   cursor: showDescription ? 'default' : 'pointer',
                   color: showDescription ? 'inherit' : 'primary.main',
                   svg: {
-                    ml: '4px',
+                    ml: '10px',
+                    opacity: 1,
                   },
                 },
               }}
@@ -307,7 +313,7 @@ const EventCard: React.FC<EventCardProps> = ({
                   },
                 }}
               >
-                {people?.slice(0, 4)?.map((person: Maybe<User>, index: number) => (
+                {people?.slice(0, 4)?.map((person: Maybe<UserBasic>, index: number) => (
                   <Tooltip
                     key={`event-avatar-${title}-${index}`}
                     placement="top"
@@ -360,7 +366,7 @@ const EventCard: React.FC<EventCardProps> = ({
                 onClick={() => onEdit?.(id)}
               />
             )}
-            {!isVerified && isAdmin ? (
+            {status === EventStatus.PendingApproval && isAdmin ? (
               <Button
                 variant="contained"
                 disabled={loading}
@@ -371,7 +377,8 @@ const EventCard: React.FC<EventCardProps> = ({
                 onClick={() => verifyEvent?.(id)}
               />
             ) : (
-              markImGoing && (
+              markImGoing &&
+              !isRSVPDone && (
                 <Button
                   title="I'm Going"
                   variant="outlined"

@@ -10,6 +10,7 @@ import { INewEventFormInput } from './NewEvent.types';
 import Button from '@/components/core/Button';
 import FormDateTimeField from '@/components/form/FormDateTimeField';
 import {
+  EventStatus,
   useCreateEventMutation,
   useGetEventDetailsQuery,
   usePublishEventMutation,
@@ -70,6 +71,14 @@ const NewEvent = () => {
     }
   }, [eventData, reset]);
 
+  const isPublishAllowed = React.useMemo(() => {
+    return (
+      !eventData?.getEventDetails?.status ||
+      eventData?.getEventDetails?.status === EventStatus.Draft ||
+      eventData?.getEventDetails?.status === EventStatus.RequestChanges
+    );
+  }, [eventData]);
+
   console.log('ZZ: getValues', getValues());
 
   const watchMedium = useWatch({ control, name: 'medium' });
@@ -85,34 +94,29 @@ const NewEvent = () => {
   const onSubmit = React.useCallback(
     (data: INewEventFormInput) => {
       if (eventId) {
+        const variables: any = {
+          eventId: parseInt(eventId as string, 0),
+          ...data,
+          startDate: data?.startDate?.toISOString(),
+          endDate: data?.endDate?.toISOString(),
+        };
+
+        if (isPublishAllowed && saveTypeRef.current === 'publish') {
+          variables.status = EventStatus.Published;
+        }
+
+        if (!isPublishAllowed && saveTypeRef.current === 'draft') {
+          variables.status = EventStatus.Draft;
+        }
+
         updateEvent({
-          variables: {
-            eventId: parseInt(eventId as string, 0),
-            ...data,
-            startDate: data?.startDate?.toISOString(),
-            endDate: data?.endDate?.toISOString(),
-          },
+          variables,
           onCompleted: () => {
             if (saveTypeRef.current === 'publish') {
-              publishEvent({
-                variables: {
-                  eventId: parseInt(eventId as string, 0),
-                  status: 'published',
-                },
-                onCompleted: () => {
-                  client.refetchQueries({
-                    include: ['getEventList'],
-                  });
-                  router.push(paths.events.root);
-                },
-                onError: (err) => {
-                  showAlert({
-                    visible: true,
-                    type: 'error',
-                    message: err?.message || 'ata saved bu the publish failed.',
-                  });
-                },
+              client.refetchQueries({
+                include: ['getEventList'],
               });
+              router.push(paths.events.root);
             }
           },
           onError: (err) => {
@@ -132,7 +136,7 @@ const NewEvent = () => {
           price: data?.price || 0,
           startDate: data?.startDate?.toISOString(),
           endDate: data?.endDate?.toISOString(),
-          isPublish: saveTypeRef.current === 'publish',
+          status: saveTypeRef.current === 'publish' ? EventStatus.Published : EventStatus.Draft,
         },
         onCompleted: async () => {
           client.refetchQueries({
@@ -149,7 +153,7 @@ const NewEvent = () => {
         },
       });
     },
-    [crateEvent, router, client, eventId, publishEvent, updateEvent]
+    [isPublishAllowed, crateEvent, router, client, eventId, publishEvent, updateEvent]
   );
 
   const saving = React.useMemo(() => {
@@ -183,20 +187,21 @@ const NewEvent = () => {
         <Box display="flex" gap={2} alignItems="center">
           <Button
             // size="small"
-            title="Save Draft"
+            title={eventData?.getEventDetails?.status === EventStatus.Published ? 'Save & Unpublish' : 'Save'}
             onClick={() => {
               saveTypeRef.current = 'draft';
               handleSubmit(onSubmit);
             }}
             startIcon={<FloppyDiskBack size={16} />}
             type="submit"
+            color={eventData?.getEventDetails?.status === EventStatus.Published ? 'error' : 'primary'}
             variant="outlined"
             disabled={saving}
             loading={saveTypeRef.current === 'draft' && saving}
           />
           <Button
             // size="small"
-            title="Save & Publish"
+            title={isPublishAllowed ? 'Save & Publish' : 'Update'}
             onClick={() => {
               saveTypeRef.current = 'publish';
               handleSubmit(onSubmit);

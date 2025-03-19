@@ -1,15 +1,5 @@
-import { Dayjs } from 'dayjs';
-
-export interface INewEventFormInput {
+export interface INewBlogFormInput {
   title: string;
-  summary: string;
-  description?: string;
-  startDate: Dayjs;
-  endDate?: Dayjs;
-  medium: string;
-  location: string;
-  category: string;
-  tags?: string;
-  price?: number;
-  isPublish?: boolean;
+  content: string;
+  categoryId: string;
 }

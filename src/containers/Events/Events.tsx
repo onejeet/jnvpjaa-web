@@ -153,7 +153,7 @@ export default function Events() {
             handleVerifyEvent({
               variables: {
                 eventId: id,
-                verified: true,
+                status: EventStatus.Published,
               },
               onCompleted: () => {
                 client.refetchQueries({
@@ -214,7 +214,9 @@ export default function Events() {
           visible: true,
           title: `Publish the Event`,
           type: 'loading',
-          message: `The event is in draft mode. Once published the admins will be notified for apporval.`,
+          message: isAdmin
+            ? `The event will be open for RSVP to all users upon publication.`
+            : `The event is in draft mode. Once published the admins will be notified for apporval.`,
           action: 'approve',
           okayButtonProps: {
             title: `Publish Now`,
@@ -243,8 +245,10 @@ export default function Events() {
                   {
                     visible: true,
                     type: 'success',
-                    title: `Published. Awaiting admin approval`,
-                    message: `The event has been published and sent for apporval to admin. Once apporved, wll be visible to all the alumni.`,
+                    title: isAdmin ? `Published` : `Published. Awaiting admin approval`,
+                    message: isAdmin
+                      ? `The event has been published successfully.`
+                      : `The event has been published and sent for apporval to admin. Once apporved, wll be visible to all the alumni.`,
                     action: 'success',
                   },
                   true
@@ -270,6 +274,8 @@ export default function Events() {
     },
     [publishEvent, user?.id, redirectToSignin, client, showAlert]
   );
+
+  console.log('ZZ: listData', listData);
 
   return (
     <LayoutModule
