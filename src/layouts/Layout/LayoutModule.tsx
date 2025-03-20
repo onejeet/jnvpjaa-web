@@ -52,7 +52,7 @@ const LayoutModule: React.FC<Props> = (props) => {
             bgcolor: 'background.paper',
             maxWidth: disableCover ? { xs: '98%', sm: '95%', md: '90%', xl: '1500px' } : '100%',
             margin: disableCover ? 'auto' : undefined,
-            minHeight: disableCover ? `calc(100vh - 379px)` : 0,
+            minHeight: disableCover ? `calc(100vh - 343px)` : 0,
             ...sxContainer,
           }}
           maxWidth={false}

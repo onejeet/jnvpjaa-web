@@ -49,12 +49,14 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
       return 'Approve';
     } else if (action === 'success') {
       return 'Okay';
+    } else if (action === 'error') {
+      return 'Okay';
     }
     return 'Yes, Proceed';
   }, [action]);
 
   const onOKayHandler = React.useMemo(() => {
-    return onOkay || (action === 'success' ? onCancel : () => {});
+    return onOkay || (action === 'success' || action === 'error' ? onCancel : () => {});
   }, [action, onOkay, onCancel]);
 
   return (

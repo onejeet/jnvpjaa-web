@@ -14,7 +14,8 @@ const EventDetails = () => {
       id: parseInt(id as string, 10),
     },
   });
-  const event: Event | undefined = React.useMemo(() => data?.getEventDetails, [data]);
+  // @ts-expect-error type-error
+  const event: Event = React.useMemo(() => data?.getEventDetails, [data]);
 
   return (
     <LayoutModule disableCover title={`${event?.title || 'Event'} • Alumni Network of JNV Paota, Jaipur`}>

@@ -68,7 +68,7 @@ const Menu: React.FC<MenuProps> = ({ id, items, value, render, disabled, childre
                       fontSize: '14px',
                       py: 0.7,
                       justifyContent: 'start',
-                      bgcolor: value && value === itemValue ? 'var(--mui-palette-background-level2)' : 'transparent',
+                      bgcolor: value && value === itemValue ? 'primary.200' : 'transparent',
                       ...(isHeading && {
                         px: 1,
                         pb: 0,
@@ -112,6 +112,7 @@ const Menu: React.FC<MenuProps> = ({ id, items, value, render, disabled, childre
                           horizontal: 'right',
                         }}
                       >
+                        {/* @ts-expect-error type-error */}
                         <MenuList
                           id
                           anchorOrigin={{

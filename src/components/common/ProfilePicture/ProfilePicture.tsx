@@ -30,7 +30,7 @@ const ProfilePicture: React.FC<ProfilePictureProps> = ({
       display="flex"
       alignItems="center"
       width="100%"
-      maxWidth={maxWidth || 200}
+      maxWidth={maxWidth || 'fit-content'}
       sx={{ cursor: 'pointer' }}
       {...containerProps}
     >

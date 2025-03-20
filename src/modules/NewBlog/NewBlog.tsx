@@ -28,7 +28,7 @@ import { useAuth } from '@/context/AuthContext';
 
 const NewBlog = () => {
   const router = useRouter();
-  const { slug } = router.query;
+  const { id: slug } = router.query;
   const client = useApolloClient();
   const { showAlert } = useAlert();
   const { user } = useAuth();
@@ -70,7 +70,7 @@ const NewBlog = () => {
       reset({
         title: blogData?.getBlog?.title,
         content: blogData?.getBlog?.content,
-        categoryId: blogData?.getBlog?.categoryId,
+        category: blogData?.getBlog?.categoryId,
       });
     }
   }, [blogData, reset]);
@@ -81,8 +81,10 @@ const NewBlog = () => {
     (data: INewBlogFormInput) => {
       if (blogId) {
         const variables: any = {
-          blogId,
-          ...data,
+          id: blogId,
+          title: data?.title?.trim(),
+          content: data?.content,
+          categoryId: data?.category,
         };
 
         if (isPublishAllowed && saveTypeRef.current === 'publish') {
@@ -123,7 +125,9 @@ const NewBlog = () => {
       }
       createBlog({
         variables: {
-          ...data,
+          title: data?.title?.trim(),
+          content: data?.content,
+          categoryId: data?.category,
           // image: `https://jnvpjaa.org/assets/events/${data?.category}.jpg`,
           status: saveTypeRef.current === 'publish' ? BlogStatus.Published : BlogStatus.Draft,
           authorId: user?.id,
@@ -176,7 +180,7 @@ const NewBlog = () => {
         <Grid size={{ xs: 12, md: 6 }}>
           <FormSelectField
             control={control}
-            name="categoryId"
+            name="category"
             selectProps={{
               //label: 'Category',
               size: 'small',
@@ -250,7 +254,7 @@ const NewBlog = () => {
         <Grid size={{ xs: 12 }}>
           <Box display="flex" flexDirection="column">
             <TipTapTextEditor
-              value=""
+              value={getValues('content')}
               onChange={(data) => setValue('content', data)}
               sx={{
                 border: 'none',

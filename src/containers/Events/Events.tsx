@@ -196,7 +196,7 @@ export default function Events() {
       router.push({
         pathname: paths.events.new,
         query: {
-          eventId: id,
+          id,
         },
       });
     },
@@ -248,7 +248,7 @@ export default function Events() {
                     title: isAdmin ? `Published` : `Published. Awaiting admin approval`,
                     message: isAdmin
                       ? `The event has been published successfully.`
-                      : `The event has been published and sent for apporval to admin. Once apporved, wll be visible to all the alumni.`,
+                      : `The event has been published and sent for apporval to admin. Once apporved, will be visible to all the alumni.`,
                     action: 'success',
                   },
                   true

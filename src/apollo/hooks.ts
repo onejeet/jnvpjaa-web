@@ -375,7 +375,7 @@ export type MutationUpdateBlogArgs = {
   content?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['String']['input'];
   slug?: InputMaybe<Scalars['String']['input']>;
-  status: BlogStatus;
+  status?: InputMaybe<BlogStatus>;
   title?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -1556,7 +1556,7 @@ export type UpdateBlogMutationVariables = Exact<{
   content?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['String']['input'];
   slug?: InputMaybe<Scalars['String']['input']>;
-  status: BlogStatus;
+  status?: InputMaybe<BlogStatus>;
   title?: InputMaybe<Scalars['String']['input']>;
 }>;
 
@@ -4064,7 +4064,7 @@ export type UpdateBatchCoordinatorMutationOptions = Apollo.BaseMutationOptions<
   UpdateBatchCoordinatorMutationVariables
 >;
 export const UpdateBlogDocument = gql`
-  mutation updateBlog($content: String, $id: String!, $slug: String, $status: BlogStatus!, $title: String) {
+  mutation updateBlog($content: String, $id: String!, $slug: String, $status: BlogStatus, $title: String) {
     updateBlog(content: $content, id: $id, slug: $slug, status: $status, title: $title) {
       adminRemark
       author {

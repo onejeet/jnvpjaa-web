@@ -8,11 +8,12 @@ export interface MenuItemProps extends Omit<MuiMenuItemProps, 'onChange' | 'valu
   href?: string;
   active?: boolean;
   value?: string | number;
+  onClick?: () => void;
   onMenuClose?: (event: object, reason: 'backdropClick' | 'escapeKeyDown') => void;
   onChange?: (value?: string | number) => void;
 }
 
-export interface MenuProps extends Omit<MuiMenuProps, 'onChange'> {
+export interface MenuProps extends Omit<MuiMenuProps, 'onChange' | 'open'> {
   items: Array<MenuItemProps>;
   menuItemProps?: MenuItemProps;
   onChange?: (value?: string | number) => void;

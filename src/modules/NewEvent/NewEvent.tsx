@@ -25,7 +25,7 @@ import dayjs from 'dayjs';
 
 const NewEvent = () => {
   const router = useRouter();
-  const { eventId } = router.query;
+  const { id: eventId } = router.query;
   const client = useApolloClient();
   const { showAlert } = useAlert();
   const saveTypeRef = React.useRef('draft');

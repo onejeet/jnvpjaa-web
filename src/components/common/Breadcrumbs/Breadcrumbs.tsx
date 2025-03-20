@@ -29,7 +29,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, loading }) => {
                   pathname: item.path,
                 }}
                 as={{
-                  pathname: '/',
+                  pathname: item.path,
                 }}
                 style={{
                   textDecoration: 'none',
