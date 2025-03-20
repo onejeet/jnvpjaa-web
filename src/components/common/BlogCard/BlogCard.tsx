@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { paths } from '@/config/paths';
 import { IBlogCardProps } from './BlogCard.types';
 import { BlogStatus } from '@/apollo/hooks';
-import { startCase } from '@/utils/helpers';
+import { getFormattedLabel, startCase } from '@/utils/helpers';
 import React from 'react';
 import Menu, { MenuItemProps } from '@/components/core/Menu';
 
@@ -42,13 +42,12 @@ const BlogCard: React.FC<IBlogCardProps> = ({
 
     switch (status) {
       case BlogStatus.Draft:
-      case BlogStatus.PendingApproval:
         items.push(
           {
             label: 'Edit',
             value: 'edit',
             onClick: () => onEdit(slug || ''),
-            icon: <Pencil size={18} />,
+            icon: <Pencil size={16} />,
           },
           {
             label: 'Publish',
@@ -76,13 +75,63 @@ const BlogCard: React.FC<IBlogCardProps> = ({
           }
         );
         break;
+      case BlogStatus.PendingApproval:
+        items.push(
+          {
+            label: 'Edit',
+            value: 'edit',
+            onClick: () => onEdit(slug || ''),
+            icon: <Pencil size={16} />,
+          },
+          {
+            label: 'Delete',
+            value: 'delete',
+            onClick: () => onDelete(id),
+            icon: <Trash size={18} />,
+            sx: {
+              color: 'error.main',
+              svg: {
+                color: 'error.main',
+              },
+            },
+          }
+        );
+
+        if (isAdminUser) {
+          items.splice(1, 0, {
+            label: 'Approve',
+            value: 'approve',
+            onClick: () => onVerify(id),
+            icon: <CheckCircle size={18} />,
+            sx: {
+              color: 'success.main',
+              svg: {
+                color: 'success.main',
+              },
+            },
+          });
+        } else {
+          items.splice(1, 0, {
+            label: 'Move to Draft',
+            value: 'unpublish',
+            onClick: () => onPublish(id, true),
+            icon: <XCircle size={18} />,
+            sx: {
+              color: 'error.main',
+              svg: {
+                color: 'error.main',
+              },
+            },
+          });
+        }
+        break;
       case BlogStatus.Published:
         items.push(
           {
             label: 'Edit',
             value: 'edit',
             onClick: () => onEdit(slug || ''),
-            icon: <Pencil size={18} />,
+            icon: <Pencil size={16} />,
           },
           {
             label: 'Unpublish',
@@ -157,7 +206,10 @@ const BlogCard: React.FC<IBlogCardProps> = ({
             md: 'column',
           }}
           alignItems="start"
-          justifyContent="start"
+          justifyContent={{
+            xs: 'start',
+            md: 'center',
+          }}
 
           // justifyContent="center"
         >
@@ -297,7 +349,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
             <Typography variant="h1" sx={{ display: 'flex', alignItems: 'center' }}>
               {title}{' '}
               {status !== BlogStatus.Published && (
-                <Chip size="small" label={startCase(status)} color={statusColor} sx={{ ml: 1 }} />
+                <Chip size="small" label={getFormattedLabel(status)} color={statusColor} sx={{ ml: 1 }} />
               )}{' '}
               <ArrowRight size={28} weight="bold" />
             </Typography>
@@ -317,6 +369,14 @@ const BlogCard: React.FC<IBlogCardProps> = ({
             onClick={() => (author?.id ? router.push(paths.profile.getProfileUrl(author?.id)) : null)}
             src={author?.profileImage}
             summary={author?.isFaculty ? 'Faculty' : author?.batch ? `Batch of ${author?.batch}` : ''}
+            titleComponentProps={{
+              titleProps: {
+                fontSize: '12px',
+              },
+              summaryProps: {
+                fontSize: '10px',
+              },
+            }}
           />
         </Box>
       </Box>

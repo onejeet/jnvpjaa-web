@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import { Dot, DotOutline } from '@phosphor-icons/react';
 import ProfilePicture from '../ProfilePicture';
 import { BlogStatus } from '@/apollo/hooks';
-import { startCase } from '@/utils/helpers';
+import { getFormattedLabel, startCase } from '@/utils/helpers';
 
 const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading }) => {
   const { id, title, author, content, status, updatedAt } = blog || {};
@@ -17,16 +17,21 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading }) => {
   }, [content]);
 
   const statusMessage = React.useMemo(() => {
-    return status !== BlogStatus.Published ? `Preview Mode. Blog is not published yet.` : null;
+    return status !== BlogStatus.Published
+      ? `Preview Mode. Blog is in ${getFormattedLabel(status as string)} status.`
+      : null;
   }, [status]);
 
   return (
     <Card sx={{ position: 'relative' }} className="single-blog">
-      <Box sx={{ position: 'absolute', top: 0, bgcolor: 'error.main', width: '100%', textAlign: 'center' }}>
-        <Typography color="common.white" variant="body2" py="4px">
-          {statusMessage}
-        </Typography>
-      </Box>
+      {statusMessage && (
+        <Box sx={{ position: 'absolute', top: 0, bgcolor: 'error.main', width: '100%', textAlign: 'center' }}>
+          <Typography color="common.white" variant="body2">
+            {statusMessage}
+          </Typography>
+        </Box>
+      )}
+
       <Box p={3} pt={statusMessage ? 5 : 3}>
         <Box display="flex" alignItems="center" gap={0.5}>
           <Typography>{dayjs(updatedAt).format('MMM DD, YYYY')}</Typography>
@@ -39,7 +44,7 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading }) => {
           {statusMessage && (
             <>
               <Dot size={32} weight="bold" />
-              <Chip size="small" label={startCase(status as string)} color="error" />
+              <Chip size="small" label={getFormattedLabel(status as string)} color="error" />
             </>
           )}
           <Dot size={32} weight="bold" />
@@ -49,6 +54,14 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading }) => {
             alt={`${author?.firstName || ''} ${author?.lastName || ''}`}
             src={author?.profileImage}
             summary={`Batch of ${author?.batch || ''}`}
+            titleComponentProps={{
+              titleProps: {
+                fontSize: '12px',
+              },
+              summaryProps: {
+                fontSize: '10px',
+              },
+            }}
           />
         </Box>
         <Typography

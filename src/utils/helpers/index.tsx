@@ -55,6 +55,15 @@ export function startCase(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }
 
+export function getFormattedLabel(str: string, seperator = '_') {
+  if (!str || str.length === 0) return ''; // Check for empty string
+  const newStr = str
+    ?.split(seperator)
+    ?.map((st) => startCase(st))
+    ?.join(' ');
+  return newStr;
+}
+
 export const getBatchOptions = () => {
   const currentYear = new Date().getFullYear();
   const yearArray = [

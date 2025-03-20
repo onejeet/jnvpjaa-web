@@ -20,7 +20,7 @@ import {
 } from '@/apollo/hooks';
 import { paths } from '@/config/paths';
 import TipTapTextEditor from '@/modules/TipTapTextEditor';
-import { FloppyDiskBack } from '@phosphor-icons/react';
+import { Eye, FloppyDiskBack } from '@phosphor-icons/react';
 import { useApolloClient } from '@apollo/client';
 import dayjs from 'dayjs';
 import { BLOG_CATEGORIES } from '@/constants/Blog.constants';
@@ -194,9 +194,18 @@ const NewBlog = () => {
           />
         </Grid>
         <Box component={Grid} size={{ xs: 12, md: 6 }} display="flex" gap={2} alignItems="center" justifyContent="end">
+          {blogData?.getBlog?.slug && (
+            <Button
+              title="Preview"
+              variant="outlined"
+              startIcon={<Eye size={18} />}
+              onClick={() => window.open(paths.blog.getBlogPostUrl(blogData?.getBlog?.slug || ''))}
+            />
+          )}
+
           <Button
             // size="small"
-            title={blogData?.getBlog?.status === BlogStatus.Published ? 'Save & Unpublish' : 'Save'}
+            title={blogData?.getBlog?.status === BlogStatus.Published ? 'Unpublish' : 'Save'}
             onClick={() => {
               saveTypeRef.current = 'draft';
               handleSubmit(onSubmit);

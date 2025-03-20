@@ -87,7 +87,7 @@ const Blog = () => {
           visible: true,
           title: `Apporve the Blog`,
           type: 'loading',
-          message: `The blog is awaiting admin approval for publication. Please review and approve. Once published, it will be visible publiically.`,
+          message: `The blog is awaiting admin approval for publication. Please review and approve. Once published, it will be visible publically.`,
           action: 'approve',
           okayButtonProps: {
             title: `Approve`,
@@ -216,7 +216,7 @@ const Blog = () => {
         true
       );
     },
-    [isAdmin, showAlert]
+    [isAdmin, showAlert, user]
   );
 
   const publishBlogPost = React.useCallback(
@@ -225,14 +225,7 @@ const Blog = () => {
         redirectToSignin(true);
         return;
       }
-      if (!isAdmin) {
-        showAlert({
-          visible: true,
-          type: 'error',
-          message: 'Unauthorized operation.',
-        });
-        return;
-      }
+
       showAlert(
         {
           visible: true,
@@ -301,7 +294,7 @@ const Blog = () => {
         true
       );
     },
-    [isAdmin, showAlert]
+    [isAdmin, showAlert, user]
   );
 
   const onEditBlog = React.useCallback(

@@ -15,6 +15,7 @@ export const paths = {
     root: '/blog',
     new: '/blog/new',
     getBlogPostUrl: (id: string) => `/blog/${id}`,
+    getBlogPostEditUrl: (id: string) => `/blog/new?id=${id}`,
   },
   profile: {
     root: '/profile',

@@ -5,7 +5,7 @@ import React from 'react';
 
 import { BreadcrumbItem, BreadcrumbsProps } from './Breadcrumbs.types';
 
-const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, loading }) => {
+const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, loading, sx = {}, ...rest }) => {
   const theme = useTheme();
 
   return (
@@ -14,9 +14,11 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, loading }) => {
         //   fontSize: '7px',
         alignItems: 'center',
         color: 'grey.500',
+        ...sx,
       }}
       // separator=">"
       aria-label="breadcrumb"
+      {...rest}
     >
       {loading ? (
         <Skeleton width="100px" />

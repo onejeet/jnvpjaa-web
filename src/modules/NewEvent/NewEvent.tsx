@@ -187,7 +187,7 @@ const NewEvent = () => {
         <Box display="flex" gap={2} alignItems="center">
           <Button
             // size="small"
-            title={eventData?.getEventDetails?.status === EventStatus.Published ? 'Save & Unpublish' : 'Save'}
+            title={eventData?.getEventDetails?.status === EventStatus.Published ? 'Unpublish' : 'Save'}
             onClick={() => {
               saveTypeRef.current = 'draft';
               handleSubmit(onSubmit);
