@@ -55,6 +55,12 @@ const BlogCard: React.FC<IBlogCardProps> = ({
             value: 'publish',
             onClick: () => onPublish(id),
             icon: <CheckCircle size={18} />,
+            sx: {
+              color: 'success.main',
+              svg: {
+                color: 'success.main',
+              },
+            },
           },
           {
             label: 'Delete',
@@ -109,7 +115,6 @@ const BlogCard: React.FC<IBlogCardProps> = ({
         bgcolor="grey.100"
         borderRadius={4}
         display="flex"
-        onClick={() => (slug ? router.push(paths.blog.getBlogPostUrl(slug)) : null)}
         p={{
           xs: 3,
           md: 4,
@@ -120,9 +125,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
         //   gap={5}
         sx={{
           position: 'relative',
-          cursor: 'pointer',
           transition: 'all 0.4s ease',
-
           h1: {
             transition: 'all 0.2s linear',
           },
@@ -181,8 +184,8 @@ const BlogCard: React.FC<IBlogCardProps> = ({
             </Typography>
           )}
         </Box>
-        <Box display={{ xs: 'flex', md: 'none' }} mb={1.5} alignItems="center" gap={0.5}>
-          <Typography>{dayjs(updatedAt).format('MMM DD, YYYY')}</Typography>
+        <Box width="100%" display={{ xs: 'flex', md: 'none' }} mb={1.5} alignItems="center" gap={0.5}>
+          <Typography variant="body2">{dayjs(updatedAt).format('MMM DD, YYYY')}</Typography>
           {/* {categoryId && (
                   <>
                     <DotOutline size={32} weight="bold" />
@@ -198,18 +201,82 @@ const BlogCard: React.FC<IBlogCardProps> = ({
           <Dot size={32} weight="bold" />
           <ProfilePicture
             id={author?.id}
+            size={28}
             title={`${author?.firstName || ''} ${author?.lastName || ''}`}
             alt={`${author?.firstName || ''} ${author?.lastName || ''}`}
             src={author?.profileImage}
+            onClick={() => (author?.id ? router.push(paths.profile.getProfileUrl(author?.id)) : null)}
             summary={`Batch of ${author?.batch || ''}`}
+            titleComponentProps={{
+              titleProps: {
+                fontSize: '12px',
+              },
+              summaryProps: {
+                fontSize: '10px',
+              },
+            }}
           />
+          {menuItems && menuItems?.length > 0 && (
+            <Box sx={{ ml: 'auto' }}>
+              <Menu
+                //  onChange={(val) => editor?.commands.toggleHeading({ level: val as Level })}
+                // value={editor?.getAttributes('heading')?.level}
+                items={menuItems}
+                slotProps={{
+                  paper: {
+                    elevation: 0,
+
+                    sx: {
+                      minWidth: 150,
+                      overflow: 'visible',
+                      filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                      mt: 1.5,
+                      '& .MuiAvatar-root': {
+                        width: 32,
+                        height: 32,
+                        ml: -0.5,
+                        mr: 1,
+                      },
+                      '&::before': {
+                        content: '""',
+                        display: 'block',
+                        position: 'absolute',
+                        top: 0,
+                        right: 14,
+                        width: 10,
+                        height: 10,
+                        bgcolor: 'background.paper',
+                        transform: 'translateY(-50%) rotate(45deg)',
+                        zIndex: 0,
+                      },
+                    },
+                  },
+                }}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                render={
+                  <IconButton>
+                    <DotsThree size={32} weight="bold" />
+                  </IconButton>
+                }
+              />
+            </Box>
+          )}
         </Box>
         <Box
           component={Grid}
           size={{ xs: 12, md: 9.5 }}
           display="flex"
           flexDirection="column"
+          onClick={() => (slug ? router.push(paths.blog.getBlogPostUrl(slug)) : null)}
           sx={{
+            cursor: 'pointer',
             svg: {
               transition: 'all 0.3s linear',
               ml: '10px',
@@ -236,13 +303,18 @@ const BlogCard: React.FC<IBlogCardProps> = ({
             </Typography>
           )}
 
-          {summary && <Typography variant="body1">{summary}</Typography>}
+          {summary && (
+            <Typography variant="body1" mt={0.5}>
+              {summary}
+            </Typography>
+          )}
         </Box>
         <Box component={Grid} size={{ xs: 12, md: 1.5 }} ml="auto" display={{ xs: 'none', md: 'flex' }}>
           <ProfilePicture
             title={`${author?.firstName || ''} ${author?.lastName || ''}`}
             loading={loading}
             id={author?.id}
+            onClick={() => (author?.id ? router.push(paths.profile.getProfileUrl(author?.id)) : null)}
             src={author?.profileImage}
             summary={author?.isFaculty ? 'Faculty' : author?.batch ? `Batch of ${author?.batch}` : ''}
           />
@@ -252,7 +324,10 @@ const BlogCard: React.FC<IBlogCardProps> = ({
         <Box
           bgcolor="grey.100"
           borderRadius={4}
-          display="flex"
+          display={{
+            xs: 'none',
+            md: 'flex',
+          }}
           p={{
             xs: 1,
             md: 3,

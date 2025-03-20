@@ -18,5 +18,6 @@ export const paths = {
   },
   profile: {
     root: '/profile',
+    getProfileUrl: (id: string) => `/profile/${id}`,
   },
 };

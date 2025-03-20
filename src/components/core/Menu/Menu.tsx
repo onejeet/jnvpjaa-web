@@ -19,7 +19,17 @@ const Menu: React.FC<MenuProps> = ({ id, items, value, render, disabled, childre
   return (
     <>
       <Box {...bindTrigger(popupState)}>
-        {render || <Button disabled variant="text" title="Button" onClick={popupState.open} />}
+        {render || (
+          <Button
+            disabled
+            variant="text"
+            title="Button"
+            onClick={(e: any) => {
+              e?.stopPropagaton();
+              popupState.open();
+            }}
+          />
+        )}
       </Box>
       {!disabled && (
         <MuiMenu
