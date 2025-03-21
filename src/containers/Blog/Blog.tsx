@@ -14,29 +14,11 @@ import { useAlert } from '@/context/AlertContext';
 import { useAuth } from '@/context/AuthContext';
 import LayoutModule from '@/layouts/Layout';
 import { useApolloClient } from '@apollo/client';
-import { Box, Divider, Grid2 as Grid, Typography } from '@mui/material';
+import { Box, Checkbox, Divider, FormControlLabel, Grid2 as Grid, Typography } from '@mui/material';
 import { Plus } from '@phosphor-icons/react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
-
-const blogsData = [
-  {
-    title: 'This is a dummy blog post',
-    slug: 'blog-post',
-    content: `<p>Cupidatat officia eu mollit eiusmod nostrud aliquip enim in. Esse sit ipsum veniam eu ullamco anim minim id. Nostrud cupidatat officia ad commodo eiusmod velit dolore est nostrud. Ipsum esse non laboris enim. Ea mollit aliquip nulla irure eiusmod sint deserunt.</p>
-
-<p>Tempor sunt nisi minim ipsum culpa labore laboris sunt eiusmod. Et Lorem laboris elit ex. Sunt duis deserunt occaecat ex proident id veniam exercitation. Occaecat irure aliquip consectetur Lorem esse. Qui aute laboris exercitation ipsum ea pariatur excepteur exercitation ullamco.</p>
-
-<blockquote>Tempor sunt nisi minim ipsum culpa labore laboris sunt eiusmod.</blockquote>
-
-<p>Aliqua pariatur veniam cillum quis. Enim adipisicing est aute Lorem ipsum dolor reprehenderit. Reprehenderit quis pariatur fugiat commodo. Quis laboris amet sit sit ullamco reprehenderit non qui tempor.</p>
-
-<p>Id qui aute est id. Anim eiusmod deserunt et tempor occaecat sit est veniam. In enim consectetur nisi laboris officia ut sint ea. Dolor et quis duis sint mollit cillum proident amet. Aliqua sunt reprehenderit magna ex cupidatat laboris.</p>
-
-<p>Consectetur minim eu officia commodo minim reprehenderit id. Tempor pariatur consectetur dolore irure excepteur pariatur minim exercitation. Eu officia pariatur sit occaecat sint ex deserunt dolor amet.</p>`,
-  },
-];
 
 const Blog = () => {
   const [isPendingApporvalOnly, setIsPendingApporvalOnly] = React.useState<boolean>(false);
@@ -347,6 +329,24 @@ const Blog = () => {
           />
         )}
       </Box>
+
+      {isAdmin && (
+        <Box display="flex" alignItems="center" mb={1}>
+          <FormControlLabel
+            label="Pending approval events only"
+            control={
+              <Checkbox
+                checked={isPendingApporvalOnly}
+                // indeterminate={checked[0] !== checked[1]}
+                onChange={(e, checked) => setIsPendingApporvalOnly(checked)}
+              />
+            }
+            sx={{
+              color: 'grey.800',
+            }}
+          />
+        </Box>
+      )}
 
       <Grid container spacing={2} width="100%" display="flex" alignItems="start" mt={2}>
         <Grid container size={{ xs: 12, md: 12 }} spacing={1}>
