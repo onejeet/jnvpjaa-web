@@ -8,7 +8,7 @@ import ErrorIcon from '@mui/icons-material/Error';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import DeleteIcon from '@mui/icons-material/Delete';
 import type { AlertContentProps } from './AlertDialog.types';
-import { Spinner } from '@phosphor-icons/react';
+import { SealQuestion, Spinner } from '@phosphor-icons/react';
 import Image from 'next/image';
 import Lottie from 'lottie-react';
 import successLottieIcon from '@/utils/lottie/success_icon.json';
@@ -97,7 +97,7 @@ const AlertContent: React.FC<AlertContentProps> = ({ title, message, action = 'd
     }
 
     return (
-      <Typography fontSize="1.3rem" variant="h6">
+      <Typography fontSize="1.5rem" variant="h6">
         {upTitle}
       </Typography>
     );
@@ -105,7 +105,7 @@ const AlertContent: React.FC<AlertContentProps> = ({ title, message, action = 'd
 
   const iconComp = React.useMemo(() => {
     if (action === 'delete' || action === 'approve' || action === 'reject' || action === 'request') {
-      return <HelpIcon sx={{ color: 'grey.700', fontSize: '100px' }} />;
+      return <SealQuestion size={100} />;
     } else if (action === 'loading') {
       return <Lottie animationData={loadingLottieIcon} loop={true} style={{ width: '130px', height: '130px' }} />;
       // return <Image width={60} height={60} src="/assets/svg/loading_animation.svg" alt="loading" />;
@@ -129,9 +129,9 @@ const AlertContent: React.FC<AlertContentProps> = ({ title, message, action = 'd
 
   return (
     <Box
-      color="var(--mui-palette-text-secondary)"
+      color="grey.700"
       px={2}
-      py={5}
+      py={6}
       gap={1.5}
       textAlign="center"
       display="flex"
@@ -139,7 +139,9 @@ const AlertContent: React.FC<AlertContentProps> = ({ title, message, action = 'd
       flexDirection="column"
       width="100%"
     >
-      <Box mb={2}>{iconComp}</Box>
+      <Box mt={1} mb={3}>
+        {iconComp}
+      </Box>
       {titleComp}
       {MessageComp}
     </Box>

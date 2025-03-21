@@ -18,14 +18,25 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading }) => {
 
   const statusMessage = React.useMemo(() => {
     return status !== BlogStatus.Published
-      ? `Preview Mode. Blog is in ${getFormattedLabel(status as string)} status.`
+      ? `Preview Mode. Blog is in "${getFormattedLabel(status as string)}" status.`
       : null;
   }, [status]);
 
   return (
     <Card sx={{ position: 'relative' }} className="single-blog">
       {statusMessage && (
-        <Box sx={{ position: 'absolute', top: 0, bgcolor: 'error.main', width: '100%', textAlign: 'center' }}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            py: '2px',
+            bgcolor: 'error.main',
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
           <Typography color="common.white" variant="body2">
             {statusMessage}
           </Typography>
@@ -54,14 +65,6 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading }) => {
             alt={`${author?.firstName || ''} ${author?.lastName || ''}`}
             src={author?.profileImage}
             summary={`Batch of ${author?.batch || ''}`}
-            titleComponentProps={{
-              titleProps: {
-                fontSize: '12px',
-              },
-              summaryProps: {
-                fontSize: '10px',
-              },
-            }}
           />
         </Box>
         <Typography
@@ -76,6 +79,7 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading }) => {
           {title}
         </Typography>
         <Typography
+          className="single-blog-content"
           variant="body1"
           color="text.primary"
           mt={1}

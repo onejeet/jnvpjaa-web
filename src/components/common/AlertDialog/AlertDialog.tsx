@@ -13,7 +13,7 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
   cancelButtonProps = {},
   ...restProps
 }) => {
-  const { action, maxWidth = 'xs' } = restProps || {};
+  const { action, maxWidth = 'sm' } = restProps || {};
 
   const btnColor: string = React.useMemo(() => {
     if (action === 'delete') {
@@ -67,6 +67,9 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
       footerProps={{
         onOkay: onOKayHandler,
         onCancel,
+        sx: {
+          borderTop: 'none',
+        },
         okayButtonProps: {
           // color,
           disabled: action === 'deleting',

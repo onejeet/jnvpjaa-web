@@ -45,7 +45,7 @@ const DataGrid: React.FC<DataGridProps> = ({
         paginationMode="server"
         sx={{
           height: '100%',
-
+          minHeight: 350,
           // '& .MuiDataGrid-pinnedColumnHeaders .MuiDataGrid-columnHeader:nth-child(2) svg': {
           //   display: 'none',
           // },

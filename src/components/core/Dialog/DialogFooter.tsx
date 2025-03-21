@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import { DIALOG_OKAY_BUTTON_WRAPPER_ID } from '.';
 import type { DialogFooterProps } from './Dialog.types';
 import Button from '../Button';
-import { CheckCircle, X } from '@phosphor-icons/react';
+import { CheckCircle, X, XCircle } from '@phosphor-icons/react';
 
 const DialogFooter: React.FC<DialogFooterProps> = ({
   title,
@@ -46,7 +46,7 @@ const DialogFooter: React.FC<DialogFooterProps> = ({
               variant="outlined"
               // size="small"
               color="secondary"
-              startIcon={cancelButtonProps?.loading ? undefined : <X size={16} />}
+              startIcon={cancelButtonProps?.loading ? undefined : <XCircle size={16} />}
               onClick={() => {
                 onCancel();
               }}

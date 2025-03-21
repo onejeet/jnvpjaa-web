@@ -151,7 +151,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
         break;
     }
     return items;
-  }, [isAdminUser, slug, id, author, status]);
+  }, [isAdminUser, slug, id, author, user, status]);
 
   console.log('SS: BLOG', status, menuItems);
 

@@ -41,7 +41,7 @@ const Title: React.FC<TitleProps> = ({
                   p={0}
                   lineHeight="normal"
                   {...titleProps}
-                  sx={{ maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+                  sx={{ maxWidth: '100%', m: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
                 >
                   {title}
                 </Typography>

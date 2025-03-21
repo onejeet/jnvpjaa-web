@@ -19,6 +19,7 @@ const TransactionsTable = () => {
   return (
     <DataGrid
       // height={tableHeight}
+
       rows={rows || []}
       columns={columns}
       rowCount={rowCount}
