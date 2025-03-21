@@ -1,4 +1,4 @@
-import { Box, Card, Chip, Typography } from '@mui/material';
+import { Box, Card, Chip, Skeleton, Typography } from '@mui/material';
 import React from 'react';
 import DOMPurify from 'dompurify';
 import { ISingleBlogViewProps } from './SingleBlogView.types';
@@ -17,7 +17,7 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading }) => {
   }, [content]);
 
   const statusMessage = React.useMemo(() => {
-    return status !== BlogStatus.Published
+    return status && status !== BlogStatus.Published
       ? `Preview Mode. Blog is in "${getFormattedLabel(status as string)}" status.`
       : null;
   }, [status]);
@@ -45,7 +45,12 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading }) => {
 
       <Box p={3} pt={statusMessage ? 5 : 3}>
         <Box display="flex" alignItems="center" gap={0.5}>
-          <Typography>{dayjs(updatedAt).format('MMM DD, YYYY')}</Typography>
+          {loading ? (
+            <Skeleton width={80} height={25} />
+          ) : (
+            <Typography>{dayjs(updatedAt).format('MMM DD, YYYY')}</Typography>
+          )}
+
           {/* {categoryId && (
           <>
             <DotOutline size={32} weight="bold" />
@@ -60,6 +65,7 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading }) => {
           )}
           <Dot size={32} weight="bold" />
           <ProfilePicture
+            loading={loading}
             id={author?.id}
             title={`${author?.firstName || ''} ${author?.lastName || ''}`}
             alt={`${author?.firstName || ''} ${author?.lastName || ''}`}
@@ -67,26 +73,50 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading }) => {
             summary={`Batch of ${author?.batch || ''}`}
           />
         </Box>
-        <Typography
-          variant="h1"
-          lineHeight="normal"
-          fontSize={{
-            xs: 30,
-            md: 50,
-          }}
-          py={2}
-        >
-          {title}
-        </Typography>
-        <Typography
-          className="single-blog-content"
-          variant="body1"
-          color="text.primary"
-          mt={1}
-          mb={2}
-          fontSize="18px"
-          dangerouslySetInnerHTML={{ __html: sanitizedContent }}
-        />
+        {loading ? (
+          <Skeleton width="80%" height={66} sx={{ py: 2 }} />
+        ) : (
+          <Typography
+            variant="h1"
+            lineHeight="normal"
+            fontSize={{
+              xs: 30,
+              md: 50,
+            }}
+            py={2}
+          >
+            {title}
+          </Typography>
+        )}
+
+        {loading ? (
+          <>
+            <Box my={1}>
+              <Skeleton width="100%" height={25} /> <Skeleton width="100%" height={25} />
+              <Skeleton width="40%" height={25} />
+            </Box>
+            <Box my={1}>
+              <Skeleton width="100%" height={25} /> <Skeleton width="80%" height={25} />
+              <Skeleton width="40%" height={25} />
+            </Box>
+            <Box my={1}>
+              <Skeleton width="100%" height={25} /> <Skeleton width="60%" height={25} />
+            </Box>
+            <Box my={1}>
+              <Skeleton width="100%" height={25} /> <Skeleton width="20%" height={25} />
+            </Box>
+          </>
+        ) : (
+          <Typography
+            className="single-blog-content"
+            variant="body1"
+            color="text.primary"
+            mt={1}
+            mb={2}
+            fontSize="18px"
+            dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+          />
+        )}
       </Box>
     </Card>
   );

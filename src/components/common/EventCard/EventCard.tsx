@@ -31,6 +31,7 @@ import {
   MapPinLine,
   Minus,
   NotePencil,
+  XCircle,
 } from '@phosphor-icons/react';
 import { EventStatus, Maybe, User, UserBasic } from '@/apollo/hooks';
 import ProfilePicture from '../ProfilePicture';
@@ -106,7 +107,7 @@ const EventCard: React.FC<EventCardProps> = ({
       {!loading && status === EventStatus.PendingApproval && (
         <Box bgcolor="error.main" sx={{ py: '4px', position: 'absolute', top: 0, width: '100%' }}>
           <Typography variant="h5" width="100%" textAlign="center" color="common.white">
-            Pending approval
+            Pending Approval
           </Typography>
         </Box>
       )}
@@ -344,7 +345,7 @@ const EventCard: React.FC<EventCardProps> = ({
             />
             {(createdBy === user?.id || isAdmin) && (
               <Button
-                variant="outlined"
+                variant="contained"
                 disabled={loading}
                 fullWidth
                 title="Publish"
@@ -355,29 +356,44 @@ const EventCard: React.FC<EventCardProps> = ({
             )}
           </Box>
         ) : (
-          <Box width="100%" display="flex" gap={2} mt="auto" pt={2}>
+          <Box width="100%" display="flex" gap={1} mt="auto" pt={2}>
             {(createdBy === user?.id || isAdmin) && (
-              <Button
-                variant="outlined"
-                disabled={loading}
-                fullWidth
-                title="Edit"
-                startIcon={<NotePencil size={16} />}
-                onClick={() => onEdit?.(id)}
-              />
+              <>
+                <Button
+                  variant="outlined"
+                  disabled={loading}
+                  fullWidth
+                  title="Edit"
+                  startIcon={<NotePencil size={16} />}
+                  onClick={() => onEdit?.(id)}
+                />
+                {status === EventStatus.Published ||
+                  (status === EventStatus.PendingApproval && (
+                    <Button
+                      variant="outlined"
+                      disabled={loading}
+                      fullWidth
+                      title="Move to Draft"
+                      startIcon={<XCircle size={16} />}
+                      onClick={() => onPublish?.(id)}
+                      sx={{ whiteSpace: 'nowrap', minWidth: '140px' }}
+                    />
+                  ))}
+              </>
             )}
             {status === EventStatus.PendingApproval && isAdmin ? (
               <Button
                 variant="contained"
                 disabled={loading}
                 fullWidth
-                title="Approve & Publish"
+                title="Approve"
                 startIcon={<CheckCircle size={16} />}
                 sx={{ whiteSpace: 'nowrap' }}
                 onClick={() => verifyEvent?.(id)}
               />
             ) : (
               markImGoing &&
+              status === EventStatus.Published &&
               !isRSVPDone && (
                 <Button
                   title="I'm Going"
@@ -387,6 +403,7 @@ const EventCard: React.FC<EventCardProps> = ({
                   // endIcon={<ArrowRightAltIcon />}
                   startIcon={<Heart size={20} weight="fill" />}
                   onClick={() => markImGoing(id)}
+                  sx={{ whiteSpace: 'nowrap', minWidth: '130px' }}
                 />
               )
             )}

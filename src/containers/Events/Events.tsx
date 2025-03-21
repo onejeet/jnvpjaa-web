@@ -308,7 +308,7 @@ export default function Events() {
       {isAdmin && (
         <Box display="flex" alignItems="center" mb={1}>
           <FormControlLabel
-            label="Pending apporval events only"
+            label="Pending approval events only"
             control={
               <Checkbox
                 checked={isPendingApporvalOnly}
