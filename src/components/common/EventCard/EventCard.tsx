@@ -67,7 +67,7 @@ const EventCard: React.FC<EventCardProps> = ({
     status,
     createdBy,
     short_url = '',
-  } = event;
+  } = event || {};
 
   const isRSVPDone = React.useMemo(() => {
     // @ts-expect-error type error

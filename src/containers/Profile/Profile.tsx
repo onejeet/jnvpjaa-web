@@ -36,8 +36,8 @@ export default function ProfilePage() {
           ) : (
             <>
               {activeTab === 'about' && <AboutSection />}
-              {activeTab === 'blogs' && <BlogsSection />}
-              {activeTab === 'events' && <EventSection />}
+              {activeTab === 'blogs' && <BlogsSection user={user} />}
+              {activeTab === 'events' && <EventSection user={user} />}
             </>
           )}
         </Box>
