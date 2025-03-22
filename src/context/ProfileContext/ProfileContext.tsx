@@ -14,7 +14,6 @@ const defaultProvider: ProfileContextProps = {
   },
   editingProfile: false,
   setEditingProfile: () => null,
-  saveProfile: () => null,
 };
 
 const ProfileContext = createContext(defaultProvider);
@@ -45,16 +44,16 @@ const ProfileProvider = ({ children }: ProfileProviderProps) => {
 
   const saveProfile = React.useCallback(
     (data: Partial<User>) => {
-      if (!isCurrentUserProfile) {
+      if (!isProfileEditable) {
         return;
       }
-      updateUser({
+      return updateUser({
         variables: {
           ...data,
         },
       });
     },
-    [isCurrentUserProfile, updateUser]
+    [isProfileEditable, updateUser]
   );
 
   console.log('ZZ: editingProfile', editingProfile);

@@ -130,7 +130,7 @@ const AlertContent: React.FC<AlertContentProps> = ({ title, message, action = 'd
   return (
     <Box
       color="grey.700"
-      px={2}
+      px={3.5}
       py={6}
       gap={1.5}
       textAlign="center"

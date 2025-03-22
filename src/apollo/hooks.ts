@@ -77,6 +77,7 @@ export type Blog = {
   /** Timestamp when the record was created */
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['String']['output'];
+  shortUrl?: Maybe<Scalars['String']['output']>;
   slug?: Maybe<Scalars['String']['output']>;
   status: BlogStatus;
   summary?: Maybe<Scalars['String']['output']>;
@@ -93,6 +94,7 @@ export type BlogBasic = {
   /** Timestamp when the record was created */
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['String']['output'];
+  shortUrl?: Maybe<Scalars['String']['output']>;
   slug: Scalars['String']['output'];
   status: BlogStatus;
   summary?: Maybe<Scalars['String']['output']>;
@@ -409,6 +411,7 @@ export type MutationUpdateUserArgs = {
   firstName?: InputMaybe<Scalars['String']['input']>;
   gender?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
+  isConfidential?: InputMaybe<Scalars['Boolean']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
   mobile?: InputMaybe<Scalars['String']['input']>;
   nickName?: InputMaybe<Scalars['String']['input']>;
@@ -576,6 +579,7 @@ export type UserBasic = {
   disabled?: Maybe<Scalars['Boolean']['output']>;
   firstName?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['ID']['output']>;
+  isConfidential?: Maybe<Scalars['Boolean']['output']>;
   isFaculty?: Maybe<Scalars['Boolean']['output']>;
   isVerified?: Maybe<Scalars['Boolean']['output']>;
   lastName?: Maybe<Scalars['String']['output']>;
@@ -604,6 +608,7 @@ export type ApproveBlogMutation = {
         content?: string | undefined;
         createdAt: any;
         id: string;
+        shortUrl?: string | undefined;
         slug?: string | undefined;
         status: BlogStatus;
         summary?: string | undefined;
@@ -616,6 +621,7 @@ export type ApproveBlogMutation = {
               disabled?: boolean | undefined;
               firstName?: string | undefined;
               id?: string | undefined;
+              isConfidential?: boolean | undefined;
               isFaculty?: boolean | undefined;
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
@@ -640,6 +646,7 @@ export type ApproveBlogMutation = {
                         disabled?: boolean | undefined;
                         firstName?: string | undefined;
                         id?: string | undefined;
+                        isConfidential?: boolean | undefined;
                         isFaculty?: boolean | undefined;
                         isVerified?: boolean | undefined;
                         lastName?: string | undefined;
@@ -739,6 +746,7 @@ export type AttendEventMutation = {
                   disabled?: boolean | undefined;
                   firstName?: string | undefined;
                   id?: string | undefined;
+                  isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
@@ -756,6 +764,7 @@ export type AttendEventMutation = {
                   disabled?: boolean | undefined;
                   firstName?: string | undefined;
                   id?: string | undefined;
+                  isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
@@ -788,6 +797,7 @@ export type CreateBlogMutation = {
         content?: string | undefined;
         createdAt: any;
         id: string;
+        shortUrl?: string | undefined;
         slug?: string | undefined;
         status: BlogStatus;
         summary?: string | undefined;
@@ -800,6 +810,7 @@ export type CreateBlogMutation = {
               disabled?: boolean | undefined;
               firstName?: string | undefined;
               id?: string | undefined;
+              isConfidential?: boolean | undefined;
               isFaculty?: boolean | undefined;
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
@@ -824,6 +835,7 @@ export type CreateBlogMutation = {
                         disabled?: boolean | undefined;
                         firstName?: string | undefined;
                         id?: string | undefined;
+                        isConfidential?: boolean | undefined;
                         isFaculty?: boolean | undefined;
                         isVerified?: boolean | undefined;
                         lastName?: string | undefined;
@@ -862,6 +874,7 @@ export type CreateCommentMutation = {
               disabled?: boolean | undefined;
               firstName?: string | undefined;
               id?: string | undefined;
+              isConfidential?: boolean | undefined;
               isFaculty?: boolean | undefined;
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
@@ -920,6 +933,7 @@ export type CreateEventMutation = {
                   disabled?: boolean | undefined;
                   firstName?: string | undefined;
                   id?: string | undefined;
+                  isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
@@ -937,6 +951,7 @@ export type CreateEventMutation = {
                   disabled?: boolean | undefined;
                   firstName?: string | undefined;
                   id?: string | undefined;
+                  isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
@@ -1033,6 +1048,7 @@ export type DeleteBlogMutation = {
         content?: string | undefined;
         createdAt: any;
         id: string;
+        shortUrl?: string | undefined;
         slug?: string | undefined;
         status: BlogStatus;
         summary?: string | undefined;
@@ -1045,6 +1061,7 @@ export type DeleteBlogMutation = {
               disabled?: boolean | undefined;
               firstName?: string | undefined;
               id?: string | undefined;
+              isConfidential?: boolean | undefined;
               isFaculty?: boolean | undefined;
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
@@ -1069,6 +1086,7 @@ export type DeleteBlogMutation = {
                         disabled?: boolean | undefined;
                         firstName?: string | undefined;
                         id?: string | undefined;
+                        isConfidential?: boolean | undefined;
                         isFaculty?: boolean | undefined;
                         isVerified?: boolean | undefined;
                         lastName?: string | undefined;
@@ -1105,6 +1123,7 @@ export type DeleteCommentMutation = {
               disabled?: boolean | undefined;
               firstName?: string | undefined;
               id?: string | undefined;
+              isConfidential?: boolean | undefined;
               isFaculty?: boolean | undefined;
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
@@ -1260,6 +1279,7 @@ export type PublishEventMutation = {
                   disabled?: boolean | undefined;
                   firstName?: string | undefined;
                   id?: string | undefined;
+                  isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
@@ -1277,6 +1297,7 @@ export type PublishEventMutation = {
                   disabled?: boolean | undefined;
                   firstName?: string | undefined;
                   id?: string | undefined;
+                  isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
@@ -1355,6 +1376,7 @@ export type RequestChangesBlogMutation = {
         content?: string | undefined;
         createdAt: any;
         id: string;
+        shortUrl?: string | undefined;
         slug?: string | undefined;
         status: BlogStatus;
         summary?: string | undefined;
@@ -1367,6 +1389,7 @@ export type RequestChangesBlogMutation = {
               disabled?: boolean | undefined;
               firstName?: string | undefined;
               id?: string | undefined;
+              isConfidential?: boolean | undefined;
               isFaculty?: boolean | undefined;
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
@@ -1391,6 +1414,7 @@ export type RequestChangesBlogMutation = {
                         disabled?: boolean | undefined;
                         firstName?: string | undefined;
                         id?: string | undefined;
+                        isConfidential?: boolean | undefined;
                         isFaculty?: boolean | undefined;
                         isVerified?: boolean | undefined;
                         lastName?: string | undefined;
@@ -1571,6 +1595,7 @@ export type UpdateBlogMutation = {
         content?: string | undefined;
         createdAt: any;
         id: string;
+        shortUrl?: string | undefined;
         slug?: string | undefined;
         status: BlogStatus;
         summary?: string | undefined;
@@ -1583,6 +1608,7 @@ export type UpdateBlogMutation = {
               disabled?: boolean | undefined;
               firstName?: string | undefined;
               id?: string | undefined;
+              isConfidential?: boolean | undefined;
               isFaculty?: boolean | undefined;
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
@@ -1607,6 +1633,7 @@ export type UpdateBlogMutation = {
                         disabled?: boolean | undefined;
                         firstName?: string | undefined;
                         id?: string | undefined;
+                        isConfidential?: boolean | undefined;
                         isFaculty?: boolean | undefined;
                         isVerified?: boolean | undefined;
                         lastName?: string | undefined;
@@ -1668,6 +1695,7 @@ export type UpdateEventMutation = {
                   disabled?: boolean | undefined;
                   firstName?: string | undefined;
                   id?: string | undefined;
+                  isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
@@ -1685,6 +1713,7 @@ export type UpdateEventMutation = {
                   disabled?: boolean | undefined;
                   firstName?: string | undefined;
                   id?: string | undefined;
+                  isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
@@ -1767,6 +1796,7 @@ export type UpdateUserMutationVariables = Exact<{
   firstName?: InputMaybe<Scalars['String']['input']>;
   gender?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
+  isConfidential?: InputMaybe<Scalars['Boolean']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
   mobile?: InputMaybe<Scalars['String']['input']>;
   nickName?: InputMaybe<Scalars['String']['input']>;
@@ -1991,6 +2021,7 @@ export type GetBlogQuery = {
         content?: string | undefined;
         createdAt: any;
         id: string;
+        shortUrl?: string | undefined;
         slug?: string | undefined;
         status: BlogStatus;
         summary?: string | undefined;
@@ -2003,6 +2034,7 @@ export type GetBlogQuery = {
               disabled?: boolean | undefined;
               firstName?: string | undefined;
               id?: string | undefined;
+              isConfidential?: boolean | undefined;
               isFaculty?: boolean | undefined;
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
@@ -2027,6 +2059,7 @@ export type GetBlogQuery = {
                         disabled?: boolean | undefined;
                         firstName?: string | undefined;
                         id?: string | undefined;
+                        isConfidential?: boolean | undefined;
                         isFaculty?: boolean | undefined;
                         isVerified?: boolean | undefined;
                         lastName?: string | undefined;
@@ -2059,6 +2092,7 @@ export type GetBlogListQuery = {
                   categoryId?: string | undefined;
                   createdAt: any;
                   id: string;
+                  shortUrl?: string | undefined;
                   slug: string;
                   status: BlogStatus;
                   summary?: string | undefined;
@@ -2071,6 +2105,7 @@ export type GetBlogListQuery = {
                         disabled?: boolean | undefined;
                         firstName?: string | undefined;
                         id?: string | undefined;
+                        isConfidential?: boolean | undefined;
                         isFaculty?: boolean | undefined;
                         isVerified?: boolean | undefined;
                         lastName?: string | undefined;
@@ -2113,6 +2148,7 @@ export type GetCommentListQuery = {
                         disabled?: boolean | undefined;
                         firstName?: string | undefined;
                         id?: string | undefined;
+                        isConfidential?: boolean | undefined;
                         isFaculty?: boolean | undefined;
                         isVerified?: boolean | undefined;
                         lastName?: string | undefined;
@@ -2164,6 +2200,7 @@ export type GetEventDetailsQuery = {
                   disabled?: boolean | undefined;
                   firstName?: string | undefined;
                   id?: string | undefined;
+                  isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
@@ -2181,6 +2218,7 @@ export type GetEventDetailsQuery = {
                   disabled?: boolean | undefined;
                   firstName?: string | undefined;
                   id?: string | undefined;
+                  isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
@@ -2235,6 +2273,7 @@ export type GetEventListQuery = {
                             disabled?: boolean | undefined;
                             firstName?: string | undefined;
                             id?: string | undefined;
+                            isConfidential?: boolean | undefined;
                             isFaculty?: boolean | undefined;
                             isVerified?: boolean | undefined;
                             lastName?: string | undefined;
@@ -2254,6 +2293,7 @@ export type GetEventListQuery = {
                             disabled?: boolean | undefined;
                             firstName?: string | undefined;
                             id?: string | undefined;
+                            isConfidential?: boolean | undefined;
                             isFaculty?: boolean | undefined;
                             isVerified?: boolean | undefined;
                             lastName?: string | undefined;
@@ -2550,6 +2590,7 @@ export const ApproveBlogDocument = gql`
         disabled
         firstName
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -2567,6 +2608,7 @@ export const ApproveBlogDocument = gql`
           disabled
           firstName
           id
+          isConfidential
           isFaculty
           isVerified
           lastName
@@ -2582,6 +2624,7 @@ export const ApproveBlogDocument = gql`
       content
       createdAt
       id
+      shortUrl
       slug
       status
       summary
@@ -2706,6 +2749,7 @@ export const AttendEventDocument = gql`
         disabled
         firstName
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -2729,6 +2773,7 @@ export const AttendEventDocument = gql`
         disabled
         firstName
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -2793,6 +2838,7 @@ export const CreateBlogDocument = gql`
         disabled
         firstName
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -2810,6 +2856,7 @@ export const CreateBlogDocument = gql`
           disabled
           firstName
           id
+          isConfidential
           isFaculty
           isVerified
           lastName
@@ -2825,6 +2872,7 @@ export const CreateBlogDocument = gql`
       content
       createdAt
       id
+      shortUrl
       slug
       status
       summary
@@ -2873,6 +2921,7 @@ export const CreateCommentDocument = gql`
         disabled
         firstName
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -2959,6 +3008,7 @@ export const CreateEventDocument = gql`
         disabled
         firstName
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -2982,6 +3032,7 @@ export const CreateEventDocument = gql`
         disabled
         firstName
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -3173,6 +3224,7 @@ export const DeleteBlogDocument = gql`
         disabled
         firstName
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -3190,6 +3242,7 @@ export const DeleteBlogDocument = gql`
           disabled
           firstName
           id
+          isConfidential
           isFaculty
           isVerified
           lastName
@@ -3205,6 +3258,7 @@ export const DeleteBlogDocument = gql`
       content
       createdAt
       id
+      shortUrl
       slug
       status
       summary
@@ -3249,6 +3303,7 @@ export const DeleteCommentDocument = gql`
         disabled
         firstName
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -3524,6 +3579,7 @@ export const PublishEventDocument = gql`
         disabled
         firstName
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -3547,6 +3603,7 @@ export const PublishEventDocument = gql`
         disabled
         firstName
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -3719,6 +3776,7 @@ export const RequestChangesBlogDocument = gql`
         disabled
         firstName
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -3736,6 +3794,7 @@ export const RequestChangesBlogDocument = gql`
           disabled
           firstName
           id
+          isConfidential
           isFaculty
           isVerified
           lastName
@@ -3751,6 +3810,7 @@ export const RequestChangesBlogDocument = gql`
       content
       createdAt
       id
+      shortUrl
       slug
       status
       summary
@@ -4072,6 +4132,7 @@ export const UpdateBlogDocument = gql`
         disabled
         firstName
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -4089,6 +4150,7 @@ export const UpdateBlogDocument = gql`
           disabled
           firstName
           id
+          isConfidential
           isFaculty
           isVerified
           lastName
@@ -4104,6 +4166,7 @@ export const UpdateBlogDocument = gql`
       content
       createdAt
       id
+      shortUrl
       slug
       status
       summary
@@ -4179,6 +4242,7 @@ export const UpdateEventDocument = gql`
         disabled
         firstName
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -4202,6 +4266,7 @@ export const UpdateEventDocument = gql`
         disabled
         firstName
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -4362,6 +4427,7 @@ export const UpdateUserDocument = gql`
     $firstName: String
     $gender: String
     $id: String
+    $isConfidential: Boolean
     $lastName: String
     $mobile: String
     $nickName: String
@@ -4379,6 +4445,7 @@ export const UpdateUserDocument = gql`
       firstName: $firstName
       gender: $gender
       id: $id
+      isConfidential: $isConfidential
       lastName: $lastName
       mobile: $mobile
       nickName: $nickName
@@ -4442,6 +4509,7 @@ export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, U
  *      firstName: // value for 'firstName'
  *      gender: // value for 'gender'
  *      id: // value for 'id'
+ *      isConfidential: // value for 'isConfidential'
  *      lastName: // value for 'lastName'
  *      mobile: // value for 'mobile'
  *      nickName: // value for 'nickName'
@@ -4826,6 +4894,7 @@ export const GetBlogDocument = gql`
         disabled
         firstName
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -4843,6 +4912,7 @@ export const GetBlogDocument = gql`
           disabled
           firstName
           id
+          isConfidential
           isFaculty
           isVerified
           lastName
@@ -4858,6 +4928,7 @@ export const GetBlogDocument = gql`
       content
       createdAt
       id
+      shortUrl
       slug
       status
       summary
@@ -4911,6 +4982,7 @@ export const GetBlogListDocument = gql`
           disabled
           firstName
           id
+          isConfidential
           isFaculty
           isVerified
           lastName
@@ -4924,6 +4996,7 @@ export const GetBlogListDocument = gql`
         categoryId
         createdAt
         id
+        shortUrl
         slug
         status
         summary
@@ -4982,6 +5055,7 @@ export const GetCommentListDocument = gql`
           disabled
           firstName
           id
+          isConfidential
           isFaculty
           isVerified
           lastName
@@ -5050,6 +5124,7 @@ export const GetEventDetailsDocument = gql`
         disabled
         firstName
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -5073,6 +5148,7 @@ export const GetEventDetailsDocument = gql`
         disabled
         firstName
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
@@ -5144,6 +5220,7 @@ export const GetEventListDocument = gql`
           disabled
           firstName
           id
+          isConfidential
           isFaculty
           isVerified
           lastName
@@ -5167,6 +5244,7 @@ export const GetEventListDocument = gql`
           disabled
           firstName
           id
+          isConfidential
           isFaculty
           isVerified
           lastName

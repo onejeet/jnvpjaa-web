@@ -52,7 +52,7 @@ const BlogListModule: React.FC<BlogFilterModuleProps> = ({ filter, skip, loading
     if (loading || propLoading) {
       return new Array(6).fill({ id: '', loading: true, title: '', summary: '', content: '', author: {} });
     }
-    return blogs?.getBlogList?.data || [];
+    if (blogs) return blogs?.getBlogList?.data || [];
   }, [loading, blogs, propLoading]);
 
   const approveBlogPost = React.useCallback(
@@ -299,7 +299,7 @@ const BlogListModule: React.FC<BlogFilterModuleProps> = ({ filter, skip, loading
   return (
     <Grid container spacing={2} width="100%" display="flex" alignItems="start" mt={2}>
       <Grid container size={{ xs: 12, md: 12 }} spacing={1}>
-        {listData?.length > 0 ? (
+        {listData && listData?.length > 0 ? (
           listData?.map((blog: BlogBasic, index) => (
             <Grid size={{ xs: 12 }} key={`events-${blog.id}-${index}`}>
               <BlogCard

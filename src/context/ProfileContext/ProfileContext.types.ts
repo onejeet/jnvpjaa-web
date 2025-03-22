@@ -1,5 +1,6 @@
-import { User } from '@/apollo/hooks';
+import { UpdateUserMutation, User } from '@/apollo/hooks';
 import { AlertDialogProps } from '@/components/common/AlertDialog';
+import { FetchResult } from '@apollo/client';
 import type React from 'react';
 
 export interface ProfileContextProps {
@@ -9,7 +10,7 @@ export interface ProfileContextProps {
   loading?: boolean;
   editingProfile: boolean;
   setEditingProfile: React.Dispatch<React.SetStateAction<boolean>>;
-  saveProfile: (data: Partial<User>) => void;
+  saveProfile: (data: Partial<User>) => Promise<FetchResult<UpdateUserMutation>> | undefined;
 }
 
 export interface ProfileProviderProps {
