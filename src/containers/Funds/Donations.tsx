@@ -29,8 +29,13 @@ const Donations = () => {
           //     sm: 'column-reverse',
           //   }}
         >
-          <Typography variant="h1" mb={3}>
+          <Typography variant="h1" mb={1}>
             Donations
+          </Typography>
+          <Typography color="grey.800" mb={3}>
+            Hey there! If you’d like to give back and help our alumni network grow, this is the place to do it. Your
+            support helps us organize events, fund community initiatives, and keep the spirit alive. Every little bit
+            counts, and we truly appreciate it! Thanks for being a part of this journey! 🙌
           </Typography>
           {/* <Box display={{ xs: 'block', sm: 'none' }} sx={{ borderRadius: '10px', width: '100%', overflow: 'hidden' }}>
             <img src="/assets/people/principal.webp" width="100%" alt="jnv principal" />
