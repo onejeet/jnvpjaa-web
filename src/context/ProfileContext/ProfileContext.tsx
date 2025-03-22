@@ -14,6 +14,7 @@ const defaultProvider: ProfileContextProps = {
   },
   editingProfile: false,
   setEditingProfile: () => null,
+  saveProfile: () => undefined,
 };
 
 const ProfileContext = createContext(defaultProvider);
