@@ -1,4 +1,9 @@
 /** @type {import('next').NextConfig} */
+const withPWA = require('next-pwa')({
+  dest: 'public',
+  register: true,
+  skipWaiting: true,
+});
 
 const nextConfig = {
   output: 'export',
@@ -17,6 +22,10 @@ const nextConfig = {
       },
     ],
   },
+  pwa: {
+    dest: 'public',
+    disable: process.env.NODE_ENV === 'development', // Disable in dev mode
+  },
   transpilePackages: ['mui-tel-input'],
   webpack: (config) => {
     config.resolve.alias.canvas = false;
@@ -25,4 +34,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+module.exports = withPWA(nextConfig);
