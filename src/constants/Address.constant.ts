@@ -148,4 +148,5 @@ export const STATES_INDIA = [
   { label: 'Uttar Pradesh', value: 'UttarPradesh' },
   { label: 'Uttarakhand', value: 'Uttarakhand' },
   { label: 'West Bengal', value: 'WestBengal' },
+  { label: 'Jammu & Kashmir', value: 'Jammu&Kashmir' },
 ];

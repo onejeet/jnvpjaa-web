@@ -13,6 +13,7 @@ interface DataPrivacyProps {
   onSuccess?: () => void;
   onCancel?: () => void;
   user?: User;
+  isLastStep?: boolean;
 }
 
 const IOSSwitch = styled((props: SwitchProps) => (
@@ -82,17 +83,25 @@ const IOSSwitch = styled((props: SwitchProps) => (
   },
 }));
 
-const DataPrivacy: React.FC<DataPrivacyProps> = ({ user, onNext, onBack, onSuccess, onCancel }) => {
+const DataPrivacy: React.FC<DataPrivacyProps> = ({ user, isLastStep, onNext, onBack, onSuccess, onCancel }) => {
   const [isConfidential, setIsConfidential] = React.useState<boolean>(user?.isConfidential ?? false);
   const client = useApolloClient();
   const { showAlert } = useAlert();
   const [updateUser, { loading }] = useUpdateUserMutation();
 
   const onSubmit = React.useCallback(() => {
+    const vars: any = {
+      id: user?.id,
+      isConfidential,
+    };
+    if (user?.metadata?.isFirstLogin && isLastStep) {
+      vars.metadata = {
+        isFirstLogin: false,
+      };
+    }
     updateUser({
       variables: {
-        id: user?.id,
-        isConfidential,
+        ...vars,
       },
       onCompleted: (res) => {
         console.log('COmpleted', res);
@@ -112,7 +121,7 @@ const DataPrivacy: React.FC<DataPrivacyProps> = ({ user, onNext, onBack, onSucce
         console.log('Error: ', err?.message);
       },
     });
-  }, [updateUser, showAlert, isConfidential, onSuccess, onNext, user?.id, client]);
+  }, [updateUser, showAlert, isConfidential, onSuccess, onNext, user, client]);
 
   return (
     <Box

@@ -28,6 +28,11 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children, checkAuth, isAuth
   const [fetchUserData, { data: userData, refetch }] = useGetUserDetailsLazyQuery({
     onCompleted: (data: any) => {
       setUser(data?.getUserDetails as User);
+      if (data?.getUserDetails?.metadata?.isFirstLogin !== false) {
+        router.push(paths.profile.setup);
+        setLoadingData({ loading: false });
+        return;
+      }
       redirectOnSignin();
     },
     onError: () => {

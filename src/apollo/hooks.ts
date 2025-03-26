@@ -446,6 +446,7 @@ export type MutationUpdateUserArgs = {
   id?: InputMaybe<Scalars['String']['input']>;
   isConfidential?: InputMaybe<Scalars['Boolean']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
+  metadata?: InputMaybe<Scalars['JSON']['input']>;
   mobile?: InputMaybe<Scalars['String']['input']>;
   nickName?: InputMaybe<Scalars['String']['input']>;
   profileImage?: InputMaybe<Scalars['String']['input']>;
@@ -600,6 +601,7 @@ export type User = {
   isVerified?: Maybe<Scalars['Boolean']['output']>;
   lastName?: Maybe<Scalars['String']['output']>;
   membershipYear?: Maybe<Scalars['Int']['output']>;
+  metadata?: Maybe<Scalars['JSON']['output']>;
   mobile?: Maybe<Scalars['String']['output']>;
   nickName?: Maybe<Scalars['String']['output']>;
   profileImage?: Maybe<Scalars['String']['output']>;
@@ -734,6 +736,7 @@ export type AssignBatchCoordinatorMutation = {
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
               membershipYear?: number | undefined;
+              metadata?: any | undefined;
               mobile?: string | undefined;
               nickName?: string | undefined;
               profileImage?: string | undefined;
@@ -1083,6 +1086,7 @@ export type CreateTransactionMutation = {
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
               membershipYear?: number | undefined;
+              metadata?: any | undefined;
               mobile?: string | undefined;
               nickName?: string | undefined;
               profileImage?: string | undefined;
@@ -1264,6 +1268,7 @@ export type DeleteTransactionMutation = {
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
               membershipYear?: number | undefined;
+              metadata?: any | undefined;
               mobile?: string | undefined;
               nickName?: string | undefined;
               profileImage?: string | undefined;
@@ -1305,6 +1310,7 @@ export type DeleteUserMutation = {
         isVerified?: boolean | undefined;
         lastName?: string | undefined;
         membershipYear?: number | undefined;
+        metadata?: any | undefined;
         mobile?: string | undefined;
         nickName?: string | undefined;
         profileImage?: string | undefined;
@@ -1431,6 +1437,7 @@ export type RefreshTokenMutation = {
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
               membershipYear?: number | undefined;
+              metadata?: any | undefined;
               mobile?: string | undefined;
               nickName?: string | undefined;
               profileImage?: string | undefined;
@@ -1559,6 +1566,7 @@ export type SigninMutation = {
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
               membershipYear?: number | undefined;
+              metadata?: any | undefined;
               mobile?: string | undefined;
               nickName?: string | undefined;
               profileImage?: string | undefined;
@@ -1607,6 +1615,7 @@ export type SignupMutation = {
         isVerified?: boolean | undefined;
         lastName?: string | undefined;
         membershipYear?: number | undefined;
+        metadata?: any | undefined;
         mobile?: string | undefined;
         nickName?: string | undefined;
         profileImage?: string | undefined;
@@ -1681,6 +1690,7 @@ export type UpdateBatchCoordinatorMutation = {
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
               membershipYear?: number | undefined;
+              metadata?: any | undefined;
               mobile?: string | undefined;
               nickName?: string | undefined;
               profileImage?: string | undefined;
@@ -1891,6 +1901,7 @@ export type UpdateTransactionMutation = {
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
               membershipYear?: number | undefined;
+              metadata?: any | undefined;
               mobile?: string | undefined;
               nickName?: string | undefined;
               profileImage?: string | undefined;
@@ -1916,6 +1927,7 @@ export type UpdateUserMutationVariables = Exact<{
   id?: InputMaybe<Scalars['String']['input']>;
   isConfidential?: InputMaybe<Scalars['Boolean']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
+  metadata?: InputMaybe<Scalars['JSON']['input']>;
   mobile?: InputMaybe<Scalars['String']['input']>;
   nickName?: InputMaybe<Scalars['String']['input']>;
   profileImage?: InputMaybe<Scalars['String']['input']>;
@@ -1947,6 +1959,7 @@ export type UpdateUserMutation = {
         isVerified?: boolean | undefined;
         lastName?: string | undefined;
         membershipYear?: number | undefined;
+        metadata?: any | undefined;
         mobile?: string | undefined;
         nickName?: string | undefined;
         profileImage?: string | undefined;
@@ -2033,6 +2046,7 @@ export type GetAllBatchCoordinatorsQuery = {
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
                   membershipYear?: number | undefined;
+                  metadata?: any | undefined;
                   mobile?: string | undefined;
                   nickName?: string | undefined;
                   profileImage?: string | undefined;
@@ -2083,6 +2097,7 @@ export type GetBatchCoordinatorByUserIdQuery = {
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
               membershipYear?: number | undefined;
+              metadata?: any | undefined;
               mobile?: string | undefined;
               nickName?: string | undefined;
               profileImage?: string | undefined;
@@ -2132,6 +2147,7 @@ export type GetBatchCoordinatorsByBatchQuery = {
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
                   membershipYear?: number | undefined;
+                  metadata?: any | undefined;
                   mobile?: string | undefined;
                   nickName?: string | undefined;
                   profileImage?: string | undefined;
@@ -2500,6 +2516,7 @@ export type GetTransactionQuery = {
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
               membershipYear?: number | undefined;
+              metadata?: any | undefined;
               mobile?: string | undefined;
               nickName?: string | undefined;
               profileImage?: string | undefined;
@@ -2563,6 +2580,7 @@ export type GetTransactionsQuery = {
                         isVerified?: boolean | undefined;
                         lastName?: string | undefined;
                         membershipYear?: number | undefined;
+                        metadata?: any | undefined;
                         mobile?: string | undefined;
                         nickName?: string | undefined;
                         profileImage?: string | undefined;
@@ -2664,6 +2682,7 @@ export type GetUserDetailsQuery = {
         isVerified?: boolean | undefined;
         lastName?: string | undefined;
         membershipYear?: number | undefined;
+        metadata?: any | undefined;
         mobile?: string | undefined;
         nickName?: string | undefined;
         profileImage?: string | undefined;
@@ -2708,6 +2727,7 @@ export type GetUserListQuery = {
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
                   membershipYear?: number | undefined;
+                  metadata?: any | undefined;
                   mobile?: string | undefined;
                   nickName?: string | undefined;
                   profileImage?: string | undefined;
@@ -2829,6 +2849,7 @@ export const AssignBatchCoordinatorDocument = gql`
         isVerified
         lastName
         membershipYear
+        metadata
         mobile
         nickName
         profileImage
@@ -3359,6 +3380,7 @@ export const CreateTransactionDocument = gql`
         isVerified
         lastName
         membershipYear
+        metadata
         mobile
         nickName
         profileImage
@@ -3640,6 +3662,7 @@ export const DeleteTransactionDocument = gql`
         isVerified
         lastName
         membershipYear
+        metadata
         mobile
         nickName
         profileImage
@@ -3714,6 +3737,7 @@ export const DeleteUserDocument = gql`
       isVerified
       lastName
       membershipYear
+      metadata
       mobile
       nickName
       profileImage
@@ -3974,6 +3998,7 @@ export const RefreshTokenDocument = gql`
         isVerified
         lastName
         membershipYear
+        metadata
         mobile
         nickName
         profileImage
@@ -4211,6 +4236,7 @@ export const SigninDocument = gql`
         isVerified
         lastName
         membershipYear
+        metadata
         mobile
         nickName
         profileImage
@@ -4292,6 +4318,7 @@ export const SignupDocument = gql`
       isVerified
       lastName
       membershipYear
+      metadata
       mobile
       nickName
       profileImage
@@ -4431,6 +4458,7 @@ export const UpdateBatchCoordinatorDocument = gql`
         isVerified
         lastName
         membershipYear
+        metadata
         mobile
         nickName
         profileImage
@@ -4724,6 +4752,7 @@ export const UpdateTransactionDocument = gql`
         isVerified
         lastName
         membershipYear
+        metadata
         mobile
         nickName
         profileImage
@@ -4790,6 +4819,7 @@ export const UpdateUserDocument = gql`
     $id: String
     $isConfidential: Boolean
     $lastName: String
+    $metadata: JSON
     $mobile: String
     $nickName: String
     $profileImage: String
@@ -4808,6 +4838,7 @@ export const UpdateUserDocument = gql`
       id: $id
       isConfidential: $isConfidential
       lastName: $lastName
+      metadata: $metadata
       mobile: $mobile
       nickName: $nickName
       profileImage: $profileImage
@@ -4833,6 +4864,7 @@ export const UpdateUserDocument = gql`
       isVerified
       lastName
       membershipYear
+      metadata
       mobile
       nickName
       profileImage
@@ -4872,6 +4904,7 @@ export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, U
  *      id: // value for 'id'
  *      isConfidential: // value for 'isConfidential'
  *      lastName: // value for 'lastName'
+ *      metadata: // value for 'metadata'
  *      mobile: // value for 'mobile'
  *      nickName: // value for 'nickName'
  *      profileImage: // value for 'profileImage'
@@ -5035,6 +5068,7 @@ export const GetAllBatchCoordinatorsDocument = gql`
         isVerified
         lastName
         membershipYear
+        metadata
         mobile
         nickName
         profileImage
@@ -5129,6 +5163,7 @@ export const GetBatchCoordinatorByUserIdDocument = gql`
         isVerified
         lastName
         membershipYear
+        metadata
         mobile
         nickName
         profileImage
@@ -5226,6 +5261,7 @@ export const GetBatchCoordinatorsByBatchDocument = gql`
         isVerified
         lastName
         membershipYear
+        metadata
         mobile
         nickName
         profileImage
@@ -5755,6 +5791,7 @@ export const GetTransactionDocument = gql`
         isVerified
         lastName
         membershipYear
+        metadata
         mobile
         nickName
         profileImage
@@ -5847,6 +5884,7 @@ export const GetTransactionsDocument = gql`
           isVerified
           lastName
           membershipYear
+          metadata
           mobile
           nickName
           profileImage
@@ -6054,6 +6092,7 @@ export const GetUserDetailsDocument = gql`
       isVerified
       lastName
       membershipYear
+      metadata
       mobile
       nickName
       profileImage
@@ -6129,6 +6168,7 @@ export const GetUserListDocument = gql`
         isVerified
         lastName
         membershipYear
+        metadata
         mobile
         nickName
         profileImage

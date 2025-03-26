@@ -11,6 +11,7 @@ import Addresses from '@/modules/ProfileSetup/Addresses';
 import DataPrivacy from '@/modules/ProfileSetup/DataPrivacy';
 import { useRouter } from 'next/router';
 import { CheckCircle } from '@phosphor-icons/react';
+import { useUpdateUserMutation } from '@/apollo/hooks';
 
 const steps = ['personal_info', 'profile_picture', 'addresses', 'privacy'];
 
@@ -31,17 +32,17 @@ const ProfileSetup = () => {
   const { user } = useAuth();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const handleNext = () => {
+  const handleNext = React.useCallback(async () => {
     if (steps[activeStepIndex] === 'privacy') {
       router.push('/profile');
       return;
     }
     setActiveStepIndex((prevStep) => prevStep + 1);
-  };
+  }, [activeStepIndex, router]);
 
   const handleBack = React.useCallback(() => {
     setActiveStepIndex((prevStep) => prevStep - 1);
-  }, [activeStepIndex]);
+  }, []);
 
   const mainComponent = React.useMemo(() => {
     const step = steps[activeStepIndex];
@@ -53,7 +54,7 @@ const ProfileSetup = () => {
       case 'addresses':
         return <Addresses onBack={handleBack} onNext={handleNext} user={user} />;
       case 'privacy':
-        return <DataPrivacy onBack={handleBack} onNext={handleNext} user={user} />;
+        return <DataPrivacy isLastStep onBack={handleBack} onNext={handleNext} user={user} />;
     }
   }, [activeStepIndex, user, handleNext, handleBack]);
 

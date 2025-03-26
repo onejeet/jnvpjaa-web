@@ -74,7 +74,7 @@ const MembersFilters = () => {
           ))}
         </Select>
       </Grid>
-      <Grid size={{ xs: 12, sm: 6, md: 2 }}>
+      {/* <Grid size={{ xs: 12, sm: 6, md: 2 }}>
         <Select
           key={searchParams.get('verified')}
           name="is_verified"
@@ -87,7 +87,7 @@ const MembersFilters = () => {
           <MenuItem value="true">Verified</MenuItem>
           <MenuItem value="false">Pending Verification</MenuItem>
         </Select>
-      </Grid>
+      </Grid> */}
     </Box>
   );
 };
