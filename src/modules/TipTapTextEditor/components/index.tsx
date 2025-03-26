@@ -160,7 +160,7 @@ export const Portal = ({ children }: any) => {
 };
 
 export const Toolbar = React.forwardRef(
-  ({ className, ...props }: PropsWithChildren<BaseProps>, ref: Ref<OrNull<HTMLDivElement>>) => (
+  ({ className, ...props }: PropsWithChildren<BaseProps>, ref: Ref<HTMLDivElement>) => (
     <Menu
       {...props}
       ref={ref}

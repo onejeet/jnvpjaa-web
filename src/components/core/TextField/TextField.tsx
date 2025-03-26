@@ -1,6 +1,6 @@
 /* REACT */
 import React from 'react';
-import { Typography } from '@mui/material';
+import { Skeleton, Typography } from '@mui/material';
 /* MUI */
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -18,6 +18,7 @@ function TextField(
     startAdornment: mainStartAdornment,
     endAdornment: mainEndAdornment,
     type,
+    loading,
     border = true,
     outline = true,
     height,
@@ -31,7 +32,9 @@ function TextField(
   const startAdornment = inputStartAdornment || mainStartAdornment;
   const endAdornment = inputEndAdornment || mainEndAdornment;
 
-  return (
+  return loading ? (
+    <Skeleton width="100%" height={41} />
+  ) : (
     <MuiTextField
       InputProps={{
         startAdornment: startAdornment ? <InputAdornment position="start">{startAdornment}</InputAdornment> : undefined,

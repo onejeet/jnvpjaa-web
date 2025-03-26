@@ -42,7 +42,7 @@ const Donations = () => {
           </Box> */}
 
           <Typography color="grey.800" mt={2}>
-            If no life membership is taken prior to donating through this link, INR 1000 will go towards life membership
+            If no life membership is taken prior to donating through this link, ₹1,000 will go towards life membership
             and rest of the amount as a donation.
           </Typography>
           <Typography color="grey.800" fontWeight={600} mt={2}>

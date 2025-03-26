@@ -8,4 +8,5 @@ export interface TextFieldProps extends Omit<MuiTextFieldProps, 'title'> {
   border?: boolean;
   outline?: boolean;
   height?: string | number;
+  loading?: boolean;
 }

@@ -61,7 +61,14 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ toolsHidden = [], default
         borderColor="grey.400"
         {...restProps}
       >
-        <Stack direction="row" spacing={2.5} alignItems="center">
+        <Stack
+          direction="row"
+          spacing={{
+            xs: 1,
+            md: 2.5,
+          }}
+          alignItems="center"
+        >
           {/* <FontFamilySelect /> */}
 
           <MarkButton format="bold" />

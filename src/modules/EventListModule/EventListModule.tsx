@@ -27,9 +27,15 @@ interface EventListModuleProps {
   filter: ListInput['filter'];
   skip?: boolean;
   loading?: boolean;
+  isCreateAllowed?: boolean;
 }
 
-const EventListModule: React.FC<EventListModuleProps> = ({ filter, skip, loading: propLoading }) => {
+const EventListModule: React.FC<EventListModuleProps> = ({
+  filter,
+  skip,
+  loading: propLoading,
+  isCreateAllowed = true,
+}) => {
   const { redirectToSignin, user, isAdmin } = useAuth();
   const { showAlert } = useAlert();
   const router = useRouter();
@@ -303,7 +309,7 @@ const EventListModule: React.FC<EventListModuleProps> = ({ filter, skip, loading
         <EmptyView
           message="No events available"
           buttonProps={
-            user?.id
+            user?.id && isCreateAllowed
               ? {
                   title: 'Create New Event',
                   startIcon: <Plus size={16} />,

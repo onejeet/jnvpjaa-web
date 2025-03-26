@@ -2,6 +2,7 @@ import { ApolloClient, HttpLink, InMemoryCache, ApolloLink, Observable, from, sp
 import { setContext } from '@apollo/client/link/context';
 import { refreshAccessToken } from './refresh';
 import { getMainDefinition } from '@apollo/client/utilities';
+import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 
 // Error handling link
 const errorLink = new ApolloLink((operation, forward) => {
@@ -63,7 +64,13 @@ const httpLink = new HttpLink({
   credentials: 'include', // or 'include' for cookies
 });
 
-const publicOperations = ['signin', 'getEventList', 'getUserList', 'signup'];
+// ✅ Upload Link
+const uploadLink = createUploadLink({
+  uri: process.env.GRAPHQL_ENDPOINT || 'http://localhost:4000/client',
+  credentials: 'include',
+});
+
+const publicOperations = ['signin', 'getEventList', 'getBlogList', 'getBlog', 'getUserList', 'signup'];
 
 // Apollo Client
 export const apolloClient = new ApolloClient({
@@ -77,6 +84,7 @@ export const apolloClient = new ApolloClient({
       // Route to 'credential_link' only if operation name is 'bo_signup'
       return operationName ? !publicOperations?.includes(operationName) : true;
     }, authLink),
+    uploadLink,
     httpLink,
   ]),
   cache: new InMemoryCache(),

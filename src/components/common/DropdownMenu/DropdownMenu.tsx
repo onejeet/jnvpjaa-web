@@ -48,7 +48,6 @@ const ButtonDropdown: React.FC<DropdownMenuProps> = ({
         }
         items={items}
         anchorEl={anchorEl}
-        open={open}
         onClose={handleClose}
         onChange={onChange}
         MenuListProps={{

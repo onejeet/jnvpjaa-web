@@ -36,7 +36,7 @@ export default function Events() {
           </Typography>
           <Typography color="grey.800">List of all the ongoing & upcoming events.</Typography>
         </Box>
-        {user?.id && isAdmin && (
+        {user?.id && (
           <Button
             title="Create Event"
             startIcon={<Plus size={16} />}

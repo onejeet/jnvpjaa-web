@@ -13,4 +13,5 @@ export interface FormSelectProps {
   // MUI SelectProps we want to extend
   selectProps?: MUISelectProps;
   disabled?: boolean;
+  loading?: boolean;
 }

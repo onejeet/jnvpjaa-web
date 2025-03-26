@@ -42,7 +42,7 @@ const Blog = () => {
             helps strengthen our bond.`}
           </Typography>
         </Box>
-        {user?.id && isAdmin && (
+        {user?.id && (
           <Button
             title="New Post"
             startIcon={<Plus size={16} />}

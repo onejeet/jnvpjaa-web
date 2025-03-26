@@ -14,15 +14,18 @@ import {
   PencilSimple,
 } from '@phosphor-icons/react';
 import { useProfile } from '@/context/ProfileContext';
-import FacultyBadge from '@/components/common/FacultyBadge/FacultyBadge';
+import FacultyBadge from '@/components/common/FacultyBadge';
 import Menu from '@/components/core/Menu';
 import React from 'react';
 import { useAlert } from '@/context/AlertContext';
 import { useApolloClient } from '@apollo/client';
+import { paths } from '@/config/paths';
+import { useRouter } from 'next/router';
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
   const { user, loading, isProfileEditable, editingProfile, saveProfile, setEditingProfile } = useProfile();
   const { showAlert, hideAlert } = useAlert();
+  const router = useRouter();
   const client = useApolloClient();
 
   const menuItems = React.useMemo(() => {
@@ -32,11 +35,12 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
           {
             label: 'Edit',
             value: 'edit',
-            onClick: () => setEditingProfile(true),
+            // onClick: () => setEditingProfile(true),
+            onClick: () => router.push(paths.profile.setup),
             icon: <Pencil size={16} />,
           },
           {
-            label: isConfidential ? 'Make Contact Info Public' : 'Keep Contact Info Private',
+            label: isConfidential ? 'Make Contact Info Visible' : 'Keep Contact Info Private',
             value: 'delete',
             onClick: () => {
               showAlert(
@@ -44,7 +48,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
                   visible: true,
                   action: 'approve',
                   type: 'custom',
-                  title: isConfidential ? 'Make Contact Info Public' : 'Keep Contact Info Private',
+                  title: isConfidential ? 'Make Contact Info Protected' : 'Keep Contact Info Private',
                   message: isConfidential
                     ? 'Your email and phone number will be visible to all the verified alumni of JNVPJAA. Rest assured, the data still be not visible to public.'
                     : 'Your email and phone number will remain completely hidden—no one will be able to access them.',
@@ -71,7 +75,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
                           {
                             visible: true,
                             type: 'success',
-                            title: isConfidential ? 'Contact Info is Public' : 'Contact Info is Private',
+                            title: isConfidential ? 'Contact Info is Protected' : 'Contact Info is Private',
                             message: isConfidential
                               ? 'Your email and phone number will be visible to all the verified alumni of JNVPJAA. Rest assured, they data still be not visible to public.'
                               : 'Your email and phone number will remain completely hidden—no one will be able to access them.',
@@ -147,15 +151,15 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
         src={user?.profileImage}
         loading={loading}
         sx={{
-          width: 168,
-          height: 168,
+          width: 180,
+          height: 180,
           border: '4px solid #fff',
           position: 'absolute',
           bottom: -24,
           left: 32,
         }}
       />
-      <Box display="flex" justifyContent="space-between" sx={{ mt: 1, ml: '200px' }}>
+      <Box display="flex" justifyContent="space-between" sx={{ mt: 1, ml: '220px' }}>
         <Title
           loading={loading}
           title={

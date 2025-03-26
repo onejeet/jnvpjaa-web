@@ -102,6 +102,17 @@ const EventCard: React.FC<EventCardProps> = ({
         position: 'relative',
         borderColor: status === EventStatus.PendingApproval ? 'error.main' : 'inherit',
         height: '100%',
+        '.event_title svg': {
+          ml: '4px',
+          transition: 'all 0.2s linear',
+          opacity: 0,
+        },
+        '&:hover': {
+          '.event_title svg': {
+            ml: '10px',
+            opacity: 1,
+          },
+        },
       }}
     >
       {!loading && status === EventStatus.PendingApproval && (
@@ -127,6 +138,7 @@ const EventCard: React.FC<EventCardProps> = ({
           height="180"
           src={image || `https://picsum.photos/seed/${title}/600/200`}
           alt="Event Image"
+          referrerPolicy="no-referrer"
           sx={{ borderTopLeftRadius: 2, borderTopRightRadius: 2 }}
         />
       )}
@@ -139,6 +151,7 @@ const EventCard: React.FC<EventCardProps> = ({
         ) : (
           <Box display="flex" alignItems="center">
             <Typography
+              className="event_title"
               variant="h2"
               component="div"
               fontWeight="bold"
@@ -151,18 +164,18 @@ const EventCard: React.FC<EventCardProps> = ({
                 display: 'flex',
                 alignItems: 'center',
                 transition: 'all 0.2s ease',
-                svg: {
-                  ml: '4px',
-                  transition: 'all 0.2s linear',
-                  opacity: 0,
-                },
+                // svg: {
+                //   ml: '4px',
+                //   transition: 'all 0.2s linear',
+                //   opacity: 0,
+                // },
                 '&:hover': {
                   cursor: showDescription ? 'default' : 'pointer',
                   color: showDescription ? 'inherit' : 'primary.main',
-                  svg: {
-                    ml: '10px',
-                    opacity: 1,
-                  },
+                  // svg: {
+                  //   ml: '10px',
+                  //   opacity: 1,
+                  // },
                 },
               }}
             >

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Controller } from 'react-hook-form';
 import { FormPhoneFieldProps } from './FormPhoneField.types';
-import { MuiTelInput } from 'mui-tel-input';
+import { MuiTelInput, matchIsValidTel } from 'mui-tel-input';
 import { phoneNumberJSONConverter } from '@/utils/helpers';
 
 const FormPhoneField: React.FC<FormPhoneFieldProps> = ({
@@ -23,27 +23,31 @@ const FormPhoneField: React.FC<FormPhoneFieldProps> = ({
         validate: {
           maxLength: (value) => {
             const { phoneNumber } = phoneNumberJSONConverter(value); // Remove non-numeric characters
-            console.log('ZZ: BB VALIDARION', phoneNumber, value);
-            if (phoneNumber?.length !== 10) {
-              return 'Invalid mobile number';
+            if (value) {
+              console.log('ZZ: BB VALIDARION', value, matchIsValidTel(value));
             }
-            return true; // Validation passes if the length is <= 10
+            if (value) {
+              if (matchIsValidTel(value)) return true;
+              else return 'Invalid mobile number';
+            }
+            return true;
           },
         },
       }}
       defaultValue={defaultValue}
       render={({ field, fieldState: { error } }) => {
-        const handleChange = (value: string, countryData: any) => {
+        const handleChange = (value: any, countryData: any) => {
           const { phoneNumber } = phoneNumberJSONConverter(value);
           console.log('ZZ: BBB', value, countryData, phoneNumber);
           if (!countryData.countryCode) {
             return;
           }
-          // Strip non-digit characters and ensure the length is <= 10
+          // // Strip non-digit characters and ensure the length is <= 10
 
-          if (!phoneNumber || phoneNumber?.length <= 10) {
-            field.onChange(value); // Update the field value if within the limit
-          }
+          // if (!phoneNumber || phoneNumber?.length <= 10) {
+          //   field.onChange(value); // Update the field value if within the limit
+          // }
+          field.onChange(value);
         };
         return (
           <MuiTelInput

@@ -54,12 +54,14 @@ input[type='number'] {
   }
 }
 
-.single-blog-content a {
+.single-blog-content a,
+.tiptap a {
   color: #c62835;
   text-decoration: none;
   transition: all 0.4s linear;
 }
-.single-blog-content a:hover {
+.single-blog-content a:hover,
+.tiptap a:hover {
   text-decoration: underline;
 }
 
@@ -94,7 +96,8 @@ input[type='number'] {
 }
 
 .ProseMirror {
-  font-size: 20px; /* Change this to your desired font size */
+  font-size: 16px; /* Change this to your desired font size */
+  font-weight: 400;
 }
 
 .ProseMirror p.is-empty::before {
@@ -104,7 +107,7 @@ input[type='number'] {
   pointer-events: none;
   font-family: 'DM Sans';
   position: absolute;
-  left: 16px; /* Adjust if needed */
+  left: 22px; /* Adjust if needed */
 }
 
 .ProseMirror p.is-empty:not(:first-child)::before {

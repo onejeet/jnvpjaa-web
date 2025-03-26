@@ -28,11 +28,11 @@ export type Address = {
   address?: Maybe<Scalars['String']['output']>;
   city?: Maybe<Scalars['String']['output']>;
   country?: Maybe<Scalars['String']['output']>;
-  id?: Maybe<Scalars['ID']['output']>;
+  id: Scalars['ID']['output'];
   postalCode?: Maybe<Scalars['String']['output']>;
   state?: Maybe<Scalars['String']['output']>;
-  type?: Maybe<Scalars['String']['output']>;
-  userId?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
+  userId: Scalars['String']['output'];
 };
 
 export type AddressInput = {
@@ -42,7 +42,7 @@ export type AddressInput = {
   id?: InputMaybe<Scalars['ID']['input']>;
   postalCode?: InputMaybe<Scalars['String']['input']>;
   state?: InputMaybe<Scalars['String']['input']>;
-  type?: InputMaybe<Scalars['String']['input']>;
+  type: Scalars['String']['input'];
 };
 
 export type AddressListResponse = {
@@ -230,15 +230,18 @@ export type Mutation = {
   approveBlog?: Maybe<Blog>;
   assignBatchCoordinator?: Maybe<BatchCoordinator>;
   attendEvent?: Maybe<Event>;
+  createAddress?: Maybe<Address>;
   createBlog?: Maybe<Blog>;
   createComment?: Maybe<Comment>;
   createEvent?: Maybe<Event>;
   createTransaction?: Maybe<Transaction>;
+  deleteAddress?: Maybe<Address>;
   deleteBlog?: Maybe<Blog>;
   deleteComment?: Maybe<Comment>;
   deleteTransaction?: Maybe<Transaction>;
   deleteUser?: Maybe<User>;
   forgotPassword?: Maybe<Scalars['Boolean']['output']>;
+  getPresignedUrl: Scalars['String']['output'];
   logout?: Maybe<Scalars['String']['output']>;
   publishEvent?: Maybe<Event>;
   refreshToken?: Maybe<AuthPayload>;
@@ -247,11 +250,13 @@ export type Mutation = {
   resetPassword?: Maybe<Scalars['Boolean']['output']>;
   signin?: Maybe<AuthPayload>;
   signup?: Maybe<User>;
+  updateAddress?: Maybe<Address>;
   updateBatchCoordinator?: Maybe<BatchCoordinator>;
   updateBlog?: Maybe<Blog>;
   updateEvent?: Maybe<Event>;
   updateTransaction?: Maybe<Transaction>;
   updateUser?: Maybe<User>;
+  upsertMultipleAddresses?: Maybe<Array<Maybe<Address>>>;
   verifyEvent?: Maybe<Scalars['Boolean']['output']>;
   verifyUser?: Maybe<Scalars['Boolean']['output']>;
 };
@@ -267,6 +272,15 @@ export type MutationAssignBatchCoordinatorArgs = {
 
 export type MutationAttendEventArgs = {
   eventId: Scalars['Int']['input'];
+};
+
+export type MutationCreateAddressArgs = {
+  address?: InputMaybe<Scalars['String']['input']>;
+  city?: InputMaybe<Scalars['String']['input']>;
+  country?: InputMaybe<Scalars['String']['input']>;
+  postalCode?: InputMaybe<Scalars['String']['input']>;
+  state?: InputMaybe<Scalars['String']['input']>;
+  type: Scalars['String']['input'];
 };
 
 export type MutationCreateBlogArgs = {
@@ -312,6 +326,10 @@ export type MutationCreateTransactionArgs = {
   userId: Scalars['String']['input'];
 };
 
+export type MutationDeleteAddressArgs = {
+  id: Scalars['String']['input'];
+};
+
 export type MutationDeleteBlogArgs = {
   id: Scalars['String']['input'];
 };
@@ -330,6 +348,11 @@ export type MutationDeleteUserArgs = {
 
 export type MutationForgotPasswordArgs = {
   email: Scalars['String']['input'];
+};
+
+export type MutationGetPresignedUrlArgs = {
+  contentType: Scalars['String']['input'];
+  fileName: Scalars['String']['input'];
 };
 
 export type MutationPublishEventArgs = {
@@ -366,6 +389,16 @@ export type MutationSignupArgs = {
   lastName: Scalars['String']['input'];
   mobile: Scalars['String']['input'];
   password: Scalars['String']['input'];
+};
+
+export type MutationUpdateAddressArgs = {
+  address?: InputMaybe<Scalars['String']['input']>;
+  city?: InputMaybe<Scalars['String']['input']>;
+  country?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
+  postalCode?: InputMaybe<Scalars['String']['input']>;
+  state?: InputMaybe<Scalars['String']['input']>;
+  type: Scalars['String']['input'];
 };
 
 export type MutationUpdateBatchCoordinatorArgs = {
@@ -418,6 +451,10 @@ export type MutationUpdateUserArgs = {
   profileImage?: InputMaybe<Scalars['String']['input']>;
   sociaMedia?: InputMaybe<Scalars['JSON']['input']>;
   whatsAppMobile?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type MutationUpsertMultipleAddressesArgs = {
+  updates: Array<AddressInput>;
 };
 
 export type MutationVerifyEventArgs = {
@@ -778,6 +815,32 @@ export type AttendEventMutation = {
     | undefined;
 };
 
+export type CreateAddressMutationVariables = Exact<{
+  address?: InputMaybe<Scalars['String']['input']>;
+  city?: InputMaybe<Scalars['String']['input']>;
+  country?: InputMaybe<Scalars['String']['input']>;
+  postalCode?: InputMaybe<Scalars['String']['input']>;
+  state?: InputMaybe<Scalars['String']['input']>;
+  type: Scalars['String']['input'];
+}>;
+
+export type CreateAddressMutation = {
+  __typename?: 'Mutation';
+  createAddress?:
+    | {
+        __typename?: 'Address';
+        address?: string | undefined;
+        city?: string | undefined;
+        country?: string | undefined;
+        id: string;
+        postalCode?: string | undefined;
+        state?: string | undefined;
+        type: string;
+        userId: string;
+      }
+    | undefined;
+};
+
 export type CreateBlogMutationVariables = Exact<{
   authorId: Scalars['String']['input'];
   categoryId: Scalars['String']['input'];
@@ -1033,6 +1096,27 @@ export type CreateTransactionMutation = {
     | undefined;
 };
 
+export type DeleteAddressMutationVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+export type DeleteAddressMutation = {
+  __typename?: 'Mutation';
+  deleteAddress?:
+    | {
+        __typename?: 'Address';
+        address?: string | undefined;
+        city?: string | undefined;
+        country?: string | undefined;
+        id: string;
+        postalCode?: string | undefined;
+        state?: string | undefined;
+        type: string;
+        userId: string;
+      }
+    | undefined;
+};
+
 export type DeleteBlogMutationVariables = Exact<{
   id: Scalars['String']['input'];
 }>;
@@ -1237,6 +1321,13 @@ export type ForgotPasswordMutationVariables = Exact<{
 }>;
 
 export type ForgotPasswordMutation = { __typename?: 'Mutation'; forgotPassword?: boolean | undefined };
+
+export type GetPresignedUrlMutationVariables = Exact<{
+  contentType: Scalars['String']['input'];
+  fileName: Scalars['String']['input'];
+}>;
+
+export type GetPresignedUrlMutation = { __typename?: 'Mutation'; getPresignedUrl: string };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never }>;
 
@@ -1523,6 +1614,33 @@ export type SignupMutation = {
         updatedAt: any;
         whatsAppMobile?: string | undefined;
         role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+      }
+    | undefined;
+};
+
+export type UpdateAddressMutationVariables = Exact<{
+  address?: InputMaybe<Scalars['String']['input']>;
+  city?: InputMaybe<Scalars['String']['input']>;
+  country?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
+  postalCode?: InputMaybe<Scalars['String']['input']>;
+  state?: InputMaybe<Scalars['String']['input']>;
+  type: Scalars['String']['input'];
+}>;
+
+export type UpdateAddressMutation = {
+  __typename?: 'Mutation';
+  updateAddress?:
+    | {
+        __typename?: 'Address';
+        address?: string | undefined;
+        city?: string | undefined;
+        country?: string | undefined;
+        id: string;
+        postalCode?: string | undefined;
+        state?: string | undefined;
+        type: string;
+        userId: string;
       }
     | undefined;
 };
@@ -1837,6 +1955,30 @@ export type UpdateUserMutation = {
         whatsAppMobile?: string | undefined;
         role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
       }
+    | undefined;
+};
+
+export type UpsertMultipleAddressesMutationVariables = Exact<{
+  updates: Array<AddressInput> | AddressInput;
+}>;
+
+export type UpsertMultipleAddressesMutation = {
+  __typename?: 'Mutation';
+  upsertMultipleAddresses?:
+    | Array<
+        | {
+            __typename?: 'Address';
+            address?: string | undefined;
+            city?: string | undefined;
+            country?: string | undefined;
+            id: string;
+            postalCode?: string | undefined;
+            state?: string | undefined;
+            type: string;
+            userId: string;
+          }
+        | undefined
+      >
     | undefined;
 };
 
@@ -2453,11 +2595,11 @@ export type GetUserAddressesQuery = {
                   address?: string | undefined;
                   city?: string | undefined;
                   country?: string | undefined;
-                  id?: string | undefined;
+                  id: string;
                   postalCode?: string | undefined;
                   state?: string | undefined;
-                  type?: string | undefined;
-                  userId?: string | undefined;
+                  type: string;
+                  userId: string;
                 }
               | undefined
             >
@@ -2823,6 +2965,70 @@ export function useAttendEventMutation(
 export type AttendEventMutationHookResult = ReturnType<typeof useAttendEventMutation>;
 export type AttendEventMutationResult = Apollo.MutationResult<AttendEventMutation>;
 export type AttendEventMutationOptions = Apollo.BaseMutationOptions<AttendEventMutation, AttendEventMutationVariables>;
+export const CreateAddressDocument = gql`
+  mutation createAddress(
+    $address: String
+    $city: String
+    $country: String
+    $postalCode: String
+    $state: String
+    $type: String!
+  ) {
+    createAddress(
+      address: $address
+      city: $city
+      country: $country
+      postalCode: $postalCode
+      state: $state
+      type: $type
+    ) {
+      address
+      city
+      country
+      id
+      postalCode
+      state
+      type
+      userId
+    }
+  }
+`;
+export type CreateAddressMutationFn = Apollo.MutationFunction<CreateAddressMutation, CreateAddressMutationVariables>;
+
+/**
+ * __useCreateAddressMutation__
+ *
+ * To run a mutation, you first call `useCreateAddressMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAddressMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createAddressMutation, { data, loading, error }] = useCreateAddressMutation({
+ *   variables: {
+ *      address: // value for 'address'
+ *      city: // value for 'city'
+ *      country: // value for 'country'
+ *      postalCode: // value for 'postalCode'
+ *      state: // value for 'state'
+ *      type: // value for 'type'
+ *   },
+ * });
+ */
+export function useCreateAddressMutation(
+  baseOptions?: Apollo.MutationHookOptions<CreateAddressMutation, CreateAddressMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<CreateAddressMutation, CreateAddressMutationVariables>(CreateAddressDocument, options);
+}
+export type CreateAddressMutationHookResult = ReturnType<typeof useCreateAddressMutation>;
+export type CreateAddressMutationResult = Apollo.MutationResult<CreateAddressMutation>;
+export type CreateAddressMutationOptions = Apollo.BaseMutationOptions<
+  CreateAddressMutation,
+  CreateAddressMutationVariables
+>;
 export const CreateBlogDocument = gql`
   mutation createBlog(
     $authorId: String!
@@ -3215,6 +3421,51 @@ export type CreateTransactionMutationOptions = Apollo.BaseMutationOptions<
   CreateTransactionMutation,
   CreateTransactionMutationVariables
 >;
+export const DeleteAddressDocument = gql`
+  mutation deleteAddress($id: String!) {
+    deleteAddress(id: $id) {
+      address
+      city
+      country
+      id
+      postalCode
+      state
+      type
+      userId
+    }
+  }
+`;
+export type DeleteAddressMutationFn = Apollo.MutationFunction<DeleteAddressMutation, DeleteAddressMutationVariables>;
+
+/**
+ * __useDeleteAddressMutation__
+ *
+ * To run a mutation, you first call `useDeleteAddressMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteAddressMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteAddressMutation, { data, loading, error }] = useDeleteAddressMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteAddressMutation(
+  baseOptions?: Apollo.MutationHookOptions<DeleteAddressMutation, DeleteAddressMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<DeleteAddressMutation, DeleteAddressMutationVariables>(DeleteAddressDocument, options);
+}
+export type DeleteAddressMutationHookResult = ReturnType<typeof useDeleteAddressMutation>;
+export type DeleteAddressMutationResult = Apollo.MutationResult<DeleteAddressMutation>;
+export type DeleteAddressMutationOptions = Apollo.BaseMutationOptions<
+  DeleteAddressMutation,
+  DeleteAddressMutationVariables
+>;
 export const DeleteBlogDocument = gql`
   mutation deleteBlog($id: String!) {
     deleteBlog(id: $id) {
@@ -3539,6 +3790,49 @@ export type ForgotPasswordMutationResult = Apollo.MutationResult<ForgotPasswordM
 export type ForgotPasswordMutationOptions = Apollo.BaseMutationOptions<
   ForgotPasswordMutation,
   ForgotPasswordMutationVariables
+>;
+export const GetPresignedUrlDocument = gql`
+  mutation getPresignedUrl($contentType: String!, $fileName: String!) {
+    getPresignedUrl(contentType: $contentType, fileName: $fileName)
+  }
+`;
+export type GetPresignedUrlMutationFn = Apollo.MutationFunction<
+  GetPresignedUrlMutation,
+  GetPresignedUrlMutationVariables
+>;
+
+/**
+ * __useGetPresignedUrlMutation__
+ *
+ * To run a mutation, you first call `useGetPresignedUrlMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useGetPresignedUrlMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [getPresignedUrlMutation, { data, loading, error }] = useGetPresignedUrlMutation({
+ *   variables: {
+ *      contentType: // value for 'contentType'
+ *      fileName: // value for 'fileName'
+ *   },
+ * });
+ */
+export function useGetPresignedUrlMutation(
+  baseOptions?: Apollo.MutationHookOptions<GetPresignedUrlMutation, GetPresignedUrlMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<GetPresignedUrlMutation, GetPresignedUrlMutationVariables>(
+    GetPresignedUrlDocument,
+    options
+  );
+}
+export type GetPresignedUrlMutationHookResult = ReturnType<typeof useGetPresignedUrlMutation>;
+export type GetPresignedUrlMutationResult = Apollo.MutationResult<GetPresignedUrlMutation>;
+export type GetPresignedUrlMutationOptions = Apollo.BaseMutationOptions<
+  GetPresignedUrlMutation,
+  GetPresignedUrlMutationVariables
 >;
 export const LogoutDocument = gql`
   mutation logout {
@@ -4044,6 +4338,73 @@ export function useSignupMutation(baseOptions?: Apollo.MutationHookOptions<Signu
 export type SignupMutationHookResult = ReturnType<typeof useSignupMutation>;
 export type SignupMutationResult = Apollo.MutationResult<SignupMutation>;
 export type SignupMutationOptions = Apollo.BaseMutationOptions<SignupMutation, SignupMutationVariables>;
+export const UpdateAddressDocument = gql`
+  mutation updateAddress(
+    $address: String
+    $city: String
+    $country: String
+    $id: String!
+    $postalCode: String
+    $state: String
+    $type: String!
+  ) {
+    updateAddress(
+      address: $address
+      city: $city
+      country: $country
+      id: $id
+      postalCode: $postalCode
+      state: $state
+      type: $type
+    ) {
+      address
+      city
+      country
+      id
+      postalCode
+      state
+      type
+      userId
+    }
+  }
+`;
+export type UpdateAddressMutationFn = Apollo.MutationFunction<UpdateAddressMutation, UpdateAddressMutationVariables>;
+
+/**
+ * __useUpdateAddressMutation__
+ *
+ * To run a mutation, you first call `useUpdateAddressMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateAddressMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateAddressMutation, { data, loading, error }] = useUpdateAddressMutation({
+ *   variables: {
+ *      address: // value for 'address'
+ *      city: // value for 'city'
+ *      country: // value for 'country'
+ *      id: // value for 'id'
+ *      postalCode: // value for 'postalCode'
+ *      state: // value for 'state'
+ *      type: // value for 'type'
+ *   },
+ * });
+ */
+export function useUpdateAddressMutation(
+  baseOptions?: Apollo.MutationHookOptions<UpdateAddressMutation, UpdateAddressMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<UpdateAddressMutation, UpdateAddressMutationVariables>(UpdateAddressDocument, options);
+}
+export type UpdateAddressMutationHookResult = ReturnType<typeof useUpdateAddressMutation>;
+export type UpdateAddressMutationResult = Apollo.MutationResult<UpdateAddressMutation>;
+export type UpdateAddressMutationOptions = Apollo.BaseMutationOptions<
+  UpdateAddressMutation,
+  UpdateAddressMutationVariables
+>;
 export const UpdateBatchCoordinatorDocument = gql`
   mutation updateBatchCoordinator($newBatch: Int!, $userId: String!) {
     updateBatchCoordinator(newBatch: $newBatch, userId: $userId) {
@@ -4528,6 +4889,57 @@ export function useUpdateUserMutation(
 export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
 export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
 export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
+export const UpsertMultipleAddressesDocument = gql`
+  mutation upsertMultipleAddresses($updates: [AddressInput!]!) {
+    upsertMultipleAddresses(updates: $updates) {
+      address
+      city
+      country
+      id
+      postalCode
+      state
+      type
+      userId
+    }
+  }
+`;
+export type UpsertMultipleAddressesMutationFn = Apollo.MutationFunction<
+  UpsertMultipleAddressesMutation,
+  UpsertMultipleAddressesMutationVariables
+>;
+
+/**
+ * __useUpsertMultipleAddressesMutation__
+ *
+ * To run a mutation, you first call `useUpsertMultipleAddressesMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpsertMultipleAddressesMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [upsertMultipleAddressesMutation, { data, loading, error }] = useUpsertMultipleAddressesMutation({
+ *   variables: {
+ *      updates: // value for 'updates'
+ *   },
+ * });
+ */
+export function useUpsertMultipleAddressesMutation(
+  baseOptions?: Apollo.MutationHookOptions<UpsertMultipleAddressesMutation, UpsertMultipleAddressesMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<UpsertMultipleAddressesMutation, UpsertMultipleAddressesMutationVariables>(
+    UpsertMultipleAddressesDocument,
+    options
+  );
+}
+export type UpsertMultipleAddressesMutationHookResult = ReturnType<typeof useUpsertMultipleAddressesMutation>;
+export type UpsertMultipleAddressesMutationResult = Apollo.MutationResult<UpsertMultipleAddressesMutation>;
+export type UpsertMultipleAddressesMutationOptions = Apollo.BaseMutationOptions<
+  UpsertMultipleAddressesMutation,
+  UpsertMultipleAddressesMutationVariables
+>;
 export const VerifyEventDocument = gql`
   mutation verifyEvent($adminRemark: String, $eventId: Int!, $status: EventStatus!) {
     verifyEvent(adminRemark: $adminRemark, eventId: $eventId, status: $status)

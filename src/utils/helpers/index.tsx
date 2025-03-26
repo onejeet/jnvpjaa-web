@@ -7,24 +7,25 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import XIcon from '@mui/icons-material/X';
 import YouTubeIcon from '@mui/icons-material/YouTube';
+import { EnvelopeSimple, FacebookLogo, InstagramLogo, LinkedinLogo, XLogo } from '@phosphor-icons/react';
 import parsePhoneNumber from 'libphonenumber-js';
 
 export const getSocialMediaIcon = (iconName: string) => {
   switch (iconName) {
     case 'facebook': {
-      return <FacebookIcon />;
+      return <FacebookLogo size={32} weight="fill" />;
     }
     case 'instagram': {
-      return <InstagramIcon />;
+      return <InstagramLogo size={32} weight="fill" />;
     }
     case 'twitter': {
-      return <XIcon sx={{ fontSize: 20 }} />;
+      return <XLogo size={28} />;
     }
     case 'linkedin': {
-      return <LinkedInIcon />;
+      return <LinkedinLogo size={32} weight="fill" />;
     }
     case 'email': {
-      return <EmailIcon />;
+      return <EnvelopeSimple size={32} />;
     }
     default: {
       return <YouTubeIcon />;

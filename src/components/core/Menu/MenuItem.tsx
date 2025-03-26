@@ -30,7 +30,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
         onChange(value);
       }
       if (onClick) {
-        onClick(e);
+        onClick();
       }
     }}
     {...restProps}

@@ -25,9 +25,15 @@ interface BlogFilterModuleProps {
   filter: ListInput['filter'];
   skip?: boolean;
   loading?: boolean;
+  isCreateAllowed?: boolean;
 }
 
-const BlogListModule: React.FC<BlogFilterModuleProps> = ({ filter, skip, loading: propLoading }) => {
+const BlogListModule: React.FC<BlogFilterModuleProps> = ({
+  filter,
+  skip,
+  loading: propLoading,
+  isCreateAllowed = true,
+}) => {
   const router = useRouter();
   const { user, isAdmin, redirectToSignin } = useAuth();
   const client = useApolloClient();
@@ -317,9 +323,9 @@ const BlogListModule: React.FC<BlogFilterModuleProps> = ({ filter, skip, loading
         ) : (
           <Grid size={{ xs: 12 }}>
             <EmptyView
-              message="No blogs. Write one."
+              message={isCreateAllowed ? 'No blogs. Write one.' : 'No blogs available.'}
               buttonProps={
-                user?.id
+                user?.id && isCreateAllowed
                   ? {
                       title: 'Create New Post',
                       startIcon: <Plus size={16} />,

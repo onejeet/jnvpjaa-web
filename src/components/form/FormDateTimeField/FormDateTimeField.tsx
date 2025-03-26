@@ -8,7 +8,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import { LocalizationProvider, MobileDateTimePicker } from '@mui/x-date-pickers';
 import TextField from '@/components/core/TextField';
 import ScheduleIcon from '@mui/icons-material/Schedule';
-import { Box } from '@mui/material';
+import { Box, Skeleton } from '@mui/material';
 
 const FormDateTimeField: React.FC<FormDateTimeFieldProps> = ({
   name,
@@ -17,6 +17,7 @@ const FormDateTimeField: React.FC<FormDateTimeFieldProps> = ({
   defaultValue,
   helperText = '',
   isDateOnly,
+  loading,
   inputProps = {},
   ...dateTimePickerProps
 }) => {
@@ -41,7 +42,9 @@ const FormDateTimeField: React.FC<FormDateTimeFieldProps> = ({
         rules={rules}
         defaultValue={defaultValue}
         render={({ field, fieldState: { error } }) =>
-          isDateOnly ? (
+          loading ? (
+            <Skeleton width="100%" height={41} />
+          ) : isDateOnly ? (
             <Box
               sx={{
                 width: '100%',

@@ -1,3 +1,3 @@
-import VerifiedBadge from './VerifiedBadge';
+import FacultyBadge from './FacultyBadge';
 
-export default VerifiedBadge;
+export default FacultyBadge;

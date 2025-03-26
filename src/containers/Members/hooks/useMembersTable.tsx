@@ -16,7 +16,7 @@ import { useAlert } from '@/context/AlertContext';
 import { useApolloClient } from '@apollo/client';
 import { useAuth } from '@/context/AuthContext';
 import { StarFour } from '@phosphor-icons/react';
-import FacultyBadge from '@/components/common/FacultyBadge/FacultyBadge';
+import FacultyBadge from '@/components/common/FacultyBadge';
 
 const useMembersTable = () => {
   const client = useApolloClient();

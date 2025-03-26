@@ -15,7 +15,7 @@ import { isURL } from '@/utils/helpers';
 import { Tooltip } from '@mui/material';
 
 const AnchorEditorButton: React.FC = (props) => {
-  const { editor = {} } = useCurrentEditor();
+  const { editor } = useCurrentEditor();
 
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
   const [url, setUrl] = React.useState<string | null>(null);
@@ -33,11 +33,13 @@ const AnchorEditorButton: React.FC = (props) => {
   const open = Boolean(anchorEl);
   const id = open ? 'anchor-url-popover' : undefined;
 
-  const editorSelection = React.useRef(editor.selection);
+  // @ts-expect-error type-error
+  const editorSelection = React.useRef(editor?.selection);
 
   React.useEffect(() => {
     if (open) {
-      editorSelection.current = editor.selection;
+      // @ts-expect-error type-error
+      editorSelection.current = editor?.selection;
     }
   }, [open]);
 
@@ -51,13 +53,13 @@ const AnchorEditorButton: React.FC = (props) => {
 
     // empty
     if (url === '') {
-      editor.chain().focus().extendMarkRange('link').unsetLink().run();
+      editor?.chain().focus().extendMarkRange('link').unsetLink().run();
 
       return;
     }
 
     // update link
-    editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+    editor?.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
   };
 
   if (!editor) {
@@ -135,8 +137,10 @@ const AnchorEditorButton: React.FC = (props) => {
               <Button
                 startIcon={<TaskAltIcon sx={{ fontSize: '18px' }} />}
                 onClick={() => {
-                  setLink(url);
-                  setAnchorEl(null);
+                  if (url) {
+                    setLink(url);
+                    setAnchorEl(null);
+                  }
                 }}
                 title="Save"
                 size="small"

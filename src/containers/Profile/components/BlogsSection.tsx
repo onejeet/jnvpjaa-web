@@ -1,4 +1,5 @@
 import { useGetBlogListQuery, User, UserBasic } from '@/apollo/hooks';
+import { useAuth } from '@/context/AuthContext';
 import BlogListModule from '@/modules/BlogListModule';
 import { Box, Typography, Grid2 as Grid, Card, CardContent, CardMedia } from '@mui/material';
 import React from 'react';
@@ -26,6 +27,7 @@ interface IBlogsSectinProps {
 }
 
 export default function BlogsSection({ user }: IBlogsSectinProps) {
+  const { user: authUser } = useAuth();
   const filter = React.useMemo(() => {
     return {
       userId: user?.id,
@@ -37,7 +39,7 @@ export default function BlogsSection({ user }: IBlogsSectinProps) {
       <Typography variant="h6" gutterBottom>
         Recent Blog Posts
       </Typography>
-      <BlogListModule filter={filter} skip={!user?.id} />
+      <BlogListModule filter={filter} skip={!user?.id} isCreateAllowed={authUser?.id === user?.id} />
     </Box>
   );
 }

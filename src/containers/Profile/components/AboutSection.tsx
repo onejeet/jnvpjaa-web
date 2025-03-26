@@ -7,7 +7,7 @@ import { User } from '@/apollo/hooks';
 
 import React from 'react';
 import { useProfile } from '@/context/ProfileContext';
-import { Cake, EnvelopeSimpleOpen, Phone, PhoneDisconnect, WhatsappLogo } from '@phosphor-icons/react';
+import { Cake, EnvelopeSimpleOpen, Lock, Phone, PhoneDisconnect, WhatsappLogo } from '@phosphor-icons/react';
 import dayjs from 'dayjs';
 import { formatPhoneNumber } from '@/utils/helpers';
 
@@ -34,9 +34,27 @@ export default function AboutSection() {
         fontWeight={400}
         color={user?.aboutMe ? 'text.primary' : 'grey.500'}
         mb={2}
+        className="tiptap"
         dangerouslySetInnerHTML={{ __html: aboutMeContent }}
       />
       <Divider sx={{ my: 3 }} />
+      <Grid container spacing={2} sx={{ mt: 2 }}>
+        <Typography
+          variant="body2"
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            svg: {
+              mr: 1,
+            },
+          }}
+        >
+          <Lock size={16} />
+          {user?.isConfidential
+            ? 'My contact info is private and not visible to anyone.'
+            : 'My contact info is protected and only visible to verified alumni.'}
+        </Typography>
+      </Grid>
       <Grid container spacing={2} sx={{ mt: 2 }}>
         <Grid size={{ xs: 12, sm: 6 }}>
           <Box display="flex" alignItems="center">

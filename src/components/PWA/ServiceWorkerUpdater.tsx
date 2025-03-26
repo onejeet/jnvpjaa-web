@@ -1,9 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Button, Snackbar } from '@mui/material';
 import { Workbox } from 'workbox-window';
-import Dialog from '../core/Dialog';
 import AlertDialog, { AlertDialogProps } from '../common/AlertDialog';
 
 export default function ServiceWorkerUpdater() {
