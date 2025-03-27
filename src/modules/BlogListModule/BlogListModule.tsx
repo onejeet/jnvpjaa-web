@@ -24,15 +24,19 @@ import React from 'react';
 interface BlogFilterModuleProps {
   filter: ListInput['filter'];
   skip?: boolean;
+  limit?: number;
   loading?: boolean;
   isCreateAllowed?: boolean;
+  isReadOnly?: boolean;
 }
 
 const BlogListModule: React.FC<BlogFilterModuleProps> = ({
   filter,
+  limit = 50,
   skip,
   loading: propLoading,
   isCreateAllowed = true,
+  isReadOnly,
 }) => {
   const router = useRouter();
   const { user, isAdmin, redirectToSignin } = useAuth();
@@ -45,6 +49,7 @@ const BlogListModule: React.FC<BlogFilterModuleProps> = ({
     variables: {
       options: {
         filter,
+        limit,
       },
     },
     notifyOnNetworkStatusChange: true,
@@ -317,6 +322,7 @@ const BlogListModule: React.FC<BlogFilterModuleProps> = ({
                 user={user}
                 isAdminUser={isAdmin}
                 onDelete={deleteBlogPost}
+                isReadOnly={isReadOnly}
               />
             </Grid>
           ))

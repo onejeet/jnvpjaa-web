@@ -35,4 +35,5 @@ export interface EventCardProps {
   onEdit?: (id: number) => void;
   onPublish?: (id: number) => void;
   showDescription?: boolean;
+  isReadOnly?: boolean;
 }

@@ -72,6 +72,7 @@ export type Blog = {
   author?: Maybe<UserBasic>;
   authorId?: Maybe<Scalars['String']['output']>;
   categoryId?: Maybe<Scalars['String']['output']>;
+  claps?: Maybe<Scalars['Int']['output']>;
   comments?: Maybe<Array<Maybe<Comment>>>;
   content?: Maybe<Scalars['String']['output']>;
   /** Timestamp when the record was created */
@@ -91,6 +92,7 @@ export type BlogBasic = {
   author?: Maybe<UserBasic>;
   authorId: Scalars['String']['output'];
   categoryId?: Maybe<Scalars['String']['output']>;
+  claps?: Maybe<Scalars['Int']['output']>;
   /** Timestamp when the record was created */
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['String']['output'];
@@ -253,6 +255,7 @@ export type Mutation = {
   updateAddress?: Maybe<Address>;
   updateBatchCoordinator?: Maybe<BatchCoordinator>;
   updateBlog?: Maybe<Blog>;
+  updateClaps?: Maybe<Scalars['Boolean']['output']>;
   updateEvent?: Maybe<Event>;
   updateTransaction?: Maybe<Transaction>;
   updateUser?: Maybe<User>;
@@ -414,6 +417,11 @@ export type MutationUpdateBlogArgs = {
   title?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type MutationUpdateClapsArgs = {
+  claps: Scalars['Int']['input'];
+  id: Scalars['String']['input'];
+};
+
 export type MutationUpdateEventArgs = {
   category: Scalars['String']['input'];
   description?: InputMaybe<Scalars['String']['input']>;
@@ -485,6 +493,7 @@ export type Query = {
   getUserCompaniesInfo?: Maybe<CompanyInfoListResponse>;
   getUserDetails?: Maybe<User>;
   getUserList?: Maybe<UserListResponse>;
+  upcomingBirthdays: Array<Maybe<UserBasic>>;
 };
 
 export type QueryGetAllBatchCoordinatorsArgs = {
@@ -616,6 +625,7 @@ export type UserBasic = {
   __typename?: 'UserBasic';
   batch?: Maybe<Scalars['Int']['output']>;
   disabled?: Maybe<Scalars['Boolean']['output']>;
+  dob?: Maybe<Scalars['DateTime']['output']>;
   firstName?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['ID']['output']>;
   isConfidential?: Maybe<Scalars['Boolean']['output']>;
@@ -644,6 +654,7 @@ export type ApproveBlogMutation = {
         adminRemark?: string | undefined;
         authorId?: string | undefined;
         categoryId?: string | undefined;
+        claps?: number | undefined;
         content?: string | undefined;
         createdAt: any;
         id: string;
@@ -658,6 +669,7 @@ export type ApproveBlogMutation = {
               __typename?: 'UserBasic';
               batch?: number | undefined;
               disabled?: boolean | undefined;
+              dob?: any | undefined;
               firstName?: string | undefined;
               id?: string | undefined;
               isConfidential?: boolean | undefined;
@@ -683,6 +695,7 @@ export type ApproveBlogMutation = {
                         __typename?: 'UserBasic';
                         batch?: number | undefined;
                         disabled?: boolean | undefined;
+                        dob?: any | undefined;
                         firstName?: string | undefined;
                         id?: string | undefined;
                         isConfidential?: boolean | undefined;
@@ -784,6 +797,7 @@ export type AttendEventMutation = {
                   __typename?: 'UserBasic';
                   batch?: number | undefined;
                   disabled?: boolean | undefined;
+                  dob?: any | undefined;
                   firstName?: string | undefined;
                   id?: string | undefined;
                   isConfidential?: boolean | undefined;
@@ -802,6 +816,7 @@ export type AttendEventMutation = {
                   __typename?: 'UserBasic';
                   batch?: number | undefined;
                   disabled?: boolean | undefined;
+                  dob?: any | undefined;
                   firstName?: string | undefined;
                   id?: string | undefined;
                   isConfidential?: boolean | undefined;
@@ -860,6 +875,7 @@ export type CreateBlogMutation = {
         adminRemark?: string | undefined;
         authorId?: string | undefined;
         categoryId?: string | undefined;
+        claps?: number | undefined;
         content?: string | undefined;
         createdAt: any;
         id: string;
@@ -874,6 +890,7 @@ export type CreateBlogMutation = {
               __typename?: 'UserBasic';
               batch?: number | undefined;
               disabled?: boolean | undefined;
+              dob?: any | undefined;
               firstName?: string | undefined;
               id?: string | undefined;
               isConfidential?: boolean | undefined;
@@ -899,6 +916,7 @@ export type CreateBlogMutation = {
                         __typename?: 'UserBasic';
                         batch?: number | undefined;
                         disabled?: boolean | undefined;
+                        dob?: any | undefined;
                         firstName?: string | undefined;
                         id?: string | undefined;
                         isConfidential?: boolean | undefined;
@@ -938,6 +956,7 @@ export type CreateCommentMutation = {
               __typename?: 'UserBasic';
               batch?: number | undefined;
               disabled?: boolean | undefined;
+              dob?: any | undefined;
               firstName?: string | undefined;
               id?: string | undefined;
               isConfidential?: boolean | undefined;
@@ -997,6 +1016,7 @@ export type CreateEventMutation = {
                   __typename?: 'UserBasic';
                   batch?: number | undefined;
                   disabled?: boolean | undefined;
+                  dob?: any | undefined;
                   firstName?: string | undefined;
                   id?: string | undefined;
                   isConfidential?: boolean | undefined;
@@ -1015,6 +1035,7 @@ export type CreateEventMutation = {
                   __typename?: 'UserBasic';
                   batch?: number | undefined;
                   disabled?: boolean | undefined;
+                  dob?: any | undefined;
                   firstName?: string | undefined;
                   id?: string | undefined;
                   isConfidential?: boolean | undefined;
@@ -1133,6 +1154,7 @@ export type DeleteBlogMutation = {
         adminRemark?: string | undefined;
         authorId?: string | undefined;
         categoryId?: string | undefined;
+        claps?: number | undefined;
         content?: string | undefined;
         createdAt: any;
         id: string;
@@ -1147,6 +1169,7 @@ export type DeleteBlogMutation = {
               __typename?: 'UserBasic';
               batch?: number | undefined;
               disabled?: boolean | undefined;
+              dob?: any | undefined;
               firstName?: string | undefined;
               id?: string | undefined;
               isConfidential?: boolean | undefined;
@@ -1172,6 +1195,7 @@ export type DeleteBlogMutation = {
                         __typename?: 'UserBasic';
                         batch?: number | undefined;
                         disabled?: boolean | undefined;
+                        dob?: any | undefined;
                         firstName?: string | undefined;
                         id?: string | undefined;
                         isConfidential?: boolean | undefined;
@@ -1209,6 +1233,7 @@ export type DeleteCommentMutation = {
               __typename?: 'UserBasic';
               batch?: number | undefined;
               disabled?: boolean | undefined;
+              dob?: any | undefined;
               firstName?: string | undefined;
               id?: string | undefined;
               isConfidential?: boolean | undefined;
@@ -1374,6 +1399,7 @@ export type PublishEventMutation = {
                   __typename?: 'UserBasic';
                   batch?: number | undefined;
                   disabled?: boolean | undefined;
+                  dob?: any | undefined;
                   firstName?: string | undefined;
                   id?: string | undefined;
                   isConfidential?: boolean | undefined;
@@ -1392,6 +1418,7 @@ export type PublishEventMutation = {
                   __typename?: 'UserBasic';
                   batch?: number | undefined;
                   disabled?: boolean | undefined;
+                  dob?: any | undefined;
                   firstName?: string | undefined;
                   id?: string | undefined;
                   isConfidential?: boolean | undefined;
@@ -1471,6 +1498,7 @@ export type RequestChangesBlogMutation = {
         adminRemark?: string | undefined;
         authorId?: string | undefined;
         categoryId?: string | undefined;
+        claps?: number | undefined;
         content?: string | undefined;
         createdAt: any;
         id: string;
@@ -1485,6 +1513,7 @@ export type RequestChangesBlogMutation = {
               __typename?: 'UserBasic';
               batch?: number | undefined;
               disabled?: boolean | undefined;
+              dob?: any | undefined;
               firstName?: string | undefined;
               id?: string | undefined;
               isConfidential?: boolean | undefined;
@@ -1510,6 +1539,7 @@ export type RequestChangesBlogMutation = {
                         __typename?: 'UserBasic';
                         batch?: number | undefined;
                         disabled?: boolean | undefined;
+                        dob?: any | undefined;
                         firstName?: string | undefined;
                         id?: string | undefined;
                         isConfidential?: boolean | undefined;
@@ -1720,6 +1750,7 @@ export type UpdateBlogMutation = {
         adminRemark?: string | undefined;
         authorId?: string | undefined;
         categoryId?: string | undefined;
+        claps?: number | undefined;
         content?: string | undefined;
         createdAt: any;
         id: string;
@@ -1734,6 +1765,7 @@ export type UpdateBlogMutation = {
               __typename?: 'UserBasic';
               batch?: number | undefined;
               disabled?: boolean | undefined;
+              dob?: any | undefined;
               firstName?: string | undefined;
               id?: string | undefined;
               isConfidential?: boolean | undefined;
@@ -1759,6 +1791,7 @@ export type UpdateBlogMutation = {
                         __typename?: 'UserBasic';
                         batch?: number | undefined;
                         disabled?: boolean | undefined;
+                        dob?: any | undefined;
                         firstName?: string | undefined;
                         id?: string | undefined;
                         isConfidential?: boolean | undefined;
@@ -1775,6 +1808,13 @@ export type UpdateBlogMutation = {
       }
     | undefined;
 };
+
+export type UpdateClapsMutationVariables = Exact<{
+  claps: Scalars['Int']['input'];
+  id: Scalars['String']['input'];
+}>;
+
+export type UpdateClapsMutation = { __typename?: 'Mutation'; updateClaps?: boolean | undefined };
 
 export type UpdateEventMutationVariables = Exact<{
   category: Scalars['String']['input'];
@@ -1821,6 +1861,7 @@ export type UpdateEventMutation = {
                   __typename?: 'UserBasic';
                   batch?: number | undefined;
                   disabled?: boolean | undefined;
+                  dob?: any | undefined;
                   firstName?: string | undefined;
                   id?: string | undefined;
                   isConfidential?: boolean | undefined;
@@ -1839,6 +1880,7 @@ export type UpdateEventMutation = {
                   __typename?: 'UserBasic';
                   batch?: number | undefined;
                   disabled?: boolean | undefined;
+                  dob?: any | undefined;
                   firstName?: string | undefined;
                   id?: string | undefined;
                   isConfidential?: boolean | undefined;
@@ -2176,6 +2218,7 @@ export type GetBlogQuery = {
         adminRemark?: string | undefined;
         authorId?: string | undefined;
         categoryId?: string | undefined;
+        claps?: number | undefined;
         content?: string | undefined;
         createdAt: any;
         id: string;
@@ -2190,6 +2233,7 @@ export type GetBlogQuery = {
               __typename?: 'UserBasic';
               batch?: number | undefined;
               disabled?: boolean | undefined;
+              dob?: any | undefined;
               firstName?: string | undefined;
               id?: string | undefined;
               isConfidential?: boolean | undefined;
@@ -2215,6 +2259,7 @@ export type GetBlogQuery = {
                         __typename?: 'UserBasic';
                         batch?: number | undefined;
                         disabled?: boolean | undefined;
+                        dob?: any | undefined;
                         firstName?: string | undefined;
                         id?: string | undefined;
                         isConfidential?: boolean | undefined;
@@ -2248,6 +2293,7 @@ export type GetBlogListQuery = {
                   __typename?: 'BlogBasic';
                   authorId: string;
                   categoryId?: string | undefined;
+                  claps?: number | undefined;
                   createdAt: any;
                   id: string;
                   shortUrl?: string | undefined;
@@ -2261,6 +2307,7 @@ export type GetBlogListQuery = {
                         __typename?: 'UserBasic';
                         batch?: number | undefined;
                         disabled?: boolean | undefined;
+                        dob?: any | undefined;
                         firstName?: string | undefined;
                         id?: string | undefined;
                         isConfidential?: boolean | undefined;
@@ -2304,6 +2351,7 @@ export type GetCommentListQuery = {
                         __typename?: 'UserBasic';
                         batch?: number | undefined;
                         disabled?: boolean | undefined;
+                        dob?: any | undefined;
                         firstName?: string | undefined;
                         id?: string | undefined;
                         isConfidential?: boolean | undefined;
@@ -2356,6 +2404,7 @@ export type GetEventDetailsQuery = {
                   __typename?: 'UserBasic';
                   batch?: number | undefined;
                   disabled?: boolean | undefined;
+                  dob?: any | undefined;
                   firstName?: string | undefined;
                   id?: string | undefined;
                   isConfidential?: boolean | undefined;
@@ -2374,6 +2423,7 @@ export type GetEventDetailsQuery = {
                   __typename?: 'UserBasic';
                   batch?: number | undefined;
                   disabled?: boolean | undefined;
+                  dob?: any | undefined;
                   firstName?: string | undefined;
                   id?: string | undefined;
                   isConfidential?: boolean | undefined;
@@ -2429,6 +2479,7 @@ export type GetEventListQuery = {
                             __typename?: 'UserBasic';
                             batch?: number | undefined;
                             disabled?: boolean | undefined;
+                            dob?: any | undefined;
                             firstName?: string | undefined;
                             id?: string | undefined;
                             isConfidential?: boolean | undefined;
@@ -2449,6 +2500,7 @@ export type GetEventListQuery = {
                             __typename?: 'UserBasic';
                             batch?: number | undefined;
                             disabled?: boolean | undefined;
+                            dob?: any | undefined;
                             firstName?: string | undefined;
                             id?: string | undefined;
                             isConfidential?: boolean | undefined;
@@ -2743,6 +2795,29 @@ export type GetUserListQuery = {
     | undefined;
 };
 
+export type UpcomingBirthdaysQueryVariables = Exact<{ [key: string]: never }>;
+
+export type UpcomingBirthdaysQuery = {
+  __typename?: 'Query';
+  upcomingBirthdays: Array<
+    | {
+        __typename?: 'UserBasic';
+        batch?: number | undefined;
+        disabled?: boolean | undefined;
+        dob?: any | undefined;
+        firstName?: string | undefined;
+        id?: string | undefined;
+        isConfidential?: boolean | undefined;
+        isFaculty?: boolean | undefined;
+        isVerified?: boolean | undefined;
+        lastName?: string | undefined;
+        profileImage?: string | undefined;
+        role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+      }
+    | undefined
+  >;
+};
+
 export const ApproveBlogDocument = gql`
   mutation approveBlog($id: String!) {
     approveBlog(id: $id) {
@@ -2750,6 +2825,7 @@ export const ApproveBlogDocument = gql`
       author {
         batch
         disabled
+        dob
         firstName
         id
         isConfidential
@@ -2764,10 +2840,12 @@ export const ApproveBlogDocument = gql`
       }
       authorId
       categoryId
+      claps
       comments {
         author {
           batch
           disabled
+          dob
           firstName
           id
           isConfidential
@@ -2910,6 +2988,7 @@ export const AttendEventDocument = gql`
       attendees {
         batch
         disabled
+        dob
         firstName
         id
         isConfidential
@@ -2934,6 +3013,7 @@ export const AttendEventDocument = gql`
       organizers {
         batch
         disabled
+        dob
         firstName
         id
         isConfidential
@@ -3063,6 +3143,7 @@ export const CreateBlogDocument = gql`
       author {
         batch
         disabled
+        dob
         firstName
         id
         isConfidential
@@ -3077,10 +3158,12 @@ export const CreateBlogDocument = gql`
       }
       authorId
       categoryId
+      claps
       comments {
         author {
           batch
           disabled
+          dob
           firstName
           id
           isConfidential
@@ -3146,6 +3229,7 @@ export const CreateCommentDocument = gql`
       author {
         batch
         disabled
+        dob
         firstName
         id
         isConfidential
@@ -3233,6 +3317,7 @@ export const CreateEventDocument = gql`
       attendees {
         batch
         disabled
+        dob
         firstName
         id
         isConfidential
@@ -3257,6 +3342,7 @@ export const CreateEventDocument = gql`
       organizers {
         batch
         disabled
+        dob
         firstName
         id
         isConfidential
@@ -3495,6 +3581,7 @@ export const DeleteBlogDocument = gql`
       author {
         batch
         disabled
+        dob
         firstName
         id
         isConfidential
@@ -3509,10 +3596,12 @@ export const DeleteBlogDocument = gql`
       }
       authorId
       categoryId
+      claps
       comments {
         author {
           batch
           disabled
+          dob
           firstName
           id
           isConfidential
@@ -3574,6 +3663,7 @@ export const DeleteCommentDocument = gql`
       author {
         batch
         disabled
+        dob
         firstName
         id
         isConfidential
@@ -3895,6 +3985,7 @@ export const PublishEventDocument = gql`
       attendees {
         batch
         disabled
+        dob
         firstName
         id
         isConfidential
@@ -3919,6 +4010,7 @@ export const PublishEventDocument = gql`
       organizers {
         batch
         disabled
+        dob
         firstName
         id
         isConfidential
@@ -4093,6 +4185,7 @@ export const RequestChangesBlogDocument = gql`
       author {
         batch
         disabled
+        dob
         firstName
         id
         isConfidential
@@ -4107,10 +4200,12 @@ export const RequestChangesBlogDocument = gql`
       }
       authorId
       categoryId
+      claps
       comments {
         author {
           batch
           disabled
+          dob
           firstName
           id
           isConfidential
@@ -4519,6 +4614,7 @@ export const UpdateBlogDocument = gql`
       author {
         batch
         disabled
+        dob
         firstName
         id
         isConfidential
@@ -4533,10 +4629,12 @@ export const UpdateBlogDocument = gql`
       }
       authorId
       categoryId
+      claps
       comments {
         author {
           batch
           disabled
+          dob
           firstName
           id
           isConfidential
@@ -4596,6 +4694,40 @@ export function useUpdateBlogMutation(
 export type UpdateBlogMutationHookResult = ReturnType<typeof useUpdateBlogMutation>;
 export type UpdateBlogMutationResult = Apollo.MutationResult<UpdateBlogMutation>;
 export type UpdateBlogMutationOptions = Apollo.BaseMutationOptions<UpdateBlogMutation, UpdateBlogMutationVariables>;
+export const UpdateClapsDocument = gql`
+  mutation updateClaps($claps: Int!, $id: String!) {
+    updateClaps(claps: $claps, id: $id)
+  }
+`;
+export type UpdateClapsMutationFn = Apollo.MutationFunction<UpdateClapsMutation, UpdateClapsMutationVariables>;
+
+/**
+ * __useUpdateClapsMutation__
+ *
+ * To run a mutation, you first call `useUpdateClapsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateClapsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateClapsMutation, { data, loading, error }] = useUpdateClapsMutation({
+ *   variables: {
+ *      claps: // value for 'claps'
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useUpdateClapsMutation(
+  baseOptions?: Apollo.MutationHookOptions<UpdateClapsMutation, UpdateClapsMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<UpdateClapsMutation, UpdateClapsMutationVariables>(UpdateClapsDocument, options);
+}
+export type UpdateClapsMutationHookResult = ReturnType<typeof useUpdateClapsMutation>;
+export type UpdateClapsMutationResult = Apollo.MutationResult<UpdateClapsMutation>;
+export type UpdateClapsMutationOptions = Apollo.BaseMutationOptions<UpdateClapsMutation, UpdateClapsMutationVariables>;
 export const UpdateEventDocument = gql`
   mutation updateEvent(
     $category: String!
@@ -4629,6 +4761,7 @@ export const UpdateEventDocument = gql`
       attendees {
         batch
         disabled
+        dob
         firstName
         id
         isConfidential
@@ -4653,6 +4786,7 @@ export const UpdateEventDocument = gql`
       organizers {
         batch
         disabled
+        dob
         firstName
         id
         isConfidential
@@ -5340,6 +5474,7 @@ export const GetBlogDocument = gql`
       author {
         batch
         disabled
+        dob
         firstName
         id
         isConfidential
@@ -5354,10 +5489,12 @@ export const GetBlogDocument = gql`
       }
       authorId
       categoryId
+      claps
       comments {
         author {
           batch
           disabled
+          dob
           firstName
           id
           isConfidential
@@ -5428,6 +5565,7 @@ export const GetBlogListDocument = gql`
         author {
           batch
           disabled
+          dob
           firstName
           id
           isConfidential
@@ -5442,6 +5580,7 @@ export const GetBlogListDocument = gql`
         }
         authorId
         categoryId
+        claps
         createdAt
         id
         shortUrl
@@ -5501,6 +5640,7 @@ export const GetCommentListDocument = gql`
         author {
           batch
           disabled
+          dob
           firstName
           id
           isConfidential
@@ -5570,6 +5710,7 @@ export const GetEventDetailsDocument = gql`
       attendees {
         batch
         disabled
+        dob
         firstName
         id
         isConfidential
@@ -5594,6 +5735,7 @@ export const GetEventDetailsDocument = gql`
       organizers {
         batch
         disabled
+        dob
         firstName
         id
         isConfidential
@@ -5666,6 +5808,7 @@ export const GetEventListDocument = gql`
         attendees {
           batch
           disabled
+          dob
           firstName
           id
           isConfidential
@@ -5690,6 +5833,7 @@ export const GetEventListDocument = gql`
         organizers {
           batch
           disabled
+          dob
           firstName
           id
           isConfidential
@@ -6223,3 +6367,69 @@ export type GetUserListQueryHookResult = ReturnType<typeof useGetUserListQuery>;
 export type GetUserListLazyQueryHookResult = ReturnType<typeof useGetUserListLazyQuery>;
 export type GetUserListSuspenseQueryHookResult = ReturnType<typeof useGetUserListSuspenseQuery>;
 export type GetUserListQueryResult = Apollo.QueryResult<GetUserListQuery, GetUserListQueryVariables>;
+export const UpcomingBirthdaysDocument = gql`
+  query upcomingBirthdays {
+    upcomingBirthdays {
+      batch
+      disabled
+      dob
+      firstName
+      id
+      isConfidential
+      isFaculty
+      isVerified
+      lastName
+      profileImage
+      role {
+        id
+        name
+      }
+    }
+  }
+`;
+
+/**
+ * __useUpcomingBirthdaysQuery__
+ *
+ * To run a query within a React component, call `useUpcomingBirthdaysQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUpcomingBirthdaysQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUpcomingBirthdaysQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUpcomingBirthdaysQuery(
+  baseOptions?: Apollo.QueryHookOptions<UpcomingBirthdaysQuery, UpcomingBirthdaysQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<UpcomingBirthdaysQuery, UpcomingBirthdaysQueryVariables>(UpcomingBirthdaysDocument, options);
+}
+export function useUpcomingBirthdaysLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<UpcomingBirthdaysQuery, UpcomingBirthdaysQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<UpcomingBirthdaysQuery, UpcomingBirthdaysQueryVariables>(
+    UpcomingBirthdaysDocument,
+    options
+  );
+}
+export function useUpcomingBirthdaysSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<UpcomingBirthdaysQuery, UpcomingBirthdaysQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<UpcomingBirthdaysQuery, UpcomingBirthdaysQueryVariables>(
+    UpcomingBirthdaysDocument,
+    options
+  );
+}
+export type UpcomingBirthdaysQueryHookResult = ReturnType<typeof useUpcomingBirthdaysQuery>;
+export type UpcomingBirthdaysLazyQueryHookResult = ReturnType<typeof useUpcomingBirthdaysLazyQuery>;
+export type UpcomingBirthdaysSuspenseQueryHookResult = ReturnType<typeof useUpcomingBirthdaysSuspenseQuery>;
+export type UpcomingBirthdaysQueryResult = Apollo.QueryResult<UpcomingBirthdaysQuery, UpcomingBirthdaysQueryVariables>;

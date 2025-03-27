@@ -1,16 +1,18 @@
-import { Box, Card, Chip, Skeleton, Typography } from '@mui/material';
+import { Box, Card, Chip, IconButton, Skeleton, Tooltip, Typography } from '@mui/material';
 import React from 'react';
 import DOMPurify from 'dompurify';
 import { ISingleBlogViewProps } from './SingleBlogView.types';
 import dayjs from 'dayjs';
-import { Dot, DotOutline } from '@phosphor-icons/react';
+import { Dot, DotOutline, HandsClapping } from '@phosphor-icons/react';
 import ProfilePicture from '../ProfilePicture';
 import { BlogStatus } from '@/apollo/hooks';
 import { getFormattedLabel, startCase } from '@/utils/helpers';
+import ClapButton from '../ClapButton';
 
-const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading }) => {
-  const { id, title, author, content, status, updatedAt } = blog || {};
+const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateClap }) => {
+  const { id, title, author, content, claps, status, updatedAt } = blog || {};
   const [sanitizedContent, setSanitizedContent] = React.useState('');
+  const [newClaps, setNewClaps] = React.useState(0);
 
   React.useEffect(() => {
     setSanitizedContent(DOMPurify.sanitize(content || ''));
@@ -21,6 +23,8 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading }) => {
       ? `Preview Mode. Blog is in "${getFormattedLabel(status as string)}" status.`
       : null;
   }, [status]);
+
+  // TODO: UPDATE CLAPS VIA API
 
   return (
     <Card sx={{ position: 'relative' }} className="single-blog">
@@ -72,6 +76,7 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading }) => {
             src={author?.profileImage}
             summary={`Batch of ${author?.batch || ''}`}
           />
+          <ClapButton initialClaps={claps || 10} claps={newClaps} setClaps={setNewClaps} />
         </Box>
         {loading ? (
           <Skeleton width="80%" height={66} sx={{ py: 2 }} />
@@ -107,15 +112,18 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading }) => {
             </Box>
           </>
         ) : (
-          <Typography
-            className="single-blog-content"
-            variant="body1"
-            color="text.primary"
-            mt={1}
-            mb={2}
-            fontSize="18px"
-            dangerouslySetInnerHTML={{ __html: sanitizedContent }}
-          />
+          <>
+            <Typography
+              className="single-blog-content"
+              variant="body1"
+              color="text.primary"
+              mt={1}
+              mb={2}
+              fontSize="18px"
+              dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+            />
+            <ClapButton initialClaps={claps || 10} claps={newClaps} setClaps={setNewClaps} author={author} />
+          </>
         )}
       </Box>
     </Card>

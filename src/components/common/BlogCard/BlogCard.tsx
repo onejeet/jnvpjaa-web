@@ -19,6 +19,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
   onPublish,
   isAdminUser,
   user,
+  isReadOnly,
 }) => {
   const { id, slug, title, summary, status, createdAt, updatedAt, author } = blog;
   const router = useRouter();
@@ -35,7 +36,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
   }, [status]);
 
   const menuItems: MenuItemProps[] | null = React.useMemo(() => {
-    if (!isAdminUser && user?.id !== author?.id) {
+    if (isReadOnly || (!isAdminUser && user?.id !== author?.id)) {
       return null;
     }
     const items: MenuItemProps[] = [];
@@ -151,7 +152,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
         break;
     }
     return items;
-  }, [isAdminUser, slug, id, author, user, status]);
+  }, [isAdminUser, slug, id, author, user, status, isReadOnly]);
 
   console.log('SS: BLOG', status, menuItems);
 

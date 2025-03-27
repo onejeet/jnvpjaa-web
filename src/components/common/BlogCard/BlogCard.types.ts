@@ -9,4 +9,5 @@ export interface IBlogCardProps {
   onDelete: (id: string) => void;
   isAdminUser?: boolean;
   user?: User;
+  isReadOnly?: boolean;
 }

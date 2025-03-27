@@ -49,6 +49,7 @@ const EventCard: React.FC<EventCardProps> = ({
   loading,
   markImGoing,
   showDescription,
+  isReadOnly,
 }) => {
   const router = useRouter();
   const {
@@ -345,7 +346,7 @@ const EventCard: React.FC<EventCardProps> = ({
           </Box>
         )}
 
-        {loading ? null : status === EventStatus.Draft ? (
+        {isReadOnly ? null : loading ? null : status === EventStatus.Draft ? (
           <Box width="100%" display="flex" gap={2} mt="auto">
             <Button
               variant="outlined"

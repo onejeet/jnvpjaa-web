@@ -1,4 +1,11 @@
-import { Blog, BlogStatus, useApproveBlogMutation, useGetBlogQuery, useUpdateBlogMutation } from '@/apollo/hooks';
+import {
+  Blog,
+  BlogStatus,
+  useApproveBlogMutation,
+  useGetBlogQuery,
+  useUpdateBlogMutation,
+  useUpdateClapsMutation,
+} from '@/apollo/hooks';
 import Breadcrumbs from '@/components/common/Breadcrumbs';
 import EmptyView from '@/components/common/EmptyView';
 import SingleBlogView from '@/components/common/SingleBlogView';
@@ -30,6 +37,8 @@ const SingleBlog = () => {
   const blog: Blog | undefined = React.useMemo(() => data?.getBlog, [data]);
   const [publisBlog, { loading: publishBlogLoading }] = useUpdateBlogMutation();
   const [handleVerifyBlog] = useApproveBlogMutation();
+
+  const [blogClapUpdate] = useUpdateClapsMutation();
 
   const breadcrumbsList = React.useMemo(
     () => [
@@ -240,6 +249,15 @@ const SingleBlog = () => {
     },
     [isAdmin]
   );
+  const updateClap = React.useCallback((claps: number) => {
+    if (claps > 0) {
+      blogClapUpdate({
+        variables: {
+          claps,
+        },
+      });
+    }
+  }, []);
 
   return (
     <LayoutModule disableCover title={`${blog?.title || 'Blog'} • Alumni Network of JNV Paota, Jaipur`}>
@@ -253,7 +271,11 @@ const SingleBlog = () => {
           </Box>
         )}
       </Box>
-      {loading || blog?.id ? <SingleBlogView blog={blog} loading={loading} /> : <EmptyView message="No blog found!" />}
+      {loading || blog?.id ? (
+        <SingleBlogView blog={blog} loading={loading} updateClap={updateClap} />
+      ) : (
+        <EmptyView message="No blog found!" />
+      )}
     </LayoutModule>
   );
 };

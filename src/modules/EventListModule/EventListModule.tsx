@@ -24,17 +24,21 @@ import Button from '@/components/core/Button';
 import { isDefined } from '@/utils/helpers';
 
 interface EventListModuleProps {
-  filter: ListInput['filter'];
+  filter?: ListInput['filter'];
   skip?: boolean;
+  limit?: number;
   loading?: boolean;
   isCreateAllowed?: boolean;
+  isReadOnly?: boolean;
 }
 
 const EventListModule: React.FC<EventListModuleProps> = ({
-  filter,
+  filter = {},
+  limit = 50,
   skip,
   loading: propLoading,
   isCreateAllowed = true,
+  isReadOnly,
 }) => {
   const { redirectToSignin, user, isAdmin } = useAuth();
   const { showAlert } = useAlert();
@@ -45,6 +49,7 @@ const EventListModule: React.FC<EventListModuleProps> = ({
     variables: {
       options: {
         filter,
+        limit,
       },
     },
     notifyOnNetworkStatusChange: true,
@@ -302,6 +307,7 @@ const EventListModule: React.FC<EventListModuleProps> = ({
               verifyEvent={verifyEvent}
               onEdit={onEditEvent}
               onPublish={onPublishEvent}
+              isReadOnly={isReadOnly}
             />
           </Grid>
         ))
