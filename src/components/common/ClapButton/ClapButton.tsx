@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Box, Typography, IconButton, Tooltip, Fade } from '@mui/material';
 import { HandsClapping } from '@phosphor-icons/react';
 import { UserBasic } from '@/apollo/hooks';
@@ -12,15 +12,19 @@ interface ClapButtonProps {
 
 const ClapButton: React.FC<ClapButtonProps> = ({ initialClaps = 0, author, claps = 0, setClaps }) => {
   const [showTooltip, setShowTooltip] = useState(false);
+  const tooltipTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  React.useEffect(() => {
+    if (showTooltip && !tooltipTimer.current)
+      tooltipTimer.current = setTimeout(() => {
+        setShowTooltip(false);
+        tooltipTimer.current = null;
+      }, 2000);
+  }, [claps]);
 
   const handleClap = () => {
     setClaps((prev) => prev + 1);
     setShowTooltip(true);
-
-    // Hide tooltip after 1 second
-    setTimeout(() => {
-      setShowTooltip(false);
-    }, 3000);
   };
 
   const total = initialClaps + claps;
