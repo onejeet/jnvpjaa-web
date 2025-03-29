@@ -45,13 +45,33 @@ const ClapButton: React.FC<ClapButtonProps> = ({ initialClaps = 0, author, claps
       >
         <IconButton
           onClick={handleClap}
-          sx={{ border: '1px solid', borderColor: 'grey.300', width: 60, height: 60, position: 'relative' }}
+          sx={{
+            border: '1px solid',
+            borderColor: 'grey.300',
+            width: {
+              xs: 50,
+              md: 60,
+            },
+            height: {
+              xs: 50,
+              md: 60,
+            },
+            position: 'relative',
+            svg: {
+              position: 'relative',
+              top: total > 0 ? '-5px' : 0,
+            },
+          }}
         >
           <HandsClapping size={30} />
           {total > 0 && (
             <Typography
               variant="h6"
-              mt={0.5}
+              mt={0.2}
+              fontSize={{
+                xs: '12px',
+                md: '16px',
+              }}
               sx={{ position: 'absolute', top: '80%', left: '50%', transform: 'translate(-50%, -50%)' }}
             >
               {total}

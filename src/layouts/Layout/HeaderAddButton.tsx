@@ -52,14 +52,14 @@ const HeaderAddButton: React.FC = () => {
             <PlusCircle weight="bold" size={36} />
           </IconButton>
         }
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
+        // anchorOrigin={{
+        //   vertical: 'bottom',
+        //   horizontal: 'center',
+        // }}
+        // transformOrigin={{
+        //   vertical: 'top',
+        //   horizontal: 'center',
+        // }}
       >
         <MenuItem
           disabled

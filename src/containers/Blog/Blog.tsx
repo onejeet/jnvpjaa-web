@@ -36,6 +36,7 @@ const Blog = () => {
               xs: '100%',
               md: '90%',
             }}
+            variant="body1"
           >
             {`This space is dedicated to sharing inspiring stories, memorable experiences, and valuable insights from our
             alumni community. Whether it's career journeys, lessons learned, or nostalgic campus moments, every story

@@ -1,7 +1,16 @@
 import { Box, Chip, Divider, Grid2 as Grid, IconButton, Skeleton, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 import ProfilePicture from '../ProfilePicture';
-import { ArrowRight, CheckCircle, Dot, DotsThree, Pencil, Trash, XCircle } from '@phosphor-icons/react';
+import {
+  ArrowRight,
+  CheckCircle,
+  Dot,
+  DotsThree,
+  DotsThreeVertical,
+  Pencil,
+  Trash,
+  XCircle,
+} from '@phosphor-icons/react';
 import { useRouter } from 'next/router';
 import { paths } from '@/config/paths';
 import { IBlogCardProps } from './BlogCard.types';
@@ -315,7 +324,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
                 }}
                 render={
                   <IconButton>
-                    <DotsThree size={32} weight="bold" />
+                    <DotsThreeVertical size={24} weight="bold" />
                   </IconButton>
                 }
               />

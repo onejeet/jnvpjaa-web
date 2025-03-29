@@ -5,13 +5,15 @@ import { useUpcomingBirthdaysQuery } from '@/apollo/hooks';
 import React from 'react';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import dayjs from 'dayjs';
+import { paths } from '@/config/paths';
+import { useRouter } from 'next/router';
 
 export default function BirthdaySlider() {
   const { data, loading } = useUpcomingBirthdaysQuery();
   const theme = useTheme();
+  const router = useRouter();
 
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
+  const isMobile = useMediaQuery('(hover: none)');
   const listData = React.useMemo(() => {
     if (loading) {
       return new Array(10).fill({ id: '', title: '', description: '', startDate: '', medium: 'Online', online: false });
@@ -43,9 +45,9 @@ export default function BirthdaySlider() {
         color="common.white"
         height="100%"
         minWidth="30%"
-        px={{ xs: 2, md: 4 }}
+        px={{ xs: 1, sm: 2, md: 4 }}
       >
-        <Typography variant="h1" lineHeight="normal" fontSize={{ xs: '24px', sm: '32px', md: '40px' }}>
+        <Typography variant="h1" lineHeight="normal" fontSize={{ xs: '18px', sm: '28px', md: '40px' }}>
           Upcoming Birthdays
         </Typography>
       </Box>
@@ -58,6 +60,8 @@ export default function BirthdaySlider() {
           alignItems: 'center',
           border: '1px solid',
           borderColor: 'grey.800',
+          borderLeftWidth: 0,
+          borderRightWidth: 0,
         }}
       >
         <Swiper
@@ -72,7 +76,13 @@ export default function BirthdaySlider() {
         >
           {listData.map((user, index) => (
             <SwiperSlide key={`birthday-slider-${index}`} style={{ width: 'auto', minWidth: '120px' }}>
-              <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
+              <Box
+                display="flex"
+                flexDirection="column"
+                justifyContent="center"
+                alignItems="center"
+                onClick={() => router.push(paths.profile.getProfileUrl(user?.id))}
+              >
                 <ProfilePicture
                   src={user.profileImage}
                   id={user?.id}

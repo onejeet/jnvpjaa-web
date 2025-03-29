@@ -1,9 +1,9 @@
-import { Box, Card, Chip, IconButton, Skeleton, Tooltip, Typography } from '@mui/material';
+import { Box, Card, Chip, IconButton, Skeleton, Tooltip, Typography, useMediaQuery, useTheme } from '@mui/material';
 import React from 'react';
 import DOMPurify from 'dompurify';
 import { ISingleBlogViewProps } from './SingleBlogView.types';
 import dayjs from 'dayjs';
-import { Dot, DotOutline, HandsClapping } from '@phosphor-icons/react';
+import { CalendarDots, Dot, DotOutline, HandsClapping } from '@phosphor-icons/react';
 import ProfilePicture from '../ProfilePicture';
 import { BlogStatus } from '@/apollo/hooks';
 import { getFormattedLabel, startCase } from '@/utils/helpers';
@@ -13,6 +13,9 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateC
   const { id, title, author, content, claps, status, updatedAt } = blog || {};
   const [sanitizedContent, setSanitizedContent] = React.useState('');
   const [newClaps, setNewClaps] = React.useState(0);
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   React.useEffect(() => {
     setSanitizedContent(DOMPurify.sanitize(content || ''));
@@ -48,38 +51,8 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateC
       )}
 
       <Box p={3} pt={statusMessage ? 5 : 3}>
-        <Box display="flex" alignItems="center" gap={0.5}>
-          {loading ? (
-            <Skeleton width={80} height={25} />
-          ) : (
-            <Typography>{dayjs(updatedAt).format('MMM DD, YYYY')}</Typography>
-          )}
-
-          {/* {categoryId && (
-          <>
-            <DotOutline size={32} weight="bold" />
-            <Typography>{categoryId}</Typography>
-          </>
-        )} */}
-          {statusMessage && (
-            <>
-              <Dot size={32} weight="bold" />
-              <Chip size="small" label={getFormattedLabel(status as string)} color="error" />
-            </>
-          )}
-          <Dot size={32} weight="bold" />
-          <ProfilePicture
-            loading={loading}
-            id={author?.id}
-            title={`${author?.firstName || ''} ${author?.lastName || ''}`}
-            alt={`${author?.firstName || ''} ${author?.lastName || ''}`}
-            src={author?.profileImage}
-            summary={`Batch of ${author?.batch || ''}`}
-          />
-          <ClapButton initialClaps={claps || 10} claps={newClaps} setClaps={setNewClaps} />
-        </Box>
         {loading ? (
-          <Skeleton width="80%" height={66} sx={{ py: 2 }} />
+          <Skeleton width="80%" height={66} sx={{ py: 1 }} />
         ) : (
           <Typography
             variant="h1"
@@ -88,11 +61,57 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateC
               xs: 30,
               md: 50,
             }}
-            py={2}
+            //  py={1}
           >
             {title}
           </Typography>
         )}
+        <Box
+          display="flex"
+          flexDirection={{ xs: 'column', md: 'row' }}
+          alignItems={{ xs: 'start', md: 'center' }}
+          gap={{
+            xs: 1,
+            md: 0.5,
+          }}
+          mt={{ xs: 1, md: 0 }}
+        >
+          {loading ? (
+            <Skeleton width={80} height={25} />
+          ) : (
+            <Box display="flex" alignItems="center" gap={1}>
+              <CalendarDots size={isMobile ? 18 : 20} />
+              <Typography variant="body1" whiteSpace="nowrap" fontSize={{ xs: '16px', md: '18px' }}>
+                {dayjs(updatedAt).format('MMM DD, YYYY')}
+              </Typography>
+            </Box>
+          )}
+
+          {/* {categoryId && (
+          <>
+            <DotOutline size={32} weight="bold" />
+            <Typography>{categoryId}</Typography>
+          </>
+        )} */}
+          {statusMessage && !isMobile && (
+            <>
+              <Dot size={32} weight="bold" />
+              <Chip size="small" label={getFormattedLabel(status as string)} color="error" />
+            </>
+          )}
+          {!isMobile && <Dot size={32} weight="bold" />}
+          <Box display="flex" alignItems="center" justifyContent="space-between" width="100%">
+            <ProfilePicture
+              loading={loading}
+              id={author?.id}
+              title={`${author?.firstName || ''} ${author?.lastName || ''}`}
+              alt={`${author?.firstName || ''} ${author?.lastName || ''}`}
+              src={author?.profileImage}
+              summary={`Batch of ${author?.batch || ''}`}
+            />
+            {id && <ClapButton initialClaps={claps || 10} claps={newClaps} setClaps={setNewClaps} />}
+          </Box>
+        </Box>
 
         {loading ? (
           <>
@@ -117,12 +136,15 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateC
               className="single-blog-content"
               variant="body1"
               color="text.primary"
-              mt={1}
-              mb={2}
-              fontSize="18px"
+              // mt={1}
+              my={2}
+              fontSize={{
+                xs: '16px',
+                md: '18px',
+              }}
               dangerouslySetInnerHTML={{ __html: sanitizedContent }}
             />
-            <ClapButton initialClaps={claps || 10} claps={newClaps} setClaps={setNewClaps} author={author} />
+            {id && <ClapButton initialClaps={claps || 10} claps={newClaps} setClaps={setNewClaps} author={author} />}
           </>
         )}
       </Box>

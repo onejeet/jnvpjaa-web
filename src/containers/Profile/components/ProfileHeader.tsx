@@ -135,8 +135,14 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
           sx={{
             width: '100%',
             minWidth: '100%',
-            height: 250,
-            minHeight: 250,
+            height: {
+              xs: 180,
+              md: 250,
+            },
+            minHeight: {
+              xs: 180,
+              md: 250,
+            },
             objectFit: 'cover',
             borderRadius: 2,
             border: '1px dashed',
@@ -151,32 +157,51 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
         src={user?.profileImage}
         loading={loading}
         sx={{
-          width: 180,
-          height: 180,
+          width: {
+            xs: 100,
+            md: 180,
+          },
+          height: {
+            xs: 100,
+            md: 180,
+          },
           border: '4px solid #fff',
           position: 'absolute',
-          bottom: -24,
-          left: 32,
+          bottom: {
+            xs: 20,
+            md: -24,
+          },
+          left: {
+            xs: 5,
+            md: 32,
+          },
         }}
       />
-      <Box display="flex" justifyContent="space-between" sx={{ mt: 1, ml: '220px' }}>
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        sx={{ mt: { xs: 0.5, md: 1 }, ml: { xs: '100px', md: '220px' } }}
+      >
         <Title
           loading={loading}
           title={
             <Box display="flex" alignItems="center">
               <Typography
                 variant="body1"
-                fontSize={28}
+                fontSize={{
+                  xs: 16,
+                  md: 28,
+                }}
                 fontWeight={500}
                 mr={0.5}
               >{`${user?.firstName} ${user?.lastName || ''}`}</Typography>
-              {user?.isVerified && <VerifiedBadge size={24} />}
+              {user?.isVerified && <VerifiedBadge size={21} />}
               {user?.batch === 0 && <FacultyBadge size={24} />}
             </Box>
           }
           titleProps={{ fontWeight: 600, fontSize: '30px' }}
           summary={user?.batch === 0 ? 'Faculty' : user?.batch ? `Batch of ${user?.batch}` : ''}
-          summaryProps={{ color: 'grey.600', fontSize: '14px', mt: 1 }}
+          summaryProps={{ color: 'grey.600', fontSize: '14px', mt: { xs: 0, md: 1 } }}
         />
         {isProfileEditable && !editingProfile && (
           <Menu

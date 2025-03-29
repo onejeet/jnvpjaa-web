@@ -11,60 +11,61 @@ const typography = {
     '"Segoe UI Emoji"',
     '"Segoe UI Symbol"',
   ].join(','),
+
   h1: {
-    fontSize: '28px',
-    lineHeight: '32px',
+    fontSize: 'clamp(1.75rem, 2.5vw, 2.25rem)', // 28px -> 36px
+    lineHeight: 'clamp(2rem, 3vw, 2.5rem)', // 32px -> 40px
     fontWeight: 500,
     letterSpacing: '-0.24%',
     fontFamily: 'Playfair Display',
   },
   h2: {
-    fontSize: '24px',
-    lineHeight: '28px',
+    fontSize: 'clamp(1.5rem, 2vw, 2rem)', // 24px -> 32px
+    lineHeight: 'clamp(1.75rem, 2.5vw, 2.25rem)', // 28px -> 36px
     fontWeight: 500,
     letterSpacing: '-0.25%',
     fontFamily: 'Playfair Display',
   },
   h3: {
-    fontSize: '16px',
-    lineHeight: '22px',
+    fontSize: 'clamp(1rem, 1.5vw, 1.5rem)', // 16px -> 24px
+    lineHeight: 'clamp(1.375rem, 2vw, 2rem)', // 22px -> 32px
     fontWeight: 500,
     letterSpacing: '-0.25%',
     fontFamily: 'Playfair Display',
   },
   h4: {
-    fontSize: '16px',
-    lineHeight: '20px',
+    fontSize: 'clamp(1rem, 1.2vw, 1.25rem)', // 16px -> 20px
+    lineHeight: 'clamp(1.25rem, 1.5vw, 1.5rem)', // 20px -> 24px
     fontWeight: 500,
     letterSpacing: '-0.24%',
   },
   h5: {
-    fontSize: '16px',
-    lineHeight: '20px',
+    fontSize: 'clamp(1rem, 1.2vw, 1.25rem)', // 16px -> 20px
+    lineHeight: 'clamp(1.25rem, 1.5vw, 1.5rem)', // 20px -> 24px
     fontWeight: 500,
     letterSpacing: '-0.24%',
   },
   h6: {
-    fontSize: '12px',
-    lineHeight: '18px',
+    fontSize: 'clamp(0.75rem, 1vw, 1rem)', // 12px -> 16px
+    lineHeight: 'clamp(1rem, 1.25vw, 1.25rem)', // 18px -> 20px
     fontWeight: 500,
     letterSpacing: '-0.24%',
   },
   subtitle1: {
-    fontSize: '13px',
-    lineHeight: '20px',
+    fontSize: 'clamp(0.8125rem, 1vw, 1rem)', // 13px -> 16px
+    lineHeight: 'clamp(1.25rem, 1.5vw, 1.5rem)', // 20px -> 24px
     fontWeight: 500,
     letterSpacing: '-0.24%',
   },
   body1: {
-    fontSize: '17px',
-    lineHeight: '25px',
+    fontSize: 'clamp(1.0625rem, 1.5vw, 1.125rem)', // 17px -> 18px
+    lineHeight: 'clamp(1.5625rem, 2vw, 1.75rem)', // 25px -> 28px
     fontWeight: 300,
     letterSpacing: '-0.24%',
   },
   body2: {
-    fontSize: '13px',
-    lineHeight: '19px',
+    fontSize: 'clamp(0.8125rem, 1vw, 0.875rem)', // 13px -> 14px
+    lineHeight: 'clamp(1.1875rem, 1.5vw, 1.25rem)', // 19px -> 20px
     fontWeight: 400,
     letterSpacing: '-0.24%',
   },

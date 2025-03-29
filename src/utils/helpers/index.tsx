@@ -8,6 +8,7 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import XIcon from '@mui/icons-material/X';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import { EnvelopeSimple, FacebookLogo, InstagramLogo, LinkedinLogo, XLogo } from '@phosphor-icons/react';
+import dayjs from 'dayjs';
 import parsePhoneNumber from 'libphonenumber-js';
 
 export const getSocialMediaIcon = (iconName: string) => {
@@ -214,3 +215,10 @@ export function formatCurrency(amount: number, currency?: string) {
     maximumFractionDigits: 2,
   }).format(amount);
 }
+
+export const isBirthdayToday = (dob?: string) => {
+  const birthDate = dayjs(dob);
+  const today = dayjs();
+
+  return birthDate.date() === today.date() && birthDate.month() === today.month();
+};

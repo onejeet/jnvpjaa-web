@@ -27,7 +27,7 @@ const Logo: React.FC<Props> = ({ width, height, icon, type, priority = false }) 
   };
 
   return (
-    <Box display="flex" maxWidth="100%">
+    <Box display="flex" maxWidth="100%" overflow="hidden">
       <Image
         src="/assets/branding/logo-full.webp"
         width={width || 390}

@@ -30,8 +30,11 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/router';
 import HoverPopover from '@/components/common/HoverPopover';
 import HeaderAddButton from './HeaderAddButton';
-import { Password, SignOut, User } from '@phosphor-icons/react';
+import { Cake, Password, SignOut, User } from '@phosphor-icons/react';
 import { paths } from '@/config/paths';
+import Lottie from 'lottie-react';
+import giftsLottieIcon from '@/utils/lottie/gifts_art.json';
+import { isBirthdayToday } from '@/utils/helpers';
 
 export interface IMenuItemProps {
   item: IHeaderMenuItem;
@@ -59,6 +62,10 @@ const LayoutTopbar: React.FC = () => {
   const HEADER_MENU = React.useMemo(() => {
     return getHeaderMenu(Boolean(user?.id));
   }, [user]);
+
+  const isBirthday = React.useMemo(() => {
+    return isBirthdayToday(user?.dob);
+  }, [user?.dob]);
 
   const ACCOUNT_MENU_LIST = React.useMemo(
     () => [
@@ -142,20 +149,40 @@ const LayoutTopbar: React.FC = () => {
             // },
           }}
         >
-          <Typography
-            color="text.primary"
-            textAlign="left"
-            variant="body1"
-            fontWeight={500}
-            sx={{
-              pr: 4,
-              background: 'linear-gradient(90deg,#C62835 0,#217bfe 70%, #078efb 100%)',
-              backgroundClip: 'text',
-              color: 'transparent',
-            }}
-          >
-            {`Hello ${user?.firstName} 👋`}
-          </Typography>
+          {isBirthday ? (
+            <Box display="flex" overflow="hidden" alignItems="center">
+              {/* <Cake size={32} /> */}
+              <Typography
+                sx={{
+                  background: 'linear-gradient(90deg,#C62835 0,#217bfe 70%, #078efb 100%)',
+                  backgroundClip: 'text',
+                  color: 'transparent',
+                  fontWeight: 500,
+                }}
+                variant="body1"
+              >
+                {`Happy Birthday ${user?.firstName}`}
+              </Typography>
+              <Box maxWidth={50} maxHeight={30} display="flex" overflow="hidden" alignItems="center">
+                <Lottie animationData={giftsLottieIcon} loop={true} style={{ width: '100px', height: '50px' }} />
+              </Box>
+            </Box>
+          ) : (
+            <Typography
+              color="text.primary"
+              textAlign="left"
+              variant="body1"
+              fontWeight={500}
+              sx={{
+                pr: 4,
+                background: 'linear-gradient(90deg,#C62835 0,#217bfe 70%, #078efb 100%)',
+                backgroundClip: 'text',
+                color: 'transparent',
+              }}
+            >
+              {`Hello ${user?.firstName} 👋`}
+            </Typography>
+          )}
         </MenuItem>
         {ACCOUNT_MENU_LIST?.map((mItem: Record<string, any>) => (
           <MenuItem
@@ -183,7 +210,7 @@ const LayoutTopbar: React.FC = () => {
         ))}
       </HoverPopover>
     );
-  }, [ACCOUNT_MENU_LIST, user, isMobile]);
+  }, [ACCOUNT_MENU_LIST, user, isMobile, isBirthday]);
 
   return (
     <AppBar
@@ -218,7 +245,7 @@ const LayoutTopbar: React.FC = () => {
           }}
         >
           <NextLink href="/">
-            <Logo width={isMobile ? 260 : 300} height={isMobile ? 40 : 45} priority />
+            <Logo width={isMobile ? 200 : 300} height={isMobile ? 30 : 45} priority />
           </NextLink>
           <Box display={{ xs: 'flex', lg: 'none' }} ml="auto" alignItems="center" gap={1}>
             {user?.id && (

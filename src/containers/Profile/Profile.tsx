@@ -10,12 +10,19 @@ import LayoutModule from '@/layouts/Layout';
 import { ProfileProvider, useProfile } from '@/context/ProfileContext';
 import LoadingData from '@/components/common/LoadingData';
 import EventSection from './components/EventSection';
-import { Paper } from '@mui/material';
+import { Paper, Typography } from '@mui/material';
 import ProfileForm from './components/ProfileForm';
+import { isBirthdayToday } from '@/utils/helpers';
+import { Cake } from '@phosphor-icons/react';
+import giftsLottieIcon from '@/utils/lottie/gifts_art.json';
+import Lottie from 'lottie-react';
 
 export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState('about');
   const { user, loading, editingProfile } = useProfile();
+  const isBirthday = React.useMemo(() => {
+    return isBirthdayToday(user?.dob);
+  }, [user?.dob]);
   return (
     <LayoutModule
       disableCover
@@ -24,6 +31,15 @@ export default function ProfilePage() {
     >
       <Box sx={{ my: 4 }}>
         <ProfileHeader />
+        {isBirthday && (
+          <Box display="flex" maxHeight={50} overflow="hidden" alignItems="center" ml={2}>
+            {/* <Cake size={32} /> */}
+            <Lottie animationData={giftsLottieIcon} loop={true} style={{ width: '100px', height: '50px' }} />
+            <Typography ml="-10px" color="#B42B43" fontWeight={500}>
+              Celebrating a Birthday Today!{' '}
+            </Typography>
+          </Box>
+        )}
         {!editingProfile && <ProfileTabs activeTab={activeTab} onTabChange={setActiveTab} />}
 
         <Box sx={{ mt: 3 }}>
