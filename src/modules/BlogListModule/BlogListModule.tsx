@@ -308,10 +308,10 @@ const BlogListModule: React.FC<BlogFilterModuleProps> = ({
   );
 
   return (
-    <Grid container spacing={2} width="100%" display="flex" alignItems="start" mt={2}>
-      <Grid container size={{ xs: 12, md: 12 }} spacing={1}>
-        {listData && listData?.length > 0 ? (
-          listData?.map((blog: BlogBasic, index) => (
+    <Grid container spacing={2} width="100%" display="flex" alignItems="start" mt={1}>
+      {listData && listData?.length > 0 ? (
+        <Grid container size={{ xs: 12, md: 12 }} spacing={1}>
+          {listData?.map((blog: BlogBasic, index) => (
             <Grid size={{ xs: 12 }} key={`events-${blog.id}-${index}`}>
               <BlogCard
                 blog={blog}
@@ -325,24 +325,25 @@ const BlogListModule: React.FC<BlogFilterModuleProps> = ({
                 isReadOnly={isReadOnly}
               />
             </Grid>
-          ))
-        ) : (
-          <Grid size={{ xs: 12 }}>
-            <EmptyView
-              message={isCreateAllowed ? 'No blogs. Write one.' : 'No blogs available.'}
-              buttonProps={
-                user?.id && isCreateAllowed
-                  ? {
-                      title: 'Create New Post',
-                      startIcon: <Plus size={16} />,
-                      onClick: () => router.push(paths.blog.new),
-                    }
-                  : undefined
-              }
-            />
-          </Grid>
-        )}
-      </Grid>
+          ))}
+        </Grid>
+      ) : (
+        <Grid size={{ xs: 12 }}>
+          <EmptyView
+            message={isCreateAllowed ? 'No blogs. Write one.' : 'No blogs available.'}
+            buttonProps={
+              user?.id && isCreateAllowed
+                ? {
+                    title: 'Create New Post',
+                    startIcon: <Plus size={16} />,
+                    onClick: () => router.push(paths.blog.new),
+                  }
+                : undefined
+            }
+          />
+        </Grid>
+      )}
+
       {/* <Grid container height="100%" size={{ xs: 12, md: 4 }}>
           Sidebar
         </Grid> */}

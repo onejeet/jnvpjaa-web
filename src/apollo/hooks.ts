@@ -493,7 +493,7 @@ export type Query = {
   getUserCompaniesInfo?: Maybe<CompanyInfoListResponse>;
   getUserDetails?: Maybe<User>;
   getUserList?: Maybe<UserListResponse>;
-  upcomingBirthdays: Array<Maybe<UserBasic>>;
+  upcomingBirthdays: Array<Maybe<UserBirthday>>;
 };
 
 export type QueryGetAllBatchCoordinatorsArgs = {
@@ -634,6 +634,20 @@ export type UserBasic = {
   lastName?: Maybe<Scalars['String']['output']>;
   profileImage?: Maybe<Scalars['String']['output']>;
   role?: Maybe<Role>;
+};
+
+export type UserBirthday = {
+  __typename?: 'UserBirthday';
+  batch?: Maybe<Scalars['Int']['output']>;
+  birthday?: Maybe<Scalars['String']['output']>;
+  disabled?: Maybe<Scalars['Boolean']['output']>;
+  firstName?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  isConfidential?: Maybe<Scalars['Boolean']['output']>;
+  isFaculty?: Maybe<Scalars['Boolean']['output']>;
+  isVerified?: Maybe<Scalars['Boolean']['output']>;
+  lastName?: Maybe<Scalars['String']['output']>;
+  profileImage?: Maybe<Scalars['String']['output']>;
 };
 
 export type UserListResponse = {
@@ -2801,10 +2815,10 @@ export type UpcomingBirthdaysQuery = {
   __typename?: 'Query';
   upcomingBirthdays: Array<
     | {
-        __typename?: 'UserBasic';
+        __typename?: 'UserBirthday';
         batch?: number | undefined;
+        birthday?: string | undefined;
         disabled?: boolean | undefined;
-        dob?: any | undefined;
         firstName?: string | undefined;
         id?: string | undefined;
         isConfidential?: boolean | undefined;
@@ -2812,7 +2826,6 @@ export type UpcomingBirthdaysQuery = {
         isVerified?: boolean | undefined;
         lastName?: string | undefined;
         profileImage?: string | undefined;
-        role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
       }
     | undefined
   >;
@@ -6371,8 +6384,8 @@ export const UpcomingBirthdaysDocument = gql`
   query upcomingBirthdays {
     upcomingBirthdays {
       batch
+      birthday
       disabled
-      dob
       firstName
       id
       isConfidential
@@ -6380,10 +6393,6 @@ export const UpcomingBirthdaysDocument = gql`
       isVerified
       lastName
       profileImage
-      role {
-        id
-        name
-      }
     }
   }
 `;

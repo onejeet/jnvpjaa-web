@@ -381,7 +381,8 @@ const BlogCard: React.FC<IBlogCardProps> = ({
             summary={author?.isFaculty ? 'Faculty' : author?.batch ? `Batch of ${author?.batch}` : ''}
             titleComponentProps={{
               titleProps: {
-                fontSize: '12px',
+                fontSize: '14px',
+                fontWeight: 500,
               },
               summaryProps: {
                 fontSize: '10px',

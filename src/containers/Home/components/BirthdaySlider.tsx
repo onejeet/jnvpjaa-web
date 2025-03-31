@@ -1,10 +1,9 @@
-import { Avatar, Box, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay, FreeMode } from 'swiper/modules';
 import { useUpcomingBirthdaysQuery } from '@/apollo/hooks';
 import React from 'react';
 import ProfilePicture from '@/components/common/ProfilePicture';
-import dayjs from 'dayjs';
 import { paths } from '@/config/paths';
 import { useRouter } from 'next/router';
 
@@ -13,10 +12,30 @@ export default function BirthdaySlider() {
   const theme = useTheme();
   const router = useRouter();
 
+  const [autoplay, setAutoplay] = React.useState(false);
+  const swiperRef = React.useRef<any>(null);
+
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setAutoplay(entry.isIntersecting); // Enable autoplay when in view
+      },
+      { threshold: 0.5 } // Trigger when 50% of Swiper is visible
+    );
+
+    if (swiperRef.current) {
+      observer.observe(swiperRef.current);
+    }
+
+    return () => {
+      if (swiperRef.current) observer.unobserve(swiperRef.current);
+    };
+  }, []);
+
   const isMobile = useMediaQuery('(hover: none)');
   const listData = React.useMemo(() => {
     if (loading) {
-      return new Array(10).fill({ id: '', title: '', description: '', startDate: '', medium: 'Online', online: false });
+      return new Array(15).fill({ id: '', title: '', description: '', startDate: '', medium: 'Online', online: false });
     }
     return data?.upcomingBirthdays || [];
   }, [loading, data]);
@@ -63,15 +82,18 @@ export default function BirthdaySlider() {
           borderLeftWidth: 0,
           borderRightWidth: 0,
         }}
+        ref={swiperRef}
       >
         <Swiper
+          key={autoplay ? 'swiper-1' : 'swiper-2'}
           modules={[Autoplay, FreeMode]}
           spaceBetween={0}
-          slidesPerView="auto"
-          loop={true}
+          slidesPerView={10}
+          slidesPerGroup={3}
+          loop={!loading}
+          autoplay={autoplay ? { delay: 4000, disableOnInteraction: true } : false}
           freeMode={true}
-          speed={5000}
-          autoplay={{ delay: 5, disableOnInteraction: false }}
+          speed={2000}
           style={{ display: 'flex', alignItems: 'center' }}
         >
           {listData.map((user, index) => (
@@ -92,9 +114,13 @@ export default function BirthdaySlider() {
                 />
 
                 <Typography variant="body2" mt={1}>{`${user?.firstName || ''} ${user?.lastName || ''}`}</Typography>
-                {user.dob && (
-                  <Typography variant="body2" fontWeight={700} color="text.secondary">
-                    {dayjs(user.dob).format('MMM DD')}
+                {user.birthday && (
+                  <Typography
+                    variant="body2"
+                    fontWeight={700}
+                    color={user.birthday === 'Today' ? 'primary.main' : 'text.secondary'}
+                  >
+                    {user.birthday}
                   </Typography>
                 )}
               </Box>

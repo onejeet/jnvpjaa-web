@@ -63,6 +63,7 @@ const ProfilePicture: React.FC<ProfilePictureProps> = ({
             summary={summary}
             titleProps={{
               fontSize: '14px',
+              fontWeight: 500,
               color: 'text.primary',
               ...titleProps,
             }}

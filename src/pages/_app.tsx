@@ -9,6 +9,7 @@ import { apolloClient } from 'src/apollo/client';
 import { AlertProvider } from '@/context/AlertContext';
 import { AuthProvider } from '@/context/AuthContext';
 import ServiceWorkerUpdater from '@/components/PWA/ServiceWorkerUpdater';
+import PWAInstaller from '@/components/PWA/PWAnstaller';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -21,6 +22,7 @@ const MyApp = ({ Component, pageProps, emotionCache = clientSideEmotionCache }: 
           <AlertProvider>
             <Component {...pageProps} />
             <ServiceWorkerUpdater />
+            <PWAInstaller />
             <GoogleTagManager gtmId="GTM-W7R5B5JB" />
           </AlertProvider>
         </LayoutProvider>
