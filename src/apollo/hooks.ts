@@ -596,7 +596,7 @@ export type User = {
   createdAt: Scalars['DateTime']['output'];
   disabled?: Maybe<Scalars['Boolean']['output']>;
   displayName?: Maybe<Scalars['String']['output']>;
-  dob?: Maybe<Scalars['String']['output']>;
+  dob?: Maybe<Scalars['DateTime']['output']>;
   email?: Maybe<Scalars['String']['output']>;
   emergencyMobile?: Maybe<Scalars['String']['output']>;
   extraEmail?: Maybe<Scalars['String']['output']>;
@@ -749,7 +749,7 @@ export type AssignBatchCoordinatorMutation = {
               createdAt: any;
               disabled?: boolean | undefined;
               displayName?: string | undefined;
-              dob?: string | undefined;
+              dob?: any | undefined;
               email?: string | undefined;
               emergencyMobile?: string | undefined;
               extraEmail?: string | undefined;
@@ -1107,7 +1107,7 @@ export type CreateTransactionMutation = {
               createdAt: any;
               disabled?: boolean | undefined;
               displayName?: string | undefined;
-              dob?: string | undefined;
+              dob?: any | undefined;
               email?: string | undefined;
               emergencyMobile?: string | undefined;
               extraEmail?: string | undefined;
@@ -1293,7 +1293,7 @@ export type DeleteTransactionMutation = {
               createdAt: any;
               disabled?: boolean | undefined;
               displayName?: string | undefined;
-              dob?: string | undefined;
+              dob?: any | undefined;
               email?: string | undefined;
               emergencyMobile?: string | undefined;
               extraEmail?: string | undefined;
@@ -1335,7 +1335,7 @@ export type DeleteUserMutation = {
         createdAt: any;
         disabled?: boolean | undefined;
         displayName?: string | undefined;
-        dob?: string | undefined;
+        dob?: any | undefined;
         email?: string | undefined;
         emergencyMobile?: string | undefined;
         extraEmail?: string | undefined;
@@ -1464,7 +1464,7 @@ export type RefreshTokenMutation = {
               createdAt: any;
               disabled?: boolean | undefined;
               displayName?: string | undefined;
-              dob?: string | undefined;
+              dob?: any | undefined;
               email?: string | undefined;
               emergencyMobile?: string | undefined;
               extraEmail?: string | undefined;
@@ -1596,7 +1596,7 @@ export type SigninMutation = {
               createdAt: any;
               disabled?: boolean | undefined;
               displayName?: string | undefined;
-              dob?: string | undefined;
+              dob?: any | undefined;
               email?: string | undefined;
               emergencyMobile?: string | undefined;
               extraEmail?: string | undefined;
@@ -1645,7 +1645,7 @@ export type SignupMutation = {
         createdAt: any;
         disabled?: boolean | undefined;
         displayName?: string | undefined;
-        dob?: string | undefined;
+        dob?: any | undefined;
         email?: string | undefined;
         emergencyMobile?: string | undefined;
         extraEmail?: string | undefined;
@@ -1720,7 +1720,7 @@ export type UpdateBatchCoordinatorMutation = {
               createdAt: any;
               disabled?: boolean | undefined;
               displayName?: string | undefined;
-              dob?: string | undefined;
+              dob?: any | undefined;
               email?: string | undefined;
               emergencyMobile?: string | undefined;
               extraEmail?: string | undefined;
@@ -1943,7 +1943,7 @@ export type UpdateTransactionMutation = {
               createdAt: any;
               disabled?: boolean | undefined;
               displayName?: string | undefined;
-              dob?: string | undefined;
+              dob?: any | undefined;
               email?: string | undefined;
               emergencyMobile?: string | undefined;
               extraEmail?: string | undefined;
@@ -2001,7 +2001,7 @@ export type UpdateUserMutation = {
         createdAt: any;
         disabled?: boolean | undefined;
         displayName?: string | undefined;
-        dob?: string | undefined;
+        dob?: any | undefined;
         email?: string | undefined;
         emergencyMobile?: string | undefined;
         extraEmail?: string | undefined;
@@ -2088,7 +2088,7 @@ export type GetAllBatchCoordinatorsQuery = {
                   createdAt: any;
                   disabled?: boolean | undefined;
                   displayName?: string | undefined;
-                  dob?: string | undefined;
+                  dob?: any | undefined;
                   email?: string | undefined;
                   emergencyMobile?: string | undefined;
                   extraEmail?: string | undefined;
@@ -2139,7 +2139,7 @@ export type GetBatchCoordinatorByUserIdQuery = {
               createdAt: any;
               disabled?: boolean | undefined;
               displayName?: string | undefined;
-              dob?: string | undefined;
+              dob?: any | undefined;
               email?: string | undefined;
               emergencyMobile?: string | undefined;
               extraEmail?: string | undefined;
@@ -2189,7 +2189,7 @@ export type GetBatchCoordinatorsByBatchQuery = {
                   createdAt: any;
                   disabled?: boolean | undefined;
                   displayName?: string | undefined;
-                  dob?: string | undefined;
+                  dob?: any | undefined;
                   email?: string | undefined;
                   emergencyMobile?: string | undefined;
                   extraEmail?: string | undefined;
@@ -2568,7 +2568,7 @@ export type GetTransactionQuery = {
               createdAt: any;
               disabled?: boolean | undefined;
               displayName?: string | undefined;
-              dob?: string | undefined;
+              dob?: any | undefined;
               email?: string | undefined;
               emergencyMobile?: string | undefined;
               extraEmail?: string | undefined;
@@ -2632,7 +2632,7 @@ export type GetTransactionsQuery = {
                         createdAt: any;
                         disabled?: boolean | undefined;
                         displayName?: string | undefined;
-                        dob?: string | undefined;
+                        dob?: any | undefined;
                         email?: string | undefined;
                         emergencyMobile?: string | undefined;
                         extraEmail?: string | undefined;
@@ -2734,7 +2734,7 @@ export type GetUserDetailsQuery = {
         createdAt: any;
         disabled?: boolean | undefined;
         displayName?: string | undefined;
-        dob?: string | undefined;
+        dob?: any | undefined;
         email?: string | undefined;
         emergencyMobile?: string | undefined;
         extraEmail?: string | undefined;
@@ -2779,7 +2779,7 @@ export type GetUserListQuery = {
                   createdAt: any;
                   disabled?: boolean | undefined;
                   displayName?: string | undefined;
-                  dob?: string | undefined;
+                  dob?: any | undefined;
                   email?: string | undefined;
                   emergencyMobile?: string | undefined;
                   extraEmail?: string | undefined;

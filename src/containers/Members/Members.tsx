@@ -17,7 +17,8 @@ export default function Members() {
         <Box>
           <Typography variant="h1">Alumni Members</Typography>
           <Typography color="grey.800" mb={3}>
-            List of all the verified and non-verified users registered for JNVPJAA portal.
+            Find and connect with alumni and faculty members of JNVPJAA. Whether {`you're`} catching up with old friends
+            or expanding your network, this directory keeps our community connected!
           </Typography>
         </Box>
       </Box>

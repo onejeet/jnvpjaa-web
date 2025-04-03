@@ -1,35 +1,28 @@
 import { adventurerNeutral, bottts, botttsNeutral, thumbs } from '@dicebear/collection';
 import { createAvatar } from '@dicebear/core';
-import { Options } from '@dicebear/thumbs';
-import EmailIcon from '@mui/icons-material/Email';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import XIcon from '@mui/icons-material/X';
-import YouTubeIcon from '@mui/icons-material/YouTube';
-import { EnvelopeSimple, FacebookLogo, InstagramLogo, LinkedinLogo, XLogo } from '@phosphor-icons/react';
+import { EnvelopeSimple, FacebookLogo, InstagramLogo, LinkedinLogo, XLogo, YoutubeLogo } from '@phosphor-icons/react';
 import dayjs from 'dayjs';
 import parsePhoneNumber from 'libphonenumber-js';
 
 export const getSocialMediaIcon = (iconName: string) => {
   switch (iconName) {
     case 'facebook': {
-      return <FacebookLogo size={32} weight="fill" />;
+      return <FacebookLogo size={28} />;
     }
     case 'instagram': {
-      return <InstagramLogo size={32} weight="fill" />;
+      return <InstagramLogo size={28} />;
     }
     case 'twitter': {
-      return <XLogo size={28} />;
+      return <XLogo size={24} />;
     }
     case 'linkedin': {
-      return <LinkedinLogo size={32} weight="fill" />;
+      return <LinkedinLogo size={28} />;
     }
     case 'email': {
-      return <EnvelopeSimple size={32} />;
+      return <EnvelopeSimple size={28} />;
     }
     default: {
-      return <YouTubeIcon />;
+      return <YoutubeLogo size={28} />;
     }
   }
 };
@@ -217,8 +210,10 @@ export function formatCurrency(amount: number, currency?: string) {
 }
 
 export const isBirthdayToday = (dob?: string) => {
+  if (!dob) return false;
   const birthDate = dayjs(dob);
   const today = dayjs();
+  console.log('ZZ: IDHSD', dob, birthDate, birthDate.date(), today.date(), birthDate.month(), today.month());
 
   return birthDate.date() === today.date() && birthDate.month() === today.month();
 };

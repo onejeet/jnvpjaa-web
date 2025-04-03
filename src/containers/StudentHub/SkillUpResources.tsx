@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import Image from 'next/image';
 
 import Breadcrumbs from '@/components/common/Breadcrumbs';
+import EmptyView from '@/components/common/EmptyView';
 
 const breadcrumbsList = [
   {
@@ -27,10 +28,16 @@ const SkillUpResources = () => {
             xs: '100%',
           }}
         >
-          <Typography variant="h1" mb={3}>
+          <Typography variant="h1" mb={1}>
             Recommended Learning Resources
           </Typography>
-          <Image
+          <Typography color="grey.800" mb={3}>
+            Explore our curated SkillUp resources designed to help students enhance their knowledge and skills. From
+            online courses to insightful articles, these learning materials will support your academic and professional
+            growth.
+          </Typography>
+          <EmptyView message="Coming Soon" />
+          {/* <Image
             src="/assets/svg/under_construction.svg"
             width={417}
             height={200}
@@ -39,7 +46,7 @@ const SkillUpResources = () => {
           />
           <Typography variant="body1" fontSize={20} color="grey.600" mt={3}>
             Coming Soon.
-          </Typography>
+          </Typography> */}
           {/* <Box
             display={{ xs: 'block', sm: 'block' }}
             sx={{ borderRadius: '10px', maxWidth: '100%', maxHeight: '400px', overflow: 'hidden' }}

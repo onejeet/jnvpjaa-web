@@ -12,6 +12,7 @@ import dayjs from 'dayjs';
 import { IAddTransactionRecordInput } from './AddTransactionRecordModule.types';
 import React from 'react';
 import { useAuth } from '@/context/AuthContext';
+import ReactSelect from '@/components/core/ReactSelect';
 
 const AddTransactionRecordModule: React.FC<any> = ({ onClose }) => {
   const { user } = useAuth();
@@ -104,6 +105,24 @@ const AddTransactionRecordModule: React.FC<any> = ({ onClose }) => {
         }}
       >
         <Grid container spacing={3}>
+          {/* <Grid size={{ xs: 12 }}>
+            <ReactSelect
+              options={[
+                {
+                  value: '1',
+                  label: 'Alice',
+                  avatarUrl: 'https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250',
+                },
+                { value: '2', label: 'Bob', avatarUrl: 'https://i.pravatar.cc/40?img=2' },
+                { value: '3', label: 'Charlie', avatarUrl: 'https://i.pravatar.cc/40?img=3' },
+              ]}
+              isSearchable
+              isMulti
+              isClearable
+              showAvatars
+              placeholder="Select Contacts"
+            />
+          </Grid> */}
           <Grid size={{ xs: 12, sm: 3 }}>
             <FormSelectField
               control={control}

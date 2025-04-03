@@ -13,4 +13,6 @@ export interface FormDateTimeFieldProps<TFieldValues extends FieldValues = Field
   inputProps?: Partial<TextFieldProps>;
   isDateOnly?: boolean;
   loading?: boolean;
+  views?: string[];
+  format?: string;
 }

@@ -6,12 +6,14 @@ import SloganBanner from '@/components/home/SloganBanner';
 import UpcomingEvents from './components/UpcomingEvents';
 import RecentBlogs from './components/RecentBlogs';
 import BirthdaySlider from './components/BirthdaySlider';
+import MetricsNumbers from './components/MetricsNumbers';
 
 const Home = () => {
   return (
     <Box bgcolor="grey.100">
       <Hero />
       <SloganBanner />
+      <MetricsNumbers />
       {/* <UpcomingEvents /> */}
       <RecentBlogs />
       <BirthdaySlider />

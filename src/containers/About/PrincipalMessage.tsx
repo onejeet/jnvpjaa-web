@@ -40,19 +40,24 @@ const PrincipalMessage = () => {
             <FormatQuoteIcon sx={{ fontSize: '32px', color: 'grey.500', position: 'relative', top: '-10px' }} />
           </Typography> */}
           <Typography color="grey.800" mt={2}>
-            It is a great moment for me that JNV Paota Jaipur Alumni Association (JNVPJAA) is launching a website. This
-            is really the result of hard work, dedication and creativity of all members of alumni association of JNV
-            Paota Jaipur. The aim of this website is to avail easy guidance and assistance to budding Navodayans. I hope
-            that there will be an exchange of great ideas and thoughts of intellectuals spreaded in different parts of
-            India and abroad. I have strong belief that students of coming generations can make the use of technology
-            for learning and their academic as well as professional growth.
+            It is with great pride that I extend my best wishes to the Jawahar Navodaya Vidyalaya Paota Jaipur Alumni
+            Association (JNVPJAA). Our alumni are a reflection of the values, excellence, and dedication that JNV stands
+            for. Your achievements inspire our current students, showing them what is possible with perseverance and
+            commitment.
           </Typography>
           <Typography color="grey.800" mt={2}>
-            At this moment, I extend my best wishes to all alumni and users.
+            JNVPJAA serves as a valuable platform for mentorship, guidance, and opportunities, helping students navigate
+            their academic and professional journeys. The support and experiences shared by alumni play a crucial role
+            in shaping their aspirations and preparing them for the future.
+          </Typography>
+          <Typography color="grey.800" mt={2}>
+            I encourage all alumni to stay connected and contribute to this growing network, fostering a strong and
+            supportive community. Together, we can uphold the spirit of Navodaya and make a meaningful impact on
+            society.
           </Typography>
 
           <Typography color="grey.800" variant="h3" fontWeight={600} mt={3}>
-            Sh. Ashwani Kumar Jain
+            Sunil Dhakar
           </Typography>
           <Typography color="grey.800">Principal, JNV Paota, Jaipur</Typography>
         </Box>

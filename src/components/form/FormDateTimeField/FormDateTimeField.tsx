@@ -56,9 +56,9 @@ const FormDateTimeField: React.FC<FormDateTimeFieldProps> = ({
             >
               <DesktopDatePicker
                 {...field}
+                format="MMM DD, YYYY"
                 {...dateTimePickerProps}
                 onChange={(newValue: Dayjs | null) => field.onChange(newValue)}
-                format="DD/MM/YYYY"
                 slots={{
                   textField: (params) => (
                     <TextField
@@ -81,7 +81,8 @@ const FormDateTimeField: React.FC<FormDateTimeFieldProps> = ({
             <MobileDateTimePicker
               {...field}
               {...dateTimePickerProps}
-              format="DD/MM/YYYY"
+              ampm={true}
+              format="MMM DD, YYYY hh:mm A"
               onChange={(newValue: Dayjs | null) => field.onChange(newValue)}
               slots={{
                 textField: (params) => (

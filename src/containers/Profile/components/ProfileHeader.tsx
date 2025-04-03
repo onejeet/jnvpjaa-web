@@ -28,6 +28,66 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
   const router = useRouter();
   const client = useApolloClient();
 
+  const handleDataPrivacyUpdate = React.useCallback(() => {
+    showAlert(
+      {
+        visible: true,
+        action: 'approve',
+        type: 'custom',
+        title: user?.isConfidential ? 'Make Contact Info Protected' : 'Keep Contact Info Private',
+        message: user?.isConfidential
+          ? 'Your email and phone number will be visible to all the verified alumni of JNVPJAA. Rest assured, the data still be not visible to public.'
+          : 'Your email and phone number will remain completely hidden—no one will be able to access them.',
+        onOkay: () => {
+          showAlert(
+            {
+              visible: true,
+              //  title: 'Are you Going?',
+              type: 'loading',
+              message: 'Please Wait, The status is being updated.',
+              action: 'loading',
+            },
+            true
+          );
+          saveProfile({
+            id: user?.id,
+            isConfidential: !user?.isConfidential,
+          })
+            ?.then((data) => {
+              client.refetchQueries({
+                include: ['getUserDetails'],
+              });
+              showAlert(
+                {
+                  visible: true,
+                  type: 'success',
+                  title: user?.isConfidential ? 'Contact Info is Protected' : 'Contact Info is Private',
+                  message: user?.isConfidential
+                    ? 'Your email and phone number will be visible to all the verified alumni of JNVPJAA. Rest assured, they data still be not visible to public.'
+                    : 'Your email and phone number will remain completely hidden—no one will be able to access them.',
+                  action: 'success',
+                },
+                true
+              );
+            })
+            ?.catch((eerr) => {
+              showAlert(
+                {
+                  visible: true,
+                  type: 'error',
+                  title: `Contact info update failed. Try again`,
+                  message: eerr?.message || 'Something went wrong.',
+                  action: 'error',
+                },
+                true
+              );
+            });
+        },
+      },
+      true
+    );
+  }, [user, saveProfile]);
+
   const menuItems = React.useMemo(() => {
     const isConfidential = user?.isConfidential;
     return isProfileEditable
@@ -42,65 +102,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
           {
             label: isConfidential ? 'Make Contact Info Visible' : 'Keep Contact Info Private',
             value: 'delete',
-            onClick: () => {
-              showAlert(
-                {
-                  visible: true,
-                  action: 'approve',
-                  type: 'custom',
-                  title: isConfidential ? 'Make Contact Info Protected' : 'Keep Contact Info Private',
-                  message: isConfidential
-                    ? 'Your email and phone number will be visible to all the verified alumni of JNVPJAA. Rest assured, the data still be not visible to public.'
-                    : 'Your email and phone number will remain completely hidden—no one will be able to access them.',
-                  onOkay: () => {
-                    showAlert(
-                      {
-                        visible: true,
-                        //  title: 'Are you Going?',
-                        type: 'loading',
-                        message: 'Please Wait, The status is being updated.',
-                        action: 'loading',
-                      },
-                      true
-                    );
-                    saveProfile({
-                      id: user?.id,
-                      isConfidential: !isConfidential,
-                    })
-                      ?.then((data) => {
-                        client.refetchQueries({
-                          include: ['getUserDetails'],
-                        });
-                        showAlert(
-                          {
-                            visible: true,
-                            type: 'success',
-                            title: isConfidential ? 'Contact Info is Protected' : 'Contact Info is Private',
-                            message: isConfidential
-                              ? 'Your email and phone number will be visible to all the verified alumni of JNVPJAA. Rest assured, they data still be not visible to public.'
-                              : 'Your email and phone number will remain completely hidden—no one will be able to access them.',
-                            action: 'success',
-                          },
-                          true
-                        );
-                      })
-                      ?.catch((eerr) => {
-                        showAlert(
-                          {
-                            visible: true,
-                            type: 'error',
-                            title: `Contact info update failed. Try again`,
-                            message: eerr?.message || 'Something went wrong.',
-                            action: 'error',
-                          },
-                          true
-                        );
-                      });
-                  },
-                },
-                true
-              );
-            },
+            onClick: () => handleDataPrivacyUpdate(),
             icon: <FileLock size={18} />,
             sx: {
               color: 'error.main',
@@ -111,7 +113,8 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
           },
         ]
       : [];
-  }, [isProfileEditable, user]);
+  }, [isProfileEditable, user, handleDataPrivacyUpdate, router]);
+
   return (
     <Box sx={{ position: 'relative', mb: 4 }}>
       {loading ? (
@@ -195,8 +198,10 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
                 fontWeight={500}
                 mr={0.5}
               >{`${user?.firstName} ${user?.lastName || ''}`}</Typography>
-              {user?.isVerified && <VerifiedBadge size={21} />}
-              {user?.batch === 0 && <FacultyBadge size={24} />}
+              {user?.isVerified && (
+                <VerifiedBadge size={21} isPrivate={user?.isConfidential} handlePrivateInfo={handleDataPrivacyUpdate} />
+              )}
+              {user?.batch === 0 && <FacultyBadge size={21} />}
             </Box>
           }
           titleProps={{ fontWeight: 600, fontSize: '30px' }}

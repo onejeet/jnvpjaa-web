@@ -14,7 +14,7 @@ export default function Transactions() {
   const [addRecord, setAddRecord] = React.useState<boolean>(false);
   const { isAdmin } = useAuth();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
     <LayoutModule

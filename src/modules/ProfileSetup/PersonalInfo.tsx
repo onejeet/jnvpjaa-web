@@ -216,6 +216,9 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({ user, onNext, onBack, onSuc
               disabled: loading,
               size: 'small',
             }}
+            views={['month', 'day']}
+            format="MMM DD"
+
             // rules={{
             //   required: 'Required',
             //   maxLength: {

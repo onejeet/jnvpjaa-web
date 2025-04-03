@@ -62,7 +62,7 @@ const Blog = () => {
       {isAdmin && (
         <Box display="flex" alignItems="center" mb={1}>
           <FormControlLabel
-            label="Pending approval events only"
+            label="Pending approval blog post only"
             control={
               <Checkbox
                 checked={isPendingApporvalOnly}

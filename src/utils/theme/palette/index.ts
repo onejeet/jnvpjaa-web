@@ -11,6 +11,17 @@ export interface SimplePaletteColorOptions {
   navy?: string;
   medium?: string;
   blush?: string;
+  contrastText?: string;
+  50?: string;
+  100?: string;
+  200?: string;
+  300?: string;
+  400?: string;
+  500?: string;
+  600?: string;
+  700?: string;
+  800?: string;
+  900?: string;
 }
 
 export interface AccentColorOptions {
@@ -29,13 +40,23 @@ interface DefaultPaletteOptions extends PaletteOptions {
 const DefaultPalette = (mode: PaletteMode): DefaultPaletteOptions => {
   // ** Vars
   const isLightMode = mode === 'light';
-  const PRIMARY_COLOR = '#C62835';
+  const PRIMARY_COLOR = {
+    50: '#FDE7E8',
+    100: '#F8C2C5',
+    200: '#F39A9F',
+    300: '#EE7278',
+    400: '#E94D54',
+    500: '#C62835', // Main color
+    600: '#AF232F',
+    700: '#951D27',
+    800: '#7C1720',
+    900: '#5C1016',
+  };
   const SECONDARY_COLOR = isLightMode ? '#081D13' : '#212a33';
   const GREY_COLOR_BASE = '#c9d1d9';
   const TEXT_COLOR = isLightMode ? SECONDARY_COLOR : '#e8eaed';
   const BACKGROUND_COLOR = isLightMode ? '#FAFBFC' : '#192128';
   const PAPER_COLOR = isLightMode ? '#ffffff' : SECONDARY_COLOR;
-  const SNOW_COLOR = '#ffffff';
 
   const GREY_COLOR = isLightMode
     ? {
@@ -64,10 +85,13 @@ const DefaultPalette = (mode: PaletteMode): DefaultPaletteOptions => {
   return {
     mode,
     primary: {
-      main: PRIMARY_COLOR,
+      ...PRIMARY_COLOR,
+      main: PRIMARY_COLOR['500'],
       snow: '#ffffff',
-      light: isLightMode ? '#F0F8F6' : alpha(PRIMARY_COLOR, 0.4),
-      medium: '#A8D5CE',
+      light: PRIMARY_COLOR['100'],
+      medium: PRIMARY_COLOR['700'],
+      dark: PRIMARY_COLOR['900'],
+      contrastText: '#ffffff',
     },
     secondary: {
       main: SECONDARY_COLOR,

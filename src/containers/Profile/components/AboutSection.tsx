@@ -7,7 +7,15 @@ import { User } from '@/apollo/hooks';
 
 import React from 'react';
 import { useProfile } from '@/context/ProfileContext';
-import { Cake, EnvelopeSimpleOpen, Lock, Phone, PhoneDisconnect, WhatsappLogo } from '@phosphor-icons/react';
+import {
+  Cake,
+  EnvelopeSimpleOpen,
+  Lock,
+  LockSimple,
+  Phone,
+  PhoneDisconnect,
+  WhatsappLogo,
+} from '@phosphor-icons/react';
 import dayjs from 'dayjs';
 import { formatPhoneNumber } from '@/utils/helpers';
 
@@ -49,10 +57,10 @@ export default function AboutSection() {
             },
           }}
         >
-          <Lock size={16} />
+          <LockSimple size={16} />
           {user?.isConfidential
-            ? 'My contact info is private and not visible to anyone.'
-            : 'My contact info is protected and only visible to verified alumni.'}
+            ? 'Contact info is private and not visible to anyone.'
+            : 'Contact info is protected and only visible to verified alumni.'}
         </Typography>
       </Grid>
       <Grid container spacing={2} sx={{ mt: 2 }}>
@@ -94,7 +102,7 @@ export default function AboutSection() {
         <Grid size={{ xs: 12, sm: 6 }}>
           <Box display="flex" alignItems="center">
             <Cake size={24} />
-            <Typography sx={{ ml: 1 }}>{user?.dob ? dayjs(user?.dob)?.format('MMM DD, YYYY') : '--'}</Typography>
+            <Typography sx={{ ml: 1 }}>{user?.dob ? dayjs(user?.dob)?.format('MMM DD') : '--'}</Typography>
           </Box>
         </Grid>
 

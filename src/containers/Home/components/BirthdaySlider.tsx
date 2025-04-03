@@ -32,7 +32,7 @@ export default function BirthdaySlider() {
     };
   }, []);
 
-  const isMobile = useMediaQuery('(hover: none)');
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const listData = React.useMemo(() => {
     if (loading) {
       return new Array(15).fill({ id: '', title: '', description: '', startDate: '', medium: 'Online', online: false });
@@ -110,7 +110,7 @@ export default function BirthdaySlider() {
                   id={user?.id}
                   loading={!user?.id}
                   alt={`${user?.firstName || ''} ${user?.lastName || ''}`}
-                  size={isMobile ? 60 : 100}
+                  size={isMobile ? 70 : 100}
                 />
 
                 <Typography variant="body2" mt={1}>{`${user?.firstName || ''} ${user?.lastName || ''}`}</Typography>

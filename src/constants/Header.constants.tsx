@@ -160,7 +160,7 @@ export const MEMBER_HEADER_MENU: IHeaderMenuItem[] = [
     path: '/donations',
     menu: [
       {
-        label: 'Members',
+        label: 'Members Directory',
         path: '/members',
       },
       {
@@ -171,10 +171,10 @@ export const MEMBER_HEADER_MENU: IHeaderMenuItem[] = [
         label: 'Donate Now',
         path: '/donations',
       },
-      {
-        label: 'Alumni Connect',
-        path: '#',
-      },
+      // {
+      //   label: 'Alumni Connect',
+      //   path: '#',
+      // },
     ],
   },
   {

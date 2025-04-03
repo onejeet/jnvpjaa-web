@@ -76,7 +76,7 @@ const EventCard: React.FC<EventCardProps> = ({
   }, [attendees, user]);
 
   const formattedStartDate = React.useMemo(() => {
-    return dayjs(startDate)?.format('MMM DD, YYYY HH:MM A');
+    return dayjs(startDate)?.format('MMM DD, YYYY hh:mm A');
   }, [startDate]);
 
   const descriptionContent = React.useMemo(() => {

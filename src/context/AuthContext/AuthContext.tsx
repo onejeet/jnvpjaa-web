@@ -29,7 +29,12 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children, checkAuth, isAuth
     onCompleted: (data: any) => {
       setUser(data?.getUserDetails as User);
       if (data?.getUserDetails?.metadata?.isFirstLogin !== false) {
-        router.push(paths.profile.setup);
+        router.push({
+          pathname: paths.profile.setup,
+          query: {
+            welcome: '1',
+          },
+        });
         setLoadingData({ loading: false });
         return;
       }
@@ -145,6 +150,9 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children, checkAuth, isAuth
 
     if (checkAuth) {
       window.location.href = paths.home;
+      setLoadingData({
+        loading: false,
+      });
     } else {
       window.location.reload();
     }

@@ -16,6 +16,7 @@ import { isBirthdayToday } from '@/utils/helpers';
 import { Cake } from '@phosphor-icons/react';
 import giftsLottieIcon from '@/utils/lottie/gifts_art.json';
 import Lottie from 'lottie-react';
+import CelebratonConfetti from '@/components/common/CelebratonConfetti';
 
 export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState('about');
@@ -23,41 +24,46 @@ export default function ProfilePage() {
   const isBirthday = React.useMemo(() => {
     return isBirthdayToday(user?.dob);
   }, [user?.dob]);
-  return (
-    <LayoutModule
-      disableCover
-      title={`${user?.firstName || ''} Profile • Alumni Network of JNV Paota, Jaipur`}
-      containerProps={{ sx: { py: 0 } }}
-    >
-      <Box sx={{ my: 4 }}>
-        <ProfileHeader />
-        {isBirthday && (
-          <Box display="flex" maxHeight={50} overflow="hidden" alignItems="center" ml={2}>
-            {/* <Cake size={32} /> */}
-            <Lottie animationData={giftsLottieIcon} loop={true} style={{ width: '100px', height: '50px' }} />
-            <Typography ml="-10px" color="#B42B43" fontWeight={500}>
-              Celebrating a Birthday Today!{' '}
-            </Typography>
-          </Box>
-        )}
-        {!editingProfile && <ProfileTabs activeTab={activeTab} onTabChange={setActiveTab} />}
 
-        <Box sx={{ mt: 3 }}>
-          {loading ? (
-            <LoadingData />
-          ) : editingProfile ? (
-            <Paper elevation={3} sx={{ p: 3 }}>
-              <ProfileForm />
-            </Paper>
-          ) : (
-            <>
-              {activeTab === 'about' && <AboutSection />}
-              {activeTab === 'blogs' && <BlogsSection user={user} />}
-              {activeTab === 'events' && <EventSection user={user} />}
-            </>
+  console.log('ZZ: user', user?.dob);
+  return (
+    <>
+      <LayoutModule
+        disableCover
+        title={`${user?.firstName || ''} Profile • Alumni Network of JNV Paota, Jaipur`}
+        containerProps={{ sx: { py: 0 } }}
+      >
+        <Box sx={{ my: 4 }}>
+          <ProfileHeader />
+          {isBirthday && (
+            <Box display="flex" maxHeight={50} overflow="hidden" alignItems="center" ml={2}>
+              {/* <Cake size={32} /> */}
+              <Lottie animationData={giftsLottieIcon} loop={true} style={{ width: '100px', height: '50px' }} />
+              <Typography ml="-10px" color="#B42B43" fontWeight={500}>
+                Celebrating a Birthday Today!{' '}
+              </Typography>
+            </Box>
           )}
+          {!editingProfile && <ProfileTabs activeTab={activeTab} onTabChange={setActiveTab} />}
+
+          <Box sx={{ mt: 3 }}>
+            {loading ? (
+              <LoadingData />
+            ) : editingProfile ? (
+              <Paper elevation={3} sx={{ p: 3 }}>
+                <ProfileForm />
+              </Paper>
+            ) : (
+              <>
+                {activeTab === 'about' && <AboutSection />}
+                {activeTab === 'blogs' && <BlogsSection user={user} />}
+                {activeTab === 'events' && <EventSection user={user} />}
+              </>
+            )}
+          </Box>
         </Box>
-      </Box>
-    </LayoutModule>
+      </LayoutModule>
+      <CelebratonConfetti />
+    </>
   );
 }

@@ -11,9 +11,7 @@ import Addresses from '@/modules/ProfileSetup/Addresses';
 import DataPrivacy from '@/modules/ProfileSetup/DataPrivacy';
 import { useRouter } from 'next/router';
 import { CheckCircle } from '@phosphor-icons/react';
-import { useUpdateUserMutation } from '@/apollo/hooks';
-
-const steps = ['personal_info', 'profile_picture', 'addresses', 'privacy'];
+import Welcome from '@/components/common/Welcome/Welcome';
 
 const CustomStepIcon = (props: StepIconProps) => {
   const { active, completed, className } = props;
@@ -32,13 +30,23 @@ const ProfileSetup = () => {
   const { user } = useAuth();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
+  console.log('TT: router', router.query);
+
+  const steps = React.useMemo(
+    () =>
+      router.query?.welcome === '1'
+        ? ['welcome', 'personal_info', 'profile_picture', 'addresses', 'privacy']
+        : ['personal_info', 'profile_picture', 'addresses', 'privacy'],
+    [router.query]
+  );
+
   const handleNext = React.useCallback(async () => {
     if (steps[activeStepIndex] === 'privacy') {
       router.push('/profile');
-      return;
+    } else {
+      setActiveStepIndex((prevStep) => prevStep + 1);
     }
-    setActiveStepIndex((prevStep) => prevStep + 1);
-  }, [activeStepIndex, router]);
+  }, [activeStepIndex, router, steps]);
 
   const handleBack = React.useCallback(() => {
     setActiveStepIndex((prevStep) => prevStep - 1);
@@ -47,6 +55,8 @@ const ProfileSetup = () => {
   const mainComponent = React.useMemo(() => {
     const step = steps[activeStepIndex];
     switch (step) {
+      case 'welcome':
+        return <Welcome onNext={handleNext} />;
       case 'personal_info':
         return <PersonalInfo onBack={handleBack} onNext={handleNext} user={user} />;
       case 'profile_picture':

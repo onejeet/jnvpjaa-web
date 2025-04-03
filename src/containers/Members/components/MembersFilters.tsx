@@ -1,4 +1,5 @@
 import TextField from '@/components/core/TextField';
+import { useAuth } from '@/context/AuthContext';
 import { debounce, getBatchOptions } from '@/utils/helpers';
 import { Box, Grid2 as Grid, MenuItem, Select } from '@mui/material';
 import { MagnifyingGlass } from '@phosphor-icons/react';
@@ -7,6 +8,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 const MembersFilters = () => {
+  const { isAdmin } = useAuth();
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -74,20 +76,22 @@ const MembersFilters = () => {
           ))}
         </Select>
       </Grid>
-      {/* <Grid size={{ xs: 12, sm: 6, md: 2 }}>
-        <Select
-          key={searchParams.get('verified')}
-          name="is_verified"
-          displayEmpty
-          size="small"
-          defaultValue={searchParams.get('verified') || ''}
-          onChange={(e) => handleFilterChange('verified', e.target.value)}
-        >
-          <MenuItem value="">All</MenuItem>
-          <MenuItem value="true">Verified</MenuItem>
-          <MenuItem value="false">Pending Verification</MenuItem>
-        </Select>
-      </Grid> */}
+      {isAdmin && (
+        <Grid size={{ xs: 12, sm: 6, md: 2 }}>
+          <Select
+            key={searchParams.get('verified')}
+            name="is_verified"
+            displayEmpty
+            size="small"
+            defaultValue={searchParams.get('verified') || ''}
+            onChange={(e) => handleFilterChange('verified', e.target.value)}
+          >
+            <MenuItem value="">All</MenuItem>
+            <MenuItem value="true">Verified</MenuItem>
+            <MenuItem value="false">Pending Verification</MenuItem>
+          </Select>
+        </Grid>
+      )}
     </Box>
   );
 };

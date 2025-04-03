@@ -53,7 +53,7 @@ const useMembersTable = () => {
       {
         field: 'name',
         headerName: 'Alumni',
-        width: 300,
+        width: 400,
         flex: 1,
         ...commonTableColumnProps,
         sortable: true,
@@ -77,7 +77,7 @@ const useMembersTable = () => {
               title={
                 <Box display="flex" alignItems="center">
                   <Typography mr={0.5}>{`${row.firstName} ${row.lastName}`}</Typography>
-                  {row.isVerified && <VerifiedBadge />}
+                  {row.isVerified && <VerifiedBadge isPrivate={row?.isConfidential} />}
                   {row.batch === 0 && <FacultyBadge />}
                 </Box>
               }

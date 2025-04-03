@@ -142,6 +142,7 @@ const LayoutFooter: React.FC = () => {
                     title={name}
                   >
                     <IconButton
+                      title={name}
                       sx={{
                         bgcolor: 'transparent',
                         color: 'grey.800',
