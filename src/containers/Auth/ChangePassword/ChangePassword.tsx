@@ -5,8 +5,11 @@ import { useRouter } from 'next/router';
 import { useAuth } from '@/context/AuthContext';
 import ChangePasswordForm from './ChangePasswordForm';
 
-const ChangePassword = () => {
-  const router = useRouter();
+interface ChangePasswordProps {
+  onNext?: () => void;
+}
+
+const ChangePassword: React.FC<ChangePasswordProps> = ({ onNext }) => {
   const { user } = useAuth();
 
   return (
@@ -21,10 +24,10 @@ const ChangePassword = () => {
       }}
     >
       <Card
-        elevation={3}
+        elevation={onNext ? 0 : 3}
         sx={{
           maxWidth: 400,
-          bgcolor: 'grey.100',
+          bgcolor: onNext ? 'transparent' : 'grey.100',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -32,7 +35,7 @@ const ChangePassword = () => {
           position: 'relative',
         }}
       >
-        <GlobalBgShade />
+        {!onNext && <GlobalBgShade />}
         <Image
           src={'/assets/svg/profile-website-icon.svg'}
           width={200}
@@ -46,7 +49,7 @@ const ChangePassword = () => {
           {`Please submit new password for ${user?.email}`}
         </Typography>
 
-        <ChangePasswordForm />
+        <ChangePasswordForm onNext={onNext} />
       </Card>
     </Box>
   );

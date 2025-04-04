@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useForm, useWatch } from 'react-hook-form';
-import { Box, Typography } from '@mui/material';
+import { Box, BoxProps, Typography } from '@mui/material';
 import FormTextField from '@/components/form/FormTextField';
 import { useAlert } from '@/context/AlertContext';
 import Button from '@/components/core/Button';
@@ -11,9 +11,14 @@ import { Info } from '@mui/icons-material';
 import { useResetPasswordMutation } from '@/apollo/hooks';
 import { useAuth } from '@/context/AuthContext';
 import { IForgotPasswordFormInput } from '../ForgotPassword/ForgotPassword.types';
+import { CheckCircle } from '@phosphor-icons/react';
 
-const ChangePasswordForm = () => {
-  const router = useRouter();
+interface ChangePasswordFormProps {
+  onNext?: () => void;
+  containerProps?: Partial<BoxProps>;
+}
+
+const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ onNext, containerProps = {} }) => {
   const { user, redirectOnSignin } = useAuth();
   const { showAlert } = useAlert();
   const {
@@ -37,11 +42,12 @@ const ChangePasswordForm = () => {
             type: 'success',
             message: 'Password reset successfully!',
           });
+          onNext?.();
           redirectOnSignin(true);
         },
       });
     },
-    [handlePasswordReset, showAlert, redirectOnSignin]
+    [handlePasswordReset, showAlert, redirectOnSignin, onNext]
   );
 
   return (
@@ -56,6 +62,7 @@ const ChangePasswordForm = () => {
         alignItems: 'center',
       }}
       gap={2.5}
+      {...containerProps}
     >
       <FormTextField
         fullWidth
@@ -95,8 +102,15 @@ const ChangePasswordForm = () => {
         The password must be a minimum of 8 characters in length and include at least one uppercase letter, one
         lowercase letter, and one numeric digit.
       </Typography>
-
-      <Button title="Change Password" type="submit" fullWidth loading={resetPasswordLoading} />
+      <Box width="100%" display="flex" ml={onNext ? 'auto' : 'none'}>
+        <Button
+          startIcon={<CheckCircle size={16} />}
+          title={onNext ? 'Change Password & Next' : 'Change Password'}
+          type="submit"
+          fullWidth
+          loading={resetPasswordLoading}
+        />
+      </Box>
     </Box>
   );
 };

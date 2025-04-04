@@ -12,6 +12,8 @@ import DataPrivacy from '@/modules/ProfileSetup/DataPrivacy';
 import { useRouter } from 'next/router';
 import { CheckCircle } from '@phosphor-icons/react';
 import Welcome from '@/components/common/Welcome/Welcome';
+import ChangePassword from '../Auth/ChangePassword/ChangePassword';
+import ChangePasswordFirst from './ChangePasswordFirst';
 
 const CustomStepIcon = (props: StepIconProps) => {
   const { active, completed, className } = props;
@@ -30,14 +32,17 @@ const ProfileSetup = () => {
   const { user } = useAuth();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
+  const isWelcomeSetup = React.useMemo(() => {
+    return router.query?.welcome === '1';
+  }, [router.query?.welcome]);
   console.log('TT: router', router.query);
 
   const steps = React.useMemo(
     () =>
-      router.query?.welcome === '1'
-        ? ['welcome', 'personal_info', 'profile_picture', 'addresses', 'privacy']
+      isWelcomeSetup
+        ? ['welcome', 'change_password', 'personal_info', 'profile_picture', 'addresses', 'privacy']
         : ['personal_info', 'profile_picture', 'addresses', 'privacy'],
-    [router.query]
+    [isWelcomeSetup]
   );
 
   const handleNext = React.useCallback(async () => {
@@ -57,6 +62,8 @@ const ProfileSetup = () => {
     switch (step) {
       case 'welcome':
         return <Welcome onNext={handleNext} />;
+      case 'change_password':
+        return <ChangePasswordFirst onNext={handleNext} />;
       case 'personal_info':
         return <PersonalInfo onBack={handleBack} onNext={handleNext} user={user} />;
       case 'profile_picture':
@@ -66,7 +73,7 @@ const ProfileSetup = () => {
       case 'privacy':
         return <DataPrivacy isLastStep onBack={handleBack} onNext={handleNext} user={user} />;
     }
-  }, [activeStepIndex, user, handleNext, handleBack]);
+  }, [activeStepIndex, user, handleNext, handleBack, steps]);
 
   return (
     <LayoutModule disableCover title={`${'Profile Setup'} • Alumni Network of JNV Paota, Jaipur`}>
@@ -74,11 +81,14 @@ const ProfileSetup = () => {
         <Stepper activeStep={activeStepIndex} orientation={'horizontal'}>
           {isMobile ? (
             <Step>
-              <StepLabel slots={{ stepIcon: CustomStepIcon }}>{getFormattedLabel(steps?.[activeStepIndex])}</StepLabel>
+              <StepLabel>{getFormattedLabel(steps?.[activeStepIndex])}</StepLabel>
             </Step>
           ) : (
             steps.map((label, index) => (
-              <Step key={index} onClick={() => setActiveStepIndex(index)}>
+              <Step
+                key={index}
+                onClick={() => (isWelcomeSetup && index > activeStepIndex ? null : setActiveStepIndex(index))}
+              >
                 <StepLabel>{getFormattedLabel(label)}</StepLabel>
               </Step>
             ))
