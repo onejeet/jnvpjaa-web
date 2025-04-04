@@ -193,7 +193,7 @@ const DataPrivacy: React.FC<DataPrivacyProps> = ({ user, isLastStep, onNext, onB
             />
           )}
           <Button
-            title={onNext ? 'Update & Next' : 'Update'}
+            title={onNext ? 'Update & Finish' : 'Update'}
             onClick={() => onSubmit()}
             startIcon={<CheckCircle size={16} />}
             loading={loading}

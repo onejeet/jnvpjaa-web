@@ -1,41 +1,38 @@
-import React, { useEffect, useRef, useCallback } from 'react';
-import Confetti from 'react-canvas-confetti';
+'use client';
+
+import React, { useEffect } from 'react';
+import confetti from 'canvas-confetti';
+import { useTheme } from '@mui/material';
 
 const CelebratonConfetti: React.FC = () => {
-  const refAnimationInstance = useRef<((options?: any) => void) | null>(null);
-  const duration = 5000; // 5 seconds
-
-  const getInstance = useCallback((instance: ((options?: any) => void) | null) => {
-    refAnimationInstance.current = instance;
-  }, []);
-
-  const fire = useCallback(() => {
-    if (refAnimationInstance.current) {
-      refAnimationInstance.current({
-        particleCount: 50,
-        spread: 60,
-        startVelocity: 30,
-        decay: 0.9,
-        scalar: 1.2,
-        origin: { y: 0.6 },
-      });
-    }
-  }, []);
+  const theme = useTheme();
 
   useEffect(() => {
-    const endTime = Date.now() + duration;
+    let count = 0;
+    const maxCount = 3;
+
     const interval = setInterval(() => {
-      if (Date.now() > endTime) {
+      if (count >= maxCount) {
         clearInterval(interval);
-      } else {
-        fire();
+        return;
       }
-    }, 250);
 
-    return () => clearInterval(interval);
-  }, [fire]);
+      confetti({
+        particleCount: 1000,
+        spread: 120,
+        shapes: ['star', 'square', 'circle'],
+        scalar: 1,
+        origin: { y: 0.6 },
+        zIndex: theme.zIndex.appBar + 1,
+      });
 
-  return <Confetti refConfetti={getInstance} />;
+      count++;
+    }, 1000); // interval in ms (0.8s between bursts)
+
+    return () => clearInterval(interval); // clean up if component unmounts
+  }, []);
+
+  return null; // This component doesn't render anything
 };
 
 export default CelebratonConfetti;

@@ -63,7 +63,7 @@ export default function ProfilePage() {
           </Box>
         </Box>
       </LayoutModule>
-      <CelebratonConfetti />
+      {isBirthday && <CelebratonConfetti />}
     </>
   );
 }

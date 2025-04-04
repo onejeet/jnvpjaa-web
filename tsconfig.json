@@ -23,6 +23,7 @@
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
+    "allowUmdGlobalAccess": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
