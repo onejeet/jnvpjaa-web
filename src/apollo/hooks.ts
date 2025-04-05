@@ -250,6 +250,7 @@ export type Mutation = {
   removeBatchCoordinator?: Maybe<Scalars['Boolean']['output']>;
   requestChangesBlog?: Maybe<Blog>;
   resetPassword?: Maybe<Scalars['Boolean']['output']>;
+  sendMassEmail?: Maybe<Scalars['Boolean']['output']>;
   signin?: Maybe<AuthPayload>;
   signup?: Maybe<User>;
   updateAddress?: Maybe<Address>;
@@ -376,6 +377,12 @@ export type MutationRequestChangesBlogArgs = {
 export type MutationResetPasswordArgs = {
   newPassword: Scalars['String']['input'];
   token?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type MutationSendMassEmailArgs = {
+  context?: InputMaybe<Scalars['JSON']['input']>;
+  subject: Scalars['String']['input'];
+  template: Scalars['String']['input'];
 };
 
 export type MutationSigninArgs = {
@@ -1577,6 +1584,14 @@ export type ResetPasswordMutationVariables = Exact<{
 }>;
 
 export type ResetPasswordMutation = { __typename?: 'Mutation'; resetPassword?: boolean | undefined };
+
+export type SendMassEmailMutationVariables = Exact<{
+  context?: InputMaybe<Scalars['JSON']['input']>;
+  subject: Scalars['String']['input'];
+  template: Scalars['String']['input'];
+}>;
+
+export type SendMassEmailMutation = { __typename?: 'Mutation'; sendMassEmail?: boolean | undefined };
 
 export type SigninMutationVariables = Exact<{
   email: Scalars['String']['input'];
@@ -4320,6 +4335,44 @@ export type ResetPasswordMutationResult = Apollo.MutationResult<ResetPasswordMut
 export type ResetPasswordMutationOptions = Apollo.BaseMutationOptions<
   ResetPasswordMutation,
   ResetPasswordMutationVariables
+>;
+export const SendMassEmailDocument = gql`
+  mutation sendMassEmail($context: JSON, $subject: String!, $template: String!) {
+    sendMassEmail(context: $context, subject: $subject, template: $template)
+  }
+`;
+export type SendMassEmailMutationFn = Apollo.MutationFunction<SendMassEmailMutation, SendMassEmailMutationVariables>;
+
+/**
+ * __useSendMassEmailMutation__
+ *
+ * To run a mutation, you first call `useSendMassEmailMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSendMassEmailMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [sendMassEmailMutation, { data, loading, error }] = useSendMassEmailMutation({
+ *   variables: {
+ *      context: // value for 'context'
+ *      subject: // value for 'subject'
+ *      template: // value for 'template'
+ *   },
+ * });
+ */
+export function useSendMassEmailMutation(
+  baseOptions?: Apollo.MutationHookOptions<SendMassEmailMutation, SendMassEmailMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<SendMassEmailMutation, SendMassEmailMutationVariables>(SendMassEmailDocument, options);
+}
+export type SendMassEmailMutationHookResult = ReturnType<typeof useSendMassEmailMutation>;
+export type SendMassEmailMutationResult = Apollo.MutationResult<SendMassEmailMutation>;
+export type SendMassEmailMutationOptions = Apollo.BaseMutationOptions<
+  SendMassEmailMutation,
+  SendMassEmailMutationVariables
 >;
 export const SigninDocument = gql`
   mutation signin($email: String!, $password: String!) {
