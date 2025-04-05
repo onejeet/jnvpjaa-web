@@ -57,7 +57,7 @@ const LayoutTopbar: React.FC = () => {
   const theme = useTheme();
   const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const { user, logoutUser, redirectToSignin } = useAuth();
+  const { user, logoutUser, isAdmin, redirectToSignin } = useAuth();
 
   const HEADER_MENU = React.useMemo(() => {
     return getHeaderMenu(Boolean(user?.id));
@@ -129,10 +129,13 @@ const LayoutTopbar: React.FC = () => {
             py: '12px',
             fontSize: '14px',
             fontWeight: 400,
-            textAlign: 'center',
+            // textAlign: 'center',
             color: 'grey.900',
             transition: 'all 0.2s linear',
             cursor: 'default',
+            display: 'flex',
+            alignItems: 'start',
+            flexDirection: 'column',
             pointerEvents: 'none',
             svg: {
               mr: '10px',
@@ -149,7 +152,22 @@ const LayoutTopbar: React.FC = () => {
             // },
           }}
         >
-          {isBirthday ? (
+          <Typography
+            color="text.primary"
+            textAlign="left"
+            variant="body1"
+            fontWeight={500}
+            sx={{
+              pr: 4,
+              background: 'linear-gradient(90deg,#C62835 0,#217bfe 70%, #078efb 100%)',
+              backgroundClip: 'text',
+              color: 'transparent',
+            }}
+          >
+            {`Hello ${user?.firstName} 👋`}
+          </Typography>
+
+          {isBirthday && (
             <Box display="flex" overflow="hidden" alignItems="center">
               {/* <Cake size={32} /> */}
               <Typography
@@ -159,29 +177,15 @@ const LayoutTopbar: React.FC = () => {
                   color: 'transparent',
                   fontWeight: 500,
                 }}
+                fontSize="14px"
                 variant="body1"
               >
-                {`Happy Birthday ${user?.firstName}`}
+                {`Wish you a very happy birtday.`}
               </Typography>
               <Box maxWidth={50} maxHeight={30} display="flex" overflow="hidden" alignItems="center">
                 <Lottie animationData={giftsLottieIcon} loop={true} style={{ width: '100px', height: '50px' }} />
               </Box>
             </Box>
-          ) : (
-            <Typography
-              color="text.primary"
-              textAlign="left"
-              variant="body1"
-              fontWeight={500}
-              sx={{
-                pr: 4,
-                background: 'linear-gradient(90deg,#C62835 0,#217bfe 70%, #078efb 100%)',
-                backgroundClip: 'text',
-                color: 'transparent',
-              }}
-            >
-              {`Hello ${user?.firstName} 👋`}
-            </Typography>
           )}
         </MenuItem>
         {ACCOUNT_MENU_LIST?.map((mItem: Record<string, any>) => (
