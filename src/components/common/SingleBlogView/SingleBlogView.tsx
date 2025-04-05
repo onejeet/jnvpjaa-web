@@ -6,16 +6,18 @@ import dayjs from 'dayjs';
 import { CalendarDots, Dot, DotOutline, HandsClapping } from '@phosphor-icons/react';
 import ProfilePicture from '../ProfilePicture';
 import { BlogStatus } from '@/apollo/hooks';
-import { getFormattedLabel, startCase } from '@/utils/helpers';
+import { debounce, getFormattedLabel, startCase } from '@/utils/helpers';
 import ClapButton from '../ClapButton';
 
 const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateClap }) => {
-  const { id, title, author, content, claps, status, updatedAt } = blog || {};
+  const { id, title, author, content, claps: initialClaps, status, updatedAt } = blog || {};
   const [sanitizedContent, setSanitizedContent] = React.useState('');
   const [newClaps, setNewClaps] = React.useState(0);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const updateClapRef = React.useRef(updateClap);
+  updateClapRef.current = updateClap;
 
   React.useEffect(() => {
     setSanitizedContent(DOMPurify.sanitize(content || ''));
@@ -28,6 +30,17 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateC
   }, [status]);
 
   // TODO: UPDATE CLAPS VIA API
+
+  const onClaps = (claps: number) => {
+    setNewClaps(claps);
+    onClapsDebounce(claps);
+  };
+
+  const onClapsDebounce = React.useRef(
+    debounce((claps: number) => {
+      updateClap(claps);
+    }, 800)
+  ).current;
 
   return (
     <Card sx={{ position: 'relative' }} className="single-blog">
@@ -109,7 +122,7 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateC
               src={author?.profileImage}
               summary={`Batch of ${author?.batch || ''}`}
             />
-            {id && <ClapButton initialClaps={claps || 10} claps={newClaps} setClaps={setNewClaps} />}
+            {id && <ClapButton initialClaps={initialClaps} claps={newClaps} setClaps={onClaps} />}
           </Box>
         </Box>
 
@@ -144,7 +157,7 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateC
               }}
               dangerouslySetInnerHTML={{ __html: sanitizedContent }}
             />
-            {id && <ClapButton initialClaps={claps || 10} claps={newClaps} setClaps={setNewClaps} author={author} />}
+            {id && <ClapButton initialClaps={initialClaps} claps={newClaps} setClaps={onClaps} author={author} />}
           </>
         )}
       </Box>

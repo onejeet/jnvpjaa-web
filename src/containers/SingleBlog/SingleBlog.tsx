@@ -5,6 +5,8 @@ import {
   useGetBlogQuery,
   useUpdateBlogMutation,
   useUpdateClapsMutation,
+  GetBlogQuery,
+  GetBlogDocument,
 } from '@/apollo/hooks';
 import Breadcrumbs from '@/components/common/Breadcrumbs';
 import EmptyView from '@/components/common/EmptyView';
@@ -15,6 +17,7 @@ import { paths } from '@/config/paths';
 import { useAlert } from '@/context/AlertContext';
 import { useAuth } from '@/context/AuthContext';
 import LayoutModule from '@/layouts/Layout';
+import { updateCache } from '@/utils/apollo';
 import { useApolloClient } from '@apollo/client';
 import { Box } from '@mui/material';
 import { CheckCircle, Eye, Pencil } from '@phosphor-icons/react';
@@ -249,15 +252,33 @@ const SingleBlog = () => {
     },
     [isAdmin]
   );
-  const updateClap = React.useCallback((claps: number) => {
-    if (claps > 0) {
-      blogClapUpdate({
-        variables: {
-          claps,
-        },
-      });
-    }
-  }, []);
+  const updateClap = React.useCallback(
+    (claps: number) => {
+      console.log('ZZ: updateClap', claps, id);
+      if (claps > 0 && id) {
+        blogClapUpdate({
+          variables: {
+            slug: id as string,
+            claps,
+          },
+          onCompleted: () => {
+            updateCache({
+              client,
+              query: GetBlogDocument,
+              data: {
+                ...blog,
+                claps: (blog?.claps || 0) + claps,
+              },
+              variables: {
+                slug: id as string,
+              },
+            });
+          },
+        });
+      }
+    },
+    [id, client, blog]
+  );
 
   return (
     <LayoutModule disableCover title={`${blog?.title || 'Blog'} • Alumni Network of JNV Paota, Jaipur`}>

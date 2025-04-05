@@ -7,7 +7,7 @@ interface ClapButtonProps {
   initialClaps?: number;
   author?: UserBasic;
   claps?: number;
-  setClaps: React.Dispatch<React.SetStateAction<number>>;
+  setClaps: (claps: number) => void;
 }
 
 const ClapButton: React.FC<ClapButtonProps> = ({ initialClaps = 0, author, claps = 0, setClaps }) => {
@@ -23,7 +23,7 @@ const ClapButton: React.FC<ClapButtonProps> = ({ initialClaps = 0, author, claps
   }, [claps]);
 
   const handleClap = () => {
-    setClaps((prev) => prev + 1);
+    setClaps(claps + 1);
     setShowTooltip(true);
   };
 

@@ -419,7 +419,7 @@ export type MutationUpdateBlogArgs = {
 
 export type MutationUpdateClapsArgs = {
   claps: Scalars['Int']['input'];
-  id: Scalars['String']['input'];
+  slug: Scalars['String']['input'];
 };
 
 export type MutationUpdateEventArgs = {
@@ -1825,7 +1825,7 @@ export type UpdateBlogMutation = {
 
 export type UpdateClapsMutationVariables = Exact<{
   claps: Scalars['Int']['input'];
-  id: Scalars['String']['input'];
+  slug: Scalars['String']['input'];
 }>;
 
 export type UpdateClapsMutation = { __typename?: 'Mutation'; updateClaps?: boolean | undefined };
@@ -4708,8 +4708,8 @@ export type UpdateBlogMutationHookResult = ReturnType<typeof useUpdateBlogMutati
 export type UpdateBlogMutationResult = Apollo.MutationResult<UpdateBlogMutation>;
 export type UpdateBlogMutationOptions = Apollo.BaseMutationOptions<UpdateBlogMutation, UpdateBlogMutationVariables>;
 export const UpdateClapsDocument = gql`
-  mutation updateClaps($claps: Int!, $id: String!) {
-    updateClaps(claps: $claps, id: $id)
+  mutation updateClaps($claps: Int!, $slug: String!) {
+    updateClaps(claps: $claps, slug: $slug)
   }
 `;
 export type UpdateClapsMutationFn = Apollo.MutationFunction<UpdateClapsMutation, UpdateClapsMutationVariables>;
@@ -4728,7 +4728,7 @@ export type UpdateClapsMutationFn = Apollo.MutationFunction<UpdateClapsMutation,
  * const [updateClapsMutation, { data, loading, error }] = useUpdateClapsMutation({
  *   variables: {
  *      claps: // value for 'claps'
- *      id: // value for 'id'
+ *      slug: // value for 'slug'
  *   },
  * });
  */
