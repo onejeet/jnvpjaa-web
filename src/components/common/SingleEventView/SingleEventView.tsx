@@ -15,8 +15,10 @@ import {
   Skeleton,
   Tooltip,
   Divider,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
-import { EventCardProps } from './EventCard.types';
+import { SingleEventViewProps } from './SingleEventView.types';
 import Button from '@/components/core/Button';
 import { getAvatarDataUrl, startCase, valueToLabelFormatter } from '@/utils/helpers';
 import {
@@ -35,12 +37,13 @@ import {
   XCircle,
 } from '@phosphor-icons/react';
 import { EventStatus, Maybe, User, UserBasic } from '@/apollo/hooks';
-import ProfilePicture from '../ProfilePicture';
 import { paths } from '@/config/paths';
 import { useRouter } from 'next/router';
 import CopyContentButton from '@/components/common/CopyContentButton';
+import UserListDialog from '../UserListDialog/UserListDialog';
+import ProfilePicture from '../ProfilePicture';
 
-const EventCard: React.FC<EventCardProps> = ({
+const EventCard: React.FC<SingleEventViewProps> = ({
   user,
   isAdmin,
   verifyEvent,
@@ -52,7 +55,10 @@ const EventCard: React.FC<EventCardProps> = ({
   showDescription,
   isReadOnly,
 }) => {
+  const [openAttendiesDialog, setOpenAttendiesDialog] = React.useState<boolean>(false);
+  const theme = useTheme();
   const router = useRouter();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const {
     id,
     title = '',
@@ -68,12 +74,12 @@ const EventCard: React.FC<EventCardProps> = ({
     total_attendies,
     attendees: people,
     status,
+    organizers,
     createdBy,
     short_url = '',
   } = event || {};
 
   const isRSVPDone = React.useMemo(() => {
-    // @ts-expect-error type error
     return attendees && attendees?.findIndex((att: UserBasic) => att?.id === user?.id) !== -1;
   }, [attendees, user]);
 
@@ -133,20 +139,13 @@ const EventCard: React.FC<EventCardProps> = ({
           sx={{ ml: 'auto', position: ' absolute', top: '10px', right: '10px', px: 2, zIndex: 10 }}
         />
       ) : null}
-      {!loading && total_attendies && total_attendies > 0 ? (
-        <Chip
-          label={`${total_attendies} Going`}
-          color="success"
-          size="small"
-          sx={{ ml: 'auto', position: ' absolute', top: '10px', right: '10px', px: 2, zIndex: 10 }}
-        />
-      ) : null}
+
       {loading ? (
         <Skeleton variant="rounded" width="100%" height={180} />
       ) : (
         <CardMedia
           component="img"
-          height="180"
+          height={isMobile ? '300' : '400'}
           src={image || `https://picsum.photos/seed/${title}/600/200`}
           alt="Event Image"
           referrerPolicy="no-referrer"
@@ -163,7 +162,7 @@ const EventCard: React.FC<EventCardProps> = ({
           <Box display="flex" alignItems="center">
             <Typography
               className="event_title"
-              variant="h2"
+              variant="h1"
               component="div"
               fontWeight="bold"
               onClick={() => {
@@ -321,12 +320,43 @@ const EventCard: React.FC<EventCardProps> = ({
           )}
         </Box>
 
+        {organizers && organizers?.length > 0 && (
+          <Box mt={2}>
+            <Typography fontWeight={400} color="grey.600" variant="body1">
+              Organiser(s)
+            </Typography>
+            <Stack direction="row" spacing={1} mt={1} sx={{ cursor: 'pointer' }}>
+              <ProfilePicture
+                src={organizers?.[0]?.profileImage}
+                title={`${organizers?.[0]?.firstName || 'NA'} ${organizers?.[0]?.lastName || ''}`}
+                summary={`Batch of ${organizers?.[0]?.batch}`}
+                id={organizers?.[0]?.id}
+                titleComponentProps={{
+                  titleProps: {
+                    fontWeight: 400,
+                  },
+                  summaryProps: {
+                    fontSize: '12px',
+                    color: 'grey.600',
+                  },
+                }}
+              />
+            </Stack>
+          </Box>
+        )}
+
         {people && people?.length > 0 && (
           <Box mt={2}>
-            <Typography color="grey.600" variant="body2">
-              Going:
+            <Typography fontWeight={400} color="grey.600" variant="body1">
+              {`Going ${total_attendies && total_attendies > 0 ? `(${total_attendies})` : ''}:`}
             </Typography>
-            <Stack direction="row" spacing={1}>
+            <Stack
+              direction="row"
+              spacing={1}
+              mt={1}
+              sx={{ cursor: 'pointer' }}
+              onClick={() => setOpenAttendiesDialog(true)}
+            >
               <AvatarGroup
                 total={people?.length}
                 slotProps={{
@@ -439,6 +469,14 @@ const EventCard: React.FC<EventCardProps> = ({
           </Box>
         )}
       </CardContent>
+      {Boolean(openAttendiesDialog) && (
+        <UserListDialog
+          title="Attending Event"
+          open={openAttendiesDialog}
+          onClose={() => setOpenAttendiesDialog(false)}
+          users={people}
+        />
+      )}
     </Card>
   );
 };

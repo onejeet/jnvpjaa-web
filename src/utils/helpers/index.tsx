@@ -2,6 +2,7 @@ import { adventurerNeutral, bottts, botttsNeutral, thumbs } from '@dicebear/coll
 import { createAvatar } from '@dicebear/core';
 import { EnvelopeSimple, FacebookLogo, InstagramLogo, LinkedinLogo, XLogo, YoutubeLogo } from '@phosphor-icons/react';
 import dayjs from 'dayjs';
+
 import parsePhoneNumber from 'libphonenumber-js';
 
 export const getSocialMediaIcon = (iconName: string) => {

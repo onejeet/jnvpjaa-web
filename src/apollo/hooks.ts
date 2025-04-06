@@ -195,8 +195,28 @@ export type Event = {
   tags?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   ticketUrl?: Maybe<Scalars['String']['output']>;
   title: Scalars['String']['output'];
+  total_attendies?: Maybe<Scalars['Int']['output']>;
   /** Timestamp when the record was last updated */
   updatedAt: Scalars['DateTime']['output'];
+};
+
+export type EventBasic = {
+  __typename?: 'EventBasic';
+  adminRemark?: Maybe<Scalars['String']['output']>;
+  category?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  endDate?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['Int']['output'];
+  image?: Maybe<Scalars['String']['output']>;
+  location?: Maybe<Scalars['String']['output']>;
+  medium: Scalars['String']['output'];
+  short_url?: Maybe<Scalars['String']['output']>;
+  startDate: Scalars['DateTime']['output'];
+  status?: Maybe<EventStatus>;
+  summary: Scalars['String']['output'];
+  tags?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  title: Scalars['String']['output'];
+  total_attendies?: Maybe<Scalars['Int']['output']>;
 };
 
 export enum EventStatus {
@@ -217,7 +237,7 @@ export type FilterInput = {
 
 export type ListEventResponse = {
   __typename?: 'ListEventResponse';
-  data?: Maybe<Array<Maybe<Event>>>;
+  data?: Maybe<Array<Maybe<EventBasic>>>;
   total?: Maybe<Scalars['Int']['output']>;
 };
 
@@ -231,11 +251,11 @@ export type Mutation = {
   __typename?: 'Mutation';
   approveBlog?: Maybe<Blog>;
   assignBatchCoordinator?: Maybe<BatchCoordinator>;
-  attendEvent?: Maybe<Event>;
+  attendEvent?: Maybe<Scalars['Boolean']['output']>;
   createAddress?: Maybe<Address>;
   createBlog?: Maybe<Blog>;
   createComment?: Maybe<Comment>;
-  createEvent?: Maybe<Event>;
+  createEvent?: Maybe<EventBasic>;
   createTransaction?: Maybe<Transaction>;
   deleteAddress?: Maybe<Address>;
   deleteBlog?: Maybe<Blog>;
@@ -245,7 +265,7 @@ export type Mutation = {
   forgotPassword?: Maybe<Scalars['Boolean']['output']>;
   getPresignedUrl: Scalars['String']['output'];
   logout?: Maybe<Scalars['String']['output']>;
-  publishEvent?: Maybe<Event>;
+  publishEvent?: Maybe<Scalars['Boolean']['output']>;
   refreshToken?: Maybe<AuthPayload>;
   removeBatchCoordinator?: Maybe<Scalars['Boolean']['output']>;
   requestChangesBlog?: Maybe<Blog>;
@@ -257,7 +277,7 @@ export type Mutation = {
   updateBatchCoordinator?: Maybe<BatchCoordinator>;
   updateBlog?: Maybe<Blog>;
   updateClaps?: Maybe<Scalars['Boolean']['output']>;
-  updateEvent?: Maybe<Event>;
+  updateEvent?: Maybe<EventBasic>;
   updateTransaction?: Maybe<Transaction>;
   updateUser?: Maybe<User>;
   upsertMultipleAddresses?: Maybe<Array<Maybe<Address>>>;
@@ -788,71 +808,7 @@ export type AttendEventMutationVariables = Exact<{
   eventId: Scalars['Int']['input'];
 }>;
 
-export type AttendEventMutation = {
-  __typename?: 'Mutation';
-  attendEvent?:
-    | {
-        __typename?: 'Event';
-        adminRemark?: string | undefined;
-        category?: string | undefined;
-        createdAt: any;
-        createdBy?: string | undefined;
-        description?: string | undefined;
-        endDate?: any | undefined;
-        id: number;
-        image?: string | undefined;
-        location?: string | undefined;
-        medium: string;
-        price?: number | undefined;
-        short_url?: string | undefined;
-        startDate: any;
-        status?: EventStatus | undefined;
-        summary: string;
-        tags?: Array<string | undefined> | undefined;
-        ticketUrl?: string | undefined;
-        title: string;
-        updatedAt: any;
-        attendees?:
-          | Array<
-              | {
-                  __typename?: 'UserBasic';
-                  batch?: number | undefined;
-                  disabled?: boolean | undefined;
-                  dob?: any | undefined;
-                  firstName?: string | undefined;
-                  id?: string | undefined;
-                  isConfidential?: boolean | undefined;
-                  isFaculty?: boolean | undefined;
-                  isVerified?: boolean | undefined;
-                  lastName?: string | undefined;
-                  profileImage?: string | undefined;
-                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
-                }
-              | undefined
-            >
-          | undefined;
-        organizers?:
-          | Array<
-              | {
-                  __typename?: 'UserBasic';
-                  batch?: number | undefined;
-                  disabled?: boolean | undefined;
-                  dob?: any | undefined;
-                  firstName?: string | undefined;
-                  id?: string | undefined;
-                  isConfidential?: boolean | undefined;
-                  isFaculty?: boolean | undefined;
-                  isVerified?: boolean | undefined;
-                  lastName?: string | undefined;
-                  profileImage?: string | undefined;
-                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
-                }
-              | undefined
-            >
-          | undefined;
-      }
-    | undefined;
-};
+export type AttendEventMutation = { __typename?: 'Mutation'; attendEvent?: boolean | undefined };
 
 export type CreateAddressMutationVariables = Exact<{
   address?: InputMaybe<Scalars['String']['input']>;
@@ -1011,64 +967,22 @@ export type CreateEventMutation = {
   __typename?: 'Mutation';
   createEvent?:
     | {
-        __typename?: 'Event';
+        __typename?: 'EventBasic';
         adminRemark?: string | undefined;
         category?: string | undefined;
-        createdAt: any;
-        createdBy?: string | undefined;
         description?: string | undefined;
         endDate?: any | undefined;
         id: number;
         image?: string | undefined;
         location?: string | undefined;
         medium: string;
-        price?: number | undefined;
         short_url?: string | undefined;
         startDate: any;
         status?: EventStatus | undefined;
         summary: string;
         tags?: Array<string | undefined> | undefined;
-        ticketUrl?: string | undefined;
         title: string;
-        updatedAt: any;
-        attendees?:
-          | Array<
-              | {
-                  __typename?: 'UserBasic';
-                  batch?: number | undefined;
-                  disabled?: boolean | undefined;
-                  dob?: any | undefined;
-                  firstName?: string | undefined;
-                  id?: string | undefined;
-                  isConfidential?: boolean | undefined;
-                  isFaculty?: boolean | undefined;
-                  isVerified?: boolean | undefined;
-                  lastName?: string | undefined;
-                  profileImage?: string | undefined;
-                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
-                }
-              | undefined
-            >
-          | undefined;
-        organizers?:
-          | Array<
-              | {
-                  __typename?: 'UserBasic';
-                  batch?: number | undefined;
-                  disabled?: boolean | undefined;
-                  dob?: any | undefined;
-                  firstName?: string | undefined;
-                  id?: string | undefined;
-                  isConfidential?: boolean | undefined;
-                  isFaculty?: boolean | undefined;
-                  isVerified?: boolean | undefined;
-                  lastName?: string | undefined;
-                  profileImage?: string | undefined;
-                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
-                }
-              | undefined
-            >
-          | undefined;
+        total_attendies?: number | undefined;
       }
     | undefined;
 };
@@ -1390,71 +1304,7 @@ export type PublishEventMutationVariables = Exact<{
   status: EventStatus;
 }>;
 
-export type PublishEventMutation = {
-  __typename?: 'Mutation';
-  publishEvent?:
-    | {
-        __typename?: 'Event';
-        adminRemark?: string | undefined;
-        category?: string | undefined;
-        createdAt: any;
-        createdBy?: string | undefined;
-        description?: string | undefined;
-        endDate?: any | undefined;
-        id: number;
-        image?: string | undefined;
-        location?: string | undefined;
-        medium: string;
-        price?: number | undefined;
-        short_url?: string | undefined;
-        startDate: any;
-        status?: EventStatus | undefined;
-        summary: string;
-        tags?: Array<string | undefined> | undefined;
-        ticketUrl?: string | undefined;
-        title: string;
-        updatedAt: any;
-        attendees?:
-          | Array<
-              | {
-                  __typename?: 'UserBasic';
-                  batch?: number | undefined;
-                  disabled?: boolean | undefined;
-                  dob?: any | undefined;
-                  firstName?: string | undefined;
-                  id?: string | undefined;
-                  isConfidential?: boolean | undefined;
-                  isFaculty?: boolean | undefined;
-                  isVerified?: boolean | undefined;
-                  lastName?: string | undefined;
-                  profileImage?: string | undefined;
-                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
-                }
-              | undefined
-            >
-          | undefined;
-        organizers?:
-          | Array<
-              | {
-                  __typename?: 'UserBasic';
-                  batch?: number | undefined;
-                  disabled?: boolean | undefined;
-                  dob?: any | undefined;
-                  firstName?: string | undefined;
-                  id?: string | undefined;
-                  isConfidential?: boolean | undefined;
-                  isFaculty?: boolean | undefined;
-                  isVerified?: boolean | undefined;
-                  lastName?: string | undefined;
-                  profileImage?: string | undefined;
-                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
-                }
-              | undefined
-            >
-          | undefined;
-      }
-    | undefined;
-};
+export type PublishEventMutation = { __typename?: 'Mutation'; publishEvent?: boolean | undefined };
 
 export type RefreshTokenMutationVariables = Exact<{ [key: string]: never }>;
 
@@ -1864,64 +1714,22 @@ export type UpdateEventMutation = {
   __typename?: 'Mutation';
   updateEvent?:
     | {
-        __typename?: 'Event';
+        __typename?: 'EventBasic';
         adminRemark?: string | undefined;
         category?: string | undefined;
-        createdAt: any;
-        createdBy?: string | undefined;
         description?: string | undefined;
         endDate?: any | undefined;
         id: number;
         image?: string | undefined;
         location?: string | undefined;
         medium: string;
-        price?: number | undefined;
         short_url?: string | undefined;
         startDate: any;
         status?: EventStatus | undefined;
         summary: string;
         tags?: Array<string | undefined> | undefined;
-        ticketUrl?: string | undefined;
         title: string;
-        updatedAt: any;
-        attendees?:
-          | Array<
-              | {
-                  __typename?: 'UserBasic';
-                  batch?: number | undefined;
-                  disabled?: boolean | undefined;
-                  dob?: any | undefined;
-                  firstName?: string | undefined;
-                  id?: string | undefined;
-                  isConfidential?: boolean | undefined;
-                  isFaculty?: boolean | undefined;
-                  isVerified?: boolean | undefined;
-                  lastName?: string | undefined;
-                  profileImage?: string | undefined;
-                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
-                }
-              | undefined
-            >
-          | undefined;
-        organizers?:
-          | Array<
-              | {
-                  __typename?: 'UserBasic';
-                  batch?: number | undefined;
-                  disabled?: boolean | undefined;
-                  dob?: any | undefined;
-                  firstName?: string | undefined;
-                  id?: string | undefined;
-                  isConfidential?: boolean | undefined;
-                  isFaculty?: boolean | undefined;
-                  isVerified?: boolean | undefined;
-                  lastName?: string | undefined;
-                  profileImage?: string | undefined;
-                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
-                }
-              | undefined
-            >
-          | undefined;
+        total_attendies?: number | undefined;
       }
     | undefined;
 };
@@ -2426,6 +2234,7 @@ export type GetEventDetailsQuery = {
         tags?: Array<string | undefined> | undefined;
         ticketUrl?: string | undefined;
         title: string;
+        total_attendies?: number | undefined;
         updatedAt: any;
         attendees?:
           | Array<
@@ -2482,68 +2291,22 @@ export type GetEventListQuery = {
         data?:
           | Array<
               | {
-                  __typename?: 'Event';
+                  __typename?: 'EventBasic';
                   adminRemark?: string | undefined;
                   category?: string | undefined;
-                  createdAt: any;
-                  createdBy?: string | undefined;
                   description?: string | undefined;
                   endDate?: any | undefined;
                   id: number;
                   image?: string | undefined;
                   location?: string | undefined;
                   medium: string;
-                  price?: number | undefined;
                   short_url?: string | undefined;
                   startDate: any;
                   status?: EventStatus | undefined;
                   summary: string;
                   tags?: Array<string | undefined> | undefined;
-                  ticketUrl?: string | undefined;
                   title: string;
-                  updatedAt: any;
-                  attendees?:
-                    | Array<
-                        | {
-                            __typename?: 'UserBasic';
-                            batch?: number | undefined;
-                            disabled?: boolean | undefined;
-                            dob?: any | undefined;
-                            firstName?: string | undefined;
-                            id?: string | undefined;
-                            isConfidential?: boolean | undefined;
-                            isFaculty?: boolean | undefined;
-                            isVerified?: boolean | undefined;
-                            lastName?: string | undefined;
-                            profileImage?: string | undefined;
-                            role?:
-                              | { __typename?: 'Role'; id?: string | undefined; name?: string | undefined }
-                              | undefined;
-                          }
-                        | undefined
-                      >
-                    | undefined;
-                  organizers?:
-                    | Array<
-                        | {
-                            __typename?: 'UserBasic';
-                            batch?: number | undefined;
-                            disabled?: boolean | undefined;
-                            dob?: any | undefined;
-                            firstName?: string | undefined;
-                            id?: string | undefined;
-                            isConfidential?: boolean | undefined;
-                            isFaculty?: boolean | undefined;
-                            isVerified?: boolean | undefined;
-                            lastName?: string | undefined;
-                            profileImage?: string | undefined;
-                            role?:
-                              | { __typename?: 'Role'; id?: string | undefined; name?: string | undefined }
-                              | undefined;
-                          }
-                        | undefined
-                      >
-                    | undefined;
+                  total_attendies?: number | undefined;
                 }
               | undefined
             >
@@ -3011,59 +2774,7 @@ export type AssignBatchCoordinatorMutationOptions = Apollo.BaseMutationOptions<
 >;
 export const AttendEventDocument = gql`
   mutation attendEvent($eventId: Int!) {
-    attendEvent(eventId: $eventId) {
-      adminRemark
-      attendees {
-        batch
-        disabled
-        dob
-        firstName
-        id
-        isConfidential
-        isFaculty
-        isVerified
-        lastName
-        profileImage
-        role {
-          id
-          name
-        }
-      }
-      category
-      createdAt
-      createdBy
-      description
-      endDate
-      id
-      image
-      location
-      medium
-      organizers {
-        batch
-        disabled
-        dob
-        firstName
-        id
-        isConfidential
-        isFaculty
-        isVerified
-        lastName
-        profileImage
-        role {
-          id
-          name
-        }
-      }
-      price
-      short_url
-      startDate
-      status
-      summary
-      tags
-      ticketUrl
-      title
-      updatedAt
-    }
+    attendEvent(eventId: $eventId)
   }
 `;
 export type AttendEventMutationFn = Apollo.MutationFunction<AttendEventMutation, AttendEventMutationVariables>;
@@ -3342,56 +3053,20 @@ export const CreateEventDocument = gql`
       title: $title
     ) {
       adminRemark
-      attendees {
-        batch
-        disabled
-        dob
-        firstName
-        id
-        isConfidential
-        isFaculty
-        isVerified
-        lastName
-        profileImage
-        role {
-          id
-          name
-        }
-      }
       category
-      createdAt
-      createdBy
       description
       endDate
       id
       image
       location
       medium
-      organizers {
-        batch
-        disabled
-        dob
-        firstName
-        id
-        isConfidential
-        isFaculty
-        isVerified
-        lastName
-        profileImage
-        role {
-          id
-          name
-        }
-      }
-      price
       short_url
       startDate
       status
       summary
       tags
-      ticketUrl
       title
-      updatedAt
+      total_attendies
     }
   }
 `;
@@ -4008,59 +3683,7 @@ export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
 export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
 export const PublishEventDocument = gql`
   mutation publishEvent($eventId: Int!, $status: EventStatus!) {
-    publishEvent(eventId: $eventId, status: $status) {
-      adminRemark
-      attendees {
-        batch
-        disabled
-        dob
-        firstName
-        id
-        isConfidential
-        isFaculty
-        isVerified
-        lastName
-        profileImage
-        role {
-          id
-          name
-        }
-      }
-      category
-      createdAt
-      createdBy
-      description
-      endDate
-      id
-      image
-      location
-      medium
-      organizers {
-        batch
-        disabled
-        dob
-        firstName
-        id
-        isConfidential
-        isFaculty
-        isVerified
-        lastName
-        profileImage
-        role {
-          id
-          name
-        }
-      }
-      price
-      short_url
-      startDate
-      status
-      summary
-      tags
-      ticketUrl
-      title
-      updatedAt
-    }
+    publishEvent(eventId: $eventId, status: $status)
   }
 `;
 export type PublishEventMutationFn = Apollo.MutationFunction<PublishEventMutation, PublishEventMutationVariables>;
@@ -4824,56 +4447,20 @@ export const UpdateEventDocument = gql`
       title: $title
     ) {
       adminRemark
-      attendees {
-        batch
-        disabled
-        dob
-        firstName
-        id
-        isConfidential
-        isFaculty
-        isVerified
-        lastName
-        profileImage
-        role {
-          id
-          name
-        }
-      }
       category
-      createdAt
-      createdBy
       description
       endDate
       id
       image
       location
       medium
-      organizers {
-        batch
-        disabled
-        dob
-        firstName
-        id
-        isConfidential
-        isFaculty
-        isVerified
-        lastName
-        profileImage
-        role {
-          id
-          name
-        }
-      }
-      price
       short_url
       startDate
       status
       summary
       tags
-      ticketUrl
       title
-      updatedAt
+      total_attendies
     }
   }
 `;
@@ -5822,6 +5409,7 @@ export const GetEventDetailsDocument = gql`
       tags
       ticketUrl
       title
+      total_attendies
       updatedAt
     }
   }
@@ -5871,56 +5459,20 @@ export const GetEventListDocument = gql`
     getEventList(options: $options) {
       data {
         adminRemark
-        attendees {
-          batch
-          disabled
-          dob
-          firstName
-          id
-          isConfidential
-          isFaculty
-          isVerified
-          lastName
-          profileImage
-          role {
-            id
-            name
-          }
-        }
         category
-        createdAt
-        createdBy
         description
         endDate
         id
         image
         location
         medium
-        organizers {
-          batch
-          disabled
-          dob
-          firstName
-          id
-          isConfidential
-          isFaculty
-          isVerified
-          lastName
-          profileImage
-          role {
-            id
-            name
-          }
-        }
-        price
         short_url
         startDate
         status
         summary
         tags
-        ticketUrl
         title
-        updatedAt
+        total_attendies
       }
       total
     }
