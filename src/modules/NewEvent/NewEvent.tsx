@@ -244,12 +244,13 @@ const NewEvent = () => {
             rules={{
               required: 'Required',
             }}
+            helperText="Write about the event in minimal words possible."
           />
         </Grid>
         <Grid size={{ xs: 12 }}>
           <Box display="flex" flexDirection="column">
             <Typography color="grey.600" variant="body1" fontSize={14}>
-              Description
+              Description (optional)
             </Typography>
             <TipTapTextEditor value="" onChange={(data) => setValue('description', data)} />
           </Box>

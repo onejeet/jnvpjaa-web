@@ -54,8 +54,6 @@
     "browser-image-compression": "^2.0.2",
     "dayjs": "^1.11.13",
     "dompurify": "^3.2.4",
-    "embla-carousel-auto-scroll": "^8.2.1",
-    "embla-carousel-react": "^8.2.1",
     "graphql": "^16.10.0",
     "graphql-tag": "^2.12.6",
     "libphonenumber-js": "^1.11.20",

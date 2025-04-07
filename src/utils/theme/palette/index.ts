@@ -135,6 +135,7 @@ const DefaultPalette = (mode: PaletteMode): DefaultPaletteOptions => {
     background: isLightMode
       ? {
           default: '#ffffff',
+          // default: '#979788',
         }
       : {
           default: BACKGROUND_COLOR,
