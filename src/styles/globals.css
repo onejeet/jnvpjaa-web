@@ -58,27 +58,27 @@ input[type='number'] {
   }
 }
 
-.single-blog-content a,
+.rich_content a,
 .tiptap a {
   color: #c62835;
   text-decoration: none;
   transition: all 0.4s linear;
 }
-.single-blog-content a:hover,
+.rich_content a:hover,
 .tiptap a:hover {
   text-decoration: underline;
 }
 
-/* .single-blog-content a::after{
+/* .rich_content a::after{
   
 } */
 
-.single-blog-content h1,
-.single-blog-content h2,
-.single-blog-content h3,
-.single-blog-content h4,
-.single-blog-content h5,
-.single-blog-content h6,
+.rich_content h1,
+.rich_content h2,
+.rich_content h3,
+.rich_content h4,
+.rich_content h5,
+.rich_content h6,
 .tiptap h1,
 .tiptap h2,
 .tiptap h3,
@@ -87,13 +87,13 @@ input[type='number'] {
 .tiptap h6 {
   margin: 24px 0;
 }
-.single-blog-content p,
+.rich_content p,
 .tiptap p {
   margin: 8px 0;
 }
 
-.single-blog-content ul,
-.single-blog-content ol,
+.rich_content ul,
+.rich_content ol,
 .tiptap ul,
 .tiptap ol {
   margin: 20px 0 16px 20px;

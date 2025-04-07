@@ -73,7 +73,6 @@ const EventCard: React.FC<EventCardProps> = ({
   } = event || {};
 
   const isRSVPDone = React.useMemo(() => {
-    // @ts-expect-error type error
     return attendees && attendees?.findIndex((att: UserBasic) => att?.id === user?.id) !== -1;
   }, [attendees, user]);
 
@@ -226,14 +225,17 @@ const EventCard: React.FC<EventCardProps> = ({
               {summary}
             </Typography>
             {showDescription && descriptionContent && (
-              <Typography
-                variant="body1"
-                color="text.primary"
-                mt={3}
-                dangerouslySetInnerHTML={{ __html: descriptionContent }}
-              />
+              <>
+                <Typography
+                  variant="body1"
+                  color="text.primary"
+                  mt={3}
+                  dangerouslySetInnerHTML={{ __html: descriptionContent }}
+                />
+                <Divider sx={{ my: 3 }} />
+              </>
             )}
-            <Divider sx={{ my: 3 }} />
+
             {category && (
               <Box sx={{ display: 'flex', my: 1 }}>
                 <Chip size="small" label={valueToLabelFormatter(category)} />

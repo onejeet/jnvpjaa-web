@@ -146,7 +146,7 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateC
         ) : (
           <>
             <Typography
-              className="single-blog-content"
+              className="rich_content"
               variant="body1"
               color="text.primary"
               // mt={1}

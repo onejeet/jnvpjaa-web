@@ -229,15 +229,15 @@ const EventCard: React.FC<SingleEventViewProps> = ({
                 variant="body1"
                 color="text.primary"
                 mt={3}
+                className="rich_content"
                 dangerouslySetInnerHTML={{ __html: descriptionContent }}
               />
             )}
             <Divider sx={{ my: 3 }} />
             {category && (
               <Box sx={{ display: 'flex', my: 1 }}>
-                <Chip size="small" label={valueToLabelFormatter(category)} />
+                <Chip label={valueToLabelFormatter(category)} />
                 <Chip
-                  size="small"
                   label={startCase(medium)}
                   color={medium === 'online' ? 'success' : 'info'}
                   sx={{ fontWeight: 500, ml: 'auto' }}
@@ -253,8 +253,8 @@ const EventCard: React.FC<SingleEventViewProps> = ({
           ) : (
             <>
               {' '}
-              <Typography display="flex" alignItems="center" variant="body2" fontWeight={500} color="text.secondary">
-                <CalendarDots size={18} style={{ marginRight: '8px' }} />
+              <Typography display="flex" alignItems="center" variant="body1" fontWeight={400} color="text.secondary">
+                <CalendarDots size={20} style={{ marginRight: '8px' }} />
                 {formattedStartDate} <Minus size={18} style={{ marginRight: '4px', marginLeft: '4px' }} />{' '}
                 {formattedEndDate || 'Ongoing'}
               </Typography>
@@ -263,7 +263,7 @@ const EventCard: React.FC<SingleEventViewProps> = ({
         </Box>
         <Box display="flex" justifyContent="space-between" alignItems="center">
           {loading ? (
-            <Skeleton width="40%" height={25} sx={{ mt: 2 }} />
+            <Skeleton width="40%" height={30} sx={{ mt: 2 }} />
           ) : (
             location && (
               <Box
@@ -277,9 +277,9 @@ const EventCard: React.FC<SingleEventViewProps> = ({
                 }}
               >
                 {medium === 'online' ? (
-                  <Globe size={18} style={{ marginRight: '8px' }} />
+                  <Globe size={20} style={{ marginRight: '8px' }} />
                 ) : (
-                  <MapPinLine size={18} style={{ marginRight: '8px' }} />
+                  <MapPinLine size={20} style={{ marginRight: '8px' }} />
                 )}
                 {medium === 'online' && location !== 'protected' ? (
                   <Typography
@@ -288,8 +288,8 @@ const EventCard: React.FC<SingleEventViewProps> = ({
                     target="_blank"
                     display="flex"
                     alignItems="center"
-                    variant="body2"
-                    fontWeight={500}
+                    variant="body1"
+                    fontWeight={400}
                     color="text.secondary"
                     sx={{
                       textDecoration: 'none',
@@ -308,8 +308,8 @@ const EventCard: React.FC<SingleEventViewProps> = ({
                   <Typography
                     display="flex"
                     alignItems="center"
-                    variant="body2"
-                    fontWeight={500}
+                    variant="body1"
+                    fontWeight={400}
                     color="text.secondary"
                   >
                     {location === 'protected' ? '******' : location}
@@ -323,7 +323,7 @@ const EventCard: React.FC<SingleEventViewProps> = ({
         {organizers && organizers?.length > 0 && (
           <Box mt={2}>
             <Typography fontWeight={400} color="grey.600" variant="body1">
-              Organiser(s)
+              Organiser
             </Typography>
             <Stack direction="row" spacing={1} mt={1} sx={{ cursor: 'pointer' }}>
               <ProfilePicture
@@ -391,83 +391,85 @@ const EventCard: React.FC<SingleEventViewProps> = ({
           </Box>
         )}
 
-        {isReadOnly ? null : loading ? null : status === EventStatus.Draft ? (
-          <Box width="100%" display="flex" gap={2} mt="auto">
-            <Button
-              variant="outlined"
-              disabled={loading}
-              fullWidth
-              title="Edit"
-              startIcon={<NotePencil size={16} />}
-              sx={{ ml: 'auto', mt: 2 }}
-              onClick={() => onEdit?.(id)}
-            />
-            {(createdBy === user?.id || isAdmin) && (
+        <Box maxWidth={{ xs: '100%', md: '50%' }} mt={2}>
+          {isReadOnly ? null : loading ? null : status === EventStatus.Draft ? (
+            <Box width="100%" display="flex" gap={2} mt="auto">
               <Button
-                variant="contained"
+                variant="outlined"
                 disabled={loading}
                 fullWidth
-                title="Publish"
-                startIcon={<CheckCircle size={16} />}
+                title="Edit"
+                startIcon={<NotePencil size={16} />}
                 sx={{ ml: 'auto', mt: 2 }}
-                onClick={() => onPublish?.(id)}
+                onClick={() => onEdit?.(id)}
               />
-            )}
-          </Box>
-        ) : (
-          <Box width="100%" display="flex" gap={1} mt="auto" pt={2}>
-            {(createdBy === user?.id || isAdmin) && (
-              <>
+              {(createdBy === user?.id || isAdmin) && (
                 <Button
-                  variant="outlined"
+                  variant="contained"
                   disabled={loading}
                   fullWidth
-                  title="Edit"
-                  startIcon={<NotePencil size={16} />}
-                  onClick={() => onEdit?.(id)}
+                  title="Publish"
+                  startIcon={<CheckCircle size={16} />}
+                  sx={{ ml: 'auto', mt: 2 }}
+                  onClick={() => onPublish?.(id)}
                 />
-                {status === EventStatus.Published ||
-                  (status === EventStatus.PendingApproval && (
-                    <Button
-                      variant="outlined"
-                      disabled={loading}
-                      fullWidth
-                      title="Move to Draft"
-                      startIcon={<XCircle size={16} />}
-                      onClick={() => onPublish?.(id)}
-                      sx={{ whiteSpace: 'nowrap', minWidth: '140px' }}
-                    />
-                  ))}
-              </>
-            )}
-            {status === EventStatus.PendingApproval && isAdmin ? (
-              <Button
-                variant="contained"
-                disabled={loading}
-                fullWidth
-                title="Approve"
-                startIcon={<CheckCircle size={16} />}
-                sx={{ whiteSpace: 'nowrap' }}
-                onClick={() => verifyEvent?.(id)}
-              />
-            ) : (
-              markImGoing &&
-              status === EventStatus.Published &&
-              !isRSVPDone && (
+              )}
+            </Box>
+          ) : (
+            <Box width="100%" display="flex" gap={1} mt="auto" pt={2}>
+              {(createdBy === user?.id || isAdmin) && (
+                <>
+                  <Button
+                    variant="outlined"
+                    disabled={loading}
+                    fullWidth
+                    title="Edit"
+                    startIcon={<NotePencil size={16} />}
+                    onClick={() => onEdit?.(id)}
+                  />
+                  {status === EventStatus.Published ||
+                    (status === EventStatus.PendingApproval && (
+                      <Button
+                        variant="outlined"
+                        disabled={loading}
+                        fullWidth
+                        title="Move to Draft"
+                        startIcon={<XCircle size={16} />}
+                        onClick={() => onPublish?.(id)}
+                        sx={{ whiteSpace: 'nowrap', minWidth: '140px' }}
+                      />
+                    ))}
+                </>
+              )}
+              {status === EventStatus.PendingApproval && isAdmin ? (
                 <Button
-                  title="I'm Going"
-                  variant="outlined"
-                  fullWidth
+                  variant="contained"
                   disabled={loading}
-                  // endIcon={<ArrowRightAltIcon />}
-                  startIcon={<Heart size={20} weight="fill" />}
-                  onClick={() => markImGoing(id)}
-                  sx={{ whiteSpace: 'nowrap', minWidth: '130px' }}
+                  fullWidth
+                  title="Approve"
+                  startIcon={<CheckCircle size={16} />}
+                  sx={{ whiteSpace: 'nowrap' }}
+                  onClick={() => verifyEvent?.(id)}
                 />
-              )
-            )}
-          </Box>
-        )}
+              ) : (
+                markImGoing &&
+                status === EventStatus.Published &&
+                !isRSVPDone && (
+                  <Button
+                    title="I'm Going"
+                    variant="outlined"
+                    fullWidth
+                    disabled={loading}
+                    // endIcon={<ArrowRightAltIcon />}
+                    startIcon={<Heart size={20} weight="fill" />}
+                    onClick={() => markImGoing(id)}
+                    sx={{ whiteSpace: 'nowrap', minWidth: '130px' }}
+                  />
+                )
+              )}
+            </Box>
+          )}
+        </Box>
       </CardContent>
       {Boolean(openAttendiesDialog) && (
         <UserListDialog

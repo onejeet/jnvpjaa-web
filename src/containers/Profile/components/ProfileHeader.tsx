@@ -21,10 +21,13 @@ import { useAlert } from '@/context/AlertContext';
 import { useApolloClient } from '@apollo/client';
 import { paths } from '@/config/paths';
 import { useRouter } from 'next/router';
+import { useAuth } from '@/context/AuthContext';
+import { GetUserDetailsDocument, GetUserListDocument, useGetUserDetailsQuery } from '@/apollo/hooks';
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
   const { user, loading, isProfileEditable, editingProfile, saveProfile, setEditingProfile } = useProfile();
   const { showAlert, hideAlert } = useAlert();
+  const { user: authUser } = useAuth();
   const router = useRouter();
   const client = useApolloClient();
 
@@ -36,8 +39,8 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
         type: 'custom',
         title: user?.isConfidential ? 'Make Contact Info Protected' : 'Keep Contact Info Private',
         message: user?.isConfidential
-          ? 'Your email and phone number will be visible to all the verified alumni of JNVPJAA. Rest assured, the data still be not visible to public.'
-          : 'Your email and phone number will remain completely hidden—no one will be able to access them.',
+          ? `${user?.firstName || ''}'s email and phone number will be visible to all the verified alumni of JNVPJAA. Rest assured, the data still be not visible to public.`
+          : `${user?.firstName || ''}'s email and phone number will remain completely hidden—no one will be able to access them.`,
         onOkay: () => {
           showAlert(
             {
@@ -53,18 +56,31 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
             id: user?.id,
             isConfidential: !user?.isConfidential,
           })
-            ?.then((data) => {
-              client.refetchQueries({
-                include: ['getUserDetails'],
-              });
+            ?.then((res) => {
+              if (user?.id === authUser?.id) {
+                client.refetchQueries({
+                  include: ['getUserDetails'],
+                });
+              } else {
+                client.writeQuery({
+                  query: GetUserDetailsDocument,
+                  variables: {
+                    id: user?.id,
+                  },
+                  data: {
+                    getUserDetails: res?.data?.updateUser,
+                  },
+                });
+              }
+
               showAlert(
                 {
                   visible: true,
                   type: 'success',
                   title: user?.isConfidential ? 'Contact Info is Protected' : 'Contact Info is Private',
                   message: user?.isConfidential
-                    ? 'Your email and phone number will be visible to all the verified alumni of JNVPJAA. Rest assured, they data still be not visible to public.'
-                    : 'Your email and phone number will remain completely hidden—no one will be able to access them.',
+                    ? `${user?.firstName || ''}'s email and phone number will be visible to all the verified alumni of JNVPJAA. Rest assured, they data still be not visible to public.`
+                    : `${user?.firstName || ''}'s email and phone number will remain completely hidden—no one will be able to access them.`,
                   action: 'success',
                 },
                 true
@@ -86,7 +102,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
       },
       true
     );
-  }, [user, saveProfile]);
+  }, [user, saveProfile, authUser]);
 
   const menuItems = React.useMemo(() => {
     const isConfidential = user?.isConfidential;
@@ -96,7 +112,13 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
             label: 'Edit',
             value: 'edit',
             // onClick: () => setEditingProfile(true),
-            onClick: () => router.push(paths.profile.setup),
+            onClick: () => {
+              if (user?.id === authUser?.id) {
+                router.push(paths.profile.setup);
+              } else {
+                setEditingProfile(true);
+              }
+            },
             icon: <Pencil size={16} />,
           },
           {
@@ -113,7 +135,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
           },
         ]
       : [];
-  }, [isProfileEditable, user, handleDataPrivacyUpdate, router]);
+  }, [isProfileEditable, user, handleDataPrivacyUpdate, router, authUser, setEditingProfile]);
 
   return (
     <Box sx={{ position: 'relative', mb: 4 }}>

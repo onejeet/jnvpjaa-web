@@ -1,8 +1,9 @@
 import { Event, useGetEventDetailsQuery } from '@/apollo/hooks';
 import Breadcrumbs from '@/components/common/Breadcrumbs';
 import EmptyView from '@/components/common/EmptyView';
-import EventCard from '@/components/common/EventCard/EventCard';
 import SingleEventView from '@/components/common/SingleEventView';
+import { useAuth } from '@/context/AuthContext';
+import useEvents from '@/hooks/useEvents';
 import LayoutModule from '@/layouts/Layout';
 import { Box } from '@mui/material';
 import { useRouter } from 'next/router';
@@ -10,7 +11,9 @@ import React from 'react';
 
 const EventDetails = () => {
   const { query } = useRouter();
+  const { user } = useAuth();
   const { id } = query;
+  const methods = useEvents({ user });
   const { data, loading } = useGetEventDetailsQuery({
     skip: !id,
     variables: {
@@ -46,7 +49,7 @@ const EventDetails = () => {
         )} */}
       </Box>
       {loading || event?.id ? (
-        <SingleEventView event={event} showDescription loading={loading} />
+        <SingleEventView event={event} showDescription loading={loading} {...methods} />
       ) : (
         <EmptyView message="No event found!" />
       )}
