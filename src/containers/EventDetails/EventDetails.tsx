@@ -49,6 +49,7 @@ const EventDetails = () => {
         )} */}
       </Box>
       {loading || event?.id ? (
+        // @ts-expect-error type-error
         <SingleEventView event={event} showDescription loading={loading} {...methods} />
       ) : (
         <EmptyView message="No event found!" />

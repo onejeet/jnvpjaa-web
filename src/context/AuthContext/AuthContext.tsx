@@ -35,14 +35,17 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children, checkAuth, isAuth
             welcome: '1',
           },
         });
-        setLoadingData({ loading: false });
+        if (loadingData?.type !== 'logout') {
+          setLoadingData({ loading: false });
+        }
         return;
       }
       redirectOnSignin();
     },
     onError: () => {
-      console.log('On Error getUser Details');
-      redirectToSignin();
+      if (loadingData?.type !== 'logout') {
+        redirectToSignin();
+      }
     },
     notifyOnNetworkStatusChange: true,
   });
@@ -54,7 +57,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children, checkAuth, isAuth
         if (redirectPath) {
           await router.push(redirectPath as string);
         } else {
-          await router.push(paths.home);
+          await router.push(paths.profile.root);
         }
       }
       setLoadingData({ loading: false });
@@ -73,7 +76,9 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children, checkAuth, isAuth
           },
         });
       }
-      setLoadingData({ loading: false });
+      if (loadingData?.type !== 'logout') {
+        setLoadingData({ loading: false });
+      }
     },
     [router, checkAuth]
   );
@@ -128,7 +133,19 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children, checkAuth, isAuth
 
   const onLoginStateChange = (event: Record<string, any>) => {
     // const isLoggedIn = localStorage.getItem('logged_in');
-    if (event.key === 'logged_in' && (event.newValue === '0' || !event.newValue)) {
+    console.log('ZZ: Strogae', event);
+    if (!event.key || (event.key === 'logged_in' && (event.newValue === '0' || !event.newValue))) {
+      if (checkAuth) {
+        window.location.href = paths.home;
+        // setLoadingData({
+        //   loading: false,
+        // });
+      } else {
+        window.location.reload();
+      }
+    }
+
+    if (event.key === 'logged_in' && event.newValue === 'true' && !user) {
       window.location.reload();
     }
   };
@@ -138,11 +155,12 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children, checkAuth, isAuth
       loading: true,
       type: 'logout',
     });
-
-    await handleLogout();
     localStorage.clear();
     client.resetStore();
     client.cache.reset();
+    setUser(null);
+    await handleLogout();
+
     // setUser(null);
     // setLoadingData({
     //   loading: false,
@@ -150,9 +168,9 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children, checkAuth, isAuth
 
     if (checkAuth) {
       window.location.href = paths.home;
-      setLoadingData({
-        loading: false,
-      });
+      // setLoadingData({
+      //   loading: false,
+      // });
     } else {
       window.location.reload();
     }

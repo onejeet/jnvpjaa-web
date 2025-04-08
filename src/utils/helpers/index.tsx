@@ -214,7 +214,6 @@ export const isBirthdayToday = (dob?: string) => {
   if (!dob) return false;
   const birthDate = dayjs(dob);
   const today = dayjs();
-  console.log('ZZ: IDHSD', dob, birthDate, birthDate.date(), today.date(), birthDate.month(), today.month());
 
   return birthDate.date() === today.date() && birthDate.month() === today.month();
 };

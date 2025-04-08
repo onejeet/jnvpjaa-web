@@ -55,7 +55,7 @@ const ProfilePicture: React.FC<ProfilePictureProps> = ({
           />
         )}
       </Box>
-      {title && (
+      {(title || loading) && (
         <Box display="flex" ml="10px" width="100%" flexDirection="column" {...contentContainerProps}>
           <Title
             title={title}

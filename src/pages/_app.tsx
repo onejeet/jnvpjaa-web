@@ -10,6 +10,7 @@ import { AlertProvider } from '@/context/AlertContext';
 import { AuthProvider } from '@/context/AuthContext';
 import ServiceWorkerUpdater from '@/components/PWA/ServiceWorkerUpdater';
 import PWAInstaller from '@/components/PWA/PWAnstaller';
+import OfflineDialog from '@/components/common/OfflineDialog';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -23,6 +24,7 @@ const MyApp = ({ Component, pageProps, emotionCache = clientSideEmotionCache }: 
             <Component {...pageProps} />
             <ServiceWorkerUpdater />
             <PWAInstaller />
+            <OfflineDialog checkAuth={!!pageProps?.checkAuth} />
             <GoogleTagManager gtmId="GTM-W7R5B5JB" />
           </AlertProvider>
         </LayoutProvider>

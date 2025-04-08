@@ -25,7 +25,7 @@ const Title: React.FC<TitleProps> = ({
           {icon}
         </Box>
       )}
-      {title && (
+      {(title || loading) && (
         <Box display="flex" width="100%" {...titleContainerProps}>
           {loading ? (
             <Skeleton variant="rounded" width="60%" height={14} />
@@ -51,7 +51,7 @@ const Title: React.FC<TitleProps> = ({
         </Box>
       )}
 
-      {summary && (
+      {(summary || loading) && (
         <Box mt="0px" display="flex" {...summaryContainerProps}>
           {loading ? (
             <Skeleton variant="rounded" width="80%" height={8} />
