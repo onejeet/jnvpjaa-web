@@ -14,22 +14,19 @@ interface OfflineDialogProps {
 }
 
 const OfflineDialog: React.FC<OfflineDialogProps> = ({ checkAuth }) => {
-  const [isOnline, setIsOnline] = useState<boolean>(navigator.onLine);
-  const [showDialog, setShowDialog] = useState<boolean>(!navigator.onLine);
+  const [isOnline, setIsOnline] = useState<boolean>(true);
+  const [showDialog, setShowDialog] = useState<boolean>(false);
+  const [retrying, setRetrying] = useState<boolean>(false);
 
   useEffect(() => {
     const handleOnline = () => {
-      if (checkAuth) {
-        setIsOnline(true);
-        setShowDialog(true);
-      }
+      setIsOnline(true);
+      setShowDialog(true);
     };
 
     const handleOffline = () => {
-      if (checkAuth) {
-        setIsOnline(false);
-        setShowDialog(true);
-      }
+      setIsOnline(false);
+      setShowDialog(true);
     };
 
     window.addEventListener('online', handleOnline);
@@ -42,7 +39,9 @@ const OfflineDialog: React.FC<OfflineDialogProps> = ({ checkAuth }) => {
   }, []);
 
   const handleRetry = async () => {
+    setRetrying(true);
     const online = await checkInternetConnection();
+    setRetrying(false);
     if (online) {
       setIsOnline(true);
       setShowDialog(true);
@@ -50,9 +49,10 @@ const OfflineDialog: React.FC<OfflineDialogProps> = ({ checkAuth }) => {
   };
 
   const handleClose = () => {
-    if (isOnline) {
-      setShowDialog(false);
-    }
+    setShowDialog(false);
+    // if (isOnline) {
+    //   setShowDialog(false);
+    // }
   };
 
   return (
@@ -67,6 +67,7 @@ const OfflineDialog: React.FC<OfflineDialogProps> = ({ checkAuth }) => {
         onOkay: () => (isOnline ? handleClose() : handleRetry()),
         okayButtonProps: {
           title: isOnline ? 'Okay' : 'Retry',
+          loading: retrying,
           startIcon: isOnline ? <CheckCircle size={18} /> : <ArrowsCounterClockwise size={18} />,
         },
         onCancel: isOnline ? undefined : handleClose,
