@@ -124,6 +124,7 @@ const TipTapTextEditor = ({
           Blockquote,
           OrderedList,
           BulletList,
+
           ListItem,
           Indentation,
           // CustomParagraph,

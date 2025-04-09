@@ -26,9 +26,14 @@ import ToolIcon from './components/ToolIcon';
 import VideoButton from './components/VideoButton';
 import IndentationButtons from './components/IndentationButtons';
 import BlockquoteButton from './components/BlockquoteButton';
+import { Smiley } from '@phosphor-icons/react';
+import EmojiPicker, { SkinTones } from 'emoji-picker-react';
 
 const EditorToolbar: React.FC<EditorToolbarProps> = ({ toolsHidden = [], defaultColors, ...restProps }) => {
   const { editor } = useCurrentEditor();
+  const [emojiAnchorEl, setEmojiAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  const openEmojiPopover = Boolean(emojiAnchorEl);
+  const emojiPopoverId = openEmojiPopover ? 'emoji-popover' : undefined;
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -95,8 +100,12 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ toolsHidden = [], default
           <AnchorEditorButton />
           <Divider orientation="vertical" />
           <ColorPicker />
+          <IconButton aria-describedby={emojiPopoverId} onClick={(e) => setEmojiAnchorEl(e.currentTarget)} size="small">
+            <Smiley size={28} weight="bold" />
+          </IconButton>
           <Divider orientation="vertical" />
           <VideoButton />
+
           <Divider orientation="vertical" />
           {/* <ImageButton /> */}
         </Stack>
@@ -125,6 +134,33 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ toolsHidden = [], default
             <AlignButton format="justify" />
           </Box>
         )}
+      </Popover>
+      <Popover
+        id={emojiPopoverId}
+        open={openEmojiPopover}
+        anchorEl={emojiAnchorEl}
+        onClose={() => setEmojiAnchorEl(null)}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        transitionDuration={0}
+      >
+        <EmojiPicker
+          lazyLoadEmojis
+          onEmojiClick={(obj) => {
+            editor?.commands.insertContent(obj?.emoji);
+            setEmojiAnchorEl(null);
+          }}
+          previewConfig={{
+            showPreview: false,
+          }}
+          defaultSkinTone={SkinTones['MEDIUM_LIGHT']}
+        />
       </Popover>
     </>
   );
