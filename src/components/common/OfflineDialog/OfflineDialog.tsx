@@ -8,25 +8,31 @@ import { ArrowsCounterClockwise, CheckCircle } from '@phosphor-icons/react';
 import Lottie from 'lottie-react';
 import successLottieIcon from '@/utils/lottie/success2_icon.json';
 import offlineLottieIcon from '@/utils/lottie/offline_art.json';
+import { useAuth } from '@/context/AuthContext';
 
 interface OfflineDialogProps {
   checkAuth?: boolean;
 }
 
 const OfflineDialog: React.FC<OfflineDialogProps> = ({ checkAuth }) => {
+  const { user } = useAuth();
   const [isOnline, setIsOnline] = useState<boolean>(true);
   const [showDialog, setShowDialog] = useState<boolean>(false);
   const [retrying, setRetrying] = useState<boolean>(false);
 
   useEffect(() => {
     const handleOnline = () => {
-      setIsOnline(true);
-      setShowDialog(true);
+      if (user?.id) {
+        setIsOnline(true);
+        setShowDialog(true);
+      }
     };
 
     const handleOffline = () => {
-      setIsOnline(false);
-      setShowDialog(true);
+      if (user?.id) {
+        setIsOnline(false);
+        setShowDialog(true);
+      }
     };
 
     window.addEventListener('online', handleOnline);

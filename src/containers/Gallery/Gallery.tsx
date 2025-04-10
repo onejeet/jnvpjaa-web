@@ -1,16 +1,14 @@
-'use client';
-
 import React, { useState } from 'react';
 import LayoutModule from '@/layouts/Layout';
-import TransactionsFilters from './components/TransactionsFilters';
-import TransactionsTable from './components/TransactionsTable';
+
 import { Box, IconButton, Typography, useMediaQuery, useTheme } from '@mui/material';
 import Button from '@/components/core/Button';
 import { Plus, PlusCircle } from '@phosphor-icons/react';
 import { useAuth } from '@/context/AuthContext';
 import AddTransactionRecordModule from '@/modules/AddTransactionRecordModule';
+import AlbumListModule from '@/modules/AlbumListModule';
 
-export default function Transactions() {
+export default function Gallery() {
   const [addRecord, setAddRecord] = React.useState<boolean>(false);
   const { isAdmin } = useAuth();
   const theme = useTheme();
@@ -19,14 +17,15 @@ export default function Transactions() {
   return (
     <LayoutModule
       disableCover
-      title={`Billing & Transactions • Alumni Network of JNV Paota, Jaipur`}
+      title={`Photo Gallery • Alumni Network of JNV Paota, Jaipur`}
       //   containerProps={{ sx: { py: 2 } }}
     >
       <Box display="flex" alignItems="start" gap={2} justifyContent="space-between">
         <Box>
-          <Typography variant="h1">Billing & Transactions</Typography>
+          <Typography variant="h1">Photo Gallery</Typography>
           <Typography color="grey.800" mb={3}>
-            List of all the transactions from JNVPJAA Fund.
+            {`A glimpse into the memories we’ve made together—reunions, celebrations, and candid moments from our alumni
+            community. Browse by event, batch, or contributor and relive the connections that last a lifetime.`}
           </Typography>
         </Box>
         {isAdmin &&
@@ -36,7 +35,7 @@ export default function Transactions() {
             </IconButton>
           ) : (
             <Button
-              title="Add Record"
+              title="Add Album"
               onClick={() => setAddRecord(true)}
               startIcon={<Plus size={16} weight="bold" />}
               sx={{ width: 200 }}
@@ -44,7 +43,7 @@ export default function Transactions() {
           ))}
       </Box>
       {/* <TransactionsFilters /> */}
-      <TransactionsTable />
+      <AlbumListModule />
       {addRecord && <AddTransactionRecordModule onClose={() => setAddRecord(false)} />}
     </LayoutModule>
   );

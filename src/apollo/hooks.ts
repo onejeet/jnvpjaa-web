@@ -51,6 +51,35 @@ export type AddressListResponse = {
   total?: Maybe<Scalars['Int']['output']>;
 };
 
+export type Album = {
+  __typename?: 'Album';
+  contributors?: Maybe<Array<Maybe<UserBasic>>>;
+  coverImage?: Maybe<Scalars['String']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  creator?: Maybe<UserBasic>;
+  description?: Maybe<Scalars['String']['output']>;
+  event?: Maybe<EventBasic>;
+  id?: Maybe<Scalars['String']['output']>;
+  photos?: Maybe<Array<Maybe<Photo>>>;
+  title?: Maybe<Scalars['String']['output']>;
+  total_photos?: Maybe<Scalars['Int']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+};
+
+export type AlbumBasic = {
+  __typename?: 'AlbumBasic';
+  contributors?: Maybe<Array<Maybe<UserBasic>>>;
+  coverImage?: Maybe<Scalars['String']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  creator?: Maybe<UserBasic>;
+  description?: Maybe<Scalars['String']['output']>;
+  event?: Maybe<EventBasic>;
+  id?: Maybe<Scalars['String']['output']>;
+  title?: Maybe<Scalars['String']['output']>;
+  total_photos?: Maybe<Scalars['Int']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+};
+
 export type AuthPayload = {
   __typename?: 'AuthPayload';
   user?: Maybe<User>;
@@ -123,13 +152,13 @@ export type Comment = {
   __typename?: 'Comment';
   author?: Maybe<UserBasic>;
   authorId?: Maybe<Scalars['String']['output']>;
-  blogId?: Maybe<Scalars['String']['output']>;
   content?: Maybe<Scalars['String']['output']>;
-  /** Timestamp when the record was created */
-  createdAt: Scalars['DateTime']['output'];
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
   id?: Maybe<Scalars['String']['output']>;
-  /** Timestamp when the record was last updated */
-  updatedAt: Scalars['DateTime']['output'];
+  isVerified?: Maybe<Scalars['Boolean']['output']>;
+  targetId?: Maybe<Scalars['String']['output']>;
+  targetType?: Maybe<CommentTargetType>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type CommentListResponse = {
@@ -137,6 +166,12 @@ export type CommentListResponse = {
   data?: Maybe<Array<Maybe<Comment>>>;
   total?: Maybe<Scalars['Int']['output']>;
 };
+
+export enum CommentTargetType {
+  Album = 'ALBUM',
+  Blog = 'BLOG',
+  Photo = 'PHOTO',
+}
 
 export type CompanyInfo = {
   __typename?: 'CompanyInfo';
@@ -235,6 +270,12 @@ export type FilterInput = {
   verified?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
+export type ListAlbumResponse = {
+  __typename?: 'ListAlbumResponse';
+  data?: Maybe<Array<Maybe<AlbumBasic>>>;
+  total?: Maybe<Scalars['Int']['output']>;
+};
+
 export type ListEventResponse = {
   __typename?: 'ListEventResponse';
   data?: Maybe<Array<Maybe<EventBasic>>>;
@@ -249,17 +290,18 @@ export type ListInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addAlbumContributor?: Maybe<Album>;
+  addPhoto?: Maybe<Photo>;
   approveBlog?: Maybe<Blog>;
   assignBatchCoordinator?: Maybe<BatchCoordinator>;
   attendEvent?: Maybe<Scalars['Boolean']['output']>;
   createAddress?: Maybe<Address>;
+  createAlbum?: Maybe<Album>;
   createBlog?: Maybe<Blog>;
-  createComment?: Maybe<Comment>;
   createEvent?: Maybe<EventBasic>;
   createTransaction?: Maybe<Transaction>;
   deleteAddress?: Maybe<Address>;
   deleteBlog?: Maybe<Blog>;
-  deleteComment?: Maybe<Comment>;
   deleteTransaction?: Maybe<Transaction>;
   deleteUser?: Maybe<User>;
   forgotPassword?: Maybe<Scalars['Boolean']['output']>;
@@ -274,6 +316,7 @@ export type Mutation = {
   signin?: Maybe<AuthPayload>;
   signup?: Maybe<User>;
   updateAddress?: Maybe<Address>;
+  updateAlbum?: Maybe<Album>;
   updateBatchCoordinator?: Maybe<BatchCoordinator>;
   updateBlog?: Maybe<Blog>;
   updateClaps?: Maybe<Scalars['Boolean']['output']>;
@@ -283,6 +326,17 @@ export type Mutation = {
   upsertMultipleAddresses?: Maybe<Array<Maybe<Address>>>;
   verifyEvent?: Maybe<Scalars['Boolean']['output']>;
   verifyUser?: Maybe<Scalars['Boolean']['output']>;
+};
+
+export type MutationAddAlbumContributorArgs = {
+  albumId: Scalars['String']['input'];
+  userId: Scalars['String']['input'];
+};
+
+export type MutationAddPhotoArgs = {
+  albumId: Scalars['String']['input'];
+  caption?: InputMaybe<Scalars['String']['input']>;
+  url: Scalars['String']['input'];
 };
 
 export type MutationApproveBlogArgs = {
@@ -307,18 +361,19 @@ export type MutationCreateAddressArgs = {
   type: Scalars['String']['input'];
 };
 
+export type MutationCreateAlbumArgs = {
+  coverImage?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  eventId?: InputMaybe<Scalars['Int']['input']>;
+  title: Scalars['String']['input'];
+};
+
 export type MutationCreateBlogArgs = {
   authorId: Scalars['String']['input'];
   categoryId: Scalars['String']['input'];
   content?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<BlogStatus>;
   title: Scalars['String']['input'];
-};
-
-export type MutationCreateCommentArgs = {
-  authorId: Scalars['String']['input'];
-  blogId: Scalars['String']['input'];
-  content: Scalars['String']['input'];
 };
 
 export type MutationCreateEventArgs = {
@@ -358,10 +413,6 @@ export type MutationDeleteBlogArgs = {
   id: Scalars['String']['input'];
 };
 
-export type MutationDeleteCommentArgs = {
-  id: Scalars['String']['input'];
-};
-
 export type MutationDeleteTransactionArgs = {
   id: Scalars['String']['input'];
 };
@@ -377,6 +428,7 @@ export type MutationForgotPasswordArgs = {
 export type MutationGetPresignedUrlArgs = {
   contentType: Scalars['String']['input'];
   fileName: Scalars['String']['input'];
+  imageCategory?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type MutationPublishEventArgs = {
@@ -429,6 +481,13 @@ export type MutationUpdateAddressArgs = {
   postalCode?: InputMaybe<Scalars['String']['input']>;
   state?: InputMaybe<Scalars['String']['input']>;
   type: Scalars['String']['input'];
+};
+
+export type MutationUpdateAlbumArgs = {
+  albumId: Scalars['String']['input'];
+  coverImage?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type MutationUpdateBatchCoordinatorArgs = {
@@ -504,8 +563,20 @@ export type MutationVerifyUserArgs = {
   verified: Scalars['Boolean']['input'];
 };
 
+export type Photo = {
+  __typename?: 'Photo';
+  album?: Maybe<AlbumBasic>;
+  caption?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  uploadedAt?: Maybe<Scalars['DateTime']['output']>;
+  uploader?: Maybe<User>;
+  url?: Maybe<Scalars['String']['output']>;
+};
+
 export type Query = {
   __typename?: 'Query';
+  getAlbum?: Maybe<Album>;
+  getAlbums?: Maybe<ListAlbumResponse>;
   getAllBatchCoordinators?: Maybe<Array<Maybe<BatchCoordinator>>>;
   getBatchCoordinatorByUserId?: Maybe<BatchCoordinator>;
   getBatchCoordinatorsByBatch?: Maybe<Array<Maybe<BatchCoordinator>>>;
@@ -514,6 +585,7 @@ export type Query = {
   getCommentList?: Maybe<CommentListResponse>;
   getEventDetails?: Maybe<Event>;
   getEventList?: Maybe<ListEventResponse>;
+  getMyPhotos?: Maybe<Array<Maybe<Photo>>>;
   getTransaction?: Maybe<Transaction>;
   getTransactions?: Maybe<TransactionListResponse>;
   getUserAddresses?: Maybe<AddressListResponse>;
@@ -521,6 +593,14 @@ export type Query = {
   getUserDetails?: Maybe<User>;
   getUserList?: Maybe<UserListResponse>;
   upcomingBirthdays: Array<Maybe<UserBirthday>>;
+};
+
+export type QueryGetAlbumArgs = {
+  id: Scalars['String']['input'];
+};
+
+export type QueryGetAlbumsArgs = {
+  options?: InputMaybe<ListInput>;
 };
 
 export type QueryGetAllBatchCoordinatorsArgs = {
@@ -683,6 +763,309 @@ export type UserListResponse = {
   total?: Maybe<Scalars['Int']['output']>;
 };
 
+export type AddAlbumContributorMutationVariables = Exact<{
+  albumId: Scalars['String']['input'];
+  userId: Scalars['String']['input'];
+}>;
+
+export type AddAlbumContributorMutation = {
+  __typename?: 'Mutation';
+  addAlbumContributor?:
+    | {
+        __typename?: 'Album';
+        coverImage?: string | undefined;
+        createdAt?: any | undefined;
+        description?: string | undefined;
+        id?: string | undefined;
+        title?: string | undefined;
+        total_photos?: number | undefined;
+        updatedAt?: any | undefined;
+        contributors?:
+          | Array<
+              | {
+                  __typename?: 'UserBasic';
+                  batch?: number | undefined;
+                  disabled?: boolean | undefined;
+                  dob?: any | undefined;
+                  firstName?: string | undefined;
+                  id?: string | undefined;
+                  isConfidential?: boolean | undefined;
+                  isFaculty?: boolean | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  profileImage?: string | undefined;
+                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+        creator?:
+          | {
+              __typename?: 'UserBasic';
+              batch?: number | undefined;
+              disabled?: boolean | undefined;
+              dob?: any | undefined;
+              firstName?: string | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              profileImage?: string | undefined;
+              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+            }
+          | undefined;
+        event?:
+          | {
+              __typename?: 'EventBasic';
+              adminRemark?: string | undefined;
+              category?: string | undefined;
+              description?: string | undefined;
+              endDate?: any | undefined;
+              id: number;
+              image?: string | undefined;
+              location?: string | undefined;
+              medium: string;
+              short_url?: string | undefined;
+              startDate: any;
+              status?: EventStatus | undefined;
+              summary: string;
+              tags?: Array<string | undefined> | undefined;
+              title: string;
+              total_attendies?: number | undefined;
+            }
+          | undefined;
+        photos?:
+          | Array<
+              | {
+                  __typename?: 'Photo';
+                  caption?: string | undefined;
+                  id?: string | undefined;
+                  uploadedAt?: any | undefined;
+                  url?: string | undefined;
+                  album?:
+                    | {
+                        __typename?: 'AlbumBasic';
+                        coverImage?: string | undefined;
+                        createdAt?: any | undefined;
+                        description?: string | undefined;
+                        id?: string | undefined;
+                        title?: string | undefined;
+                        total_photos?: number | undefined;
+                        updatedAt?: any | undefined;
+                        contributors?:
+                          | Array<
+                              | {
+                                  __typename?: 'UserBasic';
+                                  batch?: number | undefined;
+                                  disabled?: boolean | undefined;
+                                  dob?: any | undefined;
+                                  firstName?: string | undefined;
+                                  id?: string | undefined;
+                                  isConfidential?: boolean | undefined;
+                                  isFaculty?: boolean | undefined;
+                                  isVerified?: boolean | undefined;
+                                  lastName?: string | undefined;
+                                  profileImage?: string | undefined;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                        creator?:
+                          | {
+                              __typename?: 'UserBasic';
+                              batch?: number | undefined;
+                              disabled?: boolean | undefined;
+                              dob?: any | undefined;
+                              firstName?: string | undefined;
+                              id?: string | undefined;
+                              isConfidential?: boolean | undefined;
+                              isFaculty?: boolean | undefined;
+                              isVerified?: boolean | undefined;
+                              lastName?: string | undefined;
+                              profileImage?: string | undefined;
+                            }
+                          | undefined;
+                        event?:
+                          | {
+                              __typename?: 'EventBasic';
+                              adminRemark?: string | undefined;
+                              category?: string | undefined;
+                              description?: string | undefined;
+                              endDate?: any | undefined;
+                              id: number;
+                              image?: string | undefined;
+                              location?: string | undefined;
+                              medium: string;
+                              short_url?: string | undefined;
+                              startDate: any;
+                              status?: EventStatus | undefined;
+                              summary: string;
+                              tags?: Array<string | undefined> | undefined;
+                              title: string;
+                              total_attendies?: number | undefined;
+                            }
+                          | undefined;
+                      }
+                    | undefined;
+                  uploader?:
+                    | {
+                        __typename?: 'User';
+                        aboutMe?: string | undefined;
+                        batch?: number | undefined;
+                        createdAt: any;
+                        disabled?: boolean | undefined;
+                        displayName?: string | undefined;
+                        dob?: any | undefined;
+                        email?: string | undefined;
+                        emergencyMobile?: string | undefined;
+                        extraEmail?: string | undefined;
+                        extraMobile?: string | undefined;
+                        firstName?: string | undefined;
+                        gender?: string | undefined;
+                        google_auth_id?: string | undefined;
+                        id?: string | undefined;
+                        isConfidential?: boolean | undefined;
+                        isFaculty?: boolean | undefined;
+                        isVerified?: boolean | undefined;
+                        lastName?: string | undefined;
+                        membershipYear?: number | undefined;
+                        metadata?: any | undefined;
+                        mobile?: string | undefined;
+                        nickName?: string | undefined;
+                        profileImage?: string | undefined;
+                        socialMedia?: any | undefined;
+                        updatedAt: any;
+                        whatsAppMobile?: string | undefined;
+                        role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                      }
+                    | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+      }
+    | undefined;
+};
+
+export type AddPhotoMutationVariables = Exact<{
+  albumId: Scalars['String']['input'];
+  caption?: InputMaybe<Scalars['String']['input']>;
+  url: Scalars['String']['input'];
+}>;
+
+export type AddPhotoMutation = {
+  __typename?: 'Mutation';
+  addPhoto?:
+    | {
+        __typename?: 'Photo';
+        caption?: string | undefined;
+        id?: string | undefined;
+        uploadedAt?: any | undefined;
+        url?: string | undefined;
+        album?:
+          | {
+              __typename?: 'AlbumBasic';
+              coverImage?: string | undefined;
+              createdAt?: any | undefined;
+              description?: string | undefined;
+              id?: string | undefined;
+              title?: string | undefined;
+              total_photos?: number | undefined;
+              updatedAt?: any | undefined;
+              contributors?:
+                | Array<
+                    | {
+                        __typename?: 'UserBasic';
+                        batch?: number | undefined;
+                        disabled?: boolean | undefined;
+                        dob?: any | undefined;
+                        firstName?: string | undefined;
+                        id?: string | undefined;
+                        isConfidential?: boolean | undefined;
+                        isFaculty?: boolean | undefined;
+                        isVerified?: boolean | undefined;
+                        lastName?: string | undefined;
+                        profileImage?: string | undefined;
+                        role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              creator?:
+                | {
+                    __typename?: 'UserBasic';
+                    batch?: number | undefined;
+                    disabled?: boolean | undefined;
+                    dob?: any | undefined;
+                    firstName?: string | undefined;
+                    id?: string | undefined;
+                    isConfidential?: boolean | undefined;
+                    isFaculty?: boolean | undefined;
+                    isVerified?: boolean | undefined;
+                    lastName?: string | undefined;
+                    profileImage?: string | undefined;
+                    role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                  }
+                | undefined;
+              event?:
+                | {
+                    __typename?: 'EventBasic';
+                    adminRemark?: string | undefined;
+                    category?: string | undefined;
+                    description?: string | undefined;
+                    endDate?: any | undefined;
+                    id: number;
+                    image?: string | undefined;
+                    location?: string | undefined;
+                    medium: string;
+                    short_url?: string | undefined;
+                    startDate: any;
+                    status?: EventStatus | undefined;
+                    summary: string;
+                    tags?: Array<string | undefined> | undefined;
+                    title: string;
+                    total_attendies?: number | undefined;
+                  }
+                | undefined;
+            }
+          | undefined;
+        uploader?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
 export type ApproveBlogMutationVariables = Exact<{
   id: Scalars['String']['input'];
 }>;
@@ -726,11 +1109,13 @@ export type ApproveBlogMutation = {
               | {
                   __typename?: 'Comment';
                   authorId?: string | undefined;
-                  blogId?: string | undefined;
                   content?: string | undefined;
-                  createdAt: any;
+                  createdAt?: any | undefined;
                   id?: string | undefined;
-                  updatedAt: any;
+                  isVerified?: boolean | undefined;
+                  targetId?: string | undefined;
+                  targetType?: CommentTargetType | undefined;
+                  updatedAt?: any | undefined;
                   author?:
                     | {
                         __typename?: 'UserBasic';
@@ -836,6 +1221,193 @@ export type CreateAddressMutation = {
     | undefined;
 };
 
+export type CreateAlbumMutationVariables = Exact<{
+  coverImage?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  eventId?: InputMaybe<Scalars['Int']['input']>;
+  title: Scalars['String']['input'];
+}>;
+
+export type CreateAlbumMutation = {
+  __typename?: 'Mutation';
+  createAlbum?:
+    | {
+        __typename?: 'Album';
+        coverImage?: string | undefined;
+        createdAt?: any | undefined;
+        description?: string | undefined;
+        id?: string | undefined;
+        title?: string | undefined;
+        total_photos?: number | undefined;
+        updatedAt?: any | undefined;
+        contributors?:
+          | Array<
+              | {
+                  __typename?: 'UserBasic';
+                  batch?: number | undefined;
+                  disabled?: boolean | undefined;
+                  dob?: any | undefined;
+                  firstName?: string | undefined;
+                  id?: string | undefined;
+                  isConfidential?: boolean | undefined;
+                  isFaculty?: boolean | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  profileImage?: string | undefined;
+                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+        creator?:
+          | {
+              __typename?: 'UserBasic';
+              batch?: number | undefined;
+              disabled?: boolean | undefined;
+              dob?: any | undefined;
+              firstName?: string | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              profileImage?: string | undefined;
+              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+            }
+          | undefined;
+        event?:
+          | {
+              __typename?: 'EventBasic';
+              adminRemark?: string | undefined;
+              category?: string | undefined;
+              description?: string | undefined;
+              endDate?: any | undefined;
+              id: number;
+              image?: string | undefined;
+              location?: string | undefined;
+              medium: string;
+              short_url?: string | undefined;
+              startDate: any;
+              status?: EventStatus | undefined;
+              summary: string;
+              tags?: Array<string | undefined> | undefined;
+              title: string;
+              total_attendies?: number | undefined;
+            }
+          | undefined;
+        photos?:
+          | Array<
+              | {
+                  __typename?: 'Photo';
+                  caption?: string | undefined;
+                  id?: string | undefined;
+                  uploadedAt?: any | undefined;
+                  url?: string | undefined;
+                  album?:
+                    | {
+                        __typename?: 'AlbumBasic';
+                        coverImage?: string | undefined;
+                        createdAt?: any | undefined;
+                        description?: string | undefined;
+                        id?: string | undefined;
+                        title?: string | undefined;
+                        total_photos?: number | undefined;
+                        updatedAt?: any | undefined;
+                        contributors?:
+                          | Array<
+                              | {
+                                  __typename?: 'UserBasic';
+                                  batch?: number | undefined;
+                                  disabled?: boolean | undefined;
+                                  dob?: any | undefined;
+                                  firstName?: string | undefined;
+                                  id?: string | undefined;
+                                  isConfidential?: boolean | undefined;
+                                  isFaculty?: boolean | undefined;
+                                  isVerified?: boolean | undefined;
+                                  lastName?: string | undefined;
+                                  profileImage?: string | undefined;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                        creator?:
+                          | {
+                              __typename?: 'UserBasic';
+                              batch?: number | undefined;
+                              disabled?: boolean | undefined;
+                              dob?: any | undefined;
+                              firstName?: string | undefined;
+                              id?: string | undefined;
+                              isConfidential?: boolean | undefined;
+                              isFaculty?: boolean | undefined;
+                              isVerified?: boolean | undefined;
+                              lastName?: string | undefined;
+                              profileImage?: string | undefined;
+                            }
+                          | undefined;
+                        event?:
+                          | {
+                              __typename?: 'EventBasic';
+                              adminRemark?: string | undefined;
+                              category?: string | undefined;
+                              description?: string | undefined;
+                              endDate?: any | undefined;
+                              id: number;
+                              image?: string | undefined;
+                              location?: string | undefined;
+                              medium: string;
+                              short_url?: string | undefined;
+                              startDate: any;
+                              status?: EventStatus | undefined;
+                              summary: string;
+                              tags?: Array<string | undefined> | undefined;
+                              title: string;
+                              total_attendies?: number | undefined;
+                            }
+                          | undefined;
+                      }
+                    | undefined;
+                  uploader?:
+                    | {
+                        __typename?: 'User';
+                        aboutMe?: string | undefined;
+                        batch?: number | undefined;
+                        createdAt: any;
+                        disabled?: boolean | undefined;
+                        displayName?: string | undefined;
+                        dob?: any | undefined;
+                        email?: string | undefined;
+                        emergencyMobile?: string | undefined;
+                        extraEmail?: string | undefined;
+                        extraMobile?: string | undefined;
+                        firstName?: string | undefined;
+                        gender?: string | undefined;
+                        google_auth_id?: string | undefined;
+                        id?: string | undefined;
+                        isConfidential?: boolean | undefined;
+                        isFaculty?: boolean | undefined;
+                        isVerified?: boolean | undefined;
+                        lastName?: string | undefined;
+                        membershipYear?: number | undefined;
+                        metadata?: any | undefined;
+                        mobile?: string | undefined;
+                        nickName?: string | undefined;
+                        profileImage?: string | undefined;
+                        socialMedia?: any | undefined;
+                        updatedAt: any;
+                        whatsAppMobile?: string | undefined;
+                        role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                      }
+                    | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+      }
+    | undefined;
+};
+
 export type CreateBlogMutationVariables = Exact<{
   authorId: Scalars['String']['input'];
   categoryId: Scalars['String']['input'];
@@ -883,11 +1455,13 @@ export type CreateBlogMutation = {
               | {
                   __typename?: 'Comment';
                   authorId?: string | undefined;
-                  blogId?: string | undefined;
                   content?: string | undefined;
-                  createdAt: any;
+                  createdAt?: any | undefined;
                   id?: string | undefined;
-                  updatedAt: any;
+                  isVerified?: boolean | undefined;
+                  targetId?: string | undefined;
+                  targetType?: CommentTargetType | undefined;
+                  updatedAt?: any | undefined;
                   author?:
                     | {
                         __typename?: 'UserBasic';
@@ -906,43 +1480,6 @@ export type CreateBlogMutation = {
                 }
               | undefined
             >
-          | undefined;
-      }
-    | undefined;
-};
-
-export type CreateCommentMutationVariables = Exact<{
-  authorId: Scalars['String']['input'];
-  blogId: Scalars['String']['input'];
-  content: Scalars['String']['input'];
-}>;
-
-export type CreateCommentMutation = {
-  __typename?: 'Mutation';
-  createComment?:
-    | {
-        __typename?: 'Comment';
-        authorId?: string | undefined;
-        blogId?: string | undefined;
-        content?: string | undefined;
-        createdAt: any;
-        id?: string | undefined;
-        updatedAt: any;
-        author?:
-          | {
-              __typename?: 'UserBasic';
-              batch?: number | undefined;
-              disabled?: boolean | undefined;
-              dob?: any | undefined;
-              firstName?: string | undefined;
-              id?: string | undefined;
-              isConfidential?: boolean | undefined;
-              isFaculty?: boolean | undefined;
-              isVerified?: boolean | undefined;
-              lastName?: string | undefined;
-              profileImage?: string | undefined;
-              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
-            }
           | undefined;
       }
     | undefined;
@@ -1120,11 +1657,13 @@ export type DeleteBlogMutation = {
               | {
                   __typename?: 'Comment';
                   authorId?: string | undefined;
-                  blogId?: string | undefined;
                   content?: string | undefined;
-                  createdAt: any;
+                  createdAt?: any | undefined;
                   id?: string | undefined;
-                  updatedAt: any;
+                  isVerified?: boolean | undefined;
+                  targetId?: string | undefined;
+                  targetType?: CommentTargetType | undefined;
+                  updatedAt?: any | undefined;
                   author?:
                     | {
                         __typename?: 'UserBasic';
@@ -1143,41 +1682,6 @@ export type DeleteBlogMutation = {
                 }
               | undefined
             >
-          | undefined;
-      }
-    | undefined;
-};
-
-export type DeleteCommentMutationVariables = Exact<{
-  id: Scalars['String']['input'];
-}>;
-
-export type DeleteCommentMutation = {
-  __typename?: 'Mutation';
-  deleteComment?:
-    | {
-        __typename?: 'Comment';
-        authorId?: string | undefined;
-        blogId?: string | undefined;
-        content?: string | undefined;
-        createdAt: any;
-        id?: string | undefined;
-        updatedAt: any;
-        author?:
-          | {
-              __typename?: 'UserBasic';
-              batch?: number | undefined;
-              disabled?: boolean | undefined;
-              dob?: any | undefined;
-              firstName?: string | undefined;
-              id?: string | undefined;
-              isConfidential?: boolean | undefined;
-              isFaculty?: boolean | undefined;
-              isVerified?: boolean | undefined;
-              lastName?: string | undefined;
-              profileImage?: string | undefined;
-              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
-            }
           | undefined;
       }
     | undefined;
@@ -1291,6 +1795,7 @@ export type ForgotPasswordMutation = { __typename?: 'Mutation'; forgotPassword?:
 export type GetPresignedUrlMutationVariables = Exact<{
   contentType: Scalars['String']['input'];
   fileName: Scalars['String']['input'];
+  imageCategory?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 export type GetPresignedUrlMutation = { __typename?: 'Mutation'; getPresignedUrl: string };
@@ -1400,11 +1905,13 @@ export type RequestChangesBlogMutation = {
               | {
                   __typename?: 'Comment';
                   authorId?: string | undefined;
-                  blogId?: string | undefined;
                   content?: string | undefined;
-                  createdAt: any;
+                  createdAt?: any | undefined;
                   id?: string | undefined;
-                  updatedAt: any;
+                  isVerified?: boolean | undefined;
+                  targetId?: string | undefined;
+                  targetType?: CommentTargetType | undefined;
+                  updatedAt?: any | undefined;
                   author?:
                     | {
                         __typename?: 'UserBasic';
@@ -1563,6 +2070,193 @@ export type UpdateAddressMutation = {
     | undefined;
 };
 
+export type UpdateAlbumMutationVariables = Exact<{
+  albumId: Scalars['String']['input'];
+  coverImage?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type UpdateAlbumMutation = {
+  __typename?: 'Mutation';
+  updateAlbum?:
+    | {
+        __typename?: 'Album';
+        coverImage?: string | undefined;
+        createdAt?: any | undefined;
+        description?: string | undefined;
+        id?: string | undefined;
+        title?: string | undefined;
+        total_photos?: number | undefined;
+        updatedAt?: any | undefined;
+        contributors?:
+          | Array<
+              | {
+                  __typename?: 'UserBasic';
+                  batch?: number | undefined;
+                  disabled?: boolean | undefined;
+                  dob?: any | undefined;
+                  firstName?: string | undefined;
+                  id?: string | undefined;
+                  isConfidential?: boolean | undefined;
+                  isFaculty?: boolean | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  profileImage?: string | undefined;
+                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+        creator?:
+          | {
+              __typename?: 'UserBasic';
+              batch?: number | undefined;
+              disabled?: boolean | undefined;
+              dob?: any | undefined;
+              firstName?: string | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              profileImage?: string | undefined;
+              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+            }
+          | undefined;
+        event?:
+          | {
+              __typename?: 'EventBasic';
+              adminRemark?: string | undefined;
+              category?: string | undefined;
+              description?: string | undefined;
+              endDate?: any | undefined;
+              id: number;
+              image?: string | undefined;
+              location?: string | undefined;
+              medium: string;
+              short_url?: string | undefined;
+              startDate: any;
+              status?: EventStatus | undefined;
+              summary: string;
+              tags?: Array<string | undefined> | undefined;
+              title: string;
+              total_attendies?: number | undefined;
+            }
+          | undefined;
+        photos?:
+          | Array<
+              | {
+                  __typename?: 'Photo';
+                  caption?: string | undefined;
+                  id?: string | undefined;
+                  uploadedAt?: any | undefined;
+                  url?: string | undefined;
+                  album?:
+                    | {
+                        __typename?: 'AlbumBasic';
+                        coverImage?: string | undefined;
+                        createdAt?: any | undefined;
+                        description?: string | undefined;
+                        id?: string | undefined;
+                        title?: string | undefined;
+                        total_photos?: number | undefined;
+                        updatedAt?: any | undefined;
+                        contributors?:
+                          | Array<
+                              | {
+                                  __typename?: 'UserBasic';
+                                  batch?: number | undefined;
+                                  disabled?: boolean | undefined;
+                                  dob?: any | undefined;
+                                  firstName?: string | undefined;
+                                  id?: string | undefined;
+                                  isConfidential?: boolean | undefined;
+                                  isFaculty?: boolean | undefined;
+                                  isVerified?: boolean | undefined;
+                                  lastName?: string | undefined;
+                                  profileImage?: string | undefined;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                        creator?:
+                          | {
+                              __typename?: 'UserBasic';
+                              batch?: number | undefined;
+                              disabled?: boolean | undefined;
+                              dob?: any | undefined;
+                              firstName?: string | undefined;
+                              id?: string | undefined;
+                              isConfidential?: boolean | undefined;
+                              isFaculty?: boolean | undefined;
+                              isVerified?: boolean | undefined;
+                              lastName?: string | undefined;
+                              profileImage?: string | undefined;
+                            }
+                          | undefined;
+                        event?:
+                          | {
+                              __typename?: 'EventBasic';
+                              adminRemark?: string | undefined;
+                              category?: string | undefined;
+                              description?: string | undefined;
+                              endDate?: any | undefined;
+                              id: number;
+                              image?: string | undefined;
+                              location?: string | undefined;
+                              medium: string;
+                              short_url?: string | undefined;
+                              startDate: any;
+                              status?: EventStatus | undefined;
+                              summary: string;
+                              tags?: Array<string | undefined> | undefined;
+                              title: string;
+                              total_attendies?: number | undefined;
+                            }
+                          | undefined;
+                      }
+                    | undefined;
+                  uploader?:
+                    | {
+                        __typename?: 'User';
+                        aboutMe?: string | undefined;
+                        batch?: number | undefined;
+                        createdAt: any;
+                        disabled?: boolean | undefined;
+                        displayName?: string | undefined;
+                        dob?: any | undefined;
+                        email?: string | undefined;
+                        emergencyMobile?: string | undefined;
+                        extraEmail?: string | undefined;
+                        extraMobile?: string | undefined;
+                        firstName?: string | undefined;
+                        gender?: string | undefined;
+                        google_auth_id?: string | undefined;
+                        id?: string | undefined;
+                        isConfidential?: boolean | undefined;
+                        isFaculty?: boolean | undefined;
+                        isVerified?: boolean | undefined;
+                        lastName?: string | undefined;
+                        membershipYear?: number | undefined;
+                        metadata?: any | undefined;
+                        mobile?: string | undefined;
+                        nickName?: string | undefined;
+                        profileImage?: string | undefined;
+                        socialMedia?: any | undefined;
+                        updatedAt: any;
+                        whatsAppMobile?: string | undefined;
+                        role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                      }
+                    | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+      }
+    | undefined;
+};
+
 export type UpdateBatchCoordinatorMutationVariables = Exact<{
   newBatch: Scalars['Int']['input'];
   userId: Scalars['String']['input'];
@@ -1660,11 +2354,13 @@ export type UpdateBlogMutation = {
               | {
                   __typename?: 'Comment';
                   authorId?: string | undefined;
-                  blogId?: string | undefined;
                   content?: string | undefined;
-                  createdAt: any;
+                  createdAt?: any | undefined;
                   id?: string | undefined;
-                  updatedAt: any;
+                  isVerified?: boolean | undefined;
+                  targetId?: string | undefined;
+                  targetType?: CommentTargetType | undefined;
+                  updatedAt?: any | undefined;
                   author?:
                     | {
                         __typename?: 'UserBasic';
@@ -1889,6 +2585,276 @@ export type VerifyUserMutationVariables = Exact<{
 
 export type VerifyUserMutation = { __typename?: 'Mutation'; verifyUser?: boolean | undefined };
 
+export type GetAlbumQueryVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+export type GetAlbumQuery = {
+  __typename?: 'Query';
+  getAlbum?:
+    | {
+        __typename?: 'Album';
+        coverImage?: string | undefined;
+        createdAt?: any | undefined;
+        description?: string | undefined;
+        id?: string | undefined;
+        title?: string | undefined;
+        total_photos?: number | undefined;
+        updatedAt?: any | undefined;
+        contributors?:
+          | Array<
+              | {
+                  __typename?: 'UserBasic';
+                  batch?: number | undefined;
+                  disabled?: boolean | undefined;
+                  dob?: any | undefined;
+                  firstName?: string | undefined;
+                  id?: string | undefined;
+                  isConfidential?: boolean | undefined;
+                  isFaculty?: boolean | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  profileImage?: string | undefined;
+                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+        creator?:
+          | {
+              __typename?: 'UserBasic';
+              batch?: number | undefined;
+              disabled?: boolean | undefined;
+              dob?: any | undefined;
+              firstName?: string | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              profileImage?: string | undefined;
+              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+            }
+          | undefined;
+        event?:
+          | {
+              __typename?: 'EventBasic';
+              adminRemark?: string | undefined;
+              category?: string | undefined;
+              description?: string | undefined;
+              endDate?: any | undefined;
+              id: number;
+              image?: string | undefined;
+              location?: string | undefined;
+              medium: string;
+              short_url?: string | undefined;
+              startDate: any;
+              status?: EventStatus | undefined;
+              summary: string;
+              tags?: Array<string | undefined> | undefined;
+              title: string;
+              total_attendies?: number | undefined;
+            }
+          | undefined;
+        photos?:
+          | Array<
+              | {
+                  __typename?: 'Photo';
+                  caption?: string | undefined;
+                  id?: string | undefined;
+                  uploadedAt?: any | undefined;
+                  url?: string | undefined;
+                  album?:
+                    | {
+                        __typename?: 'AlbumBasic';
+                        coverImage?: string | undefined;
+                        createdAt?: any | undefined;
+                        description?: string | undefined;
+                        id?: string | undefined;
+                        title?: string | undefined;
+                        total_photos?: number | undefined;
+                        updatedAt?: any | undefined;
+                        contributors?:
+                          | Array<
+                              | {
+                                  __typename?: 'UserBasic';
+                                  batch?: number | undefined;
+                                  disabled?: boolean | undefined;
+                                  dob?: any | undefined;
+                                  firstName?: string | undefined;
+                                  id?: string | undefined;
+                                  isConfidential?: boolean | undefined;
+                                  isFaculty?: boolean | undefined;
+                                  isVerified?: boolean | undefined;
+                                  lastName?: string | undefined;
+                                  profileImage?: string | undefined;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                        creator?:
+                          | {
+                              __typename?: 'UserBasic';
+                              batch?: number | undefined;
+                              disabled?: boolean | undefined;
+                              dob?: any | undefined;
+                              firstName?: string | undefined;
+                              id?: string | undefined;
+                              isConfidential?: boolean | undefined;
+                              isFaculty?: boolean | undefined;
+                              isVerified?: boolean | undefined;
+                              lastName?: string | undefined;
+                              profileImage?: string | undefined;
+                            }
+                          | undefined;
+                        event?:
+                          | {
+                              __typename?: 'EventBasic';
+                              adminRemark?: string | undefined;
+                              category?: string | undefined;
+                              description?: string | undefined;
+                              endDate?: any | undefined;
+                              id: number;
+                              image?: string | undefined;
+                              location?: string | undefined;
+                              medium: string;
+                              short_url?: string | undefined;
+                              startDate: any;
+                              status?: EventStatus | undefined;
+                              summary: string;
+                              tags?: Array<string | undefined> | undefined;
+                              title: string;
+                              total_attendies?: number | undefined;
+                            }
+                          | undefined;
+                      }
+                    | undefined;
+                  uploader?:
+                    | {
+                        __typename?: 'User';
+                        aboutMe?: string | undefined;
+                        batch?: number | undefined;
+                        createdAt: any;
+                        disabled?: boolean | undefined;
+                        displayName?: string | undefined;
+                        dob?: any | undefined;
+                        email?: string | undefined;
+                        emergencyMobile?: string | undefined;
+                        extraEmail?: string | undefined;
+                        extraMobile?: string | undefined;
+                        firstName?: string | undefined;
+                        gender?: string | undefined;
+                        google_auth_id?: string | undefined;
+                        id?: string | undefined;
+                        isConfidential?: boolean | undefined;
+                        isFaculty?: boolean | undefined;
+                        isVerified?: boolean | undefined;
+                        lastName?: string | undefined;
+                        membershipYear?: number | undefined;
+                        metadata?: any | undefined;
+                        mobile?: string | undefined;
+                        nickName?: string | undefined;
+                        profileImage?: string | undefined;
+                        socialMedia?: any | undefined;
+                        updatedAt: any;
+                        whatsAppMobile?: string | undefined;
+                        role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                      }
+                    | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+      }
+    | undefined;
+};
+
+export type GetAlbumsQueryVariables = Exact<{
+  options?: InputMaybe<ListInput>;
+}>;
+
+export type GetAlbumsQuery = {
+  __typename?: 'Query';
+  getAlbums?:
+    | {
+        __typename?: 'ListAlbumResponse';
+        total?: number | undefined;
+        data?:
+          | Array<
+              | {
+                  __typename?: 'AlbumBasic';
+                  coverImage?: string | undefined;
+                  createdAt?: any | undefined;
+                  description?: string | undefined;
+                  id?: string | undefined;
+                  title?: string | undefined;
+                  total_photos?: number | undefined;
+                  updatedAt?: any | undefined;
+                  contributors?:
+                    | Array<
+                        | {
+                            __typename?: 'UserBasic';
+                            batch?: number | undefined;
+                            disabled?: boolean | undefined;
+                            dob?: any | undefined;
+                            firstName?: string | undefined;
+                            id?: string | undefined;
+                            isConfidential?: boolean | undefined;
+                            isFaculty?: boolean | undefined;
+                            isVerified?: boolean | undefined;
+                            lastName?: string | undefined;
+                            profileImage?: string | undefined;
+                            role?:
+                              | { __typename?: 'Role'; id?: string | undefined; name?: string | undefined }
+                              | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  creator?:
+                    | {
+                        __typename?: 'UserBasic';
+                        batch?: number | undefined;
+                        disabled?: boolean | undefined;
+                        dob?: any | undefined;
+                        firstName?: string | undefined;
+                        id?: string | undefined;
+                        isConfidential?: boolean | undefined;
+                        isFaculty?: boolean | undefined;
+                        isVerified?: boolean | undefined;
+                        lastName?: string | undefined;
+                        profileImage?: string | undefined;
+                        role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                      }
+                    | undefined;
+                  event?:
+                    | {
+                        __typename?: 'EventBasic';
+                        adminRemark?: string | undefined;
+                        category?: string | undefined;
+                        description?: string | undefined;
+                        endDate?: any | undefined;
+                        id: number;
+                        image?: string | undefined;
+                        location?: string | undefined;
+                        medium: string;
+                        short_url?: string | undefined;
+                        startDate: any;
+                        status?: EventStatus | undefined;
+                        summary: string;
+                        tags?: Array<string | undefined> | undefined;
+                        title: string;
+                        total_attendies?: number | undefined;
+                      }
+                    | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+      }
+    | undefined;
+};
+
 export type GetAllBatchCoordinatorsQueryVariables = Exact<{
   options?: InputMaybe<ListInput>;
 }>;
@@ -2086,11 +3052,13 @@ export type GetBlogQuery = {
               | {
                   __typename?: 'Comment';
                   authorId?: string | undefined;
-                  blogId?: string | undefined;
                   content?: string | undefined;
-                  createdAt: any;
+                  createdAt?: any | undefined;
                   id?: string | undefined;
-                  updatedAt: any;
+                  isVerified?: boolean | undefined;
+                  targetId?: string | undefined;
+                  targetType?: CommentTargetType | undefined;
+                  updatedAt?: any | undefined;
                   author?:
                     | {
                         __typename?: 'UserBasic';
@@ -2178,11 +3146,13 @@ export type GetCommentListQuery = {
               | {
                   __typename?: 'Comment';
                   authorId?: string | undefined;
-                  blogId?: string | undefined;
                   content?: string | undefined;
-                  createdAt: any;
+                  createdAt?: any | undefined;
                   id?: string | undefined;
-                  updatedAt: any;
+                  isVerified?: boolean | undefined;
+                  targetId?: string | undefined;
+                  targetType?: CommentTargetType | undefined;
+                  updatedAt?: any | undefined;
                   author?:
                     | {
                         __typename?: 'UserBasic';
@@ -2312,6 +3282,125 @@ export type GetEventListQuery = {
             >
           | undefined;
       }
+    | undefined;
+};
+
+export type GetMyPhotosQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetMyPhotosQuery = {
+  __typename?: 'Query';
+  getMyPhotos?:
+    | Array<
+        | {
+            __typename?: 'Photo';
+            caption?: string | undefined;
+            id?: string | undefined;
+            uploadedAt?: any | undefined;
+            url?: string | undefined;
+            album?:
+              | {
+                  __typename?: 'AlbumBasic';
+                  coverImage?: string | undefined;
+                  createdAt?: any | undefined;
+                  description?: string | undefined;
+                  id?: string | undefined;
+                  title?: string | undefined;
+                  total_photos?: number | undefined;
+                  updatedAt?: any | undefined;
+                  contributors?:
+                    | Array<
+                        | {
+                            __typename?: 'UserBasic';
+                            batch?: number | undefined;
+                            disabled?: boolean | undefined;
+                            dob?: any | undefined;
+                            firstName?: string | undefined;
+                            id?: string | undefined;
+                            isConfidential?: boolean | undefined;
+                            isFaculty?: boolean | undefined;
+                            isVerified?: boolean | undefined;
+                            lastName?: string | undefined;
+                            profileImage?: string | undefined;
+                            role?:
+                              | { __typename?: 'Role'; id?: string | undefined; name?: string | undefined }
+                              | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  creator?:
+                    | {
+                        __typename?: 'UserBasic';
+                        batch?: number | undefined;
+                        disabled?: boolean | undefined;
+                        dob?: any | undefined;
+                        firstName?: string | undefined;
+                        id?: string | undefined;
+                        isConfidential?: boolean | undefined;
+                        isFaculty?: boolean | undefined;
+                        isVerified?: boolean | undefined;
+                        lastName?: string | undefined;
+                        profileImage?: string | undefined;
+                        role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                      }
+                    | undefined;
+                  event?:
+                    | {
+                        __typename?: 'EventBasic';
+                        adminRemark?: string | undefined;
+                        category?: string | undefined;
+                        description?: string | undefined;
+                        endDate?: any | undefined;
+                        id: number;
+                        image?: string | undefined;
+                        location?: string | undefined;
+                        medium: string;
+                        short_url?: string | undefined;
+                        startDate: any;
+                        status?: EventStatus | undefined;
+                        summary: string;
+                        tags?: Array<string | undefined> | undefined;
+                        title: string;
+                        total_attendies?: number | undefined;
+                      }
+                    | undefined;
+                }
+              | undefined;
+            uploader?:
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: any | undefined;
+                  email?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  id?: string | undefined;
+                  isConfidential?: boolean | undefined;
+                  isFaculty?: boolean | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  metadata?: any | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
+                  updatedAt: any;
+                  whatsAppMobile?: string | undefined;
+                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                }
+              | undefined;
+          }
+        | undefined
+      >
     | undefined;
 };
 
@@ -2609,6 +3698,324 @@ export type UpcomingBirthdaysQuery = {
   >;
 };
 
+export const AddAlbumContributorDocument = gql`
+  mutation addAlbumContributor($albumId: String!, $userId: String!) {
+    addAlbumContributor(albumId: $albumId, userId: $userId) {
+      contributors {
+        batch
+        disabled
+        dob
+        firstName
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        profileImage
+        role {
+          id
+          name
+        }
+      }
+      coverImage
+      createdAt
+      creator {
+        batch
+        disabled
+        dob
+        firstName
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        profileImage
+        role {
+          id
+          name
+        }
+      }
+      description
+      event {
+        adminRemark
+        category
+        description
+        endDate
+        id
+        image
+        location
+        medium
+        short_url
+        startDate
+        status
+        summary
+        tags
+        title
+        total_attendies
+      }
+      id
+      photos {
+        album {
+          contributors {
+            batch
+            disabled
+            dob
+            firstName
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            profileImage
+          }
+          coverImage
+          createdAt
+          creator {
+            batch
+            disabled
+            dob
+            firstName
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            profileImage
+          }
+          description
+          event {
+            adminRemark
+            category
+            description
+            endDate
+            id
+            image
+            location
+            medium
+            short_url
+            startDate
+            status
+            summary
+            tags
+            title
+            total_attendies
+          }
+          id
+          title
+          total_photos
+          updatedAt
+        }
+        caption
+        id
+        uploadedAt
+        uploader {
+          aboutMe
+          batch
+          createdAt
+          disabled
+          displayName
+          dob
+          email
+          emergencyMobile
+          extraEmail
+          extraMobile
+          firstName
+          gender
+          google_auth_id
+          id
+          isConfidential
+          isFaculty
+          isVerified
+          lastName
+          membershipYear
+          metadata
+          mobile
+          nickName
+          profileImage
+          role {
+            id
+            name
+          }
+          socialMedia
+          updatedAt
+          whatsAppMobile
+        }
+        url
+      }
+      title
+      total_photos
+      updatedAt
+    }
+  }
+`;
+export type AddAlbumContributorMutationFn = Apollo.MutationFunction<
+  AddAlbumContributorMutation,
+  AddAlbumContributorMutationVariables
+>;
+
+/**
+ * __useAddAlbumContributorMutation__
+ *
+ * To run a mutation, you first call `useAddAlbumContributorMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddAlbumContributorMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addAlbumContributorMutation, { data, loading, error }] = useAddAlbumContributorMutation({
+ *   variables: {
+ *      albumId: // value for 'albumId'
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useAddAlbumContributorMutation(
+  baseOptions?: Apollo.MutationHookOptions<AddAlbumContributorMutation, AddAlbumContributorMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<AddAlbumContributorMutation, AddAlbumContributorMutationVariables>(
+    AddAlbumContributorDocument,
+    options
+  );
+}
+export type AddAlbumContributorMutationHookResult = ReturnType<typeof useAddAlbumContributorMutation>;
+export type AddAlbumContributorMutationResult = Apollo.MutationResult<AddAlbumContributorMutation>;
+export type AddAlbumContributorMutationOptions = Apollo.BaseMutationOptions<
+  AddAlbumContributorMutation,
+  AddAlbumContributorMutationVariables
+>;
+export const AddPhotoDocument = gql`
+  mutation addPhoto($albumId: String!, $caption: String, $url: String!) {
+    addPhoto(albumId: $albumId, caption: $caption, url: $url) {
+      album {
+        contributors {
+          batch
+          disabled
+          dob
+          firstName
+          id
+          isConfidential
+          isFaculty
+          isVerified
+          lastName
+          profileImage
+          role {
+            id
+            name
+          }
+        }
+        coverImage
+        createdAt
+        creator {
+          batch
+          disabled
+          dob
+          firstName
+          id
+          isConfidential
+          isFaculty
+          isVerified
+          lastName
+          profileImage
+          role {
+            id
+            name
+          }
+        }
+        description
+        event {
+          adminRemark
+          category
+          description
+          endDate
+          id
+          image
+          location
+          medium
+          short_url
+          startDate
+          status
+          summary
+          tags
+          title
+          total_attendies
+        }
+        id
+        title
+        total_photos
+        updatedAt
+      }
+      caption
+      id
+      uploadedAt
+      uploader {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        role {
+          id
+          name
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      url
+    }
+  }
+`;
+export type AddPhotoMutationFn = Apollo.MutationFunction<AddPhotoMutation, AddPhotoMutationVariables>;
+
+/**
+ * __useAddPhotoMutation__
+ *
+ * To run a mutation, you first call `useAddPhotoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddPhotoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addPhotoMutation, { data, loading, error }] = useAddPhotoMutation({
+ *   variables: {
+ *      albumId: // value for 'albumId'
+ *      caption: // value for 'caption'
+ *      url: // value for 'url'
+ *   },
+ * });
+ */
+export function useAddPhotoMutation(
+  baseOptions?: Apollo.MutationHookOptions<AddPhotoMutation, AddPhotoMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<AddPhotoMutation, AddPhotoMutationVariables>(AddPhotoDocument, options);
+}
+export type AddPhotoMutationHookResult = ReturnType<typeof useAddPhotoMutation>;
+export type AddPhotoMutationResult = Apollo.MutationResult<AddPhotoMutation>;
+export type AddPhotoMutationOptions = Apollo.BaseMutationOptions<AddPhotoMutation, AddPhotoMutationVariables>;
 export const ApproveBlogDocument = gql`
   mutation approveBlog($id: String!) {
     approveBlog(id: $id) {
@@ -2646,10 +4053,12 @@ export const ApproveBlogDocument = gql`
           profileImage
         }
         authorId
-        blogId
         content
         createdAt
         id
+        isVerified
+        targetId
+        targetType
         updatedAt
       }
       content
@@ -2869,6 +4278,187 @@ export type CreateAddressMutationOptions = Apollo.BaseMutationOptions<
   CreateAddressMutation,
   CreateAddressMutationVariables
 >;
+export const CreateAlbumDocument = gql`
+  mutation createAlbum($coverImage: String, $description: String, $eventId: Int, $title: String!) {
+    createAlbum(coverImage: $coverImage, description: $description, eventId: $eventId, title: $title) {
+      contributors {
+        batch
+        disabled
+        dob
+        firstName
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        profileImage
+        role {
+          id
+          name
+        }
+      }
+      coverImage
+      createdAt
+      creator {
+        batch
+        disabled
+        dob
+        firstName
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        profileImage
+        role {
+          id
+          name
+        }
+      }
+      description
+      event {
+        adminRemark
+        category
+        description
+        endDate
+        id
+        image
+        location
+        medium
+        short_url
+        startDate
+        status
+        summary
+        tags
+        title
+        total_attendies
+      }
+      id
+      photos {
+        album {
+          contributors {
+            batch
+            disabled
+            dob
+            firstName
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            profileImage
+          }
+          coverImage
+          createdAt
+          creator {
+            batch
+            disabled
+            dob
+            firstName
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            profileImage
+          }
+          description
+          event {
+            adminRemark
+            category
+            description
+            endDate
+            id
+            image
+            location
+            medium
+            short_url
+            startDate
+            status
+            summary
+            tags
+            title
+            total_attendies
+          }
+          id
+          title
+          total_photos
+          updatedAt
+        }
+        caption
+        id
+        uploadedAt
+        uploader {
+          aboutMe
+          batch
+          createdAt
+          disabled
+          displayName
+          dob
+          email
+          emergencyMobile
+          extraEmail
+          extraMobile
+          firstName
+          gender
+          google_auth_id
+          id
+          isConfidential
+          isFaculty
+          isVerified
+          lastName
+          membershipYear
+          metadata
+          mobile
+          nickName
+          profileImage
+          role {
+            id
+            name
+          }
+          socialMedia
+          updatedAt
+          whatsAppMobile
+        }
+        url
+      }
+      title
+      total_photos
+      updatedAt
+    }
+  }
+`;
+export type CreateAlbumMutationFn = Apollo.MutationFunction<CreateAlbumMutation, CreateAlbumMutationVariables>;
+
+/**
+ * __useCreateAlbumMutation__
+ *
+ * To run a mutation, you first call `useCreateAlbumMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAlbumMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createAlbumMutation, { data, loading, error }] = useCreateAlbumMutation({
+ *   variables: {
+ *      coverImage: // value for 'coverImage'
+ *      description: // value for 'description'
+ *      eventId: // value for 'eventId'
+ *      title: // value for 'title'
+ *   },
+ * });
+ */
+export function useCreateAlbumMutation(
+  baseOptions?: Apollo.MutationHookOptions<CreateAlbumMutation, CreateAlbumMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<CreateAlbumMutation, CreateAlbumMutationVariables>(CreateAlbumDocument, options);
+}
+export type CreateAlbumMutationHookResult = ReturnType<typeof useCreateAlbumMutation>;
+export type CreateAlbumMutationResult = Apollo.MutationResult<CreateAlbumMutation>;
+export type CreateAlbumMutationOptions = Apollo.BaseMutationOptions<CreateAlbumMutation, CreateAlbumMutationVariables>;
 export const CreateBlogDocument = gql`
   mutation createBlog(
     $authorId: String!
@@ -2912,10 +4502,12 @@ export const CreateBlogDocument = gql`
           profileImage
         }
         authorId
-        blogId
         content
         createdAt
         id
+        isVerified
+        targetId
+        targetType
         updatedAt
       }
       content
@@ -2962,67 +4554,6 @@ export function useCreateBlogMutation(
 export type CreateBlogMutationHookResult = ReturnType<typeof useCreateBlogMutation>;
 export type CreateBlogMutationResult = Apollo.MutationResult<CreateBlogMutation>;
 export type CreateBlogMutationOptions = Apollo.BaseMutationOptions<CreateBlogMutation, CreateBlogMutationVariables>;
-export const CreateCommentDocument = gql`
-  mutation createComment($authorId: String!, $blogId: String!, $content: String!) {
-    createComment(authorId: $authorId, blogId: $blogId, content: $content) {
-      author {
-        batch
-        disabled
-        dob
-        firstName
-        id
-        isConfidential
-        isFaculty
-        isVerified
-        lastName
-        profileImage
-        role {
-          id
-          name
-        }
-      }
-      authorId
-      blogId
-      content
-      createdAt
-      id
-      updatedAt
-    }
-  }
-`;
-export type CreateCommentMutationFn = Apollo.MutationFunction<CreateCommentMutation, CreateCommentMutationVariables>;
-
-/**
- * __useCreateCommentMutation__
- *
- * To run a mutation, you first call `useCreateCommentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateCommentMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createCommentMutation, { data, loading, error }] = useCreateCommentMutation({
- *   variables: {
- *      authorId: // value for 'authorId'
- *      blogId: // value for 'blogId'
- *      content: // value for 'content'
- *   },
- * });
- */
-export function useCreateCommentMutation(
-  baseOptions?: Apollo.MutationHookOptions<CreateCommentMutation, CreateCommentMutationVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<CreateCommentMutation, CreateCommentMutationVariables>(CreateCommentDocument, options);
-}
-export type CreateCommentMutationHookResult = ReturnType<typeof useCreateCommentMutation>;
-export type CreateCommentMutationResult = Apollo.MutationResult<CreateCommentMutation>;
-export type CreateCommentMutationOptions = Apollo.BaseMutationOptions<
-  CreateCommentMutation,
-  CreateCommentMutationVariables
->;
 export const CreateEventDocument = gql`
   mutation createEvent(
     $category: String!
@@ -3314,10 +4845,12 @@ export const DeleteBlogDocument = gql`
           profileImage
         }
         authorId
-        blogId
         content
         createdAt
         id
+        isVerified
+        targetId
+        targetType
         updatedAt
       }
       content
@@ -3360,65 +4893,6 @@ export function useDeleteBlogMutation(
 export type DeleteBlogMutationHookResult = ReturnType<typeof useDeleteBlogMutation>;
 export type DeleteBlogMutationResult = Apollo.MutationResult<DeleteBlogMutation>;
 export type DeleteBlogMutationOptions = Apollo.BaseMutationOptions<DeleteBlogMutation, DeleteBlogMutationVariables>;
-export const DeleteCommentDocument = gql`
-  mutation deleteComment($id: String!) {
-    deleteComment(id: $id) {
-      author {
-        batch
-        disabled
-        dob
-        firstName
-        id
-        isConfidential
-        isFaculty
-        isVerified
-        lastName
-        profileImage
-        role {
-          id
-          name
-        }
-      }
-      authorId
-      blogId
-      content
-      createdAt
-      id
-      updatedAt
-    }
-  }
-`;
-export type DeleteCommentMutationFn = Apollo.MutationFunction<DeleteCommentMutation, DeleteCommentMutationVariables>;
-
-/**
- * __useDeleteCommentMutation__
- *
- * To run a mutation, you first call `useDeleteCommentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteCommentMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteCommentMutation, { data, loading, error }] = useDeleteCommentMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useDeleteCommentMutation(
-  baseOptions?: Apollo.MutationHookOptions<DeleteCommentMutation, DeleteCommentMutationVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<DeleteCommentMutation, DeleteCommentMutationVariables>(DeleteCommentDocument, options);
-}
-export type DeleteCommentMutationHookResult = ReturnType<typeof useDeleteCommentMutation>;
-export type DeleteCommentMutationResult = Apollo.MutationResult<DeleteCommentMutation>;
-export type DeleteCommentMutationOptions = Apollo.BaseMutationOptions<
-  DeleteCommentMutation,
-  DeleteCommentMutationVariables
->;
 export const DeleteTransactionDocument = gql`
   mutation deleteTransaction($id: String!) {
     deleteTransaction(id: $id) {
@@ -3609,8 +5083,8 @@ export type ForgotPasswordMutationOptions = Apollo.BaseMutationOptions<
   ForgotPasswordMutationVariables
 >;
 export const GetPresignedUrlDocument = gql`
-  mutation getPresignedUrl($contentType: String!, $fileName: String!) {
-    getPresignedUrl(contentType: $contentType, fileName: $fileName)
+  mutation getPresignedUrl($contentType: String!, $fileName: String!, $imageCategory: String) {
+    getPresignedUrl(contentType: $contentType, fileName: $fileName, imageCategory: $imageCategory)
   }
 `;
 export type GetPresignedUrlMutationFn = Apollo.MutationFunction<
@@ -3633,6 +5107,7 @@ export type GetPresignedUrlMutationFn = Apollo.MutationFunction<
  *   variables: {
  *      contentType: // value for 'contentType'
  *      fileName: // value for 'fileName'
+ *      imageCategory: // value for 'imageCategory'
  *   },
  * });
  */
@@ -3866,10 +5341,12 @@ export const RequestChangesBlogDocument = gql`
           profileImage
         }
         authorId
-        blogId
         content
         createdAt
         id
+        isVerified
+        targetId
+        targetType
         updatedAt
       }
       content
@@ -4216,6 +5693,187 @@ export type UpdateAddressMutationOptions = Apollo.BaseMutationOptions<
   UpdateAddressMutation,
   UpdateAddressMutationVariables
 >;
+export const UpdateAlbumDocument = gql`
+  mutation updateAlbum($albumId: String!, $coverImage: String, $description: String, $title: String) {
+    updateAlbum(albumId: $albumId, coverImage: $coverImage, description: $description, title: $title) {
+      contributors {
+        batch
+        disabled
+        dob
+        firstName
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        profileImage
+        role {
+          id
+          name
+        }
+      }
+      coverImage
+      createdAt
+      creator {
+        batch
+        disabled
+        dob
+        firstName
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        profileImage
+        role {
+          id
+          name
+        }
+      }
+      description
+      event {
+        adminRemark
+        category
+        description
+        endDate
+        id
+        image
+        location
+        medium
+        short_url
+        startDate
+        status
+        summary
+        tags
+        title
+        total_attendies
+      }
+      id
+      photos {
+        album {
+          contributors {
+            batch
+            disabled
+            dob
+            firstName
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            profileImage
+          }
+          coverImage
+          createdAt
+          creator {
+            batch
+            disabled
+            dob
+            firstName
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            profileImage
+          }
+          description
+          event {
+            adminRemark
+            category
+            description
+            endDate
+            id
+            image
+            location
+            medium
+            short_url
+            startDate
+            status
+            summary
+            tags
+            title
+            total_attendies
+          }
+          id
+          title
+          total_photos
+          updatedAt
+        }
+        caption
+        id
+        uploadedAt
+        uploader {
+          aboutMe
+          batch
+          createdAt
+          disabled
+          displayName
+          dob
+          email
+          emergencyMobile
+          extraEmail
+          extraMobile
+          firstName
+          gender
+          google_auth_id
+          id
+          isConfidential
+          isFaculty
+          isVerified
+          lastName
+          membershipYear
+          metadata
+          mobile
+          nickName
+          profileImage
+          role {
+            id
+            name
+          }
+          socialMedia
+          updatedAt
+          whatsAppMobile
+        }
+        url
+      }
+      title
+      total_photos
+      updatedAt
+    }
+  }
+`;
+export type UpdateAlbumMutationFn = Apollo.MutationFunction<UpdateAlbumMutation, UpdateAlbumMutationVariables>;
+
+/**
+ * __useUpdateAlbumMutation__
+ *
+ * To run a mutation, you first call `useUpdateAlbumMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateAlbumMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateAlbumMutation, { data, loading, error }] = useUpdateAlbumMutation({
+ *   variables: {
+ *      albumId: // value for 'albumId'
+ *      coverImage: // value for 'coverImage'
+ *      description: // value for 'description'
+ *      title: // value for 'title'
+ *   },
+ * });
+ */
+export function useUpdateAlbumMutation(
+  baseOptions?: Apollo.MutationHookOptions<UpdateAlbumMutation, UpdateAlbumMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<UpdateAlbumMutation, UpdateAlbumMutationVariables>(UpdateAlbumDocument, options);
+}
+export type UpdateAlbumMutationHookResult = ReturnType<typeof useUpdateAlbumMutation>;
+export type UpdateAlbumMutationResult = Apollo.MutationResult<UpdateAlbumMutation>;
+export type UpdateAlbumMutationOptions = Apollo.BaseMutationOptions<UpdateAlbumMutation, UpdateAlbumMutationVariables>;
 export const UpdateBatchCoordinatorDocument = gql`
   mutation updateBatchCoordinator($newBatch: Int!, $userId: String!) {
     updateBatchCoordinator(newBatch: $newBatch, userId: $userId) {
@@ -4333,10 +5991,12 @@ export const UpdateBlogDocument = gql`
           profileImage
         }
         authorId
-        blogId
         content
         createdAt
         id
+        isVerified
+        targetId
+        targetType
         updatedAt
       }
       content
@@ -4829,6 +6489,296 @@ export function useVerifyUserMutation(
 export type VerifyUserMutationHookResult = ReturnType<typeof useVerifyUserMutation>;
 export type VerifyUserMutationResult = Apollo.MutationResult<VerifyUserMutation>;
 export type VerifyUserMutationOptions = Apollo.BaseMutationOptions<VerifyUserMutation, VerifyUserMutationVariables>;
+export const GetAlbumDocument = gql`
+  query getAlbum($id: String!) {
+    getAlbum(id: $id) {
+      contributors {
+        batch
+        disabled
+        dob
+        firstName
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        profileImage
+        role {
+          id
+          name
+        }
+      }
+      coverImage
+      createdAt
+      creator {
+        batch
+        disabled
+        dob
+        firstName
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        profileImage
+        role {
+          id
+          name
+        }
+      }
+      description
+      event {
+        adminRemark
+        category
+        description
+        endDate
+        id
+        image
+        location
+        medium
+        short_url
+        startDate
+        status
+        summary
+        tags
+        title
+        total_attendies
+      }
+      id
+      photos {
+        album {
+          contributors {
+            batch
+            disabled
+            dob
+            firstName
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            profileImage
+          }
+          coverImage
+          createdAt
+          creator {
+            batch
+            disabled
+            dob
+            firstName
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            profileImage
+          }
+          description
+          event {
+            adminRemark
+            category
+            description
+            endDate
+            id
+            image
+            location
+            medium
+            short_url
+            startDate
+            status
+            summary
+            tags
+            title
+            total_attendies
+          }
+          id
+          title
+          total_photos
+          updatedAt
+        }
+        caption
+        id
+        uploadedAt
+        uploader {
+          aboutMe
+          batch
+          createdAt
+          disabled
+          displayName
+          dob
+          email
+          emergencyMobile
+          extraEmail
+          extraMobile
+          firstName
+          gender
+          google_auth_id
+          id
+          isConfidential
+          isFaculty
+          isVerified
+          lastName
+          membershipYear
+          metadata
+          mobile
+          nickName
+          profileImage
+          role {
+            id
+            name
+          }
+          socialMedia
+          updatedAt
+          whatsAppMobile
+        }
+        url
+      }
+      title
+      total_photos
+      updatedAt
+    }
+  }
+`;
+
+/**
+ * __useGetAlbumQuery__
+ *
+ * To run a query within a React component, call `useGetAlbumQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAlbumQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAlbumQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetAlbumQuery(
+  baseOptions: Apollo.QueryHookOptions<GetAlbumQuery, GetAlbumQueryVariables> &
+    ({ variables: GetAlbumQueryVariables; skip?: boolean } | { skip: boolean })
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetAlbumQuery, GetAlbumQueryVariables>(GetAlbumDocument, options);
+}
+export function useGetAlbumLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAlbumQuery, GetAlbumQueryVariables>) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetAlbumQuery, GetAlbumQueryVariables>(GetAlbumDocument, options);
+}
+export function useGetAlbumSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAlbumQuery, GetAlbumQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetAlbumQuery, GetAlbumQueryVariables>(GetAlbumDocument, options);
+}
+export type GetAlbumQueryHookResult = ReturnType<typeof useGetAlbumQuery>;
+export type GetAlbumLazyQueryHookResult = ReturnType<typeof useGetAlbumLazyQuery>;
+export type GetAlbumSuspenseQueryHookResult = ReturnType<typeof useGetAlbumSuspenseQuery>;
+export type GetAlbumQueryResult = Apollo.QueryResult<GetAlbumQuery, GetAlbumQueryVariables>;
+export const GetAlbumsDocument = gql`
+  query getAlbums($options: ListInput) {
+    getAlbums(options: $options) {
+      data {
+        contributors {
+          batch
+          disabled
+          dob
+          firstName
+          id
+          isConfidential
+          isFaculty
+          isVerified
+          lastName
+          profileImage
+          role {
+            id
+            name
+          }
+        }
+        coverImage
+        createdAt
+        creator {
+          batch
+          disabled
+          dob
+          firstName
+          id
+          isConfidential
+          isFaculty
+          isVerified
+          lastName
+          profileImage
+          role {
+            id
+            name
+          }
+        }
+        description
+        event {
+          adminRemark
+          category
+          description
+          endDate
+          id
+          image
+          location
+          medium
+          short_url
+          startDate
+          status
+          summary
+          tags
+          title
+          total_attendies
+        }
+        id
+        title
+        total_photos
+        updatedAt
+      }
+      total
+    }
+  }
+`;
+
+/**
+ * __useGetAlbumsQuery__
+ *
+ * To run a query within a React component, call `useGetAlbumsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAlbumsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAlbumsQuery({
+ *   variables: {
+ *      options: // value for 'options'
+ *   },
+ * });
+ */
+export function useGetAlbumsQuery(baseOptions?: Apollo.QueryHookOptions<GetAlbumsQuery, GetAlbumsQueryVariables>) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetAlbumsQuery, GetAlbumsQueryVariables>(GetAlbumsDocument, options);
+}
+export function useGetAlbumsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetAlbumsQuery, GetAlbumsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetAlbumsQuery, GetAlbumsQueryVariables>(GetAlbumsDocument, options);
+}
+export function useGetAlbumsSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAlbumsQuery, GetAlbumsQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetAlbumsQuery, GetAlbumsQueryVariables>(GetAlbumsDocument, options);
+}
+export type GetAlbumsQueryHookResult = ReturnType<typeof useGetAlbumsQuery>;
+export type GetAlbumsLazyQueryHookResult = ReturnType<typeof useGetAlbumsLazyQuery>;
+export type GetAlbumsSuspenseQueryHookResult = ReturnType<typeof useGetAlbumsSuspenseQuery>;
+export type GetAlbumsQueryResult = Apollo.QueryResult<GetAlbumsQuery, GetAlbumsQueryVariables>;
 export const GetAllBatchCoordinatorsDocument = gql`
   query getAllBatchCoordinators($options: ListInput) {
     getAllBatchCoordinators(options: $options) {
@@ -5157,10 +7107,12 @@ export const GetBlogDocument = gql`
           profileImage
         }
         authorId
-        blogId
         content
         createdAt
         id
+        isVerified
+        targetId
+        targetType
         updatedAt
       }
       content
@@ -5307,10 +7259,12 @@ export const GetCommentListDocument = gql`
           }
         }
         authorId
-        blogId
         content
         createdAt
         id
+        isVerified
+        targetId
+        targetType
         updatedAt
       }
       total
@@ -5517,6 +7471,144 @@ export type GetEventListQueryHookResult = ReturnType<typeof useGetEventListQuery
 export type GetEventListLazyQueryHookResult = ReturnType<typeof useGetEventListLazyQuery>;
 export type GetEventListSuspenseQueryHookResult = ReturnType<typeof useGetEventListSuspenseQuery>;
 export type GetEventListQueryResult = Apollo.QueryResult<GetEventListQuery, GetEventListQueryVariables>;
+export const GetMyPhotosDocument = gql`
+  query getMyPhotos {
+    getMyPhotos {
+      album {
+        contributors {
+          batch
+          disabled
+          dob
+          firstName
+          id
+          isConfidential
+          isFaculty
+          isVerified
+          lastName
+          profileImage
+          role {
+            id
+            name
+          }
+        }
+        coverImage
+        createdAt
+        creator {
+          batch
+          disabled
+          dob
+          firstName
+          id
+          isConfidential
+          isFaculty
+          isVerified
+          lastName
+          profileImage
+          role {
+            id
+            name
+          }
+        }
+        description
+        event {
+          adminRemark
+          category
+          description
+          endDate
+          id
+          image
+          location
+          medium
+          short_url
+          startDate
+          status
+          summary
+          tags
+          title
+          total_attendies
+        }
+        id
+        title
+        total_photos
+        updatedAt
+      }
+      caption
+      id
+      uploadedAt
+      uploader {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        role {
+          id
+          name
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      url
+    }
+  }
+`;
+
+/**
+ * __useGetMyPhotosQuery__
+ *
+ * To run a query within a React component, call `useGetMyPhotosQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMyPhotosQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMyPhotosQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetMyPhotosQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetMyPhotosQuery, GetMyPhotosQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetMyPhotosQuery, GetMyPhotosQueryVariables>(GetMyPhotosDocument, options);
+}
+export function useGetMyPhotosLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetMyPhotosQuery, GetMyPhotosQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetMyPhotosQuery, GetMyPhotosQueryVariables>(GetMyPhotosDocument, options);
+}
+export function useGetMyPhotosSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetMyPhotosQuery, GetMyPhotosQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetMyPhotosQuery, GetMyPhotosQueryVariables>(GetMyPhotosDocument, options);
+}
+export type GetMyPhotosQueryHookResult = ReturnType<typeof useGetMyPhotosQuery>;
+export type GetMyPhotosLazyQueryHookResult = ReturnType<typeof useGetMyPhotosLazyQuery>;
+export type GetMyPhotosSuspenseQueryHookResult = ReturnType<typeof useGetMyPhotosSuspenseQuery>;
+export type GetMyPhotosQueryResult = Apollo.QueryResult<GetMyPhotosQuery, GetMyPhotosQueryVariables>;
 export const GetTransactionDocument = gql`
   query getTransaction($id: String!) {
     getTransaction(id: $id) {

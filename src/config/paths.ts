@@ -11,6 +11,11 @@ export const paths = {
     new: '/events/new',
     getEventDetailUrl: (id: number) => `/events/${id}`,
   },
+  gallery: {
+    root: '/gallery',
+    new: '/gallery/new',
+    getAlbumDetailUrl: (id: string) => `/gallery/${id}`,
+  },
   blog: {
     root: '/blog',
     new: '/blog/new',

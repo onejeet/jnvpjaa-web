@@ -379,10 +379,16 @@ const BlogCard: React.FC<IBlogCardProps> = ({
             onClick={() => (author?.id ? router.push(paths.profile.getProfileUrl(author?.id)) : null)}
             src={author?.profileImage}
             summary={author?.isFaculty ? 'Faculty' : author?.batch ? `Batch of ${author?.batch}` : ''}
+            containerProps={{
+              maxWidth: '150px',
+            }}
             titleComponentProps={{
               titleProps: {
+                maxWidth: '100%',
                 fontSize: '14px',
                 fontWeight: 500,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
               },
               summaryProps: {
                 fontSize: '10px',

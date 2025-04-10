@@ -4,12 +4,14 @@ import Image from 'next/image';
 import { User } from '@/apollo/hooks';
 import { CheckCircle } from '@phosphor-icons/react';
 import Button from '@/components/core/Button';
+import { useAuth } from '@/context/AuthContext';
 
 interface WelcomeProps {
   onNext?: () => void;
 }
 
 const Welcome: React.FC<WelcomeProps> = ({ onNext }) => {
+  const { user } = useAuth();
   return (
     <Box p={4}>
       {/* <Box sx={{ mb: 3, borderBottom: '1px solid #cccccc', pb: 2 }}>
@@ -37,7 +39,7 @@ const Welcome: React.FC<WelcomeProps> = ({ onNext }) => {
       </Box>
       <Box display="flex" flexDirection="column" justifyContent="start" gap={1}>
         <Typography>
-          Hey Navodians! 🚀 <br />
+          Hey {`${user?.firstName || 'Navodian'}`} 🚀 <br />
           {`We're thrilled to have you here! 🎊 This is your space to reconnect, relive memories, and build new ones.
         Whether it’s your first time logging in or you're already a part of this amazing community, we want you to feel
         at home.`}{' '}

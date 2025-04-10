@@ -1,7 +1,7 @@
 import { IHeaderMenuItem } from 'src/layouts/Layout/LayoutTopbar';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import ExtensionIcon from '@mui/icons-material/Extension';
-import { Article, ArticleNyTimes, CalendarDots, Ticket } from '@phosphor-icons/react';
+import { Article, ArticleNyTimes, CalendarDots, ImagesSquare, Ticket } from '@phosphor-icons/react';
 
 export const HEADER_MENU: IHeaderMenuItem[] = [
   {
@@ -79,6 +79,10 @@ export const HEADER_MENU: IHeaderMenuItem[] = [
         path: '/members',
       },
       {
+        label: 'Photo Gallery',
+        path: '/gallery',
+      },
+      {
         label: 'Donate Now',
         path: '/donations',
       },
@@ -88,6 +92,7 @@ export const HEADER_MENU: IHeaderMenuItem[] = [
       // },
     ],
   },
+
   {
     label: 'Events',
     path: '/events',
@@ -164,6 +169,10 @@ export const MEMBER_HEADER_MENU: IHeaderMenuItem[] = [
         path: '/members',
       },
       {
+        label: 'Photo Gallery',
+        path: '/gallery',
+      },
+      {
         label: 'Billing & Transactions',
         path: '/transactions',
       },
@@ -205,5 +214,10 @@ export const ADD_ENTITIES: IHeaderMenuItem[] = [
     label: 'New Event',
     path: '/events/new',
     icon: <CalendarDots />,
+  },
+  {
+    label: 'New Album',
+    path: '/gallery/new',
+    icon: <ImagesSquare />,
   },
 ];
