@@ -38,8 +38,21 @@ const Welcome: React.FC<WelcomeProps> = ({ onNext }) => {
         />
       </Box>
       <Box display="flex" flexDirection="column" justifyContent="start" gap={1}>
+        <Typography
+          color="text.primary"
+          textAlign="left"
+          variant="body1"
+          fontWeight={500}
+          sx={{
+            fontSize: '30px',
+            background: 'linear-gradient(90deg,#C62835 0,#217bfe 10%, #078efb 100%)',
+            backgroundClip: 'text',
+            color: 'transparent',
+          }}
+        >
+          {`Hello ${user?.firstName} 👋`}
+        </Typography>
         <Typography>
-          Hey {`${user?.firstName || 'Navodian'}`} 🚀 <br />
           {`We're thrilled to have you here! 🎊 This is your space to reconnect, relive memories, and build new ones.
         Whether it’s your first time logging in or you're already a part of this amazing community, we want you to feel
         at home.`}{' '}

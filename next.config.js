@@ -6,6 +6,19 @@ const withPWA = require('next-pwa')({
   register: true,
   skipWaiting: true,
   reloadOnOnline: false,
+  runtimeCaching: [
+    {
+      urlPattern: /^https:\/\/(.*)\.(jpg|jpeg|png|gif|webp|svg|bmp)$/i,
+      handler: 'CacheFirst', // This will cache the images for offline usage
+      options: {
+        cacheName: 'image-cache',
+        expiration: {
+          maxEntries: 100, // Max number of images to cache
+          maxAgeSeconds: 60 * 60 * 24 * 365, // Cache images for 1 year
+        },
+      },
+    },
+  ],
 });
 
 const nextConfig = {
