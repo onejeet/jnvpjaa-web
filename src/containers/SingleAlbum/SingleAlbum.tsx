@@ -9,6 +9,8 @@ import {
   GetBlogDocument,
   useGetAlbumQuery,
   Album,
+  UserBasic,
+  Maybe,
 } from '@/apollo/hooks';
 import Breadcrumbs from '@/components/common/Breadcrumbs';
 import EmptyView from '@/components/common/EmptyView';
@@ -21,9 +23,11 @@ import { useAlert } from '@/context/AlertContext';
 import { useAuth } from '@/context/AuthContext';
 import LayoutModule from '@/layouts/Layout';
 import { updateCache } from '@/utils/apollo';
+import { getAvatarDataUrl } from '@/utils/helpers';
 import { useApolloClient } from '@apollo/client';
-import { Box, Typography } from '@mui/material';
-import { CheckCircle, Eye, Pencil } from '@phosphor-icons/react';
+import { Avatar, AvatarGroup, Box, Skeleton, Stack, Tooltip, Typography } from '@mui/material';
+import { CalendarDots, CheckCircle, Eye, Pencil, Star } from '@phosphor-icons/react';
+import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -40,13 +44,8 @@ const SingleAlbum = () => {
       id: id as string,
     },
   });
+
   const album: Album | undefined = React.useMemo(() => data?.getAlbum, [data]);
-  const [publisBlog, { loading: publishBlogLoading }] = useUpdateBlogMutation();
-  const [handleVerifyBlog] = useApproveBlogMutation();
-
-  const [blogClapUpdate] = useUpdateClapsMutation();
-
-  console.log('ZZ: album', album);
 
   const breadcrumbsList = React.useMemo(
     () => [
@@ -60,6 +59,15 @@ const SingleAlbum = () => {
     ],
     [album]
   );
+
+  const dataLoading = loading || !id;
+
+  const listPhotos = React.useMemo(() => {
+    if (dataLoading || !id) {
+      return new Array(6).fill({ id: '', title: '', url: '' });
+    }
+    return album?.photos || [];
+  }, [id, dataLoading, album]);
 
   // const buttonProps: ButtonProps[] | null = React.useMemo(() => {
   //   switch (album?.status) {
@@ -287,13 +295,97 @@ const SingleAlbum = () => {
 
   return (
     <LayoutModule disableCover title={`${album?.title || 'Blog'} • Alumni Network of JNV Paota, Jaipur`}>
-      <Box mb={1} display="flex" flexDirection="column" justifyContent="start" alignItems="start">
-        <Breadcrumbs items={breadcrumbsList} loading={loading} sx={{ display: { xs: 'none', sm: 'flex' } }} />
-        <Box>
-          <Typography variant="h1">{album?.title || 'Album'}</Typography>
-          <Typography color="grey.800" mb={3} mt={1}>
-            {album?.description}
-          </Typography>
+      <Box mb={2} display="flex" flexDirection="column" justifyContent="start" alignItems="start">
+        <Breadcrumbs items={breadcrumbsList} loading={dataLoading} sx={{ display: { xs: 'none', sm: 'flex' } }} />
+        <Box width="100%">
+          {dataLoading ? (
+            <>
+              <Skeleton width="40%" height={40} />
+              <Skeleton width="50%" height={28} />
+            </>
+          ) : (
+            <>
+              <Typography variant="h1">{album?.title || 'Album'}</Typography>
+              <Typography color="grey.800" mt={1}>
+                {album?.description}
+              </Typography>
+            </>
+          )}
+
+          {dataLoading ? (
+            <Skeleton width="40%" height={20} />
+          ) : (
+            <Box display="flex" alignItems="center" gap={1.5} flexWrap="wrap">
+              <Box
+                display="flex"
+                alignItems="center"
+                mt={1}
+                sx={{
+                  svg: {
+                    color: 'text.secondary',
+                  },
+                }}
+              >
+                <Star size={16} weight="fill" />
+                <Typography variant="body2" ml={0.5} color="text.secondary">
+                  {album?.total_photos} Photos
+                </Typography>
+              </Box>
+              <Box
+                display="flex"
+                alignItems="center"
+                mt={1}
+                sx={{
+                  svg: {
+                    color: 'text.secondary',
+                  },
+                }}
+              >
+                <CalendarDots size={16} />
+                <Typography variant="body2" ml={0.5} color="text.secondary">
+                  {dayjs(album?.createdAt)?.format('MMM DD, YYYY')}
+                </Typography>
+              </Box>
+              {album?.contributors && album?.contributors?.length > 0 && (
+                <Stack direction="row" spacing={1} alignItems="center" mt={1}>
+                  <Typography color="grey.600" variant="body2">
+                    Contributors:
+                  </Typography>
+                  <AvatarGroup
+                    total={album?.contributors?.length}
+                    slotProps={{
+                      surplus: {
+                        sx: {
+                          // cursor: 'pointer',
+                        },
+                        // onClick: () => alert('Hello'),
+                      },
+                    }}
+                  >
+                    {album?.contributors?.slice(0, 4)?.map((person: Maybe<UserBasic>, index: number) => (
+                      <Tooltip
+                        key={`event-avatar-${index}`}
+                        placement="top"
+                        title={`${person?.firstName || 'NA'} ${person?.lastName || ''} ${person?.batch ? `(${person.batch})` : ''}`}
+                        arrow
+                      >
+                        <Avatar
+                          alt={person?.firstName || 'NA'}
+                          src={person?.profileImage || getAvatarDataUrl(person?.id)}
+                          slotProps={{
+                            img: {
+                              referrerPolicy: 'no-referrer',
+                            },
+                          }}
+                          sx={{ width: 28, height: 28 }}
+                        />
+                      </Tooltip>
+                    ))}
+                  </AvatarGroup>
+                </Stack>
+              )}
+            </Box>
+          )}
         </Box>
         {/* {buttonProps && (
           <Box display="flex" alignItems="center" gap={1.5} ml="auto">
@@ -303,7 +395,11 @@ const SingleAlbum = () => {
           </Box>
         )} */}
       </Box>
-      {loading || album?.id ? <PhotoGrid photos={album?.photos} /> : <EmptyView message="No album found!" />}
+      {dataLoading || album?.id ? (
+        <PhotoGrid loading={dataLoading} photos={listPhotos} authView={Boolean(user?.id)} />
+      ) : (
+        <EmptyView message="No album found!" />
+      )}
     </LayoutModule>
   );
 };

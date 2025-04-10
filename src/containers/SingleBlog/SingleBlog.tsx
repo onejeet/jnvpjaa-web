@@ -56,6 +56,8 @@ const SingleBlog = () => {
     [blog]
   );
 
+  const dataLoading = loading || !id;
+
   const buttonProps: ButtonProps[] | null = React.useMemo(() => {
     switch (blog?.status) {
       case BlogStatus.PendingApproval:
@@ -283,7 +285,7 @@ const SingleBlog = () => {
   return (
     <LayoutModule disableCover title={`${blog?.title || 'Blog'} • Alumni Network of JNV Paota, Jaipur`}>
       <Box mb={1} display="flex" justifyContent="start" alignItems="center">
-        <Breadcrumbs items={breadcrumbsList} loading={loading} sx={{ display: { xs: 'none', sm: 'flex' } }} />
+        <Breadcrumbs items={breadcrumbsList} loading={dataLoading} sx={{ display: { xs: 'none', sm: 'flex' } }} />
         {buttonProps && (
           <Box display="flex" alignItems="center" gap={1.5} ml="auto">
             {buttonProps.map((btProps: ButtonProps, index: number) => (
@@ -292,8 +294,8 @@ const SingleBlog = () => {
           </Box>
         )}
       </Box>
-      {loading || blog?.id ? (
-        <SingleBlogView blog={blog} loading={loading} updateClap={updateClap} />
+      {dataLoading || blog?.id ? (
+        <SingleBlogView blog={blog} loading={dataLoading} updateClap={updateClap} />
       ) : (
         <EmptyView message="No blog found!" />
       )}

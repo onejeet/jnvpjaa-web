@@ -23,7 +23,7 @@ interface AlbumListModuleProps {
 
 const AlbumListModule: React.FC<AlbumListModuleProps> = ({
   filter = {},
-  limit = 50,
+  limit = 100,
   skip,
   loading: propLoading,
   isCreateAllowed = true,

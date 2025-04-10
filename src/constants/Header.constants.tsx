@@ -215,9 +215,9 @@ export const ADD_ENTITIES: IHeaderMenuItem[] = [
     path: '/events/new',
     icon: <CalendarDots />,
   },
-  {
-    label: 'New Album',
-    path: '/gallery/new',
-    icon: <ImagesSquare />,
-  },
+  // {
+  //   label: 'New Album',
+  //   path: '/gallery/new',
+  //   icon: <ImagesSquare />,
+  // },
 ];

@@ -24,6 +24,7 @@ import { paths } from '@/config/paths';
 import { useRouter } from 'next/router';
 import CopyContentButton from '@/components/common/CopyContentButton';
 import dayjs from 'dayjs';
+import Image from 'next/image';
 
 const AlbumCard: React.FC<AlbumCardProps> = ({
   album,
@@ -73,27 +74,41 @@ const AlbumCard: React.FC<AlbumCardProps> = ({
       {loading ? (
         <Skeleton variant="rounded" width="100%" height={250} />
       ) : (
-        <CardMedia
-          component="img"
-          height="250"
-          src={coverImage || `https://picsum.photos/seed/${title}/600/200`}
-          alt="Album Image"
-          referrerPolicy="no-referrer"
-          sx={{
-            borderTopLeftRadius: 2,
-            borderTopRightRadius: 2,
-            objectFit: 'coover',
-            objectPosition: 'right top',
-            bgcolor: 'primary.50',
-          }}
-        />
+        <Box sx={{ position: 'relative', width: '100%', height: 250 }}>
+          <Image
+            src={coverImage || `https://picsum.photos/seed/${title}/600/200`}
+            alt="Album cover image"
+            fill
+            style={{ objectFit: 'cover' }}
+            sizes="(max-width: 600px) 100vw, 345px"
+            loading="lazy"
+            objectPosition="top left"
+            referrerPolicy="no-referrer"
+            priority={false} // or `loading="lazy"` equivalent
+          />
+        </Box>
+        // <CardMedia
+        //   component="img"
+        //   height="250"
+        //   src={coverImage || `https://picsum.photos/seed/${title}/600/200`}
+        //   alt="Album Image"
+        //   referrerPolicy="no-referrer"
+        //   loading="lazy"
+        //   sx={{
+        //     borderTopLeftRadius: 2,
+        //     borderTopRightRadius: 2,
+        //     objectFit: 'coover',
+        //     objectPosition: 'right top',
+        //     bgcolor: 'primary.50',
+        //   }}
+        // />
       )}
 
       <CardContent
         sx={{ mt: 0.5, flexGrow: 1, display: 'flex', flexDirection: 'column', height: 'calc(100% - 180px)' }}
       >
         {loading ? (
-          <Skeleton width="80%" height={34} />
+          <Skeleton width="50%" height={34} />
         ) : (
           <Box display="flex" alignItems="center">
             <Typography
@@ -134,8 +149,8 @@ const AlbumCard: React.FC<AlbumCardProps> = ({
         {loading ? (
           <>
             {' '}
-            <Skeleton width="100%" height={20} /> <Skeleton width="100%" height={20} />{' '}
-            <Skeleton width="60%" height={20} />
+            <Skeleton width="100%" height={20} />
+            <Skeleton width="40%" height={20} />
           </>
         ) : (
           <Typography variant="body2" color="text.secondary" mt={1}>
@@ -144,7 +159,7 @@ const AlbumCard: React.FC<AlbumCardProps> = ({
         )}
 
         {loading ? (
-          <Skeleton width="60%" height={20} />
+          <Skeleton width="30%" height={20} />
         ) : (
           <Box display="flex" alignItems="center" gap={1.5}>
             <Box
@@ -177,46 +192,6 @@ const AlbumCard: React.FC<AlbumCardProps> = ({
                 {dayjs(createdAt)?.format('MMM DD, YYYY')}
               </Typography>
             </Box>
-          </Box>
-        )}
-
-        {people && people?.length > 0 && (
-          <Box mt={2}>
-            <Typography color="grey.600" variant="body2">
-              Going:
-            </Typography>
-            <Stack direction="row" spacing={1}>
-              <AvatarGroup
-                total={people?.length}
-                slotProps={{
-                  surplus: {
-                    sx: {
-                      // cursor: 'pointer',
-                    },
-                    // onClick: () => alert('Hello'),
-                  },
-                }}
-              >
-                {people?.slice(0, 4)?.map((person: Maybe<UserBasic>, index: number) => (
-                  <Tooltip
-                    key={`event-avatar-${title}-${index}`}
-                    placement="top"
-                    title={`${person?.firstName || 'NA'} ${person?.lastName || ''} ${person?.batch ? `(${person.batch})` : ''}`}
-                    arrow
-                  >
-                    <Avatar
-                      alt={person?.firstName || 'NA'}
-                      src={person?.profileImage || getAvatarDataUrl(person?.id)}
-                      slotProps={{
-                        img: {
-                          referrerPolicy: 'no-referrer',
-                        },
-                      }}
-                    />
-                  </Tooltip>
-                ))}
-              </AvatarGroup>
-            </Stack>
           </Box>
         )}
 

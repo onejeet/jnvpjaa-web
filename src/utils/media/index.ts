@@ -19,3 +19,24 @@ export const optimiseImageSize = async (file: File, options?: Options) => {
     console.error('Error compressing image:', error);
   }
 };
+
+export const downloadImage = (imageUrl: string, fileName = 'downloaded-image') => {
+  const link = document.createElement('a');
+  link.href = imageUrl;
+  link.download = fileName;
+
+  // For cross-origin URLs, we fetch the image and convert to blob
+  fetch(imageUrl)
+    .then((response) => response.blob())
+    .then((blob) => {
+      const blobUrl = URL.createObjectURL(blob);
+      link.href = blobUrl;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(blobUrl);
+    })
+    .catch((error) => {
+      console.error('Image download failed:', error);
+    });
+};
