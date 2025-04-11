@@ -148,6 +148,36 @@ export enum BlogStatus {
   RequestChanges = 'REQUEST_CHANGES',
 }
 
+export type Business = {
+  __typename?: 'Business';
+  address?: Maybe<Scalars['String']['output']>;
+  category: Scalars['String']['output'];
+  city?: Maybe<Scalars['String']['output']>;
+  country?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  description: Scalars['String']['output'];
+  email?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  isVerified: Scalars['Boolean']['output'];
+  logoUrl?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
+  phone?: Maybe<Scalars['String']['output']>;
+  postalCode?: Maybe<Scalars['String']['output']>;
+  socialMedia?: Maybe<Scalars['JSON']['output']>;
+  state?: Maybe<Scalars['String']['output']>;
+  tags?: Maybe<Array<Scalars['String']['output']>>;
+  updatedAt: Scalars['DateTime']['output'];
+  user?: Maybe<UserBasic>;
+  userId: Scalars['String']['output'];
+  website?: Maybe<Scalars['String']['output']>;
+};
+
+export type BusinessListResponse = {
+  __typename?: 'BusinessListResponse';
+  data?: Maybe<Array<Maybe<Business>>>;
+  total?: Maybe<Scalars['Int']['output']>;
+};
+
 export type Comment = {
   __typename?: 'Comment';
   author?: Maybe<UserBasic>;
@@ -199,6 +229,23 @@ export type CompanyInfoListResponse = {
   __typename?: 'CompanyInfoListResponse';
   data?: Maybe<Array<Maybe<CompanyInfo>>>;
   total?: Maybe<Scalars['Int']['output']>;
+};
+
+export type CreateBusinessInput = {
+  address?: InputMaybe<Scalars['String']['input']>;
+  category: Scalars['String']['input'];
+  city?: InputMaybe<Scalars['String']['input']>;
+  country?: InputMaybe<Scalars['String']['input']>;
+  description: Scalars['String']['input'];
+  email?: InputMaybe<Scalars['String']['input']>;
+  logoUrl?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  phone?: InputMaybe<Scalars['String']['input']>;
+  postalCode?: InputMaybe<Scalars['String']['input']>;
+  socialMedia?: InputMaybe<Scalars['JSON']['input']>;
+  state?: InputMaybe<Scalars['String']['input']>;
+  tags?: InputMaybe<Array<Scalars['String']['input']>>;
+  website?: InputMaybe<Scalars['String']['input']>;
 };
 
 export enum Currency {
@@ -291,6 +338,7 @@ export type ListInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   addAlbumContributor?: Maybe<Album>;
+  addComment?: Maybe<Comment>;
   addPhoto?: Maybe<Photo>;
   approveBlog?: Maybe<Blog>;
   assignBatchCoordinator?: Maybe<BatchCoordinator>;
@@ -298,6 +346,7 @@ export type Mutation = {
   createAddress?: Maybe<Address>;
   createAlbum?: Maybe<Album>;
   createBlog?: Maybe<Blog>;
+  createBusiness: Business;
   createEvent?: Maybe<EventBasic>;
   createTransaction?: Maybe<Transaction>;
   deleteAddress?: Maybe<Address>;
@@ -319,11 +368,13 @@ export type Mutation = {
   updateAlbum?: Maybe<Album>;
   updateBatchCoordinator?: Maybe<BatchCoordinator>;
   updateBlog?: Maybe<Blog>;
+  updateBusiness: Business;
   updateClaps?: Maybe<Scalars['Boolean']['output']>;
   updateEvent?: Maybe<EventBasic>;
   updateTransaction?: Maybe<Transaction>;
   updateUser?: Maybe<User>;
   upsertMultipleAddresses?: Maybe<Array<Maybe<Address>>>;
+  verifyBusiness: Business;
   verifyEvent?: Maybe<Scalars['Boolean']['output']>;
   verifyUser?: Maybe<Scalars['Boolean']['output']>;
 };
@@ -331,6 +382,12 @@ export type Mutation = {
 export type MutationAddAlbumContributorArgs = {
   albumId: Scalars['String']['input'];
   userId: Scalars['String']['input'];
+};
+
+export type MutationAddCommentArgs = {
+  content: Scalars['String']['input'];
+  targetId: Scalars['String']['input'];
+  targetType: CommentTargetType;
 };
 
 export type MutationAddPhotoArgs = {
@@ -374,6 +431,10 @@ export type MutationCreateBlogArgs = {
   content?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<BlogStatus>;
   title: Scalars['String']['input'];
+};
+
+export type MutationCreateBusinessArgs = {
+  body: CreateBusinessInput;
 };
 
 export type MutationCreateEventArgs = {
@@ -503,6 +564,11 @@ export type MutationUpdateBlogArgs = {
   title?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type MutationUpdateBusinessArgs = {
+  body: UpdateBusinessInput;
+  id: Scalars['String']['input'];
+};
+
 export type MutationUpdateClapsArgs = {
   claps: Scalars['Int']['input'];
   slug: Scalars['String']['input'];
@@ -552,6 +618,11 @@ export type MutationUpsertMultipleAddressesArgs = {
   updates: Array<AddressInput>;
 };
 
+export type MutationVerifyBusinessArgs = {
+  id: Scalars['String']['input'];
+  isVerified: Scalars['Boolean']['input'];
+};
+
 export type MutationVerifyEventArgs = {
   adminRemark?: InputMaybe<Scalars['String']['input']>;
   eventId: Scalars['Int']['input'];
@@ -582,7 +653,9 @@ export type Query = {
   getBatchCoordinatorsByBatch?: Maybe<Array<Maybe<BatchCoordinator>>>;
   getBlog?: Maybe<Blog>;
   getBlogList?: Maybe<BlogListResponse>;
-  getCommentList?: Maybe<CommentListResponse>;
+  getBusiness?: Maybe<Business>;
+  getBusinesses?: Maybe<BusinessListResponse>;
+  getComments?: Maybe<Array<Maybe<Comment>>>;
   getEventDetails?: Maybe<Event>;
   getEventList?: Maybe<ListEventResponse>;
   getMyPhotos?: Maybe<Array<Maybe<Photo>>>;
@@ -624,8 +697,17 @@ export type QueryGetBlogListArgs = {
   options?: InputMaybe<ListInput>;
 };
 
-export type QueryGetCommentListArgs = {
+export type QueryGetBusinessArgs = {
+  id: Scalars['String']['input'];
+};
+
+export type QueryGetBusinessesArgs = {
   options?: InputMaybe<ListInput>;
+};
+
+export type QueryGetCommentsArgs = {
+  targetId: Scalars['String']['input'];
+  targetType: CommentTargetType;
 };
 
 export type QueryGetEventDetailsArgs = {
@@ -694,6 +776,23 @@ export enum TransactionType {
   Credit = 'CREDIT',
   Debit = 'DEBIT',
 }
+
+export type UpdateBusinessInput = {
+  address?: InputMaybe<Scalars['String']['input']>;
+  category?: InputMaybe<Scalars['String']['input']>;
+  city?: InputMaybe<Scalars['String']['input']>;
+  country?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  logoUrl?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  phone?: InputMaybe<Scalars['String']['input']>;
+  postalCode?: InputMaybe<Scalars['String']['input']>;
+  socialMedia?: InputMaybe<Scalars['JSON']['input']>;
+  state?: InputMaybe<Scalars['String']['input']>;
+  tags?: InputMaybe<Array<Scalars['String']['input']>>;
+  website?: InputMaybe<Scalars['String']['input']>;
+};
 
 export type User = {
   __typename?: 'User';
@@ -943,6 +1042,45 @@ export type AddAlbumContributorMutation = {
                 }
               | undefined
             >
+          | undefined;
+      }
+    | undefined;
+};
+
+export type AddCommentMutationVariables = Exact<{
+  content: Scalars['String']['input'];
+  targetId: Scalars['String']['input'];
+  targetType: CommentTargetType;
+}>;
+
+export type AddCommentMutation = {
+  __typename?: 'Mutation';
+  addComment?:
+    | {
+        __typename?: 'Comment';
+        authorId?: string | undefined;
+        content?: string | undefined;
+        createdAt?: any | undefined;
+        id?: string | undefined;
+        isVerified?: boolean | undefined;
+        targetId?: string | undefined;
+        targetType?: CommentTargetType | undefined;
+        updatedAt?: any | undefined;
+        author?:
+          | {
+              __typename?: 'UserBasic';
+              batch?: number | undefined;
+              disabled?: boolean | undefined;
+              dob?: any | undefined;
+              firstName?: string | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              profileImage?: string | undefined;
+              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+            }
           | undefined;
       }
     | undefined;
@@ -1483,6 +1621,52 @@ export type CreateBlogMutation = {
           | undefined;
       }
     | undefined;
+};
+
+export type CreateBusinessMutationVariables = Exact<{
+  body: CreateBusinessInput;
+}>;
+
+export type CreateBusinessMutation = {
+  __typename?: 'Mutation';
+  createBusiness: {
+    __typename?: 'Business';
+    address?: string | undefined;
+    category: string;
+    city?: string | undefined;
+    country?: string | undefined;
+    createdAt: any;
+    description: string;
+    email?: string | undefined;
+    id: string;
+    isVerified: boolean;
+    logoUrl?: string | undefined;
+    name: string;
+    phone?: string | undefined;
+    postalCode?: string | undefined;
+    socialMedia?: any | undefined;
+    state?: string | undefined;
+    tags?: Array<string> | undefined;
+    updatedAt: any;
+    userId: string;
+    website?: string | undefined;
+    user?:
+      | {
+          __typename?: 'UserBasic';
+          batch?: number | undefined;
+          disabled?: boolean | undefined;
+          dob?: any | undefined;
+          firstName?: string | undefined;
+          id?: string | undefined;
+          isConfidential?: boolean | undefined;
+          isFaculty?: boolean | undefined;
+          isVerified?: boolean | undefined;
+          lastName?: string | undefined;
+          profileImage?: string | undefined;
+          role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+        }
+      | undefined;
+  };
 };
 
 export type CreateEventMutationVariables = Exact<{
@@ -2384,6 +2568,53 @@ export type UpdateBlogMutation = {
     | undefined;
 };
 
+export type UpdateBusinessMutationVariables = Exact<{
+  body: UpdateBusinessInput;
+  id: Scalars['String']['input'];
+}>;
+
+export type UpdateBusinessMutation = {
+  __typename?: 'Mutation';
+  updateBusiness: {
+    __typename?: 'Business';
+    address?: string | undefined;
+    category: string;
+    city?: string | undefined;
+    country?: string | undefined;
+    createdAt: any;
+    description: string;
+    email?: string | undefined;
+    id: string;
+    isVerified: boolean;
+    logoUrl?: string | undefined;
+    name: string;
+    phone?: string | undefined;
+    postalCode?: string | undefined;
+    socialMedia?: any | undefined;
+    state?: string | undefined;
+    tags?: Array<string> | undefined;
+    updatedAt: any;
+    userId: string;
+    website?: string | undefined;
+    user?:
+      | {
+          __typename?: 'UserBasic';
+          batch?: number | undefined;
+          disabled?: boolean | undefined;
+          dob?: any | undefined;
+          firstName?: string | undefined;
+          id?: string | undefined;
+          isConfidential?: boolean | undefined;
+          isFaculty?: boolean | undefined;
+          isVerified?: boolean | undefined;
+          lastName?: string | undefined;
+          profileImage?: string | undefined;
+          role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+        }
+      | undefined;
+  };
+};
+
 export type UpdateClapsMutationVariables = Exact<{
   claps: Scalars['Int']['input'];
   slug: Scalars['String']['input'];
@@ -2568,6 +2799,53 @@ export type UpsertMultipleAddressesMutation = {
         | undefined
       >
     | undefined;
+};
+
+export type VerifyBusinessMutationVariables = Exact<{
+  id: Scalars['String']['input'];
+  isVerified: Scalars['Boolean']['input'];
+}>;
+
+export type VerifyBusinessMutation = {
+  __typename?: 'Mutation';
+  verifyBusiness: {
+    __typename?: 'Business';
+    address?: string | undefined;
+    category: string;
+    city?: string | undefined;
+    country?: string | undefined;
+    createdAt: any;
+    description: string;
+    email?: string | undefined;
+    id: string;
+    isVerified: boolean;
+    logoUrl?: string | undefined;
+    name: string;
+    phone?: string | undefined;
+    postalCode?: string | undefined;
+    socialMedia?: any | undefined;
+    state?: string | undefined;
+    tags?: Array<string> | undefined;
+    updatedAt: any;
+    userId: string;
+    website?: string | undefined;
+    user?:
+      | {
+          __typename?: 'UserBasic';
+          batch?: number | undefined;
+          disabled?: boolean | undefined;
+          dob?: any | undefined;
+          firstName?: string | undefined;
+          id?: string | undefined;
+          isConfidential?: boolean | undefined;
+          isFaculty?: boolean | undefined;
+          isVerified?: boolean | undefined;
+          lastName?: string | undefined;
+          profileImage?: string | undefined;
+          role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+        }
+      | undefined;
+  };
 };
 
 export type VerifyEventMutationVariables = Exact<{
@@ -3131,29 +3409,88 @@ export type GetBlogListQuery = {
     | undefined;
 };
 
-export type GetCommentListQueryVariables = Exact<{
+export type GetBusinessQueryVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+export type GetBusinessQuery = {
+  __typename?: 'Query';
+  getBusiness?:
+    | {
+        __typename?: 'Business';
+        address?: string | undefined;
+        category: string;
+        city?: string | undefined;
+        country?: string | undefined;
+        createdAt: any;
+        description: string;
+        email?: string | undefined;
+        id: string;
+        isVerified: boolean;
+        logoUrl?: string | undefined;
+        name: string;
+        phone?: string | undefined;
+        postalCode?: string | undefined;
+        socialMedia?: any | undefined;
+        state?: string | undefined;
+        tags?: Array<string> | undefined;
+        updatedAt: any;
+        userId: string;
+        website?: string | undefined;
+        user?:
+          | {
+              __typename?: 'UserBasic';
+              batch?: number | undefined;
+              disabled?: boolean | undefined;
+              dob?: any | undefined;
+              firstName?: string | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              profileImage?: string | undefined;
+              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
+export type GetBusinessesQueryVariables = Exact<{
   options?: InputMaybe<ListInput>;
 }>;
 
-export type GetCommentListQuery = {
+export type GetBusinessesQuery = {
   __typename?: 'Query';
-  getCommentList?:
+  getBusinesses?:
     | {
-        __typename?: 'CommentListResponse';
+        __typename?: 'BusinessListResponse';
         total?: number | undefined;
         data?:
           | Array<
               | {
-                  __typename?: 'Comment';
-                  authorId?: string | undefined;
-                  content?: string | undefined;
-                  createdAt?: any | undefined;
-                  id?: string | undefined;
-                  isVerified?: boolean | undefined;
-                  targetId?: string | undefined;
-                  targetType?: CommentTargetType | undefined;
-                  updatedAt?: any | undefined;
-                  author?:
+                  __typename?: 'Business';
+                  address?: string | undefined;
+                  category: string;
+                  city?: string | undefined;
+                  country?: string | undefined;
+                  createdAt: any;
+                  description: string;
+                  email?: string | undefined;
+                  id: string;
+                  isVerified: boolean;
+                  logoUrl?: string | undefined;
+                  name: string;
+                  phone?: string | undefined;
+                  postalCode?: string | undefined;
+                  socialMedia?: any | undefined;
+                  state?: string | undefined;
+                  tags?: Array<string> | undefined;
+                  updatedAt: any;
+                  userId: string;
+                  website?: string | undefined;
+                  user?:
                     | {
                         __typename?: 'UserBasic';
                         batch?: number | undefined;
@@ -3174,6 +3511,47 @@ export type GetCommentListQuery = {
             >
           | undefined;
       }
+    | undefined;
+};
+
+export type GetCommentsQueryVariables = Exact<{
+  targetId: Scalars['String']['input'];
+  targetType: CommentTargetType;
+}>;
+
+export type GetCommentsQuery = {
+  __typename?: 'Query';
+  getComments?:
+    | Array<
+        | {
+            __typename?: 'Comment';
+            authorId?: string | undefined;
+            content?: string | undefined;
+            createdAt?: any | undefined;
+            id?: string | undefined;
+            isVerified?: boolean | undefined;
+            targetId?: string | undefined;
+            targetType?: CommentTargetType | undefined;
+            updatedAt?: any | undefined;
+            author?:
+              | {
+                  __typename?: 'UserBasic';
+                  batch?: number | undefined;
+                  disabled?: boolean | undefined;
+                  dob?: any | undefined;
+                  firstName?: string | undefined;
+                  id?: string | undefined;
+                  isConfidential?: boolean | undefined;
+                  isFaculty?: boolean | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  profileImage?: string | undefined;
+                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                }
+              | undefined;
+          }
+        | undefined
+      >
     | undefined;
 };
 
@@ -3886,6 +4264,66 @@ export type AddAlbumContributorMutationOptions = Apollo.BaseMutationOptions<
   AddAlbumContributorMutation,
   AddAlbumContributorMutationVariables
 >;
+export const AddCommentDocument = gql`
+  mutation addComment($content: String!, $targetId: String!, $targetType: CommentTargetType!) {
+    addComment(content: $content, targetId: $targetId, targetType: $targetType) {
+      author {
+        batch
+        disabled
+        dob
+        firstName
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        profileImage
+        role {
+          id
+          name
+        }
+      }
+      authorId
+      content
+      createdAt
+      id
+      isVerified
+      targetId
+      targetType
+      updatedAt
+    }
+  }
+`;
+export type AddCommentMutationFn = Apollo.MutationFunction<AddCommentMutation, AddCommentMutationVariables>;
+
+/**
+ * __useAddCommentMutation__
+ *
+ * To run a mutation, you first call `useAddCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addCommentMutation, { data, loading, error }] = useAddCommentMutation({
+ *   variables: {
+ *      content: // value for 'content'
+ *      targetId: // value for 'targetId'
+ *      targetType: // value for 'targetType'
+ *   },
+ * });
+ */
+export function useAddCommentMutation(
+  baseOptions?: Apollo.MutationHookOptions<AddCommentMutation, AddCommentMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<AddCommentMutation, AddCommentMutationVariables>(AddCommentDocument, options);
+}
+export type AddCommentMutationHookResult = ReturnType<typeof useAddCommentMutation>;
+export type AddCommentMutationResult = Apollo.MutationResult<AddCommentMutation>;
+export type AddCommentMutationOptions = Apollo.BaseMutationOptions<AddCommentMutation, AddCommentMutationVariables>;
 export const AddPhotoDocument = gql`
   mutation addPhoto($albumId: String!, $caption: String, $url: String!) {
     addPhoto(albumId: $albumId, caption: $caption, url: $url) {
@@ -4554,6 +4992,78 @@ export function useCreateBlogMutation(
 export type CreateBlogMutationHookResult = ReturnType<typeof useCreateBlogMutation>;
 export type CreateBlogMutationResult = Apollo.MutationResult<CreateBlogMutation>;
 export type CreateBlogMutationOptions = Apollo.BaseMutationOptions<CreateBlogMutation, CreateBlogMutationVariables>;
+export const CreateBusinessDocument = gql`
+  mutation createBusiness($body: CreateBusinessInput!) {
+    createBusiness(body: $body) {
+      address
+      category
+      city
+      country
+      createdAt
+      description
+      email
+      id
+      isVerified
+      logoUrl
+      name
+      phone
+      postalCode
+      socialMedia
+      state
+      tags
+      updatedAt
+      user {
+        batch
+        disabled
+        dob
+        firstName
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        profileImage
+        role {
+          id
+          name
+        }
+      }
+      userId
+      website
+    }
+  }
+`;
+export type CreateBusinessMutationFn = Apollo.MutationFunction<CreateBusinessMutation, CreateBusinessMutationVariables>;
+
+/**
+ * __useCreateBusinessMutation__
+ *
+ * To run a mutation, you first call `useCreateBusinessMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateBusinessMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createBusinessMutation, { data, loading, error }] = useCreateBusinessMutation({
+ *   variables: {
+ *      body: // value for 'body'
+ *   },
+ * });
+ */
+export function useCreateBusinessMutation(
+  baseOptions?: Apollo.MutationHookOptions<CreateBusinessMutation, CreateBusinessMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<CreateBusinessMutation, CreateBusinessMutationVariables>(CreateBusinessDocument, options);
+}
+export type CreateBusinessMutationHookResult = ReturnType<typeof useCreateBusinessMutation>;
+export type CreateBusinessMutationResult = Apollo.MutationResult<CreateBusinessMutation>;
+export type CreateBusinessMutationOptions = Apollo.BaseMutationOptions<
+  CreateBusinessMutation,
+  CreateBusinessMutationVariables
+>;
 export const CreateEventDocument = gql`
   mutation createEvent(
     $category: String!
@@ -6043,6 +6553,79 @@ export function useUpdateBlogMutation(
 export type UpdateBlogMutationHookResult = ReturnType<typeof useUpdateBlogMutation>;
 export type UpdateBlogMutationResult = Apollo.MutationResult<UpdateBlogMutation>;
 export type UpdateBlogMutationOptions = Apollo.BaseMutationOptions<UpdateBlogMutation, UpdateBlogMutationVariables>;
+export const UpdateBusinessDocument = gql`
+  mutation updateBusiness($body: UpdateBusinessInput!, $id: String!) {
+    updateBusiness(body: $body, id: $id) {
+      address
+      category
+      city
+      country
+      createdAt
+      description
+      email
+      id
+      isVerified
+      logoUrl
+      name
+      phone
+      postalCode
+      socialMedia
+      state
+      tags
+      updatedAt
+      user {
+        batch
+        disabled
+        dob
+        firstName
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        profileImage
+        role {
+          id
+          name
+        }
+      }
+      userId
+      website
+    }
+  }
+`;
+export type UpdateBusinessMutationFn = Apollo.MutationFunction<UpdateBusinessMutation, UpdateBusinessMutationVariables>;
+
+/**
+ * __useUpdateBusinessMutation__
+ *
+ * To run a mutation, you first call `useUpdateBusinessMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateBusinessMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateBusinessMutation, { data, loading, error }] = useUpdateBusinessMutation({
+ *   variables: {
+ *      body: // value for 'body'
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useUpdateBusinessMutation(
+  baseOptions?: Apollo.MutationHookOptions<UpdateBusinessMutation, UpdateBusinessMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<UpdateBusinessMutation, UpdateBusinessMutationVariables>(UpdateBusinessDocument, options);
+}
+export type UpdateBusinessMutationHookResult = ReturnType<typeof useUpdateBusinessMutation>;
+export type UpdateBusinessMutationResult = Apollo.MutationResult<UpdateBusinessMutation>;
+export type UpdateBusinessMutationOptions = Apollo.BaseMutationOptions<
+  UpdateBusinessMutation,
+  UpdateBusinessMutationVariables
+>;
 export const UpdateClapsDocument = gql`
   mutation updateClaps($claps: Int!, $slug: String!) {
     updateClaps(claps: $claps, slug: $slug)
@@ -6419,6 +7002,79 @@ export type UpsertMultipleAddressesMutationResult = Apollo.MutationResult<Upsert
 export type UpsertMultipleAddressesMutationOptions = Apollo.BaseMutationOptions<
   UpsertMultipleAddressesMutation,
   UpsertMultipleAddressesMutationVariables
+>;
+export const VerifyBusinessDocument = gql`
+  mutation verifyBusiness($id: String!, $isVerified: Boolean!) {
+    verifyBusiness(id: $id, isVerified: $isVerified) {
+      address
+      category
+      city
+      country
+      createdAt
+      description
+      email
+      id
+      isVerified
+      logoUrl
+      name
+      phone
+      postalCode
+      socialMedia
+      state
+      tags
+      updatedAt
+      user {
+        batch
+        disabled
+        dob
+        firstName
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        profileImage
+        role {
+          id
+          name
+        }
+      }
+      userId
+      website
+    }
+  }
+`;
+export type VerifyBusinessMutationFn = Apollo.MutationFunction<VerifyBusinessMutation, VerifyBusinessMutationVariables>;
+
+/**
+ * __useVerifyBusinessMutation__
+ *
+ * To run a mutation, you first call `useVerifyBusinessMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useVerifyBusinessMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [verifyBusinessMutation, { data, loading, error }] = useVerifyBusinessMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      isVerified: // value for 'isVerified'
+ *   },
+ * });
+ */
+export function useVerifyBusinessMutation(
+  baseOptions?: Apollo.MutationHookOptions<VerifyBusinessMutation, VerifyBusinessMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<VerifyBusinessMutation, VerifyBusinessMutationVariables>(VerifyBusinessDocument, options);
+}
+export type VerifyBusinessMutationHookResult = ReturnType<typeof useVerifyBusinessMutation>;
+export type VerifyBusinessMutationResult = Apollo.MutationResult<VerifyBusinessMutation>;
+export type VerifyBusinessMutationOptions = Apollo.BaseMutationOptions<
+  VerifyBusinessMutation,
+  VerifyBusinessMutationVariables
 >;
 export const VerifyEventDocument = gql`
   mutation verifyEvent($adminRemark: String, $eventId: Int!, $status: EventStatus!) {
@@ -7238,11 +7894,109 @@ export type GetBlogListQueryHookResult = ReturnType<typeof useGetBlogListQuery>;
 export type GetBlogListLazyQueryHookResult = ReturnType<typeof useGetBlogListLazyQuery>;
 export type GetBlogListSuspenseQueryHookResult = ReturnType<typeof useGetBlogListSuspenseQuery>;
 export type GetBlogListQueryResult = Apollo.QueryResult<GetBlogListQuery, GetBlogListQueryVariables>;
-export const GetCommentListDocument = gql`
-  query getCommentList($options: ListInput) {
-    getCommentList(options: $options) {
+export const GetBusinessDocument = gql`
+  query getBusiness($id: String!) {
+    getBusiness(id: $id) {
+      address
+      category
+      city
+      country
+      createdAt
+      description
+      email
+      id
+      isVerified
+      logoUrl
+      name
+      phone
+      postalCode
+      socialMedia
+      state
+      tags
+      updatedAt
+      user {
+        batch
+        disabled
+        dob
+        firstName
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        profileImage
+        role {
+          id
+          name
+        }
+      }
+      userId
+      website
+    }
+  }
+`;
+
+/**
+ * __useGetBusinessQuery__
+ *
+ * To run a query within a React component, call `useGetBusinessQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBusinessQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBusinessQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetBusinessQuery(
+  baseOptions: Apollo.QueryHookOptions<GetBusinessQuery, GetBusinessQueryVariables> &
+    ({ variables: GetBusinessQueryVariables; skip?: boolean } | { skip: boolean })
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetBusinessQuery, GetBusinessQueryVariables>(GetBusinessDocument, options);
+}
+export function useGetBusinessLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetBusinessQuery, GetBusinessQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetBusinessQuery, GetBusinessQueryVariables>(GetBusinessDocument, options);
+}
+export function useGetBusinessSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetBusinessQuery, GetBusinessQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetBusinessQuery, GetBusinessQueryVariables>(GetBusinessDocument, options);
+}
+export type GetBusinessQueryHookResult = ReturnType<typeof useGetBusinessQuery>;
+export type GetBusinessLazyQueryHookResult = ReturnType<typeof useGetBusinessLazyQuery>;
+export type GetBusinessSuspenseQueryHookResult = ReturnType<typeof useGetBusinessSuspenseQuery>;
+export type GetBusinessQueryResult = Apollo.QueryResult<GetBusinessQuery, GetBusinessQueryVariables>;
+export const GetBusinessesDocument = gql`
+  query getBusinesses($options: ListInput) {
+    getBusinesses(options: $options) {
       data {
-        author {
+        address
+        category
+        city
+        country
+        createdAt
+        description
+        email
+        id
+        isVerified
+        logoUrl
+        name
+        phone
+        postalCode
+        socialMedia
+        state
+        tags
+        updatedAt
+        user {
           batch
           disabled
           dob
@@ -7258,14 +8012,8 @@ export const GetCommentListDocument = gql`
             name
           }
         }
-        authorId
-        content
-        createdAt
-        id
-        isVerified
-        targetId
-        targetType
-        updatedAt
+        userId
+        website
       }
       total
     }
@@ -7273,43 +8021,114 @@ export const GetCommentListDocument = gql`
 `;
 
 /**
- * __useGetCommentListQuery__
+ * __useGetBusinessesQuery__
  *
- * To run a query within a React component, call `useGetCommentListQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCommentListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetBusinessesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBusinessesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetCommentListQuery({
+ * const { data, loading, error } = useGetBusinessesQuery({
  *   variables: {
  *      options: // value for 'options'
  *   },
  * });
  */
-export function useGetCommentListQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetCommentListQuery, GetCommentListQueryVariables>
+export function useGetBusinessesQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetBusinessesQuery, GetBusinessesQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetCommentListQuery, GetCommentListQueryVariables>(GetCommentListDocument, options);
+  return Apollo.useQuery<GetBusinessesQuery, GetBusinessesQueryVariables>(GetBusinessesDocument, options);
 }
-export function useGetCommentListLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetCommentListQuery, GetCommentListQueryVariables>
+export function useGetBusinessesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetBusinessesQuery, GetBusinessesQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GetCommentListQuery, GetCommentListQueryVariables>(GetCommentListDocument, options);
+  return Apollo.useLazyQuery<GetBusinessesQuery, GetBusinessesQueryVariables>(GetBusinessesDocument, options);
 }
-export function useGetCommentListSuspenseQuery(
-  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCommentListQuery, GetCommentListQueryVariables>
+export function useGetBusinessesSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetBusinessesQuery, GetBusinessesQueryVariables>
 ) {
   const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<GetCommentListQuery, GetCommentListQueryVariables>(GetCommentListDocument, options);
+  return Apollo.useSuspenseQuery<GetBusinessesQuery, GetBusinessesQueryVariables>(GetBusinessesDocument, options);
 }
-export type GetCommentListQueryHookResult = ReturnType<typeof useGetCommentListQuery>;
-export type GetCommentListLazyQueryHookResult = ReturnType<typeof useGetCommentListLazyQuery>;
-export type GetCommentListSuspenseQueryHookResult = ReturnType<typeof useGetCommentListSuspenseQuery>;
-export type GetCommentListQueryResult = Apollo.QueryResult<GetCommentListQuery, GetCommentListQueryVariables>;
+export type GetBusinessesQueryHookResult = ReturnType<typeof useGetBusinessesQuery>;
+export type GetBusinessesLazyQueryHookResult = ReturnType<typeof useGetBusinessesLazyQuery>;
+export type GetBusinessesSuspenseQueryHookResult = ReturnType<typeof useGetBusinessesSuspenseQuery>;
+export type GetBusinessesQueryResult = Apollo.QueryResult<GetBusinessesQuery, GetBusinessesQueryVariables>;
+export const GetCommentsDocument = gql`
+  query getComments($targetId: String!, $targetType: CommentTargetType!) {
+    getComments(targetId: $targetId, targetType: $targetType) {
+      author {
+        batch
+        disabled
+        dob
+        firstName
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        profileImage
+        role {
+          id
+          name
+        }
+      }
+      authorId
+      content
+      createdAt
+      id
+      isVerified
+      targetId
+      targetType
+      updatedAt
+    }
+  }
+`;
+
+/**
+ * __useGetCommentsQuery__
+ *
+ * To run a query within a React component, call `useGetCommentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCommentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCommentsQuery({
+ *   variables: {
+ *      targetId: // value for 'targetId'
+ *      targetType: // value for 'targetType'
+ *   },
+ * });
+ */
+export function useGetCommentsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetCommentsQuery, GetCommentsQueryVariables> &
+    ({ variables: GetCommentsQueryVariables; skip?: boolean } | { skip: boolean })
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetCommentsQuery, GetCommentsQueryVariables>(GetCommentsDocument, options);
+}
+export function useGetCommentsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetCommentsQuery, GetCommentsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetCommentsQuery, GetCommentsQueryVariables>(GetCommentsDocument, options);
+}
+export function useGetCommentsSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCommentsQuery, GetCommentsQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetCommentsQuery, GetCommentsQueryVariables>(GetCommentsDocument, options);
+}
+export type GetCommentsQueryHookResult = ReturnType<typeof useGetCommentsQuery>;
+export type GetCommentsLazyQueryHookResult = ReturnType<typeof useGetCommentsLazyQuery>;
+export type GetCommentsSuspenseQueryHookResult = ReturnType<typeof useGetCommentsSuspenseQuery>;
+export type GetCommentsQueryResult = Apollo.QueryResult<GetCommentsQuery, GetCommentsQueryVariables>;
 export const GetEventDetailsDocument = gql`
   query getEventDetails($id: Int!) {
     getEventDetails(id: $id) {

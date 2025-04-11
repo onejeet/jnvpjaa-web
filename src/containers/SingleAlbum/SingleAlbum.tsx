@@ -304,87 +304,91 @@ const SingleAlbum = () => {
               <Skeleton width="50%" height={28} />
             </>
           ) : (
-            <>
-              <Typography variant="h1">{album?.title || 'Album'}</Typography>
-              <Typography color="grey.800" mt={1}>
-                {album?.description}
-              </Typography>
-            </>
+            album?.id && (
+              <>
+                <Typography variant="h1">{album?.title || 'Album'}</Typography>
+                <Typography color="grey.800" mt={1}>
+                  {album?.description}
+                </Typography>
+              </>
+            )
           )}
 
           {dataLoading ? (
             <Skeleton width="40%" height={20} />
           ) : (
-            <Box display="flex" alignItems="center" gap={1.5} flexWrap="wrap">
-              <Box
-                display="flex"
-                alignItems="center"
-                mt={1}
-                sx={{
-                  svg: {
-                    color: 'text.secondary',
-                  },
-                }}
-              >
-                <Star size={16} weight="fill" />
-                <Typography variant="body2" ml={0.5} color="text.secondary">
-                  {album?.total_photos} Photos
-                </Typography>
-              </Box>
-              <Box
-                display="flex"
-                alignItems="center"
-                mt={1}
-                sx={{
-                  svg: {
-                    color: 'text.secondary',
-                  },
-                }}
-              >
-                <CalendarDots size={16} />
-                <Typography variant="body2" ml={0.5} color="text.secondary">
-                  {dayjs(album?.createdAt)?.format('MMM DD, YYYY')}
-                </Typography>
-              </Box>
-              {album?.contributors && album?.contributors?.length > 0 && (
-                <Stack direction="row" spacing={1} alignItems="center" mt={1}>
-                  <Typography color="grey.600" variant="body2">
-                    Contributors:
+            album?.id && (
+              <Box display="flex" alignItems="center" gap={1.5} flexWrap="wrap">
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  mt={1}
+                  sx={{
+                    svg: {
+                      color: 'text.secondary',
+                    },
+                  }}
+                >
+                  <Star size={16} weight="fill" />
+                  <Typography variant="body2" ml={0.5} color="text.secondary">
+                    {album?.total_photos} Photos
                   </Typography>
-                  <AvatarGroup
-                    total={album?.contributors?.length}
-                    slotProps={{
-                      surplus: {
-                        sx: {
-                          // cursor: 'pointer',
+                </Box>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  mt={1}
+                  sx={{
+                    svg: {
+                      color: 'text.secondary',
+                    },
+                  }}
+                >
+                  <CalendarDots size={16} />
+                  <Typography variant="body2" ml={0.5} color="text.secondary">
+                    {dayjs(album?.createdAt)?.format('MMM DD, YYYY')}
+                  </Typography>
+                </Box>
+                {album?.contributors && album?.contributors?.length > 0 && (
+                  <Stack direction="row" spacing={1} alignItems="center" mt={1}>
+                    <Typography color="grey.600" variant="body2">
+                      Contributors:
+                    </Typography>
+                    <AvatarGroup
+                      total={album?.contributors?.length}
+                      slotProps={{
+                        surplus: {
+                          sx: {
+                            // cursor: 'pointer',
+                          },
+                          // onClick: () => alert('Hello'),
                         },
-                        // onClick: () => alert('Hello'),
-                      },
-                    }}
-                  >
-                    {album?.contributors?.slice(0, 4)?.map((person: Maybe<UserBasic>, index: number) => (
-                      <Tooltip
-                        key={`event-avatar-${index}`}
-                        placement="top"
-                        title={`${person?.firstName || 'NA'} ${person?.lastName || ''} ${person?.batch ? `(${person.batch})` : ''}`}
-                        arrow
-                      >
-                        <Avatar
-                          alt={person?.firstName || 'NA'}
-                          src={person?.profileImage || getAvatarDataUrl(person?.id)}
-                          slotProps={{
-                            img: {
-                              referrerPolicy: 'no-referrer',
-                            },
-                          }}
-                          sx={{ width: 28, height: 28 }}
-                        />
-                      </Tooltip>
-                    ))}
-                  </AvatarGroup>
-                </Stack>
-              )}
-            </Box>
+                      }}
+                    >
+                      {album?.contributors?.slice(0, 4)?.map((person: Maybe<UserBasic>, index: number) => (
+                        <Tooltip
+                          key={`event-avatar-${index}`}
+                          placement="top"
+                          title={`${person?.firstName || 'NA'} ${person?.lastName || ''} ${person?.batch ? `(${person.batch})` : ''}`}
+                          arrow
+                        >
+                          <Avatar
+                            alt={person?.firstName || 'NA'}
+                            src={person?.profileImage || getAvatarDataUrl(person?.id)}
+                            slotProps={{
+                              img: {
+                                referrerPolicy: 'no-referrer',
+                              },
+                            }}
+                            sx={{ width: 28, height: 28 }}
+                          />
+                        </Tooltip>
+                      ))}
+                    </AvatarGroup>
+                  </Stack>
+                )}
+              </Box>
+            )
           )}
         </Box>
         {/* {buttonProps && (

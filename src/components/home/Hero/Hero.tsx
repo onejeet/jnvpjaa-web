@@ -1,5 +1,3 @@
-// import EmblaCarousel from '@/components/common/EmblaCarousel/EmblaCarousel';
-import EastIcon from '@mui/icons-material/East';
 import { Box, Divider, Typography } from '@mui/material';
 
 const Hero = () => {

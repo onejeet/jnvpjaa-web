@@ -93,7 +93,7 @@ export default function BirthdaySlider() {
           loop={!loading}
           autoplay={autoplay ? { delay: 4000, disableOnInteraction: true } : false}
           freeMode={true}
-          speed={2000}
+          speed={2500}
           style={{ display: 'flex', alignItems: 'center' }}
         >
           {listData.map((user, index) => (
