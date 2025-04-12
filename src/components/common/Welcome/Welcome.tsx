@@ -25,7 +25,34 @@ const Welcome: React.FC<WelcomeProps> = ({ onNext }) => {
           />
         </a>
       </Box> */}
-      <Typography variant="h1" align="center" fontWeight={600} sx={{ mb: 2 }}>
+      <Typography
+        color="text.primary"
+        textAlign="center"
+        variant="body1"
+        fontWeight={500}
+        sx={{
+          fontSize: '30px',
+          background: 'linear-gradient(90deg,#217bfe 10%, #078efb 30%, #C62835 100%)',
+          backgroundClip: 'text',
+          color: 'transparent',
+          mb: 2,
+        }}
+      >
+        {`Hello ${user?.firstName}!`}
+      </Typography>
+      <Typography
+        variant="body1"
+        align="center"
+        fontWeight={600}
+        sx={{
+          fontSize: '40px',
+          lineHeight: 'normal',
+          mb: 2,
+          background: 'linear-gradient(90deg,#217bfe 10%, #078efb 30%, #C62835 100%)',
+          backgroundClip: 'text',
+          color: 'transparent',
+        }}
+      >
         Welcome to New JNVPJAA Portal! 🎉
       </Typography>
       <Box display="flex" flexDirection="row" justifyContent="center">
@@ -38,20 +65,6 @@ const Welcome: React.FC<WelcomeProps> = ({ onNext }) => {
         />
       </Box>
       <Box display="flex" flexDirection="column" justifyContent="start" gap={1}>
-        <Typography
-          color="text.primary"
-          textAlign="left"
-          variant="body1"
-          fontWeight={500}
-          sx={{
-            fontSize: '30px',
-            background: 'linear-gradient(90deg,#C62835 0,#217bfe 10%, #078efb 100%)',
-            backgroundClip: 'text',
-            color: 'transparent',
-          }}
-        >
-          {`Hello ${user?.firstName} 👋`}
-        </Typography>
         <Typography>
           {`We're thrilled to have you here! 🎊 This is your space to reconnect, relive memories, and build new ones.
         Whether it’s your first time logging in or you're already a part of this amazing community, we want you to feel

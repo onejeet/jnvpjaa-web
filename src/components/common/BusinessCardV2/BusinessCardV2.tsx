@@ -1,5 +1,17 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, Avatar, Typography, Chip, Stack, Box, IconButton, alpha } from '@mui/material';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  Avatar,
+  Typography,
+  Chip,
+  Stack,
+  Box,
+  IconButton,
+  alpha,
+  Skeleton,
+} from '@mui/material';
 import { blueGrey, cyan, deepPurple } from '@mui/material/colors';
 import VerifiedBadge from '../VerifiedBadge';
 import { Business, User } from '@/apollo/hooks';
@@ -45,45 +57,65 @@ const BusinessCard: React.FC<Props> = ({ business, loading, user, isAdminUser })
         gap={2}
       >
         {/* Avatar */}
-        <Box width={{ xs: 200 }} height="fit-content" minHeight={100} position="relative">
-          <Image
-            src={business?.logoUrl || ''}
-            alt={business.name}
-            fill
-            loading="lazy"
-            objectFit="cover"
-            objectPosition="top left"
-            referrerPolicy="no-referrer"
-            priority={false}
-          />
+        <Box
+          width={{ xs: 200 }}
+          display="flex"
+          alignItems="center"
+          height="fit-content"
+          minHeight={100}
+          position="relative"
+        >
+          {loading ? (
+            <Skeleton variant="rectangular" width="100%" sx={{ borderRadius: '8px' }} />
+          ) : (
+            <Image
+              src={business?.logoUrl || ''}
+              alt={business.name}
+              fill
+              loading="lazy"
+              objectFit="contain"
+              referrerPolicy="no-referrer"
+              priority={false}
+            />
+          )}
         </Box>
 
         <Box>
           <Box display="flex" alignItems="center" gap={1}>
-            <Typography
-              variant="h2"
-              fontWeight="bold"
-              color="white"
-              sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}
-            >
-              {business.name}
-            </Typography>
-            {business.isVerified ? (
-              <VerifiedBadge size={28} title="Verified" />
+            {loading ? (
+              <Skeleton width="80%" height={36} />
             ) : (
-              <Chip size="small" label="Pending Approval" color="error" />
+              <>
+                <Typography
+                  variant="h2"
+                  fontWeight="bold"
+                  color="white"
+                  sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}
+                >
+                  {business.name}
+                </Typography>
+                {business.isVerified ? (
+                  <VerifiedBadge size={28} title="Verified" />
+                ) : (
+                  <Chip size="small" label="Pending Approval" color="error" />
+                )}
+              </>
             )}
           </Box>
-          <Typography
-            variant="body1"
-            color={blueGrey[200]}
-            sx={{
-              whiteSpace: 'normal',
-              wordBreak: 'break-word',
-            }}
-          >
-            {business.category}
-          </Typography>
+          {loading ? (
+            <Skeleton width="80%" height={25} />
+          ) : (
+            <Typography
+              variant="body1"
+              color={blueGrey[200]}
+              sx={{
+                whiteSpace: 'normal',
+                wordBreak: 'break-word',
+              }}
+            >
+              {business.category}
+            </Typography>
+          )}
         </Box>
       </Box>
 
@@ -95,57 +127,75 @@ const BusinessCard: React.FC<Props> = ({ business, loading, user, isAdminUser })
           },
         }}
       >
-        <Typography variant="body1" color="white" mt={2} mb={2}>
-          {business.description}
-        </Typography>
-
+        {' '}
+        {loading ? (
+          <Skeleton width="80%" height={28} sx={{ my: 2 }} />
+        ) : (
+          <Typography variant="body1" color="white" my={2}>
+            {business.description}
+          </Typography>
+        )}
         <Stack direction="row" gap={1} flexWrap="wrap" mb={2}>
           {business?.tags?.map((tag) => (
             <Chip key={tag} label={tag} size="small" sx={{ bgcolor: deepPurple[500], color: '#fff' }} />
           ))}
         </Stack>
-
         <Stack spacing={1}>
-          {business.city && (
+          {(business.city || loading) && (
             <Typography variant="body1" gap={1} sx={{ display: 'flex', alignItems: 'center' }}>
               <MapPinLine size={18} />
-              {business?.address ? `${business?.address}, ` : ''}
-              {business?.city ? `${business?.city}, ` : ''}
-              {business.state ? `${business.state}, ` : ''}
-              {business?.country || ''}
+              {loading ? (
+                <Skeleton width="80%" height={28} />
+              ) : (
+                <>
+                  {' '}
+                  {business?.address ? `${business?.address}, ` : ''}
+                  {business?.city ? `${business?.city}, ` : ''}
+                  {business.state ? `${business.state}, ` : ''}
+                  {business?.country || ''}
+                </>
+              )}
             </Typography>
           )}
-          {business.website && (
+          {(business.website || loading) && (
             <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center' }} gap={1}>
               <Globe size={18} />
-              <a href={business.website} target="_blank" rel="noopener noreferrer">
-                {business.website}
-              </a>
+              {loading ? (
+                <Skeleton width="80%" height={28} />
+              ) : (
+                <a href={business.website} target="_blank" rel="noopener noreferrer">
+                  {business.website}
+                </a>
+              )}
             </Typography>
           )}
-          {business.email && (
+          {(business.email || loading) && (
             <Typography variant="body1" gap={1} sx={{ display: 'flex', alignItems: 'center' }}>
               <EnvelopeSimple size={18} />
-              <a href={`mailto:${business.email}`} rel="noopener noreferrer">
-                {business.email}
-              </a>
+              {loading ? (
+                <Skeleton width="80%" height={28} />
+              ) : (
+                <a href={`mailto:${business.email}`} rel="noopener noreferrer">
+                  {business.email}
+                </a>
+              )}
             </Typography>
           )}
-          {business.phone && (
+          {(business.phone || loading) && (
             <Typography variant="body1" gap={1} sx={{ display: 'flex', alignItems: 'center' }}>
               <Phone size={18} />
-              {formatPhoneNumber(business.phone)?.international}
+              {loading ? <Skeleton width="80%" height={28} /> : formatPhoneNumber(business?.phone || '')?.international}
             </Typography>
           )}
         </Stack>
-
-        {business.socialMedia && (
+        {(business.socialMedia || loading) && (
           <Box mt={2}>
             <Box gap={1} display="flex" alignItems="center">
-              {business?.user?.id && (
+              {(business?.user?.id || loading) && (
                 <ProfilePicture
                   src={business?.user?.profileImage}
                   id={business?.user?.id}
+                  loading={loading}
                   // @ts-expect-error type-error
                   onClick={() => router.push(paths.profile.getProfileUrl(business.user.id as string))}
                   title={`${business?.user?.firstName || ''} ${business?.user?.lastName || ''}`}
@@ -170,7 +220,7 @@ const BusinessCard: React.FC<Props> = ({ business, loading, user, isAdminUser })
               )}
 
               <Box display="flex" alignItems="center" ml="auto">
-                {Object.entries(business.socialMedia).map(([platform, url]) => (
+                {Object.entries(business?.socialMedia || {}).map(([platform, url]) => (
                   <IconButton
                     key={platform}
                     // href={url}
