@@ -1,4 +1,15 @@
-import { Box, Card, Chip, IconButton, Skeleton, Tooltip, Typography, useMediaQuery, useTheme } from '@mui/material';
+import {
+  Box,
+  Card,
+  Chip,
+  Divider,
+  IconButton,
+  Skeleton,
+  Tooltip,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import React from 'react';
 import DOMPurify from 'dompurify';
 import { ISingleBlogViewProps } from './SingleBlogView.types';
@@ -122,7 +133,14 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateC
               src={author?.profileImage}
               summary={`Batch of ${author?.batch || ''}`}
             />
-            {id && <ClapButton initialClaps={initialClaps} claps={newClaps} setClaps={onClaps} />}
+            {id && (
+              <ClapButton
+                initialClaps={initialClaps}
+                claps={newClaps}
+                setClaps={onClaps}
+                containerProps={{ ml: 'auto' }}
+              />
+            )}
           </Box>
         </Box>
 
@@ -157,7 +175,32 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateC
               }}
               dangerouslySetInnerHTML={{ __html: sanitizedContent }}
             />
-            {id && <ClapButton initialClaps={initialClaps} claps={newClaps} setClaps={onClaps} author={author} />}
+            <Divider sx={{ my: { xs: 2, md: 3 } }} />
+            <Box gap={2} mb={{ xs: 2, md: 3 }} display="flex" flexDirection={{ xs: 'column', sm: 'row' }}>
+              {/* <ProfilePicture
+                loading={loading}
+                id={author?.id}
+                title={`${author?.firstName || ''} ${author?.lastName || ''}`}
+                alt={`${author?.firstName || ''} ${author?.lastName || ''}`}
+                src={author?.profileImage}
+                size={54}
+                titleComponentProps={{
+                  titleProps: {
+                    fontSize: 24,
+                  },
+                }}
+                summary={`Batch of ${author?.batch || ''}`}
+              /> */}
+              {id && (
+                <ClapButton
+                  initialClaps={initialClaps}
+                  claps={newClaps}
+                  setClaps={onClaps}
+                  author={author}
+                  // containerProps={{ ml: { xs: 'none', sm: 'auto' } }}
+                />
+              )}
+            </Box>
           </>
         )}
       </Box>

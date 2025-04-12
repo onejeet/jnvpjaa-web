@@ -16,6 +16,7 @@ import { isBirthdayToday } from '@/utils/helpers';
 import giftsLottieIcon from '@/utils/lottie/gifts_art.json';
 import Lottie from 'lottie-react';
 import CelebratonConfetti from '@/components/common/CelebratonConfetti';
+import BusinessSection from './components/BusinessSection';
 
 export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState('about');
@@ -42,7 +43,7 @@ export default function ProfilePage() {
               </Typography>
             </Box>
           )}
-          {!editingProfile && <ProfileTabs activeTab={activeTab} onTabChange={setActiveTab} />}
+          {!editingProfile && <ProfileTabs activeTab={activeTab} onTabChange={setActiveTab} user={user} />}
 
           <Box sx={{ mt: 3 }}>
             {loading ? (
@@ -56,6 +57,7 @@ export default function ProfilePage() {
                 {activeTab === 'about' && <AboutSection />}
                 {activeTab === 'blogs' && <BlogsSection user={user} />}
                 {activeTab === 'events' && <EventSection user={user} />}
+                {activeTab === 'business' && <BusinessSection user={user} />}
               </>
             )}
           </Box>

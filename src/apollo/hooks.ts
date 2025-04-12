@@ -810,6 +810,7 @@ export type User = {
   firstName?: Maybe<Scalars['String']['output']>;
   gender?: Maybe<Scalars['String']['output']>;
   google_auth_id?: Maybe<Scalars['String']['output']>;
+  hasBusiness?: Maybe<Scalars['Boolean']['output']>;
   id?: Maybe<Scalars['ID']['output']>;
   isConfidential?: Maybe<Scalars['Boolean']['output']>;
   isFaculty?: Maybe<Scalars['Boolean']['output']>;
@@ -1023,6 +1024,7 @@ export type AddAlbumContributorMutation = {
                         firstName?: string | undefined;
                         gender?: string | undefined;
                         google_auth_id?: string | undefined;
+                        hasBusiness?: boolean | undefined;
                         id?: string | undefined;
                         isConfidential?: boolean | undefined;
                         isFaculty?: boolean | undefined;
@@ -1184,6 +1186,7 @@ export type AddPhotoMutation = {
               firstName?: string | undefined;
               gender?: string | undefined;
               google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
               id?: string | undefined;
               isConfidential?: boolean | undefined;
               isFaculty?: boolean | undefined;
@@ -1307,6 +1310,7 @@ export type AssignBatchCoordinatorMutation = {
               firstName?: string | undefined;
               gender?: string | undefined;
               google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
               id?: string | undefined;
               isConfidential?: boolean | undefined;
               isFaculty?: boolean | undefined;
@@ -1522,6 +1526,7 @@ export type CreateAlbumMutation = {
                         firstName?: string | undefined;
                         gender?: string | undefined;
                         google_auth_id?: string | undefined;
+                        hasBusiness?: boolean | undefined;
                         id?: string | undefined;
                         isConfidential?: boolean | undefined;
                         isFaculty?: boolean | undefined;
@@ -1757,6 +1762,7 @@ export type CreateTransactionMutation = {
               firstName?: string | undefined;
               gender?: string | undefined;
               google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
               id?: string | undefined;
               isConfidential?: boolean | undefined;
               isFaculty?: boolean | undefined;
@@ -1910,6 +1916,7 @@ export type DeleteTransactionMutation = {
               firstName?: string | undefined;
               gender?: string | undefined;
               google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
               id?: string | undefined;
               isConfidential?: boolean | undefined;
               isFaculty?: boolean | undefined;
@@ -1952,6 +1959,7 @@ export type DeleteUserMutation = {
         firstName?: string | undefined;
         gender?: string | undefined;
         google_auth_id?: string | undefined;
+        hasBusiness?: boolean | undefined;
         id?: string | undefined;
         isConfidential?: boolean | undefined;
         isFaculty?: boolean | undefined;
@@ -2018,6 +2026,7 @@ export type RefreshTokenMutation = {
               firstName?: string | undefined;
               gender?: string | undefined;
               google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
               id?: string | undefined;
               isConfidential?: boolean | undefined;
               isFaculty?: boolean | undefined;
@@ -2160,6 +2169,7 @@ export type SigninMutation = {
               firstName?: string | undefined;
               gender?: string | undefined;
               google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
               id?: string | undefined;
               isConfidential?: boolean | undefined;
               isFaculty?: boolean | undefined;
@@ -2209,6 +2219,7 @@ export type SignupMutation = {
         firstName?: string | undefined;
         gender?: string | undefined;
         google_auth_id?: string | undefined;
+        hasBusiness?: boolean | undefined;
         id?: string | undefined;
         isConfidential?: boolean | undefined;
         isFaculty?: boolean | undefined;
@@ -2417,6 +2428,7 @@ export type UpdateAlbumMutation = {
                         firstName?: string | undefined;
                         gender?: string | undefined;
                         google_auth_id?: string | undefined;
+                        hasBusiness?: boolean | undefined;
                         id?: string | undefined;
                         isConfidential?: boolean | undefined;
                         isFaculty?: boolean | undefined;
@@ -2471,6 +2483,7 @@ export type UpdateBatchCoordinatorMutation = {
               firstName?: string | undefined;
               gender?: string | undefined;
               google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
               id?: string | undefined;
               isConfidential?: boolean | undefined;
               isFaculty?: boolean | undefined;
@@ -2701,6 +2714,7 @@ export type UpdateTransactionMutation = {
               firstName?: string | undefined;
               gender?: string | undefined;
               google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
               id?: string | undefined;
               isConfidential?: boolean | undefined;
               isFaculty?: boolean | undefined;
@@ -2759,6 +2773,7 @@ export type UpdateUserMutation = {
         firstName?: string | undefined;
         gender?: string | undefined;
         google_auth_id?: string | undefined;
+        hasBusiness?: boolean | undefined;
         id?: string | undefined;
         isConfidential?: boolean | undefined;
         isFaculty?: boolean | undefined;
@@ -3023,6 +3038,7 @@ export type GetAlbumQuery = {
                         firstName?: string | undefined;
                         gender?: string | undefined;
                         google_auth_id?: string | undefined;
+                        hasBusiness?: boolean | undefined;
                         id?: string | undefined;
                         isConfidential?: boolean | undefined;
                         isFaculty?: boolean | undefined;
@@ -3163,6 +3179,7 @@ export type GetAllBatchCoordinatorsQuery = {
                   firstName?: string | undefined;
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
+                  hasBusiness?: boolean | undefined;
                   id?: string | undefined;
                   isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
@@ -3214,6 +3231,7 @@ export type GetBatchCoordinatorByUserIdQuery = {
               firstName?: string | undefined;
               gender?: string | undefined;
               google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
               id?: string | undefined;
               isConfidential?: boolean | undefined;
               isFaculty?: boolean | undefined;
@@ -3264,6 +3282,7 @@ export type GetBatchCoordinatorsByBatchQuery = {
                   firstName?: string | undefined;
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
+                  hasBusiness?: boolean | undefined;
                   id?: string | undefined;
                   isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
@@ -3760,6 +3779,7 @@ export type GetMyPhotosQuery = {
                   firstName?: string | undefined;
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
+                  hasBusiness?: boolean | undefined;
                   id?: string | undefined;
                   isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
@@ -3821,6 +3841,7 @@ export type GetTransactionQuery = {
               firstName?: string | undefined;
               gender?: string | undefined;
               google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
               id?: string | undefined;
               isConfidential?: boolean | undefined;
               isFaculty?: boolean | undefined;
@@ -3885,6 +3906,7 @@ export type GetTransactionsQuery = {
                         firstName?: string | undefined;
                         gender?: string | undefined;
                         google_auth_id?: string | undefined;
+                        hasBusiness?: boolean | undefined;
                         id?: string | undefined;
                         isConfidential?: boolean | undefined;
                         isFaculty?: boolean | undefined;
@@ -3987,6 +4009,7 @@ export type GetUserDetailsQuery = {
         firstName?: string | undefined;
         gender?: string | undefined;
         google_auth_id?: string | undefined;
+        hasBusiness?: boolean | undefined;
         id?: string | undefined;
         isConfidential?: boolean | undefined;
         isFaculty?: boolean | undefined;
@@ -4032,6 +4055,7 @@ export type GetUserListQuery = {
                   firstName?: string | undefined;
                   gender?: string | undefined;
                   google_auth_id?: string | undefined;
+                  hasBusiness?: boolean | undefined;
                   id?: string | undefined;
                   isConfidential?: boolean | undefined;
                   isFaculty?: boolean | undefined;
@@ -4200,6 +4224,7 @@ export const AddAlbumContributorDocument = gql`
           firstName
           gender
           google_auth_id
+          hasBusiness
           id
           isConfidential
           isFaculty
@@ -4402,6 +4427,7 @@ export const AddPhotoDocument = gql`
         firstName
         gender
         google_auth_id
+        hasBusiness
         id
         isConfidential
         isFaculty
@@ -4559,6 +4585,7 @@ export const AssignBatchCoordinatorDocument = gql`
         firstName
         gender
         google_auth_id
+        hasBusiness
         id
         isConfidential
         isFaculty
@@ -4840,6 +4867,7 @@ export const CreateAlbumDocument = gql`
           firstName
           gender
           google_auth_id
+          hasBusiness
           id
           isConfidential
           isFaculty
@@ -5204,6 +5232,7 @@ export const CreateTransactionDocument = gql`
         firstName
         gender
         google_auth_id
+        hasBusiness
         id
         isConfidential
         isFaculty
@@ -5433,6 +5462,7 @@ export const DeleteTransactionDocument = gql`
         firstName
         gender
         google_auth_id
+        hasBusiness
         id
         isConfidential
         isFaculty
@@ -5508,6 +5538,7 @@ export const DeleteUserDocument = gql`
       firstName
       gender
       google_auth_id
+      hasBusiness
       id
       isConfidential
       isFaculty
@@ -5720,6 +5751,7 @@ export const RefreshTokenDocument = gql`
         firstName
         gender
         google_auth_id
+        hasBusiness
         id
         isConfidential
         isFaculty
@@ -6001,6 +6033,7 @@ export const SigninDocument = gql`
         firstName
         gender
         google_auth_id
+        hasBusiness
         id
         isConfidential
         isFaculty
@@ -6083,6 +6116,7 @@ export const SignupDocument = gql`
       firstName
       gender
       google_auth_id
+      hasBusiness
       id
       isConfidential
       isFaculty
@@ -6327,6 +6361,7 @@ export const UpdateAlbumDocument = gql`
           firstName
           gender
           google_auth_id
+          hasBusiness
           id
           isConfidential
           isFaculty
@@ -6404,6 +6439,7 @@ export const UpdateBatchCoordinatorDocument = gql`
         firstName
         gender
         google_auth_id
+        hasBusiness
         id
         isConfidential
         isFaculty
@@ -6776,6 +6812,7 @@ export const UpdateTransactionDocument = gql`
         firstName
         gender
         google_auth_id
+        hasBusiness
         id
         isConfidential
         isFaculty
@@ -6888,6 +6925,7 @@ export const UpdateUserDocument = gql`
       firstName
       gender
       google_auth_id
+      hasBusiness
       id
       isConfidential
       isFaculty
@@ -7269,6 +7307,7 @@ export const GetAlbumDocument = gql`
           firstName
           gender
           google_auth_id
+          hasBusiness
           id
           isConfidential
           isFaculty
@@ -7455,6 +7494,7 @@ export const GetAllBatchCoordinatorsDocument = gql`
         firstName
         gender
         google_auth_id
+        hasBusiness
         id
         isConfidential
         isFaculty
@@ -7550,6 +7590,7 @@ export const GetBatchCoordinatorByUserIdDocument = gql`
         firstName
         gender
         google_auth_id
+        hasBusiness
         id
         isConfidential
         isFaculty
@@ -7648,6 +7689,7 @@ export const GetBatchCoordinatorsByBatchDocument = gql`
         firstName
         gender
         google_auth_id
+        hasBusiness
         id
         isConfidential
         isFaculty
@@ -8368,6 +8410,7 @@ export const GetMyPhotosDocument = gql`
         firstName
         gender
         google_auth_id
+        hasBusiness
         id
         isConfidential
         isFaculty
@@ -8458,6 +8501,7 @@ export const GetTransactionDocument = gql`
         firstName
         gender
         google_auth_id
+        hasBusiness
         id
         isConfidential
         isFaculty
@@ -8551,6 +8595,7 @@ export const GetTransactionsDocument = gql`
           firstName
           gender
           google_auth_id
+          hasBusiness
           id
           isConfidential
           isFaculty
@@ -8759,6 +8804,7 @@ export const GetUserDetailsDocument = gql`
       firstName
       gender
       google_auth_id
+      hasBusiness
       id
       isConfidential
       isFaculty
@@ -8835,6 +8881,7 @@ export const GetUserListDocument = gql`
         firstName
         gender
         google_auth_id
+        hasBusiness
         id
         isConfidential
         isFaculty

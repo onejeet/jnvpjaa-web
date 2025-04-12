@@ -1,16 +1,24 @@
 import React, { useState } from 'react';
-import { Box, Typography, IconButton, Tooltip, Fade } from '@mui/material';
+import { Box, Typography, IconButton, Tooltip, Fade, BoxProps } from '@mui/material';
 import { HandsClapping } from '@phosphor-icons/react';
 import { UserBasic } from '@/apollo/hooks';
+import ProfilePicture from '../ProfilePicture';
 
 interface ClapButtonProps {
   initialClaps?: number;
   author?: UserBasic;
   claps?: number;
   setClaps: (claps: number) => void;
+  containerProps?: BoxProps;
 }
 
-const ClapButton: React.FC<ClapButtonProps> = ({ initialClaps = 0, author, claps = 0, setClaps }) => {
+const ClapButton: React.FC<ClapButtonProps> = ({
+  containerProps = {},
+  initialClaps = 0,
+  author,
+  claps = 0,
+  setClaps,
+}) => {
   const [showTooltip, setShowTooltip] = useState(false);
   const tooltipTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -30,9 +38,36 @@ const ClapButton: React.FC<ClapButtonProps> = ({ initialClaps = 0, author, claps
   const total = initialClaps + claps;
 
   return (
-    <Box gap={2} sx={{ ml: 'auto', display: 'flex', alignItems: 'center', bgcolor: 'common.white' }}>
+    <Box gap={2} sx={{ display: 'flex', alignItems: 'center', bgcolor: 'common.white' }} {...containerProps}>
       {author && (
-        <Typography variant="h4">{`Claps for ${author?.firstName || ''} ${author?.lastName || ''}`}</Typography>
+        <Box display="flex" alignItems="center" gap={1}>
+          <Typography
+            variant="body1"
+            sx={{
+              fontSize: {
+                xs: '18px',
+                sm: '24px',
+              },
+              fontWeight: 500,
+              background: 'linear-gradient(90deg,#217bfe 10%, #078efb 30%, #C62835 100%)',
+              backgroundClip: 'text',
+              color: 'transparent',
+            }}
+          >{`Claps for`}</Typography>
+          <ProfilePicture
+            id={author?.id}
+            title={`${author?.firstName || ''} ${author?.lastName || ''}`}
+            alt={`${author?.firstName || ''} ${author?.lastName || ''}`}
+            src={author?.profileImage}
+            // size={}
+            // titleComponentProps={{
+            //   titleProps: {
+            //     fontSize: 24,
+            //   },
+            // }}
+            summary={`Batch of ${author?.batch || ''}`}
+          />
+        </Box>
       )}
 
       <Tooltip

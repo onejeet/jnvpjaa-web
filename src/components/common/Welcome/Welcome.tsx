@@ -38,7 +38,7 @@ const Welcome: React.FC<WelcomeProps> = ({ onNext }) => {
           mb: 2,
         }}
       >
-        {`Hello ${user?.firstName}!`}
+        {`Hello, ${user?.firstName}!`}
       </Typography>
       <Typography
         variant="body1"
