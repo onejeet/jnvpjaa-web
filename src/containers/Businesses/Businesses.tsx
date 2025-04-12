@@ -57,7 +57,7 @@ export default function Businesses() {
       {addBusiness && (
         <Dialog
           open={addBusiness}
-          title="Add your buiness"
+          title="Add your business"
           onClose={() => setAddBusiness(false)}
           footerProps={{ onOkay: () => setAddBusiness(false), okayButtonProps: { title: 'Okay' } }}
         >
