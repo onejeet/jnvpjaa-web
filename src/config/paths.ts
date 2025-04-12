@@ -16,6 +16,11 @@ export const paths = {
     new: '/gallery/new',
     getAlbumDetailUrl: (id: string) => `/gallery/${id}`,
   },
+  business: {
+    root: '/business',
+    new: '/business/new',
+    getBusinessDetailUrl: (id: string) => `/business/${id}`,
+  },
   blog: {
     root: '/blog',
     new: '/blog/new',

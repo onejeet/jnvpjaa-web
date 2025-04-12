@@ -83,6 +83,10 @@ export const HEADER_MENU: IHeaderMenuItem[] = [
         path: '/gallery',
       },
       {
+        label: 'Business Directory',
+        path: '/businesses',
+      },
+      {
         label: 'Donate Now',
         path: '/donations',
       },
@@ -171,6 +175,10 @@ export const MEMBER_HEADER_MENU: IHeaderMenuItem[] = [
       {
         label: 'Photo Gallery',
         path: '/gallery',
+      },
+      {
+        label: 'Business Directory',
+        path: '/businesses',
       },
       {
         label: 'Billing & Transactions',

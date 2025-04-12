@@ -7,9 +7,10 @@ interface Props {
   size?: number;
   isPrivate?: boolean;
   handlePrivateInfo?: () => void;
+  title?: string;
 }
 
-const VerifiedBadge: React.FC<Props> = ({ size, isPrivate, handlePrivateInfo }) => {
+const VerifiedBadge: React.FC<Props> = ({ size, title, isPrivate, handlePrivateInfo }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const finalSize = React.useMemo(() => {
@@ -21,7 +22,7 @@ const VerifiedBadge: React.FC<Props> = ({ size, isPrivate, handlePrivateInfo }) 
 
   return (
     <Box display="flex" alignItems="center" gap={0.5}>
-      <Tooltip title="Verified by admin" arrow placement="top">
+      <Tooltip title={title || 'Verified by admin'} arrow placement="top">
         <Image src="/assets/svg/verified.svg" width={finalSize} height={finalSize} alt="verified user" />
       </Tooltip>
       {isPrivate && (

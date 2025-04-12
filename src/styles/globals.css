@@ -59,13 +59,15 @@ input[type='number'] {
 }
 
 .rich_content a,
-.tiptap a {
+.tiptap a,
+a {
   color: #c62835;
   text-decoration: none;
   transition: all 0.4s linear;
 }
 .rich_content a:hover,
-.tiptap a:hover {
+.tiptap a:hover,
+a:hover {
   text-decoration: underline;
 }
 

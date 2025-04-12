@@ -1,11 +1,9 @@
 'use client';
 
 import React from 'react';
-import { AlbumBasic, ListInput, useGetAlbumQuery, useGetAlbumsQuery, useGetEventListQuery } from '@/apollo/hooks';
+import { AlbumBasic, ListInput, useGetAlbumsQuery } from '@/apollo/hooks';
 import { Box, Grid2 as Grid, Typography } from '@mui/material';
-import EventCard from '@/components/common/EventCard/EventCard';
 import { Plus, Ticket } from '@phosphor-icons/react';
-import useEvents from '@/hooks/useEvents';
 import { useAuth } from '@/context/AuthContext';
 import { paths } from '@/config/paths';
 import EmptyView from '@/components/common/EmptyView';

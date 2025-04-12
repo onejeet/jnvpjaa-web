@@ -5,11 +5,10 @@ import { Box, IconButton, Typography, useMediaQuery, useTheme } from '@mui/mater
 import Button from '@/components/core/Button';
 import { Plus, PlusCircle } from '@phosphor-icons/react';
 import { useAuth } from '@/context/AuthContext';
-import AddTransactionRecordModule from '@/modules/AddTransactionRecordModule';
 import AlbumListModule from '@/modules/AlbumListModule';
 
 export default function Gallery() {
-  const [addRecord, setAddRecord] = React.useState<boolean>(false);
+  const [addAlbum, setAddAlbum] = React.useState<boolean>(false);
   const { isAdmin } = useAuth();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -30,13 +29,13 @@ export default function Gallery() {
         </Box>
         {isAdmin &&
           (isMobile ? (
-            <IconButton color="primary" onClick={() => setAddRecord(true)}>
+            <IconButton color="primary" onClick={() => setAddAlbum(true)}>
               <PlusCircle size={24} weight="bold" />
             </IconButton>
           ) : (
             <Button
               title="Add Album"
-              onClick={() => setAddRecord(true)}
+              onClick={() => setAddAlbum(true)}
               startIcon={<Plus size={16} weight="bold" />}
               sx={{ width: 200 }}
             />
@@ -44,7 +43,6 @@ export default function Gallery() {
       </Box>
       {/* <TransactionsFilters /> */}
       <AlbumListModule />
-      {addRecord && <AddTransactionRecordModule onClose={() => setAddRecord(false)} />}
     </LayoutModule>
   );
 }

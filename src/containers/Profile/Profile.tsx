@@ -24,7 +24,6 @@ export default function ProfilePage() {
     return isBirthdayToday(user?.dob);
   }, [user?.dob]);
 
-  console.log('ZZ: user', user?.dob);
   return (
     <>
       <LayoutModule
