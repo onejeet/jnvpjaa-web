@@ -157,6 +157,7 @@ export type Business = {
   createdAt: Scalars['DateTime']['output'];
   description: Scalars['String']['output'];
   email?: Maybe<Scalars['String']['output']>;
+  googleReviews?: Maybe<Scalars['Float']['output']>;
   id: Scalars['ID']['output'];
   isVerified: Scalars['Boolean']['output'];
   logoUrl?: Maybe<Scalars['String']['output']>;
@@ -1643,6 +1644,7 @@ export type CreateBusinessMutation = {
     createdAt: any;
     description: string;
     email?: string | undefined;
+    googleReviews?: number | undefined;
     id: string;
     isVerified: boolean;
     logoUrl?: string | undefined;
@@ -2597,6 +2599,7 @@ export type UpdateBusinessMutation = {
     createdAt: any;
     description: string;
     email?: string | undefined;
+    googleReviews?: number | undefined;
     id: string;
     isVerified: boolean;
     logoUrl?: string | undefined;
@@ -2832,6 +2835,7 @@ export type VerifyBusinessMutation = {
     createdAt: any;
     description: string;
     email?: string | undefined;
+    googleReviews?: number | undefined;
     id: string;
     isVerified: boolean;
     logoUrl?: string | undefined;
@@ -3444,6 +3448,7 @@ export type GetBusinessQuery = {
         createdAt: any;
         description: string;
         email?: string | undefined;
+        googleReviews?: number | undefined;
         id: string;
         isVerified: boolean;
         logoUrl?: string | undefined;
@@ -3497,6 +3502,7 @@ export type GetBusinessesQuery = {
                   createdAt: any;
                   description: string;
                   email?: string | undefined;
+                  googleReviews?: number | undefined;
                   id: string;
                   isVerified: boolean;
                   logoUrl?: string | undefined;
@@ -5030,6 +5036,7 @@ export const CreateBusinessDocument = gql`
       createdAt
       description
       email
+      googleReviews
       id
       isVerified
       logoUrl
@@ -6599,6 +6606,7 @@ export const UpdateBusinessDocument = gql`
       createdAt
       description
       email
+      googleReviews
       id
       isVerified
       logoUrl
@@ -7051,6 +7059,7 @@ export const VerifyBusinessDocument = gql`
       createdAt
       description
       email
+      googleReviews
       id
       isVerified
       logoUrl
@@ -7946,6 +7955,7 @@ export const GetBusinessDocument = gql`
       createdAt
       description
       email
+      googleReviews
       id
       isVerified
       logoUrl
@@ -8028,6 +8038,7 @@ export const GetBusinessesDocument = gql`
         createdAt
         description
         email
+        googleReviews
         id
         isVerified
         logoUrl

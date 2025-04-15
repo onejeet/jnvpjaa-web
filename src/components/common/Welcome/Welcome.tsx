@@ -32,8 +32,9 @@ const Welcome: React.FC<WelcomeProps> = ({ onNext }) => {
         fontWeight={500}
         sx={{
           fontSize: '30px',
-          background: 'linear-gradient(90deg,#217bfe 10%, #078efb 30%, #C62835 100%)',
+          background: 'linear-gradient(90deg, #C62835 40%,#078efb 60%, #217bfe 100%)',
           backgroundClip: 'text',
+          lineHeight: 'normal',
           color: 'transparent',
           mb: 2,
         }}
@@ -45,7 +46,7 @@ const Welcome: React.FC<WelcomeProps> = ({ onNext }) => {
         align="center"
         fontWeight={600}
         sx={{
-          fontSize: '40px',
+          fontSize: '28px',
           lineHeight: 'normal',
           mb: 2,
           background: 'linear-gradient(90deg,#217bfe 10%, #078efb 30%, #C62835 100%)',
@@ -61,6 +62,7 @@ const Welcome: React.FC<WelcomeProps> = ({ onNext }) => {
           alt="celebration"
           width={300}
           height={100}
+          referrerPolicy="no-referrer"
           style={{ width: '300px', height: 'auto' }}
         />
       </Box>

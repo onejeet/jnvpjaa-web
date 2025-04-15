@@ -14,6 +14,7 @@ import { CheckCircle } from '@phosphor-icons/react';
 import Welcome from '@/components/common/Welcome/Welcome';
 import ChangePassword from '../Auth/ChangePassword/ChangePassword';
 import ChangePasswordFirst from './ChangePasswordFirst';
+import ProfessionInfo from '@/modules/ProfileSetup/ProfessionInfo';
 
 const CustomStepIcon = (props: StepIconProps) => {
   const { active, completed, className } = props;
@@ -40,8 +41,8 @@ const ProfileSetup = () => {
   const steps = React.useMemo(
     () =>
       isWelcomeSetup
-        ? ['welcome', 'change_password', 'personal_info', 'profile_picture', 'addresses', 'privacy']
-        : ['personal_info', 'profile_picture', 'addresses', 'privacy'],
+        ? ['welcome', 'change_password', 'personal_info', 'profile_picture', 'profession', 'addresses', 'privacy']
+        : ['personal_info', 'profile_picture', 'profession', 'addresses', 'privacy'],
     [isWelcomeSetup]
   );
 
@@ -70,6 +71,8 @@ const ProfileSetup = () => {
         return <ProfilePictureUpload onBack={handleBack} onNext={handleNext} user={user} />;
       case 'addresses':
         return <Addresses onBack={handleBack} onNext={handleNext} user={user} />;
+      case 'profession':
+        return <ProfessionInfo onBack={handleBack} onNext={handleNext} user={user} />;
       case 'privacy':
         return <DataPrivacy isLastStep onBack={handleBack} onNext={handleNext} user={user} />;
     }
@@ -87,7 +90,8 @@ const ProfileSetup = () => {
             steps.map((label, index) => (
               <Step
                 key={index}
-                onClick={() => (isWelcomeSetup && index > activeStepIndex ? null : setActiveStepIndex(index))}
+                // onClick={() => (isWelcomeSetup && index > activeStepIndex ? null : setActiveStepIndex(index))}
+                onClick={() => setActiveStepIndex(index)}
               >
                 <StepLabel>{getFormattedLabel(label)}</StepLabel>
               </Step>

@@ -1,4 +1,4 @@
-import { Dayjs } from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 
 export interface IPersonalInfoFormInput {
   firstName: string;
@@ -10,6 +10,17 @@ export interface IPersonalInfoFormInput {
   extraMobile?: string;
   emergencyMobile?: string;
   whatsAppMobile?: string;
+}
+
+export interface IProfessionInfoFormInput {
+  companyName: string;
+  position: string;
+  country: string;
+  state: string;
+  city: string;
+  startedWorking: Dayjs;
+  // endedWorking   DateTime?
+  // isCurrent      Boolean   @default(false)
 }
 
 export interface IAddressFormInput {

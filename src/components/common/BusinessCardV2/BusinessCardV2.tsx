@@ -11,6 +11,7 @@ import {
   IconButton,
   alpha,
   Skeleton,
+  Rating,
 } from '@mui/material';
 import { blueGrey, cyan, deepPurple } from '@mui/material/colors';
 import VerifiedBadge from '../VerifiedBadge';
@@ -117,6 +118,12 @@ const BusinessCard: React.FC<Props> = ({ business, loading, user, isAdminUser })
             </Typography>
           )}
         </Box>
+        {business?.googleReviews && (
+          <Box ml={{ xs: 'inherit', sm: 'auto' }}>
+            <Typography variant="body2">Google Reviews ({business?.googleReviews})</Typography>
+            <Rating value={business?.googleReviews} precision={0.5} readOnly />
+          </Box>
+        )}
       </Box>
 
       <CardContent
@@ -196,6 +203,7 @@ const BusinessCard: React.FC<Props> = ({ business, loading, user, isAdminUser })
                   src={business?.user?.profileImage}
                   id={business?.user?.id}
                   loading={loading}
+                  size={44}
                   // @ts-expect-error type-error
                   onClick={() => router.push(paths.profile.getProfileUrl(business.user.id as string))}
                   title={`${business?.user?.firstName || ''} ${business?.user?.lastName || ''}`}

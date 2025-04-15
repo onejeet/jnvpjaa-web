@@ -128,6 +128,7 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateC
             <ProfilePicture
               loading={loading}
               id={author?.id}
+              size={44}
               title={`${author?.firstName || ''} ${author?.lastName || ''}`}
               alt={`${author?.firstName || ''} ${author?.lastName || ''}`}
               src={author?.profileImage}

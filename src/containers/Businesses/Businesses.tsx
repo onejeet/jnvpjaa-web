@@ -36,7 +36,7 @@ export default function Businesses() {
         <Box>
           <Typography variant="h1">Businesses By Alumni</Typography>
           <Typography color="grey.800" mb={3}>
-            {`Check out businesses started by our alumni. Lots of them offer special discounts just for alumni, so it’s a win-win, support your network and save too!`}
+            {`Check out businesses started by our alumni. Lots of them offer special discounts just for alumni, so it’s a win-win: support your network and save too!`}
           </Typography>
         </Box>
         {isMobile ? (

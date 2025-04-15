@@ -1,8 +1,6 @@
 const typography = {
   fontFamily: [
     'DM Sans',
-    'BlinkMacSystemFont',
-    '"Segoe UI"',
     'Roboto',
     '"Helvetica Neue"',
     'Arial',

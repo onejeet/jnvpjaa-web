@@ -56,13 +56,13 @@ const BlogCard: React.FC<IBlogCardProps> = ({
           {
             label: 'Edit',
             value: 'edit',
-            onClick: () => onEdit(slug || ''),
+            onClick: () => onEdit?.(slug || ''),
             icon: <Pencil size={16} />,
           },
           {
             label: 'Publish',
             value: 'publish',
-            onClick: () => onPublish(id),
+            onClick: () => onPublish?.(id),
             icon: <CheckCircle size={18} />,
             sx: {
               color: 'success.main',
@@ -74,7 +74,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
           {
             label: 'Delete',
             value: 'delete',
-            onClick: () => onDelete(id),
+            onClick: () => onDelete?.(id),
             icon: <Trash size={18} />,
             sx: {
               color: 'error.main',
@@ -90,13 +90,13 @@ const BlogCard: React.FC<IBlogCardProps> = ({
           {
             label: 'Edit',
             value: 'edit',
-            onClick: () => onEdit(slug || ''),
+            onClick: () => onEdit?.(slug || ''),
             icon: <Pencil size={16} />,
           },
           {
             label: 'Delete',
             value: 'delete',
-            onClick: () => onDelete(id),
+            onClick: () => onDelete?.(id),
             icon: <Trash size={18} />,
             sx: {
               color: 'error.main',
@@ -111,7 +111,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
           items.splice(1, 0, {
             label: 'Approve',
             value: 'approve',
-            onClick: () => onVerify(id),
+            onClick: () => onVerify?.(id),
             icon: <CheckCircle size={18} />,
             sx: {
               color: 'success.main',
@@ -124,7 +124,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
           items.splice(1, 0, {
             label: 'Move to Draft',
             value: 'unpublish',
-            onClick: () => onPublish(id, true),
+            onClick: () => onPublish?.(id, true),
             icon: <XCircle size={18} />,
             sx: {
               color: 'error.main',
@@ -140,13 +140,13 @@ const BlogCard: React.FC<IBlogCardProps> = ({
           {
             label: 'Edit',
             value: 'edit',
-            onClick: () => onEdit(slug || ''),
+            onClick: () => onEdit?.(slug || ''),
             icon: <Pencil size={16} />,
           },
           {
             label: 'Unpublish',
             value: 'unpublish',
-            onClick: () => onPublish(id, true),
+            onClick: () => onPublish?.(id, true),
             icon: <XCircle size={18} />,
             sx: {
               color: 'error.main',
@@ -356,7 +356,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
           {loading ? (
             <Skeleton width="80%" height={32} />
           ) : (
-            <Typography variant="h1" sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography variant="h1" sx={{ display: 'flex', fontWeight: 500, alignItems: 'center' }}>
               {title}{' '}
               {status !== BlogStatus.Published && (
                 <Chip size="small" label={getFormattedLabel(status)} color={statusColor} sx={{ ml: 1 }} />

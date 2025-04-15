@@ -9,10 +9,6 @@ import Image from 'next/image';
 import { Photo } from '@/apollo/hooks';
 import SpecialTitle from '@/components/common/SpecialTitle';
 
-interface HomeSliderProps {
-  slides: Photo[];
-}
-
 const localSlides = [
   {
     url: 'https://jnvpjaa.org/assets/gallery/sports-fest-mar-2025-5.jpg',
@@ -86,18 +82,21 @@ const swiperBreakpoints = {
     slidesPerView: 1,
     spaceBetween: 10,
     slidesPerGroup: 1,
+    speed: 1500,
   },
   // when window width is >= 768px (tablet and up)
   768: {
     slidesPerView: 2,
     spaceBetween: 15,
     slidesPerGroup: 2,
+    speed: 2000,
   },
   // when window width is >= 1024px (desktop)
   1024: {
     slidesPerView: 3,
     spaceBetween: 30,
-    slidesPerGroup: 2,
+    slidesPerGroup: 3,
+    speed: 3000,
   },
 };
 
@@ -143,7 +142,7 @@ const ImageSlider: React.FC = () => {
         navigation
         breakpoints={swiperBreakpoints}
         // pagination={{ clickable: true }}
-        speed={3000}
+        // speed={3000}
         autoplay={autoplay ? { delay: 4000, disableOnInteraction: true } : false}
         loop
       >
@@ -154,7 +153,7 @@ const ImageSlider: React.FC = () => {
                 position: 'relative',
                 width: '100%',
                 borderRadius: 10,
-                height: { xs: 200, sm: 250, md: 300 },
+                height: 300,
               }}
             >
               <Image

@@ -1,8 +1,7 @@
 import Box from '@mui/material/Box';
 import Hero from '@/components/home/Hero';
 import SloganBanner from '@/components/home/SloganBanner';
-import UpcomingEvents from './components/UpcomingEvents';
-import RecentBlogs from './components/RecentBlogs';
+import FeaturedBlogs from './components/FeaturedBlogs';
 import BirthdaySlider from './components/BirthdaySlider';
 import MetricsNumbers from './components/MetricsNumbers';
 import ImageSlider from './components/ImageSlider';
@@ -15,7 +14,7 @@ const Home = () => {
       <MetricsNumbers />
       {/* <UpcomingEvents /> */}
       <ImageSlider />
-      <RecentBlogs />
+      <FeaturedBlogs />
       <BirthdaySlider />
     </Box>
   );
