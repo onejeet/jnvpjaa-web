@@ -6,7 +6,7 @@ import { checkInternetConnection } from '@/utils/network';
 import Dialog from '@/components/core/Dialog';
 import { ArrowsCounterClockwise, CheckCircle } from '@phosphor-icons/react';
 import Lottie from 'lottie-react';
-import successLottieIcon from '@/utils/lottie/success2_icon.json';
+import successLottieIcon from '@/utils/lottie/success_icon.json';
 import offlineLottieIcon from '@/utils/lottie/offline_art.json';
 import { useAuth } from '@/context/AuthContext';
 
@@ -87,9 +87,9 @@ const OfflineDialog: React.FC<OfflineDialogProps> = ({ checkAuth }) => {
         <Lottie
           animationData={isOnline ? successLottieIcon : offlineLottieIcon}
           loop={true}
-          style={{ width: '200px', height: '200px' }}
+          style={{ width: '100px', height: '100px' }}
         />
-        <Typography variant="h2" mt={-2}>
+        <Typography variant="h2" mt={2}>
           {isOnline ? 'Back Online 🎉' : 'You are Offline'}
         </Typography>
         <Typography variant="body1" my={2} textAlign="center">

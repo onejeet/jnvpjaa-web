@@ -271,7 +271,7 @@ export type Event = {
   medium: Scalars['String']['output'];
   organizers?: Maybe<Array<Maybe<UserBasic>>>;
   price?: Maybe<Scalars['Float']['output']>;
-  short_url?: Maybe<Scalars['String']['output']>;
+  shortUrl?: Maybe<Scalars['String']['output']>;
   startDate: Scalars['DateTime']['output'];
   status?: Maybe<EventStatus>;
   summary: Scalars['String']['output'];
@@ -287,13 +287,15 @@ export type EventBasic = {
   __typename?: 'EventBasic';
   adminRemark?: Maybe<Scalars['String']['output']>;
   category?: Maybe<Scalars['String']['output']>;
+  createdBy?: Maybe<Scalars['String']['output']>;
   description?: Maybe<Scalars['String']['output']>;
   endDate?: Maybe<Scalars['DateTime']['output']>;
   id: Scalars['Int']['output'];
   image?: Maybe<Scalars['String']['output']>;
+  isGoing?: Maybe<Scalars['Boolean']['output']>;
   location?: Maybe<Scalars['String']['output']>;
   medium: Scalars['String']['output'];
-  short_url?: Maybe<Scalars['String']['output']>;
+  shortUrl?: Maybe<Scalars['String']['output']>;
   startDate: Scalars['DateTime']['output'];
   status?: Maybe<EventStatus>;
   summary: Scalars['String']['output'];
@@ -921,13 +923,15 @@ export type AddAlbumContributorMutation = {
               __typename?: 'EventBasic';
               adminRemark?: string | undefined;
               category?: string | undefined;
+              createdBy?: string | undefined;
               description?: string | undefined;
               endDate?: any | undefined;
               id: number;
               image?: string | undefined;
+              isGoing?: boolean | undefined;
               location?: string | undefined;
               medium: string;
-              short_url?: string | undefined;
+              shortUrl?: string | undefined;
               startDate: any;
               status?: EventStatus | undefined;
               summary: string;
@@ -992,13 +996,15 @@ export type AddAlbumContributorMutation = {
                               __typename?: 'EventBasic';
                               adminRemark?: string | undefined;
                               category?: string | undefined;
+                              createdBy?: string | undefined;
                               description?: string | undefined;
                               endDate?: any | undefined;
                               id: number;
                               image?: string | undefined;
+                              isGoing?: boolean | undefined;
                               location?: string | undefined;
                               medium: string;
-                              short_url?: string | undefined;
+                              shortUrl?: string | undefined;
                               startDate: any;
                               status?: EventStatus | undefined;
                               summary: string;
@@ -1154,13 +1160,15 @@ export type AddPhotoMutation = {
                     __typename?: 'EventBasic';
                     adminRemark?: string | undefined;
                     category?: string | undefined;
+                    createdBy?: string | undefined;
                     description?: string | undefined;
                     endDate?: any | undefined;
                     id: number;
                     image?: string | undefined;
+                    isGoing?: boolean | undefined;
                     location?: string | undefined;
                     medium: string;
-                    short_url?: string | undefined;
+                    shortUrl?: string | undefined;
                     startDate: any;
                     status?: EventStatus | undefined;
                     summary: string;
@@ -1423,13 +1431,15 @@ export type CreateAlbumMutation = {
               __typename?: 'EventBasic';
               adminRemark?: string | undefined;
               category?: string | undefined;
+              createdBy?: string | undefined;
               description?: string | undefined;
               endDate?: any | undefined;
               id: number;
               image?: string | undefined;
+              isGoing?: boolean | undefined;
               location?: string | undefined;
               medium: string;
-              short_url?: string | undefined;
+              shortUrl?: string | undefined;
               startDate: any;
               status?: EventStatus | undefined;
               summary: string;
@@ -1494,13 +1504,15 @@ export type CreateAlbumMutation = {
                               __typename?: 'EventBasic';
                               adminRemark?: string | undefined;
                               category?: string | undefined;
+                              createdBy?: string | undefined;
                               description?: string | undefined;
                               endDate?: any | undefined;
                               id: number;
                               image?: string | undefined;
+                              isGoing?: boolean | undefined;
                               location?: string | undefined;
                               medium: string;
-                              short_url?: string | undefined;
+                              shortUrl?: string | undefined;
                               startDate: any;
                               status?: EventStatus | undefined;
                               summary: string;
@@ -1698,13 +1710,15 @@ export type CreateEventMutation = {
         __typename?: 'EventBasic';
         adminRemark?: string | undefined;
         category?: string | undefined;
+        createdBy?: string | undefined;
         description?: string | undefined;
         endDate?: any | undefined;
         id: number;
         image?: string | undefined;
+        isGoing?: boolean | undefined;
         location?: string | undefined;
         medium: string;
-        short_url?: string | undefined;
+        shortUrl?: string | undefined;
         startDate: any;
         status?: EventStatus | undefined;
         summary: string;
@@ -2326,13 +2340,15 @@ export type UpdateAlbumMutation = {
               __typename?: 'EventBasic';
               adminRemark?: string | undefined;
               category?: string | undefined;
+              createdBy?: string | undefined;
               description?: string | undefined;
               endDate?: any | undefined;
               id: number;
               image?: string | undefined;
+              isGoing?: boolean | undefined;
               location?: string | undefined;
               medium: string;
-              short_url?: string | undefined;
+              shortUrl?: string | undefined;
               startDate: any;
               status?: EventStatus | undefined;
               summary: string;
@@ -2397,13 +2413,15 @@ export type UpdateAlbumMutation = {
                               __typename?: 'EventBasic';
                               adminRemark?: string | undefined;
                               category?: string | undefined;
+                              createdBy?: string | undefined;
                               description?: string | undefined;
                               endDate?: any | undefined;
                               id: number;
                               image?: string | undefined;
+                              isGoing?: boolean | undefined;
                               location?: string | undefined;
                               medium: string;
-                              short_url?: string | undefined;
+                              shortUrl?: string | undefined;
                               startDate: any;
                               status?: EventStatus | undefined;
                               summary: string;
@@ -2660,13 +2678,15 @@ export type UpdateEventMutation = {
         __typename?: 'EventBasic';
         adminRemark?: string | undefined;
         category?: string | undefined;
+        createdBy?: string | undefined;
         description?: string | undefined;
         endDate?: any | undefined;
         id: number;
         image?: string | undefined;
+        isGoing?: boolean | undefined;
         location?: string | undefined;
         medium: string;
-        short_url?: string | undefined;
+        shortUrl?: string | undefined;
         startDate: any;
         status?: EventStatus | undefined;
         summary: string;
@@ -2938,13 +2958,15 @@ export type GetAlbumQuery = {
               __typename?: 'EventBasic';
               adminRemark?: string | undefined;
               category?: string | undefined;
+              createdBy?: string | undefined;
               description?: string | undefined;
               endDate?: any | undefined;
               id: number;
               image?: string | undefined;
+              isGoing?: boolean | undefined;
               location?: string | undefined;
               medium: string;
-              short_url?: string | undefined;
+              shortUrl?: string | undefined;
               startDate: any;
               status?: EventStatus | undefined;
               summary: string;
@@ -3009,13 +3031,15 @@ export type GetAlbumQuery = {
                               __typename?: 'EventBasic';
                               adminRemark?: string | undefined;
                               category?: string | undefined;
+                              createdBy?: string | undefined;
                               description?: string | undefined;
                               endDate?: any | undefined;
                               id: number;
                               image?: string | undefined;
+                              isGoing?: boolean | undefined;
                               location?: string | undefined;
                               medium: string;
-                              short_url?: string | undefined;
+                              shortUrl?: string | undefined;
                               startDate: any;
                               status?: EventStatus | undefined;
                               summary: string;
@@ -3130,13 +3154,15 @@ export type GetAlbumsQuery = {
                         __typename?: 'EventBasic';
                         adminRemark?: string | undefined;
                         category?: string | undefined;
+                        createdBy?: string | undefined;
                         description?: string | undefined;
                         endDate?: any | undefined;
                         id: number;
                         image?: string | undefined;
+                        isGoing?: boolean | undefined;
                         location?: string | undefined;
                         medium: string;
-                        short_url?: string | undefined;
+                        shortUrl?: string | undefined;
                         startDate: any;
                         status?: EventStatus | undefined;
                         summary: string;
@@ -3600,7 +3626,7 @@ export type GetEventDetailsQuery = {
         location?: string | undefined;
         medium: string;
         price?: number | undefined;
-        short_url?: string | undefined;
+        shortUrl?: string | undefined;
         startDate: any;
         status?: EventStatus | undefined;
         summary: string;
@@ -3667,13 +3693,15 @@ export type GetEventListQuery = {
                   __typename?: 'EventBasic';
                   adminRemark?: string | undefined;
                   category?: string | undefined;
+                  createdBy?: string | undefined;
                   description?: string | undefined;
                   endDate?: any | undefined;
                   id: number;
                   image?: string | undefined;
+                  isGoing?: boolean | undefined;
                   location?: string | undefined;
                   medium: string;
-                  short_url?: string | undefined;
+                  shortUrl?: string | undefined;
                   startDate: any;
                   status?: EventStatus | undefined;
                   summary: string;
@@ -3752,13 +3780,15 @@ export type GetMyPhotosQuery = {
                         __typename?: 'EventBasic';
                         adminRemark?: string | undefined;
                         category?: string | undefined;
+                        createdBy?: string | undefined;
                         description?: string | undefined;
                         endDate?: any | undefined;
                         id: number;
                         image?: string | undefined;
+                        isGoing?: boolean | undefined;
                         location?: string | undefined;
                         medium: string;
-                        short_url?: string | undefined;
+                        shortUrl?: string | undefined;
                         startDate: any;
                         status?: EventStatus | undefined;
                         summary: string;
@@ -4147,13 +4177,15 @@ export const AddAlbumContributorDocument = gql`
       event {
         adminRemark
         category
+        createdBy
         description
         endDate
         id
         image
+        isGoing
         location
         medium
-        short_url
+        shortUrl
         startDate
         status
         summary
@@ -4194,13 +4226,15 @@ export const AddAlbumContributorDocument = gql`
           event {
             adminRemark
             category
+            createdBy
             description
             endDate
             id
             image
+            isGoing
             location
             medium
-            short_url
+            shortUrl
             startDate
             status
             summary
@@ -4397,13 +4431,15 @@ export const AddPhotoDocument = gql`
         event {
           adminRemark
           category
+          createdBy
           description
           endDate
           id
           image
+          isGoing
           location
           medium
-          short_url
+          shortUrl
           startDate
           status
           summary
@@ -4790,13 +4826,15 @@ export const CreateAlbumDocument = gql`
       event {
         adminRemark
         category
+        createdBy
         description
         endDate
         id
         image
+        isGoing
         location
         medium
-        short_url
+        shortUrl
         startDate
         status
         summary
@@ -4837,13 +4875,15 @@ export const CreateAlbumDocument = gql`
           event {
             adminRemark
             category
+            createdBy
             description
             endDate
             id
             image
+            isGoing
             location
             medium
-            short_url
+            shortUrl
             startDate
             status
             summary
@@ -5130,13 +5170,15 @@ export const CreateEventDocument = gql`
     ) {
       adminRemark
       category
+      createdBy
       description
       endDate
       id
       image
+      isGoing
       location
       medium
-      short_url
+      shortUrl
       startDate
       status
       summary
@@ -6285,13 +6327,15 @@ export const UpdateAlbumDocument = gql`
       event {
         adminRemark
         category
+        createdBy
         description
         endDate
         id
         image
+        isGoing
         location
         medium
-        short_url
+        shortUrl
         startDate
         status
         summary
@@ -6332,13 +6376,15 @@ export const UpdateAlbumDocument = gql`
           event {
             adminRemark
             category
+            createdBy
             description
             endDate
             id
             image
+            isGoing
             location
             medium
-            short_url
+            shortUrl
             startDate
             status
             summary
@@ -6735,13 +6781,15 @@ export const UpdateEventDocument = gql`
     ) {
       adminRemark
       category
+      createdBy
       description
       endDate
       id
       image
+      isGoing
       location
       medium
-      short_url
+      shortUrl
       startDate
       status
       summary
@@ -7233,13 +7281,15 @@ export const GetAlbumDocument = gql`
       event {
         adminRemark
         category
+        createdBy
         description
         endDate
         id
         image
+        isGoing
         location
         medium
-        short_url
+        shortUrl
         startDate
         status
         summary
@@ -7280,13 +7330,15 @@ export const GetAlbumDocument = gql`
           event {
             adminRemark
             category
+            createdBy
             description
             endDate
             id
             image
+            isGoing
             location
             medium
-            short_url
+            shortUrl
             startDate
             status
             summary
@@ -7423,13 +7475,15 @@ export const GetAlbumsDocument = gql`
         event {
           adminRemark
           category
+          createdBy
           description
           endDate
           id
           image
+          isGoing
           location
           medium
-          short_url
+          shortUrl
           startDate
           status
           summary
@@ -8228,7 +8282,7 @@ export const GetEventDetailsDocument = gql`
         }
       }
       price
-      short_url
+      shortUrl
       startDate
       status
       summary
@@ -8286,13 +8340,15 @@ export const GetEventListDocument = gql`
       data {
         adminRemark
         category
+        createdBy
         description
         endDate
         id
         image
+        isGoing
         location
         medium
-        short_url
+        shortUrl
         startDate
         status
         summary
@@ -8385,13 +8441,15 @@ export const GetMyPhotosDocument = gql`
         event {
           adminRemark
           category
+          createdBy
           description
           endDate
           id
           image
+          isGoing
           location
           medium
-          short_url
+          shortUrl
           startDate
           status
           summary

@@ -43,7 +43,7 @@ import CopyContentButton from '@/components/common/CopyContentButton';
 import UserListDialog from '../UserListDialog/UserListDialog';
 import ProfilePicture from '../ProfilePicture';
 
-const EventCard: React.FC<SingleEventViewProps> = ({
+const SingleEventView: React.FC<SingleEventViewProps> = ({
   user,
   isAdmin,
   verifyEvent,
@@ -76,11 +76,11 @@ const EventCard: React.FC<SingleEventViewProps> = ({
     status,
     organizers,
     createdBy,
-    short_url = '',
+    shortUrl = '',
   } = event || {};
-
+  console.log('event', event, user);
   const isRSVPDone = React.useMemo(() => {
-    return attendees && attendees?.findIndex((att: UserBasic) => att?.id === user?.id) !== -1;
+    return attendees && attendees?.findIndex((att: Maybe<UserBasic>) => att?.id === user?.id) !== -1;
   }, [attendees, user]);
 
   const formattedStartDate = React.useMemo(() => {
@@ -201,12 +201,12 @@ const EventCard: React.FC<SingleEventViewProps> = ({
                 </Typography>
               </Box>
             )}
-            {short_url && (
+            {shortUrl && (
               <Box ml={isLive ? '10px' : 'auto'}>
                 <CopyContentButton
                   buttonType={showDescription ? 'button' : 'icon'}
                   copiedMessageProps={{ hide: true }}
-                  content={short_url}
+                  content={shortUrl}
                 />
               </Box>
             )}
@@ -483,4 +483,4 @@ const EventCard: React.FC<SingleEventViewProps> = ({
   );
 };
 
-export default EventCard;
+export default SingleEventView;

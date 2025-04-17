@@ -11,7 +11,7 @@ import React from 'react';
 
 const EventDetails = () => {
   const { query } = useRouter();
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
   const { id } = query;
   const methods = useEvents({ user });
   const { data, loading } = useGetEventDetailsQuery({
@@ -49,8 +49,7 @@ const EventDetails = () => {
         )} */}
       </Box>
       {loading || event?.id ? (
-        // @ts-expect-error type-error
-        <SingleEventView event={event} showDescription loading={loading} {...methods} />
+        <SingleEventView event={event} user={user} isAdmin={isAdmin} showDescription loading={loading} {...methods} />
       ) : (
         <EmptyView message="No event found!" />
       )}

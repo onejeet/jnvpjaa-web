@@ -27,7 +27,7 @@ import { GetUserDetailsDocument, GetUserListDocument, useGetUserDetailsQuery } f
 const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
   const { user, loading, isProfileEditable, editingProfile, saveProfile, setEditingProfile } = useProfile();
   const { showAlert, hideAlert } = useAlert();
-  const { user: authUser } = useAuth();
+  const { user: authUser, isAdmin } = useAuth();
   const router = useRouter();
   const client = useApolloClient();
 
@@ -221,7 +221,12 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
                 mr={0.5}
               >{`${user?.firstName} ${user?.lastName || ''}`}</Typography>
               {user?.isVerified && (
-                <VerifiedBadge size={21} isPrivate={user?.isConfidential} handlePrivateInfo={handleDataPrivacyUpdate} />
+                <VerifiedBadge
+                  size={21}
+                  isPrivate={user?.isConfidential}
+                  handlePrivateInfo={handleDataPrivacyUpdate}
+                  isPrivateInfoChangeAllowed={user?.id === authUser?.id || isAdmin}
+                />
               )}
               {user?.batch === 0 && <FacultyBadge size={21} />}
             </Box>

@@ -1,4 +1,4 @@
-import { Event, User } from '@/apollo/hooks';
+import { Event, EventBasic, EventStatus, User, UserBasic } from '@/apollo/hooks';
 import { EventAttendeeUser } from '@/types/global';
 
 export interface IEvent {
@@ -18,14 +18,14 @@ export interface IEvent {
 }
 
 export interface EventCardProps {
-  event: Omit<Event, 'attendees'> & { attendees: EventAttendeeUser[] };
+  event: Event & { isGoing?: boolean };
   loading?: boolean;
   markImGoing?: (id: number) => void;
   user?: User;
   isAdmin?: boolean;
   verifyEvent?: (id: number) => void;
   onEdit?: (id: number) => void;
-  onPublish?: (id: number) => void;
+  onPublish?: (id: number, satus?: EventStatus) => void;
   showDescription?: boolean;
   isReadOnly?: boolean;
 }

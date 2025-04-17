@@ -59,7 +59,8 @@ const BusinessCard: React.FC<Props> = ({ business, loading, user, isAdminUser })
       >
         {/* Avatar */}
         <Box
-          width={{ xs: 200 }}
+          maxWidth={{ xs: 200 }}
+          minWidth={200}
           display="flex"
           alignItems="center"
           height="fit-content"
@@ -195,38 +196,37 @@ const BusinessCard: React.FC<Props> = ({ business, loading, user, isAdminUser })
             </Typography>
           )}
         </Stack>
-        {(business.socialMedia || loading) && (
-          <Box mt={2}>
-            <Box gap={1} display="flex" alignItems="center">
-              {(business?.user?.id || loading) && (
-                <ProfilePicture
-                  src={business?.user?.profileImage}
-                  id={business?.user?.id}
-                  loading={loading}
-                  size={44}
-                  // @ts-expect-error type-error
-                  onClick={() => router.push(paths.profile.getProfileUrl(business.user.id as string))}
-                  title={`${business?.user?.firstName || ''} ${business?.user?.lastName || ''}`}
-                  summary={
-                    business?.user?.batch
-                      ? `Batch of ${business?.user?.batch}`
-                      : business?.user?.isFaculty
-                        ? 'Faculty'
-                        : ''
-                  }
-                  titleComponentProps={{
-                    titleProps: {
-                      color: 'common.white',
-                      fontSize: '16px',
-                    },
-                    summaryProps: {
-                      color: 'grey.500',
-                      fontSize: '12px',
-                    },
-                  }}
-                />
-              )}
-
+        <Box mt={2}>
+          <Box gap={1} display="flex" alignItems="center">
+            {(business?.user?.id || loading) && (
+              <ProfilePicture
+                src={business?.user?.profileImage}
+                id={business?.user?.id}
+                loading={loading}
+                size={44}
+                // @ts-expect-error type-error
+                onClick={() => router.push(paths.profile.getProfileUrl(business.user.id as string))}
+                title={`${business?.user?.firstName || ''} ${business?.user?.lastName || ''}`}
+                summary={
+                  business?.user?.batch
+                    ? `Batch of ${business?.user?.batch}`
+                    : business?.user?.isFaculty
+                      ? 'Faculty'
+                      : ''
+                }
+                titleComponentProps={{
+                  titleProps: {
+                    color: 'common.white',
+                    fontSize: '16px',
+                  },
+                  summaryProps: {
+                    color: 'grey.500',
+                    fontSize: '12px',
+                  },
+                }}
+              />
+            )}
+            {business.socialMedia && (
               <Box display="flex" alignItems="center" ml="auto">
                 {Object.entries(business?.socialMedia || {}).map(([platform, url]) => (
                   <IconButton
@@ -241,9 +241,9 @@ const BusinessCard: React.FC<Props> = ({ business, loading, user, isAdminUser })
                   </IconButton>
                 ))}
               </Box>
-            </Box>
+            )}
           </Box>
-        )}
+        </Box>
       </CardContent>
     </Card>
   );

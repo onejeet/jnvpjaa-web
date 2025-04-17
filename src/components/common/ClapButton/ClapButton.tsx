@@ -10,6 +10,7 @@ interface ClapButtonProps {
   claps?: number;
   setClaps: (claps: number) => void;
   containerProps?: BoxProps;
+  disabled?: boolean;
 }
 
 const ClapButton: React.FC<ClapButtonProps> = ({
@@ -17,6 +18,7 @@ const ClapButton: React.FC<ClapButtonProps> = ({
   initialClaps = 0,
   author,
   claps = 0,
+  disabled,
   setClaps,
 }) => {
   const [showTooltip, setShowTooltip] = useState(false);
@@ -80,6 +82,7 @@ const ClapButton: React.FC<ClapButtonProps> = ({
       >
         <IconButton
           onClick={handleClap}
+          disabled={disabled}
           sx={{
             border: '1px solid',
             borderColor: 'grey.300',
@@ -91,6 +94,7 @@ const ClapButton: React.FC<ClapButtonProps> = ({
               xs: 50,
               md: 60,
             },
+
             position: 'relative',
             svg: {
               position: 'relative',

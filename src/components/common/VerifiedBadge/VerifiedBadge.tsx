@@ -8,9 +8,10 @@ interface Props {
   isPrivate?: boolean;
   handlePrivateInfo?: () => void;
   title?: string;
+  isPrivateInfoChangeAllowed?: boolean;
 }
 
-const VerifiedBadge: React.FC<Props> = ({ size, title, isPrivate, handlePrivateInfo }) => {
+const VerifiedBadge: React.FC<Props> = ({ size, title, isPrivate, isPrivateInfoChangeAllowed, handlePrivateInfo }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const finalSize = React.useMemo(() => {
@@ -27,15 +28,15 @@ const VerifiedBadge: React.FC<Props> = ({ size, title, isPrivate, handlePrivateI
       </Tooltip>
       {isPrivate && (
         <Tooltip
-          title={`Your data is completely private and inaccessible to anyone else. ${handlePrivateInfo ? 'Click to change the data privacy.' : ''}`}
+          title={`Your data is completely private and inaccessible to anyone else. ${handlePrivateInfo && isPrivateInfoChangeAllowed ? 'Click to change the data privacy.' : ''}`}
           arrow
           placement="top"
         >
           <LockSimple
             size={size || 16}
             weight="bold"
-            style={{ cursor: handlePrivateInfo ? 'pointer' : 'default' }}
-            onClick={() => handlePrivateInfo?.()}
+            style={{ cursor: handlePrivateInfo && isPrivateInfoChangeAllowed ? 'pointer' : 'default' }}
+            onClick={isPrivateInfoChangeAllowed ? () => handlePrivateInfo?.() : undefined}
           />
         </Tooltip>
       )}

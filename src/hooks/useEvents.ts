@@ -58,6 +58,9 @@ const useEvents = ({ user }: IPayload) => {
                 eventId: id,
               },
               onCompleted: () => {
+                client.refetchQueries({
+                  include: ['getEventList', 'getEventDetails'],
+                });
                 showAlert(
                   {
                     visible: true,
@@ -133,7 +136,7 @@ const useEvents = ({ user }: IPayload) => {
               },
               onCompleted: () => {
                 client.refetchQueries({
-                  include: ['getEventDetails'],
+                  include: ['getEventList', 'getEventDetails'],
                 });
                 showAlert(
                   {
@@ -180,22 +183,25 @@ const useEvents = ({ user }: IPayload) => {
   );
 
   const onPublishEvent = React.useCallback(
-    (id: number) => {
+    (id: number, status?: EventStatus) => {
       if (!user?.id) {
         redirectToSignin(true);
         return;
       }
+      const isMovingToDraft = status === EventStatus.Draft;
       showAlert(
         {
           visible: true,
-          title: `Publish the Event`,
+          title: isMovingToDraft ? 'Move Back to Draft' : `Publish the Event`,
           type: 'loading',
-          message: isAdmin
-            ? `The event will be open for RSVP to all users upon publication.`
-            : `The event is in draft mode. Once published the admins will be notified for apporval.`,
+          message: isMovingToDraft
+            ? 'The event will be moved back to draft mode for user to make changes and publish again.'
+            : isAdmin
+              ? `The event will be open for RSVP to all users upon publication.`
+              : `The event is in draft mode. Once published the admins will be notified for apporval.`,
           action: 'approve',
           okayButtonProps: {
-            title: `Publish Now`,
+            title: isMovingToDraft ? `Move to Draft` : `Publish Now`,
           },
           onOkay: () => {
             showAlert(
@@ -211,20 +217,26 @@ const useEvents = ({ user }: IPayload) => {
             publishEvent({
               variables: {
                 eventId: id,
-                status: EventStatus.Published,
+                status: status || EventStatus.Published,
               },
               onCompleted: () => {
                 client.refetchQueries({
-                  include: ['getEventDetails'],
+                  include: ['getEventList', 'getEventDetails'],
                 });
                 showAlert(
                   {
                     visible: true,
                     type: 'success',
-                    title: isAdmin ? `Published` : `Published. Awaiting admin approval`,
-                    message: isAdmin
-                      ? `The event has been published successfully.`
-                      : `The event has been published and sent for apporval to admin. Once apporved, will be visible to all the alumni.`,
+                    title: isMovingToDraft
+                      ? 'Moved to Draft'
+                      : isAdmin
+                        ? `Published`
+                        : `Published. Awaiting admin approval`,
+                    message: isMovingToDraft
+                      ? 'The event has been moved to draft successfully.'
+                      : isAdmin
+                        ? `The event has been published successfully.`
+                        : `The event has been published and sent for apporval to admin. Once apporved, will be visible to all the alumni.`,
                     action: 'success',
                   },
                   true
@@ -235,7 +247,7 @@ const useEvents = ({ user }: IPayload) => {
                   {
                     visible: true,
                     type: 'error',
-                    title: `Event publishing failed. Try again`,
+                    title: isMovingToDraft ? `Event failed to move to draft` : `Event publishing failed. Try again`,
                     message: err?.message || 'Something went wrong.',
                     action: 'error',
                   },
@@ -248,7 +260,7 @@ const useEvents = ({ user }: IPayload) => {
         true
       );
     },
-    [publishEvent, user?.id, redirectToSignin, client, showAlert]
+    [publishEvent, user?.id, redirectToSignin, client, showAlert, isAdmin]
   );
   return {
     markImGoing,

@@ -35,7 +35,6 @@ import {
   XCircle,
 } from '@phosphor-icons/react';
 import { EventStatus, Maybe, User, UserBasic } from '@/apollo/hooks';
-import ProfilePicture from '../ProfilePicture';
 import { paths } from '@/config/paths';
 import { useRouter } from 'next/router';
 import CopyContentButton from '@/components/common/CopyContentButton';
@@ -62,19 +61,19 @@ const EventCard: React.FC<EventCardProps> = ({
     endDate,
     image,
     medium = '',
-    attendees,
     category,
     location,
     total_attendies,
     attendees: people,
     status,
     createdBy,
-    short_url = '',
+    shortUrl = '',
+    isGoing,
   } = event || {};
 
   const isRSVPDone = React.useMemo(() => {
-    return attendees && attendees?.findIndex((att: UserBasic) => att?.id === user?.id) !== -1;
-  }, [attendees, user]);
+    return isGoing || (people && people?.findIndex((att: Maybe<UserBasic>) => att?.id === user?.id) !== -1);
+  }, [people, user, isGoing]);
 
   const formattedStartDate = React.useMemo(() => {
     return dayjs(startDate)?.format('MMM DD, YYYY hh:mm A');
@@ -201,12 +200,12 @@ const EventCard: React.FC<EventCardProps> = ({
                 </Typography>
               </Box>
             )}
-            {short_url && (
+            {shortUrl && (
               <Box ml={isLive ? '10px' : 'auto'}>
                 <CopyContentButton
                   buttonType={showDescription ? 'button' : 'icon'}
                   copiedMessageProps={{ hide: true }}
-                  content={short_url}
+                  content={shortUrl}
                 />
               </Box>
             )}
@@ -398,18 +397,17 @@ const EventCard: React.FC<EventCardProps> = ({
                   startIcon={<NotePencil size={16} />}
                   onClick={() => onEdit?.(id)}
                 />
-                {status === EventStatus.Published ||
-                  (status === EventStatus.PendingApproval && (
-                    <Button
-                      variant="outlined"
-                      disabled={loading}
-                      fullWidth
-                      title="Move to Draft"
-                      startIcon={<XCircle size={16} />}
-                      onClick={() => onPublish?.(id)}
-                      sx={{ whiteSpace: 'nowrap', minWidth: '140px' }}
-                    />
-                  ))}
+                {(status === EventStatus.Published || status === EventStatus.PendingApproval) && (
+                  <Button
+                    variant="outlined"
+                    disabled={loading}
+                    fullWidth
+                    title="Move to Draft"
+                    startIcon={<XCircle size={16} />}
+                    onClick={() => onPublish?.(id, EventStatus.Draft)}
+                    sx={{ whiteSpace: 'nowrap', minWidth: '140px' }}
+                  />
+                )}
               </>
             )}
             {status === EventStatus.PendingApproval && isAdmin ? (

@@ -138,6 +138,7 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateC
               <ClapButton
                 initialClaps={initialClaps}
                 claps={newClaps}
+                disabled={Boolean(statusMessage)}
                 setClaps={onClaps}
                 containerProps={{ ml: 'auto' }}
               />
@@ -197,6 +198,7 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateC
                   initialClaps={initialClaps}
                   claps={newClaps}
                   setClaps={onClaps}
+                  disabled={Boolean(statusMessage)}
                   author={author}
                   // containerProps={{ ml: { xs: 'none', sm: 'auto' } }}
                 />

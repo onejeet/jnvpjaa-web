@@ -3,11 +3,12 @@ import { Stack, Divider, Typography, Box } from '@mui/material';
 import Dialog, { DialogProps } from '@/components/core/Dialog';
 import ProfilePicture from '../ProfilePicture';
 import { EventAttendeeUser } from '@/types/global';
+import { Maybe, UserBasic } from '@/apollo/hooks';
 
 interface UserListDialogProps {
   open: boolean;
   onClose: () => void;
-  users: EventAttendeeUser[];
+  users: Maybe<Maybe<UserBasic>[]>;
   title?: string;
   dialogProps?: Partial<DialogProps>;
 }
