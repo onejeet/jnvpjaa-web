@@ -92,7 +92,7 @@ const DataPrivacy: React.FC<DataPrivacyProps> = ({ user, isLastStep, onNext, onB
   const onSubmit = React.useCallback(() => {
     const vars: any = {
       id: user?.id,
-      isConfidential,
+      isConfidential: !isConfidential,
     };
     if (user?.metadata?.isFirstLogin && isLastStep) {
       vars.metadata = {
@@ -121,7 +121,7 @@ const DataPrivacy: React.FC<DataPrivacyProps> = ({ user, isLastStep, onNext, onB
         console.log('Error: ', err?.message);
       },
     });
-  }, [updateUser, showAlert, isConfidential, onSuccess, onNext, user, client]);
+  }, [updateUser, showAlert, isConfidential, onSuccess, onNext, user, client, isLastStep]);
 
   return (
     <Box
@@ -154,8 +154,14 @@ const DataPrivacy: React.FC<DataPrivacyProps> = ({ user, isLastStep, onNext, onB
           onChange={(e: any, checked: boolean) => setIsConfidential(checked)}
           control={<IOSSwitch disabled={loading} checked={isConfidential} sx={{ m: 1 }} />}
           value={isConfidential}
-          label="Keep my Data Private"
+          label="Keep my Data Protected (Visible only to alumni)"
         />
+        {!isConfidential && (
+          <Typography variant="body2" mt={1} color="grey.600">
+            Your email, mobile number, and address will be hidden from both alumni members and the public, even when
+            they log in. Turn the button on if you want other alumni to have access to your email and phone number.
+          </Typography>
+        )}
       </Box>
 
       <Box display="flex" width="100%" alignItems="center" gap={2}>

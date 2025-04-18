@@ -376,6 +376,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
             title={`${author?.firstName || ''} ${author?.lastName || ''}`}
             loading={loading}
             id={author?.id}
+            size={44}
             onClick={() => (author?.id ? router.push(paths.profile.getProfileUrl(author?.id)) : null)}
             src={author?.profileImage}
             summary={author?.isFaculty ? 'Faculty' : author?.batch ? `Batch of ${author?.batch}` : ''}
