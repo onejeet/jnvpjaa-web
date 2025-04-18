@@ -58,7 +58,7 @@ const Welcome: React.FC<WelcomeProps> = ({ onNext }) => {
       </Typography>
       <Box display="flex" flexDirection="row" justifyContent="center">
         <Image
-          src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExcGRkcWNuOWlzaGF2b3hreWl0ZHZoMmh4ZWpodDEzdjd3NDg3Nm9lYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/06ZFpFlnNPXbnsWvSt/giphy.gif"
+          src="/assets/gif/celebration.gif"
           alt="celebration"
           width={300}
           height={100}
