@@ -18,6 +18,7 @@ export interface IProfessionInfoFormInput {
   country: string;
   state: string;
   city: string;
+  address?: string;
   startedWorking: Dayjs;
   // endedWorking   DateTime?
   // isCurrent      Boolean   @default(false)

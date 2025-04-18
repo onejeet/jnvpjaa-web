@@ -1,4 +1,10 @@
-import { User, useUpdateUserMutation } from '@/apollo/hooks';
+import {
+  useCreateCompanyInfoMutation,
+  useGetCompanyInfoListByUserQuery,
+  useGetCompanyInfoQuery,
+  User,
+  useUpdateCompanyInfoMutation,
+} from '@/apollo/hooks';
 import Button from '@/components/core/Button';
 import FormSelectField from '@/components/form/FormSelectField';
 import FormTextField from '@/components/form/FormTextField';
@@ -9,11 +15,8 @@ import { useForm, useWatch } from 'react-hook-form';
 import { IProfessionInfoFormInput } from './ProfileSetup.types';
 import { CaretLeft, CaretRight, CheckCircle, SuitcaseSimple, User as UserIcon, X } from '@phosphor-icons/react';
 import FormDateTimeField from '@/components/form/FormDateTimeField';
-import TipTapTextEditor from '@/modules/TipTapTextEditor';
-import dayjs from 'dayjs';
 import { useApolloClient } from '@apollo/client';
-import FormPhoneField from '@/components/form/FormPhoneField';
-import { phoneNumberStringConverter } from '@/utils/helpers';
+import { titleCase } from '@/utils/helpers';
 import { COUNTRIES, STATES_INDIA } from '@/constants/Address.constant';
 
 interface ProfessionInfoProps {
@@ -32,34 +35,68 @@ const ProfessionInfo: React.FC<ProfessionInfoProps> = ({ user, onNext, onBack, o
     handleSubmit,
     setValue,
     getValues,
+    reset,
     formState: { errors },
   } = useForm<IProfessionInfoFormInput>({
-    defaultValues: {},
+    defaultValues: {
+      country: 'IN',
+    },
   });
 
   const watchCountry = useWatch({
     control,
     name: 'country',
   });
+  const { data, loading: dataLoading } = useGetCompanyInfoListByUserQuery({
+    skip: !user?.id,
+    variables: {
+      userId: user?.id,
+    },
+  });
 
-  const [updateUser, { loading }] = useUpdateUserMutation();
+  const [createCompanyIInfo, { loading: createCompanyLoading }] = useCreateCompanyInfoMutation();
+  const [updateCompanyIInfo, { loading }] = useUpdateCompanyInfoMutation();
+
+  React.useEffect(() => {
+    const companyInfo = data?.GetCompanyInfoListByUser?.[0];
+    if (companyInfo) {
+      reset({
+        country: companyInfo?.country || 'IN',
+        state: companyInfo?.state ? titleCase(companyInfo?.state) : 'Rajasthan',
+        city: companyInfo?.city,
+        address: companyInfo?.address,
+        companyName: companyInfo?.companyName,
+        position: companyInfo?.position,
+        startedWorking: companyInfo?.startedWorking,
+      });
+    }
+  }, [data]);
 
   const onSubmit = React.useCallback(
-    (data: IProfessionInfoFormInput) => {
-      updateUser({
-        variables: {
-          id: user?.id,
-          companyName: data?.companyName,
-          position: data?.position,
-          location: data?.city,
-          startedWorking: data?.startedWorking,
-        },
+    (payload: IProfessionInfoFormInput) => {
+      let mutation = createCompanyIInfo;
+      const variables = {
+        companyName: payload?.companyName,
+        position: payload?.position,
+        address: payload?.city,
+        city: payload?.city,
+        state: payload?.state,
+        country: payload?.country,
+        startedWorking: payload?.startedWorking,
+      };
+      if (data?.GetCompanyInfoListByUser?.[0]?.id) {
+        mutation = updateCompanyIInfo;
+        // @ts-expect-error typerror
+        variables.id = data?.GetCompanyInfoListByUser?.[0]?.id;
+      }
+
+      mutation({
+        variables,
         onCompleted: (res) => {
-          console.log('COmpleted', res);
+          console.log('Completed', res);
           client?.refetchQueries({
             include: ['getUserDetails'],
           });
-
           onSuccess?.();
           onNext?.();
         },
@@ -67,13 +104,13 @@ const ProfessionInfo: React.FC<ProfessionInfoProps> = ({ user, onNext, onBack, o
           showAlert({
             visible: true,
             type: 'error',
-            message: err?.message || 'Image upload failed. Please try again.',
+            message: err?.message || 'Update failed. Please try again.',
           });
           console.log('Error: ', err?.message);
         },
       });
     },
-    [updateUser, showAlert, onSuccess, user?.id, client]
+    [updateCompanyIInfo, createCompanyIInfo, showAlert, onSuccess, client, onNext, data]
   );
 
   return (
@@ -103,6 +140,7 @@ const ProfessionInfo: React.FC<ProfessionInfoProps> = ({ user, onNext, onBack, o
             autoFocus
             control={control}
             disabled={loading}
+            loading={dataLoading}
             name="companyName"
             size="small"
             rules={{
@@ -118,6 +156,7 @@ const ProfessionInfo: React.FC<ProfessionInfoProps> = ({ user, onNext, onBack, o
             autoFocus
             control={control}
             disabled={loading}
+            loading={dataLoading}
             name="position"
             size="small"
             rules={{
@@ -134,7 +173,7 @@ const ProfessionInfo: React.FC<ProfessionInfoProps> = ({ user, onNext, onBack, o
               id: 'country',
               disabled: loading,
             }}
-            // loading={addressesLoading}
+            loading={dataLoading}
             onChange={(value: any) => {
               setValue('country', value?.target?.value);
               if (value?.target?.value !== 'IN') {
@@ -157,6 +196,7 @@ const ProfessionInfo: React.FC<ProfessionInfoProps> = ({ user, onNext, onBack, o
             autoFocus
             control={control}
             disabled={loading}
+            loading={dataLoading}
             name="city"
             size="small"
             rules={{
@@ -174,7 +214,7 @@ const ProfessionInfo: React.FC<ProfessionInfoProps> = ({ user, onNext, onBack, o
                 id: 'state',
                 disabled: loading,
               }}
-              // loading={addressesLoading}
+              loading={dataLoading}
               options={STATES_INDIA}
               rules={{
                 required: 'Required',
@@ -189,7 +229,7 @@ const ProfessionInfo: React.FC<ProfessionInfoProps> = ({ user, onNext, onBack, o
               control={control}
               disabled={loading}
               name="state"
-              // loading={addressesLoading}
+              loading={dataLoading}
               size="small"
               // onChange={(e) => {
               //   if (e?.target?.value?.length < 11) {
@@ -212,7 +252,9 @@ const ProfessionInfo: React.FC<ProfessionInfoProps> = ({ user, onNext, onBack, o
               label: 'Working Since',
               disabled: loading,
               size: 'small',
+              loading: dataLoading,
             }}
+            loading={dataLoading}
             // rules={{
             //   required: 'Required',
             //   maxLength: {

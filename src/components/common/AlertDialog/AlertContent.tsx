@@ -7,7 +7,7 @@ import HelpIcon from '@mui/icons-material/Help';
 import type { AlertContentProps } from './AlertDialog.types';
 import { SealQuestion, Spinner } from '@phosphor-icons/react';
 import Lottie from 'lottie-react';
-import successLottieIcon from '@/utils/lottie/success_icon.json';
+import successLottieIcon from '@/utils/lottie/success3_icon.json';
 import deleteLottieIcon from '@/utils/lottie/delete_icon.json';
 import errorLottieIcon from '@/utils/lottie/error_icon.json';
 import loadingLottieIcon from '@/utils/lottie/loading_icon.json';

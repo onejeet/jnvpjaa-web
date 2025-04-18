@@ -77,7 +77,7 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({ user, onNext, onBack, onSuc
           showAlert({
             visible: true,
             type: 'error',
-            message: err?.message || 'Image upload failed. Please try again.',
+            message: err?.message || 'Update failed. Please try again.',
           });
           console.log('Error: ', err?.message);
         },

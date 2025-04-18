@@ -206,24 +206,34 @@ export enum CommentTargetType {
 
 export type CompanyInfo = {
   __typename?: 'CompanyInfo';
-  companyName?: Maybe<Scalars['String']['output']>;
+  address?: Maybe<Scalars['String']['output']>;
+  city?: Maybe<Scalars['String']['output']>;
+  companyName: Scalars['String']['output'];
+  country?: Maybe<Scalars['String']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
   endedWorking?: Maybe<Scalars['DateTime']['output']>;
-  id?: Maybe<Scalars['ID']['output']>;
-  isCurrent?: Maybe<Scalars['Boolean']['output']>;
-  location?: Maybe<Scalars['String']['output']>;
+  id: Scalars['String']['output'];
+  isCurrent: Scalars['Boolean']['output'];
   position?: Maybe<Scalars['String']['output']>;
   startedWorking?: Maybe<Scalars['DateTime']['output']>;
-  userId?: Maybe<Scalars['String']['output']>;
+  state?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  user?: Maybe<UserBasic>;
+  userId: Scalars['String']['output'];
 };
 
 export type CompanyInfoInput = {
+  address?: InputMaybe<Scalars['String']['input']>;
+  city?: InputMaybe<Scalars['String']['input']>;
   companyName?: InputMaybe<Scalars['String']['input']>;
+  country?: InputMaybe<Scalars['String']['input']>;
   endedWorking?: InputMaybe<Scalars['DateTime']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
   isCurrent?: InputMaybe<Scalars['Boolean']['input']>;
   location?: InputMaybe<Scalars['String']['input']>;
   position?: InputMaybe<Scalars['String']['input']>;
   startedWorking?: InputMaybe<Scalars['DateTime']['input']>;
+  state?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CompanyInfoListResponse = {
@@ -350,10 +360,12 @@ export type Mutation = {
   createAlbum?: Maybe<Album>;
   createBlog?: Maybe<Blog>;
   createBusiness: Business;
+  createCompanyInfo?: Maybe<CompanyInfo>;
   createEvent?: Maybe<EventBasic>;
   createTransaction?: Maybe<Transaction>;
   deleteAddress?: Maybe<Address>;
   deleteBlog?: Maybe<Blog>;
+  deleteCompanyInfo?: Maybe<CompanyInfo>;
   deleteTransaction?: Maybe<Transaction>;
   deleteUser?: Maybe<User>;
   forgotPassword?: Maybe<Scalars['Boolean']['output']>;
@@ -373,6 +385,7 @@ export type Mutation = {
   updateBlog?: Maybe<Blog>;
   updateBusiness: Business;
   updateClaps?: Maybe<Scalars['Boolean']['output']>;
+  updateCompanyInfo?: Maybe<CompanyInfo>;
   updateEvent?: Maybe<EventBasic>;
   updateTransaction?: Maybe<Transaction>;
   updateUser?: Maybe<User>;
@@ -440,6 +453,19 @@ export type MutationCreateBusinessArgs = {
   body: CreateBusinessInput;
 };
 
+export type MutationCreateCompanyInfoArgs = {
+  address?: InputMaybe<Scalars['String']['input']>;
+  city?: InputMaybe<Scalars['String']['input']>;
+  companyName?: InputMaybe<Scalars['String']['input']>;
+  country?: InputMaybe<Scalars['String']['input']>;
+  endedWorking?: InputMaybe<Scalars['DateTime']['input']>;
+  isCurrent?: InputMaybe<Scalars['Boolean']['input']>;
+  position?: InputMaybe<Scalars['String']['input']>;
+  startedWorking?: InputMaybe<Scalars['DateTime']['input']>;
+  state?: InputMaybe<Scalars['String']['input']>;
+  userId?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type MutationCreateEventArgs = {
   category: Scalars['String']['input'];
   description?: InputMaybe<Scalars['String']['input']>;
@@ -475,6 +501,10 @@ export type MutationDeleteAddressArgs = {
 
 export type MutationDeleteBlogArgs = {
   id: Scalars['String']['input'];
+};
+
+export type MutationDeleteCompanyInfoArgs = {
+  id?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type MutationDeleteTransactionArgs = {
@@ -577,6 +607,19 @@ export type MutationUpdateClapsArgs = {
   slug: Scalars['String']['input'];
 };
 
+export type MutationUpdateCompanyInfoArgs = {
+  address?: InputMaybe<Scalars['String']['input']>;
+  city?: InputMaybe<Scalars['String']['input']>;
+  companyName?: InputMaybe<Scalars['String']['input']>;
+  country?: InputMaybe<Scalars['String']['input']>;
+  endedWorking?: InputMaybe<Scalars['DateTime']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  isCurrent?: InputMaybe<Scalars['Boolean']['input']>;
+  position?: InputMaybe<Scalars['String']['input']>;
+  startedWorking?: InputMaybe<Scalars['DateTime']['input']>;
+  state?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type MutationUpdateEventArgs = {
   category: Scalars['String']['input'];
   description?: InputMaybe<Scalars['String']['input']>;
@@ -649,6 +692,7 @@ export type Photo = {
 
 export type Query = {
   __typename?: 'Query';
+  GetCompanyInfoListByUser: Array<CompanyInfo>;
   getAlbum?: Maybe<Album>;
   getAlbums?: Maybe<ListAlbumResponse>;
   getAllBatchCoordinators?: Maybe<Array<Maybe<BatchCoordinator>>>;
@@ -659,16 +703,21 @@ export type Query = {
   getBusiness?: Maybe<Business>;
   getBusinesses?: Maybe<BusinessListResponse>;
   getComments?: Maybe<Array<Maybe<Comment>>>;
+  getCompanyInfo?: Maybe<CompanyInfo>;
+  getCompanyInfoList: Array<CompanyInfo>;
   getEventDetails?: Maybe<Event>;
   getEventList?: Maybe<ListEventResponse>;
   getMyPhotos?: Maybe<Array<Maybe<Photo>>>;
   getTransaction?: Maybe<Transaction>;
   getTransactions?: Maybe<TransactionListResponse>;
   getUserAddresses?: Maybe<AddressListResponse>;
-  getUserCompaniesInfo?: Maybe<CompanyInfoListResponse>;
   getUserDetails?: Maybe<User>;
   getUserList?: Maybe<UserListResponse>;
   upcomingBirthdays: Array<Maybe<UserBirthday>>;
+};
+
+export type QueryGetCompanyInfoListByUserArgs = {
+  userId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type QueryGetAlbumArgs = {
@@ -711,6 +760,10 @@ export type QueryGetBusinessesArgs = {
 export type QueryGetCommentsArgs = {
   targetId: Scalars['String']['input'];
   targetType: CommentTargetType;
+};
+
+export type QueryGetCompanyInfoArgs = {
+  id?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type QueryGetEventDetailsArgs = {
@@ -1688,6 +1741,57 @@ export type CreateBusinessMutation = {
   };
 };
 
+export type CreateCompanyInfoMutationVariables = Exact<{
+  address?: InputMaybe<Scalars['String']['input']>;
+  city?: InputMaybe<Scalars['String']['input']>;
+  companyName?: InputMaybe<Scalars['String']['input']>;
+  country?: InputMaybe<Scalars['String']['input']>;
+  endedWorking?: InputMaybe<Scalars['DateTime']['input']>;
+  isCurrent?: InputMaybe<Scalars['Boolean']['input']>;
+  position?: InputMaybe<Scalars['String']['input']>;
+  startedWorking?: InputMaybe<Scalars['DateTime']['input']>;
+  state?: InputMaybe<Scalars['String']['input']>;
+  userId?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type CreateCompanyInfoMutation = {
+  __typename?: 'Mutation';
+  createCompanyInfo?:
+    | {
+        __typename?: 'CompanyInfo';
+        address?: string | undefined;
+        city?: string | undefined;
+        companyName: string;
+        country?: string | undefined;
+        createdAt?: any | undefined;
+        endedWorking?: any | undefined;
+        id: string;
+        isCurrent: boolean;
+        position?: string | undefined;
+        startedWorking?: any | undefined;
+        state?: string | undefined;
+        updatedAt?: any | undefined;
+        userId: string;
+        user?:
+          | {
+              __typename?: 'UserBasic';
+              batch?: number | undefined;
+              disabled?: boolean | undefined;
+              dob?: any | undefined;
+              firstName?: string | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              profileImage?: string | undefined;
+              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
 export type CreateEventMutationVariables = Exact<{
   category: Scalars['String']['input'];
   description?: InputMaybe<Scalars['String']['input']>;
@@ -1888,6 +1992,48 @@ export type DeleteBlogMutation = {
                 }
               | undefined
             >
+          | undefined;
+      }
+    | undefined;
+};
+
+export type DeleteCompanyInfoMutationVariables = Exact<{
+  id?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type DeleteCompanyInfoMutation = {
+  __typename?: 'Mutation';
+  deleteCompanyInfo?:
+    | {
+        __typename?: 'CompanyInfo';
+        address?: string | undefined;
+        city?: string | undefined;
+        companyName: string;
+        country?: string | undefined;
+        createdAt?: any | undefined;
+        endedWorking?: any | undefined;
+        id: string;
+        isCurrent: boolean;
+        position?: string | undefined;
+        startedWorking?: any | undefined;
+        state?: string | undefined;
+        updatedAt?: any | undefined;
+        userId: string;
+        user?:
+          | {
+              __typename?: 'UserBasic';
+              batch?: number | undefined;
+              disabled?: boolean | undefined;
+              dob?: any | undefined;
+              firstName?: string | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              profileImage?: string | undefined;
+              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+            }
           | undefined;
       }
     | undefined;
@@ -2656,6 +2802,57 @@ export type UpdateClapsMutationVariables = Exact<{
 
 export type UpdateClapsMutation = { __typename?: 'Mutation'; updateClaps?: boolean | undefined };
 
+export type UpdateCompanyInfoMutationVariables = Exact<{
+  address?: InputMaybe<Scalars['String']['input']>;
+  city?: InputMaybe<Scalars['String']['input']>;
+  companyName?: InputMaybe<Scalars['String']['input']>;
+  country?: InputMaybe<Scalars['String']['input']>;
+  endedWorking?: InputMaybe<Scalars['DateTime']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  isCurrent?: InputMaybe<Scalars['Boolean']['input']>;
+  position?: InputMaybe<Scalars['String']['input']>;
+  startedWorking?: InputMaybe<Scalars['DateTime']['input']>;
+  state?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type UpdateCompanyInfoMutation = {
+  __typename?: 'Mutation';
+  updateCompanyInfo?:
+    | {
+        __typename?: 'CompanyInfo';
+        address?: string | undefined;
+        city?: string | undefined;
+        companyName: string;
+        country?: string | undefined;
+        createdAt?: any | undefined;
+        endedWorking?: any | undefined;
+        id: string;
+        isCurrent: boolean;
+        position?: string | undefined;
+        startedWorking?: any | undefined;
+        state?: string | undefined;
+        updatedAt?: any | undefined;
+        userId: string;
+        user?:
+          | {
+              __typename?: 'UserBasic';
+              batch?: number | undefined;
+              disabled?: boolean | undefined;
+              dob?: any | undefined;
+              firstName?: string | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              profileImage?: string | undefined;
+              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
 export type UpdateEventMutationVariables = Exact<{
   category: Scalars['String']['input'];
   description?: InputMaybe<Scalars['String']['input']>;
@@ -2901,6 +3098,46 @@ export type VerifyUserMutationVariables = Exact<{
 }>;
 
 export type VerifyUserMutation = { __typename?: 'Mutation'; verifyUser?: boolean | undefined };
+
+export type GetCompanyInfoListByUserQueryVariables = Exact<{
+  userId?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type GetCompanyInfoListByUserQuery = {
+  __typename?: 'Query';
+  GetCompanyInfoListByUser: Array<{
+    __typename?: 'CompanyInfo';
+    address?: string | undefined;
+    city?: string | undefined;
+    companyName: string;
+    country?: string | undefined;
+    createdAt?: any | undefined;
+    endedWorking?: any | undefined;
+    id: string;
+    isCurrent: boolean;
+    position?: string | undefined;
+    startedWorking?: any | undefined;
+    state?: string | undefined;
+    updatedAt?: any | undefined;
+    userId: string;
+    user?:
+      | {
+          __typename?: 'UserBasic';
+          batch?: number | undefined;
+          disabled?: boolean | undefined;
+          dob?: any | undefined;
+          firstName?: string | undefined;
+          id?: string | undefined;
+          isConfidential?: boolean | undefined;
+          isFaculty?: boolean | undefined;
+          isVerified?: boolean | undefined;
+          lastName?: string | undefined;
+          profileImage?: string | undefined;
+          role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+        }
+      | undefined;
+  }>;
+};
 
 export type GetAlbumQueryVariables = Exact<{
   id: Scalars['String']['input'];
@@ -3606,6 +3843,86 @@ export type GetCommentsQuery = {
     | undefined;
 };
 
+export type GetCompanyInfoQueryVariables = Exact<{
+  id?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type GetCompanyInfoQuery = {
+  __typename?: 'Query';
+  getCompanyInfo?:
+    | {
+        __typename?: 'CompanyInfo';
+        address?: string | undefined;
+        city?: string | undefined;
+        companyName: string;
+        country?: string | undefined;
+        createdAt?: any | undefined;
+        endedWorking?: any | undefined;
+        id: string;
+        isCurrent: boolean;
+        position?: string | undefined;
+        startedWorking?: any | undefined;
+        state?: string | undefined;
+        updatedAt?: any | undefined;
+        userId: string;
+        user?:
+          | {
+              __typename?: 'UserBasic';
+              batch?: number | undefined;
+              disabled?: boolean | undefined;
+              dob?: any | undefined;
+              firstName?: string | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              profileImage?: string | undefined;
+              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
+export type GetCompanyInfoListQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetCompanyInfoListQuery = {
+  __typename?: 'Query';
+  getCompanyInfoList: Array<{
+    __typename?: 'CompanyInfo';
+    address?: string | undefined;
+    city?: string | undefined;
+    companyName: string;
+    country?: string | undefined;
+    createdAt?: any | undefined;
+    endedWorking?: any | undefined;
+    id: string;
+    isCurrent: boolean;
+    position?: string | undefined;
+    startedWorking?: any | undefined;
+    state?: string | undefined;
+    updatedAt?: any | undefined;
+    userId: string;
+    user?:
+      | {
+          __typename?: 'UserBasic';
+          batch?: number | undefined;
+          disabled?: boolean | undefined;
+          dob?: any | undefined;
+          firstName?: string | undefined;
+          id?: string | undefined;
+          isConfidential?: boolean | undefined;
+          isFaculty?: boolean | undefined;
+          isVerified?: boolean | undefined;
+          lastName?: string | undefined;
+          profileImage?: string | undefined;
+          role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+        }
+      | undefined;
+  }>;
+};
+
 export type GetEventDetailsQueryVariables = Exact<{
   id: Scalars['Int']['input'];
 }>;
@@ -3987,34 +4304,6 @@ export type GetUserAddressesQuery = {
                   state?: string | undefined;
                   type: string;
                   userId: string;
-                }
-              | undefined
-            >
-          | undefined;
-      }
-    | undefined;
-};
-
-export type GetUserCompaniesInfoQueryVariables = Exact<{ [key: string]: never }>;
-
-export type GetUserCompaniesInfoQuery = {
-  __typename?: 'Query';
-  getUserCompaniesInfo?:
-    | {
-        __typename?: 'CompanyInfoListResponse';
-        total?: number | undefined;
-        data?:
-          | Array<
-              | {
-                  __typename?: 'CompanyInfo';
-                  companyName?: string | undefined;
-                  endedWorking?: any | undefined;
-                  id?: string | undefined;
-                  isCurrent?: boolean | undefined;
-                  location?: string | undefined;
-                  position?: string | undefined;
-                  startedWorking?: any | undefined;
-                  userId?: string | undefined;
                 }
               | undefined
             >
@@ -5139,6 +5428,109 @@ export type CreateBusinessMutationOptions = Apollo.BaseMutationOptions<
   CreateBusinessMutation,
   CreateBusinessMutationVariables
 >;
+export const CreateCompanyInfoDocument = gql`
+  mutation createCompanyInfo(
+    $address: String
+    $city: String
+    $companyName: String
+    $country: String
+    $endedWorking: DateTime
+    $isCurrent: Boolean
+    $position: String
+    $startedWorking: DateTime
+    $state: String
+    $userId: String
+  ) {
+    createCompanyInfo(
+      address: $address
+      city: $city
+      companyName: $companyName
+      country: $country
+      endedWorking: $endedWorking
+      isCurrent: $isCurrent
+      position: $position
+      startedWorking: $startedWorking
+      state: $state
+      userId: $userId
+    ) {
+      address
+      city
+      companyName
+      country
+      createdAt
+      endedWorking
+      id
+      isCurrent
+      position
+      startedWorking
+      state
+      updatedAt
+      user {
+        batch
+        disabled
+        dob
+        firstName
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        profileImage
+        role {
+          id
+          name
+        }
+      }
+      userId
+    }
+  }
+`;
+export type CreateCompanyInfoMutationFn = Apollo.MutationFunction<
+  CreateCompanyInfoMutation,
+  CreateCompanyInfoMutationVariables
+>;
+
+/**
+ * __useCreateCompanyInfoMutation__
+ *
+ * To run a mutation, you first call `useCreateCompanyInfoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCompanyInfoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCompanyInfoMutation, { data, loading, error }] = useCreateCompanyInfoMutation({
+ *   variables: {
+ *      address: // value for 'address'
+ *      city: // value for 'city'
+ *      companyName: // value for 'companyName'
+ *      country: // value for 'country'
+ *      endedWorking: // value for 'endedWorking'
+ *      isCurrent: // value for 'isCurrent'
+ *      position: // value for 'position'
+ *      startedWorking: // value for 'startedWorking'
+ *      state: // value for 'state'
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useCreateCompanyInfoMutation(
+  baseOptions?: Apollo.MutationHookOptions<CreateCompanyInfoMutation, CreateCompanyInfoMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<CreateCompanyInfoMutation, CreateCompanyInfoMutationVariables>(
+    CreateCompanyInfoDocument,
+    options
+  );
+}
+export type CreateCompanyInfoMutationHookResult = ReturnType<typeof useCreateCompanyInfoMutation>;
+export type CreateCompanyInfoMutationResult = Apollo.MutationResult<CreateCompanyInfoMutation>;
+export type CreateCompanyInfoMutationOptions = Apollo.BaseMutationOptions<
+  CreateCompanyInfoMutation,
+  CreateCompanyInfoMutationVariables
+>;
 export const CreateEventDocument = gql`
   mutation createEvent(
     $category: String!
@@ -5481,6 +5873,78 @@ export function useDeleteBlogMutation(
 export type DeleteBlogMutationHookResult = ReturnType<typeof useDeleteBlogMutation>;
 export type DeleteBlogMutationResult = Apollo.MutationResult<DeleteBlogMutation>;
 export type DeleteBlogMutationOptions = Apollo.BaseMutationOptions<DeleteBlogMutation, DeleteBlogMutationVariables>;
+export const DeleteCompanyInfoDocument = gql`
+  mutation deleteCompanyInfo($id: String) {
+    deleteCompanyInfo(id: $id) {
+      address
+      city
+      companyName
+      country
+      createdAt
+      endedWorking
+      id
+      isCurrent
+      position
+      startedWorking
+      state
+      updatedAt
+      user {
+        batch
+        disabled
+        dob
+        firstName
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        profileImage
+        role {
+          id
+          name
+        }
+      }
+      userId
+    }
+  }
+`;
+export type DeleteCompanyInfoMutationFn = Apollo.MutationFunction<
+  DeleteCompanyInfoMutation,
+  DeleteCompanyInfoMutationVariables
+>;
+
+/**
+ * __useDeleteCompanyInfoMutation__
+ *
+ * To run a mutation, you first call `useDeleteCompanyInfoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCompanyInfoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCompanyInfoMutation, { data, loading, error }] = useDeleteCompanyInfoMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteCompanyInfoMutation(
+  baseOptions?: Apollo.MutationHookOptions<DeleteCompanyInfoMutation, DeleteCompanyInfoMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<DeleteCompanyInfoMutation, DeleteCompanyInfoMutationVariables>(
+    DeleteCompanyInfoDocument,
+    options
+  );
+}
+export type DeleteCompanyInfoMutationHookResult = ReturnType<typeof useDeleteCompanyInfoMutation>;
+export type DeleteCompanyInfoMutationResult = Apollo.MutationResult<DeleteCompanyInfoMutation>;
+export type DeleteCompanyInfoMutationOptions = Apollo.BaseMutationOptions<
+  DeleteCompanyInfoMutation,
+  DeleteCompanyInfoMutationVariables
+>;
 export const DeleteTransactionDocument = gql`
   mutation deleteTransaction($id: String!) {
     deleteTransaction(id: $id) {
@@ -6750,6 +7214,109 @@ export function useUpdateClapsMutation(
 export type UpdateClapsMutationHookResult = ReturnType<typeof useUpdateClapsMutation>;
 export type UpdateClapsMutationResult = Apollo.MutationResult<UpdateClapsMutation>;
 export type UpdateClapsMutationOptions = Apollo.BaseMutationOptions<UpdateClapsMutation, UpdateClapsMutationVariables>;
+export const UpdateCompanyInfoDocument = gql`
+  mutation updateCompanyInfo(
+    $address: String
+    $city: String
+    $companyName: String
+    $country: String
+    $endedWorking: DateTime
+    $id: String
+    $isCurrent: Boolean
+    $position: String
+    $startedWorking: DateTime
+    $state: String
+  ) {
+    updateCompanyInfo(
+      address: $address
+      city: $city
+      companyName: $companyName
+      country: $country
+      endedWorking: $endedWorking
+      id: $id
+      isCurrent: $isCurrent
+      position: $position
+      startedWorking: $startedWorking
+      state: $state
+    ) {
+      address
+      city
+      companyName
+      country
+      createdAt
+      endedWorking
+      id
+      isCurrent
+      position
+      startedWorking
+      state
+      updatedAt
+      user {
+        batch
+        disabled
+        dob
+        firstName
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        profileImage
+        role {
+          id
+          name
+        }
+      }
+      userId
+    }
+  }
+`;
+export type UpdateCompanyInfoMutationFn = Apollo.MutationFunction<
+  UpdateCompanyInfoMutation,
+  UpdateCompanyInfoMutationVariables
+>;
+
+/**
+ * __useUpdateCompanyInfoMutation__
+ *
+ * To run a mutation, you first call `useUpdateCompanyInfoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCompanyInfoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCompanyInfoMutation, { data, loading, error }] = useUpdateCompanyInfoMutation({
+ *   variables: {
+ *      address: // value for 'address'
+ *      city: // value for 'city'
+ *      companyName: // value for 'companyName'
+ *      country: // value for 'country'
+ *      endedWorking: // value for 'endedWorking'
+ *      id: // value for 'id'
+ *      isCurrent: // value for 'isCurrent'
+ *      position: // value for 'position'
+ *      startedWorking: // value for 'startedWorking'
+ *      state: // value for 'state'
+ *   },
+ * });
+ */
+export function useUpdateCompanyInfoMutation(
+  baseOptions?: Apollo.MutationHookOptions<UpdateCompanyInfoMutation, UpdateCompanyInfoMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<UpdateCompanyInfoMutation, UpdateCompanyInfoMutationVariables>(
+    UpdateCompanyInfoDocument,
+    options
+  );
+}
+export type UpdateCompanyInfoMutationHookResult = ReturnType<typeof useUpdateCompanyInfoMutation>;
+export type UpdateCompanyInfoMutationResult = Apollo.MutationResult<UpdateCompanyInfoMutation>;
+export type UpdateCompanyInfoMutationOptions = Apollo.BaseMutationOptions<
+  UpdateCompanyInfoMutation,
+  UpdateCompanyInfoMutationVariables
+>;
 export const UpdateEventDocument = gql`
   mutation updateEvent(
     $category: String!
@@ -7240,6 +7807,96 @@ export function useVerifyUserMutation(
 export type VerifyUserMutationHookResult = ReturnType<typeof useVerifyUserMutation>;
 export type VerifyUserMutationResult = Apollo.MutationResult<VerifyUserMutation>;
 export type VerifyUserMutationOptions = Apollo.BaseMutationOptions<VerifyUserMutation, VerifyUserMutationVariables>;
+export const GetCompanyInfoListByUserDocument = gql`
+  query GetCompanyInfoListByUser($userId: String) {
+    GetCompanyInfoListByUser(userId: $userId) {
+      address
+      city
+      companyName
+      country
+      createdAt
+      endedWorking
+      id
+      isCurrent
+      position
+      startedWorking
+      state
+      updatedAt
+      user {
+        batch
+        disabled
+        dob
+        firstName
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        profileImage
+        role {
+          id
+          name
+        }
+      }
+      userId
+    }
+  }
+`;
+
+/**
+ * __useGetCompanyInfoListByUserQuery__
+ *
+ * To run a query within a React component, call `useGetCompanyInfoListByUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCompanyInfoListByUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCompanyInfoListByUserQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useGetCompanyInfoListByUserQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetCompanyInfoListByUserQuery, GetCompanyInfoListByUserQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetCompanyInfoListByUserQuery, GetCompanyInfoListByUserQueryVariables>(
+    GetCompanyInfoListByUserDocument,
+    options
+  );
+}
+export function useGetCompanyInfoListByUserLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetCompanyInfoListByUserQuery, GetCompanyInfoListByUserQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetCompanyInfoListByUserQuery, GetCompanyInfoListByUserQueryVariables>(
+    GetCompanyInfoListByUserDocument,
+    options
+  );
+}
+export function useGetCompanyInfoListByUserSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetCompanyInfoListByUserQuery, GetCompanyInfoListByUserQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetCompanyInfoListByUserQuery, GetCompanyInfoListByUserQueryVariables>(
+    GetCompanyInfoListByUserDocument,
+    options
+  );
+}
+export type GetCompanyInfoListByUserQueryHookResult = ReturnType<typeof useGetCompanyInfoListByUserQuery>;
+export type GetCompanyInfoListByUserLazyQueryHookResult = ReturnType<typeof useGetCompanyInfoListByUserLazyQuery>;
+export type GetCompanyInfoListByUserSuspenseQueryHookResult = ReturnType<
+  typeof useGetCompanyInfoListByUserSuspenseQuery
+>;
+export type GetCompanyInfoListByUserQueryResult = Apollo.QueryResult<
+  GetCompanyInfoListByUserQuery,
+  GetCompanyInfoListByUserQueryVariables
+>;
 export const GetAlbumDocument = gql`
   query getAlbum($id: String!) {
     getAlbum(id: $id) {
@@ -8236,6 +8893,167 @@ export type GetCommentsQueryHookResult = ReturnType<typeof useGetCommentsQuery>;
 export type GetCommentsLazyQueryHookResult = ReturnType<typeof useGetCommentsLazyQuery>;
 export type GetCommentsSuspenseQueryHookResult = ReturnType<typeof useGetCommentsSuspenseQuery>;
 export type GetCommentsQueryResult = Apollo.QueryResult<GetCommentsQuery, GetCommentsQueryVariables>;
+export const GetCompanyInfoDocument = gql`
+  query getCompanyInfo($id: String) {
+    getCompanyInfo(id: $id) {
+      address
+      city
+      companyName
+      country
+      createdAt
+      endedWorking
+      id
+      isCurrent
+      position
+      startedWorking
+      state
+      updatedAt
+      user {
+        batch
+        disabled
+        dob
+        firstName
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        profileImage
+        role {
+          id
+          name
+        }
+      }
+      userId
+    }
+  }
+`;
+
+/**
+ * __useGetCompanyInfoQuery__
+ *
+ * To run a query within a React component, call `useGetCompanyInfoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCompanyInfoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCompanyInfoQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetCompanyInfoQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetCompanyInfoQuery, GetCompanyInfoQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetCompanyInfoQuery, GetCompanyInfoQueryVariables>(GetCompanyInfoDocument, options);
+}
+export function useGetCompanyInfoLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetCompanyInfoQuery, GetCompanyInfoQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetCompanyInfoQuery, GetCompanyInfoQueryVariables>(GetCompanyInfoDocument, options);
+}
+export function useGetCompanyInfoSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCompanyInfoQuery, GetCompanyInfoQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetCompanyInfoQuery, GetCompanyInfoQueryVariables>(GetCompanyInfoDocument, options);
+}
+export type GetCompanyInfoQueryHookResult = ReturnType<typeof useGetCompanyInfoQuery>;
+export type GetCompanyInfoLazyQueryHookResult = ReturnType<typeof useGetCompanyInfoLazyQuery>;
+export type GetCompanyInfoSuspenseQueryHookResult = ReturnType<typeof useGetCompanyInfoSuspenseQuery>;
+export type GetCompanyInfoQueryResult = Apollo.QueryResult<GetCompanyInfoQuery, GetCompanyInfoQueryVariables>;
+export const GetCompanyInfoListDocument = gql`
+  query getCompanyInfoList {
+    getCompanyInfoList {
+      address
+      city
+      companyName
+      country
+      createdAt
+      endedWorking
+      id
+      isCurrent
+      position
+      startedWorking
+      state
+      updatedAt
+      user {
+        batch
+        disabled
+        dob
+        firstName
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        profileImage
+        role {
+          id
+          name
+        }
+      }
+      userId
+    }
+  }
+`;
+
+/**
+ * __useGetCompanyInfoListQuery__
+ *
+ * To run a query within a React component, call `useGetCompanyInfoListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCompanyInfoListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCompanyInfoListQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCompanyInfoListQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetCompanyInfoListQuery, GetCompanyInfoListQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetCompanyInfoListQuery, GetCompanyInfoListQueryVariables>(
+    GetCompanyInfoListDocument,
+    options
+  );
+}
+export function useGetCompanyInfoListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetCompanyInfoListQuery, GetCompanyInfoListQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetCompanyInfoListQuery, GetCompanyInfoListQueryVariables>(
+    GetCompanyInfoListDocument,
+    options
+  );
+}
+export function useGetCompanyInfoListSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetCompanyInfoListQuery, GetCompanyInfoListQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetCompanyInfoListQuery, GetCompanyInfoListQueryVariables>(
+    GetCompanyInfoListDocument,
+    options
+  );
+}
+export type GetCompanyInfoListQueryHookResult = ReturnType<typeof useGetCompanyInfoListQuery>;
+export type GetCompanyInfoListLazyQueryHookResult = ReturnType<typeof useGetCompanyInfoListLazyQuery>;
+export type GetCompanyInfoListSuspenseQueryHookResult = ReturnType<typeof useGetCompanyInfoListSuspenseQuery>;
+export type GetCompanyInfoListQueryResult = Apollo.QueryResult<
+  GetCompanyInfoListQuery,
+  GetCompanyInfoListQueryVariables
+>;
 export const GetEventDetailsDocument = gql`
   query getEventDetails($id: Int!) {
     getEventDetails(id: $id) {
@@ -8788,75 +9606,6 @@ export type GetUserAddressesQueryHookResult = ReturnType<typeof useGetUserAddres
 export type GetUserAddressesLazyQueryHookResult = ReturnType<typeof useGetUserAddressesLazyQuery>;
 export type GetUserAddressesSuspenseQueryHookResult = ReturnType<typeof useGetUserAddressesSuspenseQuery>;
 export type GetUserAddressesQueryResult = Apollo.QueryResult<GetUserAddressesQuery, GetUserAddressesQueryVariables>;
-export const GetUserCompaniesInfoDocument = gql`
-  query getUserCompaniesInfo {
-    getUserCompaniesInfo {
-      data {
-        companyName
-        endedWorking
-        id
-        isCurrent
-        location
-        position
-        startedWorking
-        userId
-      }
-      total
-    }
-  }
-`;
-
-/**
- * __useGetUserCompaniesInfoQuery__
- *
- * To run a query within a React component, call `useGetUserCompaniesInfoQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetUserCompaniesInfoQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetUserCompaniesInfoQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetUserCompaniesInfoQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetUserCompaniesInfoQuery, GetUserCompaniesInfoQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetUserCompaniesInfoQuery, GetUserCompaniesInfoQueryVariables>(
-    GetUserCompaniesInfoDocument,
-    options
-  );
-}
-export function useGetUserCompaniesInfoLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetUserCompaniesInfoQuery, GetUserCompaniesInfoQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GetUserCompaniesInfoQuery, GetUserCompaniesInfoQueryVariables>(
-    GetUserCompaniesInfoDocument,
-    options
-  );
-}
-export function useGetUserCompaniesInfoSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<GetUserCompaniesInfoQuery, GetUserCompaniesInfoQueryVariables>
-) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<GetUserCompaniesInfoQuery, GetUserCompaniesInfoQueryVariables>(
-    GetUserCompaniesInfoDocument,
-    options
-  );
-}
-export type GetUserCompaniesInfoQueryHookResult = ReturnType<typeof useGetUserCompaniesInfoQuery>;
-export type GetUserCompaniesInfoLazyQueryHookResult = ReturnType<typeof useGetUserCompaniesInfoLazyQuery>;
-export type GetUserCompaniesInfoSuspenseQueryHookResult = ReturnType<typeof useGetUserCompaniesInfoSuspenseQuery>;
-export type GetUserCompaniesInfoQueryResult = Apollo.QueryResult<
-  GetUserCompaniesInfoQuery,
-  GetUserCompaniesInfoQueryVariables
->;
 export const GetUserDetailsDocument = gql`
   query getUserDetails($id: String) {
     getUserDetails(id: $id) {
