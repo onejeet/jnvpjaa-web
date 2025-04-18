@@ -136,7 +136,7 @@ const ProfessionInfo: React.FC<ProfessionInfoProps> = ({ user, onNext, onBack, o
           <FormTextField
             fullWidth
             id="companyName"
-            label="Company Name"
+            label="Company/Department Name"
             autoFocus
             control={control}
             disabled={loading}
