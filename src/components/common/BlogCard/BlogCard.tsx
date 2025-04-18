@@ -384,7 +384,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
             }}
             titleComponentProps={{
               titleProps: {
-                maxWidth: '100%',
+                maxWidth: '130px',
                 fontSize: '14px',
                 fontWeight: 500,
                 overflow: 'hidden',
