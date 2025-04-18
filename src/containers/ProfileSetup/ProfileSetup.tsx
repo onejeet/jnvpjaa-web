@@ -90,8 +90,8 @@ const ProfileSetup = () => {
             steps.map((label, index) => (
               <Step
                 key={index}
-                // onClick={() => (isWelcomeSetup && index > activeStepIndex ? null : setActiveStepIndex(index))}
-                onClick={() => setActiveStepIndex(index)}
+                onClick={() => (isWelcomeSetup && index > activeStepIndex ? null : setActiveStepIndex(index))}
+                // onClick={() => setActiveStepIndex(index)}
               >
                 <StepLabel>{getFormattedLabel(label)}</StepLabel>
               </Step>

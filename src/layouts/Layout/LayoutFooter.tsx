@@ -14,18 +14,25 @@ import React from 'react';
 import Logo from '@/components/common/Logo';
 
 import MenuList from '../../components/common/MenuList';
+import { useAuth } from '@/context/AuthContext';
+import { Heart } from '@phosphor-icons/react';
 
 const LayoutFooter: React.FC = () => {
+  const { user } = useAuth();
   return (
     <Box
       sx={{
         flexGrow: 1,
         bgcolor: 'grey.100',
-        pb: '20px',
       }}
     >
       <Container
-        sx={{ maxWidth: { xs: '98%', sm: '95%', md: '90%', xl: '1500px' }, margin: 'auto', p: '0 !important' }}
+        sx={{
+          maxWidth: { xs: '98%', sm: '95%', md: '90%', xl: '1500px' },
+          margin: 'auto',
+          p: '0 !important',
+          pb: '20px',
+        }}
       >
         <AppBar component="footer" position="static" sx={{ bgcolor: 'grey.100' }} elevation={0}>
           <Grid container p={{ xs: 2, sm: 0 }}>
@@ -194,11 +201,16 @@ const LayoutFooter: React.FC = () => {
                 sx={{
                   color: 'grey.800',
                   opacity: 1,
+                  svg: {
+                    color: 'error.main',
+                    mx: 1,
+                  },
                 }}
                 variant="body2"
                 display="flex"
+                alignItems="center"
               >
-                Crafted By{' '}
+                with <Heart size={20} weight="fill" /> by
                 <Box
                   component="span"
                   ml={1}
@@ -221,6 +233,25 @@ const LayoutFooter: React.FC = () => {
           </Grid>
         </AppBar>
       </Container>
+      {user?.id && (
+        <Box
+          sx={{
+            width: '100%',
+            fontSize: '14px',
+            textAlign: 'center',
+            py: 1,
+            mt: 2,
+            bgcolor: 'grey.400',
+            fontWeight: 500,
+            color: 'text.primary',
+          }}
+        >
+          If you want to share improvements, bugs or feedback, please{' '}
+          <a href="https://wa.me/917014750932" target="_blank" rel="noreferrer">
+            Chat on WhatsApp (7014750932)
+          </a>
+        </Box>
+      )}
     </Box>
   );
 };

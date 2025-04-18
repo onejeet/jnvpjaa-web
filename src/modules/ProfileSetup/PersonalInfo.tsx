@@ -38,6 +38,7 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({ user, onNext, onBack, onSuc
       aboutMe: '',
       ...(user || {}),
       dob: user?.dob ? dayjs(user?.dob) : undefined,
+      gender: user?.gender || undefined,
     },
   });
 

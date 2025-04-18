@@ -19,6 +19,7 @@ import ProfilePicture from '../ProfilePicture';
 import { BlogStatus } from '@/apollo/hooks';
 import { debounce, getFormattedLabel, startCase } from '@/utils/helpers';
 import ClapButton from '../ClapButton';
+import SocialShareModal from '../SocialShareModal';
 
 const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateClap }) => {
   const { id, title, author, content, claps: initialClaps, status, updatedAt } = blog || {};
@@ -134,14 +135,18 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateC
               src={author?.profileImage}
               summary={`Batch of ${author?.batch || ''}`}
             />
-            {id && (
-              <ClapButton
-                initialClaps={initialClaps}
-                claps={newClaps}
-                disabled={Boolean(statusMessage)}
-                setClaps={onClaps}
-                containerProps={{ ml: 'auto' }}
-              />
+
+            {!statusMessage && (
+              <Box gap={1} display="flex" alignItems="center">
+                <SocialShareModal news="" />
+                <ClapButton
+                  initialClaps={initialClaps}
+                  claps={newClaps}
+                  disabled={Boolean(statusMessage)}
+                  setClaps={onClaps}
+                  containerProps={{ ml: 'auto' }}
+                />
+              </Box>
             )}
           </Box>
         </Box>
@@ -178,21 +183,24 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateC
               dangerouslySetInnerHTML={{ __html: sanitizedContent }}
             />
             <Divider sx={{ my: { xs: 2, md: 3 } }} />
-            <Box gap={2} mb={{ xs: 2, md: 3 }} display="flex" flexDirection={{ xs: 'column', sm: 'row' }}>
-              {/* <ProfilePicture
-                loading={loading}
-                id={author?.id}
-                title={`${author?.firstName || ''} ${author?.lastName || ''}`}
-                alt={`${author?.firstName || ''} ${author?.lastName || ''}`}
-                src={author?.profileImage}
-                size={54}
-                titleComponentProps={{
-                  titleProps: {
-                    fontSize: 24,
+            <Box
+              gap={2}
+              mb={{ xs: 2, md: 3 }}
+              display="flex"
+              alignItems="center"
+              flexDirection={{ xs: 'column', sm: 'row' }}
+            >
+              <SocialShareModal news="" btn_type="button" />
+              <Divider
+                orientation="vertical"
+                sx={{
+                  height: '40px',
+                  display: {
+                    xs: 'none',
+                    sm: 'flex',
                   },
                 }}
-                summary={`Batch of ${author?.batch || ''}`}
-              /> */}
+              />
               {id && (
                 <ClapButton
                   initialClaps={initialClaps}
