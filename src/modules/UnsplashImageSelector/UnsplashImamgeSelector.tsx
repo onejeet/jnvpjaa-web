@@ -24,7 +24,7 @@ export const UnsplashImageSelector: React.FC<Props> = ({ open, onClose, onSelect
   const { showAlert } = useAlert();
   const onSearch = debounce((value: string) => {
     search(value || '');
-  }, 1500);
+  }, 1000);
 
   return (
     <Dialog

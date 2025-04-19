@@ -26,8 +26,8 @@ import EditorToolbarVertical from './EditorToolbar/EditorToolbarVertical';
 import type { TipTapTextEditorProps } from './TipTapTextEditor.types';
 import TipTapTextEditorWrapper from './TipTapTextEditorWrapper';
 /* UTILS */
-import { FontSize } from './utils/extensions';
-import HeaderMenuItem from '@/layouts/Layout/HeaderMenuItem';
+// import { FontSize } from './utils/extensions';
+// import HeaderMenuItem from '@/layouts/Layout/HeaderMenuItem';
 import { Indentation } from './components/Indentation';
 
 const TipTapTextEditor = ({
@@ -146,7 +146,7 @@ const TipTapTextEditor = ({
           FontFamily.configure({
             types: ['textStyle'],
           }),
-          FontSize,
+          // FontSize,
           Link.configure({
             protocols: ['https'],
             openOnClick: false,

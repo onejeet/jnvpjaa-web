@@ -1,8 +1,7 @@
 import { Blog, GetBlogDocument, GetBlogListDocument, GetBlogQuery } from '@/apollo/hooks';
 import SingleBlog from '@/containers/SingleBlog';
 import { initializeApollo } from '@/utils/apollo';
-import gql from 'graphql-tag';
-import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
+import { NextPage } from 'next';
 import { NextSeo } from 'next-seo';
 
 interface Params {
@@ -24,10 +23,10 @@ const SingleBlogPage: NextPage<{ blog: Blog }> = ({ blog }) => {
             description: `${blog?.summary}`,
             images: [
               {
-                url: '/assets/images/cover-2.webp',
+                url: blog?.cover?.url || '/assets/images/cover-2.webp',
                 width: 1280,
                 height: 720,
-                alt: 'JNVPJAA',
+                alt: blog?.title || 'JNVPJAA',
                 type: 'image/jpg',
               },
             ],

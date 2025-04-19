@@ -211,7 +211,7 @@ const NewBlog = () => {
             />
           )}
           <Button
-            title={getValues('cover') ? 'Change Cover Image' : 'Select Cover Image'}
+            title={getValues('cover') ? 'Change Cover Image' : 'Add Cover Image'}
             variant="text"
             onClick={() => setSelectCoverImage(true)}
           />

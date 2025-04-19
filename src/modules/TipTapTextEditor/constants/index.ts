@@ -55,8 +55,8 @@ export const EDITOR_ICONS = {
 
 export const FONT_FAMILY_LIST = [
   {
-    label: 'Shippori Mincho',
-    value: 'Shippori Mincho',
+    label: 'Noto Serif',
+    value: 'Noto Serif',
   },
   {
     label: 'Mukta Hindi',

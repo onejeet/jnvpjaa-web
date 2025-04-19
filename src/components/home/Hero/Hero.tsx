@@ -66,7 +66,7 @@ const Hero = () => {
             display="flex"
             alignItems="center"
             variant="h1"
-            fontFamily="Shippori Mincho"
+            fontFamily="DM Sans"
             fontSize={{
               xs: 50,
               sm: 60,

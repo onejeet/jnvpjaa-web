@@ -234,8 +234,8 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateC
               // mt={1}
               my={2}
               lineHeight={{
-                xs: '18px',
-                md: '30px',
+                xs: '28px',
+                md: '32px',
               }}
               fontSize={{
                 xs: '18px',

@@ -6,7 +6,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Shippori Mincho', sans-serif;
+  font-family: 'Noto Serif', sans-serif;
 }
 body {
   /* overflow-y: auto;
@@ -58,6 +58,10 @@ input[type='number'] {
   }
 }
 
+.rich_content .tiptap {
+  font-family: 'Noto Serif' !important;
+}
+
 .rich_content a,
 .tiptap a,
 a {
@@ -91,7 +95,7 @@ a:hover {
 }
 .rich_content p,
 .tiptap p {
-  margin: 12px 0;
+  margin: 14px 0;
 }
 
 .rich_content ul,
@@ -104,6 +108,7 @@ a:hover {
 .ProseMirror {
   font-size: 16px; /* Change this to your desired font size */
   font-weight: 400;
+  font-family: 'Noto Serif';
 }
 
 .ProseMirror p.is-empty::before {
@@ -111,7 +116,7 @@ a:hover {
   color: #a8afac;
   font-style: italic;
   pointer-events: none;
-  font-family: 'Shippori Mincho';
+  font-family: 'Noto Serif';
   position: absolute;
   left: 22px; /* Adjust if needed */
 }
