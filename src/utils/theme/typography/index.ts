@@ -1,35 +1,28 @@
+import { dmSans, playfairDisplay } from '../fonts';
+
 const typography = {
-  fontFamily: [
-    'DM Sans',
-    'Roboto',
-    '"Helvetica Neue"',
-    'Arial',
-    'sans-serif',
-    '"Apple Color Emoji"',
-    '"Segoe UI Emoji"',
-    '"Segoe UI Symbol"',
-  ].join(','),
+  fontFamily: dmSans.style.fontFamily,
 
   h1: {
     fontSize: 'clamp(1.75rem, 2.5vw, 2.25rem)', // 28px -> 36px
     lineHeight: 'clamp(2rem, 3vw, 2.5rem)', // 32px -> 40px
     fontWeight: 500,
     letterSpacing: '-0.24%',
-    fontFamily: 'Playfair Display',
+    fontFamily: playfairDisplay.style.fontFamily,
   },
   h2: {
     fontSize: 'clamp(1.5rem, 2vw, 2rem)', // 24px -> 32px
     lineHeight: 'clamp(1.75rem, 2.5vw, 2.25rem)', // 28px -> 36px
     fontWeight: 500,
     letterSpacing: '-0.25%',
-    fontFamily: 'Playfair Display',
+    fontFamily: playfairDisplay.style.fontFamily,
   },
   h3: {
     fontSize: 'clamp(1rem, 1.5vw, 1.5rem)', // 16px -> 24px
     lineHeight: 'clamp(1.375rem, 2vw, 2rem)', // 22px -> 32px
     fontWeight: 500,
     letterSpacing: '-0.25%',
-    fontFamily: 'Playfair Display',
+    fontFamily: playfairDisplay.style.fontFamily,
   },
   h4: {
     fontSize: 'clamp(1rem, 1.2vw, 1.25rem)', // 16px -> 20px
