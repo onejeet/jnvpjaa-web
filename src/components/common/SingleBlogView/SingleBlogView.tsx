@@ -20,11 +20,14 @@ import { BlogStatus } from '@/apollo/hooks';
 import { debounce, getFormattedLabel, startCase } from '@/utils/helpers';
 import ClapButton from '../ClapButton';
 import SocialShareModal from '../SocialShareModal';
+import Image from 'next/image';
 
 const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateClap }) => {
-  const { id, title, author, content, claps: initialClaps, status, updatedAt } = blog || {};
+  const { id, title, author, content, cover, claps: initialClaps, status, updatedAt } = blog || {};
   const [sanitizedContent, setSanitizedContent] = React.useState('');
   const [newClaps, setNewClaps] = React.useState(0);
+
+  console.log('ZZ: cover', cover);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -151,6 +154,60 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateC
           </Box>
         </Box>
 
+        <Box width="100%" mt={2} mb={1} display="flex" justifyContent="center">
+          {loading ? (
+            <Skeleton variant="rectangular" width="100%" height={300} />
+          ) : (
+            cover?.url && (
+              <Box width="100%" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+                <Image
+                  src={cover?.url}
+                  width={800}
+                  height={400}
+                  alt={`${title} cover image`}
+                  layout="responsive"
+                  objectFit="cover"
+                  referrerPolicy="no-referrer"
+                  style={{
+                    maxWidth: '90%',
+                    maxHeight: 500,
+                    borderRadius: '10px',
+                  }}
+                />
+                {cover?.credits && (
+                  <Typography
+                    // mt={1}
+                    variant="body2"
+                    width="100%"
+                    maxWidth="90%"
+                    py={0.5}
+                    textAlign="center"
+                    bgcolor="grey.100"
+                    color="grey.700"
+                    sx={{
+                      borderBottomLeftRadius: '10px',
+                      borderBottomRightRadius: '10px',
+                      a: {
+                        color: 'grey.700',
+                        '&: hover': {
+                          color: 'grey.800',
+                          textDecoration: 'none',
+                        },
+                      },
+                    }}
+                  >
+                    Photo by{' '}
+                    <a href={cover?.credits?.url} style={{ color: 'grey.700', borderBottom: '1px dotted' }}>
+                      {cover?.credits?.name || ''}
+                    </a>{' '}
+                    on {cover?.credits?.source}
+                  </Typography>
+                )}
+              </Box>
+            )
+          )}
+        </Box>
+
         {loading ? (
           <>
             <Box my={1}>
@@ -176,9 +233,13 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateC
               color="text.primary"
               // mt={1}
               my={2}
+              lineHeight={{
+                xs: '18px',
+                md: '30px',
+              }}
               fontSize={{
-                xs: '16px',
-                md: '18px',
+                xs: '18px',
+                md: '20px',
               }}
               dangerouslySetInnerHTML={{ __html: sanitizedContent }}
             />

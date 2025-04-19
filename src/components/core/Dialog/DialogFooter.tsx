@@ -26,6 +26,7 @@ const DialogFooter: React.FC<DialogFooterProps> = ({
       height="60px"
       borderTop="1px solid"
       borderColor="grey.300"
+      minHeight={70}
       {...restProps}
     >
       <Box display="flex" flex={1}>

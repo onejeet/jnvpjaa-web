@@ -27,7 +27,7 @@ const DialogHeader: React.FC<DialogHeaderProps> = ({
 }) => {
   const { sx: closeIconSx, ...restCloseIconContainerProps } = closeIconContainerProps;
   return (
-    <Box display="flex" alignItems="center" {...restProps}>
+    <Box display="flex" alignItems="center" minHeight={70} {...restProps}>
       <Box display="flex" flex={1}>
         {icon ? (
           <Box display="flex" mr={1.1} {...iconContainerProps}>

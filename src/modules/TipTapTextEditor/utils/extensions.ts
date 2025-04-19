@@ -13,7 +13,7 @@ export const FontSize = Extension.create({
         types: this.options.types,
         attributes: {
           fontFamily: {
-            default: 'DM Sans',
+            default: 'Shippori Mincho',
             renderHTML: (attributes) => ({
               style: `font-family: ${attributes.fontFamily}`,
             }),

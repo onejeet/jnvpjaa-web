@@ -6,7 +6,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Shippori Mincho', sans-serif;
 }
 body {
   /* overflow-y: auto;
@@ -91,7 +91,7 @@ a:hover {
 }
 .rich_content p,
 .tiptap p {
-  margin: 8px 0;
+  margin: 12px 0;
 }
 
 .rich_content ul,
@@ -111,7 +111,7 @@ a:hover {
   color: #a8afac;
   font-style: italic;
   pointer-events: none;
-  font-family: 'DM Sans';
+  font-family: 'Shippori Mincho';
   position: absolute;
   left: 22px; /* Adjust if needed */
 }

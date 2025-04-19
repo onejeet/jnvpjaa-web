@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Blog,
   BlogStatus,
@@ -24,7 +26,12 @@ import { CheckCircle, Eye, Pencil } from '@phosphor-icons/react';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-const SingleBlog = () => {
+interface SingleBlogProps {
+  blog?: Blog;
+}
+
+const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
+  console.log('ZZ: prerenderedBlog', prerenderedBlog);
   const router = useRouter();
   const client = useApolloClient();
   const { isAdmin, redirectToSignin, user } = useAuth();
@@ -32,12 +39,12 @@ const SingleBlog = () => {
   const { query } = useRouter();
   const { id } = query;
   const { data, loading } = useGetBlogQuery({
-    skip: !id,
+    skip: !id || Boolean(prerenderedBlog?.id),
     variables: {
       slug: id as string,
     },
   });
-  const blog: Blog | undefined = React.useMemo(() => data?.getBlog, [data]);
+  const blog: Blog | undefined = React.useMemo(() => prerenderedBlog || data?.getBlog, [data, prerenderedBlog]);
   const [publisBlog, { loading: publishBlogLoading }] = useUpdateBlogMutation();
   const [handleVerifyBlog] = useApproveBlogMutation();
 

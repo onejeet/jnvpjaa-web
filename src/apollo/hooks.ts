@@ -104,6 +104,7 @@ export type Blog = {
   claps?: Maybe<Scalars['Int']['output']>;
   comments?: Maybe<Array<Maybe<Comment>>>;
   content?: Maybe<Scalars['String']['output']>;
+  cover?: Maybe<Scalars['JSON']['output']>;
   /** Timestamp when the record was created */
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['String']['output'];
@@ -122,6 +123,7 @@ export type BlogBasic = {
   authorId: Scalars['String']['output'];
   categoryId?: Maybe<Scalars['String']['output']>;
   claps?: Maybe<Scalars['Int']['output']>;
+  cover?: Maybe<Scalars['JSON']['output']>;
   /** Timestamp when the record was created */
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['String']['output'];
@@ -445,6 +447,7 @@ export type MutationCreateBlogArgs = {
   authorId: Scalars['String']['input'];
   categoryId: Scalars['String']['input'];
   content?: InputMaybe<Scalars['String']['input']>;
+  cover?: InputMaybe<Scalars['JSON']['input']>;
   status?: InputMaybe<BlogStatus>;
   title: Scalars['String']['input'];
 };
@@ -591,6 +594,7 @@ export type MutationUpdateBatchCoordinatorArgs = {
 
 export type MutationUpdateBlogArgs = {
   content?: InputMaybe<Scalars['String']['input']>;
+  cover?: InputMaybe<Scalars['JSON']['input']>;
   id: Scalars['String']['input'];
   slug?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<BlogStatus>;
@@ -683,10 +687,22 @@ export type MutationVerifyUserArgs = {
 export type Photo = {
   __typename?: 'Photo';
   album?: Maybe<AlbumBasic>;
+  altDescription?: Maybe<Scalars['String']['output']>;
   caption?: Maybe<Scalars['String']['output']>;
+  crdits?: Maybe<PhotoCredit>;
   id?: Maybe<Scalars['String']['output']>;
+  thumbUrl?: Maybe<Scalars['String']['output']>;
   uploadedAt?: Maybe<Scalars['DateTime']['output']>;
   uploader?: Maybe<User>;
+  url?: Maybe<Scalars['String']['output']>;
+};
+
+export type PhotoCredit = {
+  __typename?: 'PhotoCredit';
+  license_type?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  source?: Maybe<Scalars['String']['output']>;
+  source_url?: Maybe<Scalars['String']['output']>;
   url?: Maybe<Scalars['String']['output']>;
 };
 
@@ -997,8 +1013,10 @@ export type AddAlbumContributorMutation = {
           | Array<
               | {
                   __typename?: 'Photo';
+                  altDescription?: string | undefined;
                   caption?: string | undefined;
                   id?: string | undefined;
+                  thumbUrl?: string | undefined;
                   uploadedAt?: any | undefined;
                   url?: string | undefined;
                   album?:
@@ -1066,6 +1084,16 @@ export type AddAlbumContributorMutation = {
                               total_attendies?: number | undefined;
                             }
                           | undefined;
+                      }
+                    | undefined;
+                  crdits?:
+                    | {
+                        __typename?: 'PhotoCredit';
+                        license_type?: string | undefined;
+                        name?: string | undefined;
+                        source?: string | undefined;
+                        source_url?: string | undefined;
+                        url?: string | undefined;
                       }
                     | undefined;
                   uploader?:
@@ -1159,8 +1187,10 @@ export type AddPhotoMutation = {
   addPhoto?:
     | {
         __typename?: 'Photo';
+        altDescription?: string | undefined;
         caption?: string | undefined;
         id?: string | undefined;
+        thumbUrl?: string | undefined;
         uploadedAt?: any | undefined;
         url?: string | undefined;
         album?:
@@ -1232,6 +1262,16 @@ export type AddPhotoMutation = {
                 | undefined;
             }
           | undefined;
+        crdits?:
+          | {
+              __typename?: 'PhotoCredit';
+              license_type?: string | undefined;
+              name?: string | undefined;
+              source?: string | undefined;
+              source_url?: string | undefined;
+              url?: string | undefined;
+            }
+          | undefined;
         uploader?:
           | {
               __typename?: 'User';
@@ -1283,6 +1323,7 @@ export type ApproveBlogMutation = {
         categoryId?: string | undefined;
         claps?: number | undefined;
         content?: string | undefined;
+        cover?: any | undefined;
         createdAt: any;
         id: string;
         shortUrl?: string | undefined;
@@ -1505,8 +1546,10 @@ export type CreateAlbumMutation = {
           | Array<
               | {
                   __typename?: 'Photo';
+                  altDescription?: string | undefined;
                   caption?: string | undefined;
                   id?: string | undefined;
+                  thumbUrl?: string | undefined;
                   uploadedAt?: any | undefined;
                   url?: string | undefined;
                   album?:
@@ -1576,6 +1619,16 @@ export type CreateAlbumMutation = {
                           | undefined;
                       }
                     | undefined;
+                  crdits?:
+                    | {
+                        __typename?: 'PhotoCredit';
+                        license_type?: string | undefined;
+                        name?: string | undefined;
+                        source?: string | undefined;
+                        source_url?: string | undefined;
+                        url?: string | undefined;
+                      }
+                    | undefined;
                   uploader?:
                     | {
                         __typename?: 'User';
@@ -1621,6 +1674,7 @@ export type CreateBlogMutationVariables = Exact<{
   authorId: Scalars['String']['input'];
   categoryId: Scalars['String']['input'];
   content?: InputMaybe<Scalars['String']['input']>;
+  cover?: InputMaybe<Scalars['JSON']['input']>;
   status?: InputMaybe<BlogStatus>;
   title: Scalars['String']['input'];
 }>;
@@ -1635,6 +1689,7 @@ export type CreateBlogMutation = {
         categoryId?: string | undefined;
         claps?: number | undefined;
         content?: string | undefined;
+        cover?: any | undefined;
         createdAt: any;
         id: string;
         shortUrl?: string | undefined;
@@ -1938,6 +1993,7 @@ export type DeleteBlogMutation = {
         categoryId?: string | undefined;
         claps?: number | undefined;
         content?: string | undefined;
+        cover?: any | undefined;
         createdAt: any;
         id: string;
         shortUrl?: string | undefined;
@@ -2231,6 +2287,7 @@ export type RequestChangesBlogMutation = {
         categoryId?: string | undefined;
         claps?: number | undefined;
         content?: string | undefined;
+        cover?: any | undefined;
         createdAt: any;
         id: string;
         shortUrl?: string | undefined;
@@ -2507,8 +2564,10 @@ export type UpdateAlbumMutation = {
           | Array<
               | {
                   __typename?: 'Photo';
+                  altDescription?: string | undefined;
                   caption?: string | undefined;
                   id?: string | undefined;
+                  thumbUrl?: string | undefined;
                   uploadedAt?: any | undefined;
                   url?: string | undefined;
                   album?:
@@ -2576,6 +2635,16 @@ export type UpdateAlbumMutation = {
                               total_attendies?: number | undefined;
                             }
                           | undefined;
+                      }
+                    | undefined;
+                  crdits?:
+                    | {
+                        __typename?: 'PhotoCredit';
+                        license_type?: string | undefined;
+                        name?: string | undefined;
+                        source?: string | undefined;
+                        source_url?: string | undefined;
+                        url?: string | undefined;
                       }
                     | undefined;
                   uploader?:
@@ -2672,6 +2741,7 @@ export type UpdateBatchCoordinatorMutation = {
 
 export type UpdateBlogMutationVariables = Exact<{
   content?: InputMaybe<Scalars['String']['input']>;
+  cover?: InputMaybe<Scalars['JSON']['input']>;
   id: Scalars['String']['input'];
   slug?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<BlogStatus>;
@@ -2688,6 +2758,7 @@ export type UpdateBlogMutation = {
         categoryId?: string | undefined;
         claps?: number | undefined;
         content?: string | undefined;
+        cover?: any | undefined;
         createdAt: any;
         id: string;
         shortUrl?: string | undefined;
@@ -3216,8 +3287,10 @@ export type GetAlbumQuery = {
           | Array<
               | {
                   __typename?: 'Photo';
+                  altDescription?: string | undefined;
                   caption?: string | undefined;
                   id?: string | undefined;
+                  thumbUrl?: string | undefined;
                   uploadedAt?: any | undefined;
                   url?: string | undefined;
                   album?:
@@ -3285,6 +3358,16 @@ export type GetAlbumQuery = {
                               total_attendies?: number | undefined;
                             }
                           | undefined;
+                      }
+                    | undefined;
+                  crdits?:
+                    | {
+                        __typename?: 'PhotoCredit';
+                        license_type?: string | undefined;
+                        name?: string | undefined;
+                        source?: string | undefined;
+                        source_url?: string | undefined;
+                        url?: string | undefined;
                       }
                     | undefined;
                   uploader?:
@@ -3587,6 +3670,7 @@ export type GetBlogQuery = {
         categoryId?: string | undefined;
         claps?: number | undefined;
         content?: string | undefined;
+        cover?: any | undefined;
         createdAt: any;
         id: string;
         shortUrl?: string | undefined;
@@ -3663,6 +3747,7 @@ export type GetBlogListQuery = {
                   authorId: string;
                   categoryId?: string | undefined;
                   claps?: number | undefined;
+                  cover?: any | undefined;
                   createdAt: any;
                   id: string;
                   shortUrl?: string | undefined;
@@ -4041,8 +4126,10 @@ export type GetMyPhotosQuery = {
     | Array<
         | {
             __typename?: 'Photo';
+            altDescription?: string | undefined;
             caption?: string | undefined;
             id?: string | undefined;
+            thumbUrl?: string | undefined;
             uploadedAt?: any | undefined;
             url?: string | undefined;
             album?:
@@ -4114,6 +4201,16 @@ export type GetMyPhotosQuery = {
                         total_attendies?: number | undefined;
                       }
                     | undefined;
+                }
+              | undefined;
+            crdits?:
+              | {
+                  __typename?: 'PhotoCredit';
+                  license_type?: string | undefined;
+                  name?: string | undefined;
+                  source?: string | undefined;
+                  source_url?: string | undefined;
+                  url?: string | undefined;
                 }
               | undefined;
             uploader?:
@@ -4536,8 +4633,17 @@ export const AddAlbumContributorDocument = gql`
           total_photos
           updatedAt
         }
+        altDescription
         caption
+        crdits {
+          license_type
+          name
+          source
+          source_url
+          url
+        }
         id
+        thumbUrl
         uploadedAt
         uploader {
           aboutMe
@@ -4741,8 +4847,17 @@ export const AddPhotoDocument = gql`
         total_photos
         updatedAt
       }
+      altDescription
       caption
+      crdits {
+        license_type
+        name
+        source
+        source_url
+        url
+      }
       id
+      thumbUrl
       uploadedAt
       uploader {
         aboutMe
@@ -4857,6 +4972,7 @@ export const ApproveBlogDocument = gql`
         updatedAt
       }
       content
+      cover
       createdAt
       id
       shortUrl
@@ -5185,8 +5301,17 @@ export const CreateAlbumDocument = gql`
           total_photos
           updatedAt
         }
+        altDescription
         caption
+        crdits {
+          license_type
+          name
+          source
+          source_url
+          url
+        }
         id
+        thumbUrl
         uploadedAt
         uploader {
           aboutMe
@@ -5265,10 +5390,18 @@ export const CreateBlogDocument = gql`
     $authorId: String!
     $categoryId: String!
     $content: String
+    $cover: JSON
     $status: BlogStatus
     $title: String!
   ) {
-    createBlog(authorId: $authorId, categoryId: $categoryId, content: $content, status: $status, title: $title) {
+    createBlog(
+      authorId: $authorId
+      categoryId: $categoryId
+      content: $content
+      cover: $cover
+      status: $status
+      title: $title
+    ) {
       adminRemark
       author {
         batch
@@ -5312,6 +5445,7 @@ export const CreateBlogDocument = gql`
         updatedAt
       }
       content
+      cover
       createdAt
       id
       shortUrl
@@ -5341,6 +5475,7 @@ export type CreateBlogMutationFn = Apollo.MutationFunction<CreateBlogMutation, C
  *      authorId: // value for 'authorId'
  *      categoryId: // value for 'categoryId'
  *      content: // value for 'content'
+ *      cover: // value for 'cover'
  *      status: // value for 'status'
  *      title: // value for 'title'
  *   },
@@ -5834,6 +5969,7 @@ export const DeleteBlogDocument = gql`
         updatedAt
       }
       content
+      cover
       createdAt
       id
       shortUrl
@@ -6405,6 +6541,7 @@ export const RequestChangesBlogDocument = gql`
         updatedAt
       }
       content
+      cover
       createdAt
       id
       shortUrl
@@ -6861,8 +6998,17 @@ export const UpdateAlbumDocument = gql`
           total_photos
           updatedAt
         }
+        altDescription
         caption
+        crdits {
+          license_type
+          name
+          source
+          source_url
+          url
+        }
         id
+        thumbUrl
         uploadedAt
         uploader {
           aboutMe
@@ -7018,8 +7164,15 @@ export type UpdateBatchCoordinatorMutationOptions = Apollo.BaseMutationOptions<
   UpdateBatchCoordinatorMutationVariables
 >;
 export const UpdateBlogDocument = gql`
-  mutation updateBlog($content: String, $id: String!, $slug: String, $status: BlogStatus, $title: String) {
-    updateBlog(content: $content, id: $id, slug: $slug, status: $status, title: $title) {
+  mutation updateBlog(
+    $content: String
+    $cover: JSON
+    $id: String!
+    $slug: String
+    $status: BlogStatus
+    $title: String
+  ) {
+    updateBlog(content: $content, cover: $cover, id: $id, slug: $slug, status: $status, title: $title) {
       adminRemark
       author {
         batch
@@ -7063,6 +7216,7 @@ export const UpdateBlogDocument = gql`
         updatedAt
       }
       content
+      cover
       createdAt
       id
       shortUrl
@@ -7090,6 +7244,7 @@ export type UpdateBlogMutationFn = Apollo.MutationFunction<UpdateBlogMutation, U
  * const [updateBlogMutation, { data, loading, error }] = useUpdateBlogMutation({
  *   variables: {
  *      content: // value for 'content'
+ *      cover: // value for 'cover'
  *      id: // value for 'id'
  *      slug: // value for 'slug'
  *      status: // value for 'status'
@@ -8008,8 +8163,17 @@ export const GetAlbumDocument = gql`
           total_photos
           updatedAt
         }
+        altDescription
         caption
+        crdits {
+          license_type
+          name
+          source
+          source_url
+          url
+        }
         id
+        thumbUrl
         uploadedAt
         uploader {
           aboutMe
@@ -8534,6 +8698,7 @@ export const GetBlogDocument = gql`
         updatedAt
       }
       content
+      cover
       createdAt
       id
       shortUrl
@@ -8604,6 +8769,7 @@ export const GetBlogListDocument = gql`
         authorId
         categoryId
         claps
+        cover
         createdAt
         id
         shortUrl
@@ -9280,8 +9446,17 @@ export const GetMyPhotosDocument = gql`
         total_photos
         updatedAt
       }
+      altDescription
       caption
+      crdits {
+        license_type
+        name
+        source
+        source_url
+        url
+      }
       id
+      thumbUrl
       uploadedAt
       uploader {
         aboutMe

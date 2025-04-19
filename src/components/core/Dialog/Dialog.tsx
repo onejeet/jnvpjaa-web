@@ -62,6 +62,7 @@ const Dialog: React.FC<DialogProps> = (props) => {
       }}
       fullWidth
       sx={{
+        overflow: 'hidden',
         [`& .MuiDialog-paperWidth${maxWidth}`]: {
           maxWidth: `${maxWidth}`,
           transition: 'max-width 0.5s',
@@ -76,7 +77,14 @@ const Dialog: React.FC<DialogProps> = (props) => {
       {...default_props}
     >
       <DialogContent
-        sx={{ p: 0, display: 'flex', flexDirection: 'column', position: 'relative', ...dialogContentSx }}
+        sx={{
+          p: 0,
+          display: 'flex',
+          flexDirection: 'column',
+          position: 'relative',
+          overflow: 'hidden',
+          ...dialogContentSx,
+        }}
         {...restDialogContentProps}
       >
         {!hideHeader &&
@@ -84,18 +92,9 @@ const Dialog: React.FC<DialogProps> = (props) => {
             <DialogHeader height={60} px={2.5} onClose={onClose} subTitle={subTitle} title={title} {...headerProps} />
           ))}
 
-        <Box justifyContent="center" left={0} display="flex" top={0} position="absolute" width="100%">
-          <Box
-            id={alertWrapperId || DIALOG_ALERT_WRAPPER_ID}
-            display="flex"
-            width="100%"
-            sx={{
-              zIndex: (theme: Theme) => theme.zIndex.modal + 1,
-            }}
-            {...alertWrapperProps}
-          />
+        <Box maxHeight="80vh" sx={{ overflowY: 'auto' }}>
+          {children}
         </Box>
-        {children}
         {!hideFooter && <DialogFooter height={60} px={2.5} {...footerProps} />}
       </DialogContent>
     </MuiDialog>

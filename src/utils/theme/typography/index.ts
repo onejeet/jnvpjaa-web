@@ -1,6 +1,6 @@
 const typography = {
   fontFamily: [
-    'DM Sans',
+    'Shippori Mincho',
     'Roboto',
     '"Helvetica Neue"',
     'Arial',

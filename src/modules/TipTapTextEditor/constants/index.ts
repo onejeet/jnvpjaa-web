@@ -55,8 +55,8 @@ export const EDITOR_ICONS = {
 
 export const FONT_FAMILY_LIST = [
   {
-    label: 'DM Sans',
-    value: 'DM Sans',
+    label: 'Shippori Mincho',
+    value: 'Shippori Mincho',
   },
   {
     label: 'Mukta Hindi',

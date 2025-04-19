@@ -1,4 +1,4 @@
-import { ApolloClient, DocumentNode, NormalizedCacheObject, Unmasked } from '@apollo/client';
+import { ApolloClient, DocumentNode, NormalizedCacheObject, Unmasked, InMemoryCache, HttpLink } from '@apollo/client';
 
 export const updateCache = ({
   client,
@@ -18,3 +18,13 @@ export const updateCache = ({
     variables,
   });
 };
+
+export function initializeApollo() {
+  return new ApolloClient({
+    ssrMode: true,
+    link: new HttpLink({
+      uri: process.env.GRAPHQL_ENDPOINT || 'http://localhost:4000/client',
+    }),
+    cache: new InMemoryCache(),
+  });
+}

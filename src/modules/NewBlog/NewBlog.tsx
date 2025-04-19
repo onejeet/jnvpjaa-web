@@ -17,6 +17,7 @@ import {
   useUpdateEventMutation,
   useGetBlogQuery,
   useUpdateBlogMutation,
+  Photo,
 } from '@/apollo/hooks';
 import { paths } from '@/config/paths';
 import TipTapTextEditor from '@/modules/TipTapTextEditor';
@@ -25,6 +26,8 @@ import { useApolloClient } from '@apollo/client';
 import dayjs from 'dayjs';
 import { BLOG_CATEGORIES } from '@/constants/Blog.constants';
 import { useAuth } from '@/context/AuthContext';
+import { UnsplashImageSelector } from '../UnsplashImageSelector/UnsplashImamgeSelector';
+import Image from 'next/image';
 
 const NewBlog = () => {
   const router = useRouter();
@@ -34,6 +37,7 @@ const NewBlog = () => {
   const { user } = useAuth();
   const saveTypeRef = React.useRef('draft');
 
+  const [selectCoverImage, setSelectCoverImage] = React.useState<boolean>(false);
   const [createBlog, { loading }] = useCreateBlogMutation();
   const [updateBlog, { loading: updateBlogLoading }] = useUpdateBlogMutation();
   //   const [publishBlog, { loading: publishBlogLoading }] = useUpdateBlogMutation();
@@ -71,6 +75,7 @@ const NewBlog = () => {
         title: blogData?.getBlog?.title,
         content: blogData?.getBlog?.content,
         category: blogData?.getBlog?.categoryId,
+        cover: blogData?.getBlog?.cover,
       });
     }
   }, [blogData, reset]);
@@ -82,6 +87,7 @@ const NewBlog = () => {
       if (blogId) {
         const variables: any = {
           id: blogId,
+          cover: data?.cover,
           title: data?.title?.trim(),
           content: data?.content,
           categoryId: data?.category,
@@ -128,6 +134,7 @@ const NewBlog = () => {
           title: data?.title?.trim(),
           content: data?.content,
           categoryId: data?.category,
+          cover: data?.cover,
           // image: `https://jnvpjaa.org/assets/events/${data?.category}.jpg`,
           status: saveTypeRef.current === 'publish' ? BlogStatus.Published : BlogStatus.Draft,
           authorId: user?.id,
@@ -177,7 +184,7 @@ const NewBlog = () => {
       }}
     >
       <Grid container spacing={3}>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 3 }}>
           <FormSelectField
             control={control}
             name="category"
@@ -191,6 +198,22 @@ const NewBlog = () => {
             rules={{
               required: 'Required',
             }}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 3 }} sx={{ display: 'flex', alignItems: 'center' }} gap={1}>
+          {getValues('cover') && (
+            <Image
+              src={getValues('cover')?.thumbUrl}
+              width={100}
+              height={50}
+              alt="cover"
+              style={{ borderRadius: '6px' }}
+            />
+          )}
+          <Button
+            title={getValues('cover') ? 'Change Cover Image' : 'Select Cover Image'}
+            variant="text"
+            onClick={() => setSelectCoverImage(true)}
           />
         </Grid>
         <Box component={Grid} size={{ xs: 12, md: 6 }} display="flex" gap={2} alignItems="center" justifyContent="end">
@@ -278,6 +301,14 @@ const NewBlog = () => {
           </Box>
         </Grid>
       </Grid>
+      {selectCoverImage && (
+        <UnsplashImageSelector
+          open={selectCoverImage}
+          onClose={() => setSelectCoverImage(false)}
+          defaultKeyword={getValues('title')}
+          onSelect={(image: Photo) => setValue('cover', image)}
+        />
+      )}
     </Box>
   );
 };
