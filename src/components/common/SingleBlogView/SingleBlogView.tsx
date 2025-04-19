@@ -21,6 +21,7 @@ import { debounce, getFormattedLabel, startCase } from '@/utils/helpers';
 import ClapButton from '../ClapButton';
 import SocialShareModal from '../SocialShareModal';
 import Image from 'next/image';
+import { dmSans, notoSerif } from '@/utils/theme/fonts';
 
 const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateClap }) => {
   const { id, title, author, content, cover, claps: initialClaps, status, updatedAt } = blog || {};
@@ -241,6 +242,7 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateC
                 xs: '18px',
                 md: '20px',
               }}
+              sx={{ fontFamily: notoSerif.style.fontFamily }}
               dangerouslySetInnerHTML={{ __html: sanitizedContent }}
             />
             <Divider sx={{ my: { xs: 2, md: 3 } }} />

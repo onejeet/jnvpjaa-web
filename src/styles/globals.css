@@ -59,7 +59,7 @@ input[type='number'] {
 }
 
 .rich_content .tiptap {
-  font-family: 'Noto Serif' !important;
+  font-weight: 300;
 }
 
 .rich_content a,
@@ -108,7 +108,6 @@ a:hover {
 .ProseMirror {
   font-size: 16px; /* Change this to your desired font size */
   font-weight: 400;
-  font-family: 'Noto Serif';
 }
 
 .ProseMirror p.is-empty::before {
@@ -116,7 +115,6 @@ a:hover {
   color: #a8afac;
   font-style: italic;
   pointer-events: none;
-  font-family: 'Noto Serif';
   position: absolute;
   left: 22px; /* Adjust if needed */
 }

@@ -42,6 +42,7 @@ import { useRouter } from 'next/router';
 import CopyContentButton from '@/components/common/CopyContentButton';
 import UserListDialog from '../UserListDialog/UserListDialog';
 import ProfilePicture from '../ProfilePicture';
+import { dmSans } from '@/utils/theme/fonts';
 
 const SingleEventView: React.FC<SingleEventViewProps> = ({
   user,
@@ -230,6 +231,7 @@ const SingleEventView: React.FC<SingleEventViewProps> = ({
                 color="text.primary"
                 mt={3}
                 className="rich_content"
+                sx={{ fontFamily: notoSerif.style.fontFamily }}
                 dangerouslySetInnerHTML={{ __html: descriptionContent }}
               />
             )}

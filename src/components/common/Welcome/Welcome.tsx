@@ -5,6 +5,7 @@ import { User } from '@/apollo/hooks';
 import { CheckCircle } from '@phosphor-icons/react';
 import Button from '@/components/core/Button';
 import { useAuth } from '@/context/AuthContext';
+import { notoSerif } from '@/utils/theme/fonts';
 
 interface WelcomeProps {
   onNext?: () => void;
@@ -68,7 +69,7 @@ const Welcome: React.FC<WelcomeProps> = ({ onNext }) => {
       </Box>
       <Box display="flex" flexDirection="column" justifyContent="start" gap={1}>
         <Typography>
-          {`We're thrilled to have you here! 🎊 This is your space to reconnect, relive memories, and build new ones.
+          {`We're thrilled to have you here! This is your space to reconnect, relive memories, and build new ones.
         Whether it’s your first time logging in or you're already a part of this amazing community, we want you to feel
         at home.`}{' '}
           🏡✨
