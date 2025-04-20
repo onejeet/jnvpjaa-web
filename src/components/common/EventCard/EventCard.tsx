@@ -66,6 +66,7 @@ const EventCard: React.FC<EventCardProps> = ({
     total_attendies,
     attendees: people,
     status,
+    cover,
     createdBy,
     shortUrl = '',
     isGoing,
@@ -145,7 +146,7 @@ const EventCard: React.FC<EventCardProps> = ({
         <CardMedia
           component="img"
           height="180"
-          src={image || `https://picsum.photos/seed/${title}/600/200`}
+          src={cover?.url || image || `https://picsum.photos/seed/${title}/600/200`}
           alt="Event Image"
           referrerPolicy="no-referrer"
           sx={{ borderTopLeftRadius: 2, borderTopRightRadius: 2 }}

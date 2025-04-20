@@ -272,6 +272,7 @@ export type Event = {
   adminRemark?: Maybe<Scalars['String']['output']>;
   attendees?: Maybe<Array<Maybe<UserBasic>>>;
   category?: Maybe<Scalars['String']['output']>;
+  cover?: Maybe<Scalars['JSON']['output']>;
   /** Timestamp when the record was created */
   createdAt: Scalars['DateTime']['output'];
   createdBy?: Maybe<Scalars['String']['output']>;
@@ -299,6 +300,7 @@ export type EventBasic = {
   __typename?: 'EventBasic';
   adminRemark?: Maybe<Scalars['String']['output']>;
   category?: Maybe<Scalars['String']['output']>;
+  cover?: Maybe<Scalars['JSON']['output']>;
   createdBy?: Maybe<Scalars['String']['output']>;
   description?: Maybe<Scalars['String']['output']>;
   endDate?: Maybe<Scalars['DateTime']['output']>;
@@ -471,6 +473,7 @@ export type MutationCreateCompanyInfoArgs = {
 
 export type MutationCreateEventArgs = {
   category: Scalars['String']['input'];
+  cover?: InputMaybe<Scalars['JSON']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   endDate?: InputMaybe<Scalars['String']['input']>;
   image?: InputMaybe<Scalars['String']['input']>;
@@ -626,6 +629,7 @@ export type MutationUpdateCompanyInfoArgs = {
 
 export type MutationUpdateEventArgs = {
   category: Scalars['String']['input'];
+  cover?: InputMaybe<Scalars['JSON']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   endDate?: InputMaybe<Scalars['String']['input']>;
   eventId: Scalars['Int']['input'];
@@ -992,6 +996,7 @@ export type AddAlbumContributorMutation = {
               __typename?: 'EventBasic';
               adminRemark?: string | undefined;
               category?: string | undefined;
+              cover?: any | undefined;
               createdBy?: string | undefined;
               description?: string | undefined;
               endDate?: any | undefined;
@@ -1067,6 +1072,7 @@ export type AddAlbumContributorMutation = {
                               __typename?: 'EventBasic';
                               adminRemark?: string | undefined;
                               category?: string | undefined;
+                              cover?: any | undefined;
                               createdBy?: string | undefined;
                               description?: string | undefined;
                               endDate?: any | undefined;
@@ -1243,6 +1249,7 @@ export type AddPhotoMutation = {
                     __typename?: 'EventBasic';
                     adminRemark?: string | undefined;
                     category?: string | undefined;
+                    cover?: any | undefined;
                     createdBy?: string | undefined;
                     description?: string | undefined;
                     endDate?: any | undefined;
@@ -1525,6 +1532,7 @@ export type CreateAlbumMutation = {
               __typename?: 'EventBasic';
               adminRemark?: string | undefined;
               category?: string | undefined;
+              cover?: any | undefined;
               createdBy?: string | undefined;
               description?: string | undefined;
               endDate?: any | undefined;
@@ -1600,6 +1608,7 @@ export type CreateAlbumMutation = {
                               __typename?: 'EventBasic';
                               adminRemark?: string | undefined;
                               category?: string | undefined;
+                              cover?: any | undefined;
                               createdBy?: string | undefined;
                               description?: string | undefined;
                               endDate?: any | undefined;
@@ -1849,6 +1858,7 @@ export type CreateCompanyInfoMutation = {
 
 export type CreateEventMutationVariables = Exact<{
   category: Scalars['String']['input'];
+  cover?: InputMaybe<Scalars['JSON']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   endDate?: InputMaybe<Scalars['String']['input']>;
   image?: InputMaybe<Scalars['String']['input']>;
@@ -1869,6 +1879,7 @@ export type CreateEventMutation = {
         __typename?: 'EventBasic';
         adminRemark?: string | undefined;
         category?: string | undefined;
+        cover?: any | undefined;
         createdBy?: string | undefined;
         description?: string | undefined;
         endDate?: any | undefined;
@@ -2543,6 +2554,7 @@ export type UpdateAlbumMutation = {
               __typename?: 'EventBasic';
               adminRemark?: string | undefined;
               category?: string | undefined;
+              cover?: any | undefined;
               createdBy?: string | undefined;
               description?: string | undefined;
               endDate?: any | undefined;
@@ -2618,6 +2630,7 @@ export type UpdateAlbumMutation = {
                               __typename?: 'EventBasic';
                               adminRemark?: string | undefined;
                               category?: string | undefined;
+                              cover?: any | undefined;
                               createdBy?: string | undefined;
                               description?: string | undefined;
                               endDate?: any | undefined;
@@ -2926,6 +2939,7 @@ export type UpdateCompanyInfoMutation = {
 
 export type UpdateEventMutationVariables = Exact<{
   category: Scalars['String']['input'];
+  cover?: InputMaybe<Scalars['JSON']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   endDate?: InputMaybe<Scalars['String']['input']>;
   eventId: Scalars['Int']['input'];
@@ -2946,6 +2960,7 @@ export type UpdateEventMutation = {
         __typename?: 'EventBasic';
         adminRemark?: string | undefined;
         category?: string | undefined;
+        cover?: any | undefined;
         createdBy?: string | undefined;
         description?: string | undefined;
         endDate?: any | undefined;
@@ -3266,6 +3281,7 @@ export type GetAlbumQuery = {
               __typename?: 'EventBasic';
               adminRemark?: string | undefined;
               category?: string | undefined;
+              cover?: any | undefined;
               createdBy?: string | undefined;
               description?: string | undefined;
               endDate?: any | undefined;
@@ -3341,6 +3357,7 @@ export type GetAlbumQuery = {
                               __typename?: 'EventBasic';
                               adminRemark?: string | undefined;
                               category?: string | undefined;
+                              cover?: any | undefined;
                               createdBy?: string | undefined;
                               description?: string | undefined;
                               endDate?: any | undefined;
@@ -3474,6 +3491,7 @@ export type GetAlbumsQuery = {
                         __typename?: 'EventBasic';
                         adminRemark?: string | undefined;
                         category?: string | undefined;
+                        cover?: any | undefined;
                         createdBy?: string | undefined;
                         description?: string | undefined;
                         endDate?: any | undefined;
@@ -4019,6 +4037,7 @@ export type GetEventDetailsQuery = {
         __typename?: 'Event';
         adminRemark?: string | undefined;
         category?: string | undefined;
+        cover?: any | undefined;
         createdAt: any;
         createdBy?: string | undefined;
         description?: string | undefined;
@@ -4095,6 +4114,7 @@ export type GetEventListQuery = {
                   __typename?: 'EventBasic';
                   adminRemark?: string | undefined;
                   category?: string | undefined;
+                  cover?: any | undefined;
                   createdBy?: string | undefined;
                   description?: string | undefined;
                   endDate?: any | undefined;
@@ -4184,6 +4204,7 @@ export type GetMyPhotosQuery = {
                         __typename?: 'EventBasic';
                         adminRemark?: string | undefined;
                         category?: string | undefined;
+                        cover?: any | undefined;
                         createdBy?: string | undefined;
                         description?: string | undefined;
                         endDate?: any | undefined;
@@ -4563,6 +4584,7 @@ export const AddAlbumContributorDocument = gql`
       event {
         adminRemark
         category
+        cover
         createdBy
         description
         endDate
@@ -4612,6 +4634,7 @@ export const AddAlbumContributorDocument = gql`
           event {
             adminRemark
             category
+            cover
             createdBy
             description
             endDate
@@ -4826,6 +4849,7 @@ export const AddPhotoDocument = gql`
         event {
           adminRemark
           category
+          cover
           createdBy
           description
           endDate
@@ -5231,6 +5255,7 @@ export const CreateAlbumDocument = gql`
       event {
         adminRemark
         category
+        cover
         createdBy
         description
         endDate
@@ -5280,6 +5305,7 @@ export const CreateAlbumDocument = gql`
           event {
             adminRemark
             category
+            cover
             createdBy
             description
             endDate
@@ -5669,6 +5695,7 @@ export type CreateCompanyInfoMutationOptions = Apollo.BaseMutationOptions<
 export const CreateEventDocument = gql`
   mutation createEvent(
     $category: String!
+    $cover: JSON
     $description: String
     $endDate: String
     $image: String
@@ -5683,6 +5710,7 @@ export const CreateEventDocument = gql`
   ) {
     createEvent(
       category: $category
+      cover: $cover
       description: $description
       endDate: $endDate
       image: $image
@@ -5697,6 +5725,7 @@ export const CreateEventDocument = gql`
     ) {
       adminRemark
       category
+      cover
       createdBy
       description
       endDate
@@ -5731,6 +5760,7 @@ export type CreateEventMutationFn = Apollo.MutationFunction<CreateEventMutation,
  * const [createEventMutation, { data, loading, error }] = useCreateEventMutation({
  *   variables: {
  *      category: // value for 'category'
+ *      cover: // value for 'cover'
  *      description: // value for 'description'
  *      endDate: // value for 'endDate'
  *      image: // value for 'image'
@@ -6928,6 +6958,7 @@ export const UpdateAlbumDocument = gql`
       event {
         adminRemark
         category
+        cover
         createdBy
         description
         endDate
@@ -6977,6 +7008,7 @@ export const UpdateAlbumDocument = gql`
           event {
             adminRemark
             category
+            cover
             createdBy
             description
             endDate
@@ -7475,6 +7507,7 @@ export type UpdateCompanyInfoMutationOptions = Apollo.BaseMutationOptions<
 export const UpdateEventDocument = gql`
   mutation updateEvent(
     $category: String!
+    $cover: JSON
     $description: String
     $endDate: String
     $eventId: Int!
@@ -7489,6 +7522,7 @@ export const UpdateEventDocument = gql`
   ) {
     updateEvent(
       category: $category
+      cover: $cover
       description: $description
       endDate: $endDate
       eventId: $eventId
@@ -7503,6 +7537,7 @@ export const UpdateEventDocument = gql`
     ) {
       adminRemark
       category
+      cover
       createdBy
       description
       endDate
@@ -7537,6 +7572,7 @@ export type UpdateEventMutationFn = Apollo.MutationFunction<UpdateEventMutation,
  * const [updateEventMutation, { data, loading, error }] = useUpdateEventMutation({
  *   variables: {
  *      category: // value for 'category'
+ *      cover: // value for 'cover'
  *      description: // value for 'description'
  *      endDate: // value for 'endDate'
  *      eventId: // value for 'eventId'
@@ -8093,6 +8129,7 @@ export const GetAlbumDocument = gql`
       event {
         adminRemark
         category
+        cover
         createdBy
         description
         endDate
@@ -8142,6 +8179,7 @@ export const GetAlbumDocument = gql`
           event {
             adminRemark
             category
+            cover
             createdBy
             description
             endDate
@@ -8296,6 +8334,7 @@ export const GetAlbumsDocument = gql`
         event {
           adminRemark
           category
+          cover
           createdBy
           description
           endDate
@@ -9241,6 +9280,7 @@ export const GetEventDetailsDocument = gql`
         }
       }
       category
+      cover
       createdAt
       createdBy
       description
@@ -9324,6 +9364,7 @@ export const GetEventListDocument = gql`
       data {
         adminRemark
         category
+        cover
         createdBy
         description
         endDate
@@ -9425,6 +9466,7 @@ export const GetMyPhotosDocument = gql`
         event {
           adminRemark
           category
+          cover
           createdBy
           description
           endDate

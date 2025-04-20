@@ -3,7 +3,7 @@ import React from 'react';
 import { useAlert } from '@/context/AlertContext';
 import { useRouter } from 'next/router';
 import { useForm, useWatch } from 'react-hook-form';
-import { Box, CircularProgress, Grid2 as Grid, Typography } from '@mui/material';
+import { Box, CircularProgress, Grid2 as Grid, IconButton, Typography } from '@mui/material';
 import FormTextField from '@/components/form/FormTextField';
 import FormSelectField from '@/components/form/FormSelectField';
 import { INewEventFormInput } from './NewEvent.types';
@@ -11,6 +11,7 @@ import Button from '@/components/core/Button';
 import FormDateTimeField from '@/components/form/FormDateTimeField';
 import {
   EventStatus,
+  Photo,
   useCreateEventMutation,
   useGetEventDetailsQuery,
   usePublishEventMutation,
@@ -18,10 +19,12 @@ import {
 } from '@/apollo/hooks';
 import { paths } from '@/config/paths';
 import TipTapTextEditor from '@/modules/TipTapTextEditor';
-import { CurrencyInr, FloppyDiskBack, Globe, MapPinLine } from '@phosphor-icons/react';
+import { CurrencyInr, FloppyDiskBack, Globe, MapPinLine, PencilSimple, UploadSimple } from '@phosphor-icons/react';
 import { useApolloClient } from '@apollo/client';
 import { EVENT_CATEGORIES, eventHostingmedium } from '@/constants/Events.constants';
 import dayjs from 'dayjs';
+import Image from 'next/image';
+import { UnsplashImageSelector } from '../UnsplashImageSelector/UnsplashImamgeSelector';
 
 const NewEvent = () => {
   const router = useRouter();
@@ -29,7 +32,7 @@ const NewEvent = () => {
   const client = useApolloClient();
   const { showAlert } = useAlert();
   const saveTypeRef = React.useRef('draft');
-
+  const [selectCoverImage, setSelectCoverImage] = React.useState<boolean>(false);
   const [crateEvent, { loading }] = useCreateEventMutation();
   const [updateEvent, { loading: updateEventLoading }] = useUpdateEventMutation();
   const [publishEvent, { loading: publishEventLoading }] = usePublishEventMutation();
@@ -67,6 +70,7 @@ const NewEvent = () => {
         category: eventData?.getEventDetails?.category,
         tags: eventData?.getEventDetails?.tags?.join(','),
         price: eventData?.getEventDetails?.price,
+        cover: eventData?.getEventDetails?.cover,
       });
     }
   }, [eventData, reset]);
@@ -94,6 +98,13 @@ const NewEvent = () => {
   const onSubmit = React.useCallback(
     (data: INewEventFormInput) => {
       if (eventId) {
+        if (!data?.cover) {
+          showAlert({
+            visible: true,
+            type: 'error',
+            message: 'Please select cover image',
+          });
+        }
         const variables: any = {
           eventId: parseInt(eventId as string, 0),
           ...data,
@@ -169,6 +180,8 @@ const NewEvent = () => {
     );
   }
 
+  console.log("ZZ: setValue('cover'", getValues('cover'));
+
   return (
     <Box
       component="form"
@@ -230,7 +243,61 @@ const NewEvent = () => {
             }}
           />
         </Grid>
-        <Grid size={{ xs: 12 }}>
+        <Grid
+          size={{ xs: 12, md: 3 }}
+          sx={{
+            position: 'relative',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            border: '1px dotted',
+            borderColor: 'grey.500',
+            borderRadius: '8px',
+            // p: 2,
+            cursor: 'pointer',
+            maxHeight: 110,
+            maxWidth: {
+              xs: 200,
+              md: '100%',
+            },
+            '&:hover img': {
+              opacity: 0.4,
+            },
+          }}
+          onClick={() => setSelectCoverImage(true)}
+          gap={1}
+        >
+          {getValues('cover') ? (
+            <>
+              <Image
+                src={getValues('cover')?.thumbUrl}
+                width={200}
+                height={100}
+                layout="responsive"
+                alt="cover"
+                style={{ borderRadius: '6px', maxHeight: '100%' }}
+              />
+              <IconButton
+                onClick={() => setSelectCoverImage(true)}
+                size="small"
+                sx={{
+                  zIndex: 1,
+                  position: 'absolute',
+                  right: '4px',
+                  top: '4px',
+                  bgcolor: 'grey.200',
+                  // border: '1px solid',
+                  svg: { color: 'grey.900' },
+                }}
+              >
+                <PencilSimple size={18} />
+              </IconButton>
+            </>
+          ) : (
+            <Button title={getValues('cover') ? 'Change Cover Image' : 'Select Cover Image'} variant="text" />
+          )}
+        </Grid>
+        <Grid size={{ xs: 12, md: 9 }}>
           <FormTextField
             fullWidth
             id="summary"
@@ -348,6 +415,14 @@ const NewEvent = () => {
           />
         </Grid>
       </Grid>
+      {selectCoverImage && (
+        <UnsplashImageSelector
+          open={selectCoverImage}
+          onClose={() => setSelectCoverImage(false)}
+          defaultKeyword={getValues('title')}
+          onSelect={(image: Photo) => setValue('cover', image)}
+        />
+      )}
     </Box>
   );
 };

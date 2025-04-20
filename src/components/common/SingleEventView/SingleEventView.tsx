@@ -42,7 +42,7 @@ import { useRouter } from 'next/router';
 import CopyContentButton from '@/components/common/CopyContentButton';
 import UserListDialog from '../UserListDialog/UserListDialog';
 import ProfilePicture from '../ProfilePicture';
-import { dmSans } from '@/utils/theme/fonts';
+import { dmSans, notoSerif } from '@/utils/theme/fonts';
 
 const SingleEventView: React.FC<SingleEventViewProps> = ({
   user,
@@ -71,6 +71,7 @@ const SingleEventView: React.FC<SingleEventViewProps> = ({
     medium = '',
     attendees,
     category,
+    cover,
     location,
     total_attendies,
     attendees: people,
@@ -144,14 +145,45 @@ const SingleEventView: React.FC<SingleEventViewProps> = ({
       {loading ? (
         <Skeleton variant="rounded" width="100%" height={180} />
       ) : (
-        <CardMedia
-          component="img"
-          height={isMobile ? '300' : '400'}
-          src={image || `https://picsum.photos/seed/${title}/600/200`}
-          alt="Event Image"
-          referrerPolicy="no-referrer"
-          sx={{ borderTopLeftRadius: 2, borderTopRightRadius: 2 }}
-        />
+        <Box>
+          <CardMedia
+            component="img"
+            height={isMobile ? '300' : '400'}
+            src={cover?.url || image || `https://picsum.photos/seed/${title}/600/200`}
+            alt="Event Image"
+            referrerPolicy="no-referrer"
+            sx={{ borderTopLeftRadius: 2, borderTopRightRadius: 2 }}
+          />
+          {cover?.credits && (
+            <Typography
+              // mt={1}
+              variant="body2"
+              width="100%"
+              maxWidth="100%"
+              py={0.5}
+              textAlign="center"
+              bgcolor="grey.100"
+              color="grey.700"
+              sx={{
+                position: 'relative',
+                top: '-4px',
+                a: {
+                  color: 'grey.700',
+                  '&: hover': {
+                    color: 'grey.800',
+                    textDecoration: 'none',
+                  },
+                },
+              }}
+            >
+              Photo by{' '}
+              <a href={cover?.credits?.url} style={{ color: 'grey.700', borderBottom: '1px dotted' }}>
+                {cover?.credits?.name || ''}
+              </a>{' '}
+              on {cover?.credits?.source}
+            </Typography>
+          )}
+        </Box>
       )}
 
       <CardContent

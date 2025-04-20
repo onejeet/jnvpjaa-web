@@ -12,4 +12,5 @@ export interface INewEventFormInput {
   tags?: string;
   price?: number;
   isPublish?: boolean;
+  cover?: Record<string, any>;
 }
