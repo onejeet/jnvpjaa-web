@@ -55,6 +55,7 @@ const AlbumCard: React.FC<AlbumCardProps> = ({
         borderRadius: 2,
         position: 'relative',
         borderColor: 'grey.300',
+        cursor: isMinimal ? 'default' : 'pointer',
         height: '100%',
         '.event_title svg': {
           ml: '4px',
@@ -64,11 +65,20 @@ const AlbumCard: React.FC<AlbumCardProps> = ({
         '&:hover': {
           borderBottom: '1px solid',
           borderBottomColor: 'primary.main',
+          '.event_title': {
+            color: isMinimal ? 'inherit' : 'primary.main',
+          },
           '.event_title svg': {
             ml: '10px',
             opacity: 1,
+            color: isMinimal ? 'inherit' : 'primary.main',
           },
         },
+      }}
+      onClick={() => {
+        if (isMinimal) return;
+
+        router.push(paths.gallery.getAlbumDetailUrl(id as string));
       }}
     >
       {loading ? (
@@ -116,11 +126,11 @@ const AlbumCard: React.FC<AlbumCardProps> = ({
               variant="h2"
               component="div"
               fontWeight="bold"
-              onClick={() => {
-                if (isMinimal) return;
+              // onClick={() => {
+              //   if (isMinimal) return;
 
-                router.push(paths.gallery.getAlbumDetailUrl(id as string));
-              }}
+              //   router.push(paths.gallery.getAlbumDetailUrl(id as string));
+              // }}
               sx={{
                 display: 'flex',
                 alignItems: 'center',
@@ -130,14 +140,14 @@ const AlbumCard: React.FC<AlbumCardProps> = ({
                 //   transition: 'all 0.2s linear',
                 //   opacity: 0,
                 // },
-                '&:hover': {
-                  cursor: isMinimal ? 'default' : 'pointer',
-                  color: isMinimal ? 'inherit' : 'primary.main',
-                  // svg: {
-                  //   ml: '10px',
-                  //   opacity: 1,
-                  // },
-                },
+                // '&:hover': {
+                //   cursor: isMinimal ? 'default' : 'pointer',
+                //   color: isMinimal ? 'inherit' : 'primary.main',
+                // svg: {
+                //   ml: '10px',
+                //   opacity: 1,
+                // },
+                // },
               }}
             >
               {title}
