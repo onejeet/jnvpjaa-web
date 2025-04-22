@@ -198,7 +198,12 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateC
                     }}
                   >
                     Photo by{' '}
-                    <a href={cover?.credits?.url} style={{ color: 'grey.700', borderBottom: '1px dotted' }}>
+                    <a
+                      href={cover?.credits?.url}
+                      target="_blank"
+                      style={{ color: 'grey.700', borderBottom: '1px dotted' }}
+                      rel="noreferrer"
+                    >
                       {cover?.credits?.name || ''}
                     </a>{' '}
                     on {cover?.credits?.source}
