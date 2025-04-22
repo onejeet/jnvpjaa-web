@@ -26,7 +26,7 @@ export default function Transactions() {
         <Box>
           <Typography variant="h1">Billing & Transactions</Typography>
           <Typography color="grey.800" mb={3}>
-            List of all the transactions from JNVPJAA Fund.
+            List of all the transactions for JNVPJAA Fund.
           </Typography>
         </Box>
         {isAdmin &&

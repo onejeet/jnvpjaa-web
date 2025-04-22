@@ -62,14 +62,15 @@ const HeaderAddButton: React.FC = () => {
         // }}
       >
         <MenuItem
-          disabled
-          onClick={handleClose}
+          // disabled
+          // onClick={handleClose}
           sx={{
             px: '16px',
             py: '12px',
             fontSize: '14px',
             fontWeight: 400,
             textAlign: 'center',
+            pointerEvents: 'none',
             color: 'grey.900 !important',
             transition: 'all 0.2s linear',
             svg: {
@@ -79,7 +80,18 @@ const HeaderAddButton: React.FC = () => {
             },
           }}
         >
-          <Typography sx={{ fontSize: '16px', fontWeight: 400 }}>Have something to share?</Typography>
+          <Typography
+            sx={{
+              fontSize: '16px',
+              fontWeight: 400,
+              background: 'linear-gradient(90deg,#C62835 0,#217bfe 70%, #078efb 100%)',
+              backgroundClip: 'text',
+              color: 'transparent',
+              opacity: 1,
+            }}
+          >
+            Have something to share?
+          </Typography>
         </MenuItem>
         {ADD_ENTITIES?.map((mItem: IHeaderMenuItem) => (
           <NextLink
