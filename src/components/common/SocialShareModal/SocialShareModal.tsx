@@ -41,11 +41,11 @@ import {
 import Button from '@/components/core/Button';
 
 interface SocialShareModalProps {
-  news: string;
+  title?: string;
   btn_type?: 'button' | 'icon';
 }
 
-const SocialShareModal: React.FC<SocialShareModalProps> = ({ news, btn_type = 'icon' }) => {
+const SocialShareModal: React.FC<SocialShareModalProps> = ({ title, btn_type = 'icon' }) => {
   const [open, setOpen] = useState(false);
   const [currentUrl, setCurrentUrl] = useState('');
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -144,7 +144,7 @@ const SocialShareModal: React.FC<SocialShareModalProps> = ({ news, btn_type = 'i
                 );
               } else {
                 return (
-                  <ShareButtonComponent key={index} url={currentUrl} style={{ width: '100%' }}>
+                  <ShareButtonComponent key={index} url={currentUrl} title={title} style={{ width: '100%' }}>
                     <ListItem
                       component={Button}
                       variant="text"
