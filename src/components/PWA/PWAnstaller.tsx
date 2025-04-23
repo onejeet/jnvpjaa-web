@@ -9,8 +9,10 @@ export default function PWAInstaller() {
   const [alertDialogProps, setAlertDialogProps] = useState<Partial<AlertDialogProps>>({});
 
   useEffect(() => {
+    const isMobile = window?.matchMedia('(pointer: coarse)')?.matches;
     const handleBeforeInstallPrompt = (event: Event) => {
       event.preventDefault();
+      if (!isMobile) return;
       setInstallPrompt(event);
       setShowInstallDialog(true);
     };
@@ -41,7 +43,7 @@ export default function PWAInstaller() {
   return (
     <AlertDialog
       open={showInstallDialog}
-      onCancel={() => setShowInstallDialog(false)}
+      // onCancel={() => setShowInstallDialog(false)}
       title="Install JNVPJAA App"
       message="Get quick access to JNVPJAA by installing the app on your device. Enjoy a faster and better experience! 🚀"
       onOkay={handleInstall}
