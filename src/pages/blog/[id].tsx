@@ -30,6 +30,11 @@ const SingleBlogPage: NextPage<{ blog: Blog }> = ({ blog }) => {
                 type: 'image/jpg',
               },
             ],
+            article: {
+              authors: [`${blog?.author?.firstName || ''} ${blog?.author?.lastName || ''}` || 'JNVPJAA'], // Author name here
+              publishedTime: blog?.createdAt,
+              modifiedTime: blog?.updatedAt,
+            },
           }}
           additionalLinkTags={[
             {
