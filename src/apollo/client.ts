@@ -9,7 +9,7 @@ const errorLink = new ApolloLink((operation, forward) => {
   return new Observable((observer) => {
     forward(operation).subscribe({
       next: async (result) => {
-        console.log('~~ CLIENT ~~ ERRORS', result?.errors);
+        // console.log('~~ CLIENT ~~ ERRORS', result?.errors);
         if (result?.errors && result?.errors?.length > 0) {
           // @ts-expect-error type
           if (result?.errors?.[0]?.code === 'NOT_AUTHORISED') {
