@@ -164,7 +164,12 @@ const LayoutFooter: React.FC = () => {
               </Stack>
             </Grid>
 
-            <Grid size={{ xs: 12, md: 6 }} textAlign={{ xs: 'center', md: 'left' }} mt={{ xs: '10px', md: 0 }}>
+            <Grid
+              size={{ xs: 12, md: 6 }}
+              textAlign={{ xs: 'center', md: 'left' }}
+              mt={{ xs: '10px', md: 0 }}
+              mb={{ xs: 0, md: 2 }}
+            >
               <Typography
                 sx={{
                   color: 'grey.800',
@@ -196,6 +201,7 @@ const LayoutFooter: React.FC = () => {
                 xs: '10px',
                 md: 0,
               }}
+              mb={{ xs: 1, md: 2 }}
             >
               <Typography
                 sx={{
@@ -210,7 +216,7 @@ const LayoutFooter: React.FC = () => {
                 display="flex"
                 alignItems="center"
               >
-                with <Heart size={20} weight="fill" /> by
+                Crafted with <Heart size={20} weight="fill" /> by
                 <Box
                   component="span"
                   ml={1}
