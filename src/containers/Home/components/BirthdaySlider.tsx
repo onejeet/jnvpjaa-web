@@ -40,6 +40,10 @@ export default function BirthdaySlider() {
     return data?.upcomingBirthdays || [];
   }, [loading, data]);
 
+  if (!loading && !data?.upcomingBirthdays) {
+    return null;
+  }
+
   return (
     <Box
       component="div"
