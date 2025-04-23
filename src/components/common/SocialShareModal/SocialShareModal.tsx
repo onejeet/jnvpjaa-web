@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ForwardRefExoticComponent } from 'react';
 import {
   Modal,
   Box,
@@ -45,6 +45,14 @@ interface SocialShareModalProps {
   btn_type?: 'button' | 'icon';
 }
 
+interface SocialIcons {
+  icon: React.ReactNode;
+  label: string;
+  size?: number;
+  component?: any;
+  onClick?: () => void;
+}
+
 const SocialShareModal: React.FC<SocialShareModalProps> = ({ title, btn_type = 'icon' }) => {
   const [open, setOpen] = useState(false);
   const [currentUrl, setCurrentUrl] = useState('');
@@ -71,7 +79,7 @@ const SocialShareModal: React.FC<SocialShareModalProps> = ({ title, btn_type = '
   const handleClose = () => setOpen(false);
   const handleSnackbarClose = () => setSnackbarOpen(false);
 
-  const socialIcons = React.useMemo(
+  const socialIcons: SocialIcons[] = React.useMemo(
     () => [
       { icon: <Copy size={32} />, label: 'Copy link', onClick: handleCopyLink },
       { component: WhatsappShareButton, icon: <WhatsappLogo size={32} />, label: 'Whatsapp' },
