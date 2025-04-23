@@ -226,12 +226,9 @@ export type CompanyInfo = {
 
 export type CompanyInfoBasic = {
   __typename?: 'CompanyInfoBasic';
-  city?: Maybe<Scalars['String']['output']>;
   companyName: Scalars['String']['output'];
-  country?: Maybe<Scalars['String']['output']>;
   id: Scalars['String']['output'];
   position?: Maybe<Scalars['String']['output']>;
-  state?: Maybe<Scalars['String']['output']>;
   userId: Scalars['String']['output'];
 };
 
@@ -1148,12 +1145,9 @@ export type AddAlbumContributorMutation = {
                           | Array<
                               | {
                                   __typename?: 'CompanyInfoBasic';
-                                  city?: string | undefined;
                                   companyName: string;
-                                  country?: string | undefined;
                                   id: string;
                                   position?: string | undefined;
-                                  state?: string | undefined;
                                   userId: string;
                                 }
                               | undefined
@@ -1340,12 +1334,9 @@ export type AddPhotoMutation = {
                 | Array<
                     | {
                         __typename?: 'CompanyInfoBasic';
-                        city?: string | undefined;
                         companyName: string;
-                        country?: string | undefined;
                         id: string;
                         position?: string | undefined;
-                        state?: string | undefined;
                         userId: string;
                       }
                     | undefined
@@ -1480,12 +1471,9 @@ export type AssignBatchCoordinatorMutation = {
                 | Array<
                     | {
                         __typename?: 'CompanyInfoBasic';
-                        city?: string | undefined;
                         companyName: string;
-                        country?: string | undefined;
                         id: string;
                         position?: string | undefined;
-                        state?: string | undefined;
                         userId: string;
                       }
                     | undefined
@@ -1729,12 +1717,9 @@ export type CreateAlbumMutation = {
                           | Array<
                               | {
                                   __typename?: 'CompanyInfoBasic';
-                                  city?: string | undefined;
                                   companyName: string;
-                                  country?: string | undefined;
                                   id: string;
                                   position?: string | undefined;
-                                  state?: string | undefined;
                                   userId: string;
                                 }
                               | undefined
@@ -2038,12 +2023,9 @@ export type CreateTransactionMutation = {
                 | Array<
                     | {
                         __typename?: 'CompanyInfoBasic';
-                        city?: string | undefined;
                         companyName: string;
-                        country?: string | undefined;
                         id: string;
                         position?: string | undefined;
-                        state?: string | undefined;
                         userId: string;
                       }
                     | undefined
@@ -2250,12 +2232,9 @@ export type DeleteTransactionMutation = {
                 | Array<
                     | {
                         __typename?: 'CompanyInfoBasic';
-                        city?: string | undefined;
                         companyName: string;
-                        country?: string | undefined;
                         id: string;
                         position?: string | undefined;
-                        state?: string | undefined;
                         userId: string;
                       }
                     | undefined
@@ -2308,12 +2287,9 @@ export type DeleteUserMutation = {
           | Array<
               | {
                   __typename?: 'CompanyInfoBasic';
-                  city?: string | undefined;
                   companyName: string;
-                  country?: string | undefined;
                   id: string;
                   position?: string | undefined;
-                  state?: string | undefined;
                   userId: string;
                 }
               | undefined
@@ -2390,12 +2366,9 @@ export type RefreshTokenMutation = {
                 | Array<
                     | {
                         __typename?: 'CompanyInfoBasic';
-                        city?: string | undefined;
                         companyName: string;
-                        country?: string | undefined;
                         id: string;
                         position?: string | undefined;
-                        state?: string | undefined;
                         userId: string;
                       }
                     | undefined
@@ -2549,12 +2522,9 @@ export type SigninMutation = {
                 | Array<
                     | {
                         __typename?: 'CompanyInfoBasic';
-                        city?: string | undefined;
                         companyName: string;
-                        country?: string | undefined;
                         id: string;
                         position?: string | undefined;
-                        state?: string | undefined;
                         userId: string;
                       }
                     | undefined
@@ -2614,12 +2584,9 @@ export type SignupMutation = {
           | Array<
               | {
                   __typename?: 'CompanyInfoBasic';
-                  city?: string | undefined;
                   companyName: string;
-                  country?: string | undefined;
                   id: string;
                   position?: string | undefined;
-                  state?: string | undefined;
                   userId: string;
                 }
               | undefined
@@ -2856,12 +2823,9 @@ export type UpdateAlbumMutation = {
                           | Array<
                               | {
                                   __typename?: 'CompanyInfoBasic';
-                                  city?: string | undefined;
                                   companyName: string;
-                                  country?: string | undefined;
                                   id: string;
                                   position?: string | undefined;
-                                  state?: string | undefined;
                                   userId: string;
                                 }
                               | undefined
@@ -2926,12 +2890,9 @@ export type UpdateBatchCoordinatorMutation = {
                 | Array<
                     | {
                         __typename?: 'CompanyInfoBasic';
-                        city?: string | undefined;
                         companyName: string;
-                        country?: string | undefined;
                         id: string;
                         position?: string | undefined;
-                        state?: string | undefined;
                         userId: string;
                       }
                     | undefined
@@ -3230,12 +3191,9 @@ export type UpdateTransactionMutation = {
                 | Array<
                     | {
                         __typename?: 'CompanyInfoBasic';
-                        city?: string | undefined;
                         companyName: string;
-                        country?: string | undefined;
                         id: string;
                         position?: string | undefined;
-                        state?: string | undefined;
                         userId: string;
                       }
                     | undefined
@@ -3304,12 +3262,9 @@ export type UpdateUserMutation = {
           | Array<
               | {
                   __typename?: 'CompanyInfoBasic';
-                  city?: string | undefined;
                   companyName: string;
-                  country?: string | undefined;
                   id: string;
                   position?: string | undefined;
-                  state?: string | undefined;
                   userId: string;
                 }
               | undefined
@@ -3643,12 +3598,9 @@ export type GetAlbumQuery = {
                           | Array<
                               | {
                                   __typename?: 'CompanyInfoBasic';
-                                  city?: string | undefined;
                                   companyName: string;
-                                  country?: string | undefined;
                                   id: string;
                                   position?: string | undefined;
-                                  state?: string | undefined;
                                   userId: string;
                                 }
                               | undefined
@@ -3802,12 +3754,9 @@ export type GetAllBatchCoordinatorsQuery = {
                     | Array<
                         | {
                             __typename?: 'CompanyInfoBasic';
-                            city?: string | undefined;
                             companyName: string;
-                            country?: string | undefined;
                             id: string;
                             position?: string | undefined;
-                            state?: string | undefined;
                             userId: string;
                           }
                         | undefined
@@ -3869,12 +3818,9 @@ export type GetBatchCoordinatorByUserIdQuery = {
                 | Array<
                     | {
                         __typename?: 'CompanyInfoBasic';
-                        city?: string | undefined;
                         companyName: string;
-                        country?: string | undefined;
                         id: string;
                         position?: string | undefined;
-                        state?: string | undefined;
                         userId: string;
                       }
                     | undefined
@@ -3935,12 +3881,9 @@ export type GetBatchCoordinatorsByBatchQuery = {
                     | Array<
                         | {
                             __typename?: 'CompanyInfoBasic';
-                            city?: string | undefined;
                             companyName: string;
-                            country?: string | undefined;
                             id: string;
                             position?: string | undefined;
-                            state?: string | undefined;
                             userId: string;
                           }
                         | undefined
@@ -4550,12 +4493,9 @@ export type GetMyPhotosQuery = {
                     | Array<
                         | {
                             __typename?: 'CompanyInfoBasic';
-                            city?: string | undefined;
                             companyName: string;
-                            country?: string | undefined;
                             id: string;
                             position?: string | undefined;
-                            state?: string | undefined;
                             userId: string;
                           }
                         | undefined
@@ -4627,12 +4567,9 @@ export type GetTransactionQuery = {
                 | Array<
                     | {
                         __typename?: 'CompanyInfoBasic';
-                        city?: string | undefined;
                         companyName: string;
-                        country?: string | undefined;
                         id: string;
                         position?: string | undefined;
-                        state?: string | undefined;
                         userId: string;
                       }
                     | undefined
@@ -4707,12 +4644,9 @@ export type GetTransactionsQuery = {
                           | Array<
                               | {
                                   __typename?: 'CompanyInfoBasic';
-                                  city?: string | undefined;
                                   companyName: string;
-                                  country?: string | undefined;
                                   id: string;
                                   position?: string | undefined;
-                                  state?: string | undefined;
                                   userId: string;
                                 }
                               | undefined
@@ -4797,12 +4731,9 @@ export type GetUserDetailsQuery = {
           | Array<
               | {
                   __typename?: 'CompanyInfoBasic';
-                  city?: string | undefined;
                   companyName: string;
-                  country?: string | undefined;
                   id: string;
                   position?: string | undefined;
-                  state?: string | undefined;
                   userId: string;
                 }
               | undefined
@@ -4858,12 +4789,9 @@ export type GetUserListQuery = {
                     | Array<
                         | {
                             __typename?: 'CompanyInfoBasic';
-                            city?: string | undefined;
                             companyName: string;
-                            country?: string | undefined;
                             id: string;
                             position?: string | undefined;
-                            state?: string | undefined;
                             userId: string;
                           }
                         | undefined
@@ -5029,12 +4957,9 @@ export const AddAlbumContributorDocument = gql`
           aboutMe
           batch
           companyInfo {
-            city
             companyName
-            country
             id
             position
-            state
             userId
           }
           createdAt
@@ -5253,12 +5178,9 @@ export const AddPhotoDocument = gql`
         aboutMe
         batch
         companyInfo {
-          city
           companyName
-          country
           id
           position
-          state
           userId
         }
         createdAt
@@ -5421,12 +5343,9 @@ export const AssignBatchCoordinatorDocument = gql`
         aboutMe
         batch
         companyInfo {
-          city
           companyName
-          country
           id
           position
-          state
           userId
         }
         createdAt
@@ -5727,12 +5646,9 @@ export const CreateAlbumDocument = gql`
           aboutMe
           batch
           companyInfo {
-            city
             companyName
-            country
             id
             position
-            state
             userId
           }
           createdAt
@@ -6221,12 +6137,9 @@ export const CreateTransactionDocument = gql`
         aboutMe
         batch
         companyInfo {
-          city
           companyName
-          country
           id
           position
-          state
           userId
         }
         createdAt
@@ -6533,12 +6446,9 @@ export const DeleteTransactionDocument = gql`
         aboutMe
         batch
         companyInfo {
-          city
           companyName
-          country
           id
           position
-          state
           userId
         }
         createdAt
@@ -6618,12 +6528,9 @@ export const DeleteUserDocument = gql`
       aboutMe
       batch
       companyInfo {
-        city
         companyName
-        country
         id
         position
-        state
         userId
       }
       createdAt
@@ -6840,12 +6747,9 @@ export const RefreshTokenDocument = gql`
         aboutMe
         batch
         companyInfo {
-          city
           companyName
-          country
           id
           position
-          state
           userId
         }
         createdAt
@@ -7132,12 +7036,9 @@ export const SigninDocument = gql`
         aboutMe
         batch
         companyInfo {
-          city
           companyName
-          country
           id
           position
-          state
           userId
         }
         createdAt
@@ -7224,12 +7125,9 @@ export const SignupDocument = gql`
       aboutMe
       batch
       companyInfo {
-        city
         companyName
-        country
         id
         position
-        state
         userId
       }
       createdAt
@@ -7493,12 +7391,9 @@ export const UpdateAlbumDocument = gql`
           aboutMe
           batch
           companyInfo {
-            city
             companyName
-            country
             id
             position
-            state
             userId
           }
           createdAt
@@ -7580,12 +7475,9 @@ export const UpdateBatchCoordinatorDocument = gql`
         aboutMe
         batch
         companyInfo {
-          city
           companyName
-          country
           id
           position
-          state
           userId
         }
         createdAt
@@ -8081,12 +7973,9 @@ export const UpdateTransactionDocument = gql`
         aboutMe
         batch
         companyInfo {
-          city
           companyName
-          country
           id
           position
-          state
           userId
         }
         createdAt
@@ -8203,12 +8092,9 @@ export const UpdateUserDocument = gql`
       aboutMe
       batch
       companyInfo {
-        city
         companyName
-        country
         id
         position
-        state
         userId
       }
       createdAt
@@ -8700,12 +8586,9 @@ export const GetAlbumDocument = gql`
           aboutMe
           batch
           companyInfo {
-            city
             companyName
-            country
             id
             position
-            state
             userId
           }
           createdAt
@@ -8899,12 +8782,9 @@ export const GetAllBatchCoordinatorsDocument = gql`
         aboutMe
         batch
         companyInfo {
-          city
           companyName
-          country
           id
           position
-          state
           userId
         }
         createdAt
@@ -9004,12 +8884,9 @@ export const GetBatchCoordinatorByUserIdDocument = gql`
         aboutMe
         batch
         companyInfo {
-          city
           companyName
-          country
           id
           position
-          state
           userId
         }
         createdAt
@@ -9112,12 +8989,9 @@ export const GetBatchCoordinatorsByBatchDocument = gql`
         aboutMe
         batch
         companyInfo {
-          city
           companyName
-          country
           id
           position
-          state
           userId
         }
         createdAt
@@ -10023,12 +9897,9 @@ export const GetMyPhotosDocument = gql`
         aboutMe
         batch
         companyInfo {
-          city
           companyName
-          country
           id
           position
-          state
           userId
         }
         createdAt
@@ -10123,12 +9994,9 @@ export const GetTransactionDocument = gql`
         aboutMe
         batch
         companyInfo {
-          city
           companyName
-          country
           id
           position
-          state
           userId
         }
         createdAt
@@ -10226,12 +10094,9 @@ export const GetTransactionsDocument = gql`
           aboutMe
           batch
           companyInfo {
-            city
             companyName
-            country
             id
             position
-            state
             userId
           }
           createdAt
@@ -10375,12 +10240,9 @@ export const GetUserDetailsDocument = gql`
       aboutMe
       batch
       companyInfo {
-        city
         companyName
-        country
         id
         position
-        state
         userId
       }
       createdAt
@@ -10461,12 +10323,9 @@ export const GetUserListDocument = gql`
         aboutMe
         batch
         companyInfo {
-          city
           companyName
-          country
           id
           position
-          state
           userId
         }
         createdAt
