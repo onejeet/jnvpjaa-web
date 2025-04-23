@@ -60,7 +60,7 @@ const FormDateTimeField: React.FC<FormDateTimeFieldProps> = ({
                 {...dateTimePickerProps}
                 onChange={(newValue: Dayjs | null) => field.onChange(newValue)}
                 slots={{
-                  textField: (params) => (
+                  textField: (params: any) => (
                     <TextField
                       fullWidth
                       endAdornment={<ScheduleIcon />}
@@ -85,7 +85,7 @@ const FormDateTimeField: React.FC<FormDateTimeFieldProps> = ({
               format="MMM DD, YYYY hh:mm A"
               onChange={(newValue: Dayjs | null) => field.onChange(newValue)}
               slots={{
-                textField: (params) => (
+                textField: (params: any) => (
                   <TextField
                     fullWidth
                     endAdornment={<ScheduleIcon />}

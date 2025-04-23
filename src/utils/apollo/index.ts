@@ -23,7 +23,7 @@ export function initializeApollo() {
   return new ApolloClient({
     ssrMode: true,
     link: new HttpLink({
-      uri: process.env.GRAPHQL_ENDPOINT || 'http://localhost:4000/client',
+      uri: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || 'http://localhost:4000/client',
     }),
     cache: new InMemoryCache(),
   });
