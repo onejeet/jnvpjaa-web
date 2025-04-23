@@ -4,8 +4,10 @@ const Tooltip = () => {
       styleOverrides: {
         tooltip: {
           backgroundColor: '#081D13',
-          padding: '6px 12px 8px',
+          padding: '8px 12px',
           borderRadius: 6,
+          fontSize: '12px',
+          letterSpacing: '0.05em',
           fontWeight: 'normal',
         },
         arrow: {

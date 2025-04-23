@@ -1,5 +1,3 @@
-// import EmblaCarousel from '@/components/common/EmblaCarousel/EmblaCarousel';
-import EastIcon from '@mui/icons-material/East';
 import { Box, Divider, Typography } from '@mui/material';
 
 const Hero = () => {
@@ -68,6 +66,7 @@ const Hero = () => {
             display="flex"
             alignItems="center"
             variant="h1"
+            fontFamily="DM Sans"
             fontSize={{
               xs: 50,
               sm: 60,

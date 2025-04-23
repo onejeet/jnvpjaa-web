@@ -1,0 +1,335 @@
+'use client';
+
+import { getHeaderMenu } from '@/constants/Header.constants';
+import CloseIcon from '@mui/icons-material/Close';
+import MenuIcon from '@mui/icons-material/Menu';
+import type { Theme } from '@mui/material';
+import {
+  alpha,
+  AppBar,
+  Box,
+  Button,
+  Container,
+  Drawer,
+  IconButton,
+  ListItemIcon,
+  MenuItem,
+  Toolbar,
+  Tooltip,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
+import NextLink from 'next/link';
+import React from 'react';
+import Logo from '@/components/common/Logo';
+
+import HeaderMenuItem from './HeaderMenuItem';
+import ProfilePicture from '@/components/common/ProfilePicture';
+import { useAuth } from '@/context/AuthContext';
+import { useRouter } from 'next/router';
+import HoverPopover from '@/components/common/HoverPopover';
+import HeaderAddButton from './HeaderAddButton';
+import { Cake, Password, SignOut, User } from '@phosphor-icons/react';
+import { paths } from '@/config/paths';
+import Lottie from 'lottie-react';
+import giftsLottieIcon from '@/utils/lottie/gifts_art.json';
+import { isBirthdayToday } from '@/utils/helpers';
+
+export interface IMenuItemProps {
+  item: IHeaderMenuItem;
+  isMobile?: boolean;
+  expanded?: boolean;
+  setExpanded?: (arg: string) => void;
+}
+
+export interface IHeaderMenuItem {
+  label: string;
+  path: string;
+  menu?: IHeaderMenuItem[];
+  icon?: React.ReactNode;
+  disabled?: boolean;
+}
+
+const LayoutTopbar: React.FC = () => {
+  const [expanded, setExpanded] = React.useState<string>('');
+  const [openMenu, setOpenMenu] = React.useState<boolean>(false);
+  const theme = useTheme();
+  const router = useRouter();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { user, logoutUser, isAdmin, redirectToSignin } = useAuth();
+
+  const HEADER_MENU = React.useMemo(() => {
+    return getHeaderMenu(Boolean(user?.id));
+  }, [user]);
+
+  const isBirthday = React.useMemo(() => {
+    return isBirthdayToday(user?.dob);
+  }, [user?.dob]);
+
+  const ACCOUNT_MENU_LIST = React.useMemo(
+    () => [
+      {
+        label: 'My Profile',
+        value: '/profile',
+        icon: <User size={16} />,
+        onClick: () => router.push(paths.profile.root),
+      },
+      {
+        label: 'Change Password',
+        value: '/change-password',
+        icon: <Password size={16} />,
+        onClick: () => redirectToSignin(true, paths.auth.change_password),
+      },
+      {
+        label: 'Log Out',
+        icon: <SignOut size={16} />,
+        sx: {
+          color: 'error.main',
+        },
+        onClick: logoutUser,
+      },
+    ],
+    [logoutUser, router]
+  );
+
+  const ACCOUNT_COMP = React.useMemo(() => {
+    return (
+      <HoverPopover
+        id={`account-menu-${user?.id}`}
+        render={
+          <ProfilePicture
+            src={user?.profileImage}
+            //   title={isMobile ? undefined : user?.firstName}
+            id={user?.id}
+            // summary="Member"
+            maxWidth={150}
+            sx={{
+              width: { xs: 28, md: 36 },
+              height: { xs: 28, md: 36 },
+              '&: hover': {
+                bgcolor: 'grey.400',
+              },
+            }}
+          />
+        }
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+      >
+        <MenuItem
+          //  onClick={handleClose}
+          sx={{
+            px: '16px',
+            py: '12px',
+            fontSize: '14px',
+            fontWeight: 400,
+            // textAlign: 'center',
+            color: 'grey.900',
+            transition: 'all 0.2s linear',
+            cursor: 'default',
+            display: 'flex',
+            alignItems: 'start',
+            flexDirection: 'column',
+            pointerEvents: 'none',
+            svg: {
+              mr: '10px',
+              color: 'grey.700',
+              fontSize: '20px',
+            },
+            // '&:hover': {
+            //   color: 'primary.main',
+            //   svg: {
+            //     ml: '2px',
+            //     mr: 0,
+            //     color: 'primary.main',
+            //   },
+            // },
+          }}
+        >
+          <Typography
+            color="text.primary"
+            textAlign="left"
+            variant="body1"
+            fontWeight={500}
+            sx={{
+              pr: 4,
+              background: 'linear-gradient(90deg,#C62835 0,#217bfe 70%, #078efb 100%)',
+              backgroundClip: 'text',
+              color: 'transparent',
+            }}
+          >
+            {`Hello ${user?.firstName} 👋`}
+          </Typography>
+
+          {isBirthday && (
+            <Box display="flex" overflow="hidden" alignItems="center">
+              {/* <Cake size={32} /> */}
+              <Typography
+                sx={{
+                  background: 'linear-gradient(90deg,#C62835 0,#217bfe 70%, #078efb 100%)',
+                  backgroundClip: 'text',
+                  color: 'transparent',
+                  fontWeight: 500,
+                }}
+                fontSize="14px"
+                variant="body1"
+              >
+                {`Wish you a very happy birtday.`}
+              </Typography>
+              <Box maxWidth={50} maxHeight={30} display="flex" overflow="hidden" alignItems="center">
+                <Lottie animationData={giftsLottieIcon} loop={true} style={{ width: '100px', height: '50px' }} />
+              </Box>
+            </Box>
+          )}
+        </MenuItem>
+        {ACCOUNT_MENU_LIST?.map((mItem: Record<string, any>) => (
+          <MenuItem
+            key={`menu-${mItem?.value}`}
+            onClick={mItem?.onClick}
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              px: '16px',
+              py: '8px',
+              fontSize: '14px',
+              fontWeight: 400,
+              textAlign: 'center',
+              color: 'grey.900',
+              transition: 'all 0.2s linear',
+              svg: {
+                mr: '8px',
+              },
+              ...(mItem?.sx || {}),
+            }}
+          >
+            {mItem?.icon ? mItem.icon : null}
+            {mItem.label}
+          </MenuItem>
+        ))}
+      </HoverPopover>
+    );
+  }, [ACCOUNT_MENU_LIST, user, isMobile, isBirthday]);
+
+  return (
+    <AppBar
+      position="sticky"
+      elevation={0}
+      sx={{
+        top: 0,
+        backgroundColor: 'background.paper',
+        borderBottom: '0.5px solid',
+        borderColor: (theme: Theme) => alpha(theme.palette.primary.main, 0.4),
+        p: 0,
+        py: {
+          sm: 1,
+          xs: 0,
+        },
+      }}
+    >
+      <Container
+        sx={{ maxWidth: { xs: '98%', sm: '95%', md: '90%', xl: '1500px' }, margin: 'auto', p: '0 !important' }}
+      >
+        <Toolbar
+          sx={{
+            width: '100%',
+            py: '4px',
+            display: 'flex',
+            justifyContent: 'start',
+            alignIttems: 'center',
+            px: '0 !important',
+            maxHeight: 50,
+            minHeight: '50px !important',
+            height: 50,
+          }}
+        >
+          <NextLink href="/">
+            <Logo width={isMobile ? 200 : 300} height={isMobile ? 30 : 45} priority />
+          </NextLink>
+          <Box display={{ xs: 'flex', lg: 'none' }} ml="auto" alignItems="center" gap={1}>
+            {user?.id && (
+              <Box display="flex" gap={2} alignItems="center">
+                <HeaderAddButton />
+                {ACCOUNT_COMP}
+              </Box>
+            )}
+            <IconButton
+              // size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={() => setOpenMenu(true)}
+              color="inherit"
+            >
+              <MenuIcon sx={{ color: 'primary.main' }} />
+            </IconButton>
+          </Box>
+
+          <Box display={{ xs: 'none', lg: 'flex' }} ml="auto" gap={0}>
+            {HEADER_MENU.map((item: IHeaderMenuItem) => (
+              <HeaderMenuItem key={item.label} item={item} />
+            ))}
+            {user?.id ? (
+              <Box gap={2} display="flex">
+                <HeaderAddButton />
+                {ACCOUNT_COMP}
+              </Box>
+            ) : (
+              <NextLink href="/signin" passHref style={{ textDecoration: 'none' }}>
+                <Button
+                  // startIcon={<Login sx={{ fontSize: '14px' }} />}
+                  variant="outlined"
+                  sx={{ display: { xs: 'none', md: 'block' }, ml: '8px', whiteSpace: 'nowrap' }}
+                >
+                  Alumni Login
+                </Button>
+              </NextLink>
+            )}
+          </Box>
+        </Toolbar>
+      </Container>
+      <Drawer
+        anchor="right"
+        open={openMenu}
+        onClose={() => setOpenMenu(false)}
+        PaperProps={{
+          sx: { height: '100%', width: '250px', minWidth: '200px', py: '20px', px: '16px', overflowX: 'hidden' },
+        }}
+      >
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+          <Logo width={195} height={30} />
+          <IconButton onClick={() => setOpenMenu(false)}>
+            <CloseIcon />{' '}
+          </IconButton>
+        </Box>
+        <Box width="100%" height="100%" display="flex" flexDirection="column" justifyContent="start">
+          <Box mb={4}>
+            {HEADER_MENU.map((item: IHeaderMenuItem) => (
+              <HeaderMenuItem
+                key={item.label}
+                item={item}
+                isMobile
+                expanded={expanded === item.path}
+                setExpanded={setExpanded}
+              />
+            ))}
+          </Box>
+          {!user?.id && (
+            <NextLink href="/signin" passHref style={{ textDecoration: 'none' }}>
+              <Button fullWidth variant="outlined" sx={{ ml: '8px', whiteSpace: 'nowrap' }}>
+                Alumni Login
+              </Button>
+            </NextLink>
+          )}
+        </Box>
+      </Drawer>
+    </AppBar>
+  );
+};
+
+export default LayoutTopbar;

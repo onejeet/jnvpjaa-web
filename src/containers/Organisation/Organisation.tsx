@@ -8,9 +8,7 @@ import { ProfileCardProps } from '@/components/common/ProfileCard/ProfileCard.ty
 const Organizations = () => {
   return (
     <Box>
-      <Typography variant="h1" textAlign="center">
-        The JNVPJAA Executive Commmittee
-      </Typography>
+      <Typography variant="h1">The JNVPJAA Executive Commmittee</Typography>
       <Typography color="grey.800" mt={2}>
         {`The dedicated individuals who lead and shape our vibrant alumni association. Our committee members bring diverse expertise and a shared passion for fostering
         community and connection among JNVPJAA alumni. Meet the team driving our mission forward and discover the faces

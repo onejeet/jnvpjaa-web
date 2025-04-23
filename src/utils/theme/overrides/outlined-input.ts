@@ -28,7 +28,7 @@ const OutlinedInput = () => {
           },
         }),
         notchedOutline: ({ theme }: OwnerStateThemeType) => ({
-          padding: '0px 0px !important',
+          padding: '0px 10px !important',
           borderColor: theme.palette.grey[400],
           borderRadius: '6px',
         }),

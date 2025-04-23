@@ -2,6 +2,7 @@ import { BreadcrumbsProps as MuiBreadcrumbsProps } from '@mui/material/Breadcrum
 
 export interface BreadcrumbsProps extends MuiBreadcrumbsProps {
   items: BreadcrumbItem[];
+  loading?: boolean;
 }
 
 export interface BreadcrumbItem {

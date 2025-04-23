@@ -6,6 +6,7 @@ import { styled } from '@mui/material/styles';
 import React from 'react';
 
 import { ProfileCardProps } from './ProfileCard.types';
+import { EnvelopeSimple, UsersThree } from '@phosphor-icons/react';
 
 interface CustomBoxProps extends BoxProps {
   bgColor?: string;
@@ -69,12 +70,24 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
         <Typography gutterBottom variant="h2" component="div" sx={{ mb: 1, fontWeight: 600 }}>
           {name}
         </Typography>
-        <Typography display="flex" alignItems="center" variant="body1" color="grey.700" sx={{ mb: 1 }}>
-          <Diversity3Icon sx={{ mr: '8px', color: 'grey.700', fontSize: '18px' }} /> Batch of {batch}
+        <Typography
+          display="flex"
+          alignItems="center"
+          variant="body1"
+          color="grey.700"
+          sx={{ mb: 1, svg: { mr: 1, color: 'grey.700' } }}
+        >
+          <UsersThree size={18} weight="fill" /> Batch of {batch}
         </Typography>
         {email && (
-          <Typography display="flex" alignItems="center" variant="body1" color="grey.700">
-            <MailIcon sx={{ mr: '8px', color: 'grey.700', fontSize: '18px' }} /> {email}
+          <Typography
+            display="flex"
+            alignItems="center"
+            variant="body1"
+            color="grey.700"
+            sx={{ svg: { mr: 1, color: 'grey.700' } }}
+          >
+            <EnvelopeSimple size={18} weight="fill" /> {email}
           </Typography>
         )}
 

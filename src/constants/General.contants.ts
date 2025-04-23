@@ -283,7 +283,7 @@ export const commonTableColumnProps = {
   editable: false,
   hideable: true,
   sortable: true,
-  resizable: false,
+  resizable: true,
   groupable: false,
   pinnable: false,
   align: 'left',

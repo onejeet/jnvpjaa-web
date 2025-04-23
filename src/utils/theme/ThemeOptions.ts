@@ -1,7 +1,4 @@
-// ** MUI Theme Provider
 import { PaletteMode, ThemeOptions } from '@mui/material';
-
-// ** Theme Override Imports
 import overrides from './overrides';
 import palette from './palette';
 import typography from './typography';
@@ -16,4 +13,9 @@ const themeOptions = (mode: PaletteMode): ThemeOptions => {
   };
 };
 
-export default themeOptions;
+const modes = {
+  light: themeOptions('light'),
+  dark: themeOptions('dark'),
+};
+
+export default modes;

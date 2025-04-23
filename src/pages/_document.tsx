@@ -2,6 +2,7 @@ import React from 'react';
 import Document, { Head, Html, Main, NextScript, DocumentContext } from 'next/document';
 import createEmotionCache from '@/utils/theme/createEmotionCache';
 import createEmotionServer from '@emotion/server/create-instance';
+import { dmSans } from '@/utils/theme/fonts';
 
 const MyDocument = (props: any) => (
   <Html lang="en">
@@ -10,14 +11,11 @@ const MyDocument = (props: any) => (
       <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" />
-      <link
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
-        rel="stylesheet"
-      />
-      <link href="https://fonts.googleapis.com/css2?family=Playwrite+CU:wght@100..400&display=swap" rel="stylesheet" />
+
+      <link href="https://fonts.googleapis.com/css2?family=Playwrite+CU:wght@400&display=swap" rel="stylesheet" />
       <link rel="shortcut icon" href="/favicon.png" type="image/x-icon" />
     </Head>
-    <body>
+    <body className={dmSans.className}>
       <Main />
       <NextScript />
     </body>

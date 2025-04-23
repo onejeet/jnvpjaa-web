@@ -1,16 +1,14 @@
 import { Box, Grid, Typography } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
 
 import useBatchCoordinators from './Hooks/usePastPresidents';
+import DataGrid from '@/components/core/DataGrid';
 
 const PastPresidents = () => {
   const { columns, rows } = useBatchCoordinators();
 
   return (
     <Box>
-      <Typography variant="h1" textAlign="center">
-        Past Presidents
-      </Typography>
+      <Typography variant="h1">Past Presidents</Typography>
       <Typography color="grey.800" mt={2}>
         Leadership is the heartbeat of any organization, and it is the pulse that has guided the JNVPJ Alumni
         Association from its humble beginnings to its current grandeur. With a legacy shaped by 3 visionary past
@@ -60,32 +58,6 @@ const PastPresidents = () => {
         // isRowSelectable={isRowSelectable}
         // sortModel={sortModel || []}
         // defaultGroupingExpansionDepth={1}
-        sx={{
-          '& .MuiDataGrid-pinnedColumnHeaders .MuiDataGrid-columnHeader:nth-child(2) svg': {
-            display: 'none',
-          },
-          '& .MuiDataGrid-pinnedColumns .MuiDataGrid-row .MuiDataGrid-cell:nth-child(2) svg': {
-            display: 'none',
-          },
-          '@media (max-width: 1200px)': {
-            '& .MuiPaginationItem-page, .MuiPaginationItem-ellipsis': {
-              display: 'none',
-            },
-          },
-          '& .MuiDataGrid-topContainer': {
-            backgroundColor: 'primary.main',
-          },
-          '& .MuiDataGrid-columnHeaders': {
-            maxHeight: 40,
-            backgroundColor: 'primary.main',
-          },
-          '& .MuiDataGrid-columnHeader': {
-            fontWeight: 400,
-            backgroundColor: 'primary.main',
-            color: 'common.white',
-            maxHeight: 40,
-          },
-        }}
       />
     </Box>
   );

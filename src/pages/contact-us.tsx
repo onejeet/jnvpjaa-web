@@ -2,7 +2,7 @@ import ContactUs from '@/containers/ContactUs';
 import { NextPage } from 'next';
 import { NextSeo } from 'next-seo';
 
-import LayoutModule from '@/components/common/Layout';
+import LayoutModule from '@/layouts/Layout';
 
 const ContactUsPage: NextPage = () => (
   <>
@@ -12,7 +12,8 @@ const ContactUsPage: NextPage = () => (
       openGraph={{
         url: 'https://jnvpjaa.org',
         title: 'Contact Us • Alumni Network of JNV Paota, Jaipur',
-        description: 'The Official Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur',
+        description:
+          'We’d love to hear from you! Whether you have questions, need assistance, or want to collaborate, feel free to reach out.',
         images: [
           {
             url: '/assets/images/cover-2.webp',

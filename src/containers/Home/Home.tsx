@@ -1,41 +1,22 @@
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-
 import Hero from '@/components/home/Hero';
+import SloganBanner from '@/components/home/SloganBanner';
+import FeaturedBlogs from './components/FeaturedBlogs';
+import BirthdaySlider from './components/BirthdaySlider';
+import MetricsNumbers from './components/MetricsNumbers';
+import ImageSlider from './components/ImageSlider';
 
 const Home = () => {
   return (
-    <>
+    <Box bgcolor="grey.100">
       <Hero />
-      <Typography
-        my={2}
-        fontSize={24}
-        fontWeight={500}
-        textAlign="center"
-        sx={{
-          lineHeight: 'normal',
-          // border: '1px solid',
-          // borderColor: 'grey.400',
-          // borderRadius: '4px',
-          p: '16px 10px',
-          //   width: 'fit-content',
-        }}
-        color="primary.main"
-      >
-        नभ: स्पृशं दीप्तम् <br />
-        (touching the skies with glory)
-        <br />
-        <Box
-          color="grey.800"
-          component="span"
-          fontSize="16px"
-          fontWeight={400}
-          sx={{ display: 'block', mt: 2, fontStyle: 'italic' }}
-        >
-          The ultimate aim of association is to lead the society with glory.
-        </Box>
-      </Typography>
-    </>
+      <SloganBanner />
+      <MetricsNumbers />
+      {/* <UpcomingEvents /> */}
+      <ImageSlider />
+      <FeaturedBlogs />
+      <BirthdaySlider />
+    </Box>
   );
 };
 

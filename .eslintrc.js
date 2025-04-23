@@ -31,7 +31,7 @@ module.exports = {
   rules: {
     'react-hooks/rules-of-hooks': 2,
     'react-hooks/exhaustive-deps': 1,
-    'newline-before-return': 2,
+    'newline-before-return': 'off',
     'react/prop-types': 0,
     'react/react-in-jsx-scope': 0,
     // 'import-helpers/order-imports': [
@@ -53,11 +53,6 @@ module.exports = {
     //     argsIgnorePattern: '^_'
     //   }
     // ],
-    'no-console': [
-      2,
-      {
-        allow: ['warn', 'error'],
-      },
-    ],
+    'no-console': 'off',
   },
 };

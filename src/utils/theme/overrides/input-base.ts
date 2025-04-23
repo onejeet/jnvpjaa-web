@@ -1,4 +1,3 @@
-// ** Type Import
 import { OwnerStateThemeType } from '.';
 
 const InputBase = () => {
@@ -6,22 +5,23 @@ const InputBase = () => {
     MuiInputBase: {
       styleOverrides: {
         root: ({ theme, ownerState }: OwnerStateThemeType) => ({
-          height: '36px',
-          '& .MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': {
-            height: '30px',
-            paddingTop: 0,
-            paddingBottom: 0,
-          },
-          '&.Mui-disabled': {
-            backgroundColor: `${theme.palette.grey[100]} !important`,
-          },
-          '&.Mui-focused fieldset': {
-            borderWidth: '1px !important',
-          },
+          height: '36px', // Set the height of the input field
         }),
-        sizeSmall: {
-          height: '30px',
-        },
+        // input: {
+        //   padding: '6px 0', // Adjust padding inside the input field
+        //   // lineHeight: '1.2',
+        // },
+        // input: {
+        //   alignItems: 'center',
+        //   alignSelf: 'stretch',
+        //   display: 'inline-flex !important', // Fix flicker
+        // },
+      },
+      sizeMedium: {
+        height: '40px', // Set your preferred height
+      },
+      sizeSmall: {
+        height: '30px', // Set your preferred height
       },
     },
   };
