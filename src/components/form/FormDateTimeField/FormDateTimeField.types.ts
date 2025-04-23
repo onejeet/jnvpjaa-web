@@ -2,6 +2,7 @@ import { Control, FieldValues, Path, RegisterOptions } from 'react-hook-form';
 import { DateTimePickerProps } from '@mui/x-date-pickers/DateTimePicker';
 import { Dayjs } from 'dayjs'; // Import Dayjs type from dayjs
 import { TextFieldProps } from '@/components/core/TextField';
+import { DateView } from '@mui/x-date-pickers';
 
 export interface FormDateTimeFieldProps<TFieldValues extends FieldValues = FieldValues> {
   name: Path<TFieldValues>;
@@ -13,6 +14,6 @@ export interface FormDateTimeFieldProps<TFieldValues extends FieldValues = Field
   inputProps?: Partial<TextFieldProps>;
   isDateOnly?: boolean;
   loading?: boolean;
-  views?: string[];
+  views?: DateView[];
   format?: string;
 }
