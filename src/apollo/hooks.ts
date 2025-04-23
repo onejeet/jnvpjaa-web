@@ -224,6 +224,17 @@ export type CompanyInfo = {
   userId: Scalars['String']['output'];
 };
 
+export type CompanyInfoBasic = {
+  __typename?: 'CompanyInfoBasic';
+  city?: Maybe<Scalars['String']['output']>;
+  companyName: Scalars['String']['output'];
+  country?: Maybe<Scalars['String']['output']>;
+  id: Scalars['String']['output'];
+  position?: Maybe<Scalars['String']['output']>;
+  state?: Maybe<Scalars['String']['output']>;
+  userId: Scalars['String']['output'];
+};
+
 export type CompanyInfoInput = {
   address?: InputMaybe<Scalars['String']['input']>;
   city?: InputMaybe<Scalars['String']['input']>;
@@ -874,6 +885,7 @@ export type User = {
   __typename?: 'User';
   aboutMe?: Maybe<Scalars['String']['output']>;
   batch?: Maybe<Scalars['Int']['output']>;
+  companyInfo?: Maybe<Array<Maybe<CompanyInfoBasic>>>;
   /** Timestamp when the record was created */
   createdAt: Scalars['DateTime']['output'];
   disabled?: Maybe<Scalars['Boolean']['output']>;
@@ -1132,6 +1144,21 @@ export type AddAlbumContributorMutation = {
                         socialMedia?: any | undefined;
                         updatedAt: any;
                         whatsAppMobile?: string | undefined;
+                        companyInfo?:
+                          | Array<
+                              | {
+                                  __typename?: 'CompanyInfoBasic';
+                                  city?: string | undefined;
+                                  companyName: string;
+                                  country?: string | undefined;
+                                  id: string;
+                                  position?: string | undefined;
+                                  state?: string | undefined;
+                                  userId: string;
+                                }
+                              | undefined
+                            >
+                          | undefined;
                         role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
                       }
                     | undefined;
@@ -1309,6 +1336,21 @@ export type AddPhotoMutation = {
               socialMedia?: any | undefined;
               updatedAt: any;
               whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        city?: string | undefined;
+                        companyName: string;
+                        country?: string | undefined;
+                        id: string;
+                        position?: string | undefined;
+                        state?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
               role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
             }
           | undefined;
@@ -1434,6 +1476,21 @@ export type AssignBatchCoordinatorMutation = {
               socialMedia?: any | undefined;
               updatedAt: any;
               whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        city?: string | undefined;
+                        companyName: string;
+                        country?: string | undefined;
+                        id: string;
+                        position?: string | undefined;
+                        state?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
               role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
             }
           | undefined;
@@ -1668,6 +1725,21 @@ export type CreateAlbumMutation = {
                         socialMedia?: any | undefined;
                         updatedAt: any;
                         whatsAppMobile?: string | undefined;
+                        companyInfo?:
+                          | Array<
+                              | {
+                                  __typename?: 'CompanyInfoBasic';
+                                  city?: string | undefined;
+                                  companyName: string;
+                                  country?: string | undefined;
+                                  id: string;
+                                  position?: string | undefined;
+                                  state?: string | undefined;
+                                  userId: string;
+                                }
+                              | undefined
+                            >
+                          | undefined;
                         role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
                       }
                     | undefined;
@@ -1962,6 +2034,21 @@ export type CreateTransactionMutation = {
               socialMedia?: any | undefined;
               updatedAt: any;
               whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        city?: string | undefined;
+                        companyName: string;
+                        country?: string | undefined;
+                        id: string;
+                        position?: string | undefined;
+                        state?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
               role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
             }
           | undefined;
@@ -2159,6 +2246,21 @@ export type DeleteTransactionMutation = {
               socialMedia?: any | undefined;
               updatedAt: any;
               whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        city?: string | undefined;
+                        companyName: string;
+                        country?: string | undefined;
+                        id: string;
+                        position?: string | undefined;
+                        state?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
               role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
             }
           | undefined;
@@ -2202,6 +2304,21 @@ export type DeleteUserMutation = {
         socialMedia?: any | undefined;
         updatedAt: any;
         whatsAppMobile?: string | undefined;
+        companyInfo?:
+          | Array<
+              | {
+                  __typename?: 'CompanyInfoBasic';
+                  city?: string | undefined;
+                  companyName: string;
+                  country?: string | undefined;
+                  id: string;
+                  position?: string | undefined;
+                  state?: string | undefined;
+                  userId: string;
+                }
+              | undefined
+            >
+          | undefined;
         role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
       }
     | undefined;
@@ -2269,6 +2386,21 @@ export type RefreshTokenMutation = {
               socialMedia?: any | undefined;
               updatedAt: any;
               whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        city?: string | undefined;
+                        companyName: string;
+                        country?: string | undefined;
+                        id: string;
+                        position?: string | undefined;
+                        state?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
               role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
             }
           | undefined;
@@ -2413,6 +2545,21 @@ export type SigninMutation = {
               socialMedia?: any | undefined;
               updatedAt: any;
               whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        city?: string | undefined;
+                        companyName: string;
+                        country?: string | undefined;
+                        id: string;
+                        position?: string | undefined;
+                        state?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
               role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
             }
           | undefined;
@@ -2463,6 +2610,21 @@ export type SignupMutation = {
         socialMedia?: any | undefined;
         updatedAt: any;
         whatsAppMobile?: string | undefined;
+        companyInfo?:
+          | Array<
+              | {
+                  __typename?: 'CompanyInfoBasic';
+                  city?: string | undefined;
+                  companyName: string;
+                  country?: string | undefined;
+                  id: string;
+                  position?: string | undefined;
+                  state?: string | undefined;
+                  userId: string;
+                }
+              | undefined
+            >
+          | undefined;
         role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
       }
     | undefined;
@@ -2690,6 +2852,21 @@ export type UpdateAlbumMutation = {
                         socialMedia?: any | undefined;
                         updatedAt: any;
                         whatsAppMobile?: string | undefined;
+                        companyInfo?:
+                          | Array<
+                              | {
+                                  __typename?: 'CompanyInfoBasic';
+                                  city?: string | undefined;
+                                  companyName: string;
+                                  country?: string | undefined;
+                                  id: string;
+                                  position?: string | undefined;
+                                  state?: string | undefined;
+                                  userId: string;
+                                }
+                              | undefined
+                            >
+                          | undefined;
                         role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
                       }
                     | undefined;
@@ -2745,6 +2922,21 @@ export type UpdateBatchCoordinatorMutation = {
               socialMedia?: any | undefined;
               updatedAt: any;
               whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        city?: string | undefined;
+                        companyName: string;
+                        country?: string | undefined;
+                        id: string;
+                        position?: string | undefined;
+                        state?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
               role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
             }
           | undefined;
@@ -3034,6 +3226,21 @@ export type UpdateTransactionMutation = {
               socialMedia?: any | undefined;
               updatedAt: any;
               whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        city?: string | undefined;
+                        companyName: string;
+                        country?: string | undefined;
+                        id: string;
+                        position?: string | undefined;
+                        state?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
               role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
             }
           | undefined;
@@ -3093,6 +3300,21 @@ export type UpdateUserMutation = {
         socialMedia?: any | undefined;
         updatedAt: any;
         whatsAppMobile?: string | undefined;
+        companyInfo?:
+          | Array<
+              | {
+                  __typename?: 'CompanyInfoBasic';
+                  city?: string | undefined;
+                  companyName: string;
+                  country?: string | undefined;
+                  id: string;
+                  position?: string | undefined;
+                  state?: string | undefined;
+                  userId: string;
+                }
+              | undefined
+            >
+          | undefined;
         role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
       }
     | undefined;
@@ -3417,6 +3639,21 @@ export type GetAlbumQuery = {
                         socialMedia?: any | undefined;
                         updatedAt: any;
                         whatsAppMobile?: string | undefined;
+                        companyInfo?:
+                          | Array<
+                              | {
+                                  __typename?: 'CompanyInfoBasic';
+                                  city?: string | undefined;
+                                  companyName: string;
+                                  country?: string | undefined;
+                                  id: string;
+                                  position?: string | undefined;
+                                  state?: string | undefined;
+                                  userId: string;
+                                }
+                              | undefined
+                            >
+                          | undefined;
                         role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
                       }
                     | undefined;
@@ -3561,6 +3798,21 @@ export type GetAllBatchCoordinatorsQuery = {
                   socialMedia?: any | undefined;
                   updatedAt: any;
                   whatsAppMobile?: string | undefined;
+                  companyInfo?:
+                    | Array<
+                        | {
+                            __typename?: 'CompanyInfoBasic';
+                            city?: string | undefined;
+                            companyName: string;
+                            country?: string | undefined;
+                            id: string;
+                            position?: string | undefined;
+                            state?: string | undefined;
+                            userId: string;
+                          }
+                        | undefined
+                      >
+                    | undefined;
                   role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
                 }
               | undefined;
@@ -3613,6 +3865,21 @@ export type GetBatchCoordinatorByUserIdQuery = {
               socialMedia?: any | undefined;
               updatedAt: any;
               whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        city?: string | undefined;
+                        companyName: string;
+                        country?: string | undefined;
+                        id: string;
+                        position?: string | undefined;
+                        state?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
               role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
             }
           | undefined;
@@ -3664,6 +3931,21 @@ export type GetBatchCoordinatorsByBatchQuery = {
                   socialMedia?: any | undefined;
                   updatedAt: any;
                   whatsAppMobile?: string | undefined;
+                  companyInfo?:
+                    | Array<
+                        | {
+                            __typename?: 'CompanyInfoBasic';
+                            city?: string | undefined;
+                            companyName: string;
+                            country?: string | undefined;
+                            id: string;
+                            position?: string | undefined;
+                            state?: string | undefined;
+                            userId: string;
+                          }
+                        | undefined
+                      >
+                    | undefined;
                   role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
                 }
               | undefined;
@@ -4264,6 +4546,21 @@ export type GetMyPhotosQuery = {
                   socialMedia?: any | undefined;
                   updatedAt: any;
                   whatsAppMobile?: string | undefined;
+                  companyInfo?:
+                    | Array<
+                        | {
+                            __typename?: 'CompanyInfoBasic';
+                            city?: string | undefined;
+                            companyName: string;
+                            country?: string | undefined;
+                            id: string;
+                            position?: string | undefined;
+                            state?: string | undefined;
+                            userId: string;
+                          }
+                        | undefined
+                      >
+                    | undefined;
                   role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
                 }
               | undefined;
@@ -4326,6 +4623,21 @@ export type GetTransactionQuery = {
               socialMedia?: any | undefined;
               updatedAt: any;
               whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        city?: string | undefined;
+                        companyName: string;
+                        country?: string | undefined;
+                        id: string;
+                        position?: string | undefined;
+                        state?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
               role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
             }
           | undefined;
@@ -4391,6 +4703,21 @@ export type GetTransactionsQuery = {
                         socialMedia?: any | undefined;
                         updatedAt: any;
                         whatsAppMobile?: string | undefined;
+                        companyInfo?:
+                          | Array<
+                              | {
+                                  __typename?: 'CompanyInfoBasic';
+                                  city?: string | undefined;
+                                  companyName: string;
+                                  country?: string | undefined;
+                                  id: string;
+                                  position?: string | undefined;
+                                  state?: string | undefined;
+                                  userId: string;
+                                }
+                              | undefined
+                            >
+                          | undefined;
                         role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
                       }
                     | undefined;
@@ -4466,6 +4793,21 @@ export type GetUserDetailsQuery = {
         socialMedia?: any | undefined;
         updatedAt: any;
         whatsAppMobile?: string | undefined;
+        companyInfo?:
+          | Array<
+              | {
+                  __typename?: 'CompanyInfoBasic';
+                  city?: string | undefined;
+                  companyName: string;
+                  country?: string | undefined;
+                  id: string;
+                  position?: string | undefined;
+                  state?: string | undefined;
+                  userId: string;
+                }
+              | undefined
+            >
+          | undefined;
         role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
       }
     | undefined;
@@ -4512,6 +4854,21 @@ export type GetUserListQuery = {
                   socialMedia?: any | undefined;
                   updatedAt: any;
                   whatsAppMobile?: string | undefined;
+                  companyInfo?:
+                    | Array<
+                        | {
+                            __typename?: 'CompanyInfoBasic';
+                            city?: string | undefined;
+                            companyName: string;
+                            country?: string | undefined;
+                            id: string;
+                            position?: string | undefined;
+                            state?: string | undefined;
+                            userId: string;
+                          }
+                        | undefined
+                      >
+                    | undefined;
                   role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
                 }
               | undefined
@@ -4671,6 +5028,15 @@ export const AddAlbumContributorDocument = gql`
         uploader {
           aboutMe
           batch
+          companyInfo {
+            city
+            companyName
+            country
+            id
+            position
+            state
+            userId
+          }
           createdAt
           disabled
           displayName
@@ -4886,6 +5252,15 @@ export const AddPhotoDocument = gql`
       uploader {
         aboutMe
         batch
+        companyInfo {
+          city
+          companyName
+          country
+          id
+          position
+          state
+          userId
+        }
         createdAt
         disabled
         displayName
@@ -5045,6 +5420,15 @@ export const AssignBatchCoordinatorDocument = gql`
       user {
         aboutMe
         batch
+        companyInfo {
+          city
+          companyName
+          country
+          id
+          position
+          state
+          userId
+        }
         createdAt
         disabled
         displayName
@@ -5342,6 +5726,15 @@ export const CreateAlbumDocument = gql`
         uploader {
           aboutMe
           batch
+          companyInfo {
+            city
+            companyName
+            country
+            id
+            position
+            state
+            userId
+          }
           createdAt
           disabled
           displayName
@@ -5827,6 +6220,15 @@ export const CreateTransactionDocument = gql`
       user {
         aboutMe
         batch
+        companyInfo {
+          city
+          companyName
+          country
+          id
+          position
+          state
+          userId
+        }
         createdAt
         disabled
         displayName
@@ -6130,6 +6532,15 @@ export const DeleteTransactionDocument = gql`
       user {
         aboutMe
         batch
+        companyInfo {
+          city
+          companyName
+          country
+          id
+          position
+          state
+          userId
+        }
         createdAt
         disabled
         displayName
@@ -6206,6 +6617,15 @@ export const DeleteUserDocument = gql`
     deleteUser(id: $id) {
       aboutMe
       batch
+      companyInfo {
+        city
+        companyName
+        country
+        id
+        position
+        state
+        userId
+      }
       createdAt
       disabled
       displayName
@@ -6419,6 +6839,15 @@ export const RefreshTokenDocument = gql`
       user {
         aboutMe
         batch
+        companyInfo {
+          city
+          companyName
+          country
+          id
+          position
+          state
+          userId
+        }
         createdAt
         disabled
         displayName
@@ -6702,6 +7131,15 @@ export const SigninDocument = gql`
       user {
         aboutMe
         batch
+        companyInfo {
+          city
+          companyName
+          country
+          id
+          position
+          state
+          userId
+        }
         createdAt
         disabled
         displayName
@@ -6785,6 +7223,15 @@ export const SignupDocument = gql`
     ) {
       aboutMe
       batch
+      companyInfo {
+        city
+        companyName
+        country
+        id
+        position
+        state
+        userId
+      }
       createdAt
       disabled
       displayName
@@ -7045,6 +7492,15 @@ export const UpdateAlbumDocument = gql`
         uploader {
           aboutMe
           batch
+          companyInfo {
+            city
+            companyName
+            country
+            id
+            position
+            state
+            userId
+          }
           createdAt
           disabled
           displayName
@@ -7123,6 +7579,15 @@ export const UpdateBatchCoordinatorDocument = gql`
       user {
         aboutMe
         batch
+        companyInfo {
+          city
+          companyName
+          country
+          id
+          position
+          state
+          userId
+        }
         createdAt
         disabled
         displayName
@@ -7615,6 +8080,15 @@ export const UpdateTransactionDocument = gql`
       user {
         aboutMe
         batch
+        companyInfo {
+          city
+          companyName
+          country
+          id
+          position
+          state
+          userId
+        }
         createdAt
         disabled
         displayName
@@ -7728,6 +8202,15 @@ export const UpdateUserDocument = gql`
     ) {
       aboutMe
       batch
+      companyInfo {
+        city
+        companyName
+        country
+        id
+        position
+        state
+        userId
+      }
       createdAt
       disabled
       displayName
@@ -8216,6 +8699,15 @@ export const GetAlbumDocument = gql`
         uploader {
           aboutMe
           batch
+          companyInfo {
+            city
+            companyName
+            country
+            id
+            position
+            state
+            userId
+          }
           createdAt
           disabled
           displayName
@@ -8406,6 +8898,15 @@ export const GetAllBatchCoordinatorsDocument = gql`
       user {
         aboutMe
         batch
+        companyInfo {
+          city
+          companyName
+          country
+          id
+          position
+          state
+          userId
+        }
         createdAt
         disabled
         displayName
@@ -8502,6 +9003,15 @@ export const GetBatchCoordinatorByUserIdDocument = gql`
       user {
         aboutMe
         batch
+        companyInfo {
+          city
+          companyName
+          country
+          id
+          position
+          state
+          userId
+        }
         createdAt
         disabled
         displayName
@@ -8601,6 +9111,15 @@ export const GetBatchCoordinatorsByBatchDocument = gql`
       user {
         aboutMe
         batch
+        companyInfo {
+          city
+          companyName
+          country
+          id
+          position
+          state
+          userId
+        }
         createdAt
         disabled
         displayName
@@ -9503,6 +10022,15 @@ export const GetMyPhotosDocument = gql`
       uploader {
         aboutMe
         batch
+        companyInfo {
+          city
+          companyName
+          country
+          id
+          position
+          state
+          userId
+        }
         createdAt
         disabled
         displayName
@@ -9594,6 +10122,15 @@ export const GetTransactionDocument = gql`
       user {
         aboutMe
         batch
+        companyInfo {
+          city
+          companyName
+          country
+          id
+          position
+          state
+          userId
+        }
         createdAt
         disabled
         displayName
@@ -9688,6 +10225,15 @@ export const GetTransactionsDocument = gql`
         user {
           aboutMe
           batch
+          companyInfo {
+            city
+            companyName
+            country
+            id
+            position
+            state
+            userId
+          }
           createdAt
           disabled
           displayName
@@ -9828,6 +10374,15 @@ export const GetUserDetailsDocument = gql`
     getUserDetails(id: $id) {
       aboutMe
       batch
+      companyInfo {
+        city
+        companyName
+        country
+        id
+        position
+        state
+        userId
+      }
       createdAt
       disabled
       displayName
@@ -9905,6 +10460,15 @@ export const GetUserListDocument = gql`
       data {
         aboutMe
         batch
+        companyInfo {
+          city
+          companyName
+          country
+          id
+          position
+          state
+          userId
+        }
         createdAt
         disabled
         displayName

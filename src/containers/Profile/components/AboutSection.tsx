@@ -14,6 +14,7 @@ import {
   LockSimple,
   Phone,
   PhoneDisconnect,
+  SuitcaseSimple,
   WhatsappLogo,
 } from '@phosphor-icons/react';
 import dayjs from 'dayjs';
@@ -64,6 +65,17 @@ export default function AboutSection() {
         </Typography>
       </Grid>
       <Grid container spacing={2} sx={{ mt: 2 }}>
+        {user?.companyInfo?.[0]?.id && (
+          <Grid size={{ xs: 12, sm: 12 }}>
+            <Box display="flex" alignItems="center">
+              <SuitcaseSimple size={24} />
+              <Typography
+                sx={{ ml: 1 }}
+              >{`${user?.companyInfo?.[0]?.position} at ${user?.companyInfo?.[0]?.companyName}`}</Typography>
+            </Box>
+          </Grid>
+        )}
+
         <Grid size={{ xs: 12, sm: 6 }}>
           <Box display="flex" alignItems="center">
             <Phone size={24} />
