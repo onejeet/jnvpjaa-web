@@ -13,6 +13,12 @@ const REFRESH_TOKEN_MUTATION = gql`
       user {
         aboutMe
         batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
         createdAt
         disabled
         displayName
@@ -24,11 +30,14 @@ const REFRESH_TOKEN_MUTATION = gql`
         firstName
         gender
         google_auth_id
+        hasBusiness
         id
+        isConfidential
         isFaculty
         isVerified
         lastName
         membershipYear
+        metadata
         mobile
         nickName
         profileImage
