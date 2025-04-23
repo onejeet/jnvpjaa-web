@@ -5,9 +5,9 @@
   "private": true,
   "author": "Jeet from Dots Created",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development GRAPHQL_ENDPOINT=http://localhost:4000/client next dev -p 3890",
-    "build": "cross-env NODE_ENV=production GRAPHQL_ENDPOINT=https://jnvpjaa-backend.fly.dev/client next build",
-    "start": "cross-env NODE_ENV=production GRAPHQL_ENDPOINT=https://jnvpjaa-backend.fly.dev/client next start",
+    "dev": "cross-env NODE_ENV=development NEXT_PUBLIC_GRAPHQL_ENDPOINT=https://localhost:4000/client next dev -p 3890",
+    "build": "cross-env NODE_ENV=production NEXT_PUBLIC_GRAPHQL_ENDPOINT=https://jnvpjaa-backend.fly.dev/client next build",
+    "start": "cross-env NODE_ENV=production NEXT_PUBLIC_GRAPHQL_ENDPOINT=https://jnvpjaa-backend.fly.dev/client next start",
     "prettier:format": "prettier --write .",
     "prettier:check": "prettier --check \"**/*.{ts,tsx,json}\"",
     "lint": "next lint",
