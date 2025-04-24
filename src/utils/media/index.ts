@@ -1,3 +1,4 @@
+import { isBrowser } from '../isBrowser';
 import imageCompression, { Options } from 'browser-image-compression';
 import isBrowser from '@/utils/isBrowser';
 
@@ -36,6 +37,7 @@ export const downloadImage = (imageUrl: string) => {
     })
     .then((blob) => {
       const blobUrl = URL.createObjectURL(blob);
+      if (!isBrowser()) return;
       const link = document.createElement('a');
       link.href = blobUrl;
       link.download = fileName;

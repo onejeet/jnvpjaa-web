@@ -1,4 +1,5 @@
 import React from 'react';
+import { isBrowser } from '../../../../utils/isBrowser';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
