@@ -161,7 +161,7 @@ const ImageSlider: React.FC = () => {
                 alt={`slide-${idx}`}
                 fill
                 referrerPolicy="no-referrer"
-                loading="lazy"
+                loading={idx > 7 ? undefined : 'lazy'}
                 sizes="100vw"
                 style={{ borderRadius: 10, objectFit: 'cover' }}
               />
