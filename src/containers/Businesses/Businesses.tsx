@@ -12,7 +12,7 @@ import Dialog from '@/components/core/Dialog';
 
 export default function Businesses() {
   const [addBusiness, setAddBusiness] = React.useState<boolean>(false);
-  const { isAdmin } = useAuth();
+  const { user } = useAuth();
   const searchParams = useSearchParams();
 
   const theme = useTheme();
@@ -39,18 +39,20 @@ export default function Businesses() {
             {`Check out businesses started by our alumni. Lots of them offer special discounts just for alumni, so it’s a win-win: support your network and save too!`}
           </Typography>
         </Box>
-        {isMobile ? (
-          <IconButton color="primary" onClick={() => setAddBusiness(true)}>
-            <PlusCircle size={24} weight="bold" />
-          </IconButton>
-        ) : (
-          <Button
-            title="List your Business"
-            onClick={() => setAddBusiness(true)}
-            startIcon={<Plus size={16} weight="bold" />}
-            sx={{ width: 250 }}
-          />
-        )}
+        {user?.id ? (
+          isMobile ? (
+            <IconButton color="primary" onClick={() => setAddBusiness(true)}>
+              <PlusCircle size={24} weight="bold" />
+            </IconButton>
+          ) : (
+            <Button
+              title="List your Business"
+              onClick={() => setAddBusiness(true)}
+              startIcon={<Plus size={16} weight="bold" />}
+              sx={{ width: 250 }}
+            />
+          )
+        ) : null}
       </Box>
       <BusinessListFilters />
       <BusinessListModule filter={filters} />

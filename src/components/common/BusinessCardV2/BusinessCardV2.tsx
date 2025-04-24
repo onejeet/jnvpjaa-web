@@ -196,14 +196,14 @@ const BusinessCard: React.FC<Props> = ({ business, loading, user, isAdminUser })
             </Typography>
           )}
         </Stack>
-        <Box mt={2}>
+        <Box mt={3}>
           <Box gap={1} display="flex" alignItems="center">
             {(business?.user?.id || loading) && (
               <ProfilePicture
                 src={business?.user?.profileImage}
                 id={business?.user?.id}
                 loading={loading}
-                size={44}
+                size={48}
                 // @ts-expect-error type-error
                 onClick={() => router.push(paths.profile.getProfileUrl(business.user.id as string))}
                 title={`${business?.user?.firstName || ''} ${business?.user?.lastName || ''}`}
