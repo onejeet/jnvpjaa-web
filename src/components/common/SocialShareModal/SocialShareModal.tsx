@@ -43,6 +43,7 @@ import Button from '@/components/core/Button';
 interface SocialShareModalProps {
   title?: string;
   btn_type?: 'button' | 'icon';
+  url?: string;
 }
 
 interface SocialIcons {
@@ -53,16 +54,16 @@ interface SocialIcons {
   onClick?: () => void;
 }
 
-const SocialShareModal: React.FC<SocialShareModalProps> = ({ title, btn_type = 'icon' }) => {
+const SocialShareModal: React.FC<SocialShareModalProps> = ({ title, url = '', btn_type = 'icon' }) => {
   const [open, setOpen] = useState(false);
-  const [currentUrl, setCurrentUrl] = useState('');
+  const [currentUrl, setCurrentUrl] = useState<string>(url);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && !currentUrl) {
       setCurrentUrl(window.location.href || '');
     }
-  }, []);
+  }, [open]);
 
   const handleCopyLink = React.useCallback(() => {
     navigator.clipboard

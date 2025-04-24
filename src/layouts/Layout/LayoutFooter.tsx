@@ -16,6 +16,7 @@ import Logo from '@/components/common/Logo';
 import MenuList from '../../components/common/MenuList';
 import { useAuth } from '@/context/AuthContext';
 import { Heart } from '@phosphor-icons/react';
+import Link from 'next/link';
 
 const LayoutFooter: React.FC = () => {
   const { user } = useAuth();
@@ -217,23 +218,25 @@ const LayoutFooter: React.FC = () => {
                 alignItems="center"
               >
                 Crafted with <Heart size={20} weight="fill" /> by
-                <Box
-                  component="span"
-                  ml={1}
-                  color="primary.main"
-                  sx={{
-                    borderBottom: '1px dotted',
-                    borderColor: 'primary.main',
-                    cursor: 'pointer',
-                    opacity: 0.7,
-                    '&:hover': {
-                      opacity: 1,
-                    },
-                  }}
-                >
-                  {' '}
-                  Dots Created
-                </Box>
+                <Link href="https://dotscreated.com?ref=jnvpjaa" target="_blank" style={{ textDecoration: 'none' }}>
+                  <Box
+                    component="span"
+                    ml={1}
+                    color="primary.main"
+                    sx={{
+                      borderBottom: '1px dotted',
+                      borderColor: 'primary.main',
+                      cursor: 'pointer',
+                      opacity: 0.7,
+                      '&:hover': {
+                        opacity: 1,
+                      },
+                    }}
+                  >
+                    {' '}
+                    Dots Created
+                  </Box>
+                </Link>
               </Typography>
             </Grid>
           </Grid>

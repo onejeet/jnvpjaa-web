@@ -78,7 +78,7 @@ const Hero = () => {
               md: '100px',
             }}
             maxWidth={{
-              xs: '350px',
+              xs: '80%',
               sm: '100%',
             }}
             textAlign="center"

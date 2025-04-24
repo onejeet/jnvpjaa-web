@@ -24,7 +24,7 @@ import Image from 'next/image';
 import { dmSans, notoSerif } from '@/utils/theme/fonts';
 
 const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateClap }) => {
-  const { id, title, author, content, cover, claps: initialClaps, status, updatedAt } = blog || {};
+  const { id, title, author, content, cover, shortUrl, claps: initialClaps, status, updatedAt } = blog || {};
   const [sanitizedContent, setSanitizedContent] = React.useState('');
   const [newClaps, setNewClaps] = React.useState(0);
 
@@ -87,7 +87,8 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateC
             variant="h1"
             lineHeight="normal"
             fontSize={{
-              xs: 30,
+              xs: 24,
+              sm: 30,
               md: 50,
             }}
             //  py={1}
@@ -142,7 +143,7 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateC
 
             {!statusMessage && (
               <Box gap={1} display="flex" alignItems="center">
-                <SocialShareModal title={title} />
+                <SocialShareModal title={title} url={shortUrl} />
                 <ClapButton
                   initialClaps={initialClaps}
                   claps={newClaps}
@@ -160,7 +161,7 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateC
             <Skeleton variant="rectangular" width="100%" height={300} />
           ) : (
             cover?.url && (
-              <Box width="100%" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+              <Box width="100%" display="flex" flexDirection="column" alignItems="start" justifyContent="center">
                 <Image
                   src={cover?.url}
                   width={800}
@@ -170,7 +171,7 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateC
                   objectFit="cover"
                   referrerPolicy="no-referrer"
                   style={{
-                    maxWidth: '90%',
+                    maxWidth: '95%',
                     maxHeight: 500,
                     borderRadius: '10px',
                   }}
@@ -240,12 +241,12 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateC
               // mt={1}
               my={2}
               lineHeight={{
-                xs: '28px',
-                md: '32px',
+                xs: '32px',
+                md: '36px',
               }}
               fontSize={{
-                xs: '18px',
-                md: '20px',
+                xs: '20px',
+                md: '22px',
               }}
               sx={{ fontFamily: notoSerif.style.fontFamily }}
               dangerouslySetInnerHTML={{ __html: sanitizedContent }}
@@ -258,7 +259,7 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateC
               alignItems="center"
               flexDirection={{ xs: 'column', sm: 'row' }}
             >
-              <SocialShareModal title={title} btn_type="button" />
+              <SocialShareModal title={title} url={shortUrl} btn_type="button" />
               <Divider
                 orientation="vertical"
                 sx={{
