@@ -31,7 +31,7 @@ import {
   IconHeart,
   IconMinus,
   IconPencilMinus as IconNotePencil,
-  IconPlaystationX as IconXCircle,
+  IconPlaystationX as IconCircleX,
   IconArrowRight,
   IconCalendarEvent,
   IconMapPin,
@@ -408,7 +408,7 @@ const EventCard: React.FC<EventCardProps> = ({
                     disabled={loading}
                     fullWidth
                     title="Move to Draft"
-                    startIcon={<IconXCircle size={16} />}
+                    startIcon={<IconCircleX size={16} />}
                     onClick={() => onPublish?.(id, EventStatus.Draft)}
                     sx={{ whiteSpace: 'nowrap', minWidth: '140px' }}
                   />

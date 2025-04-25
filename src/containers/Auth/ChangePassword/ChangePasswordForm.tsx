@@ -11,7 +11,7 @@ import { Info } from '@mui/icons-material';
 import { useResetPasswordMutation } from '@/apollo/hooks';
 import { useAuth } from '@/context/AuthContext';
 import { IForgotPasswordFormInput } from '../ForgotPassword/ForgotPassword.types';
-import { IconCheckCircle as CheckCircle } from '@tabler/icons-react';
+import { IconCircleCheck as CheckCircle } from '@tabler/icons-react';
 
 interface ChangePasswordFormProps {
   onNext?: () => void;
