@@ -1,3 +1,5 @@
+'use client';
+
 import Button from '@/components/core/Button';
 import { paths } from '@/config/paths';
 import { useAuth } from '@/context/AuthContext';
@@ -5,7 +7,7 @@ import LayoutModule from '@/layouts/Layout';
 import BlogListModule from '@/modules/BlogListModule';
 import { Box, Checkbox, Divider, FormControlLabel, Grid2 as Grid, Typography } from '@mui/material';
 import { IconPlus } from '@tabler/icons-react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 const Blog = () => {

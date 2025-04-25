@@ -14,12 +14,10 @@ import React from 'react';
 import Logo from '@/components/common/Logo';
 
 import MenuList from '../../components/common/MenuList';
-import { useAuth } from '@/context/AuthContext';
-import { Heart } from '@tabler/icons-react';
+import { IconHeartFilled as Heart } from '@tabler/icons-react';
 import Link from 'next/link';
 
 const LayoutFooter: React.FC = () => {
-  const { user } = useAuth();
   return (
     <Box
       sx={{
@@ -217,7 +215,7 @@ const LayoutFooter: React.FC = () => {
                 display="flex"
                 alignItems="center"
               >
-                Crafted with <Heart size={20} weight="fill" /> by
+                Crafted with <Heart size={20} /> by
                 <Link href="https://dotscreated.com?ref=jnvpjaa" target="_blank" style={{ textDecoration: 'none' }}>
                   <Box
                     component="span"
@@ -242,25 +240,6 @@ const LayoutFooter: React.FC = () => {
           </Grid>
         </AppBar>
       </Container>
-      {user?.id && (
-        <Box
-          sx={{
-            width: '100%',
-            fontSize: '14px',
-            textAlign: 'center',
-            py: 1,
-            mt: 2,
-            bgcolor: 'grey.400',
-            fontWeight: 500,
-            color: 'text.primary',
-          }}
-        >
-          If you want to share improvements, bugs or feedback, please{' '}
-          <a href="https://wa.me/917014750932" target="_blank" rel="noreferrer">
-            Chat on WhatsApp (7014750932)
-          </a>
-        </Box>
-      )}
     </Box>
   );
 };

@@ -29,6 +29,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
     );
   }, [pathname]);
 
+  if (!pathname) return;
+
   return (
     <CacheProvider value={clientSideEmotionCache}>
       <ApolloProvider client={apolloClient}>

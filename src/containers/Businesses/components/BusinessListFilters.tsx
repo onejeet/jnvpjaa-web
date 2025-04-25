@@ -4,7 +4,7 @@ import { debounce } from '@/utils/helpers';
 import { Box, Grid2 as Grid } from '@mui/material';
 import { IconSearch } from '@tabler/icons-react';
 import { useSearchParams } from 'next/navigation';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 const BusinessListFilters = () => {

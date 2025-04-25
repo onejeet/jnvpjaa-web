@@ -3,7 +3,7 @@ import ForgotPasswordForm from './ForgotPasswordForm';
 import Image from 'next/image';
 import GlobalBgShade from '@/components/common/GlobalBgShade';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 const ForgotPassword = () => {
   const router = useRouter();

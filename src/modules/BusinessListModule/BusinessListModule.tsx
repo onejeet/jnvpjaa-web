@@ -1,15 +1,8 @@
-'use client';
-
 import React from 'react';
 import { Business, ListInput, useGetBusinessesQuery } from '@/apollo/hooks';
 import { Box, Grid2 as Grid, Typography } from '@mui/material';
-import { IconPlus, IconTicket } from '@tabler/icons-react';
-import { useAuth } from '@/context/AuthContext';
-import { paths } from '@/config/paths';
 import EmptyView from '@/components/common/EmptyView';
-import { useRouter } from 'next/router';
 import BusinessCard from '@/components/common/BusinessCardV2';
-import { useSearchParams } from 'next/navigation';
 
 interface BusinessListModuleProps {
   filter?: ListInput['filter'];
@@ -93,14 +86,11 @@ export const dummyBusinesses: Partial<Business>[] = [
 const BusinessListModule: React.FC<BusinessListModuleProps> = ({
   filter = {},
   limit = 100,
-  skip,
+  skip = false,
   loading: propLoading,
   isCreateAllowed = true,
   isReadOnly,
 }) => {
-  const { user, isAdmin } = useAuth();
-  const router = useRouter();
-
   const { data: businessesData, loading } = useGetBusinessesQuery({
     skip,
     variables: {
@@ -130,8 +120,6 @@ const BusinessListModule: React.FC<BusinessListModuleProps> = ({
               business={business}
               loading={!business.id}
               // markImGoing={markImGoing}
-              user={user}
-              isAdminUser={isAdmin}
               // verifyEvent={verifyEvent}
               // onEdit={onEditEvent}
               // onPublish={onPublishEvent}
@@ -140,18 +128,7 @@ const BusinessListModule: React.FC<BusinessListModuleProps> = ({
           </Grid>
         ))
       ) : (
-        <EmptyView
-          message="No business available"
-          buttonProps={
-            user?.id && isCreateAllowed
-              ? {
-                  title: 'Create New Business',
-                  startIcon: <IconPlus size={16} />,
-                  onClick: () => router.push(paths.gallery.new),
-                }
-              : undefined
-          }
-        />
+        <EmptyView message="No business available" />
       )}
     </Grid>
   );

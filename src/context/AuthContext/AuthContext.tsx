@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import LoadingIndicator from '@/components/common/LoadingIndicator';
 import { AuthProviderProps, LoadingDataProps, TAuthContextData } from './AuthContext.types';
 import { Box } from '@mui/material';

@@ -21,7 +21,7 @@ import { updateCache } from '@/utils/apollo';
 import { useApolloClient } from '@apollo/client';
 import { Box } from '@mui/material';
 import { IconCircleCheck, IconEye, IconPencil } from '@tabler/icons-react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 interface SingleBlogProps {

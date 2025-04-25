@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import LayoutModule from '@/layouts/Layout';
 
@@ -30,13 +32,13 @@ export default function Gallery() {
         {isAdmin &&
           (isMobile ? (
             <IconButton color="primary" onClick={() => setAddAlbum(true)}>
-              <IconCirclePlus size={24} weight="bold" />
+              <IconCirclePlus size={24} />
             </IconButton>
           ) : (
             <Button
               title="Add Album"
               onClick={() => setAddAlbum(true)}
-              startIcon={<IconPlus size={16} weight="bold" />}
+              startIcon={<IconPlus size={16} />}
               sx={{ width: 200 }}
             />
           ))}

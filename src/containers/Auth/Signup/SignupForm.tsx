@@ -13,7 +13,7 @@ import FormSelectField from '@/components/form/FormSelectField';
 import { getBatchOptions, phoneNumberStringConverter, removeSpaces } from '@/utils/helpers';
 import { Info } from '@mui/icons-material';
 import { paths } from '@/config/paths';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import FormPhoneField from '@/components/form/FormPhoneField';
 import Lottie from 'lottie-react';
 import successLottieIcon from '@/utils/lottie/success3_icon.json';

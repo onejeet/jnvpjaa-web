@@ -17,7 +17,7 @@ import {
 import Link from '@mui/material/Link';
 import NextLink from 'next/link';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 import HoverPopover from '../../components/common/HoverPopover';

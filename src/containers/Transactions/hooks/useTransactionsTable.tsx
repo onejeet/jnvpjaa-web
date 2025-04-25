@@ -4,7 +4,7 @@ import { GridPaginationModel, GridRowParams } from '@mui/x-data-grid';
 import React from 'react';
 import { useGetTransactionsQuery } from '@/apollo/hooks';
 import { Skeleton, Typography } from '@mui/material';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 import { useSearchParams } from 'next/navigation';
 

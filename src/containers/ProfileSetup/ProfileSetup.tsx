@@ -9,7 +9,7 @@ import ProfilePictureUpload from '@/modules/ProfileSetup/ProfilePictureUpload';
 import { useAuth } from '@/context/AuthContext';
 import Addresses from '@/modules/ProfileSetup/Addresses';
 import DataPrivacy from '@/modules/ProfileSetup/DataPrivacy';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { IconCircleCheck as CheckCircle } from '@tabler/icons-react';
 import Welcome from '@/components/common/Welcome/Welcome';
 import ChangePassword from '../Auth/ChangePassword/ChangePassword';

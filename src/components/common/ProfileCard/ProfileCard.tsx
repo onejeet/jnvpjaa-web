@@ -1,6 +1,6 @@
+'use client';
+
 import { getSocialMediaIcon } from '@/utils/helpers';
-import Diversity3Icon from '@mui/icons-material/Diversity3';
-import MailIcon from '@mui/icons-material/Mail';
 import { Card, CardContent, Typography, Box, Avatar, Stack, IconButton, Link, BoxProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import React from 'react';

@@ -1,25 +1,9 @@
-import {
-  Blog,
-  BlogStatus,
-  useApproveBlogMutation,
-  useGetBlogQuery,
-  useUpdateBlogMutation,
-  useUpdateClapsMutation,
-  GetBlogQuery,
-  GetBlogDocument,
-  useGetAlbumQuery,
-  Album,
-  UserBasic,
-  Maybe,
-} from '@/apollo/hooks';
+'use client';
+
+import { useGetAlbumQuery, Album, UserBasic, Maybe } from '@/apollo/hooks';
 import Breadcrumbs from '@/components/common/Breadcrumbs';
 import EmptyView from '@/components/common/EmptyView';
 import PhotoGrid from '@/components/common/PhotoGrid';
-import SingleBlogView from '@/components/common/SingleBlogView';
-import Button from '@/components/core/Button';
-import { ButtonProps } from '@/components/core/Button/Button.types';
-import { paths } from '@/config/paths';
-import { useAlert } from '@/context/AlertContext';
 import { useAuth } from '@/context/AuthContext';
 import LayoutModule from '@/layouts/Layout';
 import { updateCache } from '@/utils/apollo';
@@ -28,7 +12,7 @@ import { useApolloClient } from '@apollo/client';
 import { Avatar, AvatarGroup, Box, Skeleton, Stack, Tooltip, Typography } from '@mui/material';
 import { IconCalendar, IconCircleCheck, IconEye, IconPencil, IconStar, IconStarFilled } from '@tabler/icons-react';
 import dayjs from 'dayjs';
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
 
 interface SingleAlbumProps {
@@ -36,12 +20,9 @@ interface SingleAlbumProps {
 }
 
 const SingleAlbum: React.FC<SingleAlbumProps> = ({ albumId }) => {
-  const router = useRouter();
-  const client = useApolloClient();
   const { isAdmin, redirectToSignin, user } = useAuth();
-  const { showAlert } = useAlert();
-  const { query } = useRouter();
-  const { id } = query;
+  const searchParams = useSearchParams();
+  const id = searchParams.get('id');
   const { data, loading } = useGetAlbumQuery({
     skip: !id,
     variables: {

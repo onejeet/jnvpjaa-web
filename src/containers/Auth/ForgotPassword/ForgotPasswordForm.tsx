@@ -7,7 +7,7 @@ import { IForgotPasswordFormInput } from './ForgotPassword.types';
 import FormTextField from '@/components/form/FormTextField';
 import { useAlert } from '@/context/AlertContext';
 import Button from '@/components/core/Button';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { Info } from '@mui/icons-material';
 import { useForgotPasswordMutation, useResetPasswordMutation } from '@/apollo/hooks';
 import Image from 'next/image';

@@ -9,7 +9,7 @@ import useEvents from '@/hooks/useEvents';
 import { useAuth } from '@/context/AuthContext';
 import { paths } from '@/config/paths';
 import EmptyView from '@/components/common/EmptyView';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 interface EventListModuleProps {
   filter?: ListInput['filter'];

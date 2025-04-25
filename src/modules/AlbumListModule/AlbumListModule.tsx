@@ -7,7 +7,7 @@ import { IconPlus, IconTicket } from '@tabler/icons-react';
 import { useAuth } from '@/context/AuthContext';
 import { paths } from '@/config/paths';
 import EmptyView from '@/components/common/EmptyView';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import AlbumCard from '@/components/common/AlbumCard';
 
 interface AlbumListModuleProps {

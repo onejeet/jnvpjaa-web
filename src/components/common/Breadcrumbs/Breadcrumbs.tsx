@@ -6,8 +6,6 @@ import React from 'react';
 import { BreadcrumbItem, BreadcrumbsProps } from './Breadcrumbs.types';
 
 const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, loading, sx = {}, ...rest }) => {
-  const theme = useTheme();
-
   return (
     <MuiBreadcrumbs
       sx={{
@@ -24,7 +22,14 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, loading, sx = {}, ...r
         <Skeleton width="100px" />
       ) : (
         items?.map((item: BreadcrumbItem) => (
-          <Box key={`breadcrumb-item-${item.label}`}>
+          <Box
+            key={`breadcrumb-item-${item.label}`}
+            sx={{
+              a: {
+                color: 'primary.main',
+              },
+            }}
+          >
             {item?.path ? (
               <NextLink
                 href={{
@@ -36,7 +41,6 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, loading, sx = {}, ...r
                 style={{
                   textDecoration: 'none',
                   fontSize: '13px',
-                  color: theme.palette.primary.main,
                 }}
               >
                 {item.label}

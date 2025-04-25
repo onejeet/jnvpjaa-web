@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useAlert } from '@/context/AlertContext';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useForm, useWatch } from 'react-hook-form';
 import { Box, CircularProgress, Divider, Grid2 as Grid, Typography } from '@mui/material';
 import FormTextField from '@/components/form/FormTextField';

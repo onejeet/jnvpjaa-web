@@ -21,7 +21,7 @@ import React from 'react';
 import { useAlert } from '@/context/AlertContext';
 import { useApolloClient } from '@apollo/client';
 import { paths } from '@/config/paths';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { GetUserDetailsDocument, GetUserListDocument, useGetUserDetailsQuery } from '@/apollo/hooks';
 

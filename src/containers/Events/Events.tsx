@@ -7,7 +7,7 @@ import { Box, Checkbox, FormControlLabel, Grid2 as Grid, Typography } from '@mui
 import { useAlert } from '@/context/AlertContext';
 import { useAuth } from '@/context/AuthContext';
 import { paths } from '@/config/paths';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { IconPlus, IconTicket } from '@tabler/icons-react';
 import Button from '@/components/core/Button';
 import EventListModule from '@/modules/EventListModule';

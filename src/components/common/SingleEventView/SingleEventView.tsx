@@ -38,7 +38,7 @@ import {
 } from '@tabler/icons-react';
 import { EventStatus, Maybe, User, UserBasic } from '@/apollo/hooks';
 import { paths } from '@/config/paths';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import CopyContentButton from '@/components/common/CopyContentButton';
 import UserListDialog from '../UserListDialog/UserListDialog';
 import ProfilePicture from '../ProfilePicture';

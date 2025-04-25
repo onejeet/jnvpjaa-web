@@ -13,7 +13,7 @@ import {
   IconTrash as Trash,
   IconPlaystationX as XCircle,
 } from '@tabler/icons-react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { paths } from '@/config/paths';
 import { IBlogCardProps } from './BlogCard.types';
 import { BlogStatus } from '@/apollo/hooks';

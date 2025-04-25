@@ -1,7 +1,7 @@
 import React, { createContext, useContext } from 'react';
 import { OnboardingContextProps, OnboardingProviderProps } from './OnboardingContext.types';
 import { useGetUserDetailsQuery, User, useUpdateUserMutation } from '@/apollo/hooks';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '../AuthContext';
 
 const defaultProvider: OnboardingContextProps = {};

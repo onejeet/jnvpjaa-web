@@ -21,12 +21,12 @@ import {
   IconArrowRight as ArrowRight,
   IconCalendarEvent as CalendarDots,
   IconPhotoShare as ImagesSquare,
-  IconStar as Star,
+  IconStarFilled as Star,
 } from '@tabler/icons-react';
 import { EventStatus, Maybe, User, UserBasic } from '@/apollo/hooks';
 import ProfilePicture from '../ProfilePicture';
 import { paths } from '@/config/paths';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import CopyContentButton from '@/components/common/CopyContentButton';
 import dayjs from 'dayjs';
 import Image from 'next/image';

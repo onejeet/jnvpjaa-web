@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import {
   Card,
@@ -26,16 +28,14 @@ import {
 import Image from 'next/image';
 import ProfilePicture from '../ProfilePicture';
 import { paths } from '@/config/paths';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 type Props = {
   business: Business;
   loading?: boolean;
-  user?: User;
-  isAdminUser?: boolean;
 };
 
-const BusinessCard: React.FC<Props> = ({ business, loading, user, isAdminUser }) => {
+const BusinessCard: React.FC<Props> = ({ business, loading }) => {
   const router = useRouter();
   return (
     <Card

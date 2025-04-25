@@ -7,7 +7,7 @@ import { useUpcomingBirthdaysQuery } from '@/apollo/hooks';
 import React from 'react';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import { paths } from '@/config/paths';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 export default function BirthdaySlider() {
   const { data, loading } = useUpcomingBirthdaysQuery();

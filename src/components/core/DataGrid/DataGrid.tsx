@@ -1,3 +1,5 @@
+'use client';
+
 import { DataGridProps } from '@mui/x-data-grid';
 import React from 'react';
 import { DataGrid as MuiDataGrid } from '@mui/x-data-grid';

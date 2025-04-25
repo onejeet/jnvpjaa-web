@@ -1,7 +1,7 @@
 import { Box, Card, Typography } from '@mui/material';
 import Image from 'next/image';
 import GlobalBgShade from '@/components/common/GlobalBgShade';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import ChangePasswordForm from './ChangePasswordForm';
 

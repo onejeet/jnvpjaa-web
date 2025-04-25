@@ -10,7 +10,7 @@ import { paths } from '@/config/paths';
 import { useAlert } from '@/context/AlertContext';
 import { useAuth } from '@/context/AuthContext';
 import { useApolloClient } from '@apollo/client';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 interface IPayload {
   user?: User;

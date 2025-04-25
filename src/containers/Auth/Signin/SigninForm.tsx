@@ -8,7 +8,7 @@ import FormTextField from '@/components/form/FormTextField';
 import { useAlert } from '@/context/AlertContext';
 import Button from '@/components/core/Button';
 import { useAuth } from '@/context/AuthContext';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useSigninMutation } from '@/apollo/hooks';
 import { useApolloClient } from '@apollo/client';
 

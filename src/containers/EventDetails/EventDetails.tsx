@@ -6,7 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import useEvents from '@/hooks/useEvents';
 import LayoutModule from '@/layouts/Layout';
 import { Box } from '@mui/material';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 const EventDetails = () => {

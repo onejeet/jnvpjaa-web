@@ -27,7 +27,7 @@ import Logo from '@/components/common/Logo';
 import HeaderMenuItem from './HeaderMenuItem';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import { useAuth } from '@/context/AuthContext';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import HoverPopover from '@/components/common/HoverPopover';
 import HeaderAddButton from './HeaderAddButton';
 import {

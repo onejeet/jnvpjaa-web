@@ -1,3 +1,5 @@
+'use client';
+
 import { Box, OutlinedInput, Typography } from '@mui/material';
 
 import useBatchCoordinators from './Hooks/useBatchCoordinators';

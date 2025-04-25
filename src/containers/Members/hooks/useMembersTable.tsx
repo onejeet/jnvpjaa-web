@@ -5,7 +5,7 @@ import React from 'react';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import { useGetUserListQuery, useVerifyUserMutation } from '@/apollo/hooks';
 import { Chip, Skeleton, Typography } from '@mui/material';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import VerifiedBadge from '@/components/common/VerifiedBadge';
 import { formatPhoneNumber } from '@/utils/helpers';
 import { useSearchParams } from 'next/navigation';
