@@ -252,17 +252,17 @@ const BlogCard: React.FC<IBlogCardProps> = ({
           <Typography variant="body2">{dayjs(updatedAt).format('MMM DD, YYYY')}</Typography>
           {/* {categoryId && (
                   <>
-                    <DotOutline size={32} weight="bold" />
+                    <DotOutline size={32}  />
                     <Typography>{categoryId}</Typography>
                   </>
                 )} */}
           {/* {statusMessage && (
             <>
-              <Dot size={32} weight="bold" />
+              <Dot size={32}  />
               <Chip size="small" label={startCase(status as string)} color="error" />
             </>
           )} */}
-          <Dot size={32} weight="bold" />
+          <Dot size={32} />
           <ProfilePicture
             id={author?.id}
             size={28}
@@ -326,7 +326,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
                 }}
                 render={
                   <IconButton>
-                    <DotsThreeVertical size={24} weight="bold" />
+                    <DotsThreeVertical size={24} />
                   </IconButton>
                 }
               />
@@ -363,7 +363,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
               {status !== BlogStatus.Published && (
                 <Chip size="small" label={getFormattedLabel(status)} color={statusColor} sx={{ ml: 1 }} />
               )}{' '}
-              <ArrowRight size={28} weight="bold" />
+              <ArrowRight size={28} />
             </Typography>
           )}
 
@@ -466,7 +466,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
             }}
             render={
               <IconButton>
-                <DotsThree size={32} weight="bold" />
+                <DotsThree size={32} />
               </IconButton>
             }
           />

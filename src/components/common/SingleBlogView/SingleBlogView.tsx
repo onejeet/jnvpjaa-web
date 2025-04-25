@@ -119,7 +119,7 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateC
 
           {/* {categoryId && (
           <>
-            <DotOutline size={32} weight="bold" />
+            <DotOutline size={32}  />
             <Typography>{categoryId}</Typography>
           </>
         )} */}

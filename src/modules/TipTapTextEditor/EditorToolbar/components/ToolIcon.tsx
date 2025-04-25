@@ -10,7 +10,7 @@ interface ToolIconProps {
 const ToolIcon: React.FC<ToolIconProps> = ({ icon }) => {
   const Icon = EDITOR_ICONS[icon || 'video'];
 
-  return <Icon weight="bold" size={18} />;
+  return <Icon size={18} />;
 };
 
 export default React.memo(ToolIcon);

@@ -36,7 +36,7 @@ const AlignButton: React.FC<AlignButtonProps> = ({ format }) => {
         }
       }}
     >
-      <AlignIcon size={20} weight="bold" />
+      <AlignIcon size={20} />
     </IconButton>
   );
 };

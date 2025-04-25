@@ -34,7 +34,6 @@ const VerifiedBadge: React.FC<Props> = ({ size, title, isPrivate, isPrivateInfoC
         >
           <LockSimple
             size={size || 16}
-            weight="bold"
             style={{ cursor: handlePrivateInfo && isPrivateInfoChangeAllowed ? 'pointer' : 'default' }}
             onClick={isPrivateInfoChangeAllowed ? () => handlePrivateInfo?.() : undefined}
           />

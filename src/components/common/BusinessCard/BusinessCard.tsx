@@ -247,7 +247,7 @@ const BusinessCard: React.FC<BusinessCardProps> = ({
           <Typography variant="body2">{dayjs(updatedAt).format('MMM DD, YYYY')}</Typography>
           {/* {categoryId && (
                   <>
-                    <IconDotsOutline size={32} weight="bold" />
+                    <IconDotsOutline size={32}  />
                     <Typography>{categoryId}</Typography>
                   </>
                 )} */}
@@ -360,7 +360,7 @@ const BusinessCard: React.FC<BusinessCardProps> = ({
               ) : (
                 <Chip size="small" label="Pending Approval" color="error" />
               )}{' '}
-              {/* <ArrowRight size={28} weight="bold" /> */}
+              {/* <ArrowRight size={28}  /> */}
             </Typography>
           )}
 
