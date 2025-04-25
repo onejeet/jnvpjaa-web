@@ -15,4 +15,5 @@ export interface ProfileContextProps {
 
 export interface ProfileProviderProps {
   children: React.ReactNode;
+  userId?: string;
 }

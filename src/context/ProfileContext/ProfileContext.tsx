@@ -19,7 +19,7 @@ const defaultProvider: ProfileContextProps = {
 
 const ProfileContext = createContext(defaultProvider);
 
-const ProfileProvider = ({ children }: ProfileProviderProps) => {
+const ProfileProvider = ({ children, userId }: ProfileProviderProps) => {
   const [editingProfile, setEditingProfile] = React.useState<boolean>(false);
   const router = useRouter();
   const { id } = router.query;

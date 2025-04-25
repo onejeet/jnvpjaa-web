@@ -31,7 +31,11 @@ import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-const SingleAlbum = () => {
+interface SingleAlbumProps {
+  albumId?: string;
+}
+
+const SingleAlbum: React.FC<SingleAlbumProps> = ({ albumId }) => {
   const router = useRouter();
   const client = useApolloClient();
   const { isAdmin, redirectToSignin, user } = useAuth();

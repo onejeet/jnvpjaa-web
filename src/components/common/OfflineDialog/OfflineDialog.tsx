@@ -10,11 +10,9 @@ import successLottieIcon from '@/utils/lottie/success3_icon.json';
 import offlineLottieIcon from '@/utils/lottie/offline_art.json';
 import { useAuth } from '@/context/AuthContext';
 
-interface OfflineDialogProps {
-  checkAuth?: boolean;
-}
+interface OfflineDialogProps {}
 
-const OfflineDialog: React.FC<OfflineDialogProps> = ({ checkAuth }) => {
+const OfflineDialog: React.FC<OfflineDialogProps> = () => {
   const { user } = useAuth();
   const [isOnline, setIsOnline] = useState<boolean>(true);
   const [showDialog, setShowDialog] = useState<boolean>(false);

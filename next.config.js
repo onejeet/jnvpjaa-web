@@ -22,9 +22,9 @@ const withPWA = require('next-pwa')({
 });
 
 const nextConfig = {
-  output: 'export',
   reactStrictMode: true,
   trailingSlash: true,
+  appDir: true,
   images: {
     unoptimized: true,
     remotePatterns: [
