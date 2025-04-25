@@ -3,7 +3,7 @@ import { CircularProgress, Typography, Box } from '@mui/material';
 import { useUnsplashSearch } from '@/hooks/useUnsplashSearch';
 import Dialog from '@/components/core/Dialog';
 import TextField from '@/components/core/TextField';
-import { MagnifyingGlass } from '@phosphor-icons/react';
+import { IconSearch } from '@tabler/icons-react';
 import { debounce } from '@/utils/helpers';
 import PhotoGrid from '@/components/common/PhotoGrid';
 import { Photo } from '@/apollo/hooks';
@@ -58,7 +58,7 @@ export const UnsplashImageSelector: React.FC<Props> = ({ open, onClose, onSelect
           // value={searchInput}
           onChange={(e) => onSearch(e.target.value)}
           variant="outlined"
-          startAdornment={<MagnifyingGlass size={24} style={{ marginRight: '8px' }} />}
+          startAdornment={<IconSearch size={24} style={{ marginRight: '8px' }} />}
           endAdornment={loading ? <CircularProgress size={20} /> : null}
           helperText="Start searching with generic keywords like school, alumni, friends, india etc."
         />

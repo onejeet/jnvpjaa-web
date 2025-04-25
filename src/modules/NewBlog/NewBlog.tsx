@@ -21,7 +21,7 @@ import {
 } from '@/apollo/hooks';
 import { paths } from '@/config/paths';
 import TipTapTextEditor from '@/modules/TipTapTextEditor';
-import { Eye, FloppyDiskBack } from '@phosphor-icons/react';
+import { IconEye, IconDeviceFloppy } from '@tabler/icons-react';
 import { useApolloClient } from '@apollo/client';
 import dayjs from 'dayjs';
 import { BLOG_CATEGORIES } from '@/constants/Blog.constants';
@@ -221,7 +221,7 @@ const NewBlog = () => {
             <Button
               title="Preview"
               variant="outlined"
-              startIcon={<Eye size={18} />}
+              startIcon={<IconEye size={18} />}
               onClick={() => window.open(paths.blog.getBlogPostUrl(blogData?.getBlog?.slug || ''))}
             />
           )}
@@ -233,7 +233,7 @@ const NewBlog = () => {
               saveTypeRef.current = 'draft';
               handleSubmit(onSubmit);
             }}
-            startIcon={<FloppyDiskBack size={16} />}
+            startIcon={<IconDeviceFloppy size={16} />}
             type="submit"
             color={blogData?.getBlog?.status === BlogStatus.Published ? 'error' : 'primary'}
             variant="outlined"

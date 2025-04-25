@@ -4,7 +4,7 @@ import { useAuth } from '@/context/AuthContext';
 import LayoutModule from '@/layouts/Layout';
 import BlogListModule from '@/modules/BlogListModule';
 import { Box, Checkbox, Divider, FormControlLabel, Grid2 as Grid, Typography } from '@mui/material';
-import { Plus } from '@phosphor-icons/react';
+import { IconPlus } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -46,7 +46,7 @@ const Blog = () => {
         {user?.id && (
           <Button
             title="New Post"
-            startIcon={<Plus size={16} />}
+            startIcon={<IconPlus size={16} />}
             onClick={() => router.push(paths.blog.new)}
             sx={{
               width: '200px',

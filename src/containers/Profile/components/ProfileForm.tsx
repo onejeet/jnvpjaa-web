@@ -8,7 +8,7 @@ import { Box, Grid2 as Grid, Typography } from '@mui/material';
 import React from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { IProfileFormInput } from '../Profile.types';
-import { CheckCircle, X } from '@phosphor-icons/react';
+import { IconUser, IconPhone, IconMapPin, IconBuilding, IconCalendar } from '@tabler/icons-react';
 import FormDateTimeField from '@/components/form/FormDateTimeField';
 import TipTapTextEditor from '@/modules/TipTapTextEditor';
 import dayjs from 'dayjs';
@@ -60,7 +60,7 @@ const ProfileForm = () => {
         onCompleted: (res) => {
           console.log('COmpleted', res);
           client?.refetchQueries({
-            include: ['getUserDetails'],
+            include: ['getIconUserDetails'],
           });
           setEditingProfile(false);
         },
@@ -131,6 +131,7 @@ const ProfileForm = () => {
             disabled={loading}
             name="mobile"
             size="small"
+            //  startIcon={<IconPhone size={16} />}
             // onChange={(e) => {
             //   if (e?.target?.value?.length < 11) {
             //     setValue('mobile', e?.target?.value);
@@ -156,6 +157,7 @@ const ProfileForm = () => {
             disabled={loading}
             name="whatsAppMobile"
             size="small"
+            // startIcon={<IconPhone size={16} />}
             // onChange={(e) => {
             //   if (e?.target?.value?.length < 11) {
             //     setValue('extraMobile', e?.target?.value);
@@ -180,6 +182,7 @@ const ProfileForm = () => {
             disabled={loading}
             name="emergencyMobile"
             size="small"
+            //  startIcon={<IconPhone size={16} />}
             // onChange={(e) => {
             //   if (e?.target?.value?.length < 11) {
             //     setValue('emergencyMobile', e?.target?.value);
@@ -249,11 +252,11 @@ const ProfileForm = () => {
           <Button
             title="Cancel"
             variant="outlined"
-            startIcon={<X size={16} />}
+            startIcon={<IconBuilding size={16} />} // Consider if this is the correct icon for 'Cancel', else revert to no icon.
             disabled={loading}
             onClick={() => setEditingProfile(false)}
           />
-          <Button title="Update" type="submit" startIcon={<CheckCircle size={16} />} loading={loading} />
+          <Button title="Update" type="submit" startIcon={<IconUser size={16} />} loading={loading} />
         </Box>
       </Grid>
     </Box>

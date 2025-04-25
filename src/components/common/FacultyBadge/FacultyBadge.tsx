@@ -1,5 +1,5 @@
 import { Tooltip } from '@mui/material';
-import { StarFour } from '@phosphor-icons/react';
+import { IconStar } from '@tabler/icons-react';
 import Image from 'next/image';
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
 const FacultyBadge: React.FC<Props> = ({ size }) => {
   return (
     <Tooltip title="Faculty of JNV Paota, Jaipur" arrow placement="top">
-      <StarFour size={size || 16} weight="fill" fill="#F2C6A0" style={{ marginLeft: '4px' }} />
+      <IconStar size={size || 16} fill="#F2C6A0" style={{ marginLeft: '4px' }} />
     </Tooltip>
   );
 };

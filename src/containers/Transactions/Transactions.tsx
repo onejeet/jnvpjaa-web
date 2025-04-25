@@ -6,7 +6,7 @@ import TransactionsFilters from './components/TransactionsFilters';
 import TransactionsTable from './components/TransactionsTable';
 import { Box, IconButton, Typography, useMediaQuery, useTheme } from '@mui/material';
 import Button from '@/components/core/Button';
-import { Plus, PlusCircle } from '@phosphor-icons/react';
+import { IconPlus, IconCirclePlus } from '@tabler/icons-react';
 import { useAuth } from '@/context/AuthContext';
 import AddTransactionRecordModule from '@/modules/AddTransactionRecordModule';
 
@@ -32,13 +32,13 @@ export default function Transactions() {
         {isAdmin &&
           (isMobile ? (
             <IconButton color="primary" onClick={() => setAddRecord(true)}>
-              <PlusCircle size={24} weight="bold" />
+              <IconCirclePlus size={24} />
             </IconButton>
           ) : (
             <Button
               title="Add Record"
               onClick={() => setAddRecord(true)}
-              startIcon={<Plus size={16} weight="bold" />}
+              startIcon={<IconPlus size={16} />}
               sx={{ width: 200 }}
             />
           ))}

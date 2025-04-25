@@ -5,14 +5,15 @@ import ProfilePicture from '@/components/common/ProfilePicture';
 import VerifiedBadge from '@/components/common/VerifiedBadge';
 import Button from '@/components/core/Button';
 import {
-  DotsThree,
-  DotsThreeCircleVertical,
-  DotsThreeVertical,
-  FileLock,
-  Notches,
-  Pencil,
-  PencilSimple,
-} from '@phosphor-icons/react';
+  IconDots,
+  IconDotsVertical,
+  IconPencil,
+  IconLock,
+  IconNote,
+  IconCheck,
+  IconUser,
+  IconShieldCheck,
+} from '@tabler/icons-react';
 import { useProfile } from '@/context/ProfileContext';
 import FacultyBadge from '@/components/common/FacultyBadge';
 import Menu from '@/components/core/Menu';
@@ -119,13 +120,13 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
                 setEditingProfile(true);
               }
             },
-            icon: <Pencil size={16} />,
+            icon: <IconPencil size={16} />,
           },
           {
             label: isConfidential ? 'Make Contact Info Visible' : 'Keep Contact Info Private',
             value: 'delete',
             onClick: () => handleDataPrivacyUpdate(),
-            icon: <FileLock size={18} />,
+            icon: <IconLock size={18} />,
             sx: {
               color: 'error.main',
               svg: {
@@ -281,7 +282,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
             render={
               <Tooltip arrow placement="top" title="Profile Menu">
                 <IconButton>
-                  <DotsThreeCircleVertical size={32} weight="bold" />
+                  <IconDotsVertical size={32} />
                 </IconButton>
               </Tooltip>
             }
@@ -291,7 +292,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
           //   title="Edit Profile"
           //   size="small"
           //   onClick={() => setEditingProfile(true)}
-          //   startIcon={<PencilSimple size={16} />}
+          //   startIcon={<IconPencilSimple size={16} />}
           //   sx={{
           //     whiteSpace: 'nowrap',
           //   }}

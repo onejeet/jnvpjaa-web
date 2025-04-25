@@ -6,7 +6,7 @@ import FormTextField from '@/components/form/FormTextField';
 import FormSelectField from '@/components/form/FormSelectField';
 import FormDateTimeField from '@/components/form/FormDateTimeField';
 import { Currency, TransactionStatus, TransactionType, useCreateTransactionMutation } from '@/apollo/hooks';
-import { CurrencyInr } from '@phosphor-icons/react';
+import { IconCurrencyRupee } from '@tabler/icons-react';
 import { useApolloClient } from '@apollo/client';
 import dayjs from 'dayjs';
 import { IAddTransactionRecordInput } from './AddTransactionRecordModule.types';
@@ -185,7 +185,7 @@ const AddTransactionRecordModule: React.FC<any> = ({ onClose }) => {
               label="Amount"
               control={control}
               disabled={saving}
-              startAdornment={<CurrencyInr size={18} />}
+              startAdornment={<IconCurrencyRupee size={18} />}
               name="amount"
               size="small"
               type="number"

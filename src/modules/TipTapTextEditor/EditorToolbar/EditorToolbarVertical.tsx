@@ -26,7 +26,7 @@ import ToolIcon from './components/ToolIcon';
 import VideoButton from './components/VideoButton';
 import IndentationButtons from './components/IndentationButtons';
 import BlockquoteButton from './components/BlockquoteButton';
-import { Smiley } from '@phosphor-icons/react';
+import { IconMoodSmile } from '@tabler/icons-react';
 import EmojiPicker, { SkinTones } from 'emoji-picker-react';
 
 const EditorToolbar: React.FC<EditorToolbarProps> = ({ toolsHidden = [], defaultColors, ...restProps }) => {
@@ -101,7 +101,7 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ toolsHidden = [], default
           <Divider orientation="vertical" />
           <ColorPicker />
           <IconButton aria-describedby={emojiPopoverId} onClick={(e) => setEmojiAnchorEl(e.currentTarget)} size="small">
-            <Smiley size={28} weight="bold" />
+            <IconMoodSmile size={28} />
           </IconButton>
           <Divider orientation="vertical" />
           <VideoButton />

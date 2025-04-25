@@ -20,7 +20,7 @@ import LayoutModule from '@/layouts/Layout';
 import { updateCache } from '@/utils/apollo';
 import { useApolloClient } from '@apollo/client';
 import { Box } from '@mui/material';
-import { CheckCircle, Eye, Pencil } from '@phosphor-icons/react';
+import { IconCircleCheck, IconEye, IconPencil } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -72,7 +72,7 @@ const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
               title: 'Edit',
               variant: 'outlined',
               color: 'primary',
-              startIcon: <Pencil size={16} />,
+              startIcon: <IconPencil size={16} />,
               onClick: () => router.push(paths.blog.getBlogPostEditUrl(blog?.slug || '')),
             },
 
@@ -80,7 +80,7 @@ const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
               title: 'Approve',
               variant: 'contained',
               color: 'success',
-              startIcon: <CheckCircle size={18} />,
+              startIcon: <IconCircleCheck size={18} />,
               onClick: () => approveBlogPost(blog.id),
             },
           ];
@@ -91,14 +91,14 @@ const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
             title: 'Edit',
             variant: 'outlined',
             color: 'primary',
-            startIcon: <Pencil size={16} />,
+            startIcon: <IconPencil size={16} />,
             onClick: () => router.push(paths.blog.getBlogPostEditUrl(blog?.slug || '')),
           },
           {
             title: 'Publish',
             variant: 'contained',
             color: 'success',
-            startIcon: <CheckCircle size={18} />,
+            startIcon: <IconCircleCheck size={18} />,
             onClick: () => publishBlogPost(blog?.id),
           },
         ];

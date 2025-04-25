@@ -4,14 +4,13 @@ import React, { useState } from 'react';
 import { Avatar, Box, Typography, IconButton, Slider, CircularProgress } from '@mui/material';
 import Cropper from 'react-easy-crop';
 import {
-  ArrowCounterClockwise,
-  CameraPlus,
-  CaretLeft,
-  CheckCircle,
-  UploadSimple,
-  X,
-  XCircle,
-} from '@phosphor-icons/react';
+  IconChevronLeft,
+  IconCircleCheck,
+  IconUpload,
+  IconX,
+  IconXboxXFilled,
+  IconArrowBackUp,
+} from '@tabler/icons-react';
 import Button from '@/components/core/Button';
 import { useAlert } from '@/context/AlertContext';
 import Dialog from '@/components/core/Dialog';
@@ -253,7 +252,7 @@ export default function ProfilePictureUpload({ user, onNext, onBack, onSuccess, 
         >
           {!croppedImage && (
             <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
-              <UploadSimple size={32} color="#333333" />
+              <IconUpload size={32} color="#333333" />
               <Typography mt={1} variant="body2" color="grey.900">
                 Upload Image
               </Typography>
@@ -280,7 +279,7 @@ export default function ProfilePictureUpload({ user, onNext, onBack, onSuccess, 
               // transform: 'translate(50%, -50%)',
             }}
           >
-            <XCircle size={32} weight="fill" />
+            <IconXboxXFilled size={32} />
           </IconButton>
         )}
       </Box>
@@ -310,7 +309,7 @@ export default function ProfilePictureUpload({ user, onNext, onBack, onSuccess, 
           variant="outlined"
           title={croppedImage ? 'Change Image' : 'Choose Image'}
           onClick={handleButtonClick}
-          startIcon={<UploadSimple size={18} />}
+          startIcon={<IconUpload size={18} />}
           disabled={loading}
         />
         {user?.profileImage && croppedImage !== user?.profileImage && (
@@ -318,7 +317,7 @@ export default function ProfilePictureUpload({ user, onNext, onBack, onSuccess, 
             variant="outlined"
             title="Reset"
             onClick={() => setCroppedImage(user?.profileImage || null)}
-            startIcon={<ArrowCounterClockwise size={18} />}
+            startIcon={<IconArrowBackUp size={18} />}
             disabled={loading}
           />
         )}
@@ -335,7 +334,7 @@ export default function ProfilePictureUpload({ user, onNext, onBack, onSuccess, 
           <Button
             title="Back"
             variant="outlined"
-            startIcon={<CaretLeft size={16} />}
+            startIcon={<IconChevronLeft size={16} />}
             disabled={loading}
             onClick={onBack}
           />
@@ -346,7 +345,7 @@ export default function ProfilePictureUpload({ user, onNext, onBack, onSuccess, 
             <Button
               title="Cancel"
               variant="outlined"
-              startIcon={<X size={16} />}
+              startIcon={<IconX size={16} />}
               disabled={loading}
               onClick={() => {
                 onCancel?.();
@@ -358,7 +357,7 @@ export default function ProfilePictureUpload({ user, onNext, onBack, onSuccess, 
             title={onNext ? (croppedImage && croppedImage !== user?.profileImage ? 'Update & Next' : 'Next') : 'Update'}
             onClick={handleUpload}
             loading={loading}
-            startIcon={<CheckCircle size={16} />}
+            startIcon={<IconCircleCheck size={16} />}
           />
         </Box>
       </Box>

@@ -4,7 +4,7 @@ import { useAlert } from '@/context/AlertContext';
 import { useApolloClient } from '@apollo/client';
 import styled from '@emotion/styled';
 import { Box, Checkbox, FormControlLabel, Switch, SwitchProps, Theme, Typography } from '@mui/material';
-import { CaretLeft, CaretRight, CheckCircle, Lock, X } from '@phosphor-icons/react';
+import { IconLock, IconCaretLeft, IconX, IconCheck, IconInfoCircle } from '@tabler/icons-react';
 import React from 'react';
 
 interface DataPrivacyProps {
@@ -133,7 +133,7 @@ const DataPrivacy: React.FC<DataPrivacyProps> = ({ user, isLastStep, onNext, onB
       }}
     >
       <Box display="flex" alignItems="center" mb={1.5}>
-        <Lock size={32} />
+        <IconLock size={32} />
         <Typography sx={{ ml: 1 }} fontWeight={600}>
           Data Privacy
         </Typography>
@@ -169,7 +169,7 @@ const DataPrivacy: React.FC<DataPrivacyProps> = ({ user, isLastStep, onNext, onB
           <Button
             title="Back"
             variant="outlined"
-            startIcon={<CaretLeft size={16} />}
+            startIcon={<IconCaretLeft size={16} />}
             disabled={loading}
             onClick={onBack}
           />
@@ -180,7 +180,7 @@ const DataPrivacy: React.FC<DataPrivacyProps> = ({ user, isLastStep, onNext, onB
             <Button
               title="Cancel"
               variant="outlined"
-              startIcon={<X size={16} />}
+              startIcon={<IconX size={16} />}
               // disabled={loading || addressesLoading}
               onClick={() => {
                 onCancel?.();
@@ -191,7 +191,6 @@ const DataPrivacy: React.FC<DataPrivacyProps> = ({ user, isLastStep, onNext, onB
             <Button
               title="Skip"
               variant="outlined"
-              endIcon={<CaretRight size={16} />}
               disabled={loading}
               onClick={() => {
                 onNext?.();
@@ -201,7 +200,7 @@ const DataPrivacy: React.FC<DataPrivacyProps> = ({ user, isLastStep, onNext, onB
           <Button
             title={onNext ? 'Update & Finish' : 'Update'}
             onClick={() => onSubmit()}
-            startIcon={<CheckCircle size={16} />}
+            startIcon={<IconCheck size={16} />}
             loading={loading}
             // disabled={addressesLoading}
           />

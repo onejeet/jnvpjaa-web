@@ -8,7 +8,7 @@ import { Box, Grid2 as Grid, Typography } from '@mui/material';
 import React from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { IPersonalInfoFormInput } from './ProfileSetup.types';
-import { CaretLeft, CaretRight, CheckCircle, User as UserIcon, X } from '@phosphor-icons/react';
+import { IconChevronLeft, IconChevronRight, IconCircleCheck, IconUser, IconX } from '@tabler/icons-react';
 import FormDateTimeField from '@/components/form/FormDateTimeField';
 import TipTapTextEditor from '@/modules/TipTapTextEditor';
 import dayjs from 'dayjs';
@@ -100,7 +100,7 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({ user, onNext, onBack, onSuc
       }}
     >
       <Box display="flex" alignItems="center" mb={3}>
-        <UserIcon size={32} />
+        <IconUser size={32} />
         <Typography sx={{ ml: 1 }} fontWeight={600}>
           Personal Info
         </Typography>
@@ -270,7 +270,7 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({ user, onNext, onBack, onSuc
             <Button
               title="Back"
               variant="outlined"
-              startIcon={<CaretLeft size={16} />}
+              startIcon={<IconChevronLeft size={16} />}
               disabled={loading}
               onClick={onBack}
             />
@@ -281,7 +281,7 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({ user, onNext, onBack, onSuc
               <Button
                 title="Cancel"
                 variant="outlined"
-                startIcon={<X size={16} />}
+                startIcon={<IconX size={16} />}
                 disabled={loading}
                 onClick={() => {
                   onCancel?.();
@@ -292,7 +292,7 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({ user, onNext, onBack, onSuc
               <Button
                 title="Skip"
                 variant="outlined"
-                endIcon={<CaretRight size={16} />}
+                endIcon={<IconChevronRight size={16} />}
                 disabled={loading}
                 onClick={() => {
                   onNext?.();
@@ -302,7 +302,7 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({ user, onNext, onBack, onSuc
             <Button
               title={onNext ? 'Update & Next' : 'Update'}
               type="submit"
-              startIcon={<CheckCircle size={16} />}
+              startIcon={<IconCircleCheck size={16} />}
               loading={loading}
             />
           </Box>

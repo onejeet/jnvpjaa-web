@@ -1,7 +1,7 @@
 import { Box, OutlinedInput, Typography } from '@mui/material';
 
 import useBatchCoordinators from './Hooks/useBatchCoordinators';
-import { MagnifyingGlass } from '@phosphor-icons/react';
+import { IconSearch } from '@tabler/icons-react';
 import BatchCoordinatorFilters from './components/BatchCoordinatorFilters';
 import DataGrid from '@/components/core/DataGrid';
 

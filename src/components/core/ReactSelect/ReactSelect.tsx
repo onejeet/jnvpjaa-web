@@ -74,7 +74,7 @@ const CustomMenuList = (props: any) => {
             fullWidth
             size="small"
             variant="outlined"
-            startAdornment={<MagnifyingGlass size={24} />}
+            startAdornment={<IconSearch size={24} />}
             placeholder="Search..."
             value={search} // bind the search state to the input field
             onChange={handleSearchChange} // update the search state on input change

@@ -3,7 +3,7 @@ import { Paper, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 
 import Breadcrumbs from '@/components/common/Breadcrumbs';
-import { MapPin } from '@phosphor-icons/react';
+import { IconMapPin } from '@tabler/icons-react';
 
 const breadcrumbsList = [
   {
@@ -52,7 +52,7 @@ const ContactUs = () => {
             alignItems="center"
             sx={{ svg: { mr: '10px' } }}
           >
-            <MapPin size={24} /> Registered Address
+            <IconMapPin size={24} /> Registered Address
           </Typography>
           <Typography color="grey.800" mt={1}>
             JNV Paota Jaipur Alumni Association, <br />

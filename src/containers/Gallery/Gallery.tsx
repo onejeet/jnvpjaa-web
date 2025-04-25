@@ -3,7 +3,7 @@ import LayoutModule from '@/layouts/Layout';
 
 import { Box, IconButton, Typography, useMediaQuery, useTheme } from '@mui/material';
 import Button from '@/components/core/Button';
-import { Plus, PlusCircle } from '@phosphor-icons/react';
+import { IconPlus, IconCirclePlus } from '@tabler/icons-react';
 import { useAuth } from '@/context/AuthContext';
 import AlbumListModule from '@/modules/AlbumListModule';
 
@@ -30,13 +30,13 @@ export default function Gallery() {
         {isAdmin &&
           (isMobile ? (
             <IconButton color="primary" onClick={() => setAddAlbum(true)}>
-              <PlusCircle size={24} weight="bold" />
+              <IconCirclePlus size={24} weight="bold" />
             </IconButton>
           ) : (
             <Button
               title="Add Album"
               onClick={() => setAddAlbum(true)}
-              startIcon={<Plus size={16} weight="bold" />}
+              startIcon={<IconPlus size={16} weight="bold" />}
               sx={{ width: 200 }}
             />
           ))}

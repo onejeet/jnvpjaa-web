@@ -13,7 +13,14 @@ import { Box, Grid2 as Grid, Typography } from '@mui/material';
 import React from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { IProfessionInfoFormInput } from './ProfileSetup.types';
-import { CaretLeft, CaretRight, CheckCircle, SuitcaseSimple, User as UserIcon, X } from '@phosphor-icons/react';
+import {
+  IconChevronLeft,
+  IconChevronRight,
+  IconCircleCheck,
+  IconBriefcase,
+  IconUser,
+  IconX,
+} from '@tabler/icons-react';
 import FormDateTimeField from '@/components/form/FormDateTimeField';
 import { useApolloClient } from '@apollo/client';
 import { titleCase } from '@/utils/helpers';
@@ -126,7 +133,7 @@ const ProfessionInfo: React.FC<ProfessionInfoProps> = ({ user, onNext, onBack, o
       }}
     >
       <Box display="flex" alignItems="center" mb={3}>
-        <SuitcaseSimple size={32} />
+        <IconBriefcase size={32} />
         <Typography sx={{ ml: 1 }} fontWeight={600}>
           Profession Info
         </Typography>
@@ -270,7 +277,7 @@ const ProfessionInfo: React.FC<ProfessionInfoProps> = ({ user, onNext, onBack, o
             <Button
               title="Back"
               variant="outlined"
-              startIcon={<CaretLeft size={16} />}
+              startIcon={<IconChevronLeft size={16} />}
               disabled={loading}
               onClick={onBack}
             />
@@ -281,7 +288,7 @@ const ProfessionInfo: React.FC<ProfessionInfoProps> = ({ user, onNext, onBack, o
               <Button
                 title="Cancel"
                 variant="outlined"
-                startIcon={<X size={16} />}
+                startIcon={<IconX size={16} />}
                 disabled={loading}
                 onClick={() => {
                   onCancel?.();
@@ -292,7 +299,7 @@ const ProfessionInfo: React.FC<ProfessionInfoProps> = ({ user, onNext, onBack, o
               <Button
                 title="Skip"
                 variant="outlined"
-                endIcon={<CaretRight size={16} />}
+                endIcon={<IconChevronRight size={16} />}
                 disabled={loading}
                 onClick={() => {
                   onNext?.();
@@ -302,7 +309,7 @@ const ProfessionInfo: React.FC<ProfessionInfoProps> = ({ user, onNext, onBack, o
             <Button
               title={onNext ? 'Update & Next' : 'Update'}
               type="submit"
-              startIcon={<CheckCircle size={16} />}
+              startIcon={<IconCircleCheck size={16} />}
               loading={loading}
             />
           </Box>

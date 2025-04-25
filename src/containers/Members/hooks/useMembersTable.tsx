@@ -15,7 +15,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useAlert } from '@/context/AlertContext';
 import { useApolloClient } from '@apollo/client';
 import { useAuth } from '@/context/AuthContext';
-import { StarFour } from '@phosphor-icons/react';
+import { IconStar } from '@tabler/icons-react';
 import FacultyBadge from '@/components/common/FacultyBadge';
 
 const useMembersTable = () => {

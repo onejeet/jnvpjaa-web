@@ -26,7 +26,7 @@ import { updateCache } from '@/utils/apollo';
 import { getAvatarDataUrl } from '@/utils/helpers';
 import { useApolloClient } from '@apollo/client';
 import { Avatar, AvatarGroup, Box, Skeleton, Stack, Tooltip, Typography } from '@mui/material';
-import { CalendarDots, CheckCircle, Eye, Pencil, Star } from '@phosphor-icons/react';
+import { IconCalendar, IconCircleCheck, IconEye, IconPencil, IconStar, IconStarFilled } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -333,7 +333,7 @@ const SingleAlbum: React.FC<SingleAlbumProps> = ({ albumId }) => {
                     },
                   }}
                 >
-                  <Star size={16} weight="fill" />
+                  <IconStarFilled size={16} />
                   <Typography variant="body2" ml={0.5} color="text.secondary">
                     {album?.total_photos} Photos
                   </Typography>
@@ -348,7 +348,7 @@ const SingleAlbum: React.FC<SingleAlbumProps> = ({ albumId }) => {
                     },
                   }}
                 >
-                  <CalendarDots size={16} />
+                  <IconCalendar size={16} />
                   <Typography variant="body2" ml={0.5} color="text.secondary">
                     {dayjs(album?.createdAt)?.format('MMM DD, YYYY')}
                   </Typography>

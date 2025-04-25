@@ -12,7 +12,7 @@ import { Box, Grid2 as Grid, Typography } from '@mui/material';
 import React from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { IAddressFormInput, IPersonalInfoFormInput } from './ProfileSetup.types';
-import { CaretLeft, CaretRight, CheckCircle, House, X } from '@phosphor-icons/react';
+import { IconChevronLeft, IconChevronRight, IconCircleCheck, IconHome, IconX } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { useApolloClient } from '@apollo/client';
 import { phoneNumberStringConverter, titleCase } from '@/utils/helpers';
@@ -122,7 +122,7 @@ const Addresses: React.FC<AddressesProps> = ({ user, onNext, onBack, onSuccess, 
     >
       <Grid container spacing={3} width="100%" size={{ xs: 12 }}>
         <Grid size={{ xs: 12 }} sx={{ display: 'flex', alignItems: 'center' }}>
-          <House size={32} />
+          <IconHome size={32} />
           <Typography sx={{ ml: 1 }} fontWeight={600}>
             Home Address
           </Typography>
@@ -252,7 +252,7 @@ const Addresses: React.FC<AddressesProps> = ({ user, onNext, onBack, onSuccess, 
             <Button
               title="Back"
               variant="outlined"
-              startIcon={<CaretLeft size={16} />}
+              startIcon={<IconChevronLeft size={16} />}
               disabled={loading || addressesLoading}
               onClick={onBack}
             />
@@ -263,7 +263,7 @@ const Addresses: React.FC<AddressesProps> = ({ user, onNext, onBack, onSuccess, 
               <Button
                 title="Cancel"
                 variant="outlined"
-                startIcon={<X size={16} />}
+                startIcon={<IconX size={16} />}
                 disabled={loading || addressesLoading}
                 onClick={() => {
                   onCancel?.();
@@ -274,7 +274,7 @@ const Addresses: React.FC<AddressesProps> = ({ user, onNext, onBack, onSuccess, 
               <Button
                 title="Skip"
                 variant="outlined"
-                endIcon={<CaretRight size={16} />}
+                endIcon={<IconChevronRight size={16} />}
                 disabled={loading || addressesLoading}
                 onClick={() => {
                   onNext?.();
@@ -284,7 +284,7 @@ const Addresses: React.FC<AddressesProps> = ({ user, onNext, onBack, onSuccess, 
             <Button
               title={onNext ? 'Update & Next' : 'Update'}
               type="submit"
-              startIcon={<CheckCircle size={16} />}
+              startIcon={<IconCircleCheck size={16} />}
               loading={loading}
               disabled={addressesLoading}
             />

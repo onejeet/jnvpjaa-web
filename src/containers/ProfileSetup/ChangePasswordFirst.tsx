@@ -1,5 +1,5 @@
 import { Box, Grid2 as Grid, Typography } from '@mui/material';
-import { Password, User } from '@phosphor-icons/react';
+import { IconLock, IconUser } from '@tabler/icons-react';
 import ChangePasswordForm from '../Auth/ChangePassword/ChangePasswordForm';
 import React from 'react';
 
@@ -19,7 +19,7 @@ const ChangePasswordFirst: React.FC<ChangePasswordFirstProps> = ({ onNext }) => 
       }}
     >
       <Box display="flex" alignItems="center" mb={3}>
-        <Password size={32} />
+        <IconLock size={32} />
         <Typography sx={{ ml: 1 }} fontWeight={600}>
           Change Password
         </Typography>

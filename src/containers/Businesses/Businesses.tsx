@@ -3,7 +3,7 @@ import LayoutModule from '@/layouts/Layout';
 
 import { Box, IconButton, Typography, useMediaQuery, useTheme } from '@mui/material';
 import Button from '@/components/core/Button';
-import { Plus, PlusCircle } from '@phosphor-icons/react';
+import { IconPlus, IconCirclePlus } from '@tabler/icons-react';
 import { useAuth } from '@/context/AuthContext';
 import BusinessListModule from '@/modules/BusinessListModule';
 import BusinessListFilters from './components/BusinessListFilters';
@@ -42,13 +42,13 @@ export default function Businesses() {
         {user?.id ? (
           isMobile ? (
             <IconButton color="primary" onClick={() => setAddBusiness(true)}>
-              <PlusCircle size={24} weight="bold" />
+              <IconCirclePlus size={24} />
             </IconButton>
           ) : (
             <Button
               title="List your Business"
               onClick={() => setAddBusiness(true)}
-              startIcon={<Plus size={16} weight="bold" />}
+              startIcon={<IconPlus size={16} />}
               sx={{ width: 250 }}
             />
           )

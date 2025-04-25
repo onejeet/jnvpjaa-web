@@ -19,7 +19,14 @@ import {
 } from '@/apollo/hooks';
 import { paths } from '@/config/paths';
 import TipTapTextEditor from '@/modules/TipTapTextEditor';
-import { CurrencyInr, FloppyDiskBack, Globe, MapPinLine, PencilSimple, UploadSimple } from '@phosphor-icons/react';
+import {
+  IconCurrencyRupee,
+  IconDeviceFloppy,
+  IconWorld,
+  IconMapPin,
+  IconPencil,
+  IconUpload,
+} from '@tabler/icons-react';
 import { useApolloClient } from '@apollo/client';
 import { EVENT_CATEGORIES, eventHostingmedium } from '@/constants/Events.constants';
 import dayjs from 'dayjs';
@@ -205,7 +212,7 @@ const NewEvent = () => {
               saveTypeRef.current = 'draft';
               handleSubmit(onSubmit);
             }}
-            startIcon={<FloppyDiskBack size={16} />}
+            startIcon={<IconDeviceFloppy size={16} />}
             type="submit"
             color={eventData?.getEventDetails?.status === EventStatus.Published ? 'error' : 'primary'}
             variant="outlined"
@@ -290,7 +297,7 @@ const NewEvent = () => {
                   svg: { color: 'grey.900' },
                 }}
               >
-                <PencilSimple size={18} />
+                <IconPencil size={18} />
               </IconButton>
             </>
           ) : (
@@ -366,7 +373,7 @@ const NewEvent = () => {
             label={watchMedium === 'online' ? 'URL' : 'Location'}
             control={control}
             disabled={saving}
-            startAdornment={watchMedium === 'online' ? <Globe size={18} /> : <MapPinLine size={18} />}
+            startAdornment={watchMedium === 'online' ? <IconWorld size={18} /> : <IconMapPin size={18} />}
             name="location"
             size="small"
             rules={{
@@ -404,7 +411,7 @@ const NewEvent = () => {
             label="Price"
             control={control}
             disabled={saving}
-            startAdornment={<CurrencyInr size={18} />}
+            startAdornment={<IconCurrencyRupee size={18} />}
             name="price"
             size="small"
             type="number"

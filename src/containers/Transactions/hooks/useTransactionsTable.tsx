@@ -16,7 +16,7 @@ import dayjs from 'dayjs';
 import { formatCurrency, getCurrencySymbol } from '@/utils/helpers';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import VerifiedBadge from '@/components/common/FacultyBadge';
-import { ArrowDown, ArrowUp } from '@phosphor-icons/react';
+import { IconArrowDown, IconArrowUp } from '@tabler/icons-react';
 
 const useTransactionsTable = () => {
   const client = useApolloClient();
@@ -113,7 +113,7 @@ const useTransactionsTable = () => {
                 },
               }}
             >
-              {row?.type === 'DEBIT' ? <ArrowDown size={16} weight="bold" /> : <ArrowUp size={16} weight="bold" />}
+              {row?.type === 'DEBIT' ? <IconArrowDown size={16} /> : <IconArrowUp size={16} />}
               <Typography variant="h5" color={row?.type === 'DEBIT' ? 'error.main' : 'success.main'} ml={0.5}>
                 {row?.type || ''}
               </Typography>

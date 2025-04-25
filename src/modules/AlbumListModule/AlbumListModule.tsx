@@ -3,7 +3,7 @@
 import React from 'react';
 import { AlbumBasic, ListInput, useGetAlbumsQuery } from '@/apollo/hooks';
 import { Box, Grid2 as Grid, Typography } from '@mui/material';
-import { Plus, Ticket } from '@phosphor-icons/react';
+import { IconPlus, IconTicket } from '@tabler/icons-react';
 import { useAuth } from '@/context/AuthContext';
 import { paths } from '@/config/paths';
 import EmptyView from '@/components/common/EmptyView';
@@ -75,7 +75,7 @@ const AlbumListModule: React.FC<AlbumListModuleProps> = ({
             user?.id && isCreateAllowed
               ? {
                   title: 'Create New Album',
-                  startIcon: <Plus size={16} />,
+                  startIcon: <IconPlus size={16} />,
                   onClick: () => router.push(paths.gallery.new),
                 }
               : undefined

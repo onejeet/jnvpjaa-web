@@ -2,15 +2,14 @@ import { Box, Chip, Divider, Grid2 as Grid, IconButton, Skeleton, Typography } f
 import dayjs from 'dayjs';
 import ProfilePicture from '../ProfilePicture';
 import {
-  ArrowRight,
-  CheckCircle,
-  Dot,
-  DotsThree,
-  DotsThreeVertical,
-  Pencil,
-  Trash,
-  XCircle,
-} from '@phosphor-icons/react';
+  IconArrowRight,
+  IconCircleCheck,
+  IconCircleX,
+  IconDots,
+  IconDotsVertical,
+  IconPencil,
+  IconTrash,
+} from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import { paths } from '@/config/paths';
 import { BusinessCardProps } from './BusinessCard.types';
@@ -57,13 +56,13 @@ const BusinessCard: React.FC<BusinessCardProps> = ({
             label: 'Edit',
             value: 'edit',
             onClick: () => onEdit?.(id || ''),
-            icon: <Pencil size={16} />,
+            icon: <IconPencil size={16} />,
           },
           {
             label: 'Publish',
             value: 'publish',
             onClick: () => onPublish?.(id),
-            icon: <CheckCircle size={18} />,
+            icon: <IconCircleCheck size={18} />,
             sx: {
               color: 'success.main',
               svg: {
@@ -75,7 +74,7 @@ const BusinessCard: React.FC<BusinessCardProps> = ({
             label: 'Delete',
             value: 'delete',
             onClick: () => onDelete?.(id),
-            icon: <Trash size={18} />,
+            icon: <IconTrash size={18} />,
             sx: {
               color: 'error.main',
               svg: {
@@ -91,13 +90,13 @@ const BusinessCard: React.FC<BusinessCardProps> = ({
             label: 'Edit',
             value: 'edit',
             onClick: () => onEdit?.(id || ''),
-            icon: <Pencil size={16} />,
+            icon: <IconPencil size={16} />,
           },
           {
             label: 'Delete',
             value: 'delete',
             onClick: () => onDelete?.(id),
-            icon: <Trash size={18} />,
+            icon: <IconTrash size={18} />,
             sx: {
               color: 'error.main',
               svg: {
@@ -112,7 +111,7 @@ const BusinessCard: React.FC<BusinessCardProps> = ({
             label: 'Approve',
             value: 'approve',
             onClick: () => onVerify?.(id),
-            icon: <CheckCircle size={18} />,
+            icon: <IconCircleCheck size={18} />,
             sx: {
               color: 'success.main',
               svg: {
@@ -125,7 +124,7 @@ const BusinessCard: React.FC<BusinessCardProps> = ({
             label: 'Move to Draft',
             value: 'unpublish',
             onClick: () => onPublish?.(id, true),
-            icon: <XCircle size={18} />,
+            icon: <IconCircleX size={18} />,
             sx: {
               color: 'error.main',
               svg: {
@@ -141,13 +140,13 @@ const BusinessCard: React.FC<BusinessCardProps> = ({
             label: 'Edit',
             value: 'edit',
             onClick: () => onEdit?.(id || ''),
-            icon: <Pencil size={16} />,
+            icon: <IconPencil size={16} />,
           },
           {
             label: 'Unpublish',
             value: 'unpublish',
             onClick: () => onPublish?.(id, true),
-            icon: <XCircle size={18} />,
+            icon: <IconCircleX size={18} />,
             sx: {
               color: 'error.main',
               svg: {
@@ -248,17 +247,17 @@ const BusinessCard: React.FC<BusinessCardProps> = ({
           <Typography variant="body2">{dayjs(updatedAt).format('MMM DD, YYYY')}</Typography>
           {/* {categoryId && (
                   <>
-                    <DotOutline size={32} weight="bold" />
+                    <IconDotsOutline size={32} weight="bold" />
                     <Typography>{categoryId}</Typography>
                   </>
                 )} */}
           {/* {statusMessage && (
             <>
-              <Dot size={32} weight="bold" />
+              <IconDots size={32} />
               <Chip size="small" label={startCase(status as string)} color="error" />
             </>
           )} */}
-          <Dot size={32} weight="bold" />
+          <IconDots size={32} />
           <ProfilePicture
             id={businessUser?.id}
             size={28}
@@ -322,7 +321,7 @@ const BusinessCard: React.FC<BusinessCardProps> = ({
                 }}
                 render={
                   <IconButton>
-                    <DotsThreeVertical size={24} weight="bold" />
+                    <IconDotsVertical size={24} />
                   </IconButton>
                 }
               />
@@ -463,7 +462,7 @@ const BusinessCard: React.FC<BusinessCardProps> = ({
             }}
             render={
               <IconButton>
-                <DotsThree size={32} weight="bold" />
+                <IconDots size={32} />
               </IconButton>
             }
           />

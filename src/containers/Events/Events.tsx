@@ -8,7 +8,7 @@ import { useAlert } from '@/context/AlertContext';
 import { useAuth } from '@/context/AuthContext';
 import { paths } from '@/config/paths';
 import { useRouter } from 'next/router';
-import { Plus, Ticket } from '@phosphor-icons/react';
+import { IconPlus, IconTicket } from '@tabler/icons-react';
 import Button from '@/components/core/Button';
 import EventListModule from '@/modules/EventListModule';
 
@@ -39,7 +39,7 @@ export default function Events() {
         {user?.id && (
           <Button
             title="Create Event"
-            startIcon={<Plus size={16} />}
+            startIcon={<IconPlus size={16} />}
             onClick={() => router.push(paths.events.new)}
             sx={{
               width: '150px',

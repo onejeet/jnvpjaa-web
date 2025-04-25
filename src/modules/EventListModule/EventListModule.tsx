@@ -4,7 +4,7 @@ import React from 'react';
 import { ListInput, useGetEventListQuery } from '@/apollo/hooks';
 import { Box, Grid2 as Grid, Typography } from '@mui/material';
 import EventCard from '@/components/common/EventCard/EventCard';
-import { Plus, Ticket } from '@phosphor-icons/react';
+import { IconPlus, IconTicket } from '@tabler/icons-react';
 import useEvents from '@/hooks/useEvents';
 import { useAuth } from '@/context/AuthContext';
 import { paths } from '@/config/paths';
@@ -77,7 +77,7 @@ const EventListModule: React.FC<EventListModuleProps> = ({
             user?.id && isCreateAllowed
               ? {
                   title: 'Create New Event',
-                  startIcon: <Plus size={16} />,
+                  startIcon: <IconPlus size={16} />,
                   onClick: () => router.push(paths.events.new),
                 }
               : undefined

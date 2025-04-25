@@ -3,7 +3,7 @@ import MuiButton from '@mui/material/Button';
 import { Theme } from '@mui/material/styles';
 import CircularProgress from '@mui/material/CircularProgress';
 import { ButtonProps } from './Button.types';
-import { CheckCircle, X } from '@phosphor-icons/react';
+import { IconCircleCheck, IconX } from '@tabler/icons-react';
 
 const actionConfig: any = {
   // add: {
@@ -55,7 +55,7 @@ const actionConfig: any = {
   //   text: 'SMS',
   // },
   save: {
-    startIcon: CheckCircle,
+    startIcon: IconCircleCheck,
     color: 'primary',
     variant: 'contained',
     text: 'Save',
@@ -67,7 +67,7 @@ const actionConfig: any = {
   //   text: 'Submit',
   // },
   cancel: {
-    startIcon: X,
+    startIcon: IconX,
     color: 'secondary',
     variant: 'outlined',
     text: 'Cancel',

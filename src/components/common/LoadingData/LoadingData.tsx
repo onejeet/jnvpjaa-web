@@ -1,10 +1,10 @@
 import { Box, Typography } from '@mui/material';
-import { Spinner } from '@phosphor-icons/react';
+import { IconLoader2 } from '@tabler/icons-react';
 
 const LoadingData = () => {
   return (
     <Box width="100%" my={3} display="flex" flexDirection="column" alignItems="center" justifyContent="center" gap={2}>
-      <Spinner size={80} />
+      <IconLoader2 size={80} />
       <Typography color="grey.500">Loading...</Typography>
     </Box>
   );
