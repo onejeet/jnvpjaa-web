@@ -1,5 +1,6 @@
 import { Event, GetEventDetailsDocument, GetEventDetailsQuery } from '@/apollo/hooks';
 import EventDetails from '@/containers/EventDetails';
+import { PageProps } from '@/types/global';
 import { initializeApollo } from '@/utils/apollo';
 import { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -9,7 +10,7 @@ export async function generateMetadata(
   { params }: { params: { id: string } },
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const id = await params.id;
+  const id = params.id;
   const apolloClient = initializeApollo();
 
   try {
@@ -69,8 +70,8 @@ async function getEventDetails(id: string) {
   }
 }
 
-export default async function EventDetailsPage({ params }: { params: { id: string } }) {
-  const id = await params.id;
+export default async function EventDetailsPage({ params }: PageProps) {
+  const id = params.id;
   const event = await getEventDetails(id);
 
   return <EventDetails event={event} />;

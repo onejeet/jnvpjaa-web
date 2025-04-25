@@ -5,3 +5,9 @@ export interface EventAttendeeUser {
   batch: number;
   profileImage?: string;
 }
+
+export interface PageProps {
+  params: {
+    id: string;
+  };
+}
