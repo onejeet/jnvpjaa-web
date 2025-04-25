@@ -15,7 +15,7 @@ import Logo from '@/components/common/Logo';
 
 import MenuList from '../../components/common/MenuList';
 import { useAuth } from '@/context/AuthContext';
-import { Heart } from '@phosphor-icons/react';
+import { Heart } from '@tabler/icons-react';
 import Link from 'next/link';
 
 const LayoutFooter: React.FC = () => {

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import { checkInternetConnection } from '@/utils/network';
 import Dialog from '@/components/core/Dialog';
-import { ArrowsCounterClockwise, CheckCircle } from '@phosphor-icons/react';
+import { IconRefresh as ArrowsCounterClockwise, IconCircleCheck as CheckCircle } from '@tabler/icons-react';
 import Lottie from 'lottie-react';
 import successLottieIcon from '@/utils/lottie/success3_icon.json';
 import offlineLottieIcon from '@/utils/lottie/offline_art.json';

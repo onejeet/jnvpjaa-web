@@ -17,7 +17,12 @@ import { blueGrey, cyan, deepPurple } from '@mui/material/colors';
 import VerifiedBadge from '../VerifiedBadge';
 import { Business, User } from '@/apollo/hooks';
 import { formatPhoneNumber, getSocialMediaIcon } from '@/utils/helpers';
-import { EnvelopeSimple, Globe, MapPinLine, Phone } from '@phosphor-icons/react';
+import {
+  IconMail as EnvelopeSimple,
+  IconGlobe as Globe,
+  IconMapPin as MapPinLine,
+  IconPhone as Phone,
+} from '@tabler/icons-react';
 import Image from 'next/image';
 import ProfilePicture from '../ProfilePicture';
 import { paths } from '@/config/paths';

@@ -2,8 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Select, { MultiValue, SingleValue, components } from 'react-select';
 import { CircularProgress, Box, useTheme, Avatar, AvatarGroup, FormHelperText, OutlinedInput } from '@mui/material';
 import ProfilePicture from '@/components/common/ProfilePicture';
-import TextField from '../TextField';
-import { MagnifyingGlass } from '@phosphor-icons/react';
+import { MagnifyingGlass } from '@tabler/icons-react';
 
 interface Option {
   value: string;
@@ -74,7 +73,7 @@ const CustomMenuList = (props: any) => {
             fullWidth
             size="small"
             variant="outlined"
-            startAdornment={<IconSearch size={24} />}
+            startAdornment={<MagnifyingGlass size={24} />}
             placeholder="Search..."
             value={search} // bind the search state to the input field
             onChange={handleSearchChange} // update the search state on input change

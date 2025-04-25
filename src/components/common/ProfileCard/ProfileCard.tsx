@@ -6,7 +6,7 @@ import { styled } from '@mui/material/styles';
 import React from 'react';
 
 import { ProfileCardProps } from './ProfileCard.types';
-import { EnvelopeSimple, UsersThree } from '@phosphor-icons/react';
+import { IconMail as EnvelopeSimple, IconUsersGroup as UsersThree } from '@tabler/icons-react';
 
 interface CustomBoxProps extends BoxProps {
   bgColor?: string;

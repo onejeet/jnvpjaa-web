@@ -10,7 +10,7 @@ import Popover from '@mui/material/Popover';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 /* ICONS */
-import { Eyedropper as EyedropperIcon, Palette } from '@phosphor-icons/react';
+import { EyedropperIcon, Palette } from '@tabler/icons-react';
 /* REACT INPUT MASK */
 import { HexColorPicker } from 'react-colorful';
 

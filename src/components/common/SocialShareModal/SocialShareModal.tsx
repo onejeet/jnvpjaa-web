@@ -27,17 +27,17 @@ import {
 
 import CheckIcon from '@mui/icons-material/Check';
 import {
-  Copy,
-  EnvelopeSimple,
-  FacebookLogo,
-  LinkedinLogo,
-  RedditLogo,
-  ShareNetwork,
-  TelegramLogo,
-  TwitterLogo,
-  WhatsappLogo,
-  XCircle,
-} from '@phosphor-icons/react';
+  IconCopy as Copy,
+  IconMail as EnvelopeSimple,
+  IconBrandFacebook as FacebookLogo,
+  IconBrandLinkedin as LinkedinLogo,
+  IconBrandReddit as RedditLogo,
+  IconShare as ShareNetwork,
+  IconBrandTelegram as TelegramLogo,
+  IconBrandTwitter as TwitterLogo,
+  IconBrandWhatsapp as WhatsappLogo,
+  IconX as XCircle,
+} from '@tabler/icons-react';
 import Button from '@/components/core/Button';
 
 interface SocialShareModalProps {

@@ -20,20 +20,24 @@ import { EventCardProps } from './EventCard.types';
 import Button from '@/components/core/Button';
 import { getAvatarDataUrl, startCase, valueToLabelFormatter } from '@/utils/helpers';
 import {
-  ArrowRight,
-  ArrowSquareOut,
-  ArrowUpRight,
-  CalendarDots,
-  CalendarHeart,
-  Check,
-  CheckCircle,
-  Globe,
-  Heart,
-  MapPinLine,
-  Minus,
-  NotePencil,
-  XCircle,
-} from '@phosphor-icons/react';
+  IconCalendarEvent as CalendarDots,
+  IconMapPin as MapPinLine,
+  IconExternalLink as ArrowSquareOut,
+  IconArrowUpRight as ArrowUpRight,
+  IconCalendarHeart,
+  IconCheck,
+  IconCircleCheck,
+  IconGlobe,
+  IconHeart,
+  IconMinus,
+  IconPencilMinus as IconNotePencil,
+  IconPlaystationX as IconXCircle,
+  IconArrowRight,
+  IconCalendarEvent,
+  IconMapPin,
+  IconArrowUpRight,
+  IconHeartFilled,
+} from '@tabler/icons-react';
 import { EventStatus, Maybe, User, UserBasic } from '@/apollo/hooks';
 import { paths } from '@/config/paths';
 import { useRouter } from 'next/router';
@@ -190,7 +194,7 @@ const EventCard: React.FC<EventCardProps> = ({
               }}
             >
               {title}
-              {!showDescription && <ArrowRight weight="bold" />}
+              {!showDescription && <IconArrowRight size={20} />}
             </Typography>
 
             {isLive && (
@@ -257,8 +261,8 @@ const EventCard: React.FC<EventCardProps> = ({
             <>
               {' '}
               <Typography display="flex" alignItems="center" variant="body2" fontWeight={500} color="text.secondary">
-                <CalendarDots size={18} style={{ marginRight: '8px' }} />
-                {formattedStartDate} <Minus size={18} style={{ marginRight: '4px', marginLeft: '4px' }} />{' '}
+                <IconCalendarEvent size={18} style={{ marginRight: '8px' }} />
+                {formattedStartDate} <IconMinus size={18} style={{ marginRight: '4px', marginLeft: '4px' }} />{' '}
                 {formattedEndDate || 'Ongoing'}
               </Typography>
             </>
@@ -280,9 +284,9 @@ const EventCard: React.FC<EventCardProps> = ({
                 }}
               >
                 {medium === 'online' ? (
-                  <Globe size={18} style={{ marginRight: '8px' }} />
+                  <IconGlobe size={18} style={{ marginRight: '8px' }} />
                 ) : (
-                  <MapPinLine size={18} style={{ marginRight: '8px' }} />
+                  <IconMapPin size={18} style={{ marginRight: '8px' }} />
                 )}
                 {medium === 'online' && location !== 'protected' ? (
                   <Typography
@@ -305,7 +309,7 @@ const EventCard: React.FC<EventCardProps> = ({
                     }}
                   >
                     {location}
-                    <ArrowUpRight size={14} style={{ marginLeft: '4px', marginTop: '2px' }} weight="bold" />
+                    <IconArrowUpRight size={14} style={{ marginLeft: '4px', marginTop: '2px' }} />
                   </Typography>
                 ) : (
                   <Typography
@@ -370,7 +374,7 @@ const EventCard: React.FC<EventCardProps> = ({
               disabled={loading}
               fullWidth
               title="Edit"
-              startIcon={<NotePencil size={16} />}
+              startIcon={<IconNotePencil size={16} />}
               sx={{ ml: 'auto', mt: 2 }}
               onClick={() => onEdit?.(id)}
             />
@@ -380,7 +384,7 @@ const EventCard: React.FC<EventCardProps> = ({
                 disabled={loading}
                 fullWidth
                 title="Publish"
-                startIcon={<CheckCircle size={16} />}
+                startIcon={<IconCircleCheck size={16} />}
                 sx={{ ml: 'auto', mt: 2 }}
                 onClick={() => onPublish?.(id)}
               />
@@ -395,7 +399,7 @@ const EventCard: React.FC<EventCardProps> = ({
                   disabled={loading}
                   fullWidth
                   title="Edit"
-                  startIcon={<NotePencil size={16} />}
+                  startIcon={<IconNotePencil size={16} />}
                   onClick={() => onEdit?.(id)}
                 />
                 {(status === EventStatus.Published || status === EventStatus.PendingApproval) && (
@@ -404,7 +408,7 @@ const EventCard: React.FC<EventCardProps> = ({
                     disabled={loading}
                     fullWidth
                     title="Move to Draft"
-                    startIcon={<XCircle size={16} />}
+                    startIcon={<IconXCircle size={16} />}
                     onClick={() => onPublish?.(id, EventStatus.Draft)}
                     sx={{ whiteSpace: 'nowrap', minWidth: '140px' }}
                   />
@@ -417,7 +421,7 @@ const EventCard: React.FC<EventCardProps> = ({
                 disabled={loading}
                 fullWidth
                 title="Approve"
-                startIcon={<CheckCircle size={16} />}
+                startIcon={<IconCircleCheck size={16} />}
                 sx={{ whiteSpace: 'nowrap' }}
                 onClick={() => verifyEvent?.(id)}
               />
@@ -431,7 +435,7 @@ const EventCard: React.FC<EventCardProps> = ({
                   fullWidth
                   disabled={loading}
                   // endIcon={<ArrowRightAltIcon />}
-                  startIcon={<Heart size={20} weight="fill" />}
+                  startIcon={<IconHeartFilled size={20} />}
                   onClick={() => markImGoing(id)}
                   sx={{ whiteSpace: 'nowrap', minWidth: '130px' }}
                 />

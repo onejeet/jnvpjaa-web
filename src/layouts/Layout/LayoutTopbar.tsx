@@ -30,7 +30,12 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/router';
 import HoverPopover from '@/components/common/HoverPopover';
 import HeaderAddButton from './HeaderAddButton';
-import { Cake, Password, SignOut, User } from '@phosphor-icons/react';
+import {
+  IconCake as Cake,
+  IconPassword as Password,
+  IconLogout as SignOut,
+  IconUser as User,
+} from '@tabler/icons-react';
 import { paths } from '@/config/paths';
 import Lottie from 'lottie-react';
 import giftsLottieIcon from '@/utils/lottie/gifts_art.json';

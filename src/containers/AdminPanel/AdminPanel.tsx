@@ -2,7 +2,7 @@ import { useSendMassEmailMutation } from '@/apollo/hooks';
 import Button from '@/components/core/Button';
 import { useAuth } from '@/context/AuthContext';
 import { Box } from '@mui/material';
-import { PaperPlaneTilt } from '@phosphor-icons/react';
+import { IconSend as PaperPlaneTilt } from '@tabler/icons-react';
 
 const AdminPanel = () => {
   const { isAdmin } = useAuth();

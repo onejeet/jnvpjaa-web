@@ -4,15 +4,15 @@ import { Box, Chip, Divider, Grid2 as Grid, IconButton, Skeleton, Typography } f
 import dayjs from 'dayjs';
 import ProfilePicture from '../ProfilePicture';
 import {
-  ArrowRight,
-  CheckCircle,
-  Dot,
-  DotsThree,
-  DotsThreeVertical,
-  Pencil,
-  Trash,
-  XCircle,
-} from '@phosphor-icons/react';
+  IconArrowRight as ArrowRight,
+  IconCircleCheck as CheckCircle,
+  IconPoint as Dot,
+  IconDots as DotsThree,
+  IconDotsVertical as DotsThreeVertical,
+  IconPencil as Pencil,
+  IconTrash as Trash,
+  IconPlaystationX as XCircle,
+} from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import { paths } from '@/config/paths';
 import { IBlogCardProps } from './BlogCard.types';

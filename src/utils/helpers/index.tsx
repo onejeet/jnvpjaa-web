@@ -1,6 +1,13 @@
 import { adventurerNeutral, bottts, botttsNeutral, thumbs } from '@dicebear/collection';
 import { createAvatar } from '@dicebear/core';
-import { EnvelopeSimple, FacebookLogo, InstagramLogo, LinkedinLogo, XLogo, YoutubeLogo } from '@phosphor-icons/react';
+import {
+  IconMail as EnvelopeSimple,
+  IconBrandFacebook as FacebookLogo,
+  IconBrandInstagram as InstagramLogo,
+  IconBrandLinkedin as LinkedinLogo,
+  IconBrandX as XLogo,
+  IconBrandYoutube as YoutubeLogo,
+} from '@tabler/icons-react';
 import dayjs from 'dayjs';
 
 import parsePhoneNumber from 'libphonenumber-js';

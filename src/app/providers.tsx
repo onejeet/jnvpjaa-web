@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { LayoutProvider } from '@/context/LayoutContext';
 import createEmotionCache from '@/utils/theme/createEmotionCache';
 import { CacheProvider } from '@emotion/react';
@@ -16,6 +17,7 @@ const clientSideEmotionCache = createEmotionCache();
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+
   const isAuthPage = React.useMemo(() => ['/signin', '/signup', '/forgot-password'].includes(pathname), [pathname]);
 
   const checkAuth = React.useMemo(() => {

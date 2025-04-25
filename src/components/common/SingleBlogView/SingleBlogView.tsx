@@ -14,7 +14,12 @@ import React from 'react';
 import DOMPurify from 'dompurify';
 import { ISingleBlogViewProps } from './SingleBlogView.types';
 import dayjs from 'dayjs';
-import { CalendarDots, Dot, DotOutline, HandsClapping } from '@phosphor-icons/react';
+import {
+  IconCalendarEvent as CalendarDots,
+  IconPoint as Dot,
+  IconCircleDotted as DotOutline,
+  IconClap as HandsClapping,
+} from '@tabler/icons-react';
 import ProfilePicture from '../ProfilePicture';
 import { BlogStatus } from '@/apollo/hooks';
 import { debounce, getFormattedLabel, startCase } from '@/utils/helpers';

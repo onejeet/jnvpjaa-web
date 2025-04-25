@@ -1,7 +1,13 @@
 import { IHeaderMenuItem } from 'src/layouts/Layout/LayoutTopbar';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import ExtensionIcon from '@mui/icons-material/Extension';
-import { Article, ArticleNyTimes, CalendarDots, ImagesSquare, Ticket } from '@phosphor-icons/react';
+import {
+  IconArticle as Article,
+  IconNews as ArticleNyTimes,
+  IconCalendarEvent as CalendarDots,
+  IconPhotoShare as ImagesSquare,
+  IconTicket as Ticket,
+} from '@tabler/icons-react';
 
 export const HEADER_MENU: IHeaderMenuItem[] = [
   {
@@ -215,7 +221,7 @@ export const ADD_ENTITIES: IHeaderMenuItem[] = [
   {
     label: 'New Blog Post',
     path: '/blog/new',
-    icon: <ArticleNyTimes />,
+    icon: <Article />,
     // disabled: true,
   },
   {

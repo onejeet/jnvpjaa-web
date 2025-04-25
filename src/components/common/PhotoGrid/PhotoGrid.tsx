@@ -1,8 +1,12 @@
 import React from 'react';
 import { Photo } from '@/apollo/hooks';
 import { downloadImage } from '@/utils/media';
-import { Box, Card, CardMedia, IconButton, Skeleton } from '@mui/material';
-import { CheckCircle, Download, DownloadSimple } from '@phosphor-icons/react';
+import { Box, Card, CardMedia, Skeleton, IconButton } from '@mui/material';
+import {
+  IconCheckCircle as CheckCircle,
+  IconDownload as Download,
+  IconDownload as DownloadSimple,
+} from '@tabler/icons-react';
 import Masonry from 'react-masonry-css';
 
 interface PhotoGridProps {
@@ -51,7 +55,7 @@ export default function PhotoGrid({ photos, loading, authView, onSelect }: Photo
         >
           {selected?.id === photo?.id && (
             <Box sx={{ position: 'absolute', right: '10px', top: '10px', zIndex: 1, svg: { color: 'success.main' } }}>
-              <CheckCircle size={32} weight="fill" />
+              <CheckCircle size={32} />
             </Box>
           )}
           {loading ? (

@@ -17,7 +17,12 @@ import {
 import { AlbumCardProps } from './AlbumCard.types';
 import Button from '@/components/core/Button';
 import { getAvatarDataUrl, startCase, valueToLabelFormatter } from '@/utils/helpers';
-import { ArrowRight, CalendarDots, ImagesSquare, Star } from '@phosphor-icons/react';
+import {
+  IconArrowRight as ArrowRight,
+  IconCalendarEvent as CalendarDots,
+  IconPhotoShare as ImagesSquare,
+  IconStar as Star,
+} from '@tabler/icons-react';
 import { EventStatus, Maybe, User, UserBasic } from '@/apollo/hooks';
 import ProfilePicture from '../ProfilePicture';
 import { paths } from '@/config/paths';
@@ -151,7 +156,7 @@ const AlbumCard: React.FC<AlbumCardProps> = ({
               }}
             >
               {title}
-              {!isMinimal && <ArrowRight weight="bold" />}
+              {!isMinimal && <ArrowRight />}
             </Typography>
           </Box>
         )}
@@ -182,7 +187,7 @@ const AlbumCard: React.FC<AlbumCardProps> = ({
                 },
               }}
             >
-              <Star size={16} weight="fill" />
+              <Star size={16} />
               <Typography variant="body2" ml={0.5} color="text.secondary">
                 {total_photos} Photos
               </Typography>
@@ -274,7 +279,7 @@ const AlbumCard: React.FC<AlbumCardProps> = ({
                   fullWidth
                   disabled={loading}
                   // endIcon={<ArrowRightAltIcon />}
-                  startIcon={<Heart size={20} weight="fill" />}
+                  startIcon={<Heart size={20} />}
                   onClick={() => markImGoing(id)}
                   sx={{ whiteSpace: 'nowrap', minWidth: '130px' }}
                 />

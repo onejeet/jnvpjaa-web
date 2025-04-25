@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Typography, IconButton, Tooltip, Fade, BoxProps } from '@mui/material';
-import { HandsClapping } from '@phosphor-icons/react';
+import { IconHandLoveYou as HandsClapping } from '@tabler/icons-react';
 import { UserBasic } from '@/apollo/hooks';
 import ProfilePicture from '../ProfilePicture';
 

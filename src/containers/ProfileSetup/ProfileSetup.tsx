@@ -10,7 +10,7 @@ import { useAuth } from '@/context/AuthContext';
 import Addresses from '@/modules/ProfileSetup/Addresses';
 import DataPrivacy from '@/modules/ProfileSetup/DataPrivacy';
 import { useRouter } from 'next/router';
-import { CheckCircle } from '@phosphor-icons/react';
+import { IconCircleCheck as CheckCircle } from '@tabler/icons-react';
 import Welcome from '@/components/common/Welcome/Welcome';
 import ChangePassword from '../Auth/ChangePassword/ChangePassword';
 import ChangePasswordFirst from './ChangePasswordFirst';
@@ -19,11 +19,7 @@ import ProfessionInfo from '@/modules/ProfileSetup/ProfessionInfo';
 const CustomStepIcon = (props: StepIconProps) => {
   const { active, completed, className } = props;
 
-  return completed ? (
-    <CheckCircle size={32} weight="fill" /> // Change the color here
-  ) : (
-    <div className={className} />
-  );
+  return completed ? <CheckCircle size={32} weight="fill" /> : <div className={className} />;
 };
 
 const ProfileSetup = () => {

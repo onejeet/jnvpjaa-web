@@ -8,15 +8,15 @@ import { User } from '@/apollo/hooks';
 import React from 'react';
 import { useProfile } from '@/context/ProfileContext';
 import {
-  Cake,
-  EnvelopeSimpleOpen,
-  Lock,
-  LockSimple,
-  Phone,
-  PhoneDisconnect,
-  SuitcaseSimple,
-  WhatsappLogo,
-} from '@phosphor-icons/react';
+  IconCake as Cake,
+  IconMailOpened as EnvelopeSimpleOpen,
+  IconLock as Lock,
+  IconLock as LockSimple,
+  IconPhone as Phone,
+  IconPhoneOff as PhoneDisconnect,
+  IconBriefcase as SuitcaseSimple,
+  IconBrandWhatsapp as WhatsappLogo,
+} from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { formatPhoneNumber } from '@/utils/helpers';
 

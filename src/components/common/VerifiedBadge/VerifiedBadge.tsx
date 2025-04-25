@@ -1,5 +1,5 @@
 import { Box, Tooltip, useMediaQuery, useTheme } from '@mui/material';
-import { LockSimple } from '@phosphor-icons/react';
+import { IconLock as LockSimple } from '@tabler/icons-react';
 import Image from 'next/image';
 import React from 'react';
 

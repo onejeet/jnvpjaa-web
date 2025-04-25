@@ -2,7 +2,7 @@ import React from 'react';
 import { IconButton, Tooltip, Typography } from '@mui/material';
 import { IProps } from './CopyContentButton.types';
 import { Box } from '@mui/material';
-import { CheckCircle, Copy } from '@phosphor-icons/react';
+import { IconCircleCheck as CheckCircle, IconDeviceFloppy as Copy } from '@tabler/icons-react';
 import Button from '@/components/core/Button';
 
 const CopyContentButton: React.FC<IProps> = ({

@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import { DIALOG_OKAY_BUTTON_WRAPPER_ID } from '.';
 import type { DialogFooterProps } from './Dialog.types';
 import Button from '../Button';
-import { CheckCircle, X, XCircle } from '@phosphor-icons/react';
+import { IconCheckCircle as CheckCircle, IconX as X, IconXCircle as XCircle } from '@tabler/icons-react';
 
 const DialogFooter: React.FC<DialogFooterProps> = ({
   title,

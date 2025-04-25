@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Typography, Paper } from '@mui/material';
 import Image from 'next/image';
 import { User } from '@/apollo/hooks';
-import { CheckCircle } from '@phosphor-icons/react';
+import { IconCircleCheck as CheckCircle } from '@tabler/icons-react';
 import Button from '@/components/core/Button';
 import { useAuth } from '@/context/AuthContext';
 import { notoSerif } from '@/utils/theme/fonts';

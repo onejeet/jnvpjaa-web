@@ -23,7 +23,7 @@ import React from 'react';
 import HoverPopover from '../../components/common/HoverPopover';
 import type { IHeaderMenuItem, IMenuItemProps } from './LayoutTopbar';
 import { ADD_ENTITIES } from '@/constants/Header.constants';
-import { IconCirclePlus } from '@phosphor-icons/react';
+import { CirclePlus as IconCirclePlus } from '@tabler/icons-react';
 
 const HeaderAddButton: React.FC = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);

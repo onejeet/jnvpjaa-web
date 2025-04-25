@@ -7,7 +7,7 @@ import { default as MuiMenu } from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 import Typography from '@mui/material/Typography';
-import { CaretRight } from '@phosphor-icons/react';
+import { IconChevronRight as CaretRight } from '@tabler/icons-react';
 import { bindMenu, bindTrigger, usePopupState } from 'material-ui-popup-state/hooks';
 import HoverPopover from '@/components/common/HoverPopover';
 import Button from '@/components/core/Button';

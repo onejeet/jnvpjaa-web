@@ -22,20 +22,20 @@ import { SingleEventViewProps } from './SingleEventView.types';
 import Button from '@/components/core/Button';
 import { getAvatarDataUrl, startCase, valueToLabelFormatter } from '@/utils/helpers';
 import {
-  ArrowRight,
-  ArrowSquareOut,
-  ArrowUpRight,
-  CalendarDots,
-  CalendarHeart,
-  Check,
-  CheckCircle,
-  Globe,
-  Heart,
-  MapPinLine,
-  Minus,
-  NotePencil,
-  XCircle,
-} from '@phosphor-icons/react';
+  IconArrowRight as ArrowRight,
+  IconExternalLink as ArrowSquareOut,
+  IconArrowUpRight as ArrowUpRight,
+  IconCalendarEvent as CalendarDots,
+  IconCalendarHeart as CalendarHeart,
+  IconCheck as Check,
+  IconCircleCheck as CheckCircle,
+  IconGlobe as Globe,
+  IconHeart as Heart,
+  IconMapPin as MapPinLine,
+  IconMinus as Minus,
+  IconNote as NotePencil,
+  IconPlaystationX as XCircle,
+} from '@tabler/icons-react';
 import { EventStatus, Maybe, User, UserBasic } from '@/apollo/hooks';
 import { paths } from '@/config/paths';
 import { useRouter } from 'next/router';

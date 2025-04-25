@@ -1,30 +1,30 @@
-import type { Icon } from '@phosphor-icons/react';
+import type { Icon as TablerIcon } from '@tabler/icons-react';
 import {
-  Image,
-  LinkSimpleHorizontal,
-  ListBullets,
-  ListNumbers,
-  Quotes,
-  TextAa,
-  TextAlignCenter,
-  TextAlignJustify,
-  TextAlignLeft,
-  TextAlignRight,
-  TextB,
-  TextH,
-  TextHFive,
-  TextHFour,
-  TextHOne,
-  TextHSix,
-  TextHThree,
-  TextHTwo,
-  TextIndent,
-  TextItalic,
-  TextOutdent,
-  TextT,
-  TextUnderline,
-  YoutubeLogo,
-} from '@phosphor-icons/react';
+  IconPhoto as Image,
+  IconLink as LinkSimpleHorizontal,
+  IconList as ListBullets,
+  IconListNumbers as ListNumbers,
+  IconQuote as Quotes,
+  IconTypography as TextAa,
+  IconAlignCenter as TextAlignCenter,
+  IconAlignJustified as TextAlignJustify,
+  IconAlignLeft as TextAlignLeft,
+  IconAlignRight as TextAlignRight,
+  IconBold as TextB,
+  IconLetterH as TextH,
+  IconH5 as TextHFive,
+  IconH4 as TextHFour,
+  IconH1 as TextHOne,
+  IconH6 as TextHSix,
+  IconH3 as TextHThree,
+  IconH2 as TextHTwo,
+  IconIndentIncrease as TextIndent,
+  IconItalic as TextItalic,
+  IconIndentDecrease as TextOutdent,
+  IconLetterT as TextT,
+  IconUnderline as TextUnderline,
+  IconBrandYoutube as YoutubeLogo,
+} from '@tabler/icons-react';
 
 export const EDITOR_ICONS = {
   bold: TextB,
@@ -51,7 +51,7 @@ export const EDITOR_ICONS = {
   indent_in: TextIndent,
   indent_out: TextOutdent,
   blockquote: Quotes,
-} as Record<string, Icon>;
+} as Record<string, TablerIcon>;
 
 export const FONT_FAMILY_LIST = [
   {
