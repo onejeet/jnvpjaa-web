@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import { LayoutProvider } from '@/context/LayoutContext';
 import createEmotionCache from '@/utils/theme/createEmotionCache';

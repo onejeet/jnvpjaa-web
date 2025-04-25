@@ -3,7 +3,7 @@ import { Photo } from '@/apollo/hooks';
 import { downloadImage } from '@/utils/media';
 import { Box, Card, CardMedia, Skeleton, IconButton } from '@mui/material';
 import {
-  IconCheckCircle as CheckCircle,
+  IconCircleCheck as CheckCircle,
   IconDownload as Download,
   IconDownload as DownloadSimple,
 } from '@tabler/icons-react';

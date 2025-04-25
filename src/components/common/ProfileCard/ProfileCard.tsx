@@ -77,7 +77,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
           color="grey.700"
           sx={{ mb: 1, svg: { mr: 1, color: 'grey.700' } }}
         >
-          <UsersThree size={18} weight="fill" /> Batch of {batch}
+          <UsersThree size={18} /> Batch of {batch}
         </Typography>
         {email && (
           <Typography
@@ -87,7 +87,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
             color="grey.700"
             sx={{ svg: { mr: 1, color: 'grey.700' } }}
           >
-            <EnvelopeSimple size={18} weight="fill" /> {email}
+            <EnvelopeSimple size={18} /> {email}
           </Typography>
         )}
 
