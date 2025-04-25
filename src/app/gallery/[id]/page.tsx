@@ -6,10 +6,7 @@ import { initializeApollo } from '@/utils/apollo';
 import { PageProps } from '.next/types/app/layout';
 
 // Generate dynamic metadata for the album page
-export async function generateMetadata(
-  { params }: { params: { id: string } },
-  parent: ResolvingMetadata
-): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps, parent: ResolvingMetadata): Promise<Metadata> {
   const { id } = await params;
   const apolloClient = initializeApollo();
 

@@ -6,10 +6,7 @@ import { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
 
 // Generate dynamic metadata for the event page
-export async function generateMetadata(
-  { params }: { params: { id: string } },
-  parent: ResolvingMetadata
-): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps, parent: ResolvingMetadata): Promise<Metadata> {
   const { id } = await params;
   const apolloClient = initializeApollo();
 
