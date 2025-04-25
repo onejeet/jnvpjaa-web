@@ -1,7 +1,9 @@
+'use client';
+
 import React, { createContext, useContext } from 'react';
 import { OnboardingContextProps, OnboardingProviderProps } from './OnboardingContext.types';
 import { useGetUserDetailsQuery, User, useUpdateUserMutation } from '@/apollo/hooks';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '../AuthContext';
 
 const defaultProvider: OnboardingContextProps = {};
@@ -10,8 +12,8 @@ const OnboardingContext = createContext(defaultProvider);
 
 const OnboardingProvider = ({ children }: OnboardingProviderProps) => {
   const [editingProfile, setEditingProfile] = React.useState<boolean>(false);
-  const router = useRouter();
-  const { id } = router.query;
+  const searchParams = useSearchParams();
+  const id = searchParams.get('id');
   const { data: userData, loading: userDataLoading } = useGetUserDetailsQuery({
     skip: !id,
     variables: {

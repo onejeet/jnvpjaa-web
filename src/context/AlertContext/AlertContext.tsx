@@ -1,3 +1,5 @@
+'use client';
+
 import React, { createContext, useContext } from 'react';
 import Box from '@mui/material/Box';
 import { WRAPPER_ID } from './AlertContext.constant';

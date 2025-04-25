@@ -1,3 +1,5 @@
+'use client';
+
 import React, { createContext, useContext } from 'react';
 import modes from '@/utils/theme/ThemeOptions';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
