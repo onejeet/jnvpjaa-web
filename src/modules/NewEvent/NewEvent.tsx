@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useAlert } from '@/context/AlertContext';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm, useWatch } from 'react-hook-form';
 import { Box, CircularProgress, Grid2 as Grid, IconButton, Typography } from '@mui/material';
 import FormTextField from '@/components/form/FormTextField';
@@ -35,7 +35,8 @@ import { UnsplashImageSelector } from '../UnsplashImageSelector/UnsplashImamgeSe
 
 const NewEvent = () => {
   const router = useRouter();
-  const { id: eventId } = router.query;
+  const searchParams = useSearchParams();
+  const eventId = searchParams.get('id');
   const client = useApolloClient();
   const { showAlert } = useAlert();
   const saveTypeRef = React.useRef('draft');

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useAlert } from '@/context/AlertContext';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm, useWatch } from 'react-hook-form';
 import { Box, CircularProgress, Divider, Grid2 as Grid, Typography } from '@mui/material';
 import FormTextField from '@/components/form/FormTextField';
@@ -31,7 +31,8 @@ import Image from 'next/image';
 
 const NewBlog = () => {
   const router = useRouter();
-  const { id: slug } = router.query;
+  const searchParams = useSearchParams();
+  const slug = searchParams.get('id');
   const client = useApolloClient();
   const { showAlert } = useAlert();
   const { user } = useAuth();
