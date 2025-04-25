@@ -1,3 +1,5 @@
+'use client';
+
 import { Box, Card, Divider, Typography } from '@mui/material';
 import SigninForm from './SignupForm';
 import GlobalBgShade from '@/components/common/GlobalBgShade';

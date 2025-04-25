@@ -7,7 +7,7 @@ import { IForgotPasswordFormInput } from './ForgotPassword.types';
 import FormTextField from '@/components/form/FormTextField';
 import { useAlert } from '@/context/AlertContext';
 import Button from '@/components/core/Button';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Info } from '@mui/icons-material';
 import { useForgotPasswordMutation, useResetPasswordMutation } from '@/apollo/hooks';
 import Image from 'next/image';
@@ -16,7 +16,9 @@ import { paths } from '@/config/paths';
 const SigninForm = () => {
   const [mailSent, setMailSent] = React.useState<boolean>(false);
   const router = useRouter();
-  const { e = '', c = '' } = router.query;
+  const searchParams = useSearchParams();
+  const e = searchParams.get('e');
+  const c = searchParams.get('c');
   const { showAlert } = useAlert();
   const {
     control,

@@ -1,13 +1,16 @@
+'use client';
+
 import { Box, Card, Typography } from '@mui/material';
 import ForgotPasswordForm from './ForgotPasswordForm';
 import Image from 'next/image';
 import GlobalBgShade from '@/components/common/GlobalBgShade';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 
 const ForgotPassword = () => {
-  const router = useRouter();
-  const { e = '', c = '' } = router.query;
+  const searchParams = useSearchParams();
+  const e = searchParams.get('e');
+  const c = searchParams.get('c');
 
   return (
     <Box
