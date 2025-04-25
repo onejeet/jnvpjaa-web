@@ -44,7 +44,11 @@ const nextConfig = {
   },
   transpilePackages: ['mui-tel-input'],
   webpack: (config) => {
-    config.resolve.alias.canvas = false;
+    // config.resolve.alias.canvas = false;
+    config.resolve.alias = {
+      ...(config.resolve.alias || {}),
+      canvas: false
+    };
 
     return config;
   },
