@@ -1,3 +1,5 @@
+'use client';
+
 import Dialog from '@/components/core/Dialog';
 import { useAlert } from '@/context/AlertContext';
 import { useForm, useWatch } from 'react-hook-form';
