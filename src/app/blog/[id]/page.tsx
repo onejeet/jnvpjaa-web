@@ -1,6 +1,6 @@
-import { PageProps } from '.next/types/app/layout';
 import { GetBlogDocument, GetBlogQuery } from '@/apollo/hooks';
 import SingleBlog from '@/containers/SingleBlog';
+import { PageProps } from '@/types/global';
 import { initializeApollo } from '@/utils/apollo';
 import { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';

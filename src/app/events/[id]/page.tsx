@@ -1,4 +1,4 @@
-import { PageProps } from '.next/types/app/layout';
+import { PageProps } from '@/types/global';
 import { Event, GetEventDetailsDocument, GetEventDetailsQuery } from '@/apollo/hooks';
 import EventDetails from '@/containers/EventDetails';
 import { initializeApollo } from '@/utils/apollo';

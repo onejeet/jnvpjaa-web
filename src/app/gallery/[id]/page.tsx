@@ -3,7 +3,7 @@ import { GetAlbumDocument, GetAlbumQuery } from '@/apollo/hooks';
 import { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
 import { initializeApollo } from '@/utils/apollo';
-import { PageProps } from '.next/types/app/layout';
+import { PageProps } from '@/types/global';
 
 // Generate dynamic metadata for the album page
 export async function generateMetadata({ params }: PageProps, parent: ResolvingMetadata): Promise<Metadata> {
