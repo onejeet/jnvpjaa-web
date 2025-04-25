@@ -3,7 +3,6 @@
 import React from 'react';
 import Button from '@/components/core/Button';
 import { ButtonProps } from '@/components/core/Button/Button.types';
-import { titleCase } from '@/utils/helpers';
 import { Box, Typography } from '@mui/material';
 import doggieLottieIcon from '@/utils/lottie/doggie_art.json';
 import Lottie from 'lottie-react';
@@ -14,7 +13,7 @@ interface IProps {
   buttonProps?: ButtonProps;
 }
 
-const EmptyView = ({ type, message, buttonProps }: IProps) => {
+const EmptyView: React.FC<IProps> = ({ type, message, buttonProps }) => {
   return (
     <Box
       mt={-10}
