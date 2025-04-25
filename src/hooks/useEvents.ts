@@ -172,12 +172,8 @@ const useEvents = ({ user }: IPayload) => {
 
   const onEditEvent = React.useCallback(
     (id: number) => {
-      router.push({
-        pathname: paths.events.new,
-        query: {
-          id,
-        },
-      });
+      const targetUrl = `${paths.events.new}?id=${id}`;
+      router.push(targetUrl);
     },
     [router]
   );

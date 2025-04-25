@@ -22,11 +22,7 @@ export const metadata: Metadata = {
 
 export default function BhamashahPillarsPage() {
   return (
-    <LayoutModule
-      disableCover
-      title="JNVPJAA Bhamashah Pillars • Alumni Network of JNV Paota, Jaipur"
-      containerProps={{}}
-    >
+    <LayoutModule disableCover title="JNVPJAA Bhamashah Pillars • Alumni Network of JNV Paota, Jaipur">
       <BhamashahPillars />
     </LayoutModule>
   );

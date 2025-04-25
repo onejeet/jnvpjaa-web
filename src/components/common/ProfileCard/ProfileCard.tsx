@@ -35,14 +35,12 @@ const ProfileImage = styled(Avatar)(({ theme }) => ({
 }));
 
 // Styled Header Section
-const HeaderSection = styled(Box, { shouldForwardProp: (prop) => prop !== 'bgColor' })<CustomBoxProps>(
-  ({ bgColor, theme }: Record<string, any>) => ({
-    padding: theme.spacing(2),
-    backgroundColor: bgColor || theme.palette.secondary.main,
-    color: theme.palette.common.white,
-    textAlign: 'center',
-  })
-);
+const HeaderSection = styled(Box)<CustomBoxProps>(({ bgColor, theme }) => ({
+  padding: theme.spacing(2),
+  backgroundColor: bgColor || theme.palette.secondary.main,
+  color: theme.palette.common.white,
+  textAlign: 'center',
+}));
 
 const ProfileCard: React.FC<ProfileCardProps> = ({
   profilePicture,

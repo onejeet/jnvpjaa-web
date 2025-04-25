@@ -4,7 +4,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Menu, MenuItem, Paper } from '@mui/material';
 import Link from '@mui/material/Link';
 import NextLink from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import React from 'react';
 
 import HoverPopover from '../../components/common/HoverPopover';
@@ -13,8 +13,7 @@ import type { IHeaderMenuItem, IMenuItemProps } from './LayoutTopbar';
 const HeaderMenuItem: React.FC<IMenuItemProps> = ({ item, isMobile, expanded, setExpanded }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const router = useRouter();
-  const { pathname } = router;
+  const pathname = usePathname();
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };

@@ -1,3 +1,5 @@
+'use client';
+
 import AdminPanel from '@/containers/AdminPanel';
 import LayoutModule from '@/layouts/Layout';
 import { Box, Card } from '@mui/material';

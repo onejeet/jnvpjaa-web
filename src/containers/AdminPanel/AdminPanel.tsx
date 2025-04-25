@@ -1,3 +1,4 @@
+'use client';
 import { useSendMassEmailMutation } from '@/apollo/hooks';
 import Button from '@/components/core/Button';
 import { useAuth } from '@/context/AuthContext';

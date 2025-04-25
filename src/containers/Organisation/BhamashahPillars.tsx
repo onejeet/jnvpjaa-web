@@ -1,3 +1,4 @@
+import React from 'react';
 import { BHAASHAH_PILLARS } from '@/constants/General.contants';
 import { Divider, Paper, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
@@ -20,7 +21,7 @@ const breadcrumbsList = [
   },
 ];
 
-const BhamashahPillars = () => {
+const BhamashahPillars: React.FC = () => {
   return (
     <Box>
       <Breadcrumbs items={breadcrumbsList} />

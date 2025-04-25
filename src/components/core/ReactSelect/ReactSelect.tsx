@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import Select, { MultiValue, SingleValue, components } from 'react-select';
 import { CircularProgress, Box, useTheme, Avatar, AvatarGroup, FormHelperText, OutlinedInput } from '@mui/material';
 import ProfilePicture from '@/components/common/ProfilePicture';
-import { MagnifyingGlass } from '@tabler/icons-react';
 
 interface Option {
   value: string;

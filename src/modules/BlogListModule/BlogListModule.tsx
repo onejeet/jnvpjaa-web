@@ -297,12 +297,8 @@ const BlogListModule: React.FC<BlogFilterModuleProps> = ({
 
   const onEditBlog = React.useCallback(
     (slug: string) => {
-      router.push({
-        pathname: paths.blog.new,
-        query: {
-          id: slug,
-        },
-      });
+      const targetUrl = `${paths.blog.new}?id=${slug}`;
+      router.push(targetUrl);
     },
     [router]
   );
