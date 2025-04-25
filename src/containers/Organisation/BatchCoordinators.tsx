@@ -6,9 +6,14 @@ import useBatchCoordinators from './Hooks/useBatchCoordinators';
 import { IconSearch } from '@tabler/icons-react';
 import BatchCoordinatorFilters from './components/BatchCoordinatorFilters';
 import DataGrid from '@/components/core/DataGrid';
+import { BatchCoordinator } from '@/apollo/hooks';
 
-const BatchCoordinators = () => {
-  const { columns, rows, onSearch } = useBatchCoordinators();
+interface BatchCoordinatorsProps {
+  coordinators?: BatchCoordinator[];
+}
+
+const BatchCoordinators: React.FC<BatchCoordinatorsProps> = ({ coordinators }) => {
+  const { columns, rows, onSearch } = useBatchCoordinators(coordinators);
 
   return (
     <Box>

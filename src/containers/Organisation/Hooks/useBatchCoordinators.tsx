@@ -5,32 +5,32 @@ import { GridRowParams } from '@mui/x-data-grid';
 import React from 'react';
 
 import ProfilePicture from '@/components/common/ProfilePicture';
-import { useGetAllBatchCoordinatorsQuery } from '@/apollo/hooks';
+import { BatchCoordinator, useGetAllBatchCoordinatorsQuery } from '@/apollo/hooks';
 import { Skeleton, Typography } from '@mui/material';
 import VerifiedBadge from '@/components/common/VerifiedBadge';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 
-const useBatchCoordinators = () => {
+const useBatchCoordinators = (coordinators?: BatchCoordinator[]) => {
   const { user } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [columns, setColumns] = React.useState<any[]>([]);
   const [searchQuery, setSearchQuery] = React.useState<string>('');
-
-  const { data: coordinators, loading } = useGetAllBatchCoordinatorsQuery({
-    variables: {
-      options: {
-        filter: {
-          verified: searchParams?.get('verified') ? searchParams?.get('verified') === 'true' : undefined,
-          query: searchParams.get('q') || '',
-          batch: searchParams?.get('batch') ? parseInt(searchParams.get('batch') || '', 10) : undefined,
-        },
-      },
-    },
-    notifyOnNetworkStatusChange: true,
-  });
+  const loading = false;
+  // const { data: coordinators, loading } = useGetAllBatchCoordinatorsQuery({
+  //   variables: {
+  //     options: {
+  //       filter: {
+  //         verified: searchParams?.get('verified') ? searchParams?.get('verified') === 'true' : undefined,
+  //         query: searchParams.get('q') || '',
+  //         batch: searchParams?.get('batch') ? parseInt(searchParams.get('batch') || '', 10) : undefined,
+  //       },
+  //     },
+  //   },
+  //   notifyOnNetworkStatusChange: true,
+  // });
 
   //   const [state, dispatch] = useImmerReducer(reducer, initialState);
   //   const { replace, query, pathname } = useRouter();
@@ -223,7 +223,7 @@ const useBatchCoordinators = () => {
         };
       });
     }
-    return coordinators?.getAllBatchCoordinators || [];
+    return coordinators || [];
   }, [loading, coordinators]);
 
   return {
