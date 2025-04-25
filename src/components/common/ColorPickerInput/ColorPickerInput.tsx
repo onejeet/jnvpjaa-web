@@ -1,17 +1,13 @@
-/* REACT */
-import React from 'react';
-//utils
+'use client';
 
+import React from 'react';
 import Box from '@mui/material/Box';
-/* CORE */
 import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Popover from '@mui/material/Popover';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-/* ICONS */
-import { EyedropperIcon, Palette } from '@tabler/icons-react';
-/* REACT INPUT MASK */
+import { IconPalette as Palette } from '@tabler/icons-react';
 import { HexColorPicker } from 'react-colorful';
 
 /* TYPES */

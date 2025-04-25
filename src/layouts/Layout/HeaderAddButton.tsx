@@ -1,6 +1,3 @@
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import {
   Accordion,
   AccordionDetails,
@@ -23,13 +20,13 @@ import React from 'react';
 import HoverPopover from '../../components/common/HoverPopover';
 import type { IHeaderMenuItem, IMenuItemProps } from './LayoutTopbar';
 import { ADD_ENTITIES } from '@/constants/Header.constants';
-import { CirclePlus as IconCirclePlus } from '@tabler/icons-react';
+import { IconCirclePlus } from '@tabler/icons-react';
 
 const HeaderAddButton: React.FC = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const router = useRouter();
-  const { pathname } = router;
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -49,7 +46,7 @@ const HeaderAddButton: React.FC = () => {
               color: 'primary.main',
             }}
           >
-            <IconCirclePlus weight="bold" size={36} />
+            <IconCirclePlus size={36} />
           </IconButton>
         }
         // anchorOrigin={{

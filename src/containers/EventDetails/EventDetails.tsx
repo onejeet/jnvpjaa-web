@@ -1,3 +1,5 @@
+'use client';
+
 import { Event, useGetEventDetailsQuery } from '@/apollo/hooks';
 import Breadcrumbs from '@/components/common/Breadcrumbs';
 import EmptyView from '@/components/common/EmptyView';
@@ -6,22 +8,27 @@ import { useAuth } from '@/context/AuthContext';
 import useEvents from '@/hooks/useEvents';
 import LayoutModule from '@/layouts/Layout';
 import { Box } from '@mui/material';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
 
-const EventDetails = () => {
-  const { query } = useRouter();
+interface EventDetailsProps {
+  event: Event;
+}
+
+const EventDetails: React.FC<EventDetailsProps> = ({ event: initialData }) => {
+  // const searchParams = useSearchParams();
   const { user, isAdmin } = useAuth();
-  const { id } = query;
+  // const id = searchParams.get('id');
   const methods = useEvents({ user });
-  const { data, loading } = useGetEventDetailsQuery({
-    skip: !id,
-    variables: {
-      id: parseInt(id as string, 10),
-    },
-  });
-  // @ts-expect-error type-error
-  const event: Event = React.useMemo(() => data?.getEventDetails, [data]);
+  const loading = false;
+  // const { data, loading } = useGetEventDetailsQuery({
+  //   skip: !id,
+  //   variables: {
+  //     id: parseInt(id as string, 10),
+  //   },
+  // });
+
+  const event: Event = React.useMemo(() => initialData, [initialData]);
 
   const breadcrumbsList = React.useMemo(
     () => [

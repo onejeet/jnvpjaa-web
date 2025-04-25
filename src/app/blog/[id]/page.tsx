@@ -11,7 +11,8 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   // Fetch blog data
   const apolloClient = initializeApollo();
-  const slug = params.id;
+  const id = await params.id;
+  const slug = decodeURIComponent(id);
 
   try {
     const { data } = await apolloClient.query<GetBlogQuery>({
@@ -54,7 +55,9 @@ export async function generateMetadata(
 // This is the main page component
 export default async function BlogPostPage({ params }: { params: { id: string } }) {
   const apolloClient = initializeApollo();
-  const slug = params.id;
+  const id = await params.id;
+  const slug = decodeURIComponent(id);
+  console.log('ZZ:  SLUG', slug);
 
   try {
     const { data } = await apolloClient.query<GetBlogQuery>({

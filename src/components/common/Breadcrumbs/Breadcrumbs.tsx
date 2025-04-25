@@ -25,8 +25,9 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, loading, sx = {}, ...r
           <Box
             key={`breadcrumb-item-${item.label}`}
             sx={{
-              a: {
+              '& .breadcrumb_link': {
                 color: 'primary.main',
+                fontWeight: 500,
               },
             }}
           >
@@ -35,6 +36,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, loading, sx = {}, ...r
                 href={{
                   pathname: item.path,
                 }}
+                className="breadcrumb_link"
                 as={{
                   pathname: item.path,
                 }}

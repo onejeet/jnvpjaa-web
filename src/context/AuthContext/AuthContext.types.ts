@@ -1,8 +1,6 @@
 import React from 'react';
 
 export interface AuthProviderProps {
-  checkAuth?: boolean;
-  isAuthPage?: boolean;
   children: React.ReactNode;
 }
 export interface TAuthContextData {

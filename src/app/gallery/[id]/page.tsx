@@ -9,7 +9,7 @@ export async function generateMetadata(
   { params }: { params: { id: string } },
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const id = params.id;
+  const id = await params.id;
   const apolloClient = initializeApollo();
 
   try {
@@ -48,6 +48,7 @@ export async function generateMetadata(
   }
 }
 
-export default function SingleAlbumPage({ params }: { params: { id: string } }) {
-  return <SingleAlbum albumId={params.id} />;
+export default async function SingleAlbumPage({ params }: { params: { id: string } }) {
+  const id = await params.id;
+  return <SingleAlbum albumId={id} />;
 }

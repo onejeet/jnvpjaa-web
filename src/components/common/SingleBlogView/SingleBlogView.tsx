@@ -14,12 +14,7 @@ import React from 'react';
 import DOMPurify from 'dompurify';
 import { ISingleBlogViewProps } from './SingleBlogView.types';
 import dayjs from 'dayjs';
-import {
-  IconCalendarEvent as CalendarDots,
-  IconPoint as Dot,
-  IconCircleDotted as DotOutline,
-  IconClap as HandsClapping,
-} from '@tabler/icons-react';
+import { IconCalendarEvent as CalendarDots, IconPointFilled as Dot } from '@tabler/icons-react';
 import ProfilePicture from '../ProfilePicture';
 import { BlogStatus } from '@/apollo/hooks';
 import { debounce, getFormattedLabel, startCase } from '@/utils/helpers';
@@ -130,11 +125,11 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateC
         )} */}
           {statusMessage && !isMobile && (
             <>
-              <Dot size={32} weight="bold" />
+              <Dot size={20} />
               <Chip size="small" label={getFormattedLabel(status as string)} color="error" />
             </>
           )}
-          {!isMobile && <Dot size={32} weight="bold" />}
+          {!isMobile && <Dot size={20} />}
           <Box display="flex" alignItems="center" justifyContent="space-between" width="100%">
             <ProfilePicture
               loading={loading}

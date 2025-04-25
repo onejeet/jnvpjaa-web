@@ -4,7 +4,7 @@ import { useAlert } from '@/context/AlertContext';
 import { useApolloClient } from '@apollo/client';
 import styled from '@emotion/styled';
 import { Box, Checkbox, FormControlLabel, Switch, SwitchProps, Theme, Typography } from '@mui/material';
-import { IconLock, IconCaretLeft, IconX, IconCheck, IconInfoCircle } from '@tabler/icons-react';
+import { IconLock, IconCaretLeft, IconX, IconCircleCheck, IconInfoCircle } from '@tabler/icons-react';
 import React from 'react';
 
 interface DataPrivacyProps {
@@ -200,7 +200,7 @@ const DataPrivacy: React.FC<DataPrivacyProps> = ({ user, isLastStep, onNext, onB
           <Button
             title={onNext ? 'Update & Finish' : 'Update'}
             onClick={() => onSubmit()}
-            startIcon={<IconCheck size={16} />}
+            startIcon={<IconCircleCheck size={16} />}
             loading={loading}
             // disabled={addressesLoading}
           />

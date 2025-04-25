@@ -3,6 +3,7 @@ import { Box, Typography, IconButton, Tooltip, Fade, BoxProps } from '@mui/mater
 import { IconHandLoveYou as HandsClapping } from '@tabler/icons-react';
 import { UserBasic } from '@/apollo/hooks';
 import ProfilePicture from '../ProfilePicture';
+import Image from 'next/image';
 
 interface ClapButtonProps {
   initialClaps?: number;
@@ -96,13 +97,14 @@ const ClapButton: React.FC<ClapButtonProps> = ({
             },
 
             position: 'relative',
-            svg: {
+            img: {
               position: 'relative',
               top: total > 0 ? '-5px' : 0,
             },
           }}
         >
-          <HandsClapping size={30} />
+          <Image src="/assets/svg/clap_icon.svg" width={30} height={30} alt="claps" />
+
           {total > 0 && (
             <Typography
               variant="h6"

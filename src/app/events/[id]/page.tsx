@@ -9,13 +9,13 @@ export async function generateMetadata(
   { params }: { params: { id: string } },
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const id = params.id;
+  const id = await params.id;
   const apolloClient = initializeApollo();
 
   try {
     const { data } = await apolloClient.query<GetEventDetailsQuery>({
       query: GetEventDetailsDocument,
-      variables: { slug: id },
+      variables: { id: parseInt(id, 10) },
     });
 
     const event = data.getEventDetails;
@@ -55,7 +55,7 @@ async function getEventDetails(id: string) {
   try {
     const { data } = await apolloClient.query<GetEventDetailsQuery>({
       query: GetEventDetailsDocument,
-      variables: { slug: id },
+      variables: { id: parseInt(id, 10) },
     });
 
     if (!data.getEventDetails) {
@@ -70,7 +70,8 @@ async function getEventDetails(id: string) {
 }
 
 export default async function EventDetailsPage({ params }: { params: { id: string } }) {
-  const event = await getEventDetails(params.id);
+  const id = await params.id;
+  const event = await getEventDetails(id);
 
   return <EventDetails event={event} />;
 }

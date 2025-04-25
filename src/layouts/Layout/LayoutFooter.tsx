@@ -225,6 +225,7 @@ const LayoutFooter: React.FC = () => {
                       borderBottom: '1px dotted',
                       borderColor: 'primary.main',
                       cursor: 'pointer',
+                      fontFamily: 'DM Sans',
                       opacity: 0.7,
                       '&:hover': {
                         opacity: 1,

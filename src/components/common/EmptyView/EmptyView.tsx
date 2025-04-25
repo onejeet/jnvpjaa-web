@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import Button from '@/components/core/Button';
 import { ButtonProps } from '@/components/core/Button/Button.types';

@@ -9,8 +9,8 @@ import ProfilePictureUpload from '@/modules/ProfileSetup/ProfilePictureUpload';
 import { useAuth } from '@/context/AuthContext';
 import Addresses from '@/modules/ProfileSetup/Addresses';
 import DataPrivacy from '@/modules/ProfileSetup/DataPrivacy';
-import { useRouter } from 'next/navigation';
-import { IconCircleCheck as CheckCircle } from '@tabler/icons-react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { IconCircleCheck as CheckCircle, IconCircleCheckFilled } from '@tabler/icons-react';
 import Welcome from '@/components/common/Welcome/Welcome';
 import ChangePassword from '../Auth/ChangePassword/ChangePassword';
 import ChangePasswordFirst from './ChangePasswordFirst';
@@ -19,20 +19,20 @@ import ProfessionInfo from '@/modules/ProfileSetup/ProfessionInfo';
 const CustomStepIcon = (props: StepIconProps) => {
   const { active, completed, className } = props;
 
-  return completed ? <CheckCircle size={32} weight="fill" /> : <div className={className} />;
+  return completed ? <IconCircleCheckFilled size={32} /> : <div className={className} />;
 };
 
 const ProfileSetup = () => {
   const [activeStepIndex, setActiveStepIndex] = React.useState<number>(0);
   const theme = useTheme();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { user } = useAuth();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const isWelcomeSetup = React.useMemo(() => {
-    return router.query?.welcome === '1';
-  }, [router.query?.welcome]);
-  console.log('TT: router', router.query);
+    return searchParams.get('welcome') === '1';
+  }, [searchParams]);
 
   const steps = React.useMemo(
     () =>

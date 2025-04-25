@@ -16,25 +16,10 @@ import { usePathname } from 'next/navigation';
 const clientSideEmotionCache = createEmotionCache();
 
 export function Providers({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-
-  const isAuthPage = React.useMemo(() => ['/signin', '/signup', '/forgot-password'].includes(pathname), [pathname]);
-
-  const checkAuth = React.useMemo(() => {
-    return (
-      pathname.startsWith('/profile') ||
-      pathname.startsWith('/admin') ||
-      pathname.includes('/new') ||
-      pathname.includes('/edit')
-    );
-  }, [pathname]);
-
-  if (!pathname) return;
-
   return (
     <CacheProvider value={clientSideEmotionCache}>
       <ApolloProvider client={apolloClient}>
-        <AuthProvider checkAuth={checkAuth} isAuthPage={isAuthPage}>
+        <AuthProvider>
           <LayoutProvider>
             <AlertProvider>
               {children}

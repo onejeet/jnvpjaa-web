@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Blog,
   BlogStatus,
@@ -34,15 +36,16 @@ const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
   const client = useApolloClient();
   const { isAdmin, redirectToSignin, user } = useAuth();
   const { showAlert } = useAlert();
-  const { query } = useRouter();
-  const { id } = query;
-  const { data, loading } = useGetBlogQuery({
-    skip: !id || Boolean(prerenderedBlog?.id),
-    variables: {
-      slug: id as string,
-    },
-  });
-  const blog: Blog | undefined = React.useMemo(() => prerenderedBlog || data?.getBlog, [data, prerenderedBlog]);
+  const loading = false;
+  // const { query } = useRouter();
+  // const { id } = query;
+  // const { data, loading } = useGetBlogQuery({
+  //   skip: !id || Boolean(prerenderedBlog?.id),
+  //   variables: {
+  //     slug: id as string,
+  //   },
+  // });
+  const blog: Blog | undefined = React.useMemo(() => prerenderedBlog, [prerenderedBlog]);
   const [publisBlog, { loading: publishBlogLoading }] = useUpdateBlogMutation();
   const [handleVerifyBlog] = useApproveBlogMutation();
 
@@ -60,7 +63,7 @@ const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
     ],
     [blog]
   );
-
+  const id = prerenderedBlog?.id;
   const dataLoading = loading || !id;
 
   const buttonProps: ButtonProps[] | null = React.useMemo(() => {

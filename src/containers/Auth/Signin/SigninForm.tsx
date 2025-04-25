@@ -13,6 +13,7 @@ import { useSigninMutation } from '@/apollo/hooks';
 import { useApolloClient } from '@apollo/client';
 
 const SigninForm = () => {
+  const [loading, setLoading] = React.useState<boolean>(false);
   const router = useRouter();
   const { showAlert } = useAlert();
   const {
@@ -23,11 +24,12 @@ const SigninForm = () => {
   const { setUser } = useAuth();
   const client = useApolloClient();
 
-  const [signin, { loading }] = useSigninMutation();
+  const [signin] = useSigninMutation();
 
   const onSubmit = React.useCallback(
     (data: ISigninFormInput) => {
       client.resetStore();
+      setLoading(true);
       signin({
         variables: {
           email: data?.email?.trim(),
@@ -41,6 +43,7 @@ const SigninForm = () => {
           // auth redirection will be handled from AuthContext
         },
         onError: (err: Error) => {
+          setLoading(false);
           showAlert({
             type: 'error',
             message: err?.message || 'Something went wrong',

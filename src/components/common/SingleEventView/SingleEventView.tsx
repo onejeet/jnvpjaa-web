@@ -30,10 +30,10 @@ import {
   IconCheck as Check,
   IconCircleCheck as CheckCircle,
   IconGlobe as Globe,
-  IconHeart as Heart,
+  IconHeartFilled as Heart,
   IconMapPin as MapPinLine,
   IconMinus as Minus,
-  IconNote as NotePencil,
+  IconPencilMinus as NotePencil,
   IconPlaystationX as XCircle,
 } from '@tabler/icons-react';
 import { EventStatus, Maybe, User, UserBasic } from '@/apollo/hooks';
@@ -228,7 +228,7 @@ const SingleEventView: React.FC<SingleEventViewProps> = ({
               }}
             >
               {title}
-              {!showDescription && <ArrowRight weight="bold" />}
+              {!showDescription && <ArrowRight />}
             </Typography>
 
             {isLive && (
@@ -341,7 +341,7 @@ const SingleEventView: React.FC<SingleEventViewProps> = ({
                     }}
                   >
                     {location}
-                    <ArrowUpRight size={14} style={{ marginLeft: '4px', marginTop: '2px' }} weight="bold" />
+                    <ArrowUpRight size={14} style={{ marginLeft: '4px', marginTop: '2px' }} />
                   </Typography>
                 ) : (
                   <Typography
@@ -500,7 +500,7 @@ const SingleEventView: React.FC<SingleEventViewProps> = ({
                     fullWidth
                     disabled={loading}
                     // endIcon={<ArrowRightAltIcon />}
-                    startIcon={<Heart size={20} weight="fill" />}
+                    startIcon={<Heart size={20} />}
                     onClick={() => markImGoing(id)}
                     sx={{ whiteSpace: 'nowrap', minWidth: '130px' }}
                   />

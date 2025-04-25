@@ -21,8 +21,9 @@ interface SingleAlbumProps {
 
 const SingleAlbum: React.FC<SingleAlbumProps> = ({ albumId }) => {
   const { isAdmin, redirectToSignin, user } = useAuth();
-  const searchParams = useSearchParams();
-  const id = searchParams.get('id');
+  // const searchParams = useSearchParams();
+  // const id = searchParams.get('id');
+  const id = albumId;
   const { data, loading } = useGetAlbumQuery({
     skip: !id,
     variables: {

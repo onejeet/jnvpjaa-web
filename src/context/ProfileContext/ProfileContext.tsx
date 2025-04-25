@@ -1,7 +1,9 @@
+'use client';
+
 import React, { createContext, useContext } from 'react';
 import { ProfileContextProps, ProfileProviderProps } from './ProfileContext.types';
 import { useGetUserDetailsQuery, User, useUpdateUserMutation } from '@/apollo/hooks';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '../AuthContext';
 
 const defaultProvider: ProfileContextProps = {
@@ -21,8 +23,8 @@ const ProfileContext = createContext(defaultProvider);
 
 const ProfileProvider = ({ children, userId }: ProfileProviderProps) => {
   const [editingProfile, setEditingProfile] = React.useState<boolean>(false);
-  const router = useRouter();
-  const { id } = router.query;
+  const searchParams = useSearchParams();
+  const id = searchParams.get('id');
   const { data: userData, loading: userDataLoading } = useGetUserDetailsQuery({
     skip: !id,
     variables: {
