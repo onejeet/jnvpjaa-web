@@ -99,7 +99,7 @@ const SocialShareModal: React.FC<SocialShareModalProps> = ({ title, url = '', bt
       <Stack direction="row" alignItems="center">
         {btn_type === 'icon' ? (
           <IconButton onClick={handleOpen} aria-label="Open social share options">
-            <ShareNetwork size={32} weight="fill" />
+            <ShareNetwork size={32} />
           </IconButton>
         ) : (
           <Button
@@ -107,7 +107,7 @@ const SocialShareModal: React.FC<SocialShareModalProps> = ({ title, url = '', bt
             title="Share"
             variant="text"
             aria-label="Open social share options"
-            startIcon={<ShareNetwork size={20} weight="fill" />}
+            startIcon={<ShareNetwork size={20} />}
             size="large"
           />
         )}
