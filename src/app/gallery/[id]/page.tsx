@@ -3,14 +3,14 @@ import { GetAlbumDocument, GetAlbumQuery } from '@/apollo/hooks';
 import { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
 import { initializeApollo } from '@/utils/apollo';
-import { PageProps } from '@/types/global';
+import { PageProps } from '.next/types/app/layout';
 
 // Generate dynamic metadata for the album page
 export async function generateMetadata(
   { params }: { params: { id: string } },
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const id = params.id;
+  const { id } = await params;
   const apolloClient = initializeApollo();
 
   try {
@@ -50,6 +50,6 @@ export async function generateMetadata(
 }
 
 export default async function SingleAlbumPage({ params }: PageProps) {
-  const id = params.id;
+  const { id } = await params;
   return <SingleAlbum albumId={id} />;
 }

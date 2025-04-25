@@ -1,6 +1,6 @@
+import { PageProps } from '.next/types/app/layout';
 import { GetBlogDocument, GetBlogQuery } from '@/apollo/hooks';
 import SingleBlog from '@/containers/SingleBlog';
-import { PageProps } from '@/types/global';
 import { initializeApollo } from '@/utils/apollo';
 import { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -12,7 +12,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   // Fetch blog data
   const apolloClient = initializeApollo();
-  const id = params.id;
+  const { id } = await params;
   const slug = decodeURIComponent(id);
 
   try {
@@ -56,9 +56,9 @@ export async function generateMetadata(
 // This is the main page component
 export default async function BlogPostPage({ params }: PageProps) {
   const apolloClient = initializeApollo();
-  const id = params.id;
+  const { id } = await params;
   const slug = decodeURIComponent(id);
-  console.log('ZZ:  SLUG', slug);
+  console.log('ZZ:  SLUG', id);
 
   try {
     const { data } = await apolloClient.query<GetBlogQuery>({
