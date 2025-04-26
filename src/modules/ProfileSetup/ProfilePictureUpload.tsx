@@ -36,6 +36,8 @@ export async function getCroppedImg(imageSrc: string, croppedAreaPixels: Record<
     image.onerror = () => reject(new Error('Failed to load image'));
   });
 
+  if (typeof window === 'undefined') return;
+
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
   if (!ctx || !croppedAreaPixels?.width) return null;
@@ -122,7 +124,7 @@ export default function ProfilePictureUpload({ user, onNext, onBack, onSuccess, 
 
     try {
       const croppedImageUrl = await getCroppedImg(image, cropArea);
-      setCroppedImage(croppedImageUrl);
+      setCroppedImage(croppedImageUrl as string);
       setOpenCropper(false);
     } catch (error) {
       showAlert({

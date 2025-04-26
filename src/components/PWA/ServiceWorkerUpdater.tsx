@@ -31,7 +31,9 @@ export default function ServiceWorkerUpdater() {
     });
     wb?.messageSW({ type: 'SKIP_WAITING' });
     setUpdateAvailable(false);
-    window.location.reload();
+    if (typeof window !== 'undefined') {
+      window.location.reload();
+    }
   };
 
   return (

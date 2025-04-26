@@ -225,7 +225,11 @@ const NewBlog = () => {
               title="Preview"
               variant="outlined"
               startIcon={<IconEye size={18} />}
-              onClick={() => window.open(paths.blog.getBlogPostUrl(blogData?.getBlog?.slug || ''))}
+              onClick={() =>
+                typeof window !== 'undefined'
+                  ? window.open(paths.blog.getBlogPostUrl(blogData?.getBlog?.slug || ''))
+                  : null
+              }
             />
           )}
 

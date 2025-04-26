@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
@@ -81,7 +83,10 @@ const VideoButton: React.FC = (props) => {
       <Popover
         id={id}
         open={open}
-        anchorEl={anchorEl || document.getElementById('typography_editor_anchor_button')}
+        anchorEl={
+          anchorEl ||
+          (typeof document !== 'undefined' ? document.getElementById('typography_editor_anchor_button') : null)
+        }
         onClose={handleClose}
         anchorOrigin={{
           vertical: 'bottom',

@@ -84,7 +84,10 @@ const AnchorEditorButton: React.FC = (props) => {
       <Popover
         id={id}
         open={open}
-        anchorEl={anchorEl || document.getElementById('typography_editor_anchor_button')}
+        anchorEl={
+          anchorEl ||
+          (typeof document !== 'undefined' ? document.getElementById('typography_editor_anchor_button') : null)
+        }
         onClose={handleClose}
         anchorOrigin={{
           vertical: 'bottom',
