@@ -15,6 +15,7 @@ import {
   IconCheck,
   IconUser,
   IconShieldCheck,
+  IconDotsCircleHorizontal,
 } from '@tabler/icons-react';
 import { useProfile } from '@/context/ProfileContext';
 import FacultyBadge from '@/components/common/FacultyBadge';
@@ -284,7 +285,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
             render={
               <Tooltip arrow placement="top" title="Profile Menu">
                 <IconButton>
-                  <IconDotsVertical size={32} />
+                  <IconDotsCircleHorizontal size={24} />
                 </IconButton>
               </Tooltip>
             }
