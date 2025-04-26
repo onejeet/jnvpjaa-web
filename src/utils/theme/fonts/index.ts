@@ -19,4 +19,5 @@ export const notoSerif = Noto_Serif({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700'],
   display: 'swap',
+  variable: '--ff-noto-serif',
 });

@@ -6,7 +6,6 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Noto Serif', sans-serif;
 }
 body {
   /* overflow-y: auto;
@@ -60,6 +59,7 @@ input[type='number'] {
 
 .rich_content .tiptap {
   font-weight: 300;
+  font-family: var(--ff-noto-serif);
 }
 
 .rich_content a,
