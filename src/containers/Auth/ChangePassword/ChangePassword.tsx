@@ -39,7 +39,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ onNext }) => {
       >
         {!onNext && <GlobalBgShade />}
         <Image
-          src={'https://assets.jnvpjaa.org/assets/svg/profile-website-icon.svg'}
+          src={'https://assets.jnvpjaa.org/svg/profile-website-icon.svg'}
           width={200}
           height={100}
           alt="forgot password"

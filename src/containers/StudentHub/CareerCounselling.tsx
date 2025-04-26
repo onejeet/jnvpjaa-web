@@ -52,7 +52,7 @@ const CareerCounselling = () => {
             sx={{ borderRadius: '10px', maxWidth: '100%', maxHeight: '400px', overflow: 'hidden' }}
           >
             <Image
-              src="https://assets.jnvpjaa.org/assets/images/career-councelling.webp"
+              src="https://assets.jnvpjaa.org/images/career-councelling.webp"
               // width="100%"
               fill
               alt="mission"
@@ -76,7 +76,7 @@ const CareerCounselling = () => {
         </Box>
         <Box display={{ xs: 'none', md: 'block' }} sx={{ borderRadius: '10px', maxWidth: '100%', overflow: 'hidden' }}>
           <Image
-            src="https://assets.jnvpjaa.org/assets/images/career-councelling.webp"
+            src="https://assets.jnvpjaa.org/images/career-councelling.webp"
             fill
             // width="100%"
             alt="mission"

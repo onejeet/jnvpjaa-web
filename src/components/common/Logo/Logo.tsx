@@ -16,7 +16,7 @@ const Logo: React.FC<Props> = ({ width, height, icon, type, priority = false }) 
       case 'regular':
         return (
           <Image
-            src="https://assets.jnvpjaa.org/assets/branding/logo-full.webp"
+            src="https://assets.jnvpjaa.org/branding/logo-full.webp"
             width={width || 390}
             height={height || 60}
             alt="JNVPJAA logo"
@@ -29,7 +29,7 @@ const Logo: React.FC<Props> = ({ width, height, icon, type, priority = false }) 
   return (
     <Box display="flex" maxWidth="100%" overflow="hidden">
       <Image
-        src="https://assets.jnvpjaa.org/assets/branding/logo-full.webp"
+        src="https://assets.jnvpjaa.org/branding/logo-full.webp"
         width={width || 390}
         height={height || 60}
         alt="JNVPJAA logo"

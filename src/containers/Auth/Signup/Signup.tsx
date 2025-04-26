@@ -31,7 +31,7 @@ const Signup = () => {
           position: 'relative',
         }}
       >
-        {/* <Image src={'https://assets.jnvpjaa.org/assets/svg/profile-website-icon.svg'} width={200} height={100} alt="login" /> */}
+        {/* <Image src={'https://assets.jnvpjaa.org/svg/profile-website-icon.svg'} width={200} height={100} alt="login" /> */}
         <GlobalBgShade />
         <Typography variant="h2">JNV Paota Alumni Registration</Typography>
         <Typography color="grey.500" variant="body2" textAlign="center" mb={2}>
@@ -40,7 +40,7 @@ const Signup = () => {
         </Typography>
         {/* <Image
           onClick={() => {}}
-          src="https://assets.jnvpjaa.org/assets/svg/google-signin.svg"
+          src="https://assets.jnvpjaa.org/svg/google-signin.svg"
           width={300}
           height={38}
           alt="Sign in with Google"

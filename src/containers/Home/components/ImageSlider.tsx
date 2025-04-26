@@ -13,67 +13,67 @@ import SpecialTitle from '@/components/common/SpecialTitle';
 
 const localSlides = [
   {
-    url: 'https://assets.jnvpjaa.org/assets/gallery/sports-fest-mar-2025-5.jpg',
+    url: 'https://assets.jnvpjaa.org/gallery/sports-fest-mar-2025-5.jpg',
     createdAt: '2025-03-15 07:09:24',
   },
   {
-    url: 'https://assets.jnvpjaa.org/assets/gallery/sports-fest-mar-2025-1.jpg',
+    url: 'https://assets.jnvpjaa.org/gallery/sports-fest-mar-2025-1.jpg',
     createdAt: '2025-03-15 07:09:24',
   },
   {
-    url: 'https://assets.jnvpjaa.org/assets/gallery/sports-fest-mar-2025-6.jpg',
+    url: 'https://assets.jnvpjaa.org/gallery/sports-fest-mar-2025-6.jpg',
     createdAt: '2025-03-15 07:09:24',
   },
   {
-    url: 'https://assets.jnvpjaa.org/assets/gallery/sports-fest-mar-2025-15.jpg',
+    url: 'https://assets.jnvpjaa.org/gallery/sports-fest-mar-2025-15.jpg',
     createdAt: '2025-03-15 07:09:24',
   },
   {
-    url: 'https://assets.jnvpjaa.org/assets/gallery/sports-fest-mar-2025-34.jpg',
+    url: 'https://assets.jnvpjaa.org/gallery/sports-fest-mar-2025-34.jpg',
     createdAt: '2025-03-15 07:09:24',
   },
   {
-    url: 'https://assets.jnvpjaa.org/assets/gallery/sports-fest-mar-2025-107.jpg',
+    url: 'https://assets.jnvpjaa.org/gallery/sports-fest-mar-2025-107.jpg',
     createdAt: '2025-03-15 07:09:24',
   },
   {
-    url: 'https://assets.jnvpjaa.org/assets/gallery/plantation-drive-july-27-2020-1.jpeg',
+    url: 'https://assets.jnvpjaa.org/gallery/plantation-drive-july-27-2020-1.jpeg',
     createdAt: '2020-07-28 07:09:24',
   },
   {
-    url: 'https://assets.jnvpjaa.org/assets/gallery/milan-sept-2019-11.jpeg',
+    url: 'https://assets.jnvpjaa.org/gallery/milan-sept-2019-11.jpeg',
     createdAt: '2019-09-14 07:09:24',
   },
   {
-    url: 'https://assets.jnvpjaa.org/assets/gallery/milan-sept-2019-20.jpeg',
+    url: 'https://assets.jnvpjaa.org/gallery/milan-sept-2019-20.jpeg',
     createdAt: '2019-09-14 07:09:24',
   },
   {
-    url: 'https://assets.jnvpjaa.org/assets/gallery/sports-fest-mar-2025-11.jpg',
+    url: 'https://assets.jnvpjaa.org/gallery/sports-fest-mar-2025-11.jpg',
     createdAt: '2025-03-15 07:09:24',
   },
   {
-    url: 'https://assets.jnvpjaa.org/assets/gallery/sports-fest-mar-2025-12.jpg',
+    url: 'https://assets.jnvpjaa.org/gallery/sports-fest-mar-2025-12.jpg',
     createdAt: '2025-03-15 07:09:24',
   },
   {
-    url: 'https://assets.jnvpjaa.org/assets/gallery/sports-fest-mar-2025-13.jpg',
+    url: 'https://assets.jnvpjaa.org/gallery/sports-fest-mar-2025-13.jpg',
     createdAt: '2025-03-15 07:09:24',
   },
   {
-    url: 'https://assets.jnvpjaa.org/assets/gallery/sports-fest-mar-2025-14.jpg',
+    url: 'https://assets.jnvpjaa.org/gallery/sports-fest-mar-2025-14.jpg',
     createdAt: '2025-03-15 07:09:24',
   },
   {
-    url: 'https://assets.jnvpjaa.org/assets/gallery/sports-fest-mar-2025-16.jpg',
+    url: 'https://assets.jnvpjaa.org/gallery/sports-fest-mar-2025-16.jpg',
     createdAt: '2025-03-15 07:09:24',
   },
   {
-    url: 'https://assets.jnvpjaa.org/assets/gallery/sports-fest-mar-2025-19.jpg',
+    url: 'https://assets.jnvpjaa.org/gallery/sports-fest-mar-2025-19.jpg',
     createdAt: '2025-03-15 07:09:24',
   },
   {
-    url: 'https://assets.jnvpjaa.org/assets/gallery/sports-fest-mar-2025-4.jpg',
+    url: 'https://assets.jnvpjaa.org/gallery/sports-fest-mar-2025-4.jpg',
     createdAt: '2025-03-15 07:09:24',
   },
 ];

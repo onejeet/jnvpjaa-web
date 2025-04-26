@@ -25,7 +25,7 @@ const SpecialTitle: React.FC<SpecialTitleProps> = ({ title, containerProps = {},
           height: '40px',
           width: '80%',
           backgroundRepeat: 'no-repeat',
-          backgroundImage: 'url("https://assets.jnvpjaa.org/assets/svg/underline.svg")',
+          backgroundImage: 'url("https://assets.jnvpjaa.org/svg/underline.svg")',
         }}
       />
     </Box>

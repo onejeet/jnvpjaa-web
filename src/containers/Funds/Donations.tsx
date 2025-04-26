@@ -38,7 +38,7 @@ const Donations = () => {
             counts, and we truly appreciate it! Thanks for being a part of this journey! 🙌
           </Typography>
           {/* <Box display={{ xs: 'block', sm: 'none' }} sx={{ borderRadius: '10px', width: '100%', overflow: 'hidden' }}>
-            <img src="https://assets.jnvpjaa.org/assets/people/principal.webp" width="100%" alt="jnv principal" />
+            <img src="https://assets.jnvpjaa.org/people/principal.webp" width="100%" alt="jnv principal" />
           </Box> */}
 
           <Typography color="grey.800" mt={2}>
@@ -65,12 +65,7 @@ const Donations = () => {
           display={{ xs: 'none', sm: 'block' }}
           sx={{ borderRadius: '10px', width: 300, height: 400, overflow: 'hidden' }}
         >
-          <Image
-            src="https://assets.jnvpjaa.org/assets/images/donation.webp"
-            width={300}
-            height={400}
-            alt="donations"
-          />
+          <Image src="https://assets.jnvpjaa.org/images/donation.webp" width={300} height={400} alt="donations" />
         </Box>
       </Box>
     </Box>

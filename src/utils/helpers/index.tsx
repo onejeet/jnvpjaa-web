@@ -37,8 +37,8 @@ export const getSocialMediaIcon = (iconName: string) => {
 
 export const getDefaultAvatar = (gender?: string) => {
   return gender === 'female'
-    ? 'https://assets.jnvpjaa.org/assets/images/female_profile_placeholder.webp'
-    : 'https://assets.jnvpjaa.org/assets/images/male_profile_placeholder.webp';
+    ? 'https://assets.jnvpjaa.org/images/female_profile_placeholder.webp'
+    : 'https://assets.jnvpjaa.org/images/male_profile_placeholder.webp';
 };
 
 export const getAvatarDataUrl = (id?: string, options?: any) => {

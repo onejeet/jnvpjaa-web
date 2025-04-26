@@ -74,7 +74,7 @@ const Vision = () => {
             <Image
               width={760}
               height={440}
-              src="https://assets.jnvpjaa.org/assets/images/slider-2.webp"
+              src="https://assets.jnvpjaa.org/images/slider-2.webp"
               alt="mission"
               // layout="responsive"
               style={{
@@ -84,7 +84,7 @@ const Vision = () => {
               }}
             />
             {/* <img
-              src="https://assets.jnvpjaa.org/assets/images/slider-2.webp"
+              src="https://assets.jnvpjaa.org/images/slider-2.webp"
               width="100%"
               alt="mission"
               style={{

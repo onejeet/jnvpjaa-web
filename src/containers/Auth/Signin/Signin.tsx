@@ -37,7 +37,7 @@ const Signin = () => {
       >
         <GlobalBgShade />
         <Image
-          src={'https://assets.jnvpjaa.org/assets/svg/profile-website-icon.svg'}
+          src={'https://assets.jnvpjaa.org/svg/profile-website-icon.svg'}
           width={200}
           height={100}
           alt="login"
@@ -52,7 +52,7 @@ const Signin = () => {
             // router.push('/google');
             handleGoogleLogin();
           }}
-          src="https://assets.jnvpjaa.org/assets/svg/google-signin.svg"
+          src="https://assets.jnvpjaa.org/svg/google-signin.svg"
           width={300}
           height={38}
           alt="Sign in with Google"

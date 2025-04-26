@@ -23,17 +23,17 @@ const getContent = (props: LoadingIndicatorProps) => {
       justifyContent="center"
     >
       <Box position="absolute" color="primary.main">
-        <Image src="https://assets.jnvpjaa.org/assets/svg/triangle-spin.svg" width={250} height={250} alt="loading" />
+        <Image src="https://assets.jnvpjaa.org/svg/triangle-spin.svg" width={250} height={250} alt="loading" />
       </Box>
 
       {children || (
         <Avatar
-          src="https://assets.jnvpjaa.org/assets/branding/logo-square-white.webp"
+          src="https://assets.jnvpjaa.org/branding/logo-square-white.webp"
           sx={{ width: size ? Math.ceil(0.55 * size) : 100, height: size ? Math.ceil(0.55 * size) : 100 }}
         />
         // <Box
-        //   // src="https://assets.jnvpjaa.org/assets/branding/logo-square-white_transparent.webp"
-        //   src="https://assets.jnvpjaa.org/assets/branding/logo-square-white.jpg"
+        //   // src="https://assets.jnvpjaa.org/branding/logo-square-white_transparent.webp"
+        //   src="https://assets.jnvpjaa.org/branding/logo-square-white.jpg"
         //   component="img"
         //   width={size ? Math.ceil(0.55 * size) : 80}
         //   height={size ? Math.ceil(0.55 * size) : 80}

@@ -59,7 +59,7 @@ const Welcome: React.FC<WelcomeProps> = ({ onNext }) => {
       </Typography>
       <Box display="flex" flexDirection="row" justifyContent="center">
         <Image
-          src="https://assets.jnvpjaa.org/assets/gif/celebration.gif"
+          src="https://assets.jnvpjaa.org/gif/celebration.gif"
           alt="celebration"
           width={300}
           height={100}

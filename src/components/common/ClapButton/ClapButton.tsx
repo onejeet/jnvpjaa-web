@@ -103,7 +103,7 @@ const ClapButton: React.FC<ClapButtonProps> = ({
             },
           }}
         >
-          <Image src="https://assets.jnvpjaa.org/assets/svg/clap_icon.svg" width={30} height={30} alt="claps" />
+          <Image src="https://assets.jnvpjaa.org/svg/clap_icon.svg" width={30} height={30} alt="claps" />
 
           {total > 0 && (
             <Typography

@@ -35,7 +35,7 @@ const PresidentMessage = () => {
             mb={2}
           >
             <Image
-              src="https://assets.jnvpjaa.org/assets/people/gaurav_2006.webp"
+              src="https://assets.jnvpjaa.org/people/gaurav_2006.webp"
               // width="100%"
               fill
               alt="jnv principal"
@@ -110,7 +110,7 @@ const PresidentMessage = () => {
           sx={{ borderRadius: '10px', width: 250, height: 350, overflow: 'hidden' }}
         >
           <Image
-            src="https://assets.jnvpjaa.org/assets/people/gaurav_2006.webp"
+            src="https://assets.jnvpjaa.org/people/gaurav_2006.webp"
             width={250}
             height={350}
             alt="jnv principal"

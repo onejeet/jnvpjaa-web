@@ -55,6 +55,7 @@ export const UnsplashImageSelector: React.FC<Props> = ({ open, onClose, onSelect
           placeholder="Search Images..."
           size="small"
           fullWidth
+          autoFocus
           // value={searchInput}
           onChange={(e) => onSearch(e.target.value)}
           variant="outlined"

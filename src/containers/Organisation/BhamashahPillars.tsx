@@ -35,7 +35,7 @@ const BhamashahPillars: React.FC = () => {
             sx={{ borderRadius: '10px', maxWidth: '100%', maxHeight: '400px', overflow: 'hidden' }}
           >
             <img
-              src="https://assets.jnvpjaa.org/assets/images/star-contributors.webp"
+              src="https://assets.jnvpjaa.org/images/star-contributors.webp"
               width="100%"
               alt="mission"
               style={{ objectFit: 'contain', position: 'relative', top: '0px' }}

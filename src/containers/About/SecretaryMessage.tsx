@@ -34,7 +34,7 @@ const SecretaryMessage = () => {
             sx={{ borderRadius: '10px', width: '100%', overflow: 'hidden' }}
             mb={2}
           >
-            <img src="https://assets.jnvpjaa.org/assets/people/dinesh_2002.webp" width="100%" alt="JNVPJAA Secretary" />
+            <img src="https://assets.jnvpjaa.org/people/dinesh_2002.webp" width="100%" alt="JNVPJAA Secretary" />
           </Box>
           <Typography color="grey.800" fontWeight={600} display="flex">
             Embracing Unity, Striving for Excellence
@@ -94,7 +94,7 @@ const SecretaryMessage = () => {
           sx={{ borderRadius: '10px', width: 250, height: 400, overflow: 'hidden' }}
         >
           <Image
-            src="https://assets.jnvpjaa.org/assets/people/dinesh_2002.webp"
+            src="https://assets.jnvpjaa.org/people/dinesh_2002.webp"
             width={250}
             height={400}
             alt="JNVPJAA Secretary"
