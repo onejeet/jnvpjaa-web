@@ -93,7 +93,7 @@ const AlertContent: React.FC<AlertContentProps> = ({ title, message, action = 'd
     }
 
     return (
-      <Typography fontSize="1.5rem" variant="h6">
+      <Typography fontSize="1.5rem" variant="h6" lineHeight="normal">
         {upTitle}
       </Typography>
     );
