@@ -36,7 +36,7 @@ const SkillUpResources = () => {
           </Typography>
           <EmptyView message="Coming Soon" />
           {/* <Image
-            src="/assets/svg/under_construction.svg"
+            src="https://assets.jnvpjaa.org/assets/svg/under_construction.svg"
             width={417}
             height={200}
             layout="fixed"
@@ -50,7 +50,7 @@ const SkillUpResources = () => {
             sx={{ borderRadius: '10px', maxWidth: '100%', maxHeight: '400px', overflow: 'hidden' }}
           >
             <img
-              src="/assets/images/contact-us-3.webp"
+              src="https://assets.jnvpjaa.org/assets/images/contact-us-3.webp"
               width="100%"
               alt="mission"
               style={{ objectFit: 'scale-down', position: 'relative' }}

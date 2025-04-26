@@ -36,7 +36,7 @@ const About = () => {
             sx={{ borderRadius: '10px', maxWidth: '100%', maxHeight: '400px', overflow: 'hidden' }}
           >
             <Image
-              src="/assets/images/cover-2.webp"
+              src="https://assets.jnvpjaa.org/assets/images/cover-2.webp"
               width={1300}
               height={585}
               alt="about JNVPJAA"
@@ -44,7 +44,7 @@ const About = () => {
               style={{ objectFit: 'contain', position: 'relative', top: '-20px' }}
             />
             {/* <img
-              src="/assets/images/cover-2.webp"
+              src="https://assets.jnvpjaa.org/assets/images/cover-2.webp"
               width="100%"
               alt="mission"
               style={{ objectFit: 'contain', position: 'relative', top: '-20px' }}
@@ -73,13 +73,13 @@ const About = () => {
               enlightenment of the society with our wisdom and knowledge. Hence, the motto:`}
             </Typography>
             <Image
-              src="/assets/branding/logo-square-white.jpg"
+              src="https://assets.jnvpjaa.org/assets/branding/logo-square-white.jpg"
               width={150}
               height={150}
               alt="JNVPJAA logo"
               layout="fixed"
             />
-            {/* <img src="/assets/branding/logo-square-white.jpg" width={150} height={150} alt="logo" /> */}
+            {/* <img src="https://assets.jnvpjaa.org/assets/branding/logo-square-white.jpg" width={150} height={150} alt="logo" /> */}
           </Box>
           <Typography
             mt={2}

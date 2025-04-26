@@ -33,7 +33,7 @@ const PrincipalMessage = () => {
             Message from Principal
           </Typography>
           <Box display={{ xs: 'block', sm: 'none' }} sx={{ borderRadius: '10px', width: '100%', overflow: 'hidden' }}>
-            <img src="/assets/people/principal.webp" width="100%" alt="jnv principal" />
+            <img src="https://assets.jnvpjaa.org/assets/people/principal.webp" width="100%" alt="jnv principal" />
           </Box>
           {/* <Typography color="grey.800" fontWeight={600} display="flex">
             Embracing Unity, Striving for Excellence
@@ -65,7 +65,12 @@ const PrincipalMessage = () => {
           display={{ xs: 'none', sm: 'block' }}
           sx={{ borderRadius: '10px', width: 250, height: 300, overflow: 'hidden' }}
         >
-          <Image src="/assets/people/principal.webp" width={250} height={300} alt="jnv principal" />
+          <Image
+            src="https://assets.jnvpjaa.org/assets/people/principal.webp"
+            width={250}
+            height={300}
+            alt="jnv principal"
+          />
         </Box>
       </Box>
     </Box>

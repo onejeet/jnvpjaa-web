@@ -37,7 +37,7 @@ const ForgotPassword = () => {
       >
         <GlobalBgShade />
         <Image
-          src={'/assets/svg/profile-website-icon.svg'}
+          src={'https://assets.jnvpjaa.org/assets/svg/profile-website-icon.svg'}
           width={200}
           height={100}
           alt="forgot password"

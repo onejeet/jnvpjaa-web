@@ -29,7 +29,7 @@ const EmptyView: React.FC<IProps> = ({ type, message, buttonProps }) => {
       <Suspense fallback={null}>
         <Lottie animationData={doggieLottieIcon} loop={true} style={{ width: '400px', height: '400px' }} />
       </Suspense>
-      {/* <Image src="/assets/svg/doggie.svg" alt="empty" width={500} height={300} /> */}
+      {/* <Image src="https://assets.jnvpjaa.org/assets/svg/doggie.svg" alt="empty" width={500} height={300} /> */}
       <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" mt={-10}>
         {React.isValidElement(message) ? (
           message

@@ -81,7 +81,12 @@ const SigninForm = () => {
         alignItems="center"
         justifyContent="center"
       >
-        <Image src="/assets/svg/email_sent.svg" width={100} height={100} alt="mail sent immage" />
+        <Image
+          src="https://assets.jnvpjaa.org/assets/svg/email_sent.svg"
+          width={100}
+          height={100}
+          alt="mail sent immage"
+        />
         <Typography textAlign="center" color="grey.600" mt={1}>
           Email sent{getValues('email') ? ` to ${getValues('email')}` : ''}.
           <br />

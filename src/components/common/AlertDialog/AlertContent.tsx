@@ -104,19 +104,19 @@ const AlertContent: React.FC<AlertContentProps> = ({ title, message, action = 'd
       return <SealQuestion size={100} />;
     } else if (action === 'loading') {
       return <Lottie animationData={loadingLottieIcon} loop={true} style={{ width: '130px', height: '130px' }} />;
-      // return <Image width={60} height={60} src="/assets/svg/loading_animation.svg" alt="loading" />;
+      // return <Image width={60} height={60} src="https://assets.jnvpjaa.org/assets/svg/loading_animation.svg" alt="loading" />;
       // return <Spinner fill="grey.700" size={100} />;
     } else if (action === 'success') {
       return <Lottie animationData={successLottieIcon} loop={true} style={{ width: '100px', height: '100px' }} />;
-      // return <Image width={60} height={60} src="/assets/svg/success_animation.svg" alt="success" />;
+      // return <Image width={60} height={60} src="https://assets.jnvpjaa.org/assets/svg/success_animation.svg" alt="success" />;
       // return <TaskAltIcon sx={{ color: 'success.main', fontSize: '100px' }} />;
     } else if (action === 'error') {
       return <Lottie animationData={errorLottieIcon} loop={true} style={{ width: '100px', height: '100px' }} />;
-      // return <Image width={60} height={60} src="/assets/svg/error_animation.svg" alt="success" />;
+      // return <Image width={60} height={60} src="https://assets.jnvpjaa.org/assets/svg/error_animation.svg" alt="success" />;
       // return <ErrorIcon sx={{ color: 'error.main', fontSize: '100px' }} />;
     } else if (action === 'deleting') {
       return <Lottie animationData={deleteLottieIcon} loop={true} style={{ width: '100px', height: '100px' }} />;
-      // return <Image width={60} height={60} src="/assets/svg/delete_animation.svg" alt="deleting" />;
+      // return <Image width={60} height={60} src="https://assets.jnvpjaa.org/assets/svg/delete_animation.svg" alt="deleting" />;
       // return <DeleteIcon sx={{ color: 'error.main', fontSize: '100px' }} />;
     } else if (action === 'unsaved') {
       return <HelpIcon sx={{ color: 'grey.700', fontSize: '100px' }} />;

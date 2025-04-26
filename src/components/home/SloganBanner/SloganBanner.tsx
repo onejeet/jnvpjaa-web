@@ -68,7 +68,13 @@ const SloganBanner = () => {
         }}
         mt="-30px"
       >
-        <Image src="/assets/svg/alumni-impact.svg" width={600} height={400} alt="JNVPJAA Imapact" layout="responsive" />
+        <Image
+          src="https://assets.jnvpjaa.org/assets/svg/alumni-impact.svg"
+          width={600}
+          height={400}
+          alt="JNVPJAA Imapact"
+          layout="responsive"
+        />
       </Box>
     </Box>
   );

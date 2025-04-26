@@ -24,7 +24,12 @@ const VerifiedBadge: React.FC<Props> = ({ size, title, isPrivate, isPrivateInfoC
   return (
     <Box display="flex" alignItems="center" gap={0.5}>
       <Tooltip title={title || 'Verified by admin'} arrow placement="top">
-        <Image src="/assets/svg/verified.svg" width={finalSize} height={finalSize} alt="verified user" />
+        <Image
+          src="https://assets.jnvpjaa.org/assets/svg/verified.svg"
+          width={finalSize}
+          height={finalSize}
+          alt="verified user"
+        />
       </Tooltip>
       {isPrivate && (
         <Tooltip

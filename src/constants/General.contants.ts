@@ -8,7 +8,7 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
     designation: 'President',
     email: 'drgaurav489@gmail.com',
     batch: '2006',
-    profilePicture: '/assets/people/gaurav_2006_passport.webp',
+    profilePicture: 'https://assets.jnvpjaa.org/assets/people/gaurav_2006_passport.webp',
     socialMedia: [
       {
         name: 'facebook',
@@ -25,7 +25,7 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
     designation: 'Vice President (Male)',
     email: '-',
     batch: '2009',
-    profilePicture: '/assets/people/rajesh_2009_passport.webp',
+    profilePicture: 'https://assets.jnvpjaa.org/assets/people/rajesh_2009_passport.webp',
     socialMedia: [
       {
         name: 'facebook',
@@ -38,7 +38,7 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
     designation: 'Vice President (Female)',
     email: '-',
     batch: '2002',
-    profilePicture: '/assets/people/naresh_2002_passport.webp',
+    profilePicture: 'https://assets.jnvpjaa.org/assets/people/naresh_2002_passport.webp',
     socialMedia: [
       {
         name: 'facebook',
@@ -52,7 +52,7 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
     designation: 'Secretary',
     email: 'bunkardinesh@gmail.com',
     batch: '2002',
-    profilePicture: '/assets/people/dinesh_2002_passport.webp',
+    profilePicture: 'https://assets.jnvpjaa.org/assets/people/dinesh_2002_passport.webp',
     socialMedia: [
       {
         name: 'facebook',
@@ -69,7 +69,7 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
     designation: 'Joint secretary',
     email: '-',
     batch: '1998',
-    profilePicture: '/assets/images/female_profile_placeholder.webp',
+    profilePicture: 'https://assets.jnvpjaa.org/assets/images/female_profile_placeholder.webp',
     socialMedia: [
       {
         name: 'facebook',
@@ -82,7 +82,7 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
     designation: 'Joint secretary',
     email: '-',
     batch: '2005',
-    profilePicture: '/assets/people/mukesh_2005_passport.webp',
+    profilePicture: 'https://assets.jnvpjaa.org/assets/people/mukesh_2005_passport.webp',
     socialMedia: [
       {
         name: 'facebook',
@@ -95,7 +95,7 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
     designation: 'Treasurer',
     email: 'frndparty918@gmail.com',
     batch: '2012',
-    profilePicture: '/assets/people/avnish_2012_passport.webp',
+    profilePicture: 'https://assets.jnvpjaa.org/assets/people/avnish_2012_passport.webp',
     socialMedia: [
       {
         name: 'facebook',
@@ -141,7 +141,7 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
     designation: 'Member',
     email: '-',
     batch: '1996',
-    profilePicture: '/assets/people/nathuram_1996_passport.webp',
+    profilePicture: 'https://assets.jnvpjaa.org/assets/people/nathuram_1996_passport.webp',
     socialMedia: [
       {
         name: 'facebook',
@@ -154,7 +154,7 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
     designation: 'Member',
     email: 'gaurav@jnvpjaa.com',
     batch: '2016',
-    profilePicture: '/assets/images/male_profile_placeholder.webp',
+    profilePicture: 'https://assets.jnvpjaa.org/assets/images/male_profile_placeholder.webp',
     socialMedia: [
       {
         name: 'facebook',
@@ -175,7 +175,7 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
     designation: 'Member',
     email: 'ritusabal34@gmail.com',
     batch: '2015',
-    profilePicture: '/assets/people/ritu_2015_passport.webp',
+    profilePicture: 'https://assets.jnvpjaa.org/assets/people/ritu_2015_passport.webp',
     socialMedia: [
       {
         name: 'facebook',
@@ -196,7 +196,7 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
     designation: 'Member',
     email: 'meenaverma473@gmail.com',
     batch: '2014',
-    profilePicture: '/assets/people/meena_2014_passport.webp',
+    profilePicture: 'https://assets.jnvpjaa.org/assets/people/meena_2014_passport.webp',
     socialMedia: [
       {
         name: 'facebook',
@@ -217,7 +217,7 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
     designation: 'Member',
     email: '-',
     batch: '2003',
-    profilePicture: '/assets/people/harinarayan_2003_passport.webp',
+    profilePicture: 'https://assets.jnvpjaa.org/assets/people/harinarayan_2003_passport.webp',
     socialMedia: [
       {
         name: 'facebook',
