@@ -83,6 +83,7 @@ const ProfessionInfo: React.FC<ProfessionInfoProps> = ({ user, onNext, onBack, o
     (payload: IProfessionInfoFormInput) => {
       let mutation = createCompanyIInfo;
       const variables = {
+        userId: user?.id,
         companyName: payload?.companyName,
         position: payload?.position,
         address: payload?.city,
@@ -117,7 +118,7 @@ const ProfessionInfo: React.FC<ProfessionInfoProps> = ({ user, onNext, onBack, o
         },
       });
     },
-    [updateCompanyIInfo, createCompanyIInfo, showAlert, onSuccess, client, onNext, data]
+    [updateCompanyIInfo, createCompanyIInfo, showAlert, onSuccess, client, onNext, data, user?.id]
   );
 
   return (
