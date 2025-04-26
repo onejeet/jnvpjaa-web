@@ -32,7 +32,15 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'unsplash.com',
+        hostname: 'assets.jnvpjaa.org',
+      },
+      {
+        protocol: 'https',
+        hostname: 'content.jnvpjaa.org',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
       },
     ],
   },
