@@ -5,8 +5,5 @@
   "env": {
     "NEXT_PUBLIC_NODE_ENV": "production"
   },
-  "routes": [{ "src": "/(.*)", "dest": "/app.js" }],
-  "experimental": {
-    "missingSuspenseWithCSRBailout": false
-  }
+  "routes": [{ "src": "/(.*)", "dest": "/app.js" }]
 }
