@@ -13,7 +13,7 @@ const Hero = () => {
         }}
         sx={{
           backgroundColor: 'grey.800',
-          backgroundImage: 'url(https://assets.jnvpjaa.org/assets/images/cover.webp)',
+          backgroundImage: 'url(https://assets.jnvpjaa.org/images/cover.webp)',
           backgroundRepeat: 'no-repeat',
           backgroundSize: {
             xs: '100% 100%',
