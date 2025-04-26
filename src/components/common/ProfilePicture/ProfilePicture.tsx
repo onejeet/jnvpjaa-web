@@ -49,6 +49,7 @@ const ProfilePicture: React.FC<ProfilePictureProps> = ({
             src={restProps?.src || getAvatarDataUrl(id)}
             slotProps={{
               img: {
+                loading: 'lazy',
                 referrerPolicy: 'no-referrer',
               },
             }}
