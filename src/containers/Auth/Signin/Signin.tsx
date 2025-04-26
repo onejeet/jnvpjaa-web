@@ -1,3 +1,5 @@
+'use client';
+
 import { alpha, Box, Card, Divider, Theme, Typography } from '@mui/material';
 import SigninForm from './SigninForm';
 import Image from 'next/image';
