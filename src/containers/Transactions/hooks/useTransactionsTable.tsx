@@ -1,3 +1,5 @@
+'use client';
+
 import { commonTableColumnProps } from '@/constants/General.contants';
 import Box from '@mui/material/Box';
 import { GridPaginationModel, GridRowParams } from '@mui/x-data-grid';

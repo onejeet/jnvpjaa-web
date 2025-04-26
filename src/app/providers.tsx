@@ -1,22 +1,23 @@
+'use client';
+
 import React from 'react';
 import { LayoutProvider } from '@/context/LayoutContext';
 import createEmotionCache from '@/utils/theme/createEmotionCache';
 import { CacheProvider } from '@emotion/react';
-import { ApolloProvider } from '@apollo/client';
-import { apolloClient } from 'src/apollo/client';
+
 import { AlertProvider } from '@/context/AlertContext';
 import { AuthProvider } from '@/context/AuthContext';
 import ServiceWorkerUpdater from '@/components/PWA/ServiceWorkerUpdater';
 import PWAInstaller from '@/components/PWA/PWAnstaller';
 import OfflineDialog from '@/components/common/OfflineDialog';
-import { usePathname } from 'next/navigation';
+import { ApolloWrapper } from '@/apollo/ApolloWrapper';
 
 const clientSideEmotionCache = createEmotionCache();
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <CacheProvider value={clientSideEmotionCache}>
-      <ApolloProvider client={apolloClient}>
+      <ApolloWrapper>
         <AuthProvider>
           <LayoutProvider>
             <AlertProvider>
@@ -27,7 +28,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
             </AlertProvider>
           </LayoutProvider>
         </AuthProvider>
-      </ApolloProvider>
+      </ApolloWrapper>
     </CacheProvider>
   );
 }

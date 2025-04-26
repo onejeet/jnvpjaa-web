@@ -1,3 +1,5 @@
+'use client';
+
 import { useSearchParams } from 'next/navigation';
 import useMembersTable from '../hooks/useMembersTable';
 import React from 'react';

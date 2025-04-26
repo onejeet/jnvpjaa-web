@@ -1,3 +1,5 @@
+'use client';
+
 import TextField from '@/components/core/TextField';
 import { useAuth } from '@/context/AuthContext';
 import { debounce, getBatchOptions } from '@/utils/helpers';

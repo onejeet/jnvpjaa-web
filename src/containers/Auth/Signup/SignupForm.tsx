@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { Box, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
@@ -83,7 +83,9 @@ const SignupForm = () => {
           justifyContent: 'center',
         }}
       >
-        <Lottie animationData={successLottieIcon} loop={true} style={{ width: '100px', height: '100px' }} />
+        <Suspense fallback={null}>
+          <Lottie animationData={successLottieIcon} loop={true} style={{ width: '100px', height: '100px' }} />
+        </Suspense>
         <Typography variant="h2">Signup Successful!</Typography>
         <Typography variant="body1" mt={1} textAlign="center" width="60%">
           The request email has been sent to the admins and upon approval you should be able to login.{' '}

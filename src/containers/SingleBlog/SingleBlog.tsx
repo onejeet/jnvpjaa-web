@@ -287,7 +287,7 @@ const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
         });
       }
     },
-    [id, client, blog]
+    [id, client, blog, blogClapUpdate]
   );
 
   return (

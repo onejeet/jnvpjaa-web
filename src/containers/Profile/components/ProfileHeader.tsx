@@ -1,3 +1,5 @@
+'use client';
+
 import Title from '@/components/common/Title';
 import { Box, Typography, Avatar, Skeleton, IconButton, Tooltip } from '@mui/material';
 import { ProfileHeaderProps } from '../Profile.types';

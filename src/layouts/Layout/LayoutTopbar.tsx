@@ -21,7 +21,7 @@ import {
   useTheme,
 } from '@mui/material';
 import NextLink from 'next/link';
-import React from 'react';
+import React, { Suspense } from 'react';
 import Logo from '@/components/common/Logo';
 
 import HeaderMenuItem from './HeaderMenuItem';
@@ -188,7 +188,9 @@ const LayoutTopbar: React.FC = () => {
                 {`Wish you a very happy birtday.`}
               </Typography>
               <Box maxWidth={50} maxHeight={30} display="flex" overflow="hidden" alignItems="center">
-                <Lottie animationData={giftsLottieIcon} loop={true} style={{ width: '100px', height: '50px' }} />
+                <Suspense fallback={null}>
+                  <Lottie animationData={giftsLottieIcon} loop={true} style={{ width: '100px', height: '50px' }} />
+                </Suspense>
               </Box>
             </Box>
           )}

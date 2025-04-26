@@ -24,9 +24,7 @@ const withPWA = require('next-pwa')({
 const nextConfig = {
   reactStrictMode: true,
   trailingSlash: true,
-  appDir: true,
   images: {
-    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
@@ -38,16 +36,19 @@ const nextConfig = {
       },
     ],
   },
+  experimental: {
+    missingSuspenseWithCSRBailout: false,
+  },
   pwa: {
     dest: 'public',
-    disable: process.env.NEXT_PUBLIC_NODE_ENV === 'development', // Disable in dev mode
+    disable: process.env.NODE_ENV === 'development', // Disable in dev mode
   },
   transpilePackages: ['mui-tel-input'],
   webpack: (config) => {
     // config.resolve.alias.canvas = false;
     config.resolve.alias = {
       ...(config.resolve.alias || {}),
-      canvas: false
+      canvas: false,
     };
 
     return config;

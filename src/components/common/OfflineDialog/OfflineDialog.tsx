@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import { checkInternetConnection } from '@/utils/network';
 import Dialog from '@/components/core/Dialog';
@@ -82,11 +82,13 @@ const OfflineDialog: React.FC<OfflineDialogProps> = () => {
       }}
     >
       <Box p={2} display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-        <Lottie
-          animationData={isOnline ? successLottieIcon : offlineLottieIcon}
-          loop={true}
-          style={{ width: isOnline ? '150px' : '200px', height: isOnline ? '150px' : '200px' }}
-        />
+        <Suspense fallback={null}>
+          <Lottie
+            animationData={isOnline ? successLottieIcon : offlineLottieIcon}
+            loop={true}
+            style={{ width: isOnline ? '150px' : '200px', height: isOnline ? '150px' : '200px' }}
+          />
+        </Suspense>
         <Typography variant="h2" mt={2}>
           {isOnline ? 'Back Online 🎉' : 'You are Offline'}
         </Typography>

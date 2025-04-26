@@ -1,3 +1,5 @@
+'use client';
+
 import { Box, Chip, Divider, Grid2 as Grid, IconButton, Skeleton, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 import ProfilePicture from '../ProfilePicture';

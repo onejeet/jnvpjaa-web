@@ -1,3 +1,5 @@
+'use client';
+
 import TextField from '@/components/core/TextField';
 import { debounce, getBatchOptions } from '@/utils/helpers';
 import { Box, Grid2 as Grid, MenuItem, Select } from '@mui/material';

@@ -1,3 +1,5 @@
+'use client';
+
 import { JNVPJAA_SOCIAL_MEDIA } from '@/constants/General.contants';
 import { getSocialMediaIcon } from '@/utils/helpers';
 import { IconButton, Stack } from '@mui/material';

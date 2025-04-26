@@ -1,3 +1,5 @@
+'use client';
+
 import { commonTableColumnProps } from '@/constants/General.contants';
 import PAST_PRESIDENTS from '@/constants/PastPresidents.json';
 import { getDefaultAvatar } from '@/utils/helpers';

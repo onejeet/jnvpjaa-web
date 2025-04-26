@@ -1,92 +1,85 @@
-import { ApolloClient, HttpLink, InMemoryCache, ApolloLink, Observable, from, split } from '@apollo/client';
+'use client';
+
+import { HttpLink, ApolloLink, from, split, Observable } from '@apollo/client';
+import { ApolloClient, InMemoryCache } from '@apollo/experimental-nextjs-app-support';
 import { setContext } from '@apollo/client/link/context';
-import { refreshAccessToken } from './refresh';
 import { getMainDefinition } from '@apollo/client/utilities';
-import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
+import { refreshAccessToken } from './refresh';
+
+// Define operations that don’t require auth
+const publicOperations = ['signin', 'getEventList', 'getBlogList', 'getBlog', 'getUserList', 'signup'];
 
 // Error handling link
 const errorLink = new ApolloLink((operation, forward) => {
   return new Observable((observer) => {
     forward(operation).subscribe({
       next: async (result) => {
-        // console.log('~~ CLIENT ~~ ERRORS', result?.errors);
-        if (result?.errors && result?.errors?.length > 0) {
-          // @ts-expect-error type
-          if (result?.errors?.[0]?.code === 'NOT_AUTHORISED') {
-            const isLoggedIn = localStorage.getItem('logged_in') === 'true';
+        if (result?.errors?.length) {
+          const isUnauth = result.errors[0]?.extensions?.code === 'NOT_AUTHORISED';
+
+          if (isUnauth) {
+            const isLoggedIn = typeof window !== 'undefined' && localStorage.getItem('logged_in') === 'true';
+
             if (isLoggedIn) {
               try {
-                // Call the refresh token mutation
                 await refreshAccessToken();
-
-                // Retry the operation with the new token
+                // Retry the operation
                 forward(operation).subscribe(observer);
               } catch (refreshError) {
                 localStorage.removeItem('logged_in');
                 observer.error(refreshError);
-                console.log('Error: ', refreshError);
               }
             } else {
-              // No refresh token available, force logout
-              observer.error(result?.errors?.[0]);
+              observer.error(result.errors[0]);
             }
           } else {
-            observer.error(result?.errors?.[0]);
-            console.log('Error: ', result?.errors?.[0]);
+            observer.error(result.errors[0]);
           }
         } else {
           observer.next(result);
         }
       },
-      error: async (error) => {
+      error: (error) => {
         observer.error(error);
-        console.log('Error: ', error);
       },
     });
   });
 });
 
-// Auth link to add tokens
+// Auth header injection
 const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      // authorization: token ? `Bearer ${token}` : '',
     },
   };
 });
 
-console.log('ZZ: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT', process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT);
-
-// HTTP link
+// HTTP link to GraphQL API
 const httpLink = new HttpLink({
-  uri: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || 'http://localhost:4000/client',
-  credentials: 'include', // or 'include' for cookies
-});
-
-// ✅ Upload Link
-const uploadLink = createUploadLink({
   uri: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || 'http://localhost:4000/client',
   credentials: 'include',
 });
 
-const publicOperations = ['signin', 'getEventList', 'getBlogList', 'getBlog', 'getUserList', 'signup'];
-
-// Apollo Client
-export const apolloClient = new ApolloClient({
-  link: from([
-    errorLink,
-    split(({ query }: { query: any }) => {
-      // Safely extract the operation name from the query
-      const mainDef = getMainDefinition(query);
-      const operationName = mainDef?.name?.value; // Handle the case where 'name' or 'value' may be undefined
-
-      // Route to 'credential_link' only if operation name is 'bo_signup'
-      return operationName ? !publicOperations?.includes(operationName) : true;
-    }, authLink),
-    uploadLink,
-    httpLink,
-  ]),
-  cache: new InMemoryCache(),
-  connectToDevTools: true,
-});
+export const apolloClient = () => {
+  return new ApolloClient({
+    cache: new InMemoryCache(), // Use InMemoryCache for both SSR and client
+    link:
+      typeof window === 'undefined'
+        ? httpLink // Server-side will use the basic HTTP link for SSR
+        : from([
+            errorLink,
+            split(
+              ({ query }) => {
+                const mainDef = getMainDefinition(query);
+                const operationName = mainDef?.name?.value;
+                return operationName ? !publicOperations.includes(operationName) : true;
+              },
+              authLink,
+              new ApolloLink((op, fwd) => fwd(op)) // Passthrough link for client-side
+            ),
+            httpLink, // HTTP link for client-side
+          ]),
+    connectToDevTools: typeof window !== 'undefined',
+  });
+};

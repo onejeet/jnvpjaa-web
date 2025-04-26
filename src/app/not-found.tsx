@@ -2,7 +2,10 @@
 
 import React from 'react';
 import { Box } from '@mui/material';
-import EmptyView from '@/components/common/EmptyView';
+
+import dynamic from 'next/dynamic';
+
+const EmptyView = dynamic(() => import('@/components/common/EmptyView'), { ssr: false });
 
 export default function NotFound() {
   return (

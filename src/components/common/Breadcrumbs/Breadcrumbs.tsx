@@ -1,3 +1,5 @@
+'use client';
+
 import { Box, Breadcrumbs as MuiBreadcrumbs, Skeleton, useTheme } from '@mui/material';
 import MuiLink from '@mui/material/Link';
 import NextLink from 'next/link';

@@ -1,4 +1,4 @@
-import React, { act } from 'react';
+import React, { act, Suspense } from 'react';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -136,7 +136,7 @@ const AlertContent: React.FC<AlertContentProps> = ({ title, message, action = 'd
       width="100%"
     >
       <Box mt={1} mb={3}>
-        {iconComp}
+        <Suspense fallback={null}>{iconComp}</Suspense>
       </Box>
       {titleComp}
       {MessageComp}

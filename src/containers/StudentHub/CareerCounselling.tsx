@@ -2,6 +2,7 @@ import { Paper, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 
 import Breadcrumbs from '@/components/common/Breadcrumbs';
+import Image from 'next/image';
 
 const breadcrumbsList = [
   {
@@ -50,9 +51,10 @@ const CareerCounselling = () => {
             display={{ xs: 'block', md: 'none' }}
             sx={{ borderRadius: '10px', maxWidth: '100%', maxHeight: '400px', overflow: 'hidden' }}
           >
-            <img
+            <Image
               src="/assets/images/career-councelling.webp"
-              width="100%"
+              // width="100%"
+              fill
               alt="mission"
               style={{ objectFit: 'contain', position: 'relative' }}
             />
@@ -73,9 +75,10 @@ const CareerCounselling = () => {
           </Typography>
         </Box>
         <Box display={{ xs: 'none', md: 'block' }} sx={{ borderRadius: '10px', maxWidth: '100%', overflow: 'hidden' }}>
-          <img
+          <Image
             src="/assets/images/career-councelling.webp"
-            width="100%"
+            fill
+            // width="100%"
             alt="mission"
             style={{ objectFit: 'contain', position: 'relative' }}
           />

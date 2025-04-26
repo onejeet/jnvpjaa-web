@@ -1,3 +1,5 @@
+'use client';
+
 import { commonTableColumnProps } from '@/constants/General.contants';
 import { formatPhoneNumber, getDefaultAvatar } from '@/utils/helpers';
 import Box from '@mui/material/Box';

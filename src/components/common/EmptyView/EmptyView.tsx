@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import Button from '@/components/core/Button';
 import { ButtonProps } from '@/components/core/Button/Button.types';
 import { Box, Typography } from '@mui/material';
@@ -26,7 +26,9 @@ const EmptyView: React.FC<IProps> = ({ type, message, buttonProps }) => {
       alignItems="center"
       overflow="hidden"
     >
-      <Lottie animationData={doggieLottieIcon} loop={true} style={{ width: '400px', height: '400px' }} />
+      <Suspense fallback={null}>
+        <Lottie animationData={doggieLottieIcon} loop={true} style={{ width: '400px', height: '400px' }} />
+      </Suspense>
       {/* <Image src="/assets/svg/doggie.svg" alt="empty" width={500} height={300} /> */}
       <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" mt={-10}>
         {React.isValidElement(message) ? (

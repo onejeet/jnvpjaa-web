@@ -3,16 +3,14 @@
 import { alpha, Box, Card, Divider, Theme, Typography } from '@mui/material';
 import SigninForm from './SigninForm';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import GlobalBgShade from '@/components/common/GlobalBgShade';
 import Link from 'next/link';
 
 const Signin = () => {
-  const router = useRouter();
-  const handleGoogleLogin = () => {
-    // Redirect to the backend Google auth endpoint
-    window.location.href = `${process.env.GRAPHQL_ENDPOINT || 'http://localhost:4000'}/auth/google`;
-  };
+  // const handleGoogleLogin = () => {
+  //   // Redirect to the backend Google auth endpoint
+  //   window.location.href = `${process.env.GRAPHQL_ENDPOINT || 'http://localhost:4000'}/auth/google`;
+  // };
 
   return (
     <Box

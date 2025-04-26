@@ -34,7 +34,12 @@ const PresidentMessage = () => {
             sx={{ borderRadius: '10px', width: '100%', overflow: 'hidden' }}
             mb={2}
           >
-            <img src="/assets/people/gaurav_2006.webp" width="100%" alt="jnv principal" />
+            <Image
+              src="/assets/people/gaurav_2006.webp"
+              // width="100%"
+              fill
+              alt="jnv principal"
+            />
           </Box>
           <Typography color="grey.800" fontWeight={600} display="flex">
             Illuminating Horizons

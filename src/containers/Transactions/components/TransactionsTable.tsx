@@ -1,3 +1,5 @@
+'use client';
+
 import { useSearchParams } from 'next/navigation';
 import useTransactionsTable from '../hooks/useTransactionsTable';
 import React from 'react';

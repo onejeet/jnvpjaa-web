@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useState } from 'react';
 import LayoutModule from '@/layouts/Layout';
 import MembersFilters from './components/MembersFilters';

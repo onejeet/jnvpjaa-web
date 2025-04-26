@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, Suspense, useContext, useEffect, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import LoadingIndicator from '@/components/common/LoadingIndicator';
 import { AuthProviderProps, LoadingDataProps, TAuthContextData } from './AuthContext.types';
@@ -194,31 +194,33 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, [user]);
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        isAdmin,
-        checkAuth,
-        setUser,
-        logoutUser,
-        isAuthPage,
-        setLoadingData,
-        redirectToSignin,
-        redirectOnSignin,
-      }}
-    >
-      {isLoading ? (
-        <Box width="100%" minHeight="100vh" display="flex" justifyContent="center" alignItems="center">
-          <LoadingIndicator isBackdrop={false} />
-        </Box>
-      ) : null}
-      {/* The Children's will not load while loading is in progress
-       * until specifically mentioned by using renderPageInBackground
-       */}
-      {Boolean(!isLoading || loadingData?.renderPageInBackground) && (
-        <Box sx={{ visibility: isLoading ? 'hidden' : 'visible' }}>{children}</Box>
-      )}
-    </AuthContext.Provider>
+    <Suspense fallback={<LoadingIndicator isBackdrop />}>
+      <AuthContext.Provider
+        value={{
+          user,
+          isAdmin,
+          checkAuth,
+          setUser,
+          logoutUser,
+          isAuthPage,
+          setLoadingData,
+          redirectToSignin,
+          redirectOnSignin,
+        }}
+      >
+        {isLoading ? (
+          <Box width="100%" minHeight="100vh" display="flex" justifyContent="center" alignItems="center">
+            <LoadingIndicator isBackdrop={false} />
+          </Box>
+        ) : null}
+        {/* The Children's will not load while loading is in progress
+         * until specifically mentioned by using renderPageInBackground
+         */}
+        {Boolean(!isLoading || loadingData?.renderPageInBackground) && (
+          <Box sx={{ visibility: isLoading ? 'hidden' : 'visible' }}>{children}</Box>
+        )}
+      </AuthContext.Provider>
+    </Suspense>
   );
 };
 

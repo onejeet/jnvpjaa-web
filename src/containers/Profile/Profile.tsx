@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import Box from '@mui/material/Box';
 import ProfileHeader from './components/ProfileHeader';
 import ProfileTabs from './components/ProfileTabs';
@@ -37,7 +37,9 @@ export default function ProfilePage() {
           {isBirthday && (
             <Box display="flex" maxHeight={50} overflow="hidden" alignItems="center" ml={2}>
               {/* <Cake size={32} /> */}
-              <Lottie animationData={giftsLottieIcon} loop={true} style={{ width: '100px', height: '50px' }} />
+              <Suspense fallback={null}>
+                <Lottie animationData={giftsLottieIcon} loop={true} style={{ width: '100px', height: '50px' }} />
+              </Suspense>
               <Typography ml="-10px" color="#B42B43" fontWeight={500}>
                 Celebrating a Birthday Today!{' '}
               </Typography>
