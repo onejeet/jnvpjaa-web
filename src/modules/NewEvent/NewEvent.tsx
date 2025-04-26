@@ -20,7 +20,7 @@ import {
   useUpdateEventMutation,
 } from '@/apollo/hooks';
 import { paths } from '@/config/paths';
-// import TipTapTextEditor from '@/modules/TipTapTextEditor';
+import TipTapTextEditor from '@/modules/TipTapTextEditor';
 import {
   IconCurrencyRupee,
   IconDeviceFloppy,
@@ -329,7 +329,7 @@ const NewEvent = () => {
             <Typography color="grey.600" variant="body1" fontSize={14}>
               Description (optional)
             </Typography>
-            {/* <TipTapTextEditor value="" onChange={(data) => setValue('description', data)} /> */}
+            <TipTapTextEditor value="" onChange={(data) => setValue('description', data)} />
           </Box>
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>

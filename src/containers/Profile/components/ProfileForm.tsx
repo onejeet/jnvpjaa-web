@@ -10,7 +10,7 @@ import { useForm, useWatch } from 'react-hook-form';
 import { IProfileFormInput } from '../Profile.types';
 import { IconUser, IconPhone, IconMapPin, IconBuilding, IconCalendar } from '@tabler/icons-react';
 import FormDateTimeField from '@/components/form/FormDateTimeField';
-// import TipTapTextEditor from '@/modules/TipTapTextEditor';
+import TipTapTextEditor from '@/modules/TipTapTextEditor';
 import dayjs from 'dayjs';
 import { useApolloClient } from '@apollo/client';
 import FormPhoneField from '@/components/form/FormPhoneField';
@@ -243,7 +243,7 @@ const ProfileForm = () => {
               <Typography color="grey.600" variant="body1" fontSize={14}>
                 About Me
               </Typography>
-              {/* <TipTapTextEditor value={getValues('aboutMe') || ''} onChange={(data) => setValue('aboutMe', data)} /> */}
+              <TipTapTextEditor value={getValues('aboutMe') || ''} onChange={(data) => setValue('aboutMe', data)} />
             </Box>
           </Grid>
         </Grid>
