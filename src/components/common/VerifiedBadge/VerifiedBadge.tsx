@@ -16,7 +16,7 @@ const VerifiedBadge: React.FC<Props> = ({ size, title, isPrivate, isPrivateInfoC
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const finalSize = React.useMemo(() => {
     if (isMobile) {
-      return (2 / 3) * (size || 16);
+      return (2 / 3) * (size || 20);
     }
     return size || 16;
   }, [size, isMobile]);
@@ -38,7 +38,7 @@ const VerifiedBadge: React.FC<Props> = ({ size, title, isPrivate, isPrivateInfoC
           placement="top"
         >
           <LockSimple
-            size={size || 16}
+            size={finalSize}
             style={{ cursor: handlePrivateInfo && isPrivateInfoChangeAllowed ? 'pointer' : 'default' }}
             onClick={isPrivateInfoChangeAllowed ? () => handlePrivateInfo?.() : undefined}
           />
