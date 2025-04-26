@@ -61,7 +61,7 @@ export default function MetricsNumbers() {
             <Typography color="primary.300" variant="h5" fontWeight={700} fontSize={{ xs: 45, sm: 60 }}>
               {m.value}
             </Typography>
-            <Typography color="grey.600" variant="body2" mt={{ xs: 2, md: 3 }}>
+            <Typography color="grey.800" variant="body2" mt={{ xs: 2, md: 3 }}>
               {m?.label || ''}
             </Typography>
           </Box>
