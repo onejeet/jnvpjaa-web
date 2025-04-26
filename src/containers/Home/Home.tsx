@@ -2,9 +2,9 @@ import Box from '@mui/material/Box';
 import Hero from '@/components/home/Hero';
 import SloganBanner from '@/components/home/SloganBanner';
 import FeaturedBlogs from './components/FeaturedBlogs';
-import BirthdaySlider from './components/BirthdaySlider';
 import MetricsNumbers from './components/MetricsNumbers';
-import ImageSlider from './components/ImageSlider';
+import DynamicImageSlider from './components/DynamicImageSlider';
+import DynamicBirthdaySlider from './components/DynamicBirthdaySlider';
 
 const Home = () => {
   return (
@@ -13,9 +13,9 @@ const Home = () => {
       <SloganBanner />
       <MetricsNumbers />
       {/* <UpcomingEvents /> */}
-      <ImageSlider />
+      <DynamicImageSlider />
       <FeaturedBlogs />
-      <BirthdaySlider />
+      <DynamicBirthdaySlider />
     </Box>
   );
 };
