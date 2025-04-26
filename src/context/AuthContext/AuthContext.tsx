@@ -132,12 +132,11 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       } else if (checkAuth || isAuthPage) {
         fetchUserData();
       }
+      window.addEventListener('storage', onLoginStateChange, false);
+      return () => {
+        window.removeEventListener('storage', onLoginStateChange, false);
+      };
     }
-
-    window.addEventListener('storage', onLoginStateChange, false);
-    return () => {
-      window.removeEventListener('storage', onLoginStateChange, false);
-    };
   }, []);
 
   const onLoginStateChange = (event: Record<string, any>) => {
@@ -160,6 +159,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const logoutUser = async () => {
+    if (typeof window === 'undefined') return;
     setLoadingData({
       loading: true,
       type: 'logout',
