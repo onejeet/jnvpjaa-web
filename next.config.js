@@ -4,6 +4,7 @@
 const withPWA = require('next-pwa')({
   dest: 'public',
   register: true,
+  disable: process.env.NEXT_PUBLIC_NODE_ENV === 'development', // Disable in dev mode
   skipWaiting: true,
   reloadOnOnline: false,
   runtimeCaching: [
@@ -14,7 +15,18 @@ const withPWA = require('next-pwa')({
         cacheName: 'image-cache',
         expiration: {
           maxEntries: 100, // Max number of images to cache
-          maxAgeSeconds: 60 * 60 * 24 * 365, // Cache images for 1 year
+          maxAgeSeconds: 60 * 60 * 24 * 30, // Cache images for 1 year
+        },
+      },
+    },
+    {
+      urlPattern: /^\/_next\/image/,
+      handler: 'CacheFirst',
+      options: {
+        cacheName: 'next-image-cache',
+        expiration: {
+          maxEntries: 50,
+          maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
         },
       },
     },
@@ -46,10 +58,6 @@ const nextConfig = {
   },
   experimental: {
     missingSuspenseWithCSRBailout: false,
-  },
-  pwa: {
-    dest: 'public',
-    disable: process.env.NEXT_PUBLIC_NODE_ENV === 'development', // Disable in dev mode
   },
   transpilePackages: ['mui-tel-input'],
   webpack: (config, { isServer }) => {
