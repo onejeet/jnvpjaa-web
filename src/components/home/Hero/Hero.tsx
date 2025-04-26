@@ -61,7 +61,11 @@ const Hero = () => {
             JNV Paota Almuni Network
           </Typography> */}
         </Box>
-        <Box sx={{ position: 'absolute', bottom: { xs: '-10px', sm: '-10px', md: '-16px' } }}>
+        <Box
+          display="flex"
+          justifyContent="center"
+          sx={{ position: 'absolute', bottom: { xs: '-10px', sm: '-10px', md: '-16px' } }}
+        >
           <Typography
             display="flex"
             alignItems="center"
@@ -77,7 +81,7 @@ const Hero = () => {
               md: '100px',
             }}
             maxWidth={{
-              xs: '80%',
+              xs: '75%',
               sm: '100%',
             }}
             textAlign="center"
