@@ -12,6 +12,7 @@ import Button from '@/components/core/Button';
 import { EDITOR_ICONS } from '../../constants';
 import ToolIcon from './ToolIcon';
 import { isURL } from '@/utils/helpers';
+import isBrowser from '@/utils/isBrowser';
 import { Tooltip } from '@mui/material';
 
 const AnchorEditorButton: React.FC = (props) => {
@@ -84,10 +85,7 @@ const AnchorEditorButton: React.FC = (props) => {
       <Popover
         id={id}
         open={open}
-        anchorEl={
-          anchorEl ||
-          (typeof document !== 'undefined' ? document.getElementById('typography_editor_anchor_button') : null)
-        }
+        anchorEl={anchorEl || (isBrowser() ? document.getElementById('typography_editor_anchor_button') : null)}
         onClose={handleClose}
         anchorOrigin={{
           vertical: 'bottom',

@@ -1,9 +1,8 @@
-// ** React Imports
+'use client';
+
 import React from 'react';
-/* MUI */
 import Box from '@mui/material/Box';
 import BulletList from '@tiptap/extension-bullet-list';
-/* TIPTAP */
 import { Color } from '@tiptap/extension-color';
 import FontFamily from '@tiptap/extension-font-family';
 import Heading from '@tiptap/extension-heading';

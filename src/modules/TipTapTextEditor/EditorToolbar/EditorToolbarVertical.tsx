@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 /* LIB */
 import Box from '@mui/material/Box';

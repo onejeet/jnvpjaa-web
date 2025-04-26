@@ -10,6 +10,7 @@ import { useCurrentEditor } from '@tiptap/react';
 import ToolIcon from './ToolIcon';
 import { isURL } from '@/utils/helpers';
 import Button from '@/components/core/Button';
+import isBrowser from '@/utils/isBrowser';
 import { Tooltip } from '@mui/material';
 
 const VideoButton: React.FC = (props) => {
@@ -83,10 +84,7 @@ const VideoButton: React.FC = (props) => {
       <Popover
         id={id}
         open={open}
-        anchorEl={
-          anchorEl ||
-          (typeof document !== 'undefined' ? document.getElementById('typography_editor_anchor_button') : null)
-        }
+        anchorEl={anchorEl || (isBrowser() ? document.getElementById('typography_editor_anchor_button') : null)}
         onClose={handleClose}
         anchorOrigin={{
           vertical: 'bottom',

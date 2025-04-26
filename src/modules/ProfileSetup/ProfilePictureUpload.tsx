@@ -18,6 +18,7 @@ import { useGetPresignedUrlMutation, User, useUpdateUserMutation } from '@/apoll
 import { org_info, R2_BUCKET_NAME, R2_ENDPOINT } from '@/config/index';
 import { useApolloClient } from '@apollo/client';
 import { optimiseImageSize } from '@/utils/media';
+import isBrowser from '@/utils/isBrowser';
 
 interface ProfilePictureUploadProps {
   onBack?: () => void;
@@ -36,9 +37,10 @@ export async function getCroppedImg(imageSrc: string, croppedAreaPixels: Record<
     image.onerror = () => reject(new Error('Failed to load image'));
   });
 
-  if (typeof window === 'undefined') return;
+  if (!isBrowser()) return;
 
-  const canvas = document.createElement('canvas');
+  const canvas = isBrowser() ? document.createElement('canvas') : null;
+  if (!canvas) return null;
   const ctx = canvas.getContext('2d');
   if (!ctx || !croppedAreaPixels?.width) return null;
 

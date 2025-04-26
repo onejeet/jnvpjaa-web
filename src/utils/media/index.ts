@@ -1,4 +1,5 @@
 import imageCompression, { Options } from 'browser-image-compression';
+import isBrowser from '@/utils/isBrowser';
 
 export const optimiseImageSize = async (file: File, options?: Options) => {
   if (!file) return;
@@ -21,6 +22,8 @@ export const optimiseImageSize = async (file: File, options?: Options) => {
 };
 
 export const downloadImage = (imageUrl: string) => {
+  // Only run in browser environment
+  if (!isBrowser()) return;
   const urlParts = imageUrl.split('/');
   const fileName = urlParts[urlParts.length - 1].split('?')[0]; // Handles URLs with query params
 

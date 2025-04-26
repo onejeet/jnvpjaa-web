@@ -4,6 +4,7 @@ import type { PropsWithChildren, Ref } from 'react';
 import React from 'react';
 import { css, cx } from '@emotion/css';
 import ReactDOM from 'react-dom';
+import isBrowser from '@/utils/isBrowser';
 
 interface BaseProps {
   className: string;
@@ -156,7 +157,7 @@ export const Menu = React.forwardRef(
 );
 
 export const Portal = ({ children }: any) => {
-  return typeof document === 'object' ? ReactDOM.createPortal(children, document.body) : null;
+  return isBrowser() ? ReactDOM.createPortal(children, document.body) : null;
 };
 
 export const Toolbar = React.forwardRef(
