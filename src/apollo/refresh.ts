@@ -62,7 +62,10 @@ export const refreshAccessToken = async (): Promise<string | null> => {
     return response.data?.refreshToken || null;
   } catch (error) {
     console.error('Failed to refresh token', error);
-    localStorage.removeItem('logged_in');
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('logged_in');
+    }
+
     return null;
   }
 };

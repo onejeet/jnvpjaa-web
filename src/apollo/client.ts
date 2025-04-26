@@ -26,7 +26,10 @@ const errorLink = new ApolloLink((operation, forward) => {
                 // Retry the operation
                 forward(operation).subscribe(observer);
               } catch (refreshError) {
-                localStorage.removeItem('logged_in');
+                if (typeof window !== 'undefined') {
+                  localStorage.removeItem('logged_in');
+                }
+
                 observer.error(refreshError);
               }
             } else {
