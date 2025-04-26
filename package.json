@@ -12,7 +12,7 @@
     "prettier:check": "prettier --check \"**/*.{ts,tsx,json}\"",
     "lint": "next lint",
     "eslint:format": "eslint src --fix",
-    "postinstall": "husky",
+    "postinstall": "npx husky",
     "codegen": "graphql-codegen --config codegen/generate.js"
   },
   "engines": {
