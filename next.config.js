@@ -43,25 +43,7 @@ const nextConfig = {
     dest: 'public',
     disable: process.env.NODE_ENV === 'development', // Disable in dev mode
   },
-  transpilePackages: [
-    'mui-tel-input',
-    '@tiptap/react',
-    '@tiptap/extension-color',
-    '@tiptap/extension-font-family',
-    '@tiptap/extension-heading',
-    '@tiptap/extension-link',
-    '@tiptap/extension-list-item',
-    '@tiptap/extension-ordered-list',
-    '@tiptap/extension-paragraph',
-    '@tiptap/extension-text-align',
-    '@tiptap/extension-text-style',
-    '@tiptap/extension-underline',
-    '@tiptap/extension-youtube',
-    '@tiptap/extension-placeholder',
-    '@tiptap/extension-blockquote',
-    '@tiptap/starter-kit',
-    '@tiptap/extension-bullet-list',
-  ],
+  transpilePackages: ['mui-tel-input'],
   webpack: (config, { isServer }) => {
     // config.resolve.alias.canvas = false;
     config.resolve.alias = {
@@ -69,12 +51,15 @@ const nextConfig = {
       canvas: false,
     };
 
-    // Exclude TipTap and related packages from server-side rendering
+    // Exclude browser-specific packages from server-side rendering
     if (isServer) {
       // These packages should only be loaded on the client side
       const serverSideExclusions = [
-        /@tiptap[/\\].*/, // All TipTap packages
-        /prosemirror-.*/, // ProseMirror (used by TipTap)
+        /react-easy-crop/, // Image cropping library that uses DOM
+        /emoji-picker-react/, // Emoji picker that uses DOM
+        /react-colorful/, // Color picker that uses DOM
+        /react-canvas-confetti/, // Canvas confetti that uses DOM
+        /browser-image-compression/, // Image compression that uses DOM
       ];
 
       // Mark these packages as external to prevent them from being bundled on the server

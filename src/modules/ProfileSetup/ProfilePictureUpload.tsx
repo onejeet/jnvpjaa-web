@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Avatar, Box, Typography, IconButton, Slider, CircularProgress } from '@mui/material';
-import Cropper from 'react-easy-crop';
+import dynamic from 'next/dynamic';
 import {
   IconChevronLeft,
   IconCircleCheck,
@@ -19,6 +19,15 @@ import { org_info, R2_BUCKET_NAME, R2_ENDPOINT } from '@/config/index';
 import { useApolloClient } from '@apollo/client';
 import { optimiseImageSize } from '@/utils/media';
 import isBrowser from '@/utils/isBrowser';
+import ClientSideOnly from './ClientSideOnly';
+
+// Dynamically import the Cropper component with SSR disabled
+const DynamicCropper = dynamic(() => import('react-easy-crop').then((mod) => mod.default), {
+  ssr: false,
+  loading: () => (
+    <Box sx={{ height: 300, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading cropper...</Box>
+  ),
+});
 
 interface ProfilePictureUploadProps {
   onBack?: () => void;
@@ -380,16 +389,18 @@ export default function ProfilePictureUpload({ user, onNext, onBack, onSuccess, 
             Adjust the image by zooming in, out, and dragging it to position the desired area.
           </Typography>
           <Box sx={{ position: 'relative', width: '100%', height: 300 }}>
-            <Cropper
-              image={image!}
-              // @ts-expect-error type error
-              crop={crop}
-              zoom={zoom}
-              aspect={1}
-              onCropComplete={(croppedArea, croppedAreaPixels) => setCropArea(croppedAreaPixels)}
-              onCropChange={setCrop}
-              onZoomChange={setZoom}
-            />
+            <ClientSideOnly>
+              <DynamicCropper
+                image={image!}
+                // @ts-expect-error type error
+                crop={crop}
+                zoom={zoom}
+                aspect={1}
+                onCropComplete={(croppedArea, croppedAreaPixels) => setCropArea(croppedAreaPixels)}
+                onCropChange={setCrop}
+                onZoomChange={setZoom}
+              />
+            </ClientSideOnly>
           </Box>
           <Box mt={2} px={2}>
             <Typography variant="body2" color="textSecondary">
