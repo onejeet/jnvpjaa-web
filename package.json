@@ -6,8 +6,8 @@
   "author": "Jeet from Dots Created",
   "scripts": {
     "dev": "cross-env NEXT_PUBLIC_NODE_ENV=development NEXT_PUBLIC_GRAPHQL_ENDPOINT=http://localhost:4000/client next dev -p 3890",
-    "build": "cross-env NEXT_PUBLIC_NODE_ENV=production NEXT_PUBLIC_GRAPHQL_ENDPOINT=https://api.jnvpjaa.org/client next build",
-    "start": "cross-env NEXT_PUBLIC_NODE_ENV=production NEXT_PUBLIC_GRAPHQL_ENDPOINT=https://api.jnvpjaa.org/client next start",
+    "build": "next build",
+    "start": "next start",
     "prettier:format": "prettier --write .",
     "prettier:check": "prettier --check \"**/*.{ts,tsx,json}\"",
     "lint": "next lint",
