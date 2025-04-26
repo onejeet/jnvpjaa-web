@@ -22,7 +22,7 @@ import {
   Photo,
 } from '@/apollo/hooks';
 import { paths } from '@/config/paths';
-import TipTapTextEditor from '@/modules/TipTapTextEditor';
+// import TipTapTextEditor from '@/modules/TipTapTextEditor';
 import { IconEye, IconDeviceFloppy } from '@tabler/icons-react';
 import { useApolloClient } from '@apollo/client';
 import dayjs from 'dayjs';
@@ -290,7 +290,7 @@ const NewBlog = () => {
         <Grid size={{ xs: 12 }}>
           <Divider />
         </Grid>
-        <Grid size={{ xs: 12 }}>
+        {/* <Grid size={{ xs: 12 }}>
           <Box display="flex" flexDirection="column">
             <TipTapTextEditor
               value={getValues('content')}
@@ -306,7 +306,7 @@ const NewBlog = () => {
               toolbarProps={{ sx: { borderRadius: '40px' } }}
             />
           </Box>
-        </Grid>
+        </Grid> */}
       </Grid>
       {selectCoverImage && (
         <UnsplashImageSelector
