@@ -1,9 +1,10 @@
 {
   "version": 2,
   "name": "jnvpjaa-web",
-  "builds": [{ "src": "app.js", "use": "@vercel/node" }],
-  "env": {
-    "NEXT_PUBLIC_NODE_ENV": "production"
-  },
-  "routes": [{ "src": "/(.*)", "dest": "/app.js" }]
+  "builds": [
+    {
+      "src": "next.config.js",
+      "use": "@vercel/next"
+    }
+  ]
 }
