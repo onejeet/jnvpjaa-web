@@ -15,7 +15,7 @@ import { Info } from '@mui/icons-material';
 import { paths } from '@/config/paths';
 import { useRouter } from 'next/navigation';
 import FormPhoneField from '@/components/form/FormPhoneField';
-import Lottie from 'lottie-react';
+import Lottie from '@/components/common/DynamicLottie';
 import successLottieIcon from '@/utils/lottie/success3_icon.json';
 import FormCheckbox from '@/components/form/FormCheckboxField/FormCheckboxField';
 

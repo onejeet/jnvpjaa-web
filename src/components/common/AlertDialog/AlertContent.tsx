@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import HelpIcon from '@mui/icons-material/Help';
 import type { AlertContentProps } from './AlertDialog.types';
 import { IconQuestionMark as SealQuestion, IconLoader as Spinner } from '@tabler/icons-react';
-import Lottie from 'lottie-react';
+import Lottie from '@/components/common/DynamicLottie';
 import successLottieIcon from '@/utils/lottie/success3_icon.json';
 import deleteLottieIcon from '@/utils/lottie/delete_icon.json';
 import errorLottieIcon from '@/utils/lottie/error_icon.json';

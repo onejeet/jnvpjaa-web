@@ -5,7 +5,7 @@ import Button from '@/components/core/Button';
 import { ButtonProps } from '@/components/core/Button/Button.types';
 import { Box, Typography } from '@mui/material';
 import doggieLottieIcon from '@/utils/lottie/doggie_art.json';
-import Lottie from 'lottie-react';
+import Lottie from '@/components/common/DynamicLottie';
 
 interface IProps {
   type?: string;

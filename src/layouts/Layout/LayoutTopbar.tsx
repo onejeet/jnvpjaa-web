@@ -37,7 +37,7 @@ import {
   IconUser as User,
 } from '@tabler/icons-react';
 import { paths } from '@/config/paths';
-import Lottie from 'lottie-react';
+import Lottie from '@/components/common/DynamicLottie';
 import giftsLottieIcon from '@/utils/lottie/gifts_art.json';
 import { isBirthdayToday } from '@/utils/helpers';
 

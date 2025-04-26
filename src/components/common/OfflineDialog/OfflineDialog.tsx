@@ -5,7 +5,7 @@ import { Box, Typography } from '@mui/material';
 import { checkInternetConnection } from '@/utils/network';
 import Dialog from '@/components/core/Dialog';
 import { IconRefresh as ArrowsCounterClockwise, IconCircleCheck as CheckCircle } from '@tabler/icons-react';
-import Lottie from 'lottie-react';
+import Lottie from '@/components/common/DynamicLottie';
 import successLottieIcon from '@/utils/lottie/success3_icon.json';
 import offlineLottieIcon from '@/utils/lottie/offline_art.json';
 import { useAuth } from '@/context/AuthContext';

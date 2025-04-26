@@ -14,7 +14,7 @@ import { Paper, Typography } from '@mui/material';
 import ProfileForm from './components/ProfileForm';
 import { isBirthdayToday } from '@/utils/helpers';
 import giftsLottieIcon from '@/utils/lottie/gifts_art.json';
-import Lottie from 'lottie-react';
+import Lottie from '@/components/common/DynamicLottie';
 import CelebratonConfetti from '@/components/common/CelebratonConfetti';
 import BusinessSection from './components/BusinessSection';
 

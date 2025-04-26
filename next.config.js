@@ -60,6 +60,8 @@ const nextConfig = {
         /react-colorful/, // Color picker that uses DOM
         /react-canvas-confetti/, // Canvas confetti that uses DOM
         /browser-image-compression/, // Image compression that uses DOM
+        /lottie-web/, // Animation library that uses DOM
+        /lottie-react/, // React wrapper for lottie-web
       ];
 
       // Mark these packages as external to prevent them from being bundled on the server
