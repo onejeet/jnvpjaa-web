@@ -1,3 +1,6 @@
+// Import TipTap patches first to ensure they're loaded before any TipTap code
+import '@/utils/tiptapPatches';
+
 import '@/styles/globals.css';
 import { dmSans } from '@/utils/theme/fonts';
 import { Metadata } from 'next';

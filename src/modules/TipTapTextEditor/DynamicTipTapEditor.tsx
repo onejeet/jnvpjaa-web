@@ -1,36 +1,35 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import React from 'react';
-import Box from '@mui/material/Box';
+import React, { useEffect, useState } from 'react';
 import type { TipTapTextEditorProps } from './TipTapTextEditor.types';
-
-// Create a loading placeholder component
-const EditorLoadingPlaceholder = () => (
-  <Box
-    sx={{
-      border: '1px solid',
-      borderColor: 'grey.400',
-      borderRadius: 2,
-      minHeight: '200px',
-      p: 3,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    }}
-  >
-    Loading editor...
-  </Box>
-);
+import TipTapEditorFallback from './TipTapEditorFallback';
 
 // Dynamically import the TipTapTextEditor with SSR disabled
 const DynamicTipTapEditor = dynamic(() => import('./TipTapTextEditor'), {
   ssr: false, // This is crucial - it prevents the component from being rendered on the server
-  loading: () => <EditorLoadingPlaceholder />,
+  loading: () => <TipTapEditorFallback value="" onChange={() => {}} />,
 });
 
-// Create a wrapper component with the same props interface
+/**
+ * Client-side only wrapper for TipTapTextEditor
+ * This ensures the editor is only loaded in the browser and never during SSR
+ */
 const TipTapEditorClientSide = (props: TipTapTextEditorProps) => {
+  // Use state to track if we're in the browser
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Only render the editor after component has mounted on the client
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Show fallback during SSR and initial client render
+  if (!isMounted) {
+    return <TipTapEditorFallback {...props} />;
+  }
+
+  // Once mounted on client, use the dynamic editor
   return <DynamicTipTapEditor {...props} />;
 };
 
