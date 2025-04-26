@@ -20,6 +20,7 @@ import { EditorProvider } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 
 /* LOCAL */
+import ClientSideOnly from './ClientSideOnly';
 import EditorToolbarVertical from './EditorToolbar/EditorToolbarVertical';
 /* TYPES */
 import type { TipTapTextEditorProps } from './TipTapTextEditor.types';
@@ -112,57 +113,59 @@ const TipTapTextEditor = ({
         ...restSx,
       }}
     >
-      <EditorProvider
-        key={id}
-        content={value}
-        onUpdate={({ editor }) => {
-          onChange(editor?.getHTML() as string);
-        }}
-        extensions={[
-          StarterKit,
-          Blockquote,
-          OrderedList,
-          BulletList,
+      <ClientSideOnly>
+        <EditorProvider
+          key={id}
+          content={value}
+          onUpdate={({ editor }) => {
+            onChange(editor?.getHTML() as string);
+          }}
+          extensions={[
+            StarterKit,
+            Blockquote,
+            OrderedList,
+            BulletList,
 
-          ListItem,
-          Indentation,
-          // CustomParagraph,
-          // CustomHeading,
-          Underline,
-          TextAlign.configure({
-            alignments: ['left', 'right', 'center', 'justify'],
-            types: ['heading', 'paragraph'],
-          }),
-          Placeholder.configure({
-            placeholder: 'Start writing here...',
-            showOnlyCurrent: false,
-            emptyEditorClass: 'is-empty',
-          }),
-          TextStyle,
-          Color.configure({
-            types: ['textStyle'],
-          }),
-          FontFamily.configure({
-            types: ['textStyle'],
-          }),
-          // FontSize,
-          Link.configure({
-            protocols: ['https'],
-            openOnClick: false,
-          }),
-          Youtube.configure({
-            controls: false,
-            nocookie: true,
-            inline: true,
-            modestBranding: true,
-          }),
-        ]}
-        slotAfter={<EditorToolbarVertical toolsHidden={['chatbot', 'transcribe']} {...toolbarProps} />}
-      >
-        <TipTapTextEditorWrapper disabled={disabled} value={value}>
-          {null}
-        </TipTapTextEditorWrapper>
-      </EditorProvider>
+            ListItem,
+            Indentation,
+            // CustomParagraph,
+            // CustomHeading,
+            Underline,
+            TextAlign.configure({
+              alignments: ['left', 'right', 'center', 'justify'],
+              types: ['heading', 'paragraph'],
+            }),
+            Placeholder.configure({
+              placeholder: 'Start writing here...',
+              showOnlyCurrent: false,
+              emptyEditorClass: 'is-empty',
+            }),
+            TextStyle,
+            Color.configure({
+              types: ['textStyle'],
+            }),
+            FontFamily.configure({
+              types: ['textStyle'],
+            }),
+            // FontSize,
+            Link.configure({
+              protocols: ['https'],
+              openOnClick: false,
+            }),
+            Youtube.configure({
+              controls: false,
+              nocookie: true,
+              inline: true,
+              modestBranding: true,
+            }),
+          ]}
+          slotAfter={<EditorToolbarVertical toolsHidden={['chatbot', 'transcribe']} {...toolbarProps} />}
+        >
+          <TipTapTextEditorWrapper disabled={disabled} value={value}>
+            {null}
+          </TipTapTextEditorWrapper>
+        </EditorProvider>
+      </ClientSideOnly>
     </Box>
   );
 };
