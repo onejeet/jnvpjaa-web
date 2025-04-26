@@ -8,7 +8,6 @@ import { Metadata } from 'next';
 // Metadata is handled in the generateMetadata function in the layout.tsx file
 
 export default function UserProfilePage({ params }: any) {
-  // The id param is available from the route parameters
   return (
     <ProfileProvider userId={params.id}>
       <Profile />

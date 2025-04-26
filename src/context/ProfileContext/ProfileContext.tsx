@@ -3,7 +3,7 @@
 import React, { createContext, useContext } from 'react';
 import { ProfileContextProps, ProfileProviderProps } from './ProfileContext.types';
 import { useGetUserDetailsQuery, User, useUpdateUserMutation } from '@/apollo/hooks';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '../AuthContext';
 
 const defaultProvider: ProfileContextProps = {
@@ -23,8 +23,8 @@ const ProfileContext = createContext(defaultProvider);
 
 const ProfileProvider = ({ children, userId }: ProfileProviderProps) => {
   const [editingProfile, setEditingProfile] = React.useState<boolean>(false);
-  const searchParams = useSearchParams();
-  const id = searchParams.get('id');
+  const params = useParams();
+  const id = params.id;
   const { data: userData, loading: userDataLoading } = useGetUserDetailsQuery({
     skip: !id,
     variables: {
