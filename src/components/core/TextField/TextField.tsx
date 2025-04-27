@@ -75,7 +75,7 @@ function TextField(
           position: 'absolute',
           left: 0,
           bottom: {
-            xs: '0px',
+            xs: '-32px',
             md: '-16px',
           },
           fontSize: '0.65rem',
