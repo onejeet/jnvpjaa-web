@@ -25,17 +25,18 @@ const ProfileProvider = ({ children, userId }: ProfileProviderProps) => {
   const [editingProfile, setEditingProfile] = React.useState<boolean>(false);
   const params = useParams();
   const id = params.id;
+  console.log('ZZ: Profile COntext', id, userId);
   const { data: userData, loading: userDataLoading } = useGetUserDetailsQuery({
-    skip: !id,
+    skip: !userId,
     variables: {
-      id: id as string,
+      id: userId as string,
     },
   });
   const { user, isAdmin } = useAuth();
 
   const userInfo = React.useMemo(() => {
-    return id ? userData?.getUserDetails : user;
-  }, [id, user, userData]);
+    return userId ? userData?.getUserDetails : user;
+  }, [userId, user, userData]);
 
   const isCurrentUserProfile = React.useMemo(() => user?.id === userInfo?.id, [userInfo?.id, user?.id]);
   const isProfileEditable = React.useMemo(

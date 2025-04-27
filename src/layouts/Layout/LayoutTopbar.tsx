@@ -116,6 +116,11 @@ const LayoutTopbar: React.FC = () => {
                 bgcolor: 'grey.400',
               },
             }}
+            slotProps={{
+              img: {
+                referrerPolicy: 'no-referrer',
+              },
+            }}
           />
         }
         anchorOrigin={{

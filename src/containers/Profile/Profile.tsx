@@ -36,10 +36,8 @@ export default function ProfilePage() {
           <ProfileHeader />
           {isBirthday && (
             <Box display="flex" maxHeight={50} overflow="hidden" alignItems="center" ml={2}>
-              {/* <Cake size={32} /> */}
-              <Suspense fallback={null}>
-                <Lottie animationData={giftsLottieIcon} loop={true} style={{ width: '100px', height: '50px' }} />
-              </Suspense>
+              <Lottie animationData={giftsLottieIcon} loop={true} style={{ width: '100px', height: '50px' }} />
+
               <Typography ml="-10px" color="#B42B43" fontWeight={500}>
                 Celebrating a Birthday Today!{' '}
               </Typography>

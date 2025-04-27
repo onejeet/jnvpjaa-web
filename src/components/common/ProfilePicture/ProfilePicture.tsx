@@ -40,6 +40,12 @@ const ProfilePicture: React.FC<ProfilePictureProps> = ({
         ) : (
           <Avatar
             alt={alt || (typeof title === 'string' ? title : 'avatar')}
+            slotProps={{
+              img: {
+                loading: 'lazy',
+                referrerPolicy: 'no-referrer',
+              },
+            }}
             {...restProps}
             sx={{
               width: size || 36,
@@ -47,12 +53,6 @@ const ProfilePicture: React.FC<ProfilePictureProps> = ({
               ...sx,
             }}
             src={restProps?.src || getAvatarDataUrl(id)}
-            slotProps={{
-              img: {
-                loading: 'lazy',
-                referrerPolicy: 'no-referrer',
-              },
-            }}
           />
         )}
       </Box>
