@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: PageProps, parent: ResolvingM
 
     const event = data.getEventDetails;
 
-    if (!event) return notFound();
+    // if (!event) return notFound();
 
     return {
       title: `${event.title} • JNVPJAA Events`,
@@ -60,9 +60,9 @@ async function getEventDetails(id: string) {
 
     console.log('ZZ: event ', id, parseInt(id, 10), data);
 
-    if (!data?.getEventDetails) {
-      return notFound();
-    }
+    // if (!data?.getEventDetails) {
+    //   return notFound();
+    // }
 
     return data?.getEventDetails;
   } catch (error) {
@@ -77,5 +77,5 @@ export default async function EventDetailsPage({ params }: PageProps) {
 
   console.log('ZZ: event', id, event);
 
-  return <EventDetails event={event} />;
+  return <EventDetails event={event as Event} />;
 }

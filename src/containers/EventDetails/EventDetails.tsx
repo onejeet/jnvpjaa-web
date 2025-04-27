@@ -28,6 +28,8 @@ const EventDetails: React.FC<EventDetailsProps> = ({ event: initialData }) => {
   //   },
   // });
 
+  console.log('ZZ: EVENT DETAILS', initialData);
+
   const event: Event = React.useMemo(() => initialData, [initialData]);
 
   const breadcrumbsList = React.useMemo(
