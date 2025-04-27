@@ -18,8 +18,8 @@ interface PhotoGridProps {
 const breakpointColumnsObj = {
   default: 4,
   1200: 3,
-  900: 2,
-  600: 1,
+  900: 3,
+  600: 2,
 };
 
 const getRandomHeight = () => {

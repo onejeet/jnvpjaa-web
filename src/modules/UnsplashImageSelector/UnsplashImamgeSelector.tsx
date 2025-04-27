@@ -50,7 +50,7 @@ export const UnsplashImageSelector: React.FC<Props> = ({ open, onClose, onSelect
         okayButtonProps: { title: 'Add Cover' },
       }}
     >
-      <Box p={2} minHeight={{ xs: 200, md: 500 }}>
+      <Box p={2} pt={3.5} minHeight={{ xs: 200, md: 500 }}>
         <TextField
           placeholder="Search Images..."
           size="small"

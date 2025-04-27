@@ -63,7 +63,7 @@ const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
     ],
     [blog]
   );
-  const id = prerenderedBlog?.id;
+  const id = prerenderedBlog?.slug;
   const dataLoading = loading || !id;
 
   const buttonProps: ButtonProps[] | null = React.useMemo(() => {
