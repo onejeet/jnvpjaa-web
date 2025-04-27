@@ -74,7 +74,10 @@ function TextField(
         '& .MuiFormHelperText-root': {
           position: 'absolute',
           left: 0,
-          bottom: '-16px',
+          bottom: {
+            xs: '0px',
+            md: '-16px',
+          },
           fontSize: '0.65rem',
           ml: 0,
         },
