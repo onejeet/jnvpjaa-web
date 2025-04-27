@@ -12,7 +12,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
 
 interface EventDetailsProps {
-  event: Event;
+  event?: Event;
 }
 
 const EventDetails: React.FC<EventDetailsProps> = ({ event: initialData }) => {
@@ -30,7 +30,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({ event: initialData }) => {
 
   console.log('ZZ: EVENT DETAILS', initialData);
 
-  const event: Event = React.useMemo(() => initialData, [initialData]);
+  const event: Event | undefined = React.useMemo(() => initialData, [initialData]);
 
   const breadcrumbsList = React.useMemo(
     () => [
@@ -58,7 +58,9 @@ const EventDetails: React.FC<EventDetailsProps> = ({ event: initialData }) => {
         )} */}
       </Box>
       {loading || event?.id ? (
-        <SingleEventView event={event} user={user} isAdmin={isAdmin} showDescription loading={loading} {...methods} />
+        event?.id && (
+          <SingleEventView event={event} user={user} isAdmin={isAdmin} showDescription loading={loading} {...methods} />
+        )
       ) : (
         <EmptyView message="No event found!" />
       )}
