@@ -58,6 +58,7 @@ const SingleEventView: React.FC<SingleEventViewProps> = ({
   showDescription,
   isReadOnly,
 }) => {
+  const [sanitizedContent, setSanitizedContent] = React.useState('');
   const [openAttendiesDialog, setOpenAttendiesDialog] = React.useState<boolean>(false);
   const theme = useTheme();
   const router = useRouter();
@@ -87,13 +88,13 @@ const SingleEventView: React.FC<SingleEventViewProps> = ({
     return attendees && attendees?.findIndex((att: Maybe<UserBasic>) => att?.id === user?.id) !== -1;
   }, [attendees, user]);
 
+  React.useEffect(() => {
+    setSanitizedContent(DOMPurify.sanitize(description || ''));
+  }, [description]);
+
   const formattedStartDate = React.useMemo(() => {
     return dayjs(startDate)?.format('MMM DD, YYYY hh:mm A');
   }, [startDate]);
-
-  const descriptionContent = React.useMemo(() => {
-    return description ? DOMPurify.sanitize(description || '') : null;
-  }, [description]);
 
   const formattedEndDate = React.useMemo(() => {
     return endDate ? dayjs(endDate)?.format('MMM DD, YYYY HH:MM A') : null;
@@ -264,14 +265,14 @@ const SingleEventView: React.FC<SingleEventViewProps> = ({
             <Typography variant="body2" color="text.secondary" mt={1}>
               {summary}
             </Typography>
-            {showDescription && descriptionContent && (
+            {showDescription && sanitizedContent && (
               <Typography
                 variant="body1"
                 color="text.primary"
                 mt={3}
                 className="rich_content"
                 sx={{ fontFamily: notoSerif.style.fontFamily }}
-                dangerouslySetInnerHTML={{ __html: descriptionContent }}
+                dangerouslySetInnerHTML={{ __html: sanitizedContent }}
               />
             )}
             <Divider sx={{ my: 3 }} />
