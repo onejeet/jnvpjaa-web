@@ -13,9 +13,9 @@ const FacultyBadge: React.FC<Props> = ({ size }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const finalSize = React.useMemo(() => {
     if (isMobile) {
-      return (2 / 3) * (size || 20);
+      return (2 / 3) * (size || 24);
     }
-    return size || 16;
+    return size || 20;
   }, [size, isMobile]);
   return (
     <Tooltip title="Faculty of JNV Paota, Jaipur" arrow placement="top">
