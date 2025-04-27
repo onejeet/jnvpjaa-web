@@ -1,4 +1,13 @@
+import {
+  Business,
+  BusinessListResponse,
+  GetBusinessDocument,
+  GetBusinessesDocument,
+  GetBusinessesQuery,
+  GetBusinessQuery,
+} from '@/apollo/hooks';
 import Businesses from '@/containers/Businesses';
+import { initializeApollo } from '@/utils/apollo';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -19,6 +28,28 @@ export const metadata: Metadata = {
   },
 };
 
-export default function BusinessesPage() {
-  return <Businesses />;
+// This is a Server Component that fetches data
+async function getBusiness() {
+  const apolloClient = initializeApollo();
+
+  try {
+    const { data } = await apolloClient.query<GetBusinessesQuery>({
+      query: GetBusinessesDocument,
+      variables: {
+        options: {
+          filter: {},
+        },
+      },
+    });
+
+    return data?.getBusinesses;
+  } catch (error) {
+    console.error('GraphQL Error (Batch Coordinators):', error);
+    return [];
+  }
+}
+
+export default async function BusinessesPage() {
+  const data = await getBusiness();
+  return <Businesses data={data as BusinessListResponse} />;
 }

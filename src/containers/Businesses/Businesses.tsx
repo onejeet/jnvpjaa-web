@@ -11,8 +11,13 @@ import BusinessListModule from '@/modules/BusinessListModule';
 import BusinessListFilters from './components/BusinessListFilters';
 import { useSearchParams } from 'next/navigation';
 import Dialog from '@/components/core/Dialog';
+import { BusinessListResponse } from '@/apollo/hooks';
 
-export default function Businesses() {
+interface BusinessesProps {
+  data: BusinessListResponse;
+}
+
+const Businesses: React.FC<BusinessesProps> = ({ data }) => {
   const [addBusiness, setAddBusiness] = React.useState<boolean>(false);
   const { user } = useAuth();
   const searchParams = useSearchParams();
@@ -22,7 +27,7 @@ export default function Businesses() {
 
   const filters = React.useMemo(
     () => ({
-      verified: searchParams?.get('verified') ? searchParams?.get('verified') === 'true' : undefined,
+      // verified: searchParams?.get('verified') ? searchParams?.get('verified') === 'true' : undefined,
       query: searchParams.get('q') || '',
     }),
     [searchParams]
@@ -57,7 +62,7 @@ export default function Businesses() {
         ) : null}
       </Box>
       <BusinessListFilters />
-      <BusinessListModule filter={filters} />
+      <BusinessListModule filter={filters} skip={filters.query === ''} data={data} />
       {addBusiness && (
         <Dialog
           open={addBusiness}
@@ -78,4 +83,6 @@ export default function Businesses() {
       {/* {addRecord && <AddTransactionRecordModule onClose={() => setAddRecord(false)} />} */}
     </LayoutModule>
   );
-}
+};
+
+export default Businesses;

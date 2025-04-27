@@ -2,6 +2,7 @@
 
 import {
   BlogBasic,
+  BlogListResponse,
   BlogStatus,
   ListInput,
   useApproveBlogMutation,
@@ -30,6 +31,7 @@ interface BlogFilterModuleProps {
   loading?: boolean;
   isCreateAllowed?: boolean;
   isReadOnly?: boolean;
+  data: BlogListResponse;
 }
 
 const BlogListModule: React.FC<BlogFilterModuleProps> = ({
@@ -39,6 +41,7 @@ const BlogListModule: React.FC<BlogFilterModuleProps> = ({
   loading: propLoading,
   isCreateAllowed = true,
   isReadOnly,
+  data: ssrData,
 }) => {
   const router = useRouter();
   const { user, isAdmin, redirectToSignin } = useAuth();
@@ -65,8 +68,8 @@ const BlogListModule: React.FC<BlogFilterModuleProps> = ({
     if (loading || propLoading) {
       return new Array(6).fill({ id: '', loading: true, title: '', summary: '', content: '', author: {} });
     }
-    if (blogs) return blogs?.getBlogList?.data || [];
-  }, [loading, blogs, propLoading]);
+    if (blogs) return blogs?.getBlogList?.data || ssrData?.data;
+  }, [loading, blogs, propLoading, ssrData]);
 
   const approveBlogPost = React.useCallback(
     (id: string) => {

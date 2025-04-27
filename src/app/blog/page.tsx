@@ -1,4 +1,6 @@
+import { BlogListResponse, GetBlogListDocument, GetBlogListQuery } from '@/apollo/hooks';
 import Blog from '@/containers/Blog';
+import { initializeApollo } from '@/utils/apollo';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -12,7 +14,7 @@ export const metadata: Metadata = {
     url: 'https://jnvpjaa.org',
     images: [
       {
-        url: 'https://images.unsplash.com/photo-1638540272551-3f250ebf1b70',
+        url: 'https://cdn.pixabay.com/photo/2020/05/31/16/48/write-5243230_1280.jpg',
         width: 1280,
         height: 720,
         alt: 'JNVPJAA',
@@ -21,6 +23,28 @@ export const metadata: Metadata = {
   },
 };
 
-export default function BlogPage() {
-  return <Blog />;
+// This is a Server Component that fetches data
+async function getBlog() {
+  const apolloClient = initializeApollo();
+
+  try {
+    const { data } = await apolloClient.query<GetBlogListQuery>({
+      query: GetBlogListDocument,
+      variables: {
+        options: {
+          filter: {},
+        },
+      },
+    });
+
+    return data.getBlogList;
+  } catch (error) {
+    console.error('GraphQL Error (Batch Coordinators):', error);
+    return [];
+  }
+}
+
+export default async function BlogPage() {
+  const blogData = await getBlog();
+  return <Blog data={blogData as BlogListResponse} />;
 }

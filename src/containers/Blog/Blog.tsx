@@ -1,5 +1,6 @@
 'use client';
 
+import { BlogListResponse } from '@/apollo/hooks';
 import Button from '@/components/core/Button';
 import { paths } from '@/config/paths';
 import { useAuth } from '@/context/AuthContext';
@@ -10,7 +11,11 @@ import { IconPlus } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
-const Blog = () => {
+interface BlogProps {
+  data: BlogListResponse;
+}
+
+const Blog: React.FC<BlogProps> = ({ data }) => {
   const [isPendingApporvalOnly, setIsPendingApporvalOnly] = React.useState<boolean>(false);
   const router = useRouter();
   const { user, isAdmin } = useAuth();
@@ -79,7 +84,7 @@ const Blog = () => {
         </Box>
       )}
 
-      <BlogListModule filter={filter} />
+      <BlogListModule filter={filter} data={data} skip={filter?.verified !== false} />
     </LayoutModule>
   );
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Business, ListInput, useGetBusinessesQuery } from '@/apollo/hooks';
+import { Business, BusinessListResponse, ListInput, useGetBusinessesQuery } from '@/apollo/hooks';
 import { Box, Grid2 as Grid, Typography } from '@mui/material';
 import EmptyView from '@/components/common/EmptyView';
 import BusinessCard from '@/components/common/BusinessCardV2';
@@ -11,6 +11,7 @@ interface BusinessListModuleProps {
   loading?: boolean;
   isCreateAllowed?: boolean;
   isReadOnly?: boolean;
+  data?: BusinessListResponse;
 }
 
 export const dummyBusinesses: Partial<Business>[] = [
@@ -90,6 +91,7 @@ const BusinessListModule: React.FC<BusinessListModuleProps> = ({
   loading: propLoading,
   isCreateAllowed = true,
   isReadOnly,
+  data: ssrData,
 }) => {
   const { data: businessesData, loading } = useGetBusinessesQuery({
     skip,
@@ -106,8 +108,8 @@ const BusinessListModule: React.FC<BusinessListModuleProps> = ({
     if (loading || propLoading) {
       return new Array(3).fill({ id: '', title: '', description: '' });
     }
-    return businessesData?.getBusinesses?.data || [];
-  }, [loading, businessesData, propLoading]);
+    return businessesData?.getBusinesses?.data || ssrData?.data || [];
+  }, [loading, businessesData, propLoading, ssrData]);
 
   console.log('ZZ: listData', listData);
 

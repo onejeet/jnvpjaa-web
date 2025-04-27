@@ -1,5 +1,3 @@
-'use client';
-
 import { JNVPJAA_SOCIAL_MEDIA } from '@/constants/General.contants';
 import { getSocialMediaIcon } from '@/utils/helpers';
 import { IconButton, Stack } from '@mui/material';
@@ -12,12 +10,12 @@ import Typography from '@mui/material/Typography';
 import Image from 'next/image';
 import NextLink from 'next/link';
 import React from 'react';
-
 import Logo from '@/components/common/Logo';
 
 import MenuList from '../../components/common/MenuList';
 import { IconHeartFilled as Heart } from '@tabler/icons-react';
 import Link from 'next/link';
+import HelpBanner from '@/components/common/HelpBanner/HelpBanner';
 
 const LayoutFooter: React.FC = () => {
   return (
@@ -239,6 +237,19 @@ const LayoutFooter: React.FC = () => {
                   </Box>
                 </Link>
               </Typography>
+            </Grid>
+            <Grid
+              size={{
+                xs: 12,
+                md: 6,
+              }}
+              display="flex"
+              justifyContent={{
+                xs: 'center',
+                md: 'end',
+              }}
+            >
+              <HelpBanner />
             </Grid>
           </Grid>
         </AppBar>
