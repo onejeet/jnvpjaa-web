@@ -18,14 +18,9 @@ export async function generateMetadata({ params }: PageProps, parent: ResolvingM
 
     console.log('ZZ: event metadata ', id, parseInt(id, 10), data);
 
-    const event = data?.getEventDetails || {
-      id: 'eee',
-      title: 'JNVPJAA Events',
-      summary: 'JNVPJAA Events',
-      cover: {},
-    };
+    const event = data?.getEventDetails;
 
-    // if (!event) return notFound();
+    if (!event) return notFound();
 
     return {
       title: `${event.title} • JNVPJAA Events`,
@@ -63,11 +58,11 @@ async function getEventDetails(id: string) {
       variables: { id: parseInt(id, 10) },
     });
 
-    console.log('ZZ: event ', id, parseInt(id, 10), data);
+    console.log('ZZ: event', id, parseInt(id, 10), data);
 
-    // if (!data?.getEventDetails) {
-    //   return notFound();
-    // }
+    if (!data?.getEventDetails) {
+      return notFound();
+    }
 
     return data?.getEventDetails;
   } catch (error) {
