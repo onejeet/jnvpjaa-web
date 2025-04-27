@@ -293,7 +293,7 @@ const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
   return (
     <LayoutModule disableCover title={`${blog?.title || 'Blog'} • Alumni Network of JNV Paota, Jaipur`}>
       <Box mb={1} display="flex" justifyContent="start" alignItems="center">
-        <Breadcrumbs items={breadcrumbsList} loading={dataLoading} sx={{ display: { xs: 'none', sm: 'flex' } }} />
+        <Breadcrumbs items={breadcrumbsList} loading={dataLoading} />
         {buttonProps && (
           <Box display="flex" alignItems="center" gap={1.5} ml="auto">
             {buttonProps.map((btProps: ButtonProps, index: number) => (
