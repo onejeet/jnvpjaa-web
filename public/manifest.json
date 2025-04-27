@@ -8,12 +8,12 @@
   "theme_color": "#C62835",
   "icons": [
     {
-      "src": "https://assets.jnvpjaa.org/branding/logo-square-white_transparent.png",
+      "src": "/icons/logo-square-white_transparent.png",
       "sizes": "512x512",
       "type": "image/png"
     },
     {
-      "src": "https://assets.jnvpjaa.org/branding/logo-square-white_transparent.png",
+      "src": "/icons/logo-square-white_transparent.png",
       "sizes": "192x192",
       "type": "image/png"
     }
