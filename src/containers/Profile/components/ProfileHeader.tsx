@@ -5,18 +5,7 @@ import { Box, Typography, Avatar, Skeleton, IconButton, Tooltip } from '@mui/mat
 import { ProfileHeaderProps } from '../Profile.types';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import VerifiedBadge from '@/components/common/VerifiedBadge';
-import Button from '@/components/core/Button';
-import {
-  IconDots,
-  IconDotsVertical,
-  IconPencil,
-  IconLock,
-  IconNote,
-  IconCheck,
-  IconUser,
-  IconShieldCheck,
-  IconDotsCircleHorizontal,
-} from '@tabler/icons-react';
+import { IconPencil, IconLock, IconDotsCircleHorizontal } from '@tabler/icons-react';
 import { useProfile } from '@/context/ProfileContext';
 import FacultyBadge from '@/components/common/FacultyBadge';
 import Menu from '@/components/core/Menu';
@@ -26,7 +15,7 @@ import { useApolloClient } from '@apollo/client';
 import { paths } from '@/config/paths';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
-import { GetUserDetailsDocument, GetUserListDocument, useGetUserDetailsQuery } from '@/apollo/hooks';
+import { GetUserDetailsDocument } from '@/apollo/hooks';
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
   const { user, loading, isProfileEditable, editingProfile, saveProfile, setEditingProfile } = useProfile();
@@ -285,7 +274,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
             render={
               <Tooltip arrow placement="top" title="Profile Menu">
                 <IconButton>
-                  <IconDotsCircleHorizontal size={24} />
+                  <IconDotsCircleHorizontal size={28} />
                 </IconButton>
               </Tooltip>
             }
