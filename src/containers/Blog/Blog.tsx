@@ -84,7 +84,7 @@ const Blog: React.FC<BlogProps> = ({ data }) => {
         </Box>
       )}
 
-      <BlogListModule filter={filter} data={data} skip={filter?.verified !== false} />
+      <BlogListModule filter={filter} data={data} skip={!isPendingApporvalOnly} />
     </LayoutModule>
   );
 };

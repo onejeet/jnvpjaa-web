@@ -33,6 +33,7 @@ async function getBlog() {
       variables: {
         options: {
           filter: {},
+          limit: 50,
         },
       },
     });

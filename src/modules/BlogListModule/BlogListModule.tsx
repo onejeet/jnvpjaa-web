@@ -68,7 +68,7 @@ const BlogListModule: React.FC<BlogFilterModuleProps> = ({
     if (loading || propLoading) {
       return new Array(6).fill({ id: '', loading: true, title: '', summary: '', content: '', author: {} });
     }
-    if (blogs) return blogs?.getBlogList?.data || ssrData?.data || [];
+    return blogs?.getBlogList?.data || ssrData?.data || [];
   }, [loading, blogs, propLoading, ssrData]);
 
   const approveBlogPost = React.useCallback(
