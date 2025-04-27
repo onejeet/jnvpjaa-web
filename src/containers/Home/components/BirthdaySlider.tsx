@@ -9,7 +9,7 @@ import ProfilePicture from '@/components/common/ProfilePicture';
 import { paths } from '@/config/paths';
 import { useRouter } from 'next/navigation';
 
-export default function BirthdaySlider() {
+const BirthdaySlider = () => {
   const { data, loading } = useUpcomingBirthdaysQuery();
   const theme = useTheme();
   const router = useRouter();
@@ -136,4 +136,6 @@ export default function BirthdaySlider() {
       </div>
     </Box>
   );
-}
+};
+
+export default React.memo(BirthdaySlider);

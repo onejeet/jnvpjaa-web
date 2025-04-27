@@ -175,4 +175,4 @@ const ImageSlider: React.FC = () => {
   );
 };
 
-export default ImageSlider;
+export default React.memo(ImageSlider);

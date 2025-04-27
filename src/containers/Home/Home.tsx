@@ -3,8 +3,10 @@ import Hero from '@/components/home/Hero';
 import SloganBanner from '@/components/home/SloganBanner';
 import FeaturedBlogs from './components/FeaturedBlogs';
 import MetricsNumbers from './components/MetricsNumbers';
-import DynamicImageSlider from './components/DynamicImageSlider';
-import DynamicBirthdaySlider from './components/DynamicBirthdaySlider';
+// import DynamicImageSlider from './components/DynamicImageSlider';
+// import DynamicBirthdaySlider from './components/DynamicBirthdaySlider';
+import BirthdaySlider from './components/BirthdaySlider';
+import ImageSlider from './components/ImageSlider';
 
 const Home = () => {
   return (
@@ -13,9 +15,9 @@ const Home = () => {
       <SloganBanner />
       <MetricsNumbers />
       {/* <UpcomingEvents /> */}
-      <DynamicImageSlider />
+      <ImageSlider />
       <FeaturedBlogs />
-      <DynamicBirthdaySlider />
+      <BirthdaySlider />
     </Box>
   );
 };
