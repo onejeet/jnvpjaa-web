@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: PageProps, parent: ResolvingM
         description: album.description || 'View photo album from JNVPJAA events and activities',
         images: [
           {
-            url: 'https://assets.jnvpjaa.org/gallery/milan-jan-2019-2.jpeg',
+            url: album.coverImage || 'https://assets.jnvpjaa.org/gallery/milan-jan-2019-2.jpeg',
             width: 1280,
             height: 720,
             alt: 'JNVPJAA Gallery',
