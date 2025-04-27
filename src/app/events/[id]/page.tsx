@@ -69,8 +69,9 @@ async function getEventDetails(id: string) {
 
 export default async function EventDetailsPage({ params }: PageProps) {
   const { id } = await params;
-  console.log('ZZ: id', id);
   const event = await getEventDetails(id);
+
+  console.log('ZZ: event', id, event);
 
   return <EventDetails event={event} />;
 }
