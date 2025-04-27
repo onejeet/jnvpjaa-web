@@ -12,7 +12,7 @@ export const metadata: Metadata = {
       "Connect with alumni and faculty members of JNVPJAA. Whether you're catching up with old friends or expanding your network, this directory keeps our community connected!",
     images: [
       {
-        url: 'https://assets.jnvpjaa.org/branding/school.jpg',
+        url: 'https://assets.jnvpjaa.org/images/cover-2.webp',
         width: 1280,
         height: 720,
         alt: 'Members Directory • JNVPJAA',

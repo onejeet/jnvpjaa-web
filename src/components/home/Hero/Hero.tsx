@@ -1,3 +1,4 @@
+import { dmSans } from '@/utils/theme/fonts';
 import { Box, Divider, Typography } from '@mui/material';
 
 const Hero = () => {
@@ -70,6 +71,7 @@ const Hero = () => {
             display="flex"
             alignItems="center"
             variant="h1"
+            fontFamily={dmSans.style.fontFamily}
             fontSize={{
               xs: 50,
               sm: 60,
