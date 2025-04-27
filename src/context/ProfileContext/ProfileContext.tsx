@@ -40,8 +40,9 @@ const ProfileProvider = ({ children, userId }: ProfileProviderProps) => {
 
   const isCurrentUserProfile = React.useMemo(() => user?.id === userInfo?.id, [userInfo?.id, user?.id]);
   const isProfileEditable = React.useMemo(
-    () => user?.id === userInfo?.id || isAdmin,
-    [userInfo?.id, user?.id, isAdmin]
+    // () => user?.id === userInfo?.id || isAdmin,
+    () => user?.id === userInfo?.id,
+    [userInfo?.id, user?.id]
   );
 
   const [updateUser] = useUpdateUserMutation();
