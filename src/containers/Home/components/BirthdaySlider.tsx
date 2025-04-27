@@ -117,6 +117,12 @@ const BirthdaySlider = () => {
                   loading={!user?.id}
                   alt={`${user?.firstName || ''} ${user?.lastName || ''}`}
                   size={isMobile ? 70 : 100}
+                  slotProps={{
+                    img: {
+                      loading: 'lazy',
+                      referrerPolicy: 'no-referrer',
+                    },
+                  }}
                 />
 
                 <Typography variant="body2" mt={1}>{`${user?.firstName || ''} ${user?.lastName || ''}`}</Typography>

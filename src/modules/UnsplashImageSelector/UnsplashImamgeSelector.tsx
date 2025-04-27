@@ -17,6 +17,13 @@ interface Props {
   defaultKeyword?: string;
 }
 
+const breakpointProps = {
+  default: 4,
+  1200: 3,
+  900: 2,
+  600: 2,
+};
+
 export const UnsplashImageSelector: React.FC<Props> = ({ open, onClose, onSelect, defaultKeyword = '' }) => {
   const [selected, setSelected] = React.useState<Photo | null>(null);
   const { images, loading, error, search, trackDownload } = useUnsplashSearch(defaultKeyword);
@@ -77,7 +84,13 @@ export const UnsplashImageSelector: React.FC<Props> = ({ open, onClose, onSelect
               }
             />
           ) : (
-            <PhotoGrid loading={loading} photos={images} authView onSelect={(image: any) => setSelected(image)} />
+            <PhotoGrid
+              loading={loading}
+              photos={images}
+              authView
+              onSelect={(image: any) => setSelected(image)}
+              breakpointProps={breakpointProps}
+            />
           )}
         </Box>
       </Box>

@@ -197,11 +197,11 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
           border: '4px solid #fff',
           position: 'absolute',
           bottom: {
-            xs: 20,
+            xs: 0,
             md: -24,
           },
           left: {
-            xs: 5,
+            xs: 2,
             md: 32,
           },
         }}
@@ -226,13 +226,13 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
               >{`${user?.firstName} ${user?.lastName || ''}`}</Typography>
               {user?.isVerified && (
                 <VerifiedBadge
-                  size={21}
+                  size={26}
                   isPrivate={user?.isConfidential}
                   handlePrivateInfo={handleDataPrivacyUpdate}
                   isPrivateInfoChangeAllowed={user?.id === authUser?.id || isAdmin}
                 />
               )}
-              {user?.batch === 0 && <FacultyBadge size={21} />}
+              {user?.batch === 0 && <FacultyBadge size={26} />}
             </Box>
           }
           titleProps={{ fontWeight: 600, fontSize: '30px' }}

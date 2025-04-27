@@ -261,7 +261,7 @@ const LayoutTopbar: React.FC = () => {
           }}
         >
           <NextLink href="/">
-            <Logo width={isMobile ? 200 : 300} height={isMobile ? 30 : 45} priority />
+            <Logo width={isMobile ? 250 : 300} height={isMobile ? 40 : 45} priority />
           </NextLink>
           <Box display={{ xs: 'flex', lg: 'none' }} ml="auto" alignItems="center" gap={1}>
             {user?.id && (

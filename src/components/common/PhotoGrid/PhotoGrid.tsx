@@ -13,21 +13,27 @@ interface PhotoGridProps {
   loading?: boolean;
   authView?: boolean;
   onSelect?: (image: Photo) => void;
+  breakpointProps?: Record<string, any>;
 }
-
-const breakpointColumnsObj = {
-  default: 4,
-  1200: 3,
-  900: 3,
-  600: 2,
-};
 
 const getRandomHeight = () => {
   return Math.floor(Math.random() * (300 - 180 + 1)) + 180; // height between 180px and 300px
 };
 
-export default function PhotoGrid({ photos, loading, authView, onSelect }: PhotoGridProps) {
+export default function PhotoGrid({ photos, loading, authView, onSelect, breakpointProps = {} }: PhotoGridProps) {
   const [selected, setSelected] = React.useState<Photo | null>(null);
+
+  const breakpointColumnsObj = React.useMemo(
+    () => ({
+      default: 4,
+      1200: 3,
+      900: 2,
+      600: 1,
+      ...breakpointProps,
+    }),
+    [breakpointProps]
+  );
+
   return (
     <Masonry breakpointCols={breakpointColumnsObj} className="my-masonry-grid" columnClassName="my-masonry-grid_column">
       {photos?.map((photo, idx) => (

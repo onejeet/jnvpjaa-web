@@ -8,7 +8,6 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Box } from '@mui/material';
 import Image from 'next/image';
-import { Photo } from '@/apollo/hooks';
 import SpecialTitle from '@/components/common/SpecialTitle';
 
 const localSlides = [

@@ -252,6 +252,7 @@ const LayoutFooter: React.FC = () => {
                 xs: 'center',
                 md: 'end',
               }}
+              width="100%"
             >
               <HelpBanner />
             </Grid>

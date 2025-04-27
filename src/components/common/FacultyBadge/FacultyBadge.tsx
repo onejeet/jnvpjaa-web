@@ -1,15 +1,24 @@
-import { Tooltip } from '@mui/material';
+'use client';
+
+import { Tooltip, useMediaQuery, useTheme } from '@mui/material';
 import { IconStar } from '@tabler/icons-react';
-import Image from 'next/image';
 
 interface Props {
   size?: number;
 }
 
 const FacultyBadge: React.FC<Props> = ({ size }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const finalSize = React.useMemo(() => {
+    if (isMobile) {
+      return (2 / 3) * (size || 20);
+    }
+    return size || 16;
+  }, [size, isMobile]);
   return (
     <Tooltip title="Faculty of JNV Paota, Jaipur" arrow placement="top">
-      <IconStar size={size || 16} fill="#F2C6A0" style={{ marginLeft: '4px' }} />
+      <IconStar size={finalSize} fill="#F2C6A0" style={{ marginLeft: '4px' }} />
     </Tooltip>
   );
 };

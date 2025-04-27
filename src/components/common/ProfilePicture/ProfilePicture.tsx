@@ -42,7 +42,7 @@ const ProfilePicture: React.FC<ProfilePictureProps> = ({
             alt={alt || (typeof title === 'string' ? title : 'avatar')}
             slotProps={{
               img: {
-                loading: 'lazy',
+                // loading: 'lazy',
                 referrerPolicy: 'no-referrer',
               },
             }}
