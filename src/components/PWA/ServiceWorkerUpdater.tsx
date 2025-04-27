@@ -15,25 +15,40 @@ export default function ServiceWorkerUpdater() {
       setWb(wbInstance);
 
       wbInstance.addEventListener('waiting', () => {
+        console.log('Service Worker waiting — update available!');
         setUpdateAvailable(true);
       });
 
-      wbInstance.register();
+      wbInstance.addEventListener('installed', (event) => {
+        console.log('Service Worker installed', event);
+        if (event.isUpdate) {
+          setUpdateAvailable(true);
+        }
+      });
+
+      wbInstance.register().catch((error) => {
+        console.error('Service worker registration failed:', error);
+      });
     }
   }, []);
 
   const handleUpdate = () => {
+    if (!wb) return;
     setAlertDialogProps({
       action: 'loading',
       title: 'Update is in Progress...',
       message:
         "Hang tight! 🚀 We're refreshing the app with the latest features and improvements. This won’t take long! 😊",
     });
-    wb?.messageSW({ type: 'SKIP_WAITING' });
-    setUpdateAvailable(false);
-    if (typeof window !== 'undefined') {
-      window.location.reload();
-    }
+    wb.messageSW({ type: 'SKIP_WAITING' })
+      .then(() => {
+        console.log('Sent SKIP_WAITING to service worker');
+        setUpdateAvailable(false);
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.error('Error sending SKIP_WAITING:', err);
+      });
   };
 
   return (
