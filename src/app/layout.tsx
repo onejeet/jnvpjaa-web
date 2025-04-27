@@ -33,8 +33,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="apple-mobile-web-app-title" content="JNVPJAA" />
         <link rel="apple-touch-icon" href="/icons/icon-512.png" />
         <link rel="icon" href="/favicon.ico" />
-        <link rel="icon" type="image/png" sizes="192x192" href="/icons/logo-square.png" />
-        <link rel="icon" type="image/png" sizes="512x512" href="/icons/logo-square.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png" />
+        <link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512.png" />
 
         <meta name="apple-mobile-web-app-capable" content="yes" />
 
