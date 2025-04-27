@@ -56,6 +56,8 @@ async function getEventDetails(id: string) {
       variables: { id: parseInt(id, 10) },
     });
 
+    console.log('ZZ: event ', id, parseInt(id, 10), data);
+
     if (!data?.getEventDetails) {
       return notFound();
     }
