@@ -21,9 +21,12 @@ import BusinessSection from './components/BusinessSection';
 export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState('about');
   const { user, loading, editingProfile } = useProfile();
+
   const isBirthday = React.useMemo(() => {
     return isBirthdayToday(user?.dob);
   }, [user?.dob]);
+
+  console.log('ZZ: Proifle', isBirthday, user?.dob);
 
   return (
     <>

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Tooltip, useMediaQuery, useTheme } from '@mui/material';
-import { IconStar } from '@tabler/icons-react';
+import { IconCircleDottedLetterF, IconStar } from '@tabler/icons-react';
 
 interface Props {
   size?: number;
@@ -19,7 +19,7 @@ const FacultyBadge: React.FC<Props> = ({ size }) => {
   }, [size, isMobile]);
   return (
     <Tooltip title="Faculty of JNV Paota, Jaipur" arrow placement="top">
-      <IconStar size={finalSize} fill="#F2C6A0" style={{ marginLeft: '4px' }} />
+      <IconCircleDottedLetterF size={finalSize} fill="#F2C6A0" style={{ marginLeft: '4px' }} />
     </Tooltip>
   );
 };
