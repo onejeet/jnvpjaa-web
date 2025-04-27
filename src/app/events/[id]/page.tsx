@@ -56,11 +56,11 @@ async function getEventDetails(id: string) {
       variables: { id: parseInt(id, 10) },
     });
 
-    if (!data.getEventDetails) {
+    if (!data?.getEventDetails) {
       return notFound();
     }
 
-    return data.getEventDetails;
+    return data?.getEventDetails;
   } catch (error) {
     console.error('GraphQL Error (event):', error);
     return notFound();
@@ -69,6 +69,7 @@ async function getEventDetails(id: string) {
 
 export default async function EventDetailsPage({ params }: PageProps) {
   const { id } = await params;
+  console.log('ZZ: id', id);
   const event = await getEventDetails(id);
 
   return <EventDetails event={event} />;
