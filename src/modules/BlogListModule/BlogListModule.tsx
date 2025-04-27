@@ -31,7 +31,7 @@ interface BlogFilterModuleProps {
   loading?: boolean;
   isCreateAllowed?: boolean;
   isReadOnly?: boolean;
-  data: BlogListResponse;
+  data?: BlogListResponse;
 }
 
 const BlogListModule: React.FC<BlogFilterModuleProps> = ({
@@ -68,7 +68,7 @@ const BlogListModule: React.FC<BlogFilterModuleProps> = ({
     if (loading || propLoading) {
       return new Array(6).fill({ id: '', loading: true, title: '', summary: '', content: '', author: {} });
     }
-    if (blogs) return blogs?.getBlogList?.data || ssrData?.data;
+    if (blogs) return blogs?.getBlogList?.data || ssrData?.data || [];
   }, [loading, blogs, propLoading, ssrData]);
 
   const approveBlogPost = React.useCallback(

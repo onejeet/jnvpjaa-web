@@ -6,7 +6,7 @@ import ProfilePicture from '../ProfilePicture';
 import {
   IconArrowRight as ArrowRight,
   IconCircleCheck as CheckCircle,
-  IconPoint as Dot,
+  IconPointFilled as Dot,
   IconDots as DotsThree,
   IconDotsVertical as DotsThreeVertical,
   IconPencil as Pencil,
@@ -262,10 +262,11 @@ const BlogCard: React.FC<IBlogCardProps> = ({
               <Chip size="small" label={startCase(status as string)} color="error" />
             </>
           )} */}
-          <Dot size={32} />
+          <Dot size={20} />
           <ProfilePicture
-            id={author?.id}
             size={28}
+            loading={loading}
+            id={author?.id}
             title={`${author?.firstName || ''} ${author?.lastName || ''}`}
             alt={`${author?.firstName || ''} ${author?.lastName || ''}`}
             src={author?.profileImage}

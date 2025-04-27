@@ -16,6 +16,7 @@ import MenuList from '../../components/common/MenuList';
 import { IconHeartFilled as Heart } from '@tabler/icons-react';
 import Link from 'next/link';
 import HelpBanner from '@/components/common/HelpBanner/HelpBanner';
+import { dmSans } from '@/utils/theme/fonts';
 
 const LayoutFooter: React.FC = () => {
   return (
@@ -223,12 +224,13 @@ const LayoutFooter: React.FC = () => {
                     color="primary.main"
                     sx={{
                       borderBottom: '1px dotted',
-                      borderColor: 'primary.main',
+                      borderColor: 'primary.300',
                       cursor: 'pointer',
-                      fontFamily: 'DM Sans',
-                      opacity: 0.7,
+                      fontFamily: dmSans.style.fontFamily,
+                      opacity: 1,
                       '&:hover': {
                         opacity: 1,
+                        borderColor: 'primary.main',
                       },
                     }}
                   >
