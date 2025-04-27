@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { Tooltip, useMediaQuery, useTheme } from '@mui/material';
 import { IconStar } from '@tabler/icons-react';
 
