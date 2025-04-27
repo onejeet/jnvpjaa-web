@@ -29,6 +29,7 @@ const VerifiedBadge: React.FC<Props> = ({ size, title, isPrivate, isPrivateInfoC
           width={finalSize}
           height={finalSize}
           alt="verified user"
+          priority
         />
       </Tooltip>
       {isPrivate && (

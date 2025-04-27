@@ -9,6 +9,9 @@ import {
   IconBrandYoutube as YoutubeLogo,
 } from '@tabler/icons-react';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 import parsePhoneNumber from 'libphonenumber-js';
 
@@ -219,7 +222,7 @@ export function formatCurrency(amount: number, currency?: string) {
 
 export const isBirthdayToday = (dob?: string) => {
   if (!dob) return false;
-  const birthDate = dayjs(dob);
+  const birthDate = dayjs.utc(dob);
   const today = dayjs();
 
   return birthDate.date() === today.date() && birthDate.month() === today.month();
