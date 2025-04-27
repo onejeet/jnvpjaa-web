@@ -255,13 +255,13 @@ const LayoutTopbar: React.FC = () => {
             justifyContent: 'start',
             alignIttems: 'center',
             px: '0 !important',
-            maxHeight: 50,
-            minHeight: '50px !important',
-            height: 50,
+            maxHeight: 60,
+            minHeight: '60px !important',
+            height: 60,
           }}
         >
           <NextLink href="/">
-            <Logo width={isMobile ? 250 : 300} height={isMobile ? 40 : 45} priority />
+            <Logo width={isMobile ? 250 : 300} height={isMobile ? 38 : 45} priority />
           </NextLink>
           <Box display={{ xs: 'flex', lg: 'none' }} ml="auto" alignItems="center" gap={1}>
             {user?.id && (
