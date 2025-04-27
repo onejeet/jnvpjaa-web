@@ -196,7 +196,7 @@ const EventCard: React.FC<EventCardProps> = ({
               }}
             >
               {title}
-              {!showDescription && <IconArrowRight size={20} />}
+              {/* {!showDescription && <IconArrowRight size={20} />} */}
             </Typography>
 
             {isLive && (
