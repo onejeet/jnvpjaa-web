@@ -6,8 +6,8 @@ import { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
 
 // Generate dynamic metadata for the event page
-export async function generateMetadata({ params }: PageProps, parent: ResolvingMetadata): Promise<Metadata> {
-  const { id } = await params;
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+  const { id } = params;
   const apolloClient = initializeApollo();
 
   try {
@@ -71,8 +71,8 @@ async function getEventDetails(id: string) {
   }
 }
 
-export default async function EventDetailsPage({ params }: PageProps) {
-  const { id } = await params;
+export default async function EventDetailsPage({ params }: { params: { id: string } }) {
+  const { id } = params;
   const event = await getEventDetails(id);
 
   console.log('ZZ: event', id, event);
