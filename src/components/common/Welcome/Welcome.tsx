@@ -18,7 +18,7 @@ const Welcome: React.FC<WelcomeProps> = ({ onNext }) => {
       {/* <Box sx={{ mb: 3, borderBottom: '1px solid #cccccc', pb: 2 }}>
         <a href="https://www.jnvpjaa.org" target="_blank" rel="noopener noreferrer">
           <Image
-            src="https://www.jnvpjaa.org/assets/branding/logo-full.webp"
+            src="https://assets.jnvpjaa.org/assets/branding/logo-full.webp"
             alt="JVPJAA"
             width={300}
             

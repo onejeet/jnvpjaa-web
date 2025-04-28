@@ -4,11 +4,14 @@ import EventDetails from '@/containers/EventDetails';
 import { initializeApollo } from '@/utils/apollo';
 import { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
+import { headers } from 'next/headers';
 
 // Generate dynamic metadata for the event page
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const { id } = params;
-  const apolloClient = initializeApollo();
+  const requestHeaders = headers();
+  const cookieHeader = requestHeaders.get('cookie');
+  const apolloClient = initializeApollo({ cookie: cookieHeader ?? '' });
 
   try {
     const { data } = await apolloClient.query<GetEventDetailsQuery>({

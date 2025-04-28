@@ -29,7 +29,7 @@ export default function Gallery() {
             community. Browse by event, batch, or contributor and relive the connections that last a lifetime.`}
           </Typography>
         </Box>
-        {isAdmin &&
+        {/* {isAdmin &&
           (isMobile ? (
             <IconButton color="primary" onClick={() => setAddAlbum(true)}>
               <IconCirclePlus size={24} />
@@ -41,7 +41,7 @@ export default function Gallery() {
               startIcon={<IconPlus size={16} />}
               sx={{ width: 200 }}
             />
-          ))}
+          ))} */}
       </Box>
       {/* <TransactionsFilters /> */}
       <AlbumListModule />
