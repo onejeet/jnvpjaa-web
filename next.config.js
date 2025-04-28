@@ -7,52 +7,33 @@ const withPWA = require('next-pwa')({
   disable: process.env.NEXT_PUBLIC_NODE_ENV === 'development', // Disable in dev mode
   skipWaiting: true,
   reloadOnOnline: false,
+  buildExcludes: [/middleware-manifest\.json$/],
   runtimeCaching: [
     {
-      urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp|bmp)$/i,
-      handler: 'CacheFirst', // This will cache the images for offline usage
-      options: {
-        cacheName: 'image-cache',
-        expiration: {
-          maxEntries: 100, // Max number of images to cache
-          maxAgeSeconds: 60 * 60 * 24 * 30, // Cache images for 1 year
-        },
-      },
-    },
-    {
-      urlPattern: /^https:\/\/assets\.jnvpjaa\.org/,
+      urlPattern: ({ request }) => request.destination === 'image',
       handler: 'CacheFirst',
       options: {
-        cacheName: 'next-image-cache',
-        expiration: {
-          maxEntries: 500,
-          maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
-        },
-      },
-    },
-    {
-      urlPattern: /^\/_next\/(image|static|webpack)/,
-      handler: 'CacheFirst',
-      options: {
-        cacheName: 'next-assets',
+        cacheName: 'images-cache',
         expiration: {
           maxEntries: 100,
           maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
         },
-      },
-    },
-    {
-      urlPattern: /^https:\/\/content\.jnvpjaa\.org/,
-      handler: 'CacheFirst',
-      options: {
-        cacheName: 'content-profile-images',
-        expiration: {
-          maxEntries: 100,
-          maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+        cacheableResponse: {
+          statuses: [0, 200],
         },
       },
     },
-
+    {
+      urlPattern: /\.(?:js|css|woff2?|eot|ttf|otf)$/,
+      handler: 'CacheFirst',
+      options: {
+        cacheName: 'static-assets',
+        expiration: {
+          maxEntries: 100,
+          maxAgeSeconds: 60 * 60 * 24 * 30,
+        },
+      },
+    },
     {
       urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
       handler: 'StaleWhileRevalidate',
