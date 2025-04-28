@@ -76,7 +76,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ onNext, contain
         rules={{
           required: 'Required',
           pattern: {
-            value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+            value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d@_\-$]{8,}$/,
             message: 'Invalid password.',
           },
         }}
