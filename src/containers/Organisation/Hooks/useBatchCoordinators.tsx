@@ -43,6 +43,7 @@ const useBatchCoordinators = (coordinators?: BatchCoordinator[]) => {
         field: 'name',
         headerName: 'COORDINATOR',
         width: 250,
+        minWidth: 250,
         flex: 1,
         ...commonTableColumnProps,
         sortable: true,
