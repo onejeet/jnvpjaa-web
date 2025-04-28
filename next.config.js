@@ -7,7 +7,7 @@ const withPWA = require('next-pwa')({
   disable: process.env.NEXT_PUBLIC_NODE_ENV === 'development', // Disable in dev mode
   skipWaiting: true,
   reloadOnOnline: false,
-  buildExcludes: [/middleware-manifest\.json$/],
+  buildExcludes: [/middleware-manifest\.json$/, /app-build-manifest\.json$/],
   runtimeCaching: [
     {
       urlPattern: /^\/_next\/image/,
