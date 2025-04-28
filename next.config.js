@@ -7,6 +7,7 @@ const withPWA = require('next-pwa')({
   disable: process.env.NEXT_PUBLIC_NODE_ENV === 'development', // Disable in dev mode
   skipWaiting: true,
   reloadOnOnline: false,
+  customWorkerDir: 'public', // Add this line
   buildExcludes: [/middleware-manifest\.json$/, /app-build-manifest\.json$/],
   runtimeCaching: [
     {

@@ -12,43 +12,36 @@ export default function ServiceWorkerUpdater() {
   useEffect(() => {
     if ('serviceWorker' in navigator) {
       const wbInstance = new Workbox('/sw.js');
-      setWb(wbInstance);
 
       wbInstance.addEventListener('waiting', () => {
-        console.log('Service Worker waiting — update available!');
+        console.log('[PWA] New Service Worker waiting to activate');
         setUpdateAvailable(true);
+        setWb(wbInstance);
       });
 
-      wbInstance.addEventListener('installed', (event) => {
-        console.log('Service Worker installed', event);
-        if (event.isUpdate) {
-          setUpdateAvailable(true);
-        }
+      wbInstance.addEventListener('controlling', () => {
+        console.log('[PWA] New service worker has taken control');
+        window.location.reload();
       });
 
       wbInstance.register().catch((error) => {
-        console.error('Service worker registration failed:', error);
+        console.error('[PWA] Service worker registration failed:', error);
       });
     }
   }, []);
 
   const handleUpdate = () => {
     if (!wb) return;
+
     setAlertDialogProps({
       action: 'loading',
-      title: 'Update is in Progress...',
-      message:
-        "Hang tight! 🚀 We're refreshing the app with the latest features and improvements. This won’t take long! 😊",
+      title: 'Update in Progress...',
+      message: 'Hang tight! We are updating the app. This will just take a second.',
     });
-    wb.messageSW({ type: 'SKIP_WAITING' })
-      .then(() => {
-        console.log('Sent SKIP_WAITING to service worker');
-        setUpdateAvailable(false);
-        window.location.reload();
-      })
-      .catch((err) => {
-        console.error('Error sending SKIP_WAITING:', err);
-      });
+
+    wb.messageSW({ type: 'SKIP_WAITING' }).catch((err) => {
+      console.error('[PWA] Error sending SKIP_WAITING:', err);
+    });
   };
 
   return (
@@ -56,7 +49,7 @@ export default function ServiceWorkerUpdater() {
       open={updateAvailable}
       onCancel={() => setUpdateAvailable(false)}
       title="App Update Available"
-      message="A fresh new version of JNVPJAA is here! 🚀 Enjoy the latest features, fixes, and improvements. Tap Update to get the best experience! 😊"
+      message="A new version of the app is ready! Tap update to apply it now."
       onOkay={handleUpdate}
       okayButtonProps={{
         title: 'Update',
