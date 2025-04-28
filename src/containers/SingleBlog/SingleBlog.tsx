@@ -289,14 +289,14 @@ const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
                 getClapsCount: (claps || 0) + cla,
               },
               variables: {
-                slug: id as string,
+                id: prerenderedBlog?.id as string,
               },
             });
           },
         });
       }
     },
-    [id, client, blog, blogClapUpdate]
+    [id, client, blogClapUpdate, claps, prerenderedBlog?.id]
   );
 
   return (
