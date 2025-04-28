@@ -35,6 +35,50 @@ const withPWA = require('next-pwa')({
       },
     },
     {
+      urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp|bmp)$/i,
+      handler: 'CacheFirst', // This will cache the images for offline usage
+      options: {
+        cacheName: 'image-cache',
+        expiration: {
+          maxEntries: 100, // Max number of images to cache
+          maxAgeSeconds: 60 * 60 * 24 * 30, // Cache images for 1 year
+        },
+      },
+    },
+    {
+      urlPattern: /^https:\/\/assets\.jnvpjaa\.org/,
+      handler: 'CacheFirst',
+      options: {
+        cacheName: 'next-image-cache',
+        expiration: {
+          maxEntries: 500,
+          maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+        },
+      },
+    },
+    {
+      urlPattern: /^\/_next\/(image|static|webpack)/,
+      handler: 'CacheFirst',
+      options: {
+        cacheName: 'next-assets',
+        expiration: {
+          maxEntries: 100,
+          maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+        },
+      },
+    },
+    {
+      urlPattern: /^https:\/\/content\.jnvpjaa\.org/,
+      handler: 'CacheFirst',
+      options: {
+        cacheName: 'content-profile-images',
+        expiration: {
+          maxEntries: 100,
+          maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+        },
+      },
+    },
+    {
       urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
       handler: 'StaleWhileRevalidate',
       options: {
