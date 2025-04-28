@@ -249,7 +249,12 @@ const BlogCard: React.FC<IBlogCardProps> = ({
           )}
         </Box>
         <Box width="100%" display={{ xs: 'flex', md: 'none' }} mb={1.5} alignItems="center" gap={0.5}>
-          <Typography variant="body2">{dayjs(updatedAt).format('MMM DD, YYYY')}</Typography>
+          {loading ? (
+            <Skeleton width={50} height={20} />
+          ) : (
+            <Typography variant="body2">{dayjs(updatedAt).format('MMM DD, YYYY')}</Typography>
+          )}
+
           {/* {categoryId && (
                   <>
                     <DotOutline size={32}  />
@@ -262,7 +267,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
               <Chip size="small" label={startCase(status as string)} color="error" />
             </>
           )} */}
-          <Dot size={16} />
+          <Dot size={14} />
           <ProfilePicture
             size={28}
             loading={loading}
