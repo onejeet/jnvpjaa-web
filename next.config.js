@@ -42,6 +42,18 @@ const withPWA = require('next-pwa')({
       },
     },
     {
+      urlPattern: /^https:\/\/content\.jnvpjaa\.org/,
+      handler: 'CacheFirst',
+      options: {
+        cacheName: 'content-profile-images',
+        expiration: {
+          maxEntries: 100,
+          maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+        },
+      },
+    },
+
+    {
       urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
       handler: 'StaleWhileRevalidate',
       options: {
