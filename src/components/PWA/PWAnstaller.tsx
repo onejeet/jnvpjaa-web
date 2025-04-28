@@ -14,11 +14,11 @@ export default function PWAInstaller() {
   const [alertDialogProps, setAlertDialogProps] = useState<Partial<AlertDialogProps>>({});
 
   useEffect(() => {
-    // const isMobile = window?.matchMedia('(pointer: coarse)')?.matches;
+    const isMobile = window?.matchMedia('(pointer: coarse)')?.matches;
     const handleBeforeInstallPrompt = (event: Event) => {
       console.log('beforeinstallprompt fired');
       event.preventDefault();
-      // if (!isMobile) return;
+      if (!isMobile) return;
       setInstallPrompt(event as BeforeInstallPromptEvent);
       setShowInstallDialog(true);
     };
