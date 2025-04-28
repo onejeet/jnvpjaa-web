@@ -42,7 +42,11 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ onNext, contain
             type: 'success',
             message: 'Password reset successfully!',
           });
-          onNext?.();
+
+          if (onNext) {
+            onNext();
+            return;
+          }
           redirectOnSignin(true);
         },
       });
