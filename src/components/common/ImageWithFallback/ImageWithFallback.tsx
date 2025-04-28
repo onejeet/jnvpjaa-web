@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { CardMedia } from '@mui/material';
 import { Photo } from '@/apollo/hooks';
@@ -14,17 +16,23 @@ const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({ photo, isSelected
   const placeholderImage = placeholder || `https://placehold.co/300x300?font=playfair-display&text=Loading...`;
   const imageToShow = !error && loaded ? photo.url : placeholderImage;
 
+  React.useEffect(() => {
+    const img = new Image();
+    img.src = photo.url!;
+
+    img.onload = () => setLoaded(true);
+    img.onerror = () => {
+      setError(true);
+      setLoaded(true);
+    };
+  }, [photo.url]);
+
   return (
     <CardMedia
       component="img"
       image={imageToShow}
       loading="lazy"
       referrerPolicy="no-referrer"
-      onLoad={() => setLoaded(true)}
-      onError={() => {
-        setError(true);
-        setLoaded(true);
-      }}
       sx={{
         width: '100%',
         objectFit: 'cover',
