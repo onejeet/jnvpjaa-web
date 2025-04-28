@@ -7,6 +7,7 @@ import {
   IconDownload as DownloadSimple,
 } from '@tabler/icons-react';
 import Masonry from 'react-masonry-css';
+import Image from 'next/image';
 
 interface PhotoGridProps {
   photos: Photo[];
@@ -69,10 +70,11 @@ export default function PhotoGrid({ photos, loading, authView, onSelect, breakpo
             <>
               {' '}
               <CardMedia
-                component="img"
+                component={Image}
                 image={photo.url}
                 alt="JNVPJAA Gallery Photo"
                 loading="lazy"
+                fill
                 referrerPolicy="no-referrer"
                 sx={{ width: '100%', objectFit: 'cover', opacity: selected?.id === photo?.id ? 0.5 : 1 }}
               />
