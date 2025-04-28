@@ -273,19 +273,21 @@ const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
     [isAdmin]
   );
   const updateClap = React.useCallback(
-    (claps: number) => {
+    (cla: number) => {
       console.log('ZZ: updateClap', claps, id);
-      if (claps > 0 && id) {
+      if (cla > 0 && id) {
         blogClapUpdate({
           variables: {
             slug: id as string,
-            claps,
+            claps: cla,
           },
           onCompleted: () => {
             updateCache({
               client,
               query: GetClapsCountDocument,
-              data: (claps || 0) + claps,
+              data: {
+                getClapsCount: (claps || 0) + cla,
+              },
               variables: {
                 slug: id as string,
               },
