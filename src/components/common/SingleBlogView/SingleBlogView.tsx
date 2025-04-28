@@ -23,6 +23,28 @@ import SocialShareModal from '../SocialShareModal';
 import Image from 'next/image';
 import { dmSans, notoSerif } from '@/utils/theme/fonts';
 
+export function useDebouncedClap(callback: (claps: number) => void, delay = 800) {
+  const callbackRef = React.useRef(callback);
+
+  // Always use latest callback
+  React.useEffect(() => {
+    callbackRef.current = callback;
+  }, [callback]);
+
+  const debounced = React.useMemo(() => {
+    return debounce((claps: number) => {
+      callbackRef.current(claps);
+    }, delay);
+  }, [delay]);
+
+  // Optional: cancel debounce on unmount
+  React.useEffect(() => {
+    return () => debounced.cancel();
+  }, [debounced]);
+
+  return debounced;
+}
+
 const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, claps: initialClaps, loading, updateClap }) => {
   const { id, title, author, content, cover, shortUrl, status, updatedAt } = blog || {};
   const [sanitizedContent, setSanitizedContent] = React.useState('');
@@ -45,18 +67,12 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, claps: initialCl
       : null;
   }, [status]);
 
-  // TODO: UPDATE CLAPS VIA API
-
   const onClaps = (claps: number) => {
     setNewClaps(claps);
     onClapsDebounce(claps);
   };
 
-  const onClapsDebounce = React.useRef(
-    debounce((claps: number) => {
-      updateClap(claps);
-    }, 800)
-  ).current;
+  const onClapsDebounce = useDebouncedClap(updateClap, 800);
 
   return (
     <Card sx={{ position: 'relative' }} className="single-blog">

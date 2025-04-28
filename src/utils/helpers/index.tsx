@@ -121,12 +121,12 @@ export function formatPhoneNumber(phoneNumber: string): { international: string;
  */
 export const debounce = (
   func: (...args: any[]) => void,
-  wait: number = 300,
-  immediate: boolean = false
-): ((...args: any[]) => void) => {
+  wait = 300,
+  immediate = false
+): ((...args: any[]) => void) & { cancel: () => void } => {
   let timeout: ReturnType<typeof setTimeout> | null = null;
 
-  return function (...args: any[]) {
+  const debounced = function (...args: any[]) {
     const later = () => {
       timeout = null;
       if (!immediate) func(...args);
@@ -134,13 +134,21 @@ export const debounce = (
 
     const callNow = immediate && !timeout;
 
-    clearTimeout(timeout as NodeJS.Timeout);
+    if (timeout) clearTimeout(timeout);
     timeout = setTimeout(later, wait);
 
-    if (callNow) {
-      func(...args);
+    if (callNow) func(...args);
+  };
+
+  // Add cancel method
+  debounced.cancel = () => {
+    if (timeout) {
+      clearTimeout(timeout);
+      timeout = null;
     }
   };
+
+  return debounced;
 };
 
 export function isURL(str: string | null) {
