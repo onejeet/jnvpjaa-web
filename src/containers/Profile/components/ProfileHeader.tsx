@@ -302,8 +302,8 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
           onClose={() => setOpenPictureView(false)}
           hideFooter
         >
-          <Box width="100%" minHeight={300}>
-            <Image src={user?.profileImage as string} fill alt="profile image" layout="responsive" />
+          <Box width="100%" minHeight="70vh">
+            <Image src={user?.profileImage as string} alt="profile image" layout="responsive" objectFit="cover" />
           </Box>
         </Dialog>
       )}
