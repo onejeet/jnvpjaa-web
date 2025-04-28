@@ -10,71 +10,64 @@ const withPWA = require('next-pwa')({
   buildExcludes: [/middleware-manifest\.json$/],
   runtimeCaching: [
     {
-      urlPattern: ({ request }) => request.destination === 'image',
+      urlPattern: /^\/_next\/image/,
       handler: 'CacheFirst',
       options: {
-        cacheName: 'images-cache',
+        cacheName: 'next-optimized-images',
         expiration: {
           maxEntries: 100,
-          maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+          maxAgeSeconds: 60 * 60 * 24 * 30,
         },
         cacheableResponse: {
           statuses: [0, 200],
         },
       },
     },
+
+    // 2. CDN: assets.jnvpjaa.org
     {
-      urlPattern: /\.(?:js|css|woff2?|eot|ttf|otf)$/,
+      urlPattern: /^https:\/\/assets\.jnvpjaa\.org\/.*\.(png|jpg|jpeg|webp|gif|svg)$/i,
       handler: 'CacheFirst',
       options: {
-        cacheName: 'static-assets',
+        cacheName: 'cdn-assets-images',
         expiration: {
           maxEntries: 100,
           maxAgeSeconds: 60 * 60 * 24 * 30,
         },
-      },
-    },
-    {
-      urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp|bmp)$/i,
-      handler: 'CacheFirst', // This will cache the images for offline usage
-      options: {
-        cacheName: 'image-cache',
-        expiration: {
-          maxEntries: 100, // Max number of images to cache
-          maxAgeSeconds: 60 * 60 * 24 * 30, // Cache images for 1 year
+        cacheableResponse: {
+          statuses: [0, 200],
         },
       },
     },
+
+    // 3. CDN: content.jnvpjaa.org
     {
-      urlPattern: /^https:\/\/assets\.jnvpjaa\.org/,
+      urlPattern: /^https:\/\/content\.jnvpjaa\.org\/.*\.(png|jpg|jpeg|webp|gif|svg)$/i,
       handler: 'CacheFirst',
       options: {
-        cacheName: 'next-image-cache',
-        expiration: {
-          maxEntries: 500,
-          maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
-        },
-      },
-    },
-    {
-      urlPattern: /^\/_next\/(image|static|webpack)/,
-      handler: 'CacheFirst',
-      options: {
-        cacheName: 'next-assets',
+        cacheName: 'cdn-content-images',
         expiration: {
           maxEntries: 100,
-          maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+          maxAgeSeconds: 60 * 60 * 24 * 30,
+        },
+        cacheableResponse: {
+          statuses: [0, 200],
         },
       },
     },
+
+    // 4. External: Unsplash, Pixabay
     {
-      urlPattern: /^https:\/\/content\.jnvpjaa\.org/,
+      urlPattern: /^https:\/\/(images\.unsplash\.com|cdn\.pixabay\.com)\/.*\.(png|jpg|jpeg|webp|gif|svg)$/i,
       handler: 'CacheFirst',
       options: {
-        cacheName: 'content-profile-images',
+        cacheName: 'external-images',
         expiration: {
           maxEntries: 100,
-          maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+          maxAgeSeconds: 60 * 60 * 24 * 30,
+        },
+        cacheableResponse: {
+          statuses: [0, 200],
         },
       },
     },
