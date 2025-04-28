@@ -730,6 +730,7 @@ export type Query = {
   getBlogList?: Maybe<BlogListResponse>;
   getBusiness?: Maybe<Business>;
   getBusinesses?: Maybe<BusinessListResponse>;
+  getClapsCount?: Maybe<Scalars['Int']['output']>;
   getComments?: Maybe<Array<Maybe<Comment>>>;
   getCompanyInfo?: Maybe<CompanyInfo>;
   getCompanyInfoList: Array<CompanyInfo>;
@@ -783,6 +784,11 @@ export type QueryGetBusinessArgs = {
 
 export type QueryGetBusinessesArgs = {
   options?: InputMaybe<ListInput>;
+};
+
+export type QueryGetClapsCountArgs = {
+  id?: InputMaybe<Scalars['String']['input']>;
+  slug?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type QueryGetCommentsArgs = {
@@ -4129,6 +4135,13 @@ export type GetBusinessesQuery = {
       }
     | undefined;
 };
+
+export type GetClapsCountQueryVariables = Exact<{
+  id?: InputMaybe<Scalars['String']['input']>;
+  slug?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type GetClapsCountQuery = { __typename?: 'Query'; getClapsCount?: number | undefined };
 
 export type GetCommentsQueryVariables = Exact<{
   targetId: Scalars['String']['input'];
@@ -9420,6 +9433,51 @@ export type GetBusinessesQueryHookResult = ReturnType<typeof useGetBusinessesQue
 export type GetBusinessesLazyQueryHookResult = ReturnType<typeof useGetBusinessesLazyQuery>;
 export type GetBusinessesSuspenseQueryHookResult = ReturnType<typeof useGetBusinessesSuspenseQuery>;
 export type GetBusinessesQueryResult = Apollo.QueryResult<GetBusinessesQuery, GetBusinessesQueryVariables>;
+export const GetClapsCountDocument = gql`
+  query getClapsCount($id: String, $slug: String) {
+    getClapsCount(id: $id, slug: $slug)
+  }
+`;
+
+/**
+ * __useGetClapsCountQuery__
+ *
+ * To run a query within a React component, call `useGetClapsCountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetClapsCountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetClapsCountQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      slug: // value for 'slug'
+ *   },
+ * });
+ */
+export function useGetClapsCountQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetClapsCountQuery, GetClapsCountQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetClapsCountQuery, GetClapsCountQueryVariables>(GetClapsCountDocument, options);
+}
+export function useGetClapsCountLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetClapsCountQuery, GetClapsCountQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetClapsCountQuery, GetClapsCountQueryVariables>(GetClapsCountDocument, options);
+}
+export function useGetClapsCountSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetClapsCountQuery, GetClapsCountQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetClapsCountQuery, GetClapsCountQueryVariables>(GetClapsCountDocument, options);
+}
+export type GetClapsCountQueryHookResult = ReturnType<typeof useGetClapsCountQuery>;
+export type GetClapsCountLazyQueryHookResult = ReturnType<typeof useGetClapsCountLazyQuery>;
+export type GetClapsCountSuspenseQueryHookResult = ReturnType<typeof useGetClapsCountSuspenseQuery>;
+export type GetClapsCountQueryResult = Apollo.QueryResult<GetClapsCountQuery, GetClapsCountQueryVariables>;
 export const GetCommentsDocument = gql`
   query getComments($targetId: String!, $targetType: CommentTargetType!) {
     getComments(targetId: $targetId, targetType: $targetType) {

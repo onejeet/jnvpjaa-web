@@ -23,8 +23,8 @@ import SocialShareModal from '../SocialShareModal';
 import Image from 'next/image';
 import { dmSans, notoSerif } from '@/utils/theme/fonts';
 
-const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, loading, updateClap }) => {
-  const { id, title, author, content, cover, shortUrl, claps: initialClaps, status, updatedAt } = blog || {};
+const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, claps: initialClaps, loading, updateClap }) => {
+  const { id, title, author, content, cover, shortUrl, status, updatedAt } = blog || {};
   const [sanitizedContent, setSanitizedContent] = React.useState('');
   const [newClaps, setNewClaps] = React.useState(0);
 

@@ -9,6 +9,7 @@ import {
   useUpdateClapsMutation,
   GetBlogQuery,
   GetBlogDocument,
+  useGetClapsCountQuery,
 } from '@/apollo/hooks';
 import Breadcrumbs from '@/components/common/Breadcrumbs';
 import EmptyView from '@/components/common/EmptyView';
@@ -37,6 +38,7 @@ const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
   const { showAlert } = useAlert();
   const searchParams = useSearchParams();
   const queryId = searchParams.get('id');
+
   const { data, loading } = useGetBlogQuery({
     skip: !queryId,
     variables: {
@@ -44,8 +46,15 @@ const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
     },
   });
 
+  const { data: clapQuery } = useGetClapsCountQuery({
+    variables: {
+      id: prerenderedBlog?.id,
+    },
+  });
+
   const id = prerenderedBlog?.slug;
-  const dataLoading = loading || !id;
+  const dataLoading = !id;
+  const claps = clapQuery?.getClapsCount;
 
   const blog: Blog | undefined = React.useMemo(() => data?.getBlog || prerenderedBlog, [data, prerenderedBlog]);
   const [publisBlog, { loading: publishBlogLoading }] = useUpdateBlogMutation();
@@ -277,7 +286,7 @@ const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
               query: GetBlogDocument,
               data: {
                 ...blog,
-                claps: (blog?.claps || 0) + claps,
+                claps: (claps || 0) + claps,
               },
               variables: {
                 slug: id as string,
@@ -303,7 +312,7 @@ const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
         )}
       </Box>
       {dataLoading || blog?.id ? (
-        <SingleBlogView blog={blog} loading={dataLoading} updateClap={updateClap} />
+        <SingleBlogView blog={blog} claps={claps} loading={dataLoading} updateClap={updateClap} />
       ) : (
         <EmptyView message="No blog found!" />
       )}
