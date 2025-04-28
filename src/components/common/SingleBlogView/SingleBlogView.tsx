@@ -61,6 +61,12 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, claps: initialCl
     setSanitizedContent(DOMPurify.sanitize(content || ''));
   }, [content]);
 
+  React.useEffect(() => {
+    if (initialClaps) {
+      setNewClaps(0);
+    }
+  }, [initialClaps]);
+
   const statusMessage = React.useMemo(() => {
     return status && status !== BlogStatus.Published
       ? `Preview Mode. Blog is in "${getFormattedLabel(status as string)}" status.`
