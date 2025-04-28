@@ -18,6 +18,7 @@ import {
   Tooltip,
   Divider,
   IconButton,
+  alpha,
 } from '@mui/material';
 import { EventCardProps } from './EventCard.types';
 import Button from '@/components/core/Button';
@@ -138,14 +139,21 @@ const EventCard: React.FC<EventCardProps> = ({
           label="Draft"
           color="error"
           size="small"
-          sx={{ ml: 'auto', position: ' absolute', top: '10px', right: '10px', px: 2, zIndex: 10 }}
+          sx={{ ml: 'auto', position: 'absolute', top: '10px', right: '10px', px: 2, zIndex: 10 }}
         />
       ) : null}
 
       {!loading && status !== EventStatus.Published && event.createdBy === user?.id && onDelete ? (
         <IconButton
           onClick={() => onDelete(event.id)}
-          sx={{ position: ' absolute', top: '10px', left: '10px', zIndex: 10, svg: { color: 'error.main' } }}
+          sx={{
+            position: 'absolute',
+            top: '10px',
+            left: '10px',
+            zIndex: 10,
+            svg: { color: 'error.main' },
+            // backgroundColor: (theme) => (theme.palette.error.main, 0.8),
+          }}
         >
           <IconTrash size={18} />
         </IconButton>

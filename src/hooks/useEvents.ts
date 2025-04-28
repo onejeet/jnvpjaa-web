@@ -184,7 +184,7 @@ const useEvents = ({ user }: IPayload) => {
       showAlert(
         {
           visible: true,
-          title: `Dele the Event`,
+          title: `Delete the Event`,
           type: 'loading',
           message: `Please review the deletion of event. All the data associated with the event will be lost once deleted.`,
           action: 'approve',
@@ -336,6 +336,7 @@ const useEvents = ({ user }: IPayload) => {
     verifyEvent,
     onEditEvent,
     onPublishEvent,
+    onDelete: deleteEvent,
   };
 };
 

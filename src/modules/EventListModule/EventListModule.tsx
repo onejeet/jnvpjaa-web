@@ -31,7 +31,7 @@ const EventListModule: React.FC<EventListModuleProps> = ({
   const { user, isAdmin } = useAuth();
   const router = useRouter();
 
-  const { markImGoing, verifyEvent, onEditEvent, onPublishEvent } = useEvents({ user });
+  const { markImGoing, verifyEvent, onEditEvent, onPublishEvent, onDelete } = useEvents({ user });
   const { data: eventData, loading } = useGetEventListQuery({
     skip,
     variables: {
@@ -67,6 +67,7 @@ const EventListModule: React.FC<EventListModuleProps> = ({
               onEdit={onEditEvent}
               onPublish={onPublishEvent}
               isReadOnly={isReadOnly}
+              onDelete={onDelete}
             />
           </Grid>
         ))
