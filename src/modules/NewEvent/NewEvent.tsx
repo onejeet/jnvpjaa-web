@@ -13,6 +13,7 @@ import Button from '@/components/core/Button';
 import FormDateTimeField from '@/components/form/FormDateTimeField';
 import {
   EventStatus,
+  GetEventListDocument,
   Photo,
   useCreateEventMutation,
   useGetEventDetailsQuery,
@@ -29,17 +30,19 @@ import {
   IconPencil,
   IconUpload,
 } from '@tabler/icons-react';
-import { useApolloClient } from '@apollo/client';
+// import { useApolloClient } from '@apollo/client';
 import { EVENT_CATEGORIES, eventHostingmedium } from '@/constants/Events.constants';
 import dayjs from 'dayjs';
 import Image from 'next/image';
 import { UnsplashImageSelector } from '../UnsplashImageSelector/UnsplashImamgeSelector';
+import { useApolloClient } from '@apollo/client';
 
 const NewEvent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const eventId = searchParams.get('id');
   const client = useApolloClient();
+
   const { showAlert } = useAlert();
   const saveTypeRef = React.useRef('draft');
   const [selectCoverImage, setSelectCoverImage] = React.useState<boolean>(false);
@@ -134,9 +137,8 @@ const NewEvent = () => {
           variables,
           onCompleted: () => {
             if (saveTypeRef.current === 'publish') {
-              client.refetchQueries({
-                include: ['getEventList'],
-              });
+              client.cache.evict({ fieldName: 'getEventList' });
+              client.cache.gc();
               router.push(paths.events.root);
             }
           },
@@ -160,9 +162,8 @@ const NewEvent = () => {
           status: saveTypeRef.current === 'publish' ? EventStatus.Published : EventStatus.Draft,
         },
         onCompleted: async () => {
-          client.refetchQueries({
-            include: ['getEventList'],
-          });
+          client.cache.evict({ fieldName: 'getEventList' }); // Wipe from cache
+          client.cache.gc();
           router.push(paths.events.root);
         },
         onError: (err) => {

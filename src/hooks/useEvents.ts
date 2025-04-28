@@ -60,9 +60,9 @@ const useEvents = ({ user }: IPayload) => {
                 eventId: id,
               },
               onCompleted: () => {
-                client.refetchQueries({
-                  include: ['getEventList', 'getEventDetails'],
-                });
+                client.cache.evict({ fieldName: 'getEventList' });
+                client.cache.evict({ fieldName: 'getEventDetails' });
+                client.cache.gc();
                 showAlert(
                   {
                     visible: true,
@@ -137,9 +137,9 @@ const useEvents = ({ user }: IPayload) => {
                 status: EventStatus.Published,
               },
               onCompleted: () => {
-                client.refetchQueries({
-                  include: ['getEventList', 'getEventDetails'],
-                });
+                client.cache.evict({ fieldName: 'getEventList' });
+                client.cache.evict({ fieldName: 'getEventDetails' });
+                client.cache.gc();
                 showAlert(
                   {
                     visible: true,
@@ -218,9 +218,9 @@ const useEvents = ({ user }: IPayload) => {
                 status: status || EventStatus.Published,
               },
               onCompleted: () => {
-                client.refetchQueries({
-                  include: ['getEventList', 'getEventDetails'],
-                });
+                client.cache.evict({ fieldName: 'getEventList' });
+                client.cache.evict({ fieldName: 'getEventDetails' });
+                client.cache.gc();
                 showAlert(
                   {
                     visible: true,

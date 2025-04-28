@@ -156,9 +156,9 @@ export default function ProfilePictureUpload({ user, onNext, onBack, onSuccess, 
             profileImage: '',
           },
           onCompleted: () => {
-            client.refetchQueries({
-              include: ['getUserDetails', 'getUserList'],
-            });
+            client.cache.evict({ fieldName: 'getUserDetails' });
+            client.cache.evict({ fieldName: 'getUserList' });
+            client.cache.gc();
             onNext?.();
             onSuccess?.();
           },
@@ -213,9 +213,9 @@ export default function ProfilePictureUpload({ user, onNext, onBack, onSuccess, 
           profileImage: uploadedFileUrl,
         },
         onCompleted: () => {
-          client.refetchQueries({
-            include: ['getUserDetails', 'getUserList'],
-          });
+          client.cache.evict({ fieldName: 'getUserDetails' });
+          client.cache.evict({ fieldName: 'getUserList' });
+          client.cache.gc();
           setCroppedImage(uploadedFileUrl);
           onNext?.();
           onSuccess?.();

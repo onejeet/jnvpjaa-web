@@ -240,6 +240,13 @@ const BlogCard: React.FC<IBlogCardProps> = ({
               </>
             )}
           </Box>
+          {loading ? (
+            <Skeleton width={50} height={20} />
+          ) : (
+            <Typography fontSize="1rem" alignItems="center" display="flex" variant="body2" ml={{ xs: 1, md: 0 }}>
+              {dayjs(updatedAt).format('YYYY').toString()}
+            </Typography>
+          )}
         </Box>
         <Box width="100%" display={{ xs: 'flex', md: 'none' }} mb={1.5} alignItems="center" gap={0.5}>
           <Typography variant="body2">{dayjs(updatedAt).format('MMM DD, YYYY')}</Typography>

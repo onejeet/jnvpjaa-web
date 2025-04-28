@@ -51,9 +51,8 @@ const AddTransactionRecordModule: React.FC<any> = ({ onClose }) => {
           transactionDate: data?.transactionDate?.toISOString(),
         },
         onCompleted: () => {
-          client.refetchQueries({
-            include: ['getTransactions'],
-          });
+          client.cache.evict({ fieldName: 'getTransactions' });
+          client.cache.gc();
           showAlert({
             visible: true,
             type: 'success',

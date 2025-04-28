@@ -23,7 +23,7 @@ import { updateCache } from '@/utils/apollo';
 import { useApolloClient } from '@apollo/client';
 import { Box } from '@mui/material';
 import { IconCircleCheck, IconEye, IconPencil } from '@tabler/icons-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
 
 interface SingleBlogProps {
@@ -31,21 +31,23 @@ interface SingleBlogProps {
 }
 
 const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
-  console.log('ZZ: prerenderedBlog', prerenderedBlog);
   const router = useRouter();
   const client = useApolloClient();
   const { isAdmin, redirectToSignin, user } = useAuth();
   const { showAlert } = useAlert();
-  const loading = false;
-  // const { query } = useRouter();
-  // const { id } = query;
-  // const { data, loading } = useGetBlogQuery({
-  //   skip: !id || Boolean(prerenderedBlog?.id),
-  //   variables: {
-  //     slug: id as string,
-  //   },
-  // });
-  const blog: Blog | undefined = React.useMemo(() => prerenderedBlog, [prerenderedBlog]);
+  const searchParams = useSearchParams();
+  const queryId = searchParams.get('id');
+  const { data, loading } = useGetBlogQuery({
+    skip: !queryId,
+    variables: {
+      slug: queryId as string,
+    },
+  });
+
+  const id = prerenderedBlog?.slug;
+  const dataLoading = loading || !id;
+
+  const blog: Blog | undefined = React.useMemo(() => data?.getBlog || prerenderedBlog, [data, prerenderedBlog]);
   const [publisBlog, { loading: publishBlogLoading }] = useUpdateBlogMutation();
   const [handleVerifyBlog] = useApproveBlogMutation();
 
@@ -63,8 +65,6 @@ const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
     ],
     [blog]
   );
-  const id = prerenderedBlog?.slug;
-  const dataLoading = loading || !id;
 
   const buttonProps: ButtonProps[] | null = React.useMemo(() => {
     switch (blog?.status) {
@@ -149,9 +149,9 @@ const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
                 status: isUnpublish ? BlogStatus.Draft : BlogStatus.Published,
               },
               onCompleted: () => {
-                client.refetchQueries({
-                  include: ['getBlog', 'getBlogList'],
-                });
+                client.cache.evict({ fieldName: 'getBlog' });
+                client.cache.evict({ fieldName: 'getBlogList' });
+                client.cache.gc();
                 showAlert(
                   {
                     visible: true,
@@ -228,9 +228,9 @@ const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
                 id,
               },
               onCompleted: () => {
-                client.refetchQueries({
-                  include: ['getBlog', 'getBlogList'],
-                });
+                client.cache.evict({ fieldName: 'getBlog' });
+                client.cache.evict({ fieldName: 'getBlogList' });
+                client.cache.gc();
                 showAlert(
                   {
                     visible: true,

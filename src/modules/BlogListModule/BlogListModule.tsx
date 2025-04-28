@@ -111,9 +111,9 @@ const BlogListModule: React.FC<BlogFilterModuleProps> = ({
                 id,
               },
               onCompleted: () => {
-                client.refetchQueries({
-                  include: ['getBlog', 'getBlogList'],
-                });
+                client.cache.evict({ fieldName: 'getBlogList' });
+                client.cache.evict({ fieldName: 'getBlog' });
+                client.cache.gc();
                 showAlert(
                   {
                     visible: true,
@@ -187,9 +187,9 @@ const BlogListModule: React.FC<BlogFilterModuleProps> = ({
                 id,
               },
               onCompleted: () => {
-                client.refetchQueries({
-                  include: ['getBlog', 'getBlogList'],
-                });
+                client.cache.evict({ fieldName: 'getBlogList' });
+                client.cache.evict({ fieldName: 'getBlog' });
+                client.cache.gc();
                 showAlert(
                   {
                     visible: true,
@@ -261,9 +261,9 @@ const BlogListModule: React.FC<BlogFilterModuleProps> = ({
                 status: isUnpublish ? BlogStatus.Draft : BlogStatus.Published,
               },
               onCompleted: () => {
-                client.refetchQueries({
-                  include: ['getBlog', 'getBlogList'],
-                });
+                client.cache.evict({ fieldName: 'getBlogList' });
+                client.cache.evict({ fieldName: 'getBlog' });
+                client.cache.gc();
                 showAlert(
                   {
                     visible: true,

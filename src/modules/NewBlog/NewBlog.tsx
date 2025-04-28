@@ -108,9 +108,8 @@ const NewBlog = () => {
           variables,
           onCompleted: () => {
             if (saveTypeRef.current === 'publish') {
-              client.refetchQueries({
-                include: ['getBlogList'],
-              });
+              client.cache.evict({ fieldName: 'getBlogList' });
+              client.cache.gc();
               router.push(paths.blog.root);
             }
           },
@@ -143,9 +142,8 @@ const NewBlog = () => {
           authorId: user?.id,
         },
         onCompleted: async () => {
-          client.refetchQueries({
-            include: ['getBlogList'],
-          });
+          client.cache.evict({ fieldName: 'getBlogList' });
+          client.cache.gc();
           router.push(paths.blog.root);
         },
         onError: (err) => {

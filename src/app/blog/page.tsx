@@ -32,7 +32,9 @@ async function getBlog() {
       query: GetBlogListDocument,
       variables: {
         options: {
-          filter: {},
+          filter: {
+            verified: undefined,
+          },
           limit: 50,
         },
       },

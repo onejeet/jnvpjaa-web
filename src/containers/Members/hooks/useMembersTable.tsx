@@ -236,9 +236,9 @@ const useMembersTable = () => {
                                     type: 'success',
                                     message: `${row?.firstName || ''} ${row?.lastName || ''} is approved. `,
                                   });
-                                  client.refetchQueries({
-                                    include: ['getUserList'],
-                                  });
+
+                                  client.cache.evict({ fieldName: 'getUserList' });
+                                  client.cache.gc();
                                 },
                               });
                             },
@@ -276,9 +276,9 @@ const useMembersTable = () => {
                                     type: 'success',
                                     message: `${row?.firstName || ''} ${row?.lastName || ''} is rejected. `,
                                   });
-                                  client.refetchQueries({
-                                    include: ['getUserList'],
-                                  });
+
+                                  client.cache.evict({ fieldName: 'getUserList' });
+                                  client.cache.gc();
                                 },
                               });
                             },

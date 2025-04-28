@@ -51,9 +51,8 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
           })
             ?.then((res) => {
               if (user?.id === authUser?.id) {
-                client.refetchQueries({
-                  include: ['getUserDetails'],
-                });
+                client.cache.evict({ fieldName: 'getUserDetails' });
+                client.cache.gc();
               } else {
                 client.writeQuery({
                   query: GetUserDetailsDocument,
