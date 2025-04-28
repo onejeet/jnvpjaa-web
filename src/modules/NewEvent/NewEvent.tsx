@@ -155,7 +155,7 @@ const NewEvent = () => {
       crateEvent({
         variables: {
           ...data,
-          image: `https://assets.jnvpjaa.org/assets/events/${data?.category}.jpg`,
+          image: `https://assets.jnvpjaa.org/events/${data?.category}.jpg`,
           price: data?.price || 0,
           startDate: data?.startDate?.toISOString(),
           endDate: data?.endDate?.toISOString(),
