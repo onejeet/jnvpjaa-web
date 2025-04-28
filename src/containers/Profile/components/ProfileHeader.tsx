@@ -16,8 +16,11 @@ import { paths } from '@/config/paths';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { GetUserDetailsDocument } from '@/apollo/hooks';
+import Dialog from '@/components/core/Dialog';
+import Image from 'next/image';
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
+  const [openPictureView, setOpenPictureView] = React.useState<boolean>(false);
   const { user, loading, isProfileEditable, editingProfile, saveProfile, setEditingProfile } = useProfile();
   const { showAlert, hideAlert } = useAlert();
   const { user: authUser, isAdmin } = useAuth();
@@ -173,6 +176,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
         id={user?.id}
         src={user?.profileImage}
         loading={loading}
+        onClick={() => (user?.profileImage ? setOpenPictureView(true) : null)}
         sx={{
           width: {
             xs: 100,
@@ -290,6 +294,17 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
           // />
         )}
       </Box>
+      {openPictureView && (
+        <Dialog
+          maxWidth="md"
+          title="Preview"
+          open={openPictureView}
+          onClose={() => setOpenPictureView(false)}
+          hideFooter
+        >
+          <Image src={user?.profileImage as string} fill alt="profile image" />
+        </Dialog>
+      )}
     </Box>
   );
 };

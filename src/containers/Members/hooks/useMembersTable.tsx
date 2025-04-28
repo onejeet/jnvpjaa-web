@@ -56,7 +56,7 @@ const useMembersTable = () => {
         field: 'name',
         headerName: 'Alumni',
         width: 400,
-        minWidh: 300,
+        minWidth: 300,
         flex: 1,
         ...commonTableColumnProps,
         sortable: true,
