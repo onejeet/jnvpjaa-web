@@ -3,6 +3,7 @@ import { BatchCoordinator, GetAllBatchCoordinatorsDocument, GetAllBatchCoordinat
 import { initializeApollo } from '@/utils/apollo';
 import { Metadata } from 'next';
 import LayoutModule from '@/layouts/Layout';
+import { headers } from 'next/headers';
 
 export const metadata: Metadata = {
   title: 'Batch Coordinators • Alumni Network of JNV Paota, Jaipur',
@@ -24,7 +25,9 @@ export const metadata: Metadata = {
 
 // This is a Server Component that fetches data
 async function getBatchCoordinators() {
-  const apolloClient = initializeApollo();
+  const requestHeaders = headers();
+  const cookieHeader = requestHeaders.get('cookie');
+  const apolloClient = initializeApollo({ cookie: cookieHeader ?? '' });
 
   try {
     const { data } = await apolloClient.query<GetAllBatchCoordinatorsQuery>({
