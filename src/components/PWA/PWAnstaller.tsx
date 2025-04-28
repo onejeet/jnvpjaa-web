@@ -53,6 +53,7 @@ export default function PWAInstaller() {
       title="Install JNVPJAA App"
       message="Get quick access to JNVPJAA by installing the app on your device. Enjoy a faster and better experience! 🚀"
       onOkay={handleInstall}
+      onCancel={() => setShowInstallDialog(false)}
       okayButtonProps={{
         title: 'Install',
       }}
