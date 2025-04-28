@@ -17,6 +17,7 @@ import {
   Skeleton,
   Tooltip,
   Divider,
+  IconButton,
 } from '@mui/material';
 import { EventCardProps } from './EventCard.types';
 import Button from '@/components/core/Button';
@@ -39,6 +40,7 @@ import {
   IconMapPin,
   IconArrowUpRight,
   IconHeartFilled,
+  IconTrash,
 } from '@tabler/icons-react';
 import { EventStatus, Maybe, User, UserBasic } from '@/apollo/hooks';
 import { paths } from '@/config/paths';
@@ -51,6 +53,7 @@ const EventCard: React.FC<EventCardProps> = ({
   verifyEvent,
   onEdit,
   onPublish,
+  onDelete,
   event,
   loading,
   markImGoing,
@@ -137,6 +140,15 @@ const EventCard: React.FC<EventCardProps> = ({
           size="small"
           sx={{ ml: 'auto', position: ' absolute', top: '10px', right: '10px', px: 2, zIndex: 10 }}
         />
+      ) : null}
+
+      {!loading && status !== EventStatus.Published && event.createdBy === user?.id && onDelete ? (
+        <IconButton
+          onClick={() => onDelete(event.id)}
+          sx={{ position: ' absolute', top: '10px', left: '10px', zIndex: 10, svg: { color: 'error.main' } }}
+        >
+          <IconTrash size={18} />
+        </IconButton>
       ) : null}
       {!loading && total_attendies && total_attendies > 0 ? (
         <Chip

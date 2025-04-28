@@ -4,6 +4,7 @@ import React from 'react';
 import {
   EventStatus,
   useAttendEventMutation,
+  useDeleteEventMutation,
   usePublishEventMutation,
   User,
   useVerifyEventMutation,
@@ -26,6 +27,7 @@ const useEvents = ({ user }: IPayload) => {
 
   const [handleRSVP] = useAttendEventMutation();
   const [handleVerifyEvent] = useVerifyEventMutation();
+  const [handleDeleteEvent] = useDeleteEventMutation();
   const [publishEvent, { loading: publishEventLoading }] = usePublishEventMutation();
 
   const markImGoing = React.useCallback(
@@ -170,6 +172,75 @@ const useEvents = ({ user }: IPayload) => {
       );
     },
     [handleVerifyEvent, user?.id, client, isAdmin, redirectToSignin, showAlert]
+  );
+
+  const deleteEvent = React.useCallback(
+    (id: number) => {
+      if (!user?.id) {
+        redirectToSignin(true);
+        return;
+      }
+
+      showAlert(
+        {
+          visible: true,
+          title: `Dele the Event`,
+          type: 'loading',
+          message: `Please review the deletion of event. All the data associated with the event will be lost once deleted.`,
+          action: 'approve',
+          okayButtonProps: {
+            title: `Delete`,
+            color: 'error',
+          },
+          onOkay: () => {
+            showAlert(
+              {
+                visible: true,
+                //  title: 'Are you Going?',
+                type: 'loading',
+                message: 'Please Wait, The status is being updated.',
+                action: 'loading',
+              },
+              true
+            );
+            handleDeleteEvent({
+              variables: {
+                id,
+              },
+              onCompleted: () => {
+                client.cache.evict({ fieldName: 'getEventList' });
+                client.cache.evict({ fieldName: 'getEventDetails' });
+                client.cache.gc();
+                showAlert(
+                  {
+                    visible: true,
+                    type: 'success',
+                    title: `Event has been deleted successfully.`,
+                    message: `The event has been deleted and removed from the list.`,
+                    action: 'success',
+                  },
+                  true
+                );
+              },
+              onError: (err) => {
+                showAlert(
+                  {
+                    visible: true,
+                    type: 'error',
+                    title: `Event deletion failed. Try again`,
+                    message: err?.message || 'Something went wrong.',
+                    action: 'error',
+                  },
+                  true
+                );
+              },
+            });
+          },
+        },
+        true
+      );
+    },
+    [handleDeleteEvent, user?.id, client, isAdmin, redirectToSignin, showAlert]
   );
 
   const onEditEvent = React.useCallback(
