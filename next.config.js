@@ -10,10 +10,10 @@ const withPWA = require('next-pwa')({
   buildExcludes: [/middleware-manifest\.json$/, /app-build-manifest\.json$/],
   runtimeCaching: [
     {
-      urlPattern: /^\/_next\/image/,
+      urlPattern: /^\/_next\/image\?url=/,
       handler: 'CacheFirst',
       options: {
-        cacheName: 'next-optimized-images',
+        cacheName: 'next-image-optimized',
         expiration: {
           maxEntries: 100,
           maxAgeSeconds: 60 * 60 * 24 * 30,
@@ -23,7 +23,6 @@ const withPWA = require('next-pwa')({
         },
       },
     },
-
     // 2. CDN: assets.jnvpjaa.org
     {
       urlPattern: /^https:\/\/assets\.jnvpjaa\.org\/.*\.(png|jpg|jpeg|webp|gif|svg)$/i,
