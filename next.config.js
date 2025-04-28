@@ -20,7 +20,7 @@ const withPWA = require('next-pwa')({
       },
     },
     {
-      urlPattern: /^\/_next\/image/,
+      urlPattern: /^\/_next\/image\?.*/i,
       handler: 'CacheFirst',
       options: {
         cacheName: 'next-image-cache',
