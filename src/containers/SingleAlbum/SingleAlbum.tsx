@@ -282,7 +282,7 @@ const SingleAlbum: React.FC<SingleAlbumProps> = ({ albumId }) => {
   return (
     <LayoutModule disableCover title={`${album?.title || 'Blog'} • Alumni Network of JNV Paota, Jaipur`}>
       <Box mb={2} display="flex" flexDirection="column" justifyContent="start" alignItems="start">
-        <Breadcrumbs items={breadcrumbsList} loading={dataLoading} sx={{ display: { xs: 'none', sm: 'flex' } }} />
+        <Breadcrumbs items={breadcrumbsList} loading={dataLoading} />
         <Box width="100%">
           {dataLoading ? (
             <>
