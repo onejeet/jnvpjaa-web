@@ -20,12 +20,12 @@ const withPWA = require('next-pwa')({
       },
     },
     {
-      urlPattern: /^\/_next\/image\?.*/i,
+      urlPattern: /^https:\/\/assets\.jnvpjaa\.org/,
       handler: 'CacheFirst',
       options: {
         cacheName: 'next-image-cache',
         expiration: {
-          maxEntries: 50,
+          maxEntries: 500,
           maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
         },
       },
