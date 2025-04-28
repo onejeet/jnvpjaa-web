@@ -20,6 +20,7 @@ export const updateCache = ({
 };
 
 export function initializeApollo(headers?: HeadersInit) {
+  console.log('ZZ: initializeApollo', headers);
   const httpLink = new HttpLink({
     uri: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || 'http://localhost:4000/client',
     credentials: 'include',

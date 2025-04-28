@@ -27,6 +27,7 @@ export const metadata: Metadata = {
 async function getBatchCoordinators() {
   const requestHeaders = headers();
   const cookieHeader = requestHeaders.get('cookie');
+  console.log('ZZ: cookieHeader', cookieHeader);
   const apolloClient = initializeApollo({ cookie: cookieHeader ?? '' });
 
   try {
