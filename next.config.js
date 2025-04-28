@@ -9,7 +9,7 @@ const withPWA = require('next-pwa')({
   reloadOnOnline: false,
   runtimeCaching: [
     {
-      urlPattern: /^https:\/\/(.*)\.(jpg|jpeg|png|gif|webp|svg|bmp)$/i,
+      urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp|bmp)$/i,
       handler: 'CacheFirst', // This will cache the images for offline usage
       options: {
         cacheName: 'image-cache',
