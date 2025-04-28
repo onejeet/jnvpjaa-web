@@ -8,6 +8,7 @@ import {
 } from '@tabler/icons-react';
 import Masonry from 'react-masonry-css';
 import Image from 'next/image';
+import ImageWithFallback from '../ImageWithFallback';
 
 interface PhotoGridProps {
   photos: Photo[];
@@ -69,14 +70,15 @@ export default function PhotoGrid({ photos, loading, authView, onSelect, breakpo
           ) : (
             <>
               {' '}
-              <CardMedia
+              <ImageWithFallback photo={photo} isSelected={selected?.id === photo?.id} />
+              {/* <CardMedia
                 component="img"
                 image={photo.url}
                 loading="lazy"
                 // fill
                 referrerPolicy="no-referrer"
                 sx={{ width: '100%', objectFit: 'cover', opacity: selected?.id === photo?.id ? 0.5 : 1 }}
-              />
+              /> */}
               {authView ? null : (
                 // TODO: download Photo
                 // <Box

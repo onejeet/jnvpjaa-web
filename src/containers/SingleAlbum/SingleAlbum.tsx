@@ -10,7 +10,7 @@ import { updateCache } from '@/utils/apollo';
 import { getAvatarDataUrl } from '@/utils/helpers';
 import { useApolloClient } from '@apollo/client';
 import { Avatar, AvatarGroup, Box, Skeleton, Stack, Tooltip, Typography } from '@mui/material';
-import { IconCalendar, IconCircleCheck, IconEye, IconPencil, IconStar, IconStarFilled } from '@tabler/icons-react';
+import { IconCalendarEvent, IconCircleCheck, IconEye, IconPencil, IconStar, IconStarFilled } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
@@ -330,7 +330,7 @@ const SingleAlbum: React.FC<SingleAlbumProps> = ({ albumId }) => {
                     },
                   }}
                 >
-                  <IconCalendar size={16} />
+                  <IconCalendarEvent size={16} />
                   <Typography variant="body2" ml={0.5} color="text.secondary">
                     {dayjs(album?.createdAt)?.format('MMM DD, YYYY')}
                   </Typography>
