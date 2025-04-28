@@ -70,9 +70,8 @@ export default function PhotoGrid({ photos, loading, authView, onSelect, breakpo
             <>
               {' '}
               <CardMedia
-                // component={Image}
+                component="img"
                 image={photo.url}
-                alt="JNVPJAA Gallery Photo"
                 loading="lazy"
                 // fill
                 referrerPolicy="no-referrer"
