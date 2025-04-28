@@ -2,7 +2,7 @@ import { Blog } from '@/apollo/hooks';
 
 export interface ISingleBlogViewProps {
   blog?: Blog;
-  claps?: Int;
+  claps?: number;
   loading?: boolean;
   updateClap: (clap: number) => void;
 }
