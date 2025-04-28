@@ -10,6 +10,7 @@ import {
   GetBlogQuery,
   GetBlogDocument,
   useGetClapsCountQuery,
+  GetClapsCountDocument,
 } from '@/apollo/hooks';
 import Breadcrumbs from '@/components/common/Breadcrumbs';
 import EmptyView from '@/components/common/EmptyView';
@@ -283,11 +284,8 @@ const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
           onCompleted: () => {
             updateCache({
               client,
-              query: GetBlogDocument,
-              data: {
-                ...blog,
-                claps: (claps || 0) + claps,
-              },
+              query: GetClapsCountDocument,
+              data: (claps || 0) + claps,
               variables: {
                 slug: id as string,
               },
