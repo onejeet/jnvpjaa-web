@@ -20,17 +20,15 @@ const EventDetails: React.FC<EventDetailsProps> = ({ event: initialData }) => {
   const { user, isAdmin } = useAuth();
   // const id = searchParams.get('id');
   const methods = useEvents({ user });
-  const loading = false;
-  // const { data, loading } = useGetEventDetailsQuery({
-  //   skip: !id,
-  //   variables: {
-  //     id: parseInt(id as string, 10),
-  //   },
-  // });
+  // const loading = false;
+  const { data, loading } = useGetEventDetailsQuery({
+    skip: !initialData?.id,
+    variables: {
+      id: initialData?.id,
+    },
+  });
 
-  console.log('ZZ: EVENT DETAILS', initialData);
-
-  const event: Event = React.useMemo(() => initialData, [initialData]);
+  const event: Event = React.useMemo(() => data?.getEventDetails || initialData, [data, initialData]);
 
   const breadcrumbsList = React.useMemo(
     () => [
