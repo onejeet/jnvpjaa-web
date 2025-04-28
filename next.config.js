@@ -93,6 +93,21 @@ const withPWA = require('next-pwa')({
         },
       },
     },
+    {
+      urlPattern: /^\/$/, // caches the root page (or adjust for others)
+      handler: 'NetworkFirst',
+      options: {
+        cacheName: 'html-cache',
+        networkTimeoutSeconds: 10,
+        expiration: {
+          maxEntries: 10,
+          maxAgeSeconds: 60 * 60 * 24,
+        },
+        cacheableResponse: {
+          statuses: [0, 200],
+        },
+      },
+    },
   ],
 });
 
