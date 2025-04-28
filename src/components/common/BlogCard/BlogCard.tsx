@@ -262,7 +262,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
               <Chip size="small" label={startCase(status as string)} color="error" />
             </>
           )} */}
-          <Dot size={20} />
+          <Dot size={16} />
           <ProfilePicture
             size={28}
             loading={loading}
