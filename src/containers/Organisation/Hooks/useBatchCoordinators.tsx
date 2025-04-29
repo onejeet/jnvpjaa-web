@@ -119,7 +119,14 @@ const useBatchCoordinators = (coordinators?: BatchCoordinator[]) => {
           ) : user?.id ? (
             row?.user?.email || ''
           ) : (
-            <Typography height="100%" color="grey.600" variant="body2" fontWeight={400}>
+            <Typography
+              display="flex"
+              alignItems="center"
+              height="100%"
+              color="grey.600"
+              variant="body2"
+              fontWeight={400}
+            >
               login to view
             </Typography>
           ),
@@ -138,7 +145,14 @@ const useBatchCoordinators = (coordinators?: BatchCoordinator[]) => {
           ) : user?.id ? (
             formatPhoneNumber(row?.user?.mobile)?.international
           ) : (
-            <Typography height="100%" color="grey.600" variant="body2" fontWeight={400}>
+            <Typography
+              display="flex"
+              alignItems="center"
+              height="100%"
+              color="grey.600"
+              variant="body2"
+              fontWeight={400}
+            >
               login to view
             </Typography>
           ),
@@ -157,7 +171,14 @@ const useBatchCoordinators = (coordinators?: BatchCoordinator[]) => {
           ) : user?.id ? (
             formatPhoneNumber(row.whatsappMobile)?.international || '--'
           ) : (
-            <Typography height="100%" color="grey.600" variant="body2" fontWeight={400}>
+            <Typography
+              display="flex"
+              alignItems="center"
+              height="100%"
+              color="grey.600"
+              variant="body2"
+              fontWeight={400}
+            >
               login to view
             </Typography>
           ),
@@ -176,7 +197,14 @@ const useBatchCoordinators = (coordinators?: BatchCoordinator[]) => {
           ) : user?.id ? (
             formatPhoneNumber(row.emergencyMobile)?.international || '--'
           ) : (
-            <Typography height="100%" color="grey.600" variant="body2" fontWeight={400}>
+            <Typography
+              display="flex"
+              alignItems="center"
+              height="100%"
+              color="grey.600"
+              variant="body2"
+              fontWeight={400}
+            >
               login to view
             </Typography>
           ),
