@@ -74,7 +74,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
       setLoadingData({ loading: false });
     },
-    [router, isAuthPage]
+    [router, isAuthPage, searchParams]
   );
 
   const redirectToSignin = React.useCallback(
