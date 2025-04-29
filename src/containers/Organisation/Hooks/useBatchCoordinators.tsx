@@ -119,7 +119,9 @@ const useBatchCoordinators = (coordinators?: BatchCoordinator[]) => {
           ) : user?.id ? (
             row?.user?.email || ''
           ) : (
-            'login to view'
+            <Typography height="100%" color="grey.600" variant="body2" fontWeight={400}>
+              login to view
+            </Typography>
           ),
       },
       {
@@ -136,7 +138,9 @@ const useBatchCoordinators = (coordinators?: BatchCoordinator[]) => {
           ) : user?.id ? (
             formatPhoneNumber(row?.user?.mobile)?.international
           ) : (
-            'login to view'
+            <Typography height="100%" color="grey.600" variant="body2" fontWeight={400}>
+              login to view
+            </Typography>
           ),
       },
       {
@@ -153,7 +157,9 @@ const useBatchCoordinators = (coordinators?: BatchCoordinator[]) => {
           ) : user?.id ? (
             formatPhoneNumber(row.whatsappMobile)?.international || '--'
           ) : (
-            'login to view'
+            <Typography height="100%" color="grey.600" variant="body2" fontWeight={400}>
+              login to view
+            </Typography>
           ),
       },
       {
@@ -170,7 +176,9 @@ const useBatchCoordinators = (coordinators?: BatchCoordinator[]) => {
           ) : user?.id ? (
             formatPhoneNumber(row.emergencyMobile)?.international || '--'
           ) : (
-            'login to view'
+            <Typography height="100%" color="grey.600" variant="body2" fontWeight={400}>
+              login to view
+            </Typography>
           ),
       },
       // {
