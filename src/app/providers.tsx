@@ -11,6 +11,7 @@ import ServiceWorkerUpdater from '@/components/PWA/ServiceWorkerUpdater';
 import PWAInstaller from '@/components/PWA/PWAnstaller';
 import OfflineDialog from '@/components/common/OfflineDialog';
 import { ApolloWrapper } from '@/apollo/ApolloWrapper';
+import ScrollToTop from '@/components/common/ScrollToTop';
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -25,6 +26,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
               <ServiceWorkerUpdater />
               <PWAInstaller />
               <OfflineDialog />
+              <ScrollToTop threshold={250} />
             </AlertProvider>
           </LayoutProvider>
         </AuthProvider>
