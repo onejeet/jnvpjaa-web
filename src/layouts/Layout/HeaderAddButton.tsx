@@ -64,14 +64,14 @@ const HeaderAddButton: React.FC<HeaderAddButtonProps> = ({ isMobile }) => {
             )}
           </IconButton>
         }
-        // anchorOrigin={{
-        //   vertical: 'bottom',
-        //   horizontal: 'center',
-        // }}
-        // transformOrigin={{
-        //   vertical: 'top',
-        //   horizontal: 'center',
-        // }}
+        anchorOrigin={{
+          vertical: isMobile ? 'top' : 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
       >
         <MenuItem
           // disabled

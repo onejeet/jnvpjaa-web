@@ -105,7 +105,7 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
         onClick: logoutUser,
       },
     ],
-    [logoutUser, router]
+    [logoutUser, router, redirectToSignin]
   );
 
   const ACCOUNT_COMP = React.useMemo(() => {
@@ -134,7 +134,7 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
           />
         }
         anchorOrigin={{
-          vertical: 'bottom',
+          vertical: position === 'bottom' ? 'top' : 'bottom',
           horizontal: 'right',
         }}
         transformOrigin={{
@@ -236,7 +236,7 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
         ))}
       </HoverPopover>
     );
-  }, [ACCOUNT_MENU_LIST, user, isMobile, isBirthday]);
+  }, [ACCOUNT_MENU_LIST, user, isBirthday, position]);
 
   if ((isMobile && position === 'top') || (!isMobile && position === 'bottom')) {
     return null;
