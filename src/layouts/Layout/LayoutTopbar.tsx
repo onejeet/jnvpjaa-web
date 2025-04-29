@@ -281,7 +281,7 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
             alignItems="center"
             // gap={1}
             sx={{
-              '&::before': {
+              '&::before': position === 'bottom' && {
                 content: '" "',
                 position: 'absolute',
                 bottom: 0,
