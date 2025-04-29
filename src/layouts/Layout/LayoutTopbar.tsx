@@ -281,18 +281,21 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
             alignItems="center"
             // gap={1}
             sx={{
-              '&::before': position === 'bottom' && {
-                content: '" "',
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
-                inset: 0,
-                zIndex: 0,
-                // width: '100%',
-                height: '90px',
-                background: (theme: Theme) =>
-                  `radial-gradient(farthest-corner at 180px 100px,${alpha(theme.palette.primary.main, 0.2)} 0%, transparent 60%)`,
-              },
+              '&::before':
+                position === 'bottom'
+                  ? {
+                      content: '" "',
+                      position: 'absolute',
+                      bottom: 0,
+                      left: 0,
+                      inset: 0,
+                      zIndex: 0,
+                      // width: '100%',
+                      height: '90px',
+                      background: (theme: Theme) =>
+                        `radial-gradient(farthest-corner at 180px 100px,${alpha(theme.palette.primary.main, 0.2)} 0%, transparent 60%)`,
+                    }
+                  : {},
             }}
           >
             <NextLink href="/">
