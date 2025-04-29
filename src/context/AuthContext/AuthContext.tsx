@@ -32,7 +32,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     );
   }, [pathname]);
 
-  const [user, setUser] = useState<User | null>({ id: '535' });
+  const [user, setUser] = useState<User | null>(null);
   const [loadingData, setLoadingData] = useState<LoadingDataProps>({
     loading: checkAuth || isAuthPage,
   });
