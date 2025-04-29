@@ -35,6 +35,7 @@ import {
   IconCalendarEvent,
   IconCategory2,
   IconPhotoBolt,
+  IconUserCircle,
   IconWritingSign,
   IconPassword as Password,
   IconLogout as SignOut,
@@ -44,6 +45,7 @@ import { paths } from '@/config/paths';
 import Lottie from '@/components/common/DynamicLottie';
 import giftsLottieIcon from '@/utils/lottie/gifts_art.json';
 import { isBirthdayToday } from '@/utils/helpers';
+import GlobalBgShade from '@/components/common/GlobalBgShade';
 
 export interface IMenuItemProps {
   item: IHeaderMenuItem;
@@ -236,7 +238,7 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
     );
   }, [ACCOUNT_MENU_LIST, user, isMobile, isBirthday]);
 
-  if (isMobile && position === 'top') {
+  if ((isMobile && position === 'top') || (!isMobile && position === 'bottom')) {
     return null;
   }
   return (
@@ -251,10 +253,8 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
         borderTop: position === 'bottom' ? '0.5px solid' : undefined,
         borderColor: (theme: Theme) => alpha(theme.palette.primary.main, 0.4),
         p: 0,
-        py: {
-          sm: 1,
-          xs: 0,
-        },
+        py: 1,
+        pb: position === 'bottom' ? 2 : 0,
       }}
     >
       <Container
@@ -273,7 +273,28 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
             height: 60,
           }}
         >
-          <Box display="flex" flex={1} justifyContent={{ xs: 'space-evenly', md: 'start' }} alignItems="center" gap={1}>
+          <Box
+            position="relative"
+            display="flex"
+            flex={1}
+            justifyContent={{ xs: 'space-evenly', md: 'start' }}
+            alignItems="center"
+            // gap={1}
+            sx={{
+              '&::before': {
+                content: '" "',
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                inset: 0,
+                zIndex: 0,
+                // width: '100%',
+                height: '90px',
+                background: (theme: Theme) =>
+                  `radial-gradient(farthest-corner at 180px 100px,${alpha(theme.palette.primary.main, 0.2)} 0%, transparent 60%)`,
+              },
+            }}
+          >
             <NextLink href="/">
               <Logo
                 type={isMobile ? 'icon' : 'regular'}
@@ -300,7 +321,7 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
                 Events
               </Typography>
             </IconButton>
-            {user?.id && (
+            {!user?.id && (
               <IconButton
                 onClick={() => router.push(paths.gallery.root)}
                 sx={{
@@ -373,10 +394,14 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
                   svg: { color: 'primary.main' },
                 }}
               >
-                <IconPhotoBolt size={22} />
+                <IconUserCircle size={22} />
+                <Typography fontSize="10px" variant="body2">
+                  Login
+                </Typography>
+                {/* <IconPhotoBolt size={22} />
                 <Typography fontSize="10px" variant="body2">
                   Gallery
-                </Typography>
+                </Typography> */}
               </IconButton>
             )}
           </Box>

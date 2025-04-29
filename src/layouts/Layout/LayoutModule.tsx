@@ -63,6 +63,7 @@ const LayoutModule: React.FC<Props> = (props) => {
         </Container>
       </Box>
       {!disableFooter && <LayoutFooter />}
+      <LayoutTopbar position="bottom" />
     </>
   );
 };
