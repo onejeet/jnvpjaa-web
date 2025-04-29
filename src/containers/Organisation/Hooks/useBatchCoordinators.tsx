@@ -68,7 +68,7 @@ const useBatchCoordinators = (coordinators?: BatchCoordinator[]) => {
               title={
                 <Box display="flex" alignItems="center">
                   <Typography mr={0.5}>{`${row?.user?.firstName} ${row?.user?.lastName}`}</Typography>
-                  {row?.user?.isVerified && <VerifiedBadge isPrivate={row?.user?.isConfidential} />}
+                  {row?.user?.isVerified && <VerifiedBadge />}
                 </Box>
               }
               summary={`Batch of ${row.user.batch}`}

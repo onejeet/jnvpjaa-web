@@ -1,3 +1,6 @@
+'use client';
+
+import { useAuth } from '@/context/AuthContext';
 import { Box, Tooltip, useMediaQuery, useTheme } from '@mui/material';
 import { IconLock as LockSimple } from '@tabler/icons-react';
 import Image from 'next/image';
@@ -13,6 +16,7 @@ interface Props {
 
 const VerifiedBadge: React.FC<Props> = ({ size, title, isPrivate, isPrivateInfoChangeAllowed, handlePrivateInfo }) => {
   const theme = useTheme();
+  const { user } = useAuth();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const finalSize = React.useMemo(() => {
     if (isMobile) {
@@ -32,7 +36,7 @@ const VerifiedBadge: React.FC<Props> = ({ size, title, isPrivate, isPrivateInfoC
           priority
         />
       </Tooltip>
-      {isPrivate && (
+      {isPrivate && user?.id && (
         <Tooltip
           title={`Your data is completely private and inaccessible to anyone else. ${handlePrivateInfo && isPrivateInfoChangeAllowed ? 'Click to change the data privacy.' : ''}`}
           arrow
