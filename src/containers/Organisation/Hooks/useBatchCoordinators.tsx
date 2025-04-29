@@ -116,8 +116,10 @@ const useBatchCoordinators = (coordinators?: BatchCoordinator[]) => {
               {' '}
               <Skeleton width="100%" height={30} />
             </Box>
-          ) : (
+          ) : user?.id ? (
             row?.user?.email || ''
+          ) : (
+            'login to view'
           ),
       },
       {
@@ -131,8 +133,10 @@ const useBatchCoordinators = (coordinators?: BatchCoordinator[]) => {
             <Box height="100%" display="flex" alignItems="center">
               <Skeleton width="100%" height={30} />
             </Box>
-          ) : (
+          ) : user?.id ? (
             formatPhoneNumber(row?.user?.mobile)?.international
+          ) : (
+            'login to view'
           ),
       },
       {
@@ -146,8 +150,10 @@ const useBatchCoordinators = (coordinators?: BatchCoordinator[]) => {
             <Box height="100%" display="flex" alignItems="center">
               <Skeleton width="100%" height={30} />
             </Box>
-          ) : (
+          ) : user?.id ? (
             formatPhoneNumber(row.whatsappMobile)?.international || '--'
+          ) : (
+            'login to view'
           ),
       },
       {
@@ -161,8 +167,10 @@ const useBatchCoordinators = (coordinators?: BatchCoordinator[]) => {
             <Box height="100%" display="flex" alignItems="center">
               <Skeleton width="100%" height={30} />
             </Box>
-          ) : (
+          ) : user?.id ? (
             formatPhoneNumber(row.emergencyMobile)?.international || '--'
+          ) : (
+            'login to view'
           ),
       },
       // {
