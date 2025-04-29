@@ -69,7 +69,7 @@ const HeaderAddButton: React.FC<HeaderAddButtonProps> = ({ isMobile }) => {
           horizontal: 'right',
         }}
         transformOrigin={{
-          vertical: 'top',
+          vertical: isMobile ? 'bottom' : 'top',
           horizontal: 'right',
         }}
       >

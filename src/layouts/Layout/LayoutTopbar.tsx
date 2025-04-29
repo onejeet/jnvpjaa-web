@@ -138,7 +138,7 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
           horizontal: 'right',
         }}
         transformOrigin={{
-          vertical: 'top',
+          vertical: position === 'bottom' ? 'bottom' : 'top',
           horizontal: 'right',
         }}
       >
