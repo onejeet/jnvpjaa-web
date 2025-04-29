@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 import { Fab, Zoom } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -9,7 +11,7 @@ interface ScrollToTopProps {
 
 const ScrollTopFab = styled(Fab)(({ theme }) => ({
   position: 'fixed',
-  bottom: theme.spacing(4),
+  bottom: theme.spacing(8),
   right: theme.spacing(4),
   zIndex: 1000,
 }));
