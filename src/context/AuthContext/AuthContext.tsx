@@ -21,7 +21,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const client = useApolloClient();
   const { showAlert } = useAlert();
   const isLoggedInRef = React.useRef(false);
-  const isAuthPage = React.useMemo(() => ['/signin', '/signup', '/forgot-password'].includes(pathname), [pathname]);
+  const isAuthPage = React.useMemo(() => ['/signin/', '/signup/', '/forgot-password/'].includes(pathname), [pathname]);
 
   const checkAuth = React.useMemo(() => {
     return (
@@ -31,6 +31,8 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       pathname.includes('/edit')
     );
   }, [pathname]);
+
+  console.log('ZZ: pathnme', isAuthPage, checkAuth);
 
   const [user, setUser] = useState<User | null>(null);
   const [loadingData, setLoadingData] = useState<LoadingDataProps>({
