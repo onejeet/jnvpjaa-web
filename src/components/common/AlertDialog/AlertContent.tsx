@@ -11,11 +11,13 @@ import successLottieIcon from '@/utils/lottie/success3_icon.json';
 import deleteLottieIcon from '@/utils/lottie/delete_icon.json';
 import errorLottieIcon from '@/utils/lottie/error_icon.json';
 import loadingLottieIcon from '@/utils/lottie/loading_icon.json';
+import appLottieIcon from '@/utils/lottie/app.json';
 
 const AlertContent: React.FC<AlertContentProps> = ({ title, message, action = 'delete', items = [] }) => {
   const MessageComp = React.useMemo(() => {
     switch (action) {
       case 'approve':
+      case 'app':
         return (
           <Typography variant="body1">
             {message || (
@@ -78,7 +80,7 @@ const AlertContent: React.FC<AlertContentProps> = ({ title, message, action = 'd
 
   const titleComp = React.useMemo(() => {
     let upTitle = null;
-    if (action === 'delete' || action === 'approve' || action === 'reject') {
+    if (action === 'delete' || action === 'approve' || action === 'reject' || action === 'app') {
       upTitle = title || 'Are you sure?';
     } else if (action === 'deleting') {
       upTitle = title || 'Deleting...';
@@ -120,6 +122,8 @@ const AlertContent: React.FC<AlertContentProps> = ({ title, message, action = 'd
       // return <DeleteIcon sx={{ color: 'error.main', fontSize: '100px' }} />;
     } else if (action === 'unsaved') {
       return <HelpIcon sx={{ color: 'grey.700', fontSize: '100px' }} />;
+    } else if (action === 'app') {
+      return <Lottie animationData={appLottieIcon} loop={true} style={{ width: '100px', height: '100px' }} />;
     }
   }, [action]);
 

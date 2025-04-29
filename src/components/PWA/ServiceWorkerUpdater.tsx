@@ -54,7 +54,7 @@ export default function ServiceWorkerUpdater() {
       okayButtonProps={{
         title: 'Update',
       }}
-      action="approve"
+      action="app"
       {...alertDialogProps}
     />
   );

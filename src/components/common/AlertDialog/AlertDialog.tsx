@@ -26,7 +26,7 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
       return 'error';
     } else if (action === 'reject') {
       return 'error';
-    } else if (action === 'approve') {
+    } else if (action === 'approve' || action === 'app') {
       return 'success';
     } else if (action === 'success') {
       return 'success';
@@ -37,7 +37,7 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
   const btnText: string = React.useMemo(() => {
     if (action === 'delete') {
       return 'Yes, Delete';
-    } else if (action === 'unsaved') {
+    } else if (action === 'unsaved' || action === 'app') {
       return 'Yes, Proceed';
     } else if (action === 'loading') {
       return 'Loading...';

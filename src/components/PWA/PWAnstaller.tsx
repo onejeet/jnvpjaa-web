@@ -55,9 +55,9 @@ export default function PWAInstaller() {
       onOkay={handleInstall}
       onCancel={() => setShowInstallDialog(false)}
       okayButtonProps={{
-        title: 'Install',
+        title: 'Install App',
       }}
-      action="approve"
+      action="app"
       {...alertDialogProps}
     />
   );
