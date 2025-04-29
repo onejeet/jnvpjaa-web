@@ -258,7 +258,26 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
       }}
     >
       <Container
-        sx={{ maxWidth: { xs: '98%', sm: '95%', md: '90%', xl: '1500px' }, margin: 'auto', p: '0 !important' }}
+        sx={{
+          maxWidth: { xs: '98%', sm: '95%', md: '90%', xl: '1500px' },
+          margin: 'auto',
+          p: '0 !important',
+          '&::before':
+            position === 'bottom'
+              ? {
+                  content: '" "',
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  inset: 0,
+                  zIndex: 0,
+                  width: '100%',
+                  height: '90px',
+                  background: (theme: Theme) =>
+                    `radial-gradient(farthest-corner at 50% 100%, ${alpha(theme.palette.primary.main, 0.2)} 0%, transparent 80%)`,
+                }
+              : {},
+        }}
       >
         <Toolbar
           sx={{
@@ -280,23 +299,6 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
             justifyContent={{ xs: 'space-evenly', md: 'start' }}
             alignItems="center"
             // gap={1}
-            sx={{
-              '&::before':
-                position === 'bottom'
-                  ? {
-                      content: '" "',
-                      position: 'absolute',
-                      bottom: 0,
-                      left: 0,
-                      inset: 0,
-                      zIndex: 0,
-                      // width: '100%',
-                      height: '90px',
-                      background: (theme: Theme) =>
-                        `radial-gradient(farthest-corner at 180px 100px,${alpha(theme.palette.primary.main, 0.2)} 0%, transparent 60%)`,
-                    }
-                  : {},
-            }}
           >
             <NextLink href="/">
               <Logo
