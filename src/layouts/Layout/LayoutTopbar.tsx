@@ -32,6 +32,10 @@ import HoverPopover from '@/components/common/HoverPopover';
 import HeaderAddButton from './HeaderAddButton';
 import {
   IconCake as Cake,
+  IconCalendarEvent,
+  IconCategory2,
+  IconPhotoBolt,
+  IconWritingSign,
   IconPassword as Password,
   IconLogout as SignOut,
   IconUser as User,
@@ -56,12 +60,16 @@ export interface IHeaderMenuItem {
   disabled?: boolean;
 }
 
-const LayoutTopbar: React.FC = () => {
+interface LayoutTopbarProps {
+  position?: 'top' | 'bottom';
+}
+
+const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
   const [expanded, setExpanded] = React.useState<string>('');
   const [openMenu, setOpenMenu] = React.useState<boolean>(false);
   const theme = useTheme();
   const router = useRouter();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const { user, logoutUser, isAdmin, redirectToSignin } = useAuth();
 
   const HEADER_MENU = React.useMemo(() => {
@@ -110,8 +118,8 @@ const LayoutTopbar: React.FC = () => {
             // summary="Member"
             maxWidth={150}
             sx={{
-              width: { xs: 28, md: 36 },
-              height: { xs: 28, md: 36 },
+              width: { xs: 40, md: 36 },
+              height: { xs: 40, md: 36 },
               '&: hover': {
                 bgcolor: 'grey.400',
               },
@@ -228,14 +236,19 @@ const LayoutTopbar: React.FC = () => {
     );
   }, [ACCOUNT_MENU_LIST, user, isMobile, isBirthday]);
 
+  if (isMobile && position === 'top') {
+    return null;
+  }
   return (
     <AppBar
-      position="sticky"
-      elevation={0}
+      position={position === 'bottom' ? 'fixed' : 'sticky'}
+      elevation={position === 'bottom' ? 1 : 0}
       sx={{
-        top: 0,
+        top: position === 'bottom' ? 'auto' : 0,
+        bottom: position === 'bottom' ? 0 : undefined,
         backgroundColor: 'background.paper',
         borderBottom: '0.5px solid',
+        borderTop: position === 'bottom' ? '0.5px solid' : undefined,
         borderColor: (theme: Theme) => alpha(theme.palette.primary.main, 0.4),
         p: 0,
         py: {
@@ -260,29 +273,115 @@ const LayoutTopbar: React.FC = () => {
             height: 60,
           }}
         >
-          <NextLink href="/">
-            <Logo width={isMobile ? 250 : 300} height={isMobile ? 38 : 45} priority />
-          </NextLink>
-          <Box display={{ xs: 'flex', lg: 'none' }} ml="auto" alignItems="center" gap={1}>
+          <Box display="flex" flex={1} justifyContent={{ xs: 'space-evenly', md: 'start' }} alignItems="center" gap={1}>
+            <NextLink href="/">
+              <Logo
+                type={isMobile ? 'icon' : 'regular'}
+                width={isMobile ? 40 : 300}
+                height={isMobile ? 40 : 45}
+                priority
+              />
+            </NextLink>
+
+            <IconButton
+              onClick={() => router.push(paths.events.root)}
+              // display={{ xs: 'flex', lg: 'none' }}
+              sx={{
+                width: 59,
+                height: 59,
+                display: { xs: 'flex', lg: 'none' },
+                ml: isMobile ? undefined : 'auto',
+                flexDirection: 'column',
+                svg: { color: 'primary.main' },
+              }}
+            >
+              <IconCalendarEvent />
+              <Typography fontSize="10px" variant="body2">
+                Events
+              </Typography>
+            </IconButton>
             {user?.id && (
-              <Box display="flex" gap={2} alignItems="center">
-                <HeaderAddButton />
-                {ACCOUNT_COMP}
-              </Box>
+              <IconButton
+                onClick={() => router.push(paths.gallery.root)}
+                sx={{
+                  width: 59,
+                  height: 59,
+                  display: { xs: 'flex', lg: 'none' },
+                  flexDirection: 'column',
+                  svg: { color: 'primary.main' },
+                }}
+              >
+                <IconPhotoBolt size={22} />
+                <Typography fontSize="10px" variant="body2">
+                  Gallery
+                </Typography>
+              </IconButton>
             )}
+
             <IconButton
               // size="large"
               aria-label="account of current user"
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={() => setOpenMenu(true)}
-              color="inherit"
+              sx={{
+                width: 59,
+                height: 59,
+                display: { xs: 'flex', lg: 'none' },
+                flexDirection: 'column',
+                // ml: 'auto',
+                svg: {
+                  color: 'primary.main',
+                },
+              }}
             >
-              <MenuIcon sx={{ color: 'primary.main' }} />
+              <IconCategory2 />
+              <Typography fontSize="10px" variant="body2">
+                Menu
+              </Typography>
             </IconButton>
+
+            <IconButton
+              onClick={() => router.push(paths.blog.root)}
+              sx={{
+                width: 59,
+                height: 59,
+                display: { xs: 'flex', lg: 'none' },
+                flexDirection: 'column',
+                svg: { color: 'primary.main' },
+              }}
+            >
+              <IconWritingSign />
+              <Typography fontSize="10px" variant="body2">
+                Blog
+              </Typography>
+            </IconButton>
+
+            {user?.id && isMobile ? (
+              <Box display="flex" gap={2} alignItems="center">
+                <HeaderAddButton isMobile />
+                {ACCOUNT_COMP}
+              </Box>
+            ) : (
+              <IconButton
+                onClick={() => router.push(paths.gallery.root)}
+                sx={{
+                  width: 59,
+                  height: 59,
+                  display: { xs: 'flex', lg: 'none' },
+                  flexDirection: 'column',
+                  svg: { color: 'primary.main' },
+                }}
+              >
+                <IconPhotoBolt size={22} />
+                <Typography fontSize="10px" variant="body2">
+                  Gallery
+                </Typography>
+              </IconButton>
+            )}
           </Box>
 
-          <Box display={{ xs: 'none', lg: 'flex' }} ml="auto" gap={0}>
+          <Box display={{ xs: 'none', lg: 'flex' }} alignItems="center" ml="auto" gap={0}>
             {HEADER_MENU.map((item: IHeaderMenuItem) => (
               <HeaderMenuItem key={item.label} item={item} />
             ))}

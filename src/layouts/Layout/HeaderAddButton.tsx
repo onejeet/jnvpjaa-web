@@ -24,7 +24,11 @@ import type { IHeaderMenuItem, IMenuItemProps } from './LayoutTopbar';
 import { ADD_ENTITIES } from '@/constants/Header.constants';
 import { IconCirclePlus } from '@tabler/icons-react';
 
-const HeaderAddButton: React.FC = () => {
+interface HeaderAddButtonProps {
+  isMobile?: boolean;
+}
+
+const HeaderAddButton: React.FC<HeaderAddButtonProps> = ({ isMobile }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const router = useRouter();
@@ -43,12 +47,21 @@ const HeaderAddButton: React.FC = () => {
         render={
           <IconButton
             sx={{
-              width: 36,
-              height: 36,
-              color: 'primary.main',
+              width: isMobile ? 59 : 42,
+              height: isMobile ? 59 : 42,
+              display: 'flex',
+              flexDirection: 'column',
+              svg: {
+                color: 'primary.main',
+              },
             }}
           >
-            <IconCirclePlus size={36} />
+            <IconCirclePlus />
+            {isMobile && (
+              <Typography fontSize="10px" variant="body2">
+                Add
+              </Typography>
+            )}
           </IconButton>
         }
         // anchorOrigin={{

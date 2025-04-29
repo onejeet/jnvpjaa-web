@@ -6,12 +6,12 @@ interface Props {
   width?: number;
   height?: number;
   icon?: boolean;
-  type?: 'regular';
+  type?: 'regular' | 'icon';
   priority?: boolean;
 }
 
-const Logo: React.FC<Props> = ({ width, height, icon, type, priority = false }) => {
-  const getLogo = () => {
+const Logo: React.FC<Props> = ({ width, height, icon, type = 'regular', priority = false }) => {
+  const LogoComp = React.useMemo(() => {
     switch (type) {
       case 'regular':
         return (
@@ -23,18 +23,22 @@ const Logo: React.FC<Props> = ({ width, height, icon, type, priority = false }) 
             priority={priority}
           />
         );
+      case 'icon':
+        return (
+          <Image
+            src="https://assets.jnvpjaa.org/branding/logo-square-white_transparent.webp"
+            width={40}
+            height={40}
+            alt="JNVPJAA logo"
+            priority={priority}
+          />
+        );
     }
-  };
+  }, [type, width, height, priority]);
 
   return (
     <Box display="flex" maxWidth="100%" overflow="hidden">
-      <Image
-        src="https://assets.jnvpjaa.org/branding/logo-full.webp"
-        width={width || 390}
-        height={height || 60}
-        alt="JNVPJAA logo"
-        priority={priority}
-      />
+      {LogoComp}
     </Box>
   );
 };

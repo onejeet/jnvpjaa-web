@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, useMediaQuery, useTheme } from '@mui/material';
 import Container from '@mui/material/Container';
 import Head from 'next/head';
 import React from 'react';
@@ -48,6 +48,7 @@ const LayoutModule: React.FC<Props> = (props) => {
             },
             overflow: 'hidden',
             flexGrow: 1,
+            position: 'relative',
             bgcolor: 'background.paper',
             maxWidth: disableCover ? { xs: '98%', sm: '95%', md: '90%', xl: '1500px' } : '100%',
             margin: disableCover ? 'auto' : undefined,
