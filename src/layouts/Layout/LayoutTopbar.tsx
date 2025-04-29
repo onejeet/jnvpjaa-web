@@ -388,7 +388,7 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
               </Box>
             ) : (
               <IconButton
-                onClick={() => router.push(paths.gallery.root)}
+                onClick={() => router.push(paths.auth.signin)}
                 sx={{
                   width: 59,
                   height: 59,
