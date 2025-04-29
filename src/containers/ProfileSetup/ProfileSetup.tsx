@@ -15,6 +15,7 @@ import Welcome from '@/components/common/Welcome/Welcome';
 import ChangePassword from '../Auth/ChangePassword/ChangePassword';
 import ChangePasswordFirst from './ChangePasswordFirst';
 import ProfessionInfo from '@/modules/ProfileSetup/ProfessionInfo';
+import dayjs from 'dayjs';
 
 const CustomStepIcon = (props: StepIconProps) => {
   const { active, completed, className } = props;
@@ -34,12 +35,19 @@ const ProfileSetup = () => {
     return searchParams.get('welcome') === '1';
   }, [searchParams]);
 
+  const isSignedUp = React.useMemo(() => {
+    // TODO :Check if user is created new and not imported.
+    return dayjs(user?.createdAt).isAfter('28/04/2025');
+  }, [user]);
+
   const steps = React.useMemo(
     () =>
       isWelcomeSetup
-        ? ['welcome', 'change_password', 'personal_info', 'profile_picture', 'profession', 'addresses', 'privacy']
+        ? isSignedUp
+          ? ['welcome', 'personal_info', 'profile_picture', 'profession', 'addresses', 'privacy']
+          : ['welcome', 'change_password', 'personal_info', 'profile_picture', 'profession', 'addresses', 'privacy']
         : ['personal_info', 'profile_picture', 'profession', 'addresses', 'privacy'],
-    [isWelcomeSetup]
+    [isWelcomeSetup, isSignedUp]
   );
 
   const handleNext = React.useCallback(async () => {

@@ -7,7 +7,7 @@ import React from 'react';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import { useGetUserListQuery, useVerifyUserMutation } from '@/apollo/hooks';
 import { Chip, Skeleton, Typography } from '@mui/material';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import VerifiedBadge from '@/components/common/VerifiedBadge';
 import { formatPhoneNumber } from '@/utils/helpers';
 import { useSearchParams } from 'next/navigation';
@@ -17,13 +17,14 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useAlert } from '@/context/AlertContext';
 import { useApolloClient } from '@apollo/client';
 import { useAuth } from '@/context/AuthContext';
-import { IconStar } from '@tabler/icons-react';
+import { IconCircleCheck, IconStar } from '@tabler/icons-react';
 import FacultyBadge from '@/components/common/FacultyBadge';
 
 const useMembersTable = () => {
   const client = useApolloClient();
   const { isAdmin, user } = useAuth();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const router = useRouter();
   const [columns, setColumns] = React.useState<any[]>([]);
   const [paginationModel, setPaginationModel] = React.useState<GridPaginationModel>({
@@ -209,36 +210,61 @@ const useMembersTable = () => {
                     <Button
                       title="Approve"
                       size="small"
-                      startIcon={<TaskAltIcon />}
+                      startIcon={<IconCircleCheck size={18} />}
                       color="success"
                       onClick={() => {
                         showAlert(
                           {
                             visible: true,
+                            title: `Approve ${row.firstName || ''}?`,
                             type: 'loading',
-                            message: '',
-                            open: true,
+                            message: `Once the user ${row.firstName || ''} from batch ${row.batch} is approved, will be able to access alumni portal.`,
                             action: 'approve',
+                            okayButtonProps: {
+                              title: `Approve`,
+                            },
                             onOkay: () => {
-                              showAlert({
-                                visible: true,
-                                type: 'loading',
-                                message: 'Approval is in progress...',
-                              });
+                              showAlert(
+                                {
+                                  visible: true,
+                                  //  title: 'Are you Going?',
+                                  type: 'loading',
+                                  message: 'Please Wait, The status is being updated.',
+                                  action: 'loading',
+                                },
+                                true
+                              );
                               handleUserVerification({
                                 variables: {
                                   user_id: row.id,
                                   verified: true,
                                 },
                                 onCompleted: () => {
-                                  showAlert({
-                                    visible: true,
-                                    type: 'success',
-                                    message: `${row?.firstName || ''} ${row?.lastName || ''} is approved. `,
-                                  });
-
+                                  router.replace(pathname);
                                   client.cache.evict({ fieldName: 'getUserList' });
                                   client.cache.gc();
+                                  showAlert(
+                                    {
+                                      visible: true,
+                                      type: 'success',
+                                      title: `${row.firstName} is Verified`,
+                                      message: `${row.firstName} is verified and can access the portal. Email has been sent to him to notify the approval.`,
+                                      action: 'success',
+                                    },
+                                    true
+                                  );
+                                },
+                                onError: (err) => {
+                                  showAlert(
+                                    {
+                                      visible: true,
+                                      type: 'error',
+                                      title: `Verification failed. Try again`,
+                                      message: err?.message || 'Something went wrong.',
+                                      action: 'error',
+                                    },
+                                    true
+                                  );
                                 },
                               });
                             },
@@ -293,7 +319,7 @@ const useMembersTable = () => {
     }
 
     setColumns(columns);
-  }, [isAdmin, user, handleUserVerification]);
+  }, [isAdmin, user, handleUserVerification, pathname, showAlert, router, client]);
 
   const onPaginationModelChange = React.useCallback((model: GridPaginationModel) => {
     setPaginationModel(model);
