@@ -254,7 +254,7 @@ const useBatchCoordinators = (coordinators?: BatchCoordinator[]) => {
     ];
 
     setColumns(columns);
-  }, []);
+  }, [router, user]);
 
   const onSearch = React.useCallback((q: string) => {
     setSearchQuery(q);
