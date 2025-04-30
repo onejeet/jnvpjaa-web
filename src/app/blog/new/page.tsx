@@ -12,7 +12,7 @@ const breadcrumbsList = [
     path: '/blog',
   },
   {
-    label: ' New Post',
+    label: 'New Blog Post',
   },
 ];
 
