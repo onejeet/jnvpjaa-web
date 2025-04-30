@@ -32,7 +32,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
   user,
   isReadOnly,
 }) => {
-  const { id, slug, title, summary, status, createdAt, updatedAt, author } = blog;
+  const { id, slug, title, summary, status, updatedAt, createdAt, author } = blog;
   const router = useRouter();
 
   const statusColor = React.useMemo(() => {
@@ -232,10 +232,10 @@ const BlogCard: React.FC<IBlogCardProps> = ({
               <>
                 {' '}
                 <Typography fontSize="0.7rem" variant="body2">
-                  {dayjs(updatedAt).format('MMM').toString()}
+                  {dayjs(createdAt).format('MMM').toString()}
                 </Typography>
                 <Typography fontSize="0.9rem" variant="subtitle1">
-                  {dayjs(updatedAt).format('DD').toString()}
+                  {dayjs(createdAt).format('DD').toString()}
                 </Typography>
               </>
             )}
@@ -244,7 +244,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
             <Skeleton width={50} height={20} />
           ) : (
             <Typography fontSize="1rem" alignItems="center" display="flex" variant="body2" ml={{ xs: 1, md: 0 }}>
-              {dayjs(updatedAt).format('YYYY').toString()}
+              {dayjs(createdAt).format('YYYY').toString()}
             </Typography>
           )}
         </Box>
@@ -252,7 +252,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
           {loading ? (
             <Skeleton width={50} height={20} />
           ) : (
-            <Typography variant="body2">{dayjs(updatedAt).format('MMM DD, YYYY')}</Typography>
+            <Typography variant="body2">{dayjs(createdAt).format('MMM DD, YYYY')}</Typography>
           )}
 
           {/* {categoryId && (
