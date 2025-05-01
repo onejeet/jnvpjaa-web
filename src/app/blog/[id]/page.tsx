@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { GetBlogDocument, GetBlogQuery } from '@/apollo/hooks';
 import SingleBlog from '@/containers/SingleBlog';
 import { PageProps } from '@/types/global';
@@ -6,10 +7,13 @@ import { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
 
 // Generate metadata for the page dynamically
-export async function generateMetadata({ params }: PageProps, parent: ResolvingMetadata): Promise<Metadata> {
+export async function generateMetadata(
+  { params }: { params: { id: string } },
+  parent: ResolvingMetadata
+): Promise<Metadata> {
   // Fetch blog data
   const apolloClient = initializeApollo();
-  const { id } = await params;
+  const { id } = params;
   const slug = decodeURIComponent(id);
 
   try {

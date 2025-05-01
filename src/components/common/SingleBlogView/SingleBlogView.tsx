@@ -193,8 +193,8 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, claps: initialCl
                   objectFit="cover"
                   referrerPolicy="no-referrer"
                   style={{
-                    maxWidth: '80%',
-                    maxHeight: 500,
+                    maxWidth: '90%',
+                    // maxHeight: 650,
                     borderRadius: '10px',
                   }}
                 />
