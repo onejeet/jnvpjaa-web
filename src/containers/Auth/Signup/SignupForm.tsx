@@ -10,7 +10,7 @@ import FormTextField from '@/components/form/FormTextField';
 import { useAlert } from '@/context/AlertContext';
 import Button from '@/components/core/Button';
 import FormSelectField from '@/components/form/FormSelectField';
-import { getBatchOptions, phoneNumberStringConverter, removeSpaces } from '@/utils/helpers';
+import { getBatchOptions, phoneNumberStringConverter, removeSpaces, startCase } from '@/utils/helpers';
 import { Info } from '@mui/icons-material';
 import { paths } from '@/config/paths';
 import { useRouter } from 'next/navigation';
@@ -44,8 +44,8 @@ const SignupForm = () => {
     (data: ISignupFormInput) => {
       signup({
         variables: {
-          firstName: data?.first_name?.trim(),
-          lastName: data?.last_name?.trim(),
+          firstName: startCase(data?.first_name?.trim()),
+          lastName: startCase(data?.last_name?.trim()),
           email: data?.email?.trim(),
           password: data?.password,
           gender: data?.gender,
