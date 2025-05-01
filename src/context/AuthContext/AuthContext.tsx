@@ -10,6 +10,7 @@ import { decodeBase64, encodeBase64 } from '@/utils/index';
 import { useGetUserDetailsLazyQuery, useLogoutMutation, User } from '@/apollo/hooks';
 import { useApolloClient } from '@apollo/client';
 import { useAlert } from '../AlertContext';
+import { track } from '@vercel/analytics';
 
 const AuthContext = createContext<TAuthContextData>({} as TAuthContextData);
 
@@ -44,6 +45,11 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [fetchUserData, { data: userData, refetch }] = useGetUserDetailsLazyQuery({
     onCompleted: (data: any) => {
       setUser(data?.getUserDetails as User);
+      track('user_dashboard_view', {
+        userName: data?.getUserDetails?.firstName,
+        batch: data?.getUserDetails?.batch,
+        userId: data?.getUserDetails?.id,
+      });
       if (data?.getUserDetails?.metadata?.isFirstLogin !== false) {
         const targetUrl = `${paths.profile.setup}?welcome=1`;
         router.push(targetUrl);
