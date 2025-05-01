@@ -61,7 +61,7 @@ const SignupForm = () => {
         onError: (err: Error) => {
           showAlert({
             type: 'error',
-            message: 'Something went wrong',
+            message: err?.message || 'Something went wrong',
           });
           console.log('Error: ', err?.message);
         },
