@@ -46,6 +46,13 @@ const SigninForm = () => {
             });
             router.push(paths.home);
           },
+          onError: (err) => {
+            showAlert({
+              type: 'error',
+              message: err?.message || 'Something went wrong',
+            });
+            console.log('Error: ', err?.message);
+          },
         });
       } else {
         handleForgotPassword({
