@@ -16,6 +16,7 @@ export async function generateMetadata({ params }: PageProps, parent: ResolvingM
     const { data } = await apolloClient.query<GetBlogQuery>({
       query: GetBlogDocument,
       variables: { slug },
+      fetchPolicy: 'no-cache',
     });
 
     const blog = data.getBlog;
