@@ -55,7 +55,6 @@ export default async function BlogPostPage({ params }: PageProps) {
   const apolloClient = initializeApollo();
   const { id } = await params;
   const slug = decodeURIComponent(id);
-  console.log('ZZ:  SLUG', id);
 
   try {
     const { data } = await apolloClient.query<GetBlogQuery>({
