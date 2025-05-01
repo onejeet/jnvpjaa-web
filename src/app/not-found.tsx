@@ -13,9 +13,22 @@ const EmptyView = dynamic(() => import('@/components/common/EmptyView'), { ssr: 
 export default function NotFound() {
   const router = useRouter();
   return (
-    <Box width="100vw" height="100vh" gap={3}>
+    <Box
+      width="100vw"
+      height="100vh"
+      gap={3}
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+    >
       <EmptyView message="404 | Page not found" />
-      <Button title="Go Back" startIcon={<IconArrowRampLeft size={18} />} onClick={() => router.back()} />
+      <Button
+        title="Go Back"
+        startIcon={<IconArrowRampLeft size={18} />}
+        sx={{ mt: 3 }}
+        onClick={() => router.back()}
+      />
     </Box>
   );
 }
