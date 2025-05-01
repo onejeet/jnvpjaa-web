@@ -41,9 +41,8 @@ const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
   const queryId = searchParams.get('id');
 
   const { data, loading } = useGetBlogQuery({
-    skip: !queryId,
     variables: {
-      slug: queryId as string,
+      slug: prerenderedBlog?.slug as string,
     },
   });
 
