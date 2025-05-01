@@ -76,29 +76,30 @@ const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
   );
 
   const buttonProps: ButtonProps[] | null = React.useMemo(() => {
+    if (!user?.id) return null;
+    let btns: ButtonProps[] = [];
     switch (blog?.status) {
       case BlogStatus.PendingApproval:
         if (isAdmin)
-          return [
-            {
-              title: 'Edit',
-              variant: 'outlined',
-              color: 'primary',
-              startIcon: <IconPencil size={16} />,
-              onClick: () => router.push(paths.blog.getBlogPostEditUrl(blog?.slug || '')),
-            },
-
-            {
-              title: 'Approve',
-              variant: 'contained',
-              color: 'success',
-              startIcon: <IconCircleCheck size={18} />,
-              onClick: () => approveBlogPost(blog.id),
-            },
-          ];
-        return null;
+          btns.push({
+            title: 'Edit',
+            variant: 'outlined',
+            color: 'primary',
+            startIcon: <IconPencil size={16} />,
+            onClick: () => router.push(paths.blog.getBlogPostEditUrl(blog?.slug || '')),
+          });
+        if (isAdmin) {
+          btns.push({
+            title: 'Approve',
+            variant: 'contained',
+            color: 'success',
+            startIcon: <IconCircleCheck size={18} />,
+            onClick: () => approveBlogPost(blog.id),
+          });
+        }
+        return btns;
       case BlogStatus.Draft:
-        return [
+        btns = [
           {
             title: 'Edit',
             variant: 'outlined',
@@ -114,10 +115,11 @@ const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
             onClick: () => publishBlogPost(blog?.id),
           },
         ];
+        return btns;
       default:
         return null;
     }
-  }, [blog?.status, blog?.slug, user]);
+  }, [blog?.status, blog?.slug, user, isAdmin, blog?.id]);
 
   const publishBlogPost = React.useCallback(
     (id: string, isUnpublish?: boolean) => {
