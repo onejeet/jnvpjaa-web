@@ -68,10 +68,10 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, claps: initialCl
   }, [initialClaps]);
 
   const statusMessage = React.useMemo(() => {
-    return status && status !== BlogStatus.Published
+    return !loading && status && status !== BlogStatus.Published
       ? `Preview Mode. Blog is in "${getFormattedLabel(status as string)}" status.`
       : null;
-  }, [status]);
+  }, [status, loading]);
 
   const onClaps = (claps: number) => {
     setNewClaps(claps);
