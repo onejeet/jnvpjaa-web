@@ -177,7 +177,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
         borderRadius={4}
         display="flex"
         p={{
-          xs: 3,
+          xs: 1.5,
           md: 4,
         }}
         //   py={2}
