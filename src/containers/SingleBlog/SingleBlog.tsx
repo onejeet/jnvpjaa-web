@@ -56,6 +56,8 @@ const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
   const dataLoading = !id;
   const claps = clapQuery?.getClapsCount;
 
+  console.log('ZZ: prerenderedBlog', prerenderedBlog);
+
   const blog: Blog | undefined = React.useMemo(() => data?.getBlog || prerenderedBlog, [data, prerenderedBlog]);
   const [publisBlog, { loading: publishBlogLoading }] = useUpdateBlogMutation();
   const [handleVerifyBlog] = useApproveBlogMutation();
