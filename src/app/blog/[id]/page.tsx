@@ -50,11 +50,9 @@ export async function generateMetadata({ params }: PageProps, parent: ResolvingM
   }
 }
 
-// This is the main page component
-export default async function BlogPostPage({ params }: PageProps) {
+// This is a Server Component that fetches data
+async function getBlogDetails(slug: string) {
   const apolloClient = initializeApollo();
-  const { id } = await params;
-  const slug = decodeURIComponent(id);
 
   try {
     const { data } = await apolloClient.query<GetBlogQuery>({
@@ -65,9 +63,19 @@ export default async function BlogPostPage({ params }: PageProps) {
     const blog = data.getBlog;
     if (!blog) return notFound();
 
-    return <SingleBlog blog={blog} />;
+    return blog;
   } catch (error) {
-    console.error('GraphQL Error:', error);
+    console.error('GraphQL Error (event):', error);
     return notFound();
   }
+}
+
+// This is the main page component
+export default async function BlogPostPage({ params }: { params: { id: string } }) {
+  const { id } = params;
+  const slug = decodeURIComponent(id);
+
+  const blog = await getBlogDetails(slug);
+
+  return <SingleBlog blog={blog} />;
 }
