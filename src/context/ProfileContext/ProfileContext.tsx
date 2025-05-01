@@ -49,9 +49,9 @@ const ProfileProvider = ({ children, userId }: ProfileProviderProps) => {
 
   const saveProfile = React.useCallback(
     (data: Partial<User>) => {
-      if (!isProfileEditable) {
-        return;
-      }
+      // if (!isProfileEditable) {
+      //   return;
+      // }
       return updateUser({
         variables: {
           ...data,

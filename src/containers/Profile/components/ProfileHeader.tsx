@@ -97,7 +97,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
       },
       true
     );
-  }, [user, saveProfile, authUser]);
+  }, [user, saveProfile, authUser, client, showAlert]);
 
   const menuItems = React.useMemo(() => {
     const isConfidential = user?.isConfidential;
