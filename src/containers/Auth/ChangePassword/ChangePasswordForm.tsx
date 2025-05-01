@@ -49,6 +49,13 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ onNext, contain
           }
           redirectOnSignin(true);
         },
+        onError: (err: Error) => {
+          showAlert({
+            type: 'error',
+            message: err?.message || 'Something went wrong',
+          });
+          console.log('Error: ', err?.message);
+        },
       });
     },
     [handlePasswordReset, showAlert, redirectOnSignin, onNext]
