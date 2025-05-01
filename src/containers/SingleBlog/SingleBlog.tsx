@@ -53,7 +53,7 @@ const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
   });
 
   const id = prerenderedBlog?.slug;
-  const dataLoading = !id;
+  const dataLoading = !id || loading;
   const claps = clapQuery?.getClapsCount;
 
   console.log('ZZ: prerenderedBlog', prerenderedBlog);
