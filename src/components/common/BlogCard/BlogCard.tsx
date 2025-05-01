@@ -177,7 +177,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
         borderRadius={4}
         display="flex"
         p={{
-          xs: 1.5,
+          xs: 2,
           md: 4,
         }}
         //   py={2}
@@ -192,7 +192,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
           },
           '&: hover': {
             px: {
-              xs: 3,
+              xs: 2,
               md: 7,
             },
 

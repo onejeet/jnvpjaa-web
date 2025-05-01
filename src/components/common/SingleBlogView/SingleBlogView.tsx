@@ -101,7 +101,7 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, claps: initialCl
         </Box>
       )}
 
-      <Box p={3} pt={statusMessage ? 5 : 3}>
+      <Box p={{ xs: 1.5, md: 3 }} pt={statusMessage ? 5 : 3}>
         {loading ? (
           <Skeleton width="80%" height={66} sx={{ py: 1 }} />
         ) : (
