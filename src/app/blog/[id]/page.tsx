@@ -58,6 +58,7 @@ async function getBlogDetails(slug: string) {
     const { data } = await apolloClient.query<GetBlogQuery>({
       query: GetBlogDocument,
       variables: { slug },
+      fetchPolicy: 'no-cache',
     });
 
     const blog = data.getBlog;
