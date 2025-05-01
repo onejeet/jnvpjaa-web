@@ -6,6 +6,7 @@ import { dmSans } from '@/utils/theme/fonts';
 import { Metadata } from 'next';
 import { GoogleTagManager } from '@next/third-parties/google';
 import { Providers } from '../app/providers';
+import { Analytics } from '@vercel/analytics/react';
 
 export const metadata: Metadata = {
   title: {
@@ -234,6 +235,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Providers>
           {children}
           <GoogleTagManager gtmId="GTM-W7R5B5JB" />
+          <Analytics />
         </Providers>
       </body>
     </html>
