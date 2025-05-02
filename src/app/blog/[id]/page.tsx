@@ -21,8 +21,18 @@ export async function generateMetadata(
       variables: { slug },
     });
 
-    const blog = data.getBlog;
-    if (!blog) return notFound();
+    const blog = data?.getBlog || {
+      title: 'Blog Preview',
+      summary: 'Blog Preview',
+      cover: {},
+      author: {
+        firstName: '',
+        lastName: '',
+      },
+      createdAt: '',
+      updatedAt: '',
+    };
+    // if (!blog) return notFound();
 
     return {
       title: `${blog.title} • JNVPJAA Blog`,
@@ -64,7 +74,7 @@ async function getBlogDetails(slug: string) {
     });
 
     const blog = data.getBlog;
-    if (!blog) return notFound();
+    // if (!blog) return notFound();
 
     return blog;
   } catch (error) {

@@ -25,14 +25,14 @@ import { updateCache } from '@/utils/apollo';
 import { useApolloClient } from '@apollo/client';
 import { Box } from '@mui/material';
 import { IconCircleCheck, IconEye, IconPencil } from '@tabler/icons-react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { notFound, useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
 
 interface SingleBlogProps {
   blog?: Blog;
 }
 
-const SingleBlog = ({ blog: prerenderedBlog }: SingleBlogProps) => {
+const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
   const router = useRouter();
   const client = useApolloClient();
   const { isAdmin, redirectToSignin, user } = useAuth();
@@ -43,7 +43,7 @@ const SingleBlog = ({ blog: prerenderedBlog }: SingleBlogProps) => {
   console.log('ZZ: Blog queryId', queryId);
 
   const { data, loading } = useGetBlogQuery({
-    skip: !(isAdmin && !prerenderedBlog?.id),
+    skip: !!prerenderedBlog?.id,
     variables: {
       slug: queryId as string,
     },
@@ -306,7 +306,8 @@ const SingleBlog = ({ blog: prerenderedBlog }: SingleBlogProps) => {
   );
 
   if (!loading && !blog?.id) {
-    return { notFound: true };
+    notFound();
+    return null;
   }
 
   return (
