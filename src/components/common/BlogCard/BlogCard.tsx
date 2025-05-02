@@ -20,6 +20,7 @@ import { BlogStatus } from '@/apollo/hooks';
 import { getFormattedLabel, startCase } from '@/utils/helpers';
 import React from 'react';
 import Menu, { MenuItemProps } from '@/components/core/Menu';
+import ClapButton from '../ClapButton';
 
 const BlogCard: React.FC<IBlogCardProps> = ({
   blog,
@@ -32,7 +33,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
   user,
   isReadOnly,
 }) => {
-  const { id, slug, title, summary, status, updatedAt, createdAt, author } = blog;
+  const { id, slug, title, summary, status, claps, updatedAt, createdAt, author } = blog;
   const router = useRouter();
 
   const statusColor = React.useMemo(() => {
@@ -250,7 +251,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
         </Box>
         <Box width="100%" display={{ xs: 'flex', md: 'none' }} mb={1.5} alignItems="center" gap={0.5}>
           {loading ? (
-            <Skeleton width={50} height={20} />
+            <Skeleton width={80} height={20} />
           ) : (
             <Typography variant="body2">{dayjs(createdAt).format('MMM DD, YYYY')}</Typography>
           )}
@@ -267,6 +268,8 @@ const BlogCard: React.FC<IBlogCardProps> = ({
               <Chip size="small" label={startCase(status as string)} color="error" />
             </>
           )} */}
+          <Dot size={14} />
+          <ClapButton initialClaps={claps} />
           <Dot size={14} />
           <ProfilePicture
             size={28}
@@ -341,7 +344,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
         </Box>
         <Box
           component={Grid}
-          size={{ xs: 12, md: 9.5 }}
+          size={{ xs: 12, md: 8.5 }}
           display="flex"
           flexDirection="column"
           onClick={() => (slug ? router.push(paths.blog.getBlogPostUrl(slug)) : null)}
@@ -379,7 +382,16 @@ const BlogCard: React.FC<IBlogCardProps> = ({
             </Typography>
           )}
         </Box>
-        <Box component={Grid} size={{ xs: 12, md: 1.5 }} ml="auto" display={{ xs: 'none', md: 'flex' }}>
+
+        <Box
+          component={Grid}
+          size={{ xs: 12, md: 2.5 }}
+          ml="auto"
+          display={{ xs: 'none', md: 'flex' }}
+          alignItems="center"
+          gap={1}
+        >
+          <ClapButton initialClaps={claps} />
           <ProfilePicture
             title={`${author?.firstName || ''} ${author?.lastName || ''}`}
             loading={loading}

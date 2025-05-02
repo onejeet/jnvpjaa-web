@@ -37,7 +37,7 @@ export const useUnsplashSearch = (defaultKeyword?: string): UseUnsplashSearch =>
         const response = await axios.get('https://api.unsplash.com/search/photos', {
           params: {
             query,
-            per_page: 20,
+            per_page: 40,
             orientation: 'landscape',
           },
           headers: {

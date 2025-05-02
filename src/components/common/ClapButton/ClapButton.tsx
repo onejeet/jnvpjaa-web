@@ -9,7 +9,7 @@ interface ClapButtonProps {
   initialClaps?: number;
   author?: UserBasic;
   claps?: number;
-  setClaps: (claps: number) => void;
+  setClaps?: (claps: number) => void;
   containerProps?: BoxProps;
   disabled?: boolean;
 }
@@ -34,7 +34,8 @@ const ClapButton: React.FC<ClapButtonProps> = ({
   }, [claps]);
 
   const handleClap = () => {
-    setClaps(claps + 1);
+    if (disabled) return;
+    setClaps?.(claps + 1);
     setShowTooltip(true);
   };
 
@@ -85,7 +86,7 @@ const ClapButton: React.FC<ClapButtonProps> = ({
           onClick={handleClap}
           disabled={disabled}
           sx={{
-            border: '1px solid',
+            border: disabled ? '0px solid' : '1px solid',
             borderColor: 'grey.300',
             width: {
               xs: 50,
@@ -95,11 +96,13 @@ const ClapButton: React.FC<ClapButtonProps> = ({
               xs: 50,
               md: 60,
             },
+            display: 'flexx',
+            flexDirection: disabled ? 'row' : 'column',
 
             position: 'relative',
             img: {
               position: 'relative',
-              top: total > 0 ? '-5px' : 0,
+              top: disabled ? 0 : total > 0 ? '-5px' : 0,
             },
           }}
         >
@@ -108,7 +111,8 @@ const ClapButton: React.FC<ClapButtonProps> = ({
           {total > 0 && (
             <Typography
               variant="h6"
-              mt={0.2}
+              mt={disabled ? 0 : 0.2}
+              ml={disabled ? 1 : 0}
               fontSize={{
                 xs: '12px',
                 md: '16px',
