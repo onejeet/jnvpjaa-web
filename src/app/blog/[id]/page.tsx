@@ -80,7 +80,8 @@ async function getBlogDetails(slug: string) {
     return blog;
   } catch (error) {
     console.error('GraphQL Error (event):', error);
-    return notFound();
+    // return notFound();
+    return undefined;
   }
 }
 
