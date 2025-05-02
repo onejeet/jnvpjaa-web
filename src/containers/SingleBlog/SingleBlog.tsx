@@ -25,7 +25,7 @@ import { updateCache } from '@/utils/apollo';
 import { useApolloClient } from '@apollo/client';
 import { Box } from '@mui/material';
 import { IconCircleCheck, IconEye, IconPencil } from '@tabler/icons-react';
-import { notFound, useRouter, useSearchParams } from 'next/navigation';
+import { notFound, useParams, useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
 
 interface SingleBlogProps {
@@ -37,8 +37,7 @@ const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
   const client = useApolloClient();
   const { isAdmin, redirectToSignin, user } = useAuth();
   const { showAlert } = useAlert();
-  const searchParams = useSearchParams();
-  const queryId = searchParams.get('id');
+  const { id: queryId } = useParams();
 
   console.log('ZZ: Blog queryId', queryId);
 

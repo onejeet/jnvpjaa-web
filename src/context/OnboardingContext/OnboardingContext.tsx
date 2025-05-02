@@ -3,7 +3,7 @@
 import React, { createContext, useContext } from 'react';
 import { OnboardingContextProps, OnboardingProviderProps } from './OnboardingContext.types';
 import { useGetUserDetailsQuery, User, useUpdateUserMutation } from '@/apollo/hooks';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '../AuthContext';
 
 const defaultProvider: OnboardingContextProps = {};
@@ -12,8 +12,7 @@ const OnboardingContext = createContext(defaultProvider);
 
 const OnboardingProvider = ({ children }: OnboardingProviderProps) => {
   const [editingProfile, setEditingProfile] = React.useState<boolean>(false);
-  const searchParams = useSearchParams();
-  const id = searchParams.get('id');
+  const { id } = useParams();
   const { data: userData, loading: userDataLoading } = useGetUserDetailsQuery({
     skip: !id,
     variables: {

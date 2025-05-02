@@ -17,7 +17,6 @@ import { useSearchParams } from 'next/navigation';
 const useBatchCoordinators = (coordinators?: BatchCoordinator[]) => {
   const { user } = useAuth();
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [columns, setColumns] = React.useState<any[]>([]);
   const [searchQuery, setSearchQuery] = React.useState<string>('');
   const loading = false;

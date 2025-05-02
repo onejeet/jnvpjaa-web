@@ -232,7 +232,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   );
 };
 
-const useAuth = (): TAuthContextData => {
+const useAuth = () => {
   const context = useContext(AuthContext);
 
   if (!context) {
