@@ -22,12 +22,13 @@ export default function NotFound() {
       alignItems="center"
       justifyContent="center"
     >
-      <EmptyView message="404 | Page not found" />
-      <Button
-        title="Go Back"
-        startIcon={<IconArrowRampLeft size={18} />}
-        sx={{ mt: 3 }}
-        onClick={() => router.back()}
+      <EmptyView
+        message="404 | Page not found"
+        buttonProps={{
+          title: 'Go Back',
+          startIcon: <IconArrowRampLeft size={18} />,
+          onClick: () => router.back(),
+        }}
       />
     </Box>
   );
