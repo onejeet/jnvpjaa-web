@@ -74,7 +74,7 @@ async function getBlogDetails(slug: string) {
       variables: { slug },
     });
 
-    const blog = data.getBlog;
+    const blog = data?.getBlog;
     // if (!blog) return notFound();
 
     return blog;

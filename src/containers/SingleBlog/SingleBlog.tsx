@@ -50,6 +50,7 @@ const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
   });
 
   const { data: clapQuery } = useGetClapsCountQuery({
+    skip: !(prerenderedBlog?.id || data?.getBlog?.id),
     variables: {
       id: prerenderedBlog?.id || data?.getBlog?.id,
     },
