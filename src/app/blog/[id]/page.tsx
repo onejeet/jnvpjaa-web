@@ -1,5 +1,3 @@
-export const dynamic = 'force-dynamic';
-
 import { GetBlogDocument, GetBlogQuery } from '@/apollo/hooks';
 import SingleBlog from '@/containers/SingleBlog';
 import { PageProps } from '@/types/global';
@@ -21,7 +19,6 @@ export async function generateMetadata(
     const { data } = await apolloClient.query<GetBlogQuery>({
       query: GetBlogDocument,
       variables: { slug },
-      fetchPolicy: 'no-cache',
     });
 
     const blog = data.getBlog;
@@ -64,7 +61,6 @@ async function getBlogDetails(slug: string) {
     const { data } = await apolloClient.query<GetBlogQuery>({
       query: GetBlogDocument,
       variables: { slug },
-      fetchPolicy: 'no-cache',
     });
 
     const blog = data.getBlog;
