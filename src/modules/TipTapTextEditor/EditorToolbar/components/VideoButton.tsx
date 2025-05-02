@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { isBrowser } from '../../../../utils/isBrowser';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -11,8 +10,8 @@ import { useCurrentEditor } from '@tiptap/react';
 import ToolIcon from './ToolIcon';
 import { isURL } from '@/utils/helpers';
 import Button from '@/components/core/Button';
-import isBrowser from '@/utils/isBrowser';
 import { Tooltip } from '@mui/material';
+import { isBrowser } from '@/utils/isBrowser';
 
 const VideoButton: React.FC = (props) => {
   const { editor } = useCurrentEditor();

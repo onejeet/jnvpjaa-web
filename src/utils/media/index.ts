@@ -1,6 +1,5 @@
-import { isBrowser } from '../isBrowser';
 import imageCompression, { Options } from 'browser-image-compression';
-import isBrowser from '@/utils/isBrowser';
+import { isBrowser } from '@/utils/isBrowser';
 
 export const optimiseImageSize = async (file: File, options?: Options) => {
   if (!file) return;

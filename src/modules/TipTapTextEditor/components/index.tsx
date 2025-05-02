@@ -3,9 +3,8 @@
 import type { PropsWithChildren, Ref } from 'react';
 import React from 'react';
 import { css, cx } from '@emotion/css';
-import { isBrowser } from '../../../utils/isBrowser';
 import ReactDOM from 'react-dom';
-import isBrowser from '@/utils/isBrowser';
+import { isBrowser } from '@/utils/isBrowser';
 
 interface BaseProps {
   className: string;

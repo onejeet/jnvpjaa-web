@@ -12,6 +12,7 @@ interface ClapButtonProps {
   setClaps?: (claps: number) => void;
   containerProps?: BoxProps;
   disabled?: boolean;
+  viewOnly?: boolean;
 }
 
 const ClapButton: React.FC<ClapButtonProps> = ({
@@ -20,6 +21,7 @@ const ClapButton: React.FC<ClapButtonProps> = ({
   author,
   claps = 0,
   disabled,
+  viewOnly,
   setClaps,
 }) => {
   const [showTooltip, setShowTooltip] = useState(false);
@@ -41,8 +43,37 @@ const ClapButton: React.FC<ClapButtonProps> = ({
 
   const total = initialClaps + claps;
 
+  if (viewOnly) {
+    return (
+      <Box
+        sx={{
+          cursor: 'default',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}
+      >
+        <Image src="https://assets.jnvpjaa.org/svg/clap_icon.svg" width={20} height={20} alt="claps" />
+
+        {total > 0 && (
+          <Typography
+            variant="h6"
+            ml={1}
+            fontSize={{
+              xs: '12px',
+              md: '16px',
+            }}
+            color="grey.600"
+          >
+            {total}
+          </Typography>
+        )}
+      </Box>
+    );
+  }
+
   return (
-    <Box gap={2} sx={{ display: 'flex', alignItems: 'center', bgcolor: 'common.white' }} {...containerProps}>
+    <Box gap={2} sx={{ display: 'flex', alignItems: 'center', bgcolor: 'transparent' }} {...containerProps}>
       {author && (
         <Box display="flex" alignItems="center" gap={1}>
           <Typography
@@ -96,13 +127,13 @@ const ClapButton: React.FC<ClapButtonProps> = ({
               xs: 50,
               md: 60,
             },
-            display: 'flexx',
+            display: 'flex',
             flexDirection: disabled ? 'row' : 'column',
 
             position: 'relative',
             img: {
               position: 'relative',
-              top: disabled ? 0 : total > 0 ? '-5px' : 0,
+              top: total > 0 ? '-5px' : 0,
             },
           }}
         >
@@ -111,8 +142,7 @@ const ClapButton: React.FC<ClapButtonProps> = ({
           {total > 0 && (
             <Typography
               variant="h6"
-              mt={disabled ? 0 : 0.2}
-              ml={disabled ? 1 : 0}
+              mt={0.2}
               fontSize={{
                 xs: '12px',
                 md: '16px',

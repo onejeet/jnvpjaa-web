@@ -33,7 +33,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
   user,
   isReadOnly,
 }) => {
-  const { id, slug, title, summary, status, claps, updatedAt, createdAt, author } = blog;
+  const { id, slug, title, summary, status, claps = 0, updatedAt, createdAt, author } = blog;
   const router = useRouter();
 
   const statusColor = React.useMemo(() => {
@@ -268,8 +268,14 @@ const BlogCard: React.FC<IBlogCardProps> = ({
               <Chip size="small" label={startCase(status as string)} color="error" />
             </>
           )} */}
-          <Dot size={14} />
-          <ClapButton initialClaps={claps} />
+          {claps > 0 && (
+            <>
+              {' '}
+              <Dot size={14} />
+              <ClapButton initialClaps={claps} viewOnly />
+            </>
+          )}
+
           <Dot size={14} />
           <ProfilePicture
             size={28}
@@ -344,7 +350,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
         </Box>
         <Box
           component={Grid}
-          size={{ xs: 12, md: 8.5 }}
+          size={{ xs: 12, md: 8 }}
           display="flex"
           flexDirection="column"
           onClick={() => (slug ? router.push(paths.blog.getBlogPostUrl(slug)) : null)}
@@ -385,13 +391,14 @@ const BlogCard: React.FC<IBlogCardProps> = ({
 
         <Box
           component={Grid}
-          size={{ xs: 12, md: 2.5 }}
+          size={{ xs: 12, md: 3 }}
           ml="auto"
           display={{ xs: 'none', md: 'flex' }}
           alignItems="center"
-          gap={1}
+          gap={2}
         >
-          <ClapButton initialClaps={claps} />
+          {claps > 0 && <ClapButton initialClaps={claps} viewOnly />}
+
           <ProfilePicture
             title={`${author?.firstName || ''} ${author?.lastName || ''}`}
             loading={loading}
