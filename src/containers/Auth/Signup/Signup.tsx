@@ -27,13 +27,16 @@ const Signup = () => {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
+          justifyContent: 'center',
           p: 3,
           position: 'relative',
         }}
       >
         {/* <Image src={'https://assets.jnvpjaa.org/svg/profile-website-icon.svg'} width={200} height={100} alt="login" /> */}
         <GlobalBgShade />
-        <Typography variant="h2">JNV Paota Alumni Registration</Typography>
+        <Typography variant="h2" textAlign="center">
+          JNV Paota Alumni Registration
+        </Typography>
         <Typography color="grey.500" variant="body2" textAlign="center" mb={2}>
           The registration will be reviewed and verified by the Alumni Association and batch coordinators,
           <br /> and will be approved accordingly.
