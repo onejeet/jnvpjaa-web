@@ -1,4 +1,5 @@
 export const dynamic = 'force-dynamic';
+
 import { GetBlogDocument, GetBlogQuery } from '@/apollo/hooks';
 import SingleBlog from '@/containers/SingleBlog';
 import { PageProps } from '@/types/global';

@@ -40,11 +40,11 @@ const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
   const searchParams = useSearchParams();
   const queryId = searchParams.get('id');
 
-  const { data, loading } = useGetBlogQuery({
-    variables: {
-      slug: prerenderedBlog?.slug as string,
-    },
-  });
+  // const { data, loading } = useGetBlogQuery({
+  //   variables: {
+  //     slug: prerenderedBlog?.slug as string,
+  //   },
+  // });
 
   const { data: clapQuery } = useGetClapsCountQuery({
     variables: {
@@ -53,12 +53,12 @@ const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
   });
 
   const id = prerenderedBlog?.slug;
-  const dataLoading = !id || loading;
+  const dataLoading = !id;
   const claps = clapQuery?.getClapsCount;
 
   console.log('ZZ: prerenderedBlog', prerenderedBlog);
 
-  const blog: Blog | undefined = React.useMemo(() => data?.getBlog || prerenderedBlog, [data, prerenderedBlog]);
+  const blog: Blog | undefined = React.useMemo(() => prerenderedBlog, [prerenderedBlog]);
   const [publisBlog, { loading: publishBlogLoading }] = useUpdateBlogMutation();
   const [handleVerifyBlog] = useApproveBlogMutation();
 
