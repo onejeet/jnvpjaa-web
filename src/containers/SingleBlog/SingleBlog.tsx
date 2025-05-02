@@ -32,7 +32,7 @@ interface SingleBlogProps {
   blog?: Blog;
 }
 
-const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
+const SingleBlog = ({ blog: prerenderedBlog }: SingleBlogProps) => {
   const router = useRouter();
   const client = useApolloClient();
   const { isAdmin, redirectToSignin, user } = useAuth();
@@ -40,25 +40,28 @@ const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
   const searchParams = useSearchParams();
   const queryId = searchParams.get('id');
 
-  // const { data, loading } = useGetBlogQuery({
-  //   variables: {
-  //     slug: prerenderedBlog?.slug as string,
-  //   },
-  // });
+  console.log('ZZ: Blog queryId', queryId);
 
-  const { data: clapQuery } = useGetClapsCountQuery({
+  const { data, loading } = useGetBlogQuery({
+    skip: !(isAdmin && !prerenderedBlog?.id),
     variables: {
-      id: prerenderedBlog?.id,
+      slug: queryId as string,
     },
   });
 
-  const id = prerenderedBlog?.slug;
-  const dataLoading = !id;
+  const { data: clapQuery } = useGetClapsCountQuery({
+    variables: {
+      id: prerenderedBlog?.id || data?.getBlog?.id,
+    },
+  });
+
+  const id = data?.getBlog?.slug || prerenderedBlog?.slug;
+  const dataLoading = !id || loading;
   const claps = clapQuery?.getClapsCount;
 
   console.log('ZZ: prerenderedBlog', prerenderedBlog);
 
-  const blog: Blog | undefined = React.useMemo(() => prerenderedBlog, [prerenderedBlog]);
+  const blog: Blog | undefined = React.useMemo(() => data?.getBlog || prerenderedBlog, [data, prerenderedBlog]);
   const [publisBlog, { loading: publishBlogLoading }] = useUpdateBlogMutation();
   const [handleVerifyBlog] = useApproveBlogMutation();
 
@@ -301,6 +304,10 @@ const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
     },
     [id, client, blogClapUpdate, claps, prerenderedBlog?.id]
   );
+
+  if (!loading && !blog?.id) {
+    return { notFound: true };
+  }
 
   return (
     <LayoutModule disableCover title={`${blog?.title || 'Blog'} • Alumni Network of JNV Paota, Jaipur`}>
