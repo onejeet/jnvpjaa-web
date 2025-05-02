@@ -361,13 +361,13 @@ const BlogCard: React.FC<IBlogCardProps> = ({
               ml: '10px',
               opacity: 0,
             },
-            '&: hover': {
-              svg: {
-                opacity: 1,
-                ml: '16px',
-                color: 'primary.main',
-              },
-            },
+            // '&: hover': {
+            //   svg: {
+            //     opacity: 1,
+            //     ml: '16px',
+            //     color: 'primary.main',
+            //   },
+            // },
           }}
         >
           {loading ? (
@@ -378,7 +378,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
               {status !== BlogStatus.Published && (
                 <Chip size="small" label={getFormattedLabel(status)} color={statusColor} sx={{ ml: 1 }} />
               )}{' '}
-              <ArrowRight size={28} />
+              {/* <ArrowRight size={28} /> */}
             </Typography>
           )}
 
