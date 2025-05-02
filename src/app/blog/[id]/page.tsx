@@ -23,6 +23,7 @@ export async function generateMetadata(
 
     const blog = data?.getBlog || {
       title: 'Blog Preview',
+      slug,
       summary: 'Blog Preview',
       cover: {},
       author: {
