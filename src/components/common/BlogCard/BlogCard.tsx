@@ -350,7 +350,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
         </Box>
         <Box
           component={Grid}
-          size={{ xs: 12, md: 9 }}
+          size={{ xs: 12, md: 8.8 }}
           display="flex"
           flexDirection="column"
           onClick={() => (slug ? router.push(paths.blog.getBlogPostUrl(slug)) : null)}
@@ -391,7 +391,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
 
         <Box
           component={Grid}
-          size={{ xs: 12, md: 2 }}
+          size={{ xs: 12, md: 2.2 }}
           ml="auto"
           display={{ xs: 'none', md: 'flex' }}
           alignItems="center"
