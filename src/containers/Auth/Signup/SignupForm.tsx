@@ -112,7 +112,7 @@ const SignupForm = () => {
           <FormCheckbox
             fullWidth
             id="isFaculty"
-            label="Are you a registering as faculty in JNV Paota?"
+            label="Are you registering as faculty in JNV Paota?"
             autoFocus
             control={control}
             disabled={loading}
