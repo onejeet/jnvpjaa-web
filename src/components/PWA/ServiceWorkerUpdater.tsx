@@ -42,6 +42,11 @@ export default function ServiceWorkerUpdater() {
     wb.messageSW({ type: 'SKIP_WAITING' }).catch((err) => {
       console.error('[PWA] Error sending SKIP_WAITING:', err);
     });
+    setTimeout(() => {
+      if (typeof window !== 'undefined') {
+        window.location.reload();
+      }
+    }, 2000);
   };
 
   return (
