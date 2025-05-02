@@ -18,6 +18,7 @@ const ProfilePicture: React.FC<ProfilePictureProps> = ({
   size,
   loading,
   maxWidth,
+  onClick,
   id,
   alt,
   sx,
@@ -30,6 +31,7 @@ const ProfilePicture: React.FC<ProfilePictureProps> = ({
       display="flex"
       alignItems="center"
       width="100%"
+      onClick={onClick}
       maxWidth={maxWidth || 'fit-content'}
       sx={{ cursor: 'pointer' }}
       {...containerProps}

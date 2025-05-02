@@ -16,4 +16,5 @@ export interface ProfilePictureProps extends Omit<MuiAvatarProps, 'title'> {
   loading?: boolean;
   maxWidth?: number;
   id?: string;
+  onClick?: () => void;
 }
