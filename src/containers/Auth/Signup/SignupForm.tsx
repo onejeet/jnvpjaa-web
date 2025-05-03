@@ -105,9 +105,10 @@ const SignupForm = () => {
         width: '100%',
         mt: 1,
         p: {
-          xs: 1.5,
+          xs: 2,
           md: 3,
         },
+        pt: 3,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
