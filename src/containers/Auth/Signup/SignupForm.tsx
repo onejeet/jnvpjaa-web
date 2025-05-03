@@ -76,7 +76,10 @@ const SignupForm = () => {
         sx={{
           width: '100%',
           my: 2,
-          p: 3,
+          p: {
+            xs: 1.5,
+            md: 3,
+          },
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -87,7 +90,7 @@ const SignupForm = () => {
           <Lottie animationData={successLottieIcon} loop={true} style={{ width: '100px', height: '100px' }} />
         </Suspense>
         <Typography variant="h2">Signup Successful!</Typography>
-        <Typography variant="body1" mt={1} textAlign="center" width="60%">
+        <Typography variant="body1" mt={1} textAlign="center" width={{ xs: '100%', md: '60%' }}>
           The request email has been sent to the admins and upon approval you should be able to login.{' '}
         </Typography>
       </Box>
@@ -101,7 +104,10 @@ const SignupForm = () => {
       sx={{
         width: '100%',
         mt: 1,
-        p: 3,
+        p: {
+          xs: 1.5,
+          md: 3,
+        },
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',

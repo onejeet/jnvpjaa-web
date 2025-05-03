@@ -64,8 +64,10 @@ const SigninForm = () => {
       onSubmit={handleSubmit(onSubmit)}
       sx={{
         width: 400,
-
-        p: 3,
+        p: {
+          xs: 1.5,
+          md: 3,
+        },
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
