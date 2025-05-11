@@ -32,7 +32,7 @@ const SigninForm = () => {
       setLoading(true);
       signin({
         variables: {
-          email: data?.email?.trim(),
+          email: data?.email?.toLowerCase()?.trim(),
           password: data?.password,
         },
         onCompleted: (res: any) => {
