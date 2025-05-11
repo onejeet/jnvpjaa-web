@@ -46,7 +46,7 @@ const SignupForm = () => {
         variables: {
           firstName: startCase(data?.first_name?.trim()),
           lastName: startCase(data?.last_name?.trim()),
-          email: data?.email?.trim(),
+          email: data?.email?.toLowerCase()?.trim(),
           password: data?.password,
           gender: data?.gender,
           mobile: data?.mobile ? phoneNumberStringConverter(data?.mobile) : data?.mobile,

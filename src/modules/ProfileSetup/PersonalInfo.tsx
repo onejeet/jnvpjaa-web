@@ -14,7 +14,7 @@ import TipTapTextEditor from '@/modules/TipTapTextEditor';
 import dayjs from 'dayjs';
 import { useApolloClient } from '@apollo/client';
 import FormPhoneField from '@/components/form/FormPhoneField';
-import { phoneNumberStringConverter } from '@/utils/helpers';
+import { phoneNumberStringConverter, startCase } from '@/utils/helpers';
 
 interface PersonalInfoProps {
   onBack?: () => void;
@@ -49,8 +49,8 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({ user, onNext, onBack, onSuc
       updateUser({
         variables: {
           id: user?.id,
-          firstName: data?.firstName?.trim(),
-          lastName: data?.lastName?.trim(),
+          firstName: startCase(data?.firstName?.trim()),
+          lastName: startCase(data?.lastName?.trim()),
           gender: data?.gender,
           aboutMe: data?.aboutMe,
           // @ts-expect-error type error
