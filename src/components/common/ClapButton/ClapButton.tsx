@@ -4,6 +4,7 @@ import { IconHandLoveYou as HandsClapping } from '@tabler/icons-react';
 import { UserBasic } from '@/apollo/hooks';
 import ProfilePicture from '../ProfilePicture';
 import Image from 'next/image';
+import { formatCompactNumber } from '@/utils/helpers';
 
 interface ClapButtonProps {
   initialClaps?: number;
@@ -65,7 +66,7 @@ const ClapButton: React.FC<ClapButtonProps> = ({
             }}
             color="grey.600"
           >
-            {total}
+            {formatCompactNumber(total)}
           </Typography>
         )}
       </Box>
@@ -149,7 +150,7 @@ const ClapButton: React.FC<ClapButtonProps> = ({
               }}
               sx={{ position: 'absolute', top: '80%', left: '50%', transform: 'translate(-50%, -50%)' }}
             >
-              {total}
+              {formatCompactNumber(total)}
             </Typography>
           )}
         </IconButton>
