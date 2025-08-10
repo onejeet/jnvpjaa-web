@@ -1,4 +1,3 @@
-// ** Type Imports
 import { Palette, alpha, PaletteOptions, PaletteMode } from '@mui/material';
 
 export interface SimplePaletteColorOptions {
