@@ -1,7 +1,7 @@
 'use client';
 
 import { Card, CardActionArea, Box, Typography, IconButton, Chip, Stack } from '@mui/material';
-import { IconMessageCircle, IconCalendar, IconHeart } from '@tabler/icons-react';
+import { IconMessageCircle, IconCalendar, IconHeart, IconMessage2 } from '@tabler/icons-react';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import React from 'react';
 
@@ -47,40 +47,34 @@ const DiscussionCard: React.FC<DiscussionCardProps> = ({
           </Typography>
         )}
 
-        <Stack direction="row" alignItems="center" spacing={1} mt={1}>
+        <Stack direction="row" alignItems="center" spacing={2} mt={1}>
           <ProfilePicture
             id={authorId}
             title={authorName || 'Unknown'}
             alt={authorName}
             src={authorImage}
-            size={26}
+            size={36}
             titleComponentProps={{
-              titleProps: { fontSize: '12px', fontWeight: 500 },
+              titleProps: { fontSize: '14px', fontWeight: 500 },
               summaryProps: { fontSize: '12px', color: 'text.secondary' },
             }}
           />
           <Box display="flex" alignItems="center" gap={0.5} color="text.secondary" ml={1}>
             <IconCalendar size={16} />
-            <Typography variant="caption">{new Date(createdAt).toLocaleString()}</Typography>
+            <Typography variant="body2">{new Date(createdAt).toLocaleString()}</Typography>
           </Box>
 
-          <Chip
-            size="small"
-            variant="outlined"
-            icon={<IconMessageCircle size={14} />}
-            label={repliesCount}
-            sx={{ ml: 'auto' }}
-          />
-        </Stack>
-
-        <Box display="flex" gap={2} mt={1} alignItems="center">
+          <Box display="flex" alignItems="center" gap={0.5} color="text.secondary" ml={1}>
+            <IconMessage2 size={16} />
+            <Typography variant="body2">{repliesCount}</Typography>
+          </Box>
           <Box display="flex" alignItems="center" gap={0.5} onClick={(e) => e.stopPropagation()}>
-            <IconButton size="small" onClick={() => onReact?.(id, 'like')}>
-              <IconHeart size={16} />
-            </IconButton>
-            <Typography variant="caption">{likes}</Typography>
+            {/* <IconButton size="small" onClick={() => onReact?.(id, 'like')}> */}
+            <IconHeart size={16} />
+            {/* </IconButton> */}
+            <Typography variant="body2">{likes}</Typography>
           </Box>
-        </Box>
+        </Stack>
       </CardActionArea>
     </Card>
   );
