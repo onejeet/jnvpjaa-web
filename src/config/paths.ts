@@ -27,6 +27,10 @@ export const paths = {
     getBlogPostUrl: (id: string) => `/blog/${id}`,
     getBlogPostEditUrl: (id: string) => `/blog/new?id=${id}`,
   },
+  discussions: {
+    root: '/discussions',
+    getThreadUrl: (id: string) => `/discussions/${id}`,
+  },
   profile: {
     root: '/profile',
     getProfileUrl: (id: string) => `/profile/${id}`,

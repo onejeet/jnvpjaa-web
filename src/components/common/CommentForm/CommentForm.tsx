@@ -1,7 +1,8 @@
 'use client';
 
-import { Button, TextField, Stack } from '@mui/material';
+import { Button, Stack } from '@mui/material';
 import { useState } from 'react';
+import TipTapTextEditor from '@/modules/TipTapTextEditor';
 
 interface Props {
   onSubmit: (content: string) => void;
@@ -12,23 +13,20 @@ export default function CommentForm({ onSubmit, autoFocus }: Props) {
   const [content, setContent] = useState('');
 
   const handleSubmit = () => {
-    if (content.trim()) {
-      onSubmit(content.trim());
+    const trimmed = content.replace(/<p><br\/><\/p>/g, '').trim();
+    if (trimmed) {
+      onSubmit(content);
       setContent('');
     }
   };
 
   return (
     <Stack spacing={2}>
-      <TextField
-        multiline
-        fullWidth
-        autoFocus={autoFocus}
-        minRows={3}
+      <TipTapTextEditor
         value={content}
-        onChange={(e) => setContent(e.target.value)}
-        placeholder="Write a comment..."
-        variant="outlined"
+        onChange={setContent}
+        height={160}
+        toolbarProps={{ toolsHidden: ['image', 'video'] }}
       />
       <Button variant="contained" onClick={handleSubmit}>
         Post
