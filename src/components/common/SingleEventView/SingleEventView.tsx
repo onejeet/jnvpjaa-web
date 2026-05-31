@@ -335,7 +335,7 @@ const SingleEventView: React.FC<SingleEventViewProps> = ({
                 ) : (
                   <MapPinLine size={20} style={{ marginRight: '8px' }} />
                 )}
-                {showDescription && medium !== 'online' && venueLocationHref ? (
+                {medium !== 'online' && venueLocationHref ? (
                   <Typography
                     component="a"
                     href={venueLocationHref}

@@ -106,6 +106,13 @@ const EventCard: React.FC<EventCardProps> = ({
     );
   }, [status, startDate, endDate]);
 
+  const locationHref = React.useMemo(() => {
+    if (!location || location === 'protected') return null;
+    if (/^https?:\/\//i.test(location)) return location;
+    if (medium === 'online') return `https://${location}`;
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
+  }, [location, medium]);
+
   return (
     <Card
       sx={{
@@ -310,11 +317,12 @@ const EventCard: React.FC<EventCardProps> = ({
                 ) : (
                   <IconMapPin size={18} style={{ marginRight: '8px' }} />
                 )}
-                {medium === 'online' && location !== 'protected' ? (
+                {locationHref ? (
                   <Typography
                     component="a"
-                    href={location}
+                    href={locationHref}
                     target="_blank"
+                    rel="noreferrer"
                     display="flex"
                     alignItems="center"
                     variant="body2"
