@@ -108,6 +108,18 @@ const SingleEventView: React.FC<SingleEventViewProps> = ({
     );
   }, [status, startDate, endDate]);
 
+  const venueLocationHref = React.useMemo(() => {
+    if (!location || location === 'protected') return null;
+
+    if (/^https?:\/\//i.test(location)) return location;
+
+    if (medium === 'online') {
+      return `https://${location}`;
+    }
+
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
+  }, [location, medium]);
+
   return (
     <Card
       sx={{
@@ -323,11 +335,37 @@ const SingleEventView: React.FC<SingleEventViewProps> = ({
                 ) : (
                   <MapPinLine size={20} style={{ marginRight: '8px' }} />
                 )}
-                {medium === 'online' && location !== 'protected' ? (
+                {showDescription && medium !== 'online' && venueLocationHref ? (
                   <Typography
                     component="a"
-                    href={location}
+                    href={venueLocationHref}
                     target="_blank"
+                    rel="noreferrer"
+                    display="flex"
+                    alignItems="center"
+                    variant="body1"
+                    fontWeight={500}
+                    color="text.secondary"
+                    sx={{
+                      textDecoration: 'none',
+                      borderBottom: '1px dotted',
+                      '&:hover': {
+                        color: 'primary.main',
+                        svg: {
+                          color: 'primary.main',
+                        },
+                      },
+                    }}
+                  >
+                    Venue Location
+                    <ArrowUpRight size={14} style={{ marginLeft: '4px', marginTop: '2px' }} />
+                  </Typography>
+                ) : venueLocationHref ? (
+                  <Typography
+                    component="a"
+                    href={venueLocationHref}
+                    target="_blank"
+                    rel="noreferrer"
                     display="flex"
                     alignItems="center"
                     variant="body1"
