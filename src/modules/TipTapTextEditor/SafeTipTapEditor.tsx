@@ -2,12 +2,15 @@
 
 import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import DOMPurify from 'dompurify';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import type { TipTapTextEditorProps } from './TipTapTextEditor.types';
 
 // Create a simple fallback component that just displays the HTML content
 const EditorFallback: React.FC<TipTapTextEditorProps> = ({ value, sx = {}, height }) => {
+  const sanitizedValue = React.useMemo(() => DOMPurify.sanitize(value || ''), [value]);
+
   return (
     <Box
       sx={{
@@ -19,8 +22,8 @@ const EditorFallback: React.FC<TipTapTextEditorProps> = ({ value, sx = {}, heigh
         ...sx,
       }}
     >
-      {value ? (
-        <div dangerouslySetInnerHTML={{ __html: value }} />
+      {sanitizedValue ? (
+        <div dangerouslySetInnerHTML={{ __html: sanitizedValue }} />
       ) : (
         <Typography color="text.secondary">Editor loading...</Typography>
       )}

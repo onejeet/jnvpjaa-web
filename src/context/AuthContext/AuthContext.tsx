@@ -14,6 +14,28 @@ import { track } from '@vercel/analytics';
 
 const AuthContext = createContext<TAuthContextData>({} as TAuthContextData);
 
+const AUTH_ROUTES = ['/signin', '/signup', '/forgot-password'];
+
+const isAuthRoute = (pathname: string) =>
+  AUTH_ROUTES.some((route) => pathname === route || pathname === `${route}/` || pathname.startsWith(`${route}/`));
+
+const isSafeRedirectPath = (path?: string | null) => {
+  if (!path) return false;
+
+  return path.startsWith('/') && !path.startsWith('//') && !/^https?:\/\//i.test(path);
+};
+
+const getSafeRedirectPath = (encodedPath?: string | null) => {
+  if (!encodedPath) return null;
+
+  try {
+    const decodedPath = decodeBase64(encodedPath);
+    return isSafeRedirectPath(decodedPath) ? decodedPath : null;
+  } catch (error) {
+    return null;
+  }
+};
+
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -22,12 +44,14 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const client = useApolloClient();
   const { showAlert } = useAlert();
   const isLoggedInRef = React.useRef(false);
-  const isAuthPage = React.useMemo(() => ['/signin/', '/signup/', '/forgot-password/'].includes(pathname), [pathname]);
+  const isAuthPage = React.useMemo(() => isAuthRoute(pathname), [pathname]);
 
   const checkAuth = React.useMemo(() => {
     return (
       pathname.startsWith('/profile') ||
       pathname.startsWith('/admin') ||
+      pathname.startsWith('/transactions') ||
+      pathname.startsWith('/change-password') ||
       pathname.includes('/new') ||
       pathname.includes('/edit')
     );
@@ -71,11 +95,9 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const redirectOnSignin = React.useCallback(
     async (customPass?: boolean) => {
       if (isAuthPage || customPass) {
-        const redirectPath = searchParams.get('r')
-          ? decodeBase64(searchParams.get('r') as string)
-          : searchParams.get('r');
+        const redirectPath = getSafeRedirectPath(searchParams.get('r'));
         if (redirectPath) {
-          await router.push(redirectPath as string);
+          await router.push(redirectPath);
         } else {
           await router.push(paths.profile.root);
         }

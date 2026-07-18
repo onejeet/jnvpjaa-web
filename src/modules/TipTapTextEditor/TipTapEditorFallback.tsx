@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import DOMPurify from 'dompurify';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import type { TipTapTextEditorProps } from './TipTapTextEditor.types';
@@ -10,6 +11,8 @@ import type { TipTapTextEditorProps } from './TipTapTextEditor.types';
  * when the editor cannot be loaded (e.g., during server-side rendering).
  */
 const TipTapEditorFallback = ({ value, sx = {}, height }: TipTapTextEditorProps) => {
+  const sanitizedValue = React.useMemo(() => DOMPurify.sanitize(value || ''), [value]);
+
   return (
     <Box
       sx={{
@@ -21,8 +24,8 @@ const TipTapEditorFallback = ({ value, sx = {}, height }: TipTapTextEditorProps)
         ...sx,
       }}
     >
-      {value ? (
-        <div dangerouslySetInnerHTML={{ __html: value }} />
+      {sanitizedValue ? (
+        <div dangerouslySetInnerHTML={{ __html: sanitizedValue }} />
       ) : (
         <Typography color="text.secondary">Loading editor...</Typography>
       )}

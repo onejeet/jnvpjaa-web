@@ -1,6 +1,5 @@
-import { Box, useMediaQuery, useTheme } from '@mui/material';
+import { Box } from '@mui/material';
 import Container from '@mui/material/Container';
-import Head from 'next/head';
 import React from 'react';
 
 import { Props } from './Layout.types';
@@ -8,23 +7,12 @@ import LayoutFooter from './LayoutFooter';
 import LayoutTopbar from './LayoutTopbar';
 
 const LayoutModule: React.FC<Props> = (props) => {
-  const {
-    children,
-    title,
-    disableTopbar = false,
-    disableFooter = false,
-    containerProps = {},
-    disableCover = true,
-  } = props;
+  const { children, disableTopbar = false, disableFooter = false, containerProps = {}, disableCover = true } = props;
 
   const { sx: sxContainer = {}, ...restContainerProps } = containerProps;
 
   return (
     <>
-      <Head>
-        <title>{title || 'Untitled'}</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-      </Head>
       <Box
         // minHeight="100vh"
         width="100%"

@@ -5,6 +5,10 @@ import React from 'react';
 
 export interface Props {
   children?: React.ReactNode;
+  /**
+   * @deprecated App Router pages should set titles via route metadata or generateMetadata.
+   * Kept temporarily so existing LayoutModule call sites can be migrated gradually.
+   */
   title?: string;
   disableTopbar?: boolean;
   disableFooter?: boolean;
