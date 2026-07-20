@@ -16,9 +16,9 @@
     "codegen": "graphql-codegen --config codegen/generate.js"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=20 <21"
   },
-  "packageManager": "^npm@10.7.0",
+  "packageManager": "npm@10.7.0",
   "dependencies": {
     "@apollo/client": "3.13.8",
     "@apollo/experimental-nextjs-app-support": "^0.11.6",
@@ -91,7 +91,7 @@
     "@graphql-codegen/typescript-react-apollo": "^4.3.2",
     "@types/apollo-upload-client": "^18.0.0",
     "@types/canvas-confetti": "^1.9.0",
-    "@types/node": "22.1.0",
+    "@types/node": "20.17.30",
     "@types/react": "18.3.4",
     "@types/react-dom": "18.3.0",
     "@typescript-eslint/eslint-plugin": "7.0.0",
