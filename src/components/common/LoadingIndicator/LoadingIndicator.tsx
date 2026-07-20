@@ -1,7 +1,7 @@
 /* REACT */
 
 import React from 'react';
-import { Avatar, Backdrop } from '@mui/material';
+import { Backdrop } from '@mui/material';
 /* MUI */
 import Box from '@mui/material/Box';
 import { alpha } from '@mui/system';
@@ -10,8 +10,12 @@ import { alpha } from '@mui/system';
 import type { LoadingIndicatorProps } from './LoadingIndicator.types';
 import Image from 'next/image';
 
+const LOADING_SPINNER_SRC = 'https://assets.jnvpjaa.org/svg/triangle-spin.svg';
+const LOADING_LOGO_SRC = 'https://assets.jnvpjaa.org/branding/logo-square-white.webp';
+
 const getContent = (props: LoadingIndicatorProps) => {
   const { size, children, icon, ...restProps } = props;
+  const logoSize = size ? Math.ceil(0.55 * size) : 100;
 
   return (
     <Box
@@ -23,21 +27,13 @@ const getContent = (props: LoadingIndicatorProps) => {
       justifyContent="center"
     >
       <Box position="absolute" color="primary.main">
-        <Image src="https://assets.jnvpjaa.org/svg/triangle-spin.svg" width={250} height={250} alt="loading" />
+        <Image src={LOADING_SPINNER_SRC} width={250} height={250} alt="loading" priority />
       </Box>
 
       {children || (
-        <Avatar
-          src="https://assets.jnvpjaa.org/branding/logo-square-white.webp"
-          sx={{ width: size ? Math.ceil(0.55 * size) : 100, height: size ? Math.ceil(0.55 * size) : 100 }}
-        />
-        // <Box
-        //   // src="https://assets.jnvpjaa.org/branding/logo-square-white_transparent.webp"
-        //   src="https://assets.jnvpjaa.org/branding/logo-square-white.jpg"
-        //   component="img"
-        //   width={size ? Math.ceil(0.55 * size) : 80}
-        //   height={size ? Math.ceil(0.55 * size) : 80}
-        // />
+        <Box width={logoSize} height={logoSize} borderRadius="50%" overflow="hidden" position="relative" flexShrink={0}>
+          <Image src={LOADING_LOGO_SRC} alt="JNVPJAA logo" fill sizes={`${logoSize}px`} priority />
+        </Box>
       )}
     </Box>
   );

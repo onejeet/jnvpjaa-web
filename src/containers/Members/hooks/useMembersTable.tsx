@@ -35,12 +35,19 @@ const useMembersTable = () => {
 
   const { showAlert } = useAlert();
   const [handleUserVerification] = useVerifyUserMutation();
+  const verifiedFilter = React.useMemo(() => {
+    if (!isAdmin || !searchParams?.get('verified')) {
+      return undefined;
+    }
+
+    return searchParams.get('verified') === 'true';
+  }, [isAdmin, searchParams]);
 
   const { data: userListData, loading } = useGetUserListQuery({
     variables: {
       options: {
         filter: {
-          verified: searchParams?.get('verified') ? searchParams?.get('verified') === 'true' : undefined,
+          verified: verifiedFilter,
           query: searchParams.get('q') || '',
           batch: searchParams?.get('batch') ? parseInt(searchParams.get('batch') || '', 10) : undefined,
         },

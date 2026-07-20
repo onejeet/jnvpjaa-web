@@ -5,13 +5,14 @@ import { useAuth } from '@/context/AuthContext';
 import { debounce, getBatchOptions } from '@/utils/helpers';
 import { Box, Grid2 as Grid, MenuItem, Select } from '@mui/material';
 import { IconSearch } from '@tabler/icons-react';
-import { useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
 const MembersFilters = () => {
-  const { isAdmin } = useAuth();
+  const { isAdmin, user } = useAuth();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const router = useRouter();
 
   const handleFilterChange = React.useCallback(
@@ -38,6 +39,17 @@ const MembersFilters = () => {
     }, 700),
     [handleFilterChange]
   );
+
+  React.useEffect(() => {
+    if (!user || isAdmin || !searchParams.has('verified')) {
+      return;
+    }
+
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete('verified');
+    const nextQueryString = params.toString();
+    router.replace(nextQueryString ? `${pathname}?${nextQueryString}` : pathname);
+  }, [isAdmin, pathname, router, searchParams, user]);
 
   return (
     <Box container component={Grid} mb={2} spacing={2}>
