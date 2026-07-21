@@ -23,7 +23,7 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
   {
     name: 'Rajesh Dayma',
     designation: 'Vice President (Male)',
-    email: '-',
+    email: 'rajeshdaymaalwaysroxx@gmail.com',
     batch: '2009',
     profilePicture: 'https://assets.jnvpjaa.org/people/rajesh_2009_passport.webp',
     socialMedia: [
@@ -67,7 +67,7 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
   {
     name: 'Gayatri Sharma',
     designation: 'Joint secretary',
-    email: '-',
+    email: 'advocategayatrisharma@gmail.com',
     batch: '1998',
     profilePicture: 'https://assets.jnvpjaa.org/images/female_profile_placeholder.webp',
     socialMedia: [
@@ -80,7 +80,7 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
   {
     name: 'Mukesh Meena',
     designation: 'Joint secretary',
-    email: '-',
+    email: 'prince.meena1986@gmail.com',
     batch: '2005',
     profilePicture: 'https://assets.jnvpjaa.org/people/mukesh_2005_passport.webp',
     socialMedia: [
@@ -139,7 +139,7 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
   {
     name: 'Nathuram Pankaj',
     designation: 'Member',
-    email: '-',
+    email: 'bookcitytrip@gmail.com',
     batch: '1996',
     profilePicture: 'https://assets.jnvpjaa.org/people/nathuram_1996_passport.webp',
     socialMedia: [
@@ -215,7 +215,7 @@ export const EXEC_COMMITTEE: ProfileCardProps[] = [
   {
     name: 'Hari Narayan Lakharan',
     designation: 'Member',
-    email: '-',
+    email: 'harinarayanlakharan21@gmail.com',
     batch: '2003',
     profilePicture: 'https://assets.jnvpjaa.org/people/harinarayan_2003_passport.webp',
     socialMedia: [

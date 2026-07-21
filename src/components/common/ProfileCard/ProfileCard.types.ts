@@ -4,6 +4,7 @@ export interface ProfileCardProps {
   designation?: string;
   batch: string;
   email?: string;
+  mobile?: string;
   socialMedia?: { name: string; url: string }[];
   color?: string;
 }

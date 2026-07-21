@@ -1,19 +1,18 @@
 'use client';
 
-import { Box, OutlinedInput, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 import useBatchCoordinators from './Hooks/useBatchCoordinators';
-import { IconSearch } from '@tabler/icons-react';
 import BatchCoordinatorFilters from './components/BatchCoordinatorFilters';
 import DataGrid from '@/components/core/DataGrid';
-import { BatchCoordinator } from '@/apollo/hooks';
+import { BatchCoordinatorRoleAssignment } from '@/types/access';
 
 interface BatchCoordinatorsProps {
-  coordinators?: BatchCoordinator[];
+  coordinators?: BatchCoordinatorRoleAssignment[];
 }
 
 const BatchCoordinators: React.FC<BatchCoordinatorsProps> = ({ coordinators }) => {
-  const { columns, rows, onSearch } = useBatchCoordinators(coordinators);
+  const { columns, rows } = useBatchCoordinators(coordinators);
 
   return (
     <Box>

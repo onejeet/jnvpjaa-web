@@ -5,12 +5,20 @@ export interface AuthProviderProps {
 }
 export interface TAuthContextData {
   user?: any;
+  access?: any;
+  roles?: any[];
+  positions?: any[];
+  permissions?: string[];
   checkAuth?: boolean;
   setUser: (user: any) => void;
   logoutUser: () => void;
   setLoadingData: React.Dispatch<React.SetStateAction<LoadingDataProps>>;
   isAuthPage?: boolean;
   isAdmin?: boolean;
+  hasRole: (roleCode: string) => boolean;
+  hasPosition: (positionCode: string) => boolean;
+  can: (permissionCode: string) => boolean;
+  canForBatch: (permissionCode: string, batch?: number | null) => boolean;
   redirectToSignin: (arg?: boolean, targetPath?: string) => void;
   redirectOnSignin: (arg?: boolean) => void;
 }

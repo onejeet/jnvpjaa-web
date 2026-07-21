@@ -11,6 +11,9 @@ import { useGetUserDetailsLazyQuery, useLogoutMutation, User } from '@/apollo/ho
 import { useApolloClient } from '@apollo/client';
 import { useAlert } from '../AlertContext';
 import { track } from '@vercel/analytics';
+import { useLazyQuery } from '@apollo/client';
+import { VIEWER_ACCESS_CONTEXT } from '@/apollo/accessOperations';
+import { PERMISSION_CODES, ROLE_CODES } from '@/constants/access';
 
 const AuthContext = createContext<TAuthContextData>({} as TAuthContextData);
 
@@ -60,15 +63,26 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   console.log('ZZ: pathnme', isAuthPage, checkAuth);
 
   const [user, setUser] = useState<User | null>(null);
+  const [access, setAccess] = useState<any>(null);
   const [loadingData, setLoadingData] = useState<LoadingDataProps>({
     loading: checkAuth || isAuthPage,
   });
 
   const [handleLogout] = useLogoutMutation();
+  const [fetchViewerAccess] = useLazyQuery(VIEWER_ACCESS_CONTEXT, {
+    fetchPolicy: 'network-only',
+    onCompleted: (data) => {
+      setAccess(data?.viewerAccessContext || null);
+    },
+    onError: () => {
+      setAccess(null);
+    },
+  });
 
   const [fetchUserData, { data: userData, refetch }] = useGetUserDetailsLazyQuery({
     onCompleted: (data: any) => {
       setUser(data?.getUserDetails as User);
+      fetchViewerAccess();
       track('user_dashboard_view', {
         userName: data?.getUserDetails?.firstName,
         batch: data?.getUserDetails?.batch,
@@ -159,8 +173,10 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (isLoggedIn === 'true') {
         isLoggedInRef.current = Boolean(isLoggedIn);
         fetchUserData();
-      } else if (checkAuth || isAuthPage) {
+      } else if (checkAuth) {
         fetchUserData();
+      } else if (isAuthPage) {
+        setLoadingData({ loading: false });
       }
       window.addEventListener('storage', onLoginStateChange, false);
       return () => {
@@ -198,6 +214,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     client.resetStore();
     client.cache.reset();
     setUser(null);
+    setAccess(null);
     await handleLogout();
 
     // setUser(null);
@@ -219,16 +236,58 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     return loadingData?.loading;
   }, [loadingData?.loading]);
 
+  const permissions = React.useMemo(() => access?.permissions || [], [access?.permissions]);
+  const roles = React.useMemo(() => access?.roles || [], [access?.roles]);
+  const positions = React.useMemo(() => access?.positions || [], [access?.positions]);
+
+  const can = React.useCallback(
+    (permissionCode: string) => {
+      return Boolean(access?.hasFullAccess || permissions.includes(permissionCode));
+    },
+    [access?.hasFullAccess, permissions]
+  );
+
+  const hasRole = React.useCallback((roleCode: string) => roles.some((role: any) => role.code === roleCode), [roles]);
+
+  const hasPosition = React.useCallback(
+    (positionCode: string) => positions.some((position: any) => position.code === positionCode),
+    [positions]
+  );
+
+  const canForBatch = React.useCallback(
+    (permissionCode: string, batch?: number | null) => {
+      if (can(permissionCode) && access?.hasFullAccess) return true;
+      if (!can(permissionCode)) return false;
+      if (batch === null || batch === undefined) return true;
+
+      return roles.some((role: any) => role.scopeType === 'GLOBAL' || role.scopeBatch === batch);
+    },
+    [access?.hasFullAccess, can, roles]
+  );
+
   const isAdmin = React.useMemo(() => {
-    return user?.role?.name === 'admin';
-  }, [user]);
+    return (
+      user?.role?.name === 'admin' ||
+      hasRole(ROLE_CODES.SUPER_ADMIN) ||
+      hasRole(ROLE_CODES.PLATFORM_ADMIN) ||
+      can(PERMISSION_CODES.SYSTEM_FULL_ACCESS)
+    );
+  }, [can, hasRole, user]);
 
   return (
     <Suspense fallback={<LoadingIndicator isBackdrop />}>
       <AuthContext.Provider
         value={{
           user,
+          access,
+          roles,
+          positions,
+          permissions,
           isAdmin,
+          hasRole,
+          hasPosition,
+          can,
+          canForBatch,
           checkAuth,
           setUser,
           logoutUser,

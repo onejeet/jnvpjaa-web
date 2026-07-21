@@ -7,37 +7,20 @@ import { GridRowParams } from '@mui/x-data-grid';
 import React from 'react';
 
 import ProfilePicture from '@/components/common/ProfilePicture';
-import { BatchCoordinator, useGetAllBatchCoordinatorsQuery } from '@/apollo/hooks';
 import { Skeleton, Typography } from '@mui/material';
 import VerifiedBadge from '@/components/common/VerifiedBadge';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
-import { useSearchParams } from 'next/navigation';
+import { BatchCoordinatorRoleAssignment } from '@/types/access';
 
-const useBatchCoordinators = (coordinators?: BatchCoordinator[]) => {
+const useBatchCoordinators = (coordinators?: BatchCoordinatorRoleAssignment[]) => {
   const { user } = useAuth();
   const router = useRouter();
   const [columns, setColumns] = React.useState<any[]>([]);
   const [searchQuery, setSearchQuery] = React.useState<string>('');
   const loading = false;
-  // const { data: coordinators, loading } = useGetAllBatchCoordinatorsQuery({
-  //   variables: {
-  //     options: {
-  //       filter: {
-  //         verified: searchParams?.get('verified') ? searchParams?.get('verified') === 'true' : undefined,
-  //         query: searchParams.get('q') || '',
-  //         batch: searchParams?.get('batch') ? parseInt(searchParams.get('batch') || '', 10) : undefined,
-  //       },
-  //     },
-  //   },
-  //   notifyOnNetworkStatusChange: true,
-  // });
-
-  //   const [state, dispatch] = useImmerReducer(reducer, initialState);
-  //   const { replace, query, pathname } = useRouter();
-
   React.useEffect(() => {
-    const columns = [
+    const columns: any[] = [
       {
         field: 'name',
         headerName: 'COORDINATOR',
@@ -168,7 +151,7 @@ const useBatchCoordinators = (coordinators?: BatchCoordinator[]) => {
               <Skeleton width="100%" height={30} />
             </Box>
           ) : user?.id ? (
-            formatPhoneNumber(row.whatsappMobile)?.international || '--'
+            formatPhoneNumber(row?.user?.whatsAppMobile)?.international || '--'
           ) : (
             <Typography
               display="flex"
@@ -194,7 +177,7 @@ const useBatchCoordinators = (coordinators?: BatchCoordinator[]) => {
               <Skeleton width="100%" height={30} />
             </Box>
           ) : user?.id ? (
-            formatPhoneNumber(row.emergencyMobile)?.international || '--'
+            formatPhoneNumber(row?.user?.emergencyMobile)?.international || '--'
           ) : (
             <Typography
               display="flex"
@@ -234,21 +217,6 @@ const useBatchCoordinators = (coordinators?: BatchCoordinator[]) => {
       //     }
       //     return params.row.user.metadata?.title;
       //   },
-      // },
-
-      // {
-      //   field: 'actions',
-      //   type: 'actions',
-      //   headerName: '',
-      //   // headerClassName: 'users-data-grid-header',
-      //   align: 'right',
-      //   sortbale: false,
-      //   resizable: false,
-      //   width: 100,
-      //   minWidth: 100,
-      //   // flex: 1,
-      //   cellClassName: 'actions_cell',
-      //   getActions: (params: GridRowParams) => getActionsList(params.row.user),
       // },
     ];
 

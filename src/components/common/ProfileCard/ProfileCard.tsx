@@ -1,12 +1,12 @@
 'use client';
 
-import { getSocialMediaIcon } from '@/utils/helpers';
+import { formatPhoneNumber, getSocialMediaIcon } from '@/utils/helpers';
 import { Card, CardContent, Typography, Box, Avatar, Stack, IconButton, Link, BoxProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import React from 'react';
 
 import { ProfileCardProps } from './ProfileCard.types';
-import { IconMail as EnvelopeSimple, IconUsersGroup as UsersThree } from '@tabler/icons-react';
+import { IconMail as EnvelopeSimple, IconPhone, IconUsersGroup as UsersThree } from '@tabler/icons-react';
 
 interface CustomBoxProps extends BoxProps {
   bgColor?: string;
@@ -48,9 +48,12 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
   designation,
   batch,
   email,
+  mobile,
   socialMedia,
   color,
 }) => {
+  const formattedMobile = mobile ? formatPhoneNumber(mobile).international : '';
+
   return (
     <StyledCard>
       <HeaderSection bgColor={color}>
@@ -83,9 +86,20 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
             alignItems="center"
             variant="body1"
             color="grey.700"
-            sx={{ svg: { mr: 1, color: 'grey.700' } }}
+            sx={{ mb: 1, svg: { mr: 1, color: 'grey.700' } }}
           >
             <EnvelopeSimple size={18} /> {email}
+          </Typography>
+        )}
+        {formattedMobile && (
+          <Typography
+            display="flex"
+            alignItems="center"
+            variant="body1"
+            color="grey.700"
+            sx={{ svg: { mr: 1, color: 'grey.700' } }}
+          >
+            <IconPhone size={18} /> {formattedMobile}
           </Typography>
         )}
 

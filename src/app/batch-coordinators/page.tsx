@@ -1,9 +1,10 @@
 import BatchCoordinators from '@/containers/Organisation/BatchCoordinators';
-import { BatchCoordinator, GetAllBatchCoordinatorsDocument, GetAllBatchCoordinatorsQuery } from '@/apollo/hooks';
 import { initializeApollo } from '@/utils/apollo';
 import { Metadata } from 'next';
 import LayoutModule from '@/layouts/Layout';
 import { headers } from 'next/headers';
+import { BATCH_COORDINATOR_ROLE_ASSIGNMENTS_QUERY } from '@/apollo/accessOperations';
+import { BatchCoordinatorRoleAssignment } from '@/types/access';
 
 export const metadata: Metadata = {
   title: 'Batch Coordinators • Alumni Network of JNV Paota, Jaipur',
@@ -27,12 +28,13 @@ export const metadata: Metadata = {
 async function getBatchCoordinators() {
   const requestHeaders = headers();
   const cookieHeader = requestHeaders.get('cookie');
-  console.log('ZZ: cookieHeader', cookieHeader);
   const apolloClient = initializeApollo({ cookie: cookieHeader ?? '' });
 
   try {
-    const { data } = await apolloClient.query<GetAllBatchCoordinatorsQuery>({
-      query: GetAllBatchCoordinatorsDocument,
+    const { data } = await apolloClient.query<{
+      getAllBatchCoordinators?: BatchCoordinatorRoleAssignment[];
+    }>({
+      query: BATCH_COORDINATOR_ROLE_ASSIGNMENTS_QUERY,
       variables: {
         options: {
           filter: {},
@@ -52,7 +54,7 @@ export default async function BatchCoordinatorsPage() {
 
   return (
     <LayoutModule disableCover title="Batch Coordinators • Alumni Network of JNV Paota, Jaipur" containerProps={{}}>
-      <BatchCoordinators coordinators={coordinators as BatchCoordinator[]} />
+      <BatchCoordinators coordinators={coordinators || []} />
     </LayoutModule>
   );
 }

@@ -40,12 +40,14 @@ import {
   IconPassword as Password,
   IconLogout as SignOut,
   IconUser as User,
+  IconShieldCheck,
 } from '@tabler/icons-react';
 import { paths } from '@/config/paths';
 import Lottie from '@/components/common/DynamicLottie';
 import giftsLottieIcon from '@/utils/lottie/gifts_art.json';
 import { isBirthdayToday } from '@/utils/helpers';
 import GlobalBgShade from '@/components/common/GlobalBgShade';
+import { PERMISSION_CODES } from '@/constants/access';
 
 export interface IMenuItemProps {
   item: IHeaderMenuItem;
@@ -72,7 +74,7 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
   const theme = useTheme();
   const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const { user, logoutUser, isAdmin, redirectToSignin } = useAuth();
+  const { user, logoutUser, redirectToSignin, can } = useAuth();
 
   const HEADER_MENU = React.useMemo(() => {
     return getHeaderMenu(Boolean(user?.id));
@@ -82,30 +84,48 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
     return isBirthdayToday(user?.dob);
   }, [user?.dob]);
 
+  const canAccessAdminCenter = React.useMemo(
+    () =>
+      can(PERMISSION_CODES.IAM_USER_ACCESS_READ) ||
+      can(PERMISSION_CODES.IAM_CATALOG_READ) ||
+      can(PERMISSION_CODES.IAM_ROLE_ASSIGNMENT_MANAGE_BATCH_ROLES) ||
+      can(PERMISSION_CODES.IAM_EXECUTIVE_POSITION_MANAGE),
+    [can]
+  );
+
   const ACCOUNT_MENU_LIST = React.useMemo(
-    () => [
-      {
-        label: 'My Profile',
-        value: '/profile',
-        icon: <User size={16} />,
-        onClick: () => router.push(paths.profile.root),
-      },
-      {
-        label: 'Change Password',
-        value: '/change-password',
-        icon: <Password size={16} />,
-        onClick: () => redirectToSignin(true, paths.auth.change_password),
-      },
-      {
-        label: 'Log Out',
-        icon: <SignOut size={16} />,
-        sx: {
-          color: 'error.main',
+    () =>
+      [
+        {
+          label: 'My Profile',
+          value: '/profile',
+          icon: <User size={16} />,
+          onClick: () => router.push(paths.profile.root),
         },
-        onClick: logoutUser,
-      },
-    ],
-    [logoutUser, router, redirectToSignin]
+        canAccessAdminCenter
+          ? {
+              label: 'Admin Center',
+              value: '/admin',
+              icon: <IconShieldCheck size={16} />,
+              onClick: () => router.push('/admin'),
+            }
+          : null,
+        {
+          label: 'Change Password',
+          value: '/change-password',
+          icon: <Password size={16} />,
+          onClick: () => redirectToSignin(true, paths.auth.change_password),
+        },
+        {
+          label: 'Log Out',
+          icon: <SignOut size={16} />,
+          sx: {
+            color: 'error.main',
+          },
+          onClick: logoutUser,
+        },
+      ].filter(Boolean),
+    [canAccessAdminCenter, logoutUser, router, redirectToSignin]
   );
 
   const ACCOUNT_COMP = React.useMemo(() => {

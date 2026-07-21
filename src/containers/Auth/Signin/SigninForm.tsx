@@ -11,6 +11,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useSigninMutation } from '@/apollo/hooks';
 import { useApolloClient } from '@apollo/client';
+import { paths } from '@/config/paths';
 
 const SigninForm = () => {
   const [loading, setLoading] = React.useState<boolean>(false);
@@ -27,8 +28,8 @@ const SigninForm = () => {
   const [signin] = useSigninMutation();
 
   const onSubmit = React.useCallback(
-    (data: ISigninFormInput) => {
-      client.resetStore();
+    async (data: ISigninFormInput) => {
+      await client.clearStore();
       setLoading(true);
       signin({
         variables: {
@@ -40,10 +41,13 @@ const SigninForm = () => {
             localStorage.setItem('logged_in', 'true');
           }
 
-          client.resetStore();
-          client.cache.reset();
           setUser(res?.signin?.user);
-          // auth redirection will be handled from AuthContext
+          client.clearStore();
+          const targetUrl =
+            res?.signin?.user?.metadata?.isFirstLogin !== false
+              ? `${paths.profile.setup}?welcome=1`
+              : paths.profile.root;
+          router.push(targetUrl);
         },
         onError: (err: Error) => {
           setLoading(false);
@@ -55,7 +59,7 @@ const SigninForm = () => {
         },
       });
     },
-    [signin, showAlert, setUser, router]
+    [client, signin, showAlert, setUser, router]
   );
 
   return (
