@@ -14,11 +14,12 @@ import {
 import { useGetUserListQuery, useSendMassEmailMutation } from '@/apollo/hooks';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import Button from '@/components/core/Button';
+import ReactSelect from '@/components/core/ReactSelect';
 import FormDateTimeField from '@/components/form/FormDateTimeField';
 import { PERMISSION_CODES, ROLE_CODES, ROLE_LABELS } from '@/constants/access';
 import { useAlert } from '@/context/AlertContext';
 import { useAuth } from '@/context/AuthContext';
-import { getBatchOptions } from '@/utils/helpers';
+import { getBatchOptions, getDefaultAvatar } from '@/utils/helpers';
 import dayjs, { Dayjs } from 'dayjs';
 import { useForm } from 'react-hook-form';
 import {
@@ -73,6 +74,14 @@ type RoleAssignmentFormState = {
   reason: string;
 };
 
+type SelectOption = {
+  value: string;
+  label: string;
+  title?: string;
+  summary?: string;
+  avatarUrl?: string;
+};
+
 const toDateInputValue = (value?: Dayjs | null) => (value ? value.format('YYYY-MM-DD') : null);
 
 const getLatestBatchValue = () => {
@@ -92,10 +101,33 @@ const getRoleManagementPermission = (roleCode: string) => {
 
 const getRoleLabel = (role: any) => ROLE_LABELS[role?.code as keyof typeof ROLE_LABELS] || role?.name || role?.code;
 
+const toBatchSelectOptions = () =>
+  getBatchOptions().map((batch) => ({
+    value: String(batch.value),
+    label: batch.label,
+  }));
+
+const getUserAvatarSrc = (user: any) => user?.profileImage || getDefaultAvatar(user?.gender);
+
+const toUserSelectOptions = (users: any[]) =>
+  users.map((user: any) => {
+    const name = `${user?.firstName || ''} ${user?.lastName || ''}`.trim();
+    const batch = user?.batch !== null && user?.batch !== undefined ? `Batch ${user.batch}` : 'Batch NA';
+    const summary = [batch, user?.email].filter(Boolean).join(' - ');
+
+    return {
+      value: user.id,
+      label: [name, summary].filter(Boolean).join(' - '),
+      title: name || user?.email || 'Member',
+      summary,
+      avatarUrl: getUserAvatarSrc(user),
+    };
+  });
+
 const UserMenuLabel = ({ user, showEmail = false }: { user: any; showEmail?: boolean }) => (
   <ProfilePicture
     id={user?.id}
-    src={user?.profileImage || undefined}
+    src={getUserAvatarSrc(user)}
     title={`${user?.firstName || ''} ${user?.lastName || ''}`}
     summary={
       showEmail
@@ -112,7 +144,7 @@ const UserMenuLabel = ({ user, showEmail = false }: { user: any; showEmail?: boo
 const AssignmentUser = ({ user, showEmail = false }: { user: any; showEmail?: boolean }) => (
   <ProfilePicture
     id={user?.id}
-    src={user?.profileImage || undefined}
+    src={getUserAvatarSrc(user)}
     title={`${user?.firstName || ''} ${user?.lastName || ''}`}
     summary={
       showEmail
@@ -143,6 +175,8 @@ const AdminPanel = () => {
   const [replacementTarget, setReplacementTarget] = React.useState<any>(null);
   const [replacementUserId, setReplacementUserId] = React.useState('');
   const [replacementReason, setReplacementReason] = React.useState('');
+  const [addCoordinatorSaving, setAddCoordinatorSaving] = React.useState(false);
+  const [replacementSaving, setReplacementSaving] = React.useState(false);
   const replacementBatch = replacementTarget?.batch ? String(replacementTarget.batch) : selectedBatch;
   const roleDateForm = useForm<AccessDateForm>({
     defaultValues: {
@@ -160,7 +194,7 @@ const AdminPanel = () => {
   const [assignRole, { loading: assigningRole }] = useMutation(ASSIGN_USER_ROLE_MUTATION, {
     refetchQueries: ['roleAssignments', 'batchCoordinatorRoleAssignments', 'viewerAccessContext'],
   });
-  const [revokeRole, { loading: revokingRole }] = useMutation(REVOKE_USER_ROLE_MUTATION, {
+  const [revokeRole] = useMutation(REVOKE_USER_ROLE_MUTATION, {
     refetchQueries: ['roleAssignments', 'batchCoordinatorRoleAssignments', 'viewerAccessContext'],
   });
   const [assignPosition, { loading: assigningPosition }] = useMutation(ASSIGN_EXECUTIVE_POSITION_MUTATION, {
@@ -188,16 +222,6 @@ const AdminPanel = () => {
     },
     skip: !canManageBatchRoles,
   });
-  const { data: userData } = useGetUserListQuery({
-    variables: {
-      options: {
-        filter: { verified: true },
-        offset: 0,
-        limit: 250,
-      },
-    },
-    skip: !canReadAccess,
-  });
   const { data: selectedBatchUserData } = useGetUserListQuery({
     variables: {
       options: {
@@ -212,17 +236,56 @@ const AdminPanel = () => {
   const [roleForm, setRoleForm] = React.useState<RoleAssignmentFormState>({
     userId: '',
     roleCode: ROLE_CODES.BATCH_COORDINATOR,
-    scopeBatch: '',
+    scopeBatch: getLatestBatchValue(),
     reason: '',
   });
   const [positionForm, setPositionForm] = React.useState({
     userId: '',
+    batch: getLatestBatchValue(),
     positionCode: 'PRESIDENT',
     reason: '',
   });
 
-  const users = userData?.getUserList?.data || [];
-  const selectedBatchUsers = selectedBatchUserData?.getUserList?.data || [];
+  const { data: roleBatchUserData, loading: roleBatchUsersLoading } = useGetUserListQuery({
+    variables: {
+      options: {
+        filter: { verified: true, batch: roleForm.scopeBatch ? parseInt(roleForm.scopeBatch, 10) : undefined },
+        offset: 0,
+        limit: 250,
+      },
+    },
+    skip: !canReadAccess || !roleForm.scopeBatch,
+  });
+  const { data: executiveBatchUserData, loading: executiveBatchUsersLoading } = useGetUserListQuery({
+    variables: {
+      options: {
+        filter: { verified: true, batch: positionForm.batch ? parseInt(positionForm.batch, 10) : undefined },
+        offset: 0,
+        limit: 250,
+      },
+    },
+    skip: !canManageExecutivePositions || !positionForm.batch,
+  });
+  const batchSelectOptions = React.useMemo(() => toBatchSelectOptions(), []);
+  const selectedBatchUsers = React.useMemo(
+    () => selectedBatchUserData?.getUserList?.data || [],
+    [selectedBatchUserData?.getUserList?.data]
+  );
+  const roleBatchUsers = React.useMemo(
+    () => roleBatchUserData?.getUserList?.data || [],
+    [roleBatchUserData?.getUserList?.data]
+  );
+  const executiveBatchUsers = React.useMemo(
+    () => executiveBatchUserData?.getUserList?.data || [],
+    [executiveBatchUserData?.getUserList?.data]
+  );
+  const roleUserOptions = React.useMemo(() => toUserSelectOptions(roleBatchUsers), [roleBatchUsers]);
+  const executiveUserOptions = React.useMemo(() => toUserSelectOptions(executiveBatchUsers), [executiveBatchUsers]);
+  const selectedRoleBatchOption = batchSelectOptions.find((option) => option.value === roleForm.scopeBatch) || null;
+  const selectedRoleUserOption = roleUserOptions.find((option) => option.value === roleForm.userId) || null;
+  const selectedExecutiveBatchOption = batchSelectOptions.find((option) => option.value === positionForm.batch) || null;
+  const selectedExecutiveUserOption =
+    executiveUserOptions.find((option) => option.value === positionForm.userId) || null;
   const roles = React.useMemo(() => {
     const rolesByCode = new Map<string, any>();
 
@@ -251,7 +314,7 @@ const AdminPanel = () => {
 
   React.useEffect(() => {
     if (roles.length && !roles.some((role: any) => role.code === roleForm.roleCode)) {
-      setRoleForm((prev) => ({ ...prev, roleCode: roles[0].code, scopeBatch: '' }));
+      setRoleForm((prev) => ({ ...prev, roleCode: roles[0].code }));
     }
   }, [roleForm.roleCode, roles]);
 
@@ -288,16 +351,16 @@ const AdminPanel = () => {
         },
       });
       setRoleForm((prev) => ({ ...prev, reason: '' }));
-      showAlert({ visible: true, type: 'success', message: 'Role assigned successfully.' }, true);
+      showAlert({ visible: true, type: 'success', message: 'Role assigned successfully.' });
     } catch (error: any) {
-      showAlert({ visible: true, type: 'error', message: error?.message || 'Role assignment failed.' }, true);
+      showAlert({ visible: true, type: 'error', message: error?.message || 'Role assignment failed.' });
     }
   };
 
   const onAssignPosition = async () => {
     const positionDates = positionDateForm.getValues();
     if (!activeTerm?.id) {
-      showAlert({ visible: true, type: 'error', message: 'Create and activate an executive term first.' }, true);
+      showAlert({ visible: true, type: 'error', message: 'Create and activate an executive term first.' });
       return;
     }
 
@@ -315,28 +378,31 @@ const AdminPanel = () => {
         },
       });
       setPositionForm((prev) => ({ ...prev, reason: '' }));
-      showAlert({ visible: true, type: 'success', message: 'Executive position assigned successfully.' }, true);
+      showAlert({ visible: true, type: 'success', message: 'Executive position assigned successfully.' });
     } catch (error: any) {
-      showAlert({ visible: true, type: 'error', message: error?.message || 'Position assignment failed.' }, true);
+      showAlert({ visible: true, type: 'error', message: error?.message || 'Position assignment failed.' });
     }
   };
 
-  const closeReplacementDialog = () => {
+  const closeReplacementDialog = (force = false) => {
+    if (replacementSaving && !force) return;
     setReplacementTarget(null);
     setReplacementUserId('');
     setReplacementReason('');
   };
 
-  const closeAddCoordinatorDialog = () => {
+  const closeAddCoordinatorDialog = (force = false) => {
+    if (addCoordinatorSaving && !force) return;
     setAddCoordinatorDialogOpen(false);
     setNewCoordinatorUserId('');
     setNewCoordinatorReason('');
   };
 
   const addBatchCoordinator = async () => {
-    if (!selectedBatch || !newCoordinatorUserId || !newCoordinatorReason) return;
+    if (!selectedBatch || !newCoordinatorUserId) return;
 
     try {
+      setAddCoordinatorSaving(true);
       await assignRole({
         variables: {
           input: {
@@ -344,26 +410,29 @@ const AdminPanel = () => {
             roleCode: ROLE_CODES.BATCH_COORDINATOR,
             scopeType: 'BATCH',
             scopeBatch: parseInt(selectedBatch, 10),
-            reason: newCoordinatorReason,
+            reason: newCoordinatorReason || null,
           },
         },
       });
-      showAlert({ visible: true, type: 'success', message: 'Batch coordinator added successfully.' }, true);
-      closeAddCoordinatorDialog();
+      closeAddCoordinatorDialog(true);
+      showAlert({ visible: true, type: 'success', message: 'Batch coordinator added successfully.' });
     } catch (error: any) {
-      showAlert({ visible: true, type: 'error', message: error?.message || 'Adding coordinator failed.' }, true);
+      showAlert({ visible: true, type: 'error', message: error?.message || 'Adding coordinator failed.' });
+    } finally {
+      setAddCoordinatorSaving(false);
     }
   };
 
   const replaceBatchCoordinator = async () => {
-    if (!replacementTarget?.id || !replacementTarget?.batch || !replacementUserId || !replacementReason) return;
+    if (!replacementTarget?.id || !replacementTarget?.batch || !replacementUserId) return;
 
     try {
+      setReplacementSaving(true);
       await revokeRole({
         variables: {
           input: {
             assignmentId: replacementTarget.id,
-            reason: replacementReason,
+            reason: replacementReason || null,
           },
         },
       });
@@ -374,14 +443,16 @@ const AdminPanel = () => {
             roleCode: ROLE_CODES.BATCH_COORDINATOR,
             scopeType: 'BATCH',
             scopeBatch: replacementTarget.batch,
-            reason: replacementReason,
+            reason: replacementReason || null,
           },
         },
       });
-      showAlert({ visible: true, type: 'success', message: 'Batch coordinator replaced successfully.' }, true);
-      closeReplacementDialog();
+      closeReplacementDialog(true);
+      showAlert({ visible: true, type: 'success', message: 'Batch coordinator replaced successfully.' });
     } catch (error: any) {
-      showAlert({ visible: true, type: 'error', message: error?.message || 'Replacement failed.' }, true);
+      showAlert({ visible: true, type: 'error', message: error?.message || 'Replacement failed.' });
+    } finally {
+      setReplacementSaving(false);
     }
   };
 
@@ -473,9 +544,7 @@ const AdminPanel = () => {
                   <Select
                     label="Role"
                     value={roleForm.roleCode}
-                    onChange={(event) =>
-                      setRoleForm((prev) => ({ ...prev, roleCode: event.target.value, scopeBatch: '' }))
-                    }
+                    onChange={(event) => setRoleForm((prev) => ({ ...prev, roleCode: event.target.value, userId: '' }))}
                   >
                     {roles.map((role: any) => (
                       <MenuItem key={role.code} value={role.code}>
@@ -484,36 +553,46 @@ const AdminPanel = () => {
                     ))}
                   </Select>
                 </FormControl>
-                <FormControl size="small" fullWidth>
-                  <InputLabel>User</InputLabel>
-                  <Select
-                    label="User"
-                    value={roleForm.userId}
-                    onChange={(event) => setRoleForm((prev) => ({ ...prev, userId: event.target.value }))}
-                  >
-                    {users.map((user: any) => (
-                      <MenuItem key={user.id} value={user.id}>
-                        <UserMenuLabel user={user} />
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-                {selectedRoleRequiresBatch && (
-                  <FormControl size="small" fullWidth>
-                    <InputLabel>Batch</InputLabel>
-                    <Select
-                      label="Batch"
-                      value={roleForm.scopeBatch}
-                      onChange={(event) => setRoleForm((prev) => ({ ...prev, scopeBatch: event.target.value }))}
-                    >
-                      {getBatchOptions().map((batch) => (
-                        <MenuItem key={batch.value} value={batch.value}>
-                          {batch.label}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                )}
+                <Grid container spacing={1}>
+                  <Grid size={{ xs: 12, sm: 5 }}>
+                    <Typography variant="caption" color="text.secondary">
+                      Batch
+                    </Typography>
+                    <ReactSelect
+                      options={batchSelectOptions}
+                      value={selectedRoleBatchOption}
+                      placeholder="Select batch"
+                      size="small"
+                      isSearchable
+                      onChange={(option) => {
+                        const selected = option as SelectOption | null;
+                        setRoleForm((prev) => ({
+                          ...prev,
+                          scopeBatch: selected?.value || '',
+                          userId: '',
+                        }));
+                      }}
+                    />
+                  </Grid>
+                  <Grid size={{ xs: 12, sm: 7 }}>
+                    <Typography variant="caption" color="text.secondary">
+                      User
+                    </Typography>
+                    <ReactSelect
+                      options={roleUserOptions}
+                      value={selectedRoleUserOption}
+                      placeholder={roleForm.scopeBatch ? 'Search active member' : 'Select batch first'}
+                      size="small"
+                      isSearchable
+                      showAvatars
+                      isLoading={roleBatchUsersLoading}
+                      onChange={(option) => {
+                        const selected = option as SelectOption | null;
+                        setRoleForm((prev) => ({ ...prev, userId: selected?.value || '' }));
+                      }}
+                    />
+                  </Grid>
+                </Grid>
                 <Grid container spacing={1}>
                   <Grid size={{ xs: 12, sm: 6 }}>
                     <FormDateTimeField
@@ -541,6 +620,7 @@ const AdminPanel = () => {
                 <TextField
                   size="small"
                   label="Reason"
+                  placeholder="Optional"
                   multiline
                   minRows={2}
                   value={roleForm.reason}
@@ -550,7 +630,7 @@ const AdminPanel = () => {
                   title="Assign Role"
                   onClick={onAssignRole}
                   loading={assigningRole}
-                  disabled={!roleForm.userId || !roleForm.reason || (selectedRoleRequiresBatch && !roleForm.scopeBatch)}
+                  disabled={!roleForm.scopeBatch || !roleForm.userId}
                 />
               </Stack>
             </Paper>
@@ -582,20 +662,46 @@ const AdminPanel = () => {
                     ))}
                   </Select>
                 </FormControl>
-                <FormControl size="small" fullWidth>
-                  <InputLabel>User</InputLabel>
-                  <Select
-                    label="User"
-                    value={positionForm.userId}
-                    onChange={(event) => setPositionForm((prev) => ({ ...prev, userId: event.target.value }))}
-                  >
-                    {users.map((user: any) => (
-                      <MenuItem key={user.id} value={user.id}>
-                        <UserMenuLabel user={user} />
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+                <Grid container spacing={1}>
+                  <Grid size={{ xs: 12, sm: 5 }}>
+                    <Typography variant="caption" color="text.secondary">
+                      Batch
+                    </Typography>
+                    <ReactSelect
+                      options={batchSelectOptions}
+                      value={selectedExecutiveBatchOption}
+                      placeholder="Select batch"
+                      size="small"
+                      isSearchable
+                      onChange={(option) => {
+                        const selected = option as SelectOption | null;
+                        setPositionForm((prev) => ({
+                          ...prev,
+                          batch: selected?.value || '',
+                          userId: '',
+                        }));
+                      }}
+                    />
+                  </Grid>
+                  <Grid size={{ xs: 12, sm: 7 }}>
+                    <Typography variant="caption" color="text.secondary">
+                      User
+                    </Typography>
+                    <ReactSelect
+                      options={executiveUserOptions}
+                      value={selectedExecutiveUserOption}
+                      placeholder={positionForm.batch ? 'Search active member' : 'Select batch first'}
+                      size="small"
+                      isSearchable
+                      showAvatars
+                      isLoading={executiveBatchUsersLoading}
+                      onChange={(option) => {
+                        const selected = option as SelectOption | null;
+                        setPositionForm((prev) => ({ ...prev, userId: selected?.value || '' }));
+                      }}
+                    />
+                  </Grid>
+                </Grid>
                 <Grid container spacing={1}>
                   <Grid size={{ xs: 12, sm: 6 }}>
                     <FormDateTimeField
@@ -623,6 +729,7 @@ const AdminPanel = () => {
                 <TextField
                   size="small"
                   label="Reason"
+                  placeholder="Optional"
                   multiline
                   minRows={2}
                   value={positionForm.reason}
@@ -632,7 +739,7 @@ const AdminPanel = () => {
                   title="Assign Position"
                   onClick={onAssignPosition}
                   loading={assigningPosition}
-                  disabled={!activeTerm || !positionForm.userId || !positionForm.reason}
+                  disabled={!activeTerm || !positionForm.batch || !positionForm.userId}
                 />
               </Stack>
             </Paper>
@@ -715,7 +822,7 @@ const AdminPanel = () => {
         </Accordion>
       )}
 
-      <Dialog open={addCoordinatorDialogOpen} onClose={closeAddCoordinatorDialog} fullWidth maxWidth="sm">
+      <Dialog open={addCoordinatorDialogOpen} onClose={() => closeAddCoordinatorDialog()} fullWidth maxWidth="sm">
         <DialogTitle>Add Batch Coordinator</DialogTitle>
         <DialogContent>
           <Typography color="grey.700" mb={2}>
@@ -738,6 +845,7 @@ const AdminPanel = () => {
           <TextField
             fullWidth
             label="Reason"
+            placeholder="Optional"
             value={newCoordinatorReason}
             onChange={(event) => setNewCoordinatorReason(event.target.value)}
             multiline
@@ -746,17 +854,23 @@ const AdminPanel = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button title="Cancel" variant="outlined" color="secondary" onClick={closeAddCoordinatorDialog} />
           <Button
-            title="Save"
-            loading={assigningRole}
-            disabled={!newCoordinatorUserId || !newCoordinatorReason}
+            title="Cancel"
+            variant="outlined"
+            color="secondary"
+            disabled={addCoordinatorSaving}
+            onClick={() => closeAddCoordinatorDialog()}
+          />
+          <Button
+            title="Add"
+            loading={addCoordinatorSaving}
+            disabled={!newCoordinatorUserId || addCoordinatorSaving}
             onClick={addBatchCoordinator}
           />
         </DialogActions>
       </Dialog>
 
-      <Dialog open={Boolean(replacementTarget)} onClose={closeReplacementDialog} fullWidth maxWidth="sm">
+      <Dialog open={Boolean(replacementTarget)} onClose={() => closeReplacementDialog()} fullWidth maxWidth="sm">
         <DialogTitle>Replace Batch Coordinator</DialogTitle>
         <DialogContent>
           <Typography color="grey.700" mb={2}>
@@ -779,6 +893,7 @@ const AdminPanel = () => {
           <TextField
             fullWidth
             label="Reason"
+            placeholder="Optional"
             value={replacementReason}
             onChange={(event) => setReplacementReason(event.target.value)}
             multiline
@@ -787,11 +902,17 @@ const AdminPanel = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button title="Cancel" variant="outlined" color="secondary" onClick={closeReplacementDialog} />
           <Button
-            title="Save"
-            loading={assigningRole || revokingRole}
-            disabled={!replacementUserId || !replacementReason}
+            title="Cancel"
+            variant="outlined"
+            color="secondary"
+            disabled={replacementSaving}
+            onClick={() => closeReplacementDialog()}
+          />
+          <Button
+            title="Update"
+            loading={replacementSaving}
+            disabled={!replacementUserId || replacementSaving}
             onClick={replaceBatchCoordinator}
           />
         </DialogActions>

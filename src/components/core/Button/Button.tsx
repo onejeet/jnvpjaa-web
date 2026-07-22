@@ -172,7 +172,7 @@ const Button = (
     ref={ref}
     {...restProps}
   >
-    {loading ? '' : title || actionConfig[action]?.title}
+    {title || actionConfig[action]?.title}
   </MuiButton>
 );
 const ButtonWithRef = React.forwardRef(Button);

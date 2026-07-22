@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Select, { MultiValue, SingleValue, components } from 'react-select';
-import { CircularProgress, Box, useTheme, Avatar, AvatarGroup, FormHelperText, OutlinedInput } from '@mui/material';
+import { CircularProgress, Box, useTheme } from '@mui/material';
 import ProfilePicture from '@/components/common/ProfilePicture';
 
 interface Option {
   value: string;
   label: string;
+  title?: string;
+  summary?: string;
   avatarUrl?: string; // Optional for avatar-based options
 }
 
@@ -28,29 +30,21 @@ interface ReactSelectProps {
 const MultiValueLabel = ({ data, showAvatars, ...props }: any) => (
   <components.MultiValueLabel {...props}>
     <Box display="flex" alignItems="center" gap={1}>
-      {showAvatars && data.avatarUrl && <Avatar src={data.avatarUrl} alt={data.label} sx={{ width: 20, height: 20 }} />}
-      {data.label}
+      {showAvatars ? (
+        <ProfilePicture
+          title={data.title || data.label}
+          src={data.avatarUrl}
+          alt={data.title || data.label}
+          size={20}
+          containerProps={{ sx: { cursor: 'default' } }}
+          contentContainerProps={{ sx: { ml: '6px' } }}
+        />
+      ) : (
+        data.label
+      )}
     </Box>
   </components.MultiValueLabel>
 );
-
-// Custom Multi Value Container with AvatarGroup
-const MultiValueContainer = (props: any) => {
-  const { selectProps, children } = props;
-  const selectedOptions = Array.isArray(selectProps.value) ? selectProps.value : [];
-
-  if (selectProps.isMulti && selectProps.showAvatars) {
-    return (
-      <AvatarGroup max={4}>
-        {selectedOptions.map((option: Option) => (
-          <Avatar key={option.value} src={option.avatarUrl} alt={option.label} />
-        ))}
-      </AvatarGroup>
-    );
-  }
-
-  return <components.MultiValueContainer {...props} />;
-};
 
 // Custom Menu with Search Bar
 const CustomMenuList = (props: any) => {
@@ -98,8 +92,15 @@ const CustomOption = (props: any) => {
   return (
     <components.Option {...props}>
       <Box display="flex" alignItems="center" gap={1}>
-        {showAvatars && data.avatarUrl ? (
-          <ProfilePicture title={data?.label} src={data.avatarUrl} alt={data.label} size={size === 'small' ? 24 : 28} />
+        {showAvatars ? (
+          <ProfilePicture
+            title={data.title || data.label}
+            summary={data.summary}
+            src={data.avatarUrl}
+            alt={data.title || data.label}
+            size={size === 'small' ? 28 : 32}
+            containerProps={{ sx: { cursor: 'default' } }}
+          />
         ) : (
           data.label
         )}
@@ -139,12 +140,14 @@ const ReactSelect: React.FC<ReactSelectProps> = ({
     ({ data, showAvatars, ...props }: any) => (
       <components.SingleValue {...props}>
         <Box display="flex" alignItems="center" gap={1}>
-          {showAvatars && data.avatarUrl ? (
+          {showAvatars ? (
             <ProfilePicture
-              title={data.label}
+              title={data.title || data.label}
+              summary={data.summary}
               src={data.avatarUrl}
-              alt={data.label}
-              size={size === 'small' ? 24 : 32}
+              alt={data.title || data.label}
+              size={size === 'small' ? 24 : 28}
+              containerProps={{ sx: { cursor: 'default' } }}
             />
           ) : (
             data.label
@@ -189,12 +192,7 @@ const ReactSelect: React.FC<ReactSelectProps> = ({
           Option: (props) => <CustomOption {...props} showAvatars={showAvatars} size={size} />,
           SingleValue: (props) => <SingleValueComp {...props} showAvatars={showAvatars} />,
           MultiValueLabel: (props) => <MultiValueLabel {...props} showAvatars={showAvatars} />,
-          MultiValueContainer: (props) =>
-            isMulti && showAvatars ? (
-              <MultiValueContainer {...props} showAvatars={showAvatars} />
-            ) : (
-              <components.MultiValueContainer {...props} />
-            ),
+          MultiValueContainer: (props) => <components.MultiValueContainer {...props} />,
           MenuList: (props) => (
             <CustomMenuList
               {...props}
