@@ -11,6 +11,7 @@ import {
   REVOKE_USER_ROLE_MUTATION,
   ROLE_ASSIGNMENTS_QUERY,
 } from '@/apollo/accessOperations';
+import AlertDialog, { AlertDialogProps } from '@/components/common/AlertDialog';
 import { useGetUserListQuery, useSendMassEmailMutation } from '@/apollo/hooks';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import Button from '@/components/core/Button';
@@ -54,6 +55,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { IconSend as PaperPlaneTilt, IconShieldCheck } from '@tabler/icons-react';
 
 const batchRoles = [ROLE_CODES.BATCH_COORDINATOR, ROLE_CODES.BATCH_MENTOR];
+const activeAssignmentOtherRoles = [ROLE_CODES.FINANCE_MANAGER, ROLE_CODES.PLATFORM_ADMIN, ROLE_CODES.SUPER_ADMIN];
 const assignableRoleCodes = [
   ROLE_CODES.BATCH_COORDINATOR,
   ROLE_CODES.BATCH_MENTOR,
@@ -155,6 +157,18 @@ const AssignmentUser = ({ user, showEmail = false }: { user: any; showEmail?: bo
   />
 );
 
+const evictRoleAssignmentCaches = (cache: any) => {
+  cache.evict({ fieldName: 'roleAssignments' });
+  cache.evict({ fieldName: 'getAllBatchCoordinators' });
+  cache.gc();
+};
+
+const evictExecutiveAssignmentCaches = (cache: any) => {
+  cache.evict({ fieldName: 'executivePositionAssignments' });
+  cache.evict({ fieldName: 'publicExecutiveCommittee' });
+  cache.gc();
+};
+
 const AdminPanel = () => {
   const { can, hasRole } = useAuth();
   const { showAlert } = useAlert();
@@ -177,6 +191,8 @@ const AdminPanel = () => {
   const [replacementReason, setReplacementReason] = React.useState('');
   const [addCoordinatorSaving, setAddCoordinatorSaving] = React.useState(false);
   const [replacementSaving, setReplacementSaving] = React.useState(false);
+  const [executiveAssignDialog, setExecutiveAssignDialog] = React.useState<Partial<AlertDialogProps>>({});
+  const [welcomeEmailDialog, setWelcomeEmailDialog] = React.useState<Partial<AlertDialogProps>>({});
   const replacementBatch = replacementTarget?.batch ? String(replacementTarget.batch) : selectedBatch;
   const roleDateForm = useForm<AccessDateForm>({
     defaultValues: {
@@ -193,12 +209,18 @@ const AdminPanel = () => {
 
   const [assignRole, { loading: assigningRole }] = useMutation(ASSIGN_USER_ROLE_MUTATION, {
     refetchQueries: ['roleAssignments', 'batchCoordinatorRoleAssignments', 'viewerAccessContext'],
+    awaitRefetchQueries: true,
+    update: evictRoleAssignmentCaches,
   });
   const [revokeRole] = useMutation(REVOKE_USER_ROLE_MUTATION, {
     refetchQueries: ['roleAssignments', 'batchCoordinatorRoleAssignments', 'viewerAccessContext'],
+    awaitRefetchQueries: true,
+    update: evictRoleAssignmentCaches,
   });
-  const [assignPosition, { loading: assigningPosition }] = useMutation(ASSIGN_EXECUTIVE_POSITION_MUTATION, {
-    refetchQueries: ['executivePositionAssignments', 'viewerAccessContext'],
+  const [assignPosition] = useMutation(ASSIGN_EXECUTIVE_POSITION_MUTATION, {
+    refetchQueries: ['executivePositionAssignments', 'publicExecutiveCommittee', 'viewerAccessContext'],
+    awaitRefetchQueries: true,
+    update: evictExecutiveAssignmentCaches,
   });
 
   const { data: catalogData } = useQuery(ACCESS_CATALOG_QUERY, {
@@ -307,9 +329,8 @@ const AdminPanel = () => {
   const batchMentorAssignments = roleAssignments.filter(
     (assignment: any) => assignment.role?.code === ROLE_CODES.BATCH_MENTOR
   );
-  const otherAssignments = roleAssignments.filter(
-    (assignment: any) =>
-      assignment.role?.code !== ROLE_CODES.BATCH_COORDINATOR && assignment.role?.code !== ROLE_CODES.BATCH_MENTOR
+  const otherAssignments = roleAssignments.filter((assignment: any) =>
+    activeAssignmentOtherRoles.includes(assignment.role?.code)
   );
 
   React.useEffect(() => {
@@ -322,14 +343,55 @@ const AdminPanel = () => {
     return null;
   }
 
-  const onSendWelcomeEmail = () => {
-    sendEmail({
-      variables: {
-        subject: '🙌 New JNVPJAA Portal Awaits – Let’s Go! 🎉 ',
-        template: 'newPortalWelcome',
-        context: {
-          url: 'https://jnvpjaa.org',
+  const closeWelcomeEmailDialog = () => {
+    setWelcomeEmailDialog({});
+  };
+
+  const executeSendWelcomeEmail = async () => {
+    try {
+      setWelcomeEmailDialog({
+        open: true,
+        action: 'loading',
+        title: 'Sending Welcome Email',
+        message: 'Sending welcome email to members. Please wait...',
+      });
+      await sendEmail({
+        variables: {
+          subject: '🙌 New JNVPJAA Portal Awaits – Let’s Go! 🎉 ',
+          template: 'newPortalWelcome',
+          context: {
+            url: 'https://jnvpjaa.org',
+          },
         },
+      });
+      setWelcomeEmailDialog({
+        open: true,
+        action: 'success',
+        title: 'Welcome Email Sent',
+        message: 'Welcome email has been sent successfully.',
+        onCancel: closeWelcomeEmailDialog,
+      });
+    } catch (error: any) {
+      setWelcomeEmailDialog({
+        open: true,
+        action: 'error',
+        title: 'Sending Failed',
+        message: error?.message || 'Welcome email could not be sent.',
+        onCancel: closeWelcomeEmailDialog,
+      });
+    }
+  };
+
+  const onSendWelcomeEmail = () => {
+    setWelcomeEmailDialog({
+      open: true,
+      action: 'update',
+      title: 'Send Welcome Email?',
+      message: 'This will send the welcome email to members. Do you want to continue?',
+      onOkay: executeSendWelcomeEmail,
+      onCancel: closeWelcomeEmailDialog,
+      okayButtonProps: {
+        title: 'Send',
       },
     });
   };
@@ -357,14 +419,33 @@ const AdminPanel = () => {
     }
   };
 
-  const onAssignPosition = async () => {
+  const closeExecutiveAssignDialog = () => {
+    setExecutiveAssignDialog({});
+  };
+
+  const selectedExecutivePosition = positions.find((position: any) => position.code === positionForm.positionCode);
+  const selectedExecutiveUser = executiveBatchUsers.find((user: any) => user.id === positionForm.userId);
+
+  const executeAssignPosition = async () => {
     const positionDates = positionDateForm.getValues();
     if (!activeTerm?.id) {
-      showAlert({ visible: true, type: 'error', message: 'Create and activate an executive term first.' });
+      setExecutiveAssignDialog({
+        open: true,
+        action: 'error',
+        title: 'No Active Term',
+        message: 'Create and activate an executive term first.',
+        onCancel: closeExecutiveAssignDialog,
+      });
       return;
     }
 
     try {
+      setExecutiveAssignDialog({
+        open: true,
+        action: 'loading',
+        title: 'Updating Assignment',
+        message: 'Updating executive position assignment. Please wait...',
+      });
       await assignPosition({
         variables: {
           input: {
@@ -378,10 +459,47 @@ const AdminPanel = () => {
         },
       });
       setPositionForm((prev) => ({ ...prev, reason: '' }));
-      showAlert({ visible: true, type: 'success', message: 'Executive position assigned successfully.' });
+      setExecutiveAssignDialog({
+        open: true,
+        action: 'success',
+        title: 'Assignment Updated',
+        message: 'Executive position assignment updated successfully.',
+        onCancel: closeExecutiveAssignDialog,
+      });
     } catch (error: any) {
-      showAlert({ visible: true, type: 'error', message: error?.message || 'Position assignment failed.' });
+      setExecutiveAssignDialog({
+        open: true,
+        action: 'error',
+        title: 'Update Failed',
+        message: error?.message || 'Position assignment failed.',
+        onCancel: closeExecutiveAssignDialog,
+      });
     }
+  };
+
+  const onAssignPosition = () => {
+    if (!activeTerm?.id) {
+      setExecutiveAssignDialog({
+        open: true,
+        action: 'error',
+        title: 'No Active Term',
+        message: 'Create and activate an executive term first.',
+        onCancel: closeExecutiveAssignDialog,
+      });
+      return;
+    }
+
+    setExecutiveAssignDialog({
+      open: true,
+      action: 'update',
+      title: 'Update Executive Position?',
+      message: `This will assign ${selectedExecutiveUser ? `${selectedExecutiveUser.firstName || ''} ${selectedExecutiveUser.lastName || ''}`.trim() : 'the selected member'} as ${selectedExecutivePosition?.name || positionForm.positionCode}. If this position already has a member, the existing member will be replaced.`,
+      onOkay: executeAssignPosition,
+      onCancel: closeExecutiveAssignDialog,
+      okayButtonProps: {
+        title: 'Update',
+      },
+    });
   };
 
   const closeReplacementDialog = (force = false) => {
@@ -512,6 +630,9 @@ const AdminPanel = () => {
     if (!otherAssignments.length) return renderNoAssignments('No other active role assignments found.');
     return otherAssignments.map(renderRoleAssignment);
   };
+
+  const { open: executiveAssignDialogOpen, ...executiveAssignDialogProps } = executiveAssignDialog;
+  const { open: welcomeEmailDialogOpen, ...welcomeEmailDialogProps } = welcomeEmailDialog;
 
   return (
     <Box width="100%" p={{ xs: 2, md: 4 }}>
@@ -644,10 +765,6 @@ const AdminPanel = () => {
                 Assign Executive Position
               </Typography>
               <Stack spacing={2}>
-                <Alert severity={activeTerm ? 'success' : 'warning'}>
-                  {activeTerm ? `Active term: ${activeTerm.name}` : 'No active executive term found.'}
-                </Alert>
-
                 <FormControl size="small" fullWidth>
                   <InputLabel>Position</InputLabel>
                   <Select
@@ -738,8 +855,7 @@ const AdminPanel = () => {
                 <Button
                   title="Assign Position"
                   onClick={onAssignPosition}
-                  loading={assigningPosition}
-                  disabled={!activeTerm || !positionForm.batch || !positionForm.userId}
+                  disabled={!positionForm.batch || !positionForm.userId}
                 />
               </Stack>
             </Paper>
@@ -917,6 +1033,22 @@ const AdminPanel = () => {
           />
         </DialogActions>
       </Dialog>
+
+      {executiveAssignDialogOpen && (
+        <AlertDialog
+          {...executiveAssignDialogProps}
+          open={Boolean(executiveAssignDialogOpen)}
+          onClose={closeExecutiveAssignDialog}
+        />
+      )}
+
+      {welcomeEmailDialogOpen && (
+        <AlertDialog
+          {...welcomeEmailDialogProps}
+          open={Boolean(welcomeEmailDialogOpen)}
+          onClose={closeWelcomeEmailDialog}
+        />
+      )}
     </Box>
   );
 };

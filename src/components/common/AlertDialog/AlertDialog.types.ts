@@ -8,6 +8,7 @@ export interface AlertContentProps {
     | 'approve'
     | 'reject'
     | 'delete'
+    | 'update'
     | 'unsaved'
     | 'loading'
     | 'deleting'

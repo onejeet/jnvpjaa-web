@@ -26,7 +26,7 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
       return 'error';
     } else if (action === 'reject') {
       return 'error';
-    } else if (action === 'approve' || action === 'app') {
+    } else if (action === 'approve' || action === 'app' || action === 'update') {
       return 'success';
     } else if (action === 'success') {
       return 'success';
@@ -47,6 +47,8 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
       return 'Reject';
     } else if (action === 'approve') {
       return 'Approve';
+    } else if (action === 'update') {
+      return 'Update';
     } else if (action === 'success') {
       return 'Okay';
     } else if (action === 'error') {

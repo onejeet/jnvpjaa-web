@@ -35,6 +35,8 @@ const AlertContent: React.FC<AlertContentProps> = ({ title, message, action = 'd
             <br /> The registration will be discarded and removed.
           </Typography>
         );
+      case 'update':
+        return <Typography variant="body1">{message || 'Do you really want to update this assignment?'}</Typography>;
       case 'delete':
         if (items.length === 0) {
           return <Typography variant="body1">Do you really want to delete this item?</Typography>;
@@ -80,7 +82,7 @@ const AlertContent: React.FC<AlertContentProps> = ({ title, message, action = 'd
 
   const titleComp = React.useMemo(() => {
     let upTitle = null;
-    if (action === 'delete' || action === 'approve' || action === 'reject' || action === 'app') {
+    if (action === 'delete' || action === 'approve' || action === 'reject' || action === 'app' || action === 'update') {
       upTitle = title || 'Are you sure?';
     } else if (action === 'deleting') {
       upTitle = title || 'Deleting...';
@@ -102,7 +104,13 @@ const AlertContent: React.FC<AlertContentProps> = ({ title, message, action = 'd
   }, [action, title]);
 
   const iconComp = React.useMemo(() => {
-    if (action === 'delete' || action === 'approve' || action === 'reject' || action === 'request') {
+    if (
+      action === 'delete' ||
+      action === 'approve' ||
+      action === 'reject' ||
+      action === 'request' ||
+      action === 'update'
+    ) {
       return <SealQuestion size={100} />;
     } else if (action === 'loading') {
       return <Lottie animationData={loadingLottieIcon} loop={true} style={{ width: '130px', height: '130px' }} />;
