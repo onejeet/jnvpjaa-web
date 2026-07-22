@@ -32,6 +32,44 @@ const EventListModule: React.FC<EventListModuleProps> = ({
   const router = useRouter();
 
   const { markImGoing, verifyEvent, onEditEvent, onPublishEvent, onDelete } = useEvents({ user });
+
+  const dummyEvents = React.useMemo(() => {
+    const now = new Date();
+    const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000).toISOString();
+    const dayAfter = new Date(now.getTime() + 2 * 24 * 60 * 60 * 1000).toISOString();
+
+    return [
+      {
+        id: 900001,
+        title: 'Dummy Online Event',
+        summary: 'Test online event for live UI verification.',
+        description: 'This is a dummy online event created for testing.',
+        startDate: tomorrow,
+        endDate: dayAfter,
+        medium: 'online',
+        location: 'https://meet.google.com/abc-defg-hij',
+        status: 'PUBLISHED',
+        total_attendies: 0,
+        attendees: [],
+        category: 'GENERAL',
+      },
+      {
+        id: 900002,
+        title: 'Dummy Offline Event',
+        summary: 'Test offline event for live UI verification.',
+        description: 'This is a dummy offline event created for testing.',
+        startDate: tomorrow,
+        endDate: dayAfter,
+        medium: 'offline',
+        location: 'Paota, Jaipur, Rajasthan',
+        status: 'PUBLISHED',
+        total_attendies: 0,
+        attendees: [],
+        category: 'GENERAL',
+      },
+    ];
+  }, []);
+
   const { data: eventData, loading } = useGetEventListQuery({
     skip,
     variables: {
@@ -47,8 +85,8 @@ const EventListModule: React.FC<EventListModuleProps> = ({
     if (loading || propLoading) {
       return new Array(6).fill({ id: '', title: '', description: '', startDate: '', medium: 'Online', online: false });
     }
-    return eventData?.getEventList?.data || [];
-  }, [loading, eventData, propLoading]);
+    return [...dummyEvents, ...(eventData?.getEventList?.data || [])];
+  }, [loading, eventData, propLoading, dummyEvents]);
 
   console.log('ZZ: listData', listData);
 
