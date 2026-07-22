@@ -68,6 +68,14 @@ interface LayoutTopbarProps {
   position?: 'top' | 'bottom';
 }
 
+type AccountMenuItem = {
+  label: string;
+  value: string;
+  icon: React.ReactNode;
+  onClick: () => void;
+  sx?: Record<string, any>;
+};
+
 const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
   const [expanded, setExpanded] = React.useState<string>('');
   const [openMenu, setOpenMenu] = React.useState<boolean>(false);
@@ -118,13 +126,14 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
         },
         {
           label: 'Log Out',
+          value: 'logout',
           icon: <SignOut size={16} />,
           sx: {
             color: 'error.main',
           },
           onClick: logoutUser,
         },
-      ].filter(Boolean),
+      ].filter(Boolean) as AccountMenuItem[],
     [canAccessAdminCenter, logoutUser, router, redirectToSignin]
   );
 
@@ -230,7 +239,7 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
             </Box>
           )}
         </MenuItem>
-        {ACCOUNT_MENU_LIST?.map((mItem: Record<string, any>) => (
+        {ACCOUNT_MENU_LIST?.map((mItem) => (
           <MenuItem
             key={`menu-${mItem?.value}`}
             onClick={mItem?.onClick}

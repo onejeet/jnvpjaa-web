@@ -66,6 +66,13 @@ type AccessDateForm = {
   validUntil: Dayjs | null;
 };
 
+type RoleAssignmentFormState = {
+  userId: string;
+  roleCode: string;
+  scopeBatch: string;
+  reason: string;
+};
+
 const toDateInputValue = (value?: Dayjs | null) => (value ? value.format('YYYY-MM-DD') : null);
 
 const getLatestBatchValue = () => {
@@ -202,7 +209,7 @@ const AdminPanel = () => {
     skip: !canManageBatchRoles || (!replacementBatch && !addCoordinatorDialogOpen),
   });
 
-  const [roleForm, setRoleForm] = React.useState({
+  const [roleForm, setRoleForm] = React.useState<RoleAssignmentFormState>({
     userId: '',
     roleCode: ROLE_CODES.BATCH_COORDINATOR,
     scopeBatch: '',
