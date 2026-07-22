@@ -214,7 +214,7 @@ const AdminPanel = () => {
   const [roleUsers, setRoleUsers] = React.useState<any[]>([]);
   const [roleUserOffset, setRoleUserOffset] = React.useState(0);
   const [roleUserTotal, setRoleUserTotal] = React.useState(0);
-  const roleUserRequestId = React.useRef(0);
+  const roleUserRequestKey = React.useRef('');
   const [addCoordinatorSaving, setAddCoordinatorSaving] = React.useState(false);
   const [replacementSaving, setReplacementSaving] = React.useState(false);
   const [executiveAssignDialog, setExecutiveAssignDialog] = React.useState<Partial<AlertDialogProps>>({});
@@ -242,6 +242,7 @@ const AdminPanel = () => {
   const [fetchRoleUsers, { loading: roleUsersLoading }] = useGetUserListLazyQuery({
     fetchPolicy: 'network-only',
   });
+  const fetchRoleUsersRef = React.useRef(fetchRoleUsers);
 
   const { data: catalogData } = useQuery(ACCESS_CATALOG_QUERY, {
     skip: !canReadCatalog,
@@ -340,6 +341,10 @@ const AdminPanel = () => {
     }
   }, [roleForm.roleCode, roles]);
 
+  React.useEffect(() => {
+    fetchRoleUsersRef.current = fetchRoleUsers;
+  }, [fetchRoleUsers]);
+
   const fetchRoleUserPage = React.useCallback(
     async (search: string, offset: number) => {
       const parsedScopeBatch = roleForm.scopeBatch ? parseInt(roleForm.scopeBatch, 10) : undefined;
@@ -366,8 +371,9 @@ const AdminPanel = () => {
         filter.excludeBatch = parsedScopeBatch;
       }
 
-      const requestId = ++roleUserRequestId.current;
-      const result = await fetchRoleUsers({
+      const requestKey = `${roleForm.roleCode}:${roleForm.scopeBatch}:${search.trim()}:${offset}`;
+      roleUserRequestKey.current = requestKey;
+      const result = await fetchRoleUsersRef.current({
         variables: {
           options: {
             filter,
@@ -376,7 +382,7 @@ const AdminPanel = () => {
           },
         },
       });
-      if (requestId !== roleUserRequestId.current) return;
+      if (roleUserRequestKey.current !== requestKey) return;
 
       const nextUsers = (result.data?.getUserList?.data || []).filter(Boolean);
 
@@ -391,7 +397,7 @@ const AdminPanel = () => {
     },
     [
       canReadAccess,
-      fetchRoleUsers,
+      roleForm.roleCode,
       roleForm.scopeBatch,
       selectedRoleIsCoordinator,
       selectedRoleIsMentor,
