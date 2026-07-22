@@ -9,7 +9,6 @@ import {
   CardMedia,
   Typography,
   Badge,
-  Avatar,
   Box,
   Stack,
   AvatarGroup,
@@ -22,7 +21,8 @@ import {
 } from '@mui/material';
 import { EventCardProps } from './EventCard.types';
 import Button from '@/components/core/Button';
-import { getAvatarDataUrl, startCase, valueToLabelFormatter } from '@/utils/helpers';
+import ProfilePicture from '@/components/common/ProfilePicture';
+import { startCase, valueToLabelFormatter } from '@/utils/helpers';
 import {
   IconCalendarEvent as CalendarDots,
   IconMapPin as MapPinLine,
@@ -381,14 +381,12 @@ const EventCard: React.FC<EventCardProps> = ({
                     title={`${person?.firstName || 'NA'} ${person?.lastName || ''} ${person?.batch ? `(${person.batch})` : ''}`}
                     arrow
                   >
-                    <Avatar
+                    <ProfilePicture
+                      id={person?.id}
                       alt={person?.firstName || 'NA'}
-                      src={person?.profileImage || getAvatarDataUrl(person?.id)}
-                      slotProps={{
-                        img: {
-                          referrerPolicy: 'no-referrer',
-                        },
-                      }}
+                      src={person?.profileImage || undefined}
+                      size={40}
+                      containerProps={{ sx: { width: 40, cursor: 'default' } }}
                     />
                   </Tooltip>
                 ))}

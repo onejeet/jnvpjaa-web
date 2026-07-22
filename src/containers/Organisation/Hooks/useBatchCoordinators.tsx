@@ -1,7 +1,7 @@
 'use client';
 
 import { commonTableColumnProps } from '@/constants/General.contants';
-import { formatPhoneNumber, getDefaultAvatar } from '@/utils/helpers';
+import { formatPhoneNumber } from '@/utils/helpers';
 import Box from '@mui/material/Box';
 import { GridRowParams } from '@mui/x-data-grid';
 import React from 'react';
@@ -46,7 +46,7 @@ const useBatchCoordinators = (coordinators?: BatchCoordinatorRoleAssignment[]) =
             <ProfilePicture
               loading={row.loading}
               id={row?.id}
-              src={row?.user?.profileImage || getDefaultAvatar(row?.user?.gender)}
+              src={row?.user?.profileImage || undefined}
               title={
                 <Box display="flex" alignItems="center">
                   <Typography mr={0.5}>{`${row?.user?.firstName} ${row?.user?.lastName}`}</Typography>

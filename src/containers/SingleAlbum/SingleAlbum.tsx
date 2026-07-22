@@ -4,12 +4,12 @@ import { useGetAlbumQuery, Album, UserBasic, Maybe } from '@/apollo/hooks';
 import Breadcrumbs from '@/components/common/Breadcrumbs';
 import EmptyView from '@/components/common/EmptyView';
 import PhotoGrid from '@/components/common/PhotoGrid';
+import ProfilePicture from '@/components/common/ProfilePicture';
 import { useAuth } from '@/context/AuthContext';
 import LayoutModule from '@/layouts/Layout';
 import { updateCache } from '@/utils/apollo';
-import { getAvatarDataUrl } from '@/utils/helpers';
 import { useApolloClient } from '@apollo/client';
-import { Avatar, AvatarGroup, Box, Skeleton, Stack, Tooltip, Typography } from '@mui/material';
+import { AvatarGroup, Box, Skeleton, Stack, Tooltip, Typography } from '@mui/material';
 import { IconCalendarEvent, IconCircleCheck, IconEye, IconPencil, IconStar, IconStarFilled } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -358,14 +358,12 @@ const SingleAlbum: React.FC<SingleAlbumProps> = ({ albumId }) => {
                           title={`${person?.firstName || 'NA'} ${person?.lastName || ''} ${person?.batch ? `(${person.batch})` : ''}`}
                           arrow
                         >
-                          <Avatar
+                          <ProfilePicture
+                            id={person?.id}
                             alt={person?.firstName || 'NA'}
-                            src={person?.profileImage || getAvatarDataUrl(person?.id)}
-                            slotProps={{
-                              img: {
-                                referrerPolicy: 'no-referrer',
-                              },
-                            }}
+                            src={person?.profileImage || undefined}
+                            size={28}
+                            containerProps={{ sx: { width: 28, cursor: 'default' } }}
                             sx={{ width: 28, height: 28 }}
                           />
                         </Tooltip>

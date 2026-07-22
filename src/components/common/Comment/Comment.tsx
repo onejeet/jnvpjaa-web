@@ -1,11 +1,12 @@
 'use client';
 
-import { Avatar, Box, Typography, Stack, Button } from '@mui/material';
+import { Box, Typography, Stack, Button } from '@mui/material';
 import { useState } from 'react';
 import CommentForm from '../CommentForm';
 import dayjs from 'dayjs';
 import { Comment } from '@/apollo/hooks';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import ProfilePicture from '../ProfilePicture';
 
 dayjs.extend(relativeTime);
 
@@ -20,7 +21,13 @@ export default function CommentItem({ comment, onReply }: Props) {
   return (
     <Box sx={{ mt: 2 }}>
       <Stack direction="row" spacing={2}>
-        <Avatar src={comment?.author?.profileImage || undefined} />
+        <ProfilePicture
+          id={comment?.author?.id}
+          src={comment?.author?.profileImage || undefined}
+          title=""
+          size={40}
+          containerProps={{ sx: { width: 40, cursor: 'default', flexShrink: 0 } }}
+        />
         <Box>
           <Typography fontWeight="bold">{`${comment?.author?.firstName || ''} ${comment?.author?.lastName || ''}`}</Typography>
           <Typography variant="body2" color="text.secondary">

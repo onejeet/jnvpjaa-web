@@ -7,10 +7,8 @@ import {
   CardMedia,
   Typography,
   Badge,
-  Avatar,
   Box,
   Stack,
-  AvatarGroup,
   Chip,
   Skeleton,
   Tooltip,
@@ -18,7 +16,7 @@ import {
 } from '@mui/material';
 import { AlbumCardProps } from './AlbumCard.types';
 import Button from '@/components/core/Button';
-import { getAvatarDataUrl, startCase, valueToLabelFormatter } from '@/utils/helpers';
+import { startCase, valueToLabelFormatter } from '@/utils/helpers';
 import {
   IconArrowRight as ArrowRight,
   IconCalendarEvent as CalendarDots,

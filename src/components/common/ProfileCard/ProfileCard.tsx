@@ -1,7 +1,8 @@
 'use client';
 
 import { formatPhoneNumber, getSocialMediaIcon } from '@/utils/helpers';
-import { Card, CardContent, Typography, Box, Avatar, Stack, IconButton, Link, BoxProps } from '@mui/material';
+import ProfilePicture from '@/components/common/ProfilePicture';
+import { Card, CardContent, Typography, Box, Stack, IconButton, Link, BoxProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import React from 'react';
 
@@ -24,14 +25,6 @@ const StyledCard = styled(Card)(({ theme }) => ({
     boxShadow: `0 6px 12px rgba(0, 0, 0, 0.2), 0 12px 30px rgba(0, 0, 0, 0.2)`,
     transform: 'scale(1.02)',
   },
-}));
-
-// Profile Image with Custom Styling
-const ProfileImage = styled(Avatar)(({ theme }) => ({
-  width: 200,
-  height: 200,
-  border: `4px solid ${theme.palette.primary.main}`,
-  boxShadow: `0 4px 8px rgba(0, 0, 0, 0.2)`,
 }));
 
 // Styled Header Section
@@ -61,11 +54,18 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
           {designation}
         </Typography>
       </HeaderSection>
-      {profilePicture && (
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-          <ProfileImage src={profilePicture} alt={`${name}'s profile picture`} />
-        </Box>
-      )}
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+        <ProfilePicture
+          src={profilePicture || undefined}
+          alt={`${name}'s profile picture`}
+          size={200}
+          containerProps={{ sx: { width: 200, cursor: 'default' } }}
+          sx={(theme) => ({
+            border: `4px solid ${theme.palette.primary.main}`,
+            boxShadow: `0 4px 8px rgba(0, 0, 0, 0.2)`,
+          })}
+        />
+      </Box>
 
       <CardContent sx={{ textAlign: 'left' }}>
         <Typography gutterBottom variant="h2" component="div" sx={{ mb: 1, fontWeight: 600 }}>

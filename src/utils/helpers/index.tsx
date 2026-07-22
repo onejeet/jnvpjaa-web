@@ -1,4 +1,4 @@
-import { adventurerNeutral, bottts, botttsNeutral, thumbs } from '@dicebear/collection';
+import { botttsNeutral } from '@dicebear/collection';
 import { createAvatar } from '@dicebear/core';
 import {
   IconMail as EnvelopeSimple,
@@ -36,12 +36,6 @@ export const getSocialMediaIcon = (iconName: string) => {
       return <YoutubeLogo size={28} />;
     }
   }
-};
-
-export const getDefaultAvatar = (gender?: string) => {
-  return gender === 'female'
-    ? 'https://assets.jnvpjaa.org/images/female_profile_placeholder.webp'
-    : 'https://assets.jnvpjaa.org/images/male_profile_placeholder.webp';
 };
 
 export const getAvatarDataUrl = (id?: string, options?: any) => {

@@ -337,6 +337,7 @@ export enum EventStatus {
 export type FilterInput = {
   batch?: InputMaybe<Scalars['Int']['input']>;
   blogId?: InputMaybe<Scalars['String']['input']>;
+  excludeBatch?: InputMaybe<Scalars['Int']['input']>;
   query?: InputMaybe<Scalars['String']['input']>;
   userId?: InputMaybe<Scalars['String']['input']>;
   verified?: InputMaybe<Scalars['Boolean']['input']>;

@@ -5,7 +5,6 @@ import {
   Card,
   CardContent,
   CardHeader,
-  Avatar,
   Typography,
   Chip,
   Stack,

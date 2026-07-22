@@ -2,7 +2,6 @@
 
 import { commonTableColumnProps } from '@/constants/General.contants';
 import PAST_PRESIDENTS from '@/constants/PastPresidents.json';
-import { getDefaultAvatar } from '@/utils/helpers';
 import Box from '@mui/material/Box';
 import { GridRowParams } from '@mui/x-data-grid';
 import React from 'react';
@@ -28,7 +27,8 @@ const usePastPresidents = () => {
         renderCell: (params: GridRowParams) => (
           <Box display="flex" alignItems="center" height="100%">
             <ProfilePicture
-              src={params.row.profile_image || getDefaultAvatar(params.row.gender)}
+              id={params.row.id}
+              src={params.row.profile_image || undefined}
               title={params.row.name}
               summary={`Batch of ${params.row.year}`}
               alt={`${params.row.firstname || ''} ${params.row.lastname || ''}`}

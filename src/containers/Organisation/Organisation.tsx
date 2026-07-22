@@ -30,7 +30,6 @@ import { useAuth } from '@/context/AuthContext';
 import EditIcon from '@mui/icons-material/Edit';
 import { useGetUserListQuery } from '@/apollo/hooks';
 import Button from '@/components/core/Button';
-import { getAvatarDataUrl } from '@/utils/helpers';
 
 const executiveCommitteePositionOrder = [
   'PRESIDENT',
@@ -88,7 +87,7 @@ const Organizations = () => {
             name: assignment.name,
             designation: assignment.designation,
             batch: assignment.batch,
-            profilePicture: assignment.profilePicture || getAvatarDataUrl(assignment.userId),
+            profilePicture: assignment.profilePicture || undefined,
             email: assignment.email,
             mobile: assignment.mobile,
           },

@@ -9,7 +9,6 @@ import {
   CardMedia,
   Typography,
   Badge,
-  Avatar,
   Box,
   Stack,
   AvatarGroup,
@@ -22,7 +21,7 @@ import {
 } from '@mui/material';
 import { SingleEventViewProps } from './SingleEventView.types';
 import Button from '@/components/core/Button';
-import { getAvatarDataUrl, startCase, valueToLabelFormatter } from '@/utils/helpers';
+import { startCase, valueToLabelFormatter } from '@/utils/helpers';
 import {
   IconArrowRight as ArrowRight,
   IconExternalLink as ArrowSquareOut,
@@ -455,14 +454,12 @@ const SingleEventView: React.FC<SingleEventViewProps> = ({
                     title={`${person?.firstName || 'NA'} ${person?.lastName || ''} ${person?.batch ? `(${person.batch})` : ''}`}
                     arrow
                   >
-                    <Avatar
+                    <ProfilePicture
+                      id={person?.id}
                       alt={person?.firstName || 'NA'}
-                      src={person?.profileImage || getAvatarDataUrl(person?.id)}
-                      slotProps={{
-                        img: {
-                          referrerPolicy: 'no-referrer',
-                        },
-                      }}
+                      src={person?.profileImage || undefined}
+                      size={40}
+                      containerProps={{ sx: { width: 40, cursor: 'default' } }}
                     />
                   </Tooltip>
                 ))}

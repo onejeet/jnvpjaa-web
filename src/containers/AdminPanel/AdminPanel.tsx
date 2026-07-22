@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useMutation, useQuery } from '@apollo/client';
+import { useApolloClient, useMutation, useQuery } from '@apollo/client';
 import {
   ACCESS_CATALOG_QUERY,
   ASSIGN_EXECUTIVE_POSITION_MUTATION,
@@ -12,7 +12,7 @@ import {
   ROLE_ASSIGNMENTS_QUERY,
 } from '@/apollo/accessOperations';
 import AlertDialog, { AlertDialogProps } from '@/components/common/AlertDialog';
-import { useGetUserListQuery, useSendMassEmailMutation } from '@/apollo/hooks';
+import { useGetUserListLazyQuery, useGetUserListQuery, useSendMassEmailMutation } from '@/apollo/hooks';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import Button from '@/components/core/Button';
 import ReactSelect from '@/components/core/ReactSelect';
@@ -20,7 +20,7 @@ import FormDateTimeField from '@/components/form/FormDateTimeField';
 import { PERMISSION_CODES, ROLE_CODES, ROLE_LABELS } from '@/constants/access';
 import { useAlert } from '@/context/AlertContext';
 import { useAuth } from '@/context/AuthContext';
-import { getBatchOptions, getDefaultAvatar } from '@/utils/helpers';
+import { getBatchOptions } from '@/utils/helpers';
 import dayjs, { Dayjs } from 'dayjs';
 import { useForm } from 'react-hook-form';
 import {
@@ -51,10 +51,12 @@ import {
   Typography,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { IconSend as PaperPlaneTilt, IconShieldCheck } from '@tabler/icons-react';
 
 const batchRoles = [ROLE_CODES.BATCH_COORDINATOR, ROLE_CODES.BATCH_MENTOR];
+const roleUserPageSize = 25;
 const activeAssignmentOtherRoles = [ROLE_CODES.FINANCE_MANAGER, ROLE_CODES.PLATFORM_ADMIN, ROLE_CODES.SUPER_ADMIN];
 const assignableRoleCodes = [
   ROLE_CODES.BATCH_COORDINATOR,
@@ -109,7 +111,7 @@ const toBatchSelectOptions = () =>
     label: batch.label,
   }));
 
-const getUserAvatarSrc = (user: any) => user?.profileImage || getDefaultAvatar(user?.gender);
+const getUserAvatarSrc = (user: any) => user?.profileImage || undefined;
 
 const toUserSelectOptions = (users: any[]) =>
   users.map((user: any) => {
@@ -170,6 +172,7 @@ const evictExecutiveAssignmentCaches = (cache: any) => {
 };
 
 const AdminPanel = () => {
+  const client = useApolloClient();
   const { can, hasRole } = useAuth();
   const { showAlert } = useAlert();
   const [sendEmail] = useSendMassEmailMutation();
@@ -189,10 +192,16 @@ const AdminPanel = () => {
   const [replacementTarget, setReplacementTarget] = React.useState<any>(null);
   const [replacementUserId, setReplacementUserId] = React.useState('');
   const [replacementReason, setReplacementReason] = React.useState('');
+  const [roleUserSearch, setRoleUserSearch] = React.useState('');
+  const [roleUsers, setRoleUsers] = React.useState<any[]>([]);
+  const [roleUserOffset, setRoleUserOffset] = React.useState(0);
+  const [roleUserTotal, setRoleUserTotal] = React.useState(0);
+  const roleUserRequestId = React.useRef(0);
   const [addCoordinatorSaving, setAddCoordinatorSaving] = React.useState(false);
   const [replacementSaving, setReplacementSaving] = React.useState(false);
   const [executiveAssignDialog, setExecutiveAssignDialog] = React.useState<Partial<AlertDialogProps>>({});
   const [welcomeEmailDialog, setWelcomeEmailDialog] = React.useState<Partial<AlertDialogProps>>({});
+  const [roleRemovalDialog, setRoleRemovalDialog] = React.useState<Partial<AlertDialogProps>>({});
   const replacementBatch = replacementTarget?.batch ? String(replacementTarget.batch) : selectedBatch;
   const roleDateForm = useForm<AccessDateForm>({
     defaultValues: {
@@ -218,9 +227,10 @@ const AdminPanel = () => {
     update: evictRoleAssignmentCaches,
   });
   const [assignPosition] = useMutation(ASSIGN_EXECUTIVE_POSITION_MUTATION, {
-    refetchQueries: ['executivePositionAssignments', 'publicExecutiveCommittee', 'viewerAccessContext'],
-    awaitRefetchQueries: true,
     update: evictExecutiveAssignmentCaches,
+  });
+  const [fetchRoleUsers, { loading: roleUsersLoading }] = useGetUserListLazyQuery({
+    fetchPolicy: 'network-only',
   });
 
   const { data: catalogData } = useQuery(ACCESS_CATALOG_QUERY, {
@@ -268,16 +278,6 @@ const AdminPanel = () => {
     reason: '',
   });
 
-  const { data: roleBatchUserData, loading: roleBatchUsersLoading } = useGetUserListQuery({
-    variables: {
-      options: {
-        filter: { verified: true, batch: roleForm.scopeBatch ? parseInt(roleForm.scopeBatch, 10) : undefined },
-        offset: 0,
-        limit: 250,
-      },
-    },
-    skip: !canReadAccess || !roleForm.scopeBatch,
-  });
   const { data: executiveBatchUserData, loading: executiveBatchUsersLoading } = useGetUserListQuery({
     variables: {
       options: {
@@ -293,15 +293,11 @@ const AdminPanel = () => {
     () => selectedBatchUserData?.getUserList?.data || [],
     [selectedBatchUserData?.getUserList?.data]
   );
-  const roleBatchUsers = React.useMemo(
-    () => roleBatchUserData?.getUserList?.data || [],
-    [roleBatchUserData?.getUserList?.data]
-  );
   const executiveBatchUsers = React.useMemo(
     () => executiveBatchUserData?.getUserList?.data || [],
     [executiveBatchUserData?.getUserList?.data]
   );
-  const roleUserOptions = React.useMemo(() => toUserSelectOptions(roleBatchUsers), [roleBatchUsers]);
+  const roleUserOptions = React.useMemo(() => toUserSelectOptions(roleUsers), [roleUsers]);
   const executiveUserOptions = React.useMemo(() => toUserSelectOptions(executiveBatchUsers), [executiveBatchUsers]);
   const selectedRoleBatchOption = batchSelectOptions.find((option) => option.value === roleForm.scopeBatch) || null;
   const selectedRoleUserOption = roleUserOptions.find((option) => option.value === roleForm.userId) || null;
@@ -323,6 +319,8 @@ const AdminPanel = () => {
   const activeTerm = (catalogData?.executiveTerms || []).find((term: any) => term.status === 'ACTIVE');
   const positions = (catalogData?.executivePositions || []).filter((position: any) => position.isActive);
   const selectedRoleRequiresBatch = batchRoles.includes(roleForm.roleCode as any);
+  const selectedRoleIsMentor = roleForm.roleCode === ROLE_CODES.BATCH_MENTOR;
+  const selectedRoleIsCoordinator = roleForm.roleCode === ROLE_CODES.BATCH_COORDINATOR;
   const batchCoordinators = batchCoordinatorData?.getAllBatchCoordinators || [];
   const roleAssignments = assignmentData?.roleAssignments || [];
   const executiveAssignments = executiveAssignmentData?.executivePositionAssignments || [];
@@ -338,6 +336,77 @@ const AdminPanel = () => {
       setRoleForm((prev) => ({ ...prev, roleCode: roles[0].code }));
     }
   }, [roleForm.roleCode, roles]);
+
+  const fetchRoleUserPage = React.useCallback(
+    async (search: string, offset: number) => {
+      const parsedScopeBatch = roleForm.scopeBatch ? parseInt(roleForm.scopeBatch, 10) : undefined;
+
+      if (!canReadAccess || (selectedRoleRequiresBatch && parsedScopeBatch === undefined)) {
+        setRoleUsers([]);
+        setRoleUserOffset(0);
+        setRoleUserTotal(0);
+        return;
+      }
+
+      const filter: any = { verified: true };
+      const trimmedSearch = search.trim();
+
+      if (trimmedSearch) {
+        filter.query = trimmedSearch;
+      }
+
+      if (selectedRoleIsCoordinator) {
+        filter.batch = parsedScopeBatch;
+      }
+
+      if (selectedRoleIsMentor) {
+        filter.excludeBatch = parsedScopeBatch;
+      }
+
+      const requestId = ++roleUserRequestId.current;
+      const result = await fetchRoleUsers({
+        variables: {
+          options: {
+            filter,
+            offset,
+            limit: roleUserPageSize,
+          },
+        },
+      });
+      if (requestId !== roleUserRequestId.current) return;
+
+      const nextUsers = (result.data?.getUserList?.data || []).filter(Boolean);
+
+      setRoleUserTotal(result.data?.getUserList?.total || 0);
+      setRoleUserOffset(offset + nextUsers.length);
+      setRoleUsers((prev) => {
+        if (offset === 0) return nextUsers;
+        const usersById = new Map(prev.map((user: any) => [user.id, user]));
+        nextUsers.forEach((user: any) => usersById.set(user.id, user));
+        return Array.from(usersById.values());
+      });
+    },
+    [
+      canReadAccess,
+      fetchRoleUsers,
+      roleForm.scopeBatch,
+      selectedRoleIsCoordinator,
+      selectedRoleIsMentor,
+      selectedRoleRequiresBatch,
+    ]
+  );
+
+  React.useEffect(() => {
+    setRoleUsers([]);
+    setRoleUserOffset(0);
+    setRoleUserTotal(0);
+
+    const timer = window.setTimeout(() => {
+      void fetchRoleUserPage(roleUserSearch, 0);
+    }, 300);
+
+    return () => window.clearTimeout(timer);
+  }, [fetchRoleUserPage, roleUserSearch]);
 
   if (!canUseAdminCenter) {
     return null;
@@ -426,6 +495,16 @@ const AdminPanel = () => {
   const selectedExecutivePosition = positions.find((position: any) => position.code === positionForm.positionCode);
   const selectedExecutiveUser = executiveBatchUsers.find((user: any) => user.id === positionForm.userId);
 
+  const refreshExecutiveAssignmentCaches = () => {
+    void client
+      .refetchQueries({
+        include: ['executivePositionAssignments', 'publicExecutiveCommittee', 'viewerAccessContext'],
+      })
+      .catch((error) => {
+        console.error('Executive assignment cache refresh failed:', error);
+      });
+  };
+
   const executeAssignPosition = async () => {
     const positionDates = positionDateForm.getValues();
     if (!activeTerm?.id) {
@@ -459,6 +538,7 @@ const AdminPanel = () => {
         },
       });
       setPositionForm((prev) => ({ ...prev, reason: '' }));
+      refreshExecutiveAssignmentCaches();
       setExecutiveAssignDialog({
         open: true,
         action: 'success',
@@ -574,17 +654,83 @@ const AdminPanel = () => {
     }
   };
 
-  const renderRoleAssignment = (assignment: any) => (
-    <Stack key={assignment.id} direction="row" spacing={1.5} alignItems="center" justifyContent="space-between">
-      <AssignmentUser user={assignment.user} />
-      <Stack direction="row" spacing={1} alignItems="center">
-        <Chip label={getRoleLabel(assignment.role)} size="small" />
-        {assignment.scopeBatch !== null && assignment.scopeBatch !== undefined && (
-          <Chip label={`Batch ${assignment.scopeBatch}`} size="small" variant="outlined" />
-        )}
+  const closeRoleRemovalDialog = () => {
+    setRoleRemovalDialog({});
+  };
+
+  const getAssignmentUserName = (assignment: any) =>
+    `${assignment?.user?.firstName || ''} ${assignment?.user?.lastName || ''}`.trim() || 'this member';
+
+  const executeRemoveRoleAssignment = async (assignment: any) => {
+    try {
+      setRoleRemovalDialog({
+        open: true,
+        action: 'loading',
+        title: 'Removing Assignment',
+        message: `Removing ${getRoleLabel(assignment.role)} assignment. Please wait...`,
+      });
+      await revokeRole({
+        variables: {
+          input: {
+            assignmentId: assignment.id,
+            reason: null,
+          },
+        },
+      });
+      setRoleRemovalDialog({
+        open: true,
+        action: 'success',
+        title: 'Assignment Removed',
+        message: `${getRoleLabel(assignment.role)} assignment removed successfully.`,
+        onCancel: closeRoleRemovalDialog,
+      });
+    } catch (error: any) {
+      setRoleRemovalDialog({
+        open: true,
+        action: 'error',
+        title: 'Remove Failed',
+        message: error?.message || 'Role assignment could not be removed.',
+        onCancel: closeRoleRemovalDialog,
+      });
+    }
+  };
+
+  const onRemoveRoleAssignment = (assignment: any) => {
+    setRoleRemovalDialog({
+      open: true,
+      action: 'delete',
+      title: 'Remove Role Assignment?',
+      message: `This will remove ${getRoleLabel(assignment.role)} from ${getAssignmentUserName(assignment)}.`,
+      onOkay: () => executeRemoveRoleAssignment(assignment),
+      onCancel: closeRoleRemovalDialog,
+      okayButtonProps: {
+        title: 'Remove',
+      },
+    });
+  };
+
+  const renderRoleAssignment = (assignment: any, allowRemove = false) => {
+    const canRemoveAssignment = allowRemove && can(getRoleManagementPermission(assignment?.role?.code));
+
+    return (
+      <Stack key={assignment.id} direction="row" spacing={1.5} alignItems="center" justifyContent="space-between">
+        <AssignmentUser user={assignment.user} />
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Chip label={getRoleLabel(assignment.role)} size="small" />
+          {assignment.scopeBatch !== null && assignment.scopeBatch !== undefined && (
+            <Chip label={`Batch ${assignment.scopeBatch}`} size="small" variant="outlined" />
+          )}
+          {canRemoveAssignment && (
+            <Tooltip title="Remove assignment">
+              <IconButton size="small" color="error" onClick={() => onRemoveRoleAssignment(assignment)}>
+                <DeleteIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+          )}
+        </Stack>
       </Stack>
-    </Stack>
-  );
+    );
+  };
 
   const renderAssignmentSkeleton = () => (
     <Stack spacing={1.5}>
@@ -609,7 +755,7 @@ const AdminPanel = () => {
     if (assignmentTab === 'mentors') {
       if (assignmentLoading) return renderAssignmentSkeleton();
       if (!batchMentorAssignments.length) return renderNoAssignments('No active batch mentor assignments found.');
-      return batchMentorAssignments.map(renderRoleAssignment);
+      return batchMentorAssignments.map((assignment: any) => renderRoleAssignment(assignment, true));
     }
 
     if (assignmentTab === 'executive') {
@@ -628,11 +774,12 @@ const AdminPanel = () => {
 
     if (assignmentLoading) return renderAssignmentSkeleton();
     if (!otherAssignments.length) return renderNoAssignments('No other active role assignments found.');
-    return otherAssignments.map(renderRoleAssignment);
+    return otherAssignments.map((assignment: any) => renderRoleAssignment(assignment, true));
   };
 
   const { open: executiveAssignDialogOpen, ...executiveAssignDialogProps } = executiveAssignDialog;
   const { open: welcomeEmailDialogOpen, ...welcomeEmailDialogProps } = welcomeEmailDialog;
+  const { open: roleRemovalDialogOpen, ...roleRemovalDialogProps } = roleRemovalDialog;
 
   return (
     <Box width="100%" p={{ xs: 2, md: 4 }}>
@@ -675,38 +822,60 @@ const AdminPanel = () => {
                   </Select>
                 </FormControl>
                 <Grid container spacing={1}>
-                  <Grid size={{ xs: 12, sm: 5 }}>
-                    <Typography variant="caption" color="text.secondary">
-                      Batch
-                    </Typography>
-                    <ReactSelect
-                      options={batchSelectOptions}
-                      value={selectedRoleBatchOption}
-                      placeholder="Select batch"
-                      size="small"
-                      isSearchable
-                      onChange={(option) => {
-                        const selected = option as SelectOption | null;
-                        setRoleForm((prev) => ({
-                          ...prev,
-                          scopeBatch: selected?.value || '',
-                          userId: '',
-                        }));
-                      }}
-                    />
-                  </Grid>
-                  <Grid size={{ xs: 12, sm: 7 }}>
+                  {selectedRoleRequiresBatch && (
+                    <Grid size={{ xs: 12, sm: 5 }}>
+                      <Typography variant="caption" color="text.secondary">
+                        {selectedRoleIsMentor ? 'Mentor Batch' : 'Batch'}
+                      </Typography>
+                      <ReactSelect
+                        options={batchSelectOptions}
+                        value={selectedRoleBatchOption}
+                        placeholder="Select batch"
+                        size="small"
+                        isSearchable
+                        onChange={(option) => {
+                          const selected = option as SelectOption | null;
+                          setRoleForm((prev) => ({
+                            ...prev,
+                            scopeBatch: selected?.value || '',
+                            userId: '',
+                          }));
+                        }}
+                      />
+                    </Grid>
+                  )}
+                  <Grid size={{ xs: 12, sm: selectedRoleRequiresBatch ? 7 : 12 }}>
                     <Typography variant="caption" color="text.secondary">
                       User
                     </Typography>
                     <ReactSelect
                       options={roleUserOptions}
                       value={selectedRoleUserOption}
-                      placeholder={roleForm.scopeBatch ? 'Search active member' : 'Select batch first'}
+                      placeholder={
+                        selectedRoleRequiresBatch && !roleForm.scopeBatch
+                          ? 'Select batch first'
+                          : selectedRoleIsMentor
+                            ? 'Search active members outside this batch'
+                            : 'Search active member'
+                      }
                       size="small"
                       isSearchable
                       showAvatars
-                      isLoading={roleBatchUsersLoading}
+                      useServerSearch
+                      isLoading={roleUsersLoading}
+                      isDisabled={selectedRoleRequiresBatch && !roleForm.scopeBatch}
+                      noOptionsMessage={
+                        selectedRoleRequiresBatch && !roleForm.scopeBatch
+                          ? 'Select a batch first'
+                          : selectedRoleIsMentor
+                            ? 'No eligible mentors found outside this batch'
+                            : 'No active members found'
+                      }
+                      onInputChange={setRoleUserSearch}
+                      onFetchMore={() => {
+                        if (roleUsersLoading || roleUsers.length >= roleUserTotal) return;
+                        void fetchRoleUserPage(roleUserSearch, roleUserOffset);
+                      }}
                       onChange={(option) => {
                         const selected = option as SelectOption | null;
                         setRoleForm((prev) => ({ ...prev, userId: selected?.value || '' }));
@@ -751,7 +920,7 @@ const AdminPanel = () => {
                   title="Assign Role"
                   onClick={onAssignRole}
                   loading={assigningRole}
-                  disabled={!roleForm.scopeBatch || !roleForm.userId}
+                  disabled={!roleForm.userId || (selectedRoleRequiresBatch && !roleForm.scopeBatch)}
                 />
               </Stack>
             </Paper>
@@ -1047,6 +1216,14 @@ const AdminPanel = () => {
           {...welcomeEmailDialogProps}
           open={Boolean(welcomeEmailDialogOpen)}
           onClose={closeWelcomeEmailDialog}
+        />
+      )}
+
+      {roleRemovalDialogOpen && (
+        <AlertDialog
+          {...roleRemovalDialogProps}
+          open={Boolean(roleRemovalDialogOpen)}
+          onClose={closeRoleRemovalDialog}
         />
       )}
     </Box>

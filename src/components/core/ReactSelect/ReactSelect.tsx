@@ -18,9 +18,13 @@ interface ReactSelectProps {
   isLoading?: boolean;
   onFetchMore?: () => void;
   onChange?: (value: SingleValue<Option> | MultiValue<Option>) => void;
+  onInputChange?: (value: string) => void;
   placeholder?: string;
   value?: SingleValue<Option> | MultiValue<Option>;
   isSearchable?: boolean;
+  useServerSearch?: boolean;
+  isDisabled?: boolean;
+  noOptionsMessage?: string;
   size?: 'small' | 'medium';
   showAvatars?: boolean; // Determines if avatars should be used
   isClearable?: boolean;
@@ -118,6 +122,10 @@ const ReactSelect: React.FC<ReactSelectProps> = ({
   placeholder = 'Select...',
   value,
   isSearchable,
+  useServerSearch = false,
+  onInputChange,
+  isDisabled,
+  noOptionsMessage,
   size,
   isClearable,
   label,
@@ -174,8 +182,18 @@ const ReactSelect: React.FC<ReactSelectProps> = ({
         onChange={isLoading ? undefined : onChange}
         placeholder={placeholder}
         isLoading={isLoading}
+        isDisabled={isDisabled}
         isClearable={isClearable}
         isSearchable={isSearchable}
+        noOptionsMessage={() => noOptionsMessage || 'No options'}
+        filterOption={useServerSearch ? null : undefined}
+        onInputChange={(inputValue, meta) => {
+          if (meta.action === 'input-change') {
+            setSearch(inputValue);
+            onInputChange?.(inputValue);
+          }
+          return inputValue;
+        }}
         menuIsOpen={menuIsOpen}
         onMenuOpen={() => setMenuIsOpen(true)}
         onMenuClose={() => setMenuIsOpen(false)}
