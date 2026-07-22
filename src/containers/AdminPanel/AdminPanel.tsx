@@ -87,6 +87,10 @@ type SelectOption = {
 };
 
 const toDateInputValue = (value?: Dayjs | null) => (value ? value.format('YYYY-MM-DD') : null);
+const defaultAccessDateForm = () => ({
+  validFrom: dayjs(),
+  validUntil: null,
+});
 
 const getLatestBatchValue = () => {
   const batches = getBatchOptions()
@@ -94,6 +98,20 @@ const getLatestBatchValue = () => {
     .filter((batch) => batch > 0);
   return Math.max(...batches).toString();
 };
+
+const getDefaultRoleAssignmentForm = (): RoleAssignmentFormState => ({
+  userId: '',
+  roleCode: ROLE_CODES.BATCH_COORDINATOR,
+  scopeBatch: getLatestBatchValue(),
+  reason: '',
+});
+
+const getDefaultPositionForm = () => ({
+  userId: '',
+  batch: getLatestBatchValue(),
+  positionCode: 'PRESIDENT',
+  reason: '',
+});
 
 const getRoleManagementPermission = (roleCode: string) => {
   if (batchRoles.includes(roleCode as any)) return PERMISSION_CODES.IAM_ROLE_ASSIGNMENT_MANAGE_BATCH_ROLES;
@@ -204,16 +222,10 @@ const AdminPanel = () => {
   const [roleRemovalDialog, setRoleRemovalDialog] = React.useState<Partial<AlertDialogProps>>({});
   const replacementBatch = replacementTarget?.batch ? String(replacementTarget.batch) : selectedBatch;
   const roleDateForm = useForm<AccessDateForm>({
-    defaultValues: {
-      validFrom: dayjs(),
-      validUntil: null,
-    },
+    defaultValues: defaultAccessDateForm(),
   });
   const positionDateForm = useForm<AccessDateForm>({
-    defaultValues: {
-      validFrom: dayjs(),
-      validUntil: null,
-    },
+    defaultValues: defaultAccessDateForm(),
   });
 
   const [assignRole, { loading: assigningRole }] = useMutation(ASSIGN_USER_ROLE_MUTATION, {
@@ -222,8 +234,6 @@ const AdminPanel = () => {
     update: evictRoleAssignmentCaches,
   });
   const [revokeRole] = useMutation(REVOKE_USER_ROLE_MUTATION, {
-    refetchQueries: ['roleAssignments', 'batchCoordinatorRoleAssignments', 'viewerAccessContext'],
-    awaitRefetchQueries: true,
     update: evictRoleAssignmentCaches,
   });
   const [assignPosition] = useMutation(ASSIGN_EXECUTIVE_POSITION_MUTATION, {
@@ -265,18 +275,8 @@ const AdminPanel = () => {
     skip: !canManageBatchRoles || (!replacementBatch && !addCoordinatorDialogOpen),
   });
 
-  const [roleForm, setRoleForm] = React.useState<RoleAssignmentFormState>({
-    userId: '',
-    roleCode: ROLE_CODES.BATCH_COORDINATOR,
-    scopeBatch: getLatestBatchValue(),
-    reason: '',
-  });
-  const [positionForm, setPositionForm] = React.useState({
-    userId: '',
-    batch: getLatestBatchValue(),
-    positionCode: 'PRESIDENT',
-    reason: '',
-  });
+  const [roleForm, setRoleForm] = React.useState<RoleAssignmentFormState>(getDefaultRoleAssignmentForm);
+  const [positionForm, setPositionForm] = React.useState(getDefaultPositionForm);
 
   const { data: executiveBatchUserData, loading: executiveBatchUsersLoading } = useGetUserListQuery({
     variables: {
@@ -327,6 +327,9 @@ const AdminPanel = () => {
   const batchMentorAssignments = roleAssignments.filter(
     (assignment: any) => assignment.role?.code === ROLE_CODES.BATCH_MENTOR
   );
+  const activeSuperAdminCount = roleAssignments.filter(
+    (assignment: any) => assignment.role?.code === ROLE_CODES.SUPER_ADMIN
+  ).length;
   const otherAssignments = roleAssignments.filter((assignment: any) =>
     activeAssignmentOtherRoles.includes(assignment.role?.code)
   );
@@ -481,7 +484,12 @@ const AdminPanel = () => {
           },
         },
       });
-      setRoleForm((prev) => ({ ...prev, reason: '' }));
+      setRoleForm(getDefaultRoleAssignmentForm());
+      setRoleUserSearch('');
+      setRoleUsers([]);
+      setRoleUserOffset(0);
+      setRoleUserTotal(0);
+      roleDateForm.reset(defaultAccessDateForm());
       showAlert({ visible: true, type: 'success', message: 'Role assigned successfully.' });
     } catch (error: any) {
       showAlert({ visible: true, type: 'error', message: error?.message || 'Role assignment failed.' });
@@ -494,6 +502,16 @@ const AdminPanel = () => {
 
   const selectedExecutivePosition = positions.find((position: any) => position.code === positionForm.positionCode);
   const selectedExecutiveUser = executiveBatchUsers.find((user: any) => user.id === positionForm.userId);
+
+  const refreshRoleAssignmentCaches = () => {
+    void client
+      .refetchQueries({
+        include: ['roleAssignments', 'batchCoordinatorRoleAssignments', 'viewerAccessContext'],
+      })
+      .catch((error) => {
+        console.error('Role assignment cache refresh failed:', error);
+      });
+  };
 
   const refreshExecutiveAssignmentCaches = () => {
     void client
@@ -537,7 +555,8 @@ const AdminPanel = () => {
           },
         },
       });
-      setPositionForm((prev) => ({ ...prev, reason: '' }));
+      setPositionForm(getDefaultPositionForm());
+      positionDateForm.reset(defaultAccessDateForm());
       refreshExecutiveAssignmentCaches();
       setExecutiveAssignDialog({
         open: true,
@@ -634,6 +653,7 @@ const AdminPanel = () => {
           },
         },
       });
+      refreshRoleAssignmentCaches();
       await assignRole({
         variables: {
           input: {
@@ -677,6 +697,7 @@ const AdminPanel = () => {
           },
         },
       });
+      refreshRoleAssignmentCaches();
       setRoleRemovalDialog({
         open: true,
         action: 'success',
@@ -696,6 +717,17 @@ const AdminPanel = () => {
   };
 
   const onRemoveRoleAssignment = (assignment: any) => {
+    if (assignment?.role?.code === ROLE_CODES.SUPER_ADMIN && activeSuperAdminCount <= 1) {
+      setRoleRemovalDialog({
+        open: true,
+        action: 'error',
+        title: 'Cannot Remove Super Admin',
+        message: 'At least one active Super Admin must remain.',
+        onCancel: closeRoleRemovalDialog,
+      });
+      return;
+    }
+
     setRoleRemovalDialog({
       open: true,
       action: 'delete',
@@ -710,6 +742,7 @@ const AdminPanel = () => {
   };
 
   const renderRoleAssignment = (assignment: any, allowRemove = false) => {
+    const isLastSuperAdmin = assignment?.role?.code === ROLE_CODES.SUPER_ADMIN && activeSuperAdminCount <= 1;
     const canRemoveAssignment = allowRemove && can(getRoleManagementPermission(assignment?.role?.code));
 
     return (
@@ -721,10 +754,17 @@ const AdminPanel = () => {
             <Chip label={`Batch ${assignment.scopeBatch}`} size="small" variant="outlined" />
           )}
           {canRemoveAssignment && (
-            <Tooltip title="Remove assignment">
-              <IconButton size="small" color="error" onClick={() => onRemoveRoleAssignment(assignment)}>
-                <DeleteIcon fontSize="small" />
-              </IconButton>
+            <Tooltip title={isLastSuperAdmin ? 'At least one active Super Admin must remain' : 'Remove assignment'}>
+              <span>
+                <IconButton
+                  size="small"
+                  color="error"
+                  disabled={isLastSuperAdmin}
+                  onClick={() => onRemoveRoleAssignment(assignment)}
+                >
+                  <DeleteIcon fontSize="small" />
+                </IconButton>
+              </span>
             </Tooltip>
           )}
         </Stack>
@@ -855,8 +895,8 @@ const AdminPanel = () => {
                         selectedRoleRequiresBatch && !roleForm.scopeBatch
                           ? 'Select batch first'
                           : selectedRoleIsMentor
-                            ? 'Search active members outside this batch'
-                            : 'Search active member'
+                            ? 'Select active mentor'
+                            : 'Select active member'
                       }
                       size="small"
                       isSearchable
@@ -868,8 +908,8 @@ const AdminPanel = () => {
                         selectedRoleRequiresBatch && !roleForm.scopeBatch
                           ? 'Select a batch first'
                           : selectedRoleIsMentor
-                            ? 'No eligible mentors found outside this batch'
-                            : 'No active members found'
+                            ? 'No active mentor found'
+                            : 'No active member found'
                       }
                       onInputChange={setRoleUserSearch}
                       onFetchMore={() => {

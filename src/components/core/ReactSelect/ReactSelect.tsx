@@ -165,20 +165,12 @@ const ReactSelect: React.FC<ReactSelectProps> = ({
     ),
     [size]
   );
-  const filterOption = React.useCallback(
-    (option: Option) => {
-      return option.label.toLowerCase().includes(search.toLowerCase());
-    },
-    [search]
-  );
-
   return (
     <>
       <Select
         options={options}
         isMulti={isMulti}
         value={value}
-        // filterOption={filterOption}
         onChange={isLoading ? undefined : onChange}
         placeholder={placeholder}
         isLoading={isLoading}
@@ -186,7 +178,7 @@ const ReactSelect: React.FC<ReactSelectProps> = ({
         isClearable={isClearable}
         isSearchable={isSearchable}
         noOptionsMessage={() => noOptionsMessage || 'No options'}
-        filterOption={useServerSearch ? null : undefined}
+        filterOption={useServerSearch ? () => true : undefined}
         onInputChange={(inputValue, meta) => {
           if (meta.action === 'input-change') {
             setSearch(inputValue);
