@@ -12,7 +12,7 @@ import {
   ROLE_ASSIGNMENTS_QUERY,
 } from '@/apollo/accessOperations';
 import AlertDialog, { AlertDialogProps } from '@/components/common/AlertDialog';
-import { useGetUserListLazyQuery, useGetUserListQuery, useSendMassEmailMutation } from '@/apollo/hooks';
+import { useGetUserListQuery, useSendMassEmailMutation } from '@/apollo/hooks';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import Button from '@/components/core/Button';
 import ReactSelect from '@/components/core/ReactSelect';
@@ -214,7 +214,6 @@ const AdminPanel = () => {
   const [roleUsers, setRoleUsers] = React.useState<any[]>([]);
   const [roleUserOffset, setRoleUserOffset] = React.useState(0);
   const [roleUserTotal, setRoleUserTotal] = React.useState(0);
-  const roleUserRequestKey = React.useRef('');
   const [addCoordinatorSaving, setAddCoordinatorSaving] = React.useState(false);
   const [replacementSaving, setReplacementSaving] = React.useState(false);
   const [executiveAssignDialog, setExecutiveAssignDialog] = React.useState<Partial<AlertDialogProps>>({});
@@ -239,10 +238,6 @@ const AdminPanel = () => {
   const [assignPosition] = useMutation(ASSIGN_EXECUTIVE_POSITION_MUTATION, {
     update: evictExecutiveAssignmentCaches,
   });
-  const [fetchRoleUsers, { loading: roleUsersLoading }] = useGetUserListLazyQuery({
-    fetchPolicy: 'network-only',
-  });
-  const fetchRoleUsersRef = React.useRef(fetchRoleUsers);
 
   const { data: catalogData } = useQuery(ACCESS_CATALOG_QUERY, {
     skip: !canReadCatalog,
@@ -278,6 +273,44 @@ const AdminPanel = () => {
 
   const [roleForm, setRoleForm] = React.useState<RoleAssignmentFormState>(getDefaultRoleAssignmentForm);
   const [positionForm, setPositionForm] = React.useState(getDefaultPositionForm);
+  const selectedRoleRequiresBatch = batchRoles.includes(roleForm.roleCode as any);
+  const selectedRoleIsMentor = roleForm.roleCode === ROLE_CODES.BATCH_MENTOR;
+  const selectedRoleIsCoordinator = roleForm.roleCode === ROLE_CODES.BATCH_COORDINATOR;
+  const roleUserFilter = React.useMemo(() => {
+    const filter: any = { verified: true };
+    const trimmedSearch = roleUserSearch.trim();
+    const parsedScopeBatch = roleForm.scopeBatch ? parseInt(roleForm.scopeBatch, 10) : undefined;
+
+    if (trimmedSearch) {
+      filter.query = trimmedSearch;
+    }
+
+    if (selectedRoleIsCoordinator) {
+      filter.batch = parsedScopeBatch;
+    }
+
+    if (selectedRoleIsMentor) {
+      filter.excludeBatch = parsedScopeBatch;
+    }
+
+    return filter;
+  }, [roleForm.scopeBatch, roleUserSearch, selectedRoleIsCoordinator, selectedRoleIsMentor]);
+
+  const {
+    data: roleUserData,
+    loading: roleUsersLoading,
+    fetchMore: fetchMoreRoleUsers,
+  } = useGetUserListQuery({
+    variables: {
+      options: {
+        filter: roleUserFilter,
+        offset: 0,
+        limit: roleUserPageSize,
+      },
+    },
+    skip: !canReadAccess || (selectedRoleRequiresBatch && !roleForm.scopeBatch),
+    notifyOnNetworkStatusChange: true,
+  });
 
   const { data: executiveBatchUserData, loading: executiveBatchUsersLoading } = useGetUserListQuery({
     variables: {
@@ -319,9 +352,6 @@ const AdminPanel = () => {
   }, [can, catalogData?.systemRoles, isSuperAdmin]);
   const activeTerm = (catalogData?.executiveTerms || []).find((term: any) => term.status === 'ACTIVE');
   const positions = (catalogData?.executivePositions || []).filter((position: any) => position.isActive);
-  const selectedRoleRequiresBatch = batchRoles.includes(roleForm.roleCode as any);
-  const selectedRoleIsMentor = roleForm.roleCode === ROLE_CODES.BATCH_MENTOR;
-  const selectedRoleIsCoordinator = roleForm.roleCode === ROLE_CODES.BATCH_COORDINATOR;
   const batchCoordinators = batchCoordinatorData?.getAllBatchCoordinators || [];
   const roleAssignments = assignmentData?.roleAssignments || [];
   const executiveAssignments = executiveAssignmentData?.executivePositionAssignments || [];
@@ -337,85 +367,17 @@ const AdminPanel = () => {
 
   React.useEffect(() => {
     if (roles.length && !roles.some((role: any) => role.code === roleForm.roleCode)) {
-      setRoleForm((prev) => ({ ...prev, roleCode: roles[0].code }));
+      setRoleForm((prev) => ({ ...prev, roleCode: roles[0].code, userId: '' }));
+      setRoleUserSearch('');
     }
   }, [roleForm.roleCode, roles]);
 
   React.useEffect(() => {
-    fetchRoleUsersRef.current = fetchRoleUsers;
-  }, [fetchRoleUsers]);
-
-  const fetchRoleUserPage = React.useCallback(
-    async (search: string, offset: number) => {
-      const parsedScopeBatch = roleForm.scopeBatch ? parseInt(roleForm.scopeBatch, 10) : undefined;
-
-      if (!canReadAccess || (selectedRoleRequiresBatch && parsedScopeBatch === undefined)) {
-        setRoleUsers([]);
-        setRoleUserOffset(0);
-        setRoleUserTotal(0);
-        return;
-      }
-
-      const filter: any = { verified: true };
-      const trimmedSearch = search.trim();
-
-      if (trimmedSearch) {
-        filter.query = trimmedSearch;
-      }
-
-      if (selectedRoleIsCoordinator) {
-        filter.batch = parsedScopeBatch;
-      }
-
-      if (selectedRoleIsMentor) {
-        filter.excludeBatch = parsedScopeBatch;
-      }
-
-      const requestKey = `${roleForm.roleCode}:${roleForm.scopeBatch}:${search.trim()}:${offset}`;
-      roleUserRequestKey.current = requestKey;
-      const result = await fetchRoleUsersRef.current({
-        variables: {
-          options: {
-            filter,
-            offset,
-            limit: roleUserPageSize,
-          },
-        },
-      });
-      if (roleUserRequestKey.current !== requestKey) return;
-
-      const nextUsers = (result.data?.getUserList?.data || []).filter(Boolean);
-
-      setRoleUserTotal(result.data?.getUserList?.total || 0);
-      setRoleUserOffset(offset + nextUsers.length);
-      setRoleUsers((prev) => {
-        if (offset === 0) return nextUsers;
-        const usersById = new Map(prev.map((user: any) => [user.id, user]));
-        nextUsers.forEach((user: any) => usersById.set(user.id, user));
-        return Array.from(usersById.values());
-      });
-    },
-    [
-      canReadAccess,
-      roleForm.roleCode,
-      roleForm.scopeBatch,
-      selectedRoleIsCoordinator,
-      selectedRoleIsMentor,
-      selectedRoleRequiresBatch,
-    ]
-  );
-
-  React.useEffect(() => {
-    setRoleUsers([]);
-    setRoleUserOffset(0);
-    setRoleUserTotal(0);
-
-    const timer = window.setTimeout(() => {
-      void fetchRoleUserPage(roleUserSearch, 0);
-    }, 300);
-
-    return () => window.clearTimeout(timer);
-  }, [fetchRoleUserPage, roleUserSearch]);
+    const users = (roleUserData?.getUserList?.data || []).filter(Boolean);
+    setRoleUsers(users);
+    setRoleUserOffset(users.length);
+    setRoleUserTotal(roleUserData?.getUserList?.total || 0);
+  }, [roleUserData?.getUserList?.data, roleUserData?.getUserList?.total]);
 
   if (!canUseAdminCenter) {
     return null;
@@ -858,7 +820,10 @@ const AdminPanel = () => {
                   <Select
                     label="Role"
                     value={roleForm.roleCode}
-                    onChange={(event) => setRoleForm((prev) => ({ ...prev, roleCode: event.target.value, userId: '' }))}
+                    onChange={(event) => {
+                      setRoleForm((prev) => ({ ...prev, roleCode: event.target.value, userId: '' }));
+                      setRoleUserSearch('');
+                    }}
                   >
                     {roles.map((role: any) => (
                       <MenuItem key={role.code} value={role.code}>
@@ -886,6 +851,7 @@ const AdminPanel = () => {
                             scopeBatch: selected?.value || '',
                             userId: '',
                           }));
+                          setRoleUserSearch('');
                         }}
                       />
                     </Grid>
@@ -920,7 +886,24 @@ const AdminPanel = () => {
                       onInputChange={setRoleUserSearch}
                       onFetchMore={() => {
                         if (roleUsersLoading || roleUsers.length >= roleUserTotal) return;
-                        void fetchRoleUserPage(roleUserSearch, roleUserOffset);
+                        void fetchMoreRoleUsers({
+                          variables: {
+                            options: {
+                              filter: roleUserFilter,
+                              offset: roleUserOffset,
+                              limit: roleUserPageSize,
+                            },
+                          },
+                        }).then((result) => {
+                          const nextUsers = (result.data?.getUserList?.data || []).filter(Boolean);
+                          setRoleUserTotal(result.data?.getUserList?.total || 0);
+                          setRoleUserOffset((prev) => prev + nextUsers.length);
+                          setRoleUsers((prev) => {
+                            const usersById = new Map(prev.map((user: any) => [user.id, user]));
+                            nextUsers.forEach((user: any) => usersById.set(user.id, user));
+                            return Array.from(usersById.values());
+                          });
+                        });
                       }}
                       onChange={(option) => {
                         const selected = option as SelectOption | null;
