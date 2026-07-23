@@ -1,18 +1,21 @@
 import React from 'react';
-import { Controller } from 'react-hook-form';
+import { Controller, FieldValues, Path } from 'react-hook-form';
 import { FormPhoneFieldProps } from './FormPhoneField.types';
 import { MuiTelInput, matchIsValidTel } from 'mui-tel-input';
 import { phoneNumberJSONConverter } from '@/utils/helpers';
 
-const FormPhoneField: React.FC<FormPhoneFieldProps> = ({
+const FormPhoneField = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends Path<TFieldValues> = Path<TFieldValues>,
+>({
   name,
   control,
   rules,
-  defaultValue = '',
+  defaultValue,
   helperText = '',
   defaultCountry = 'IN',
   ...textFieldProps
-}) => {
+}: FormPhoneFieldProps<TFieldValues, TName>) => {
   return (
     <Controller
       name={name}
@@ -22,7 +25,7 @@ const FormPhoneField: React.FC<FormPhoneFieldProps> = ({
         // Add a custom validation rule to check the length
         validate: {
           maxLength: (value) => {
-            const { phoneNumber } = phoneNumberJSONConverter(value); // Remove non-numeric characters
+            const { phoneNumber } = phoneNumberJSONConverter(String(value || '')); // Remove non-numeric characters
             if (value) {
               console.log('ZZ: BB VALIDARION', value, matchIsValidTel(value));
             }
@@ -56,7 +59,7 @@ const FormPhoneField: React.FC<FormPhoneFieldProps> = ({
             error={!!error}
             helperText={error ? error.message : helperText}
             onChange={handleChange} // Properly hook up the onChange handler
-            value={field.value || defaultValue} // Ensuring the value is set correctly
+            value={field.value || defaultValue || ''} // Ensuring the value is set correctly
             defaultCountry={defaultCountry}
             sx={{
               '& .MuiFormHelperText-root': {

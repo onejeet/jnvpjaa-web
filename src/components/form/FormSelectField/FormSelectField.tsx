@@ -1,22 +1,25 @@
 import React from 'react';
-import { Controller } from 'react-hook-form';
+import { Controller, FieldValues, Path } from 'react-hook-form';
 import { FormSelectProps } from './FormSelectField.types';
 import { Select, MenuItem, FormControl, InputLabel, FormHelperText, Typography, Skeleton } from '@mui/material';
 import { startCase } from '@/utils/helpers';
 
-const FormSelect: React.FC<FormSelectProps> = ({
+const FormSelect = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends Path<TFieldValues> = Path<TFieldValues>,
+>({
   name,
   control,
   rules,
   disabled,
   loading,
-  defaultValue = '',
+  defaultValue,
   helperText = '',
   options = [],
   error = false,
   selectProps,
   ...rest
-}) => {
+}: FormSelectProps<TFieldValues, TName>) => {
   return (
     <Controller
       name={name}

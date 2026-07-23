@@ -1,11 +1,14 @@
 import { SelectProps as MUISelectProps } from '@mui/material/Select';
-import { Control, FieldValues, InputValidationRules, RegisterOptions } from 'react-hook-form';
+import { Control, FieldPathValue, FieldValues, Path, RegisterOptions } from 'react-hook-form';
 
-export interface FormSelectProps {
-  name: string;
-  control: Control<any, any>;
-  rules?: RegisterOptions<any>; // Validation rules for react-hook-form
-  defaultValue?: any;
+export interface FormSelectProps<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends Path<TFieldValues> = Path<TFieldValues>,
+> {
+  name: TName;
+  control: Control<TFieldValues>;
+  rules?: RegisterOptions<TFieldValues, TName>; // Validation rules for react-hook-form
+  defaultValue?: FieldPathValue<TFieldValues, TName>;
   helperText?: React.ReactNode;
   options: { value: string | number; label: string }[];
   error?: boolean;
