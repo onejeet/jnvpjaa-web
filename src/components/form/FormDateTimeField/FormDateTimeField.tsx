@@ -1,5 +1,5 @@
 import React from 'react';
-import { Controller } from 'react-hook-form';
+import { Controller, FieldValues, Path } from 'react-hook-form';
 import { FormDateTimeFieldProps } from './FormDateTimeField.types';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
@@ -10,7 +10,10 @@ import TextField from '@/components/core/TextField';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import { Box, Skeleton } from '@mui/material';
 
-const FormDateTimeField: React.FC<FormDateTimeFieldProps> = ({
+const FormDateTimeField = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends Path<TFieldValues> = Path<TFieldValues>,
+>({
   name,
   control,
   rules,
@@ -20,7 +23,7 @@ const FormDateTimeField: React.FC<FormDateTimeFieldProps> = ({
   loading,
   inputProps = {},
   ...dateTimePickerProps
-}) => {
+}: FormDateTimeFieldProps<TFieldValues, TName>) => {
   const [cleared, setCleared] = React.useState<boolean>(false);
 
   React.useEffect(() => {
