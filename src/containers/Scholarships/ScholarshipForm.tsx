@@ -7,7 +7,9 @@ import { Alert, Box, MenuItem, Paper, Stack, TextField, Typography } from '@mui/
 import toast from 'react-hot-toast';
 import Button from '@/components/core/Button';
 import LayoutModule from '@/layouts/Layout';
+import { useAuth } from '@/context/AuthContext';
 import { CREATE_SCHOLARSHIP_DRAFT, SUBMIT_SCHOLARSHIP_APPLICATION } from '@/apollo/scholarshipOperations';
+import { useScholarshipLoginGuard } from './useScholarshipLoginGuard';
 
 const initialForm = {
   requestedAmount: '',
@@ -48,6 +50,8 @@ const buildInput = (form: typeof initialForm) => ({
 
 export default function ScholarshipForm() {
   const router = useRouter();
+  const { user } = useAuth();
+  const canRender = useScholarshipLoginGuard(user?.id);
   const [form, setForm] = React.useState(initialForm);
   const [createDraft, createState] = useMutation(CREATE_SCHOLARSHIP_DRAFT);
   const [submitApplication, submitState] = useMutation(SUBMIT_SCHOLARSHIP_APPLICATION, {
@@ -75,6 +79,16 @@ export default function ScholarshipForm() {
       toast.error(error?.message || 'Could not save scholarship application.');
     }
   };
+
+  if (!canRender) {
+    return (
+      <LayoutModule disableCover title="New Scholarship Application • Alumni Network of JNV Paota, Jaipur">
+        <Box py={8} display="flex" justifyContent="center">
+          <Typography color="grey.700">Loading...</Typography>
+        </Box>
+      </LayoutModule>
+    );
+  }
 
   return (
     <LayoutModule disableCover title="New Scholarship Application • Alumni Network of JNV Paota, Jaipur">

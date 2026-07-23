@@ -64,50 +64,137 @@ export const SCHOLARSHIP_TRANSACTION_FIELDS = gql`
   }
 `;
 
+export const SCHOLARSHIP_DASHBOARD_FIELDS = gql`
+  fragment ScholarshipDashboardFields on ScholarshipDashboard {
+    totalApplications
+    requestedAmount
+    disbursedAmount
+    exceptionCount
+    draftRequests
+    submittedApplications
+    submittedOrUnderReview
+    underReviewApplications
+    needsInformation
+    awaitingPaymentConfirmation
+    paymentConfirmationPendingApplications
+    proofDue
+    partialProof
+    overdueProof
+    completedApplications
+    rejectedApplications
+    routingPendingApplications
+    wrongDisbursementApplications
+    applicationsAwaitingReview
+    fullProofsAwaitingVerification
+    partialReceiptMismatchCount
+    beneficiaryNonReceiptCount
+    openRefundCaseCount
+    refundResponsePendingCount
+    refundReconciliationPendingCount
+    missingMentorRoutingCount
+    allocationDisputeCount
+    failedNotificationCount
+    disputedMentorAllocations
+    activeBeneficiaryCount
+    activeMentorCount
+    pendingBeneficiaryConfirmationCount
+    completedTransactionCount
+    totalAllocationRecorded
+    confirmedAllocation
+    pendingIncomingAllocation
+    disputedIncomingAllocation
+    mentorCustodyBalance
+    pendingBeneficiaryConfirmation
+    confirmedBeneficiaryDisbursement
+    returnedAmount
+    approvedAdjustments
+    approvalCapacity
+    totalCompletedAfterProofVerification
+    overdueProofAmount
+    wrongDisbursementAmount
+    refundRequestedAmount
+    refundConfirmedAmount
+    byStatus {
+      key
+      count
+    }
+    byProofStatus {
+      key
+      count
+    }
+    byRefundStatus {
+      key
+      count
+    }
+    byAllocationStatus {
+      key
+      count
+    }
+    byTransactionStatus {
+      key
+      count
+    }
+    capacity {
+      allocated
+      committed
+      returned
+      available
+    }
+  }
+`;
+
 export const GET_MY_SCHOLARSHIP_DASHBOARD = gql`
+  ${SCHOLARSHIP_DASHBOARD_FIELDS}
   query getMyScholarshipDashboard {
     getMyScholarshipDashboard {
-      totalApplications
-      requestedAmount
-      disbursedAmount
-      byStatus {
-        key
-        count
-      }
+      ...ScholarshipDashboardFields
     }
   }
 `;
 
 export const GET_SCHOLARSHIP_ORG_DASHBOARD = gql`
+  ${SCHOLARSHIP_DASHBOARD_FIELDS}
   query getScholarshipOrganizationDashboard {
     getScholarshipOrganizationDashboard {
-      totalApplications
-      requestedAmount
-      disbursedAmount
-      exceptionCount
-      byStatus {
-        key
-        count
-      }
+      ...ScholarshipDashboardFields
     }
   }
 `;
 
 export const GET_MENTOR_SCHOLARSHIP_DASHBOARD = gql`
+  ${SCHOLARSHIP_DASHBOARD_FIELDS}
   query getMentorScholarshipDashboard {
     getMentorScholarshipDashboard {
-      totalApplications
-      requestedAmount
-      disbursedAmount
-      byStatus {
-        key
-        count
+      ...ScholarshipDashboardFields
+    }
+  }
+`;
+
+export const GET_BATCH_COORDINATOR_SCHOLARSHIP_DASHBOARD = gql`
+  ${SCHOLARSHIP_DASHBOARD_FIELDS}
+  query getBatchCoordinatorScholarshipDashboard($batch: Int!) {
+    getBatchCoordinatorScholarshipDashboard(batch: $batch) {
+      ...ScholarshipDashboardFields
+    }
+  }
+`;
+
+export const GET_SCHOLARSHIP_MENTOR_SUMMARIES = gql`
+  ${SCHOLARSHIP_DASHBOARD_FIELDS}
+  query getScholarshipMentorSummaries {
+    getScholarshipMentorSummaries {
+      mentorUserId
+      assignedBatches
+      mentor {
+        id
+        firstName
+        lastName
+        email
+        batch
+        profileImage
       }
-      capacity {
-        allocated
-        committed
-        returned
-        available
+      summary {
+        ...ScholarshipDashboardFields
       }
     }
   }
@@ -234,6 +321,25 @@ export const RECORD_MENTOR_FUND_ALLOCATION = gql`
       amount
       confirmedAmount
       status
+    }
+  }
+`;
+
+export const GET_MENTOR_FUND_ALLOCATIONS = gql`
+  query getMentorFundAllocations($mentorUserId: String, $batch: Int, $options: ListInput) {
+    getMentorFundAllocations(mentorUserId: $mentorUserId, batch: $batch, options: $options) {
+      id
+      mentorUserId
+      batch
+      amount
+      confirmedAmount
+      disputedAmount
+      transferDate
+      method
+      reference
+      notes
+      status
+      createdAt
     }
   }
 `;

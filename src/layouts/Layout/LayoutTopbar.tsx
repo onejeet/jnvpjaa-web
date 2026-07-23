@@ -95,7 +95,6 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
   const canAccessAdminCenter = React.useMemo(
     () =>
       can(PERMISSION_CODES.IAM_USER_ACCESS_READ) ||
-      can(PERMISSION_CODES.IAM_CATALOG_READ) ||
       can(PERMISSION_CODES.IAM_ROLE_ASSIGNMENT_MANAGE_BATCH_ROLES) ||
       can(PERMISSION_CODES.IAM_EXECUTIVE_POSITION_MANAGE) ||
       can(PERMISSION_CODES.SCHOLARSHIP_DASHBOARD_READ_ORG) ||

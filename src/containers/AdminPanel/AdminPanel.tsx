@@ -201,7 +201,7 @@ const AdminPanel = () => {
   const canManageExecutivePositions = can(PERMISSION_CODES.IAM_EXECUTIVE_POSITION_MANAGE);
   const isSuperAdmin = hasRole(ROLE_CODES.SUPER_ADMIN);
   const canSendWelcomeEmail = isSuperAdmin;
-  const canUseAdminCenter = canReadAccess || canReadCatalog || canManageBatchRoles || canManageExecutivePositions;
+  const canUseAdminCenter = canReadAccess || canManageBatchRoles || canManageExecutivePositions;
   const [activeAssignmentsExpanded, setActiveAssignmentsExpanded] = React.useState(false);
   const [assignmentTab, setAssignmentTab] = React.useState('mentors');
   const [selectedBatch, setSelectedBatch] = React.useState(getLatestBatchValue);

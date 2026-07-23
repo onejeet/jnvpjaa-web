@@ -19,15 +19,19 @@ import {
   SUBMIT_SCHOLARSHIP_APPLICATION,
 } from '@/apollo/scholarshipOperations';
 import { formatCurrency, getFullName, humanizeScholarshipStatus } from './helpers';
+import { useScholarshipLoginGuard } from './useScholarshipLoginGuard';
 
 export default function ScholarshipDetail({ applicationId }: { applicationId: string }) {
   const { can, user } = useAuth();
+  const canRender = useScholarshipLoginGuard(user?.id);
   const applicationQuery = useQuery(GET_SCHOLARSHIP_APPLICATION, {
     variables: { id: applicationId },
+    skip: !canRender,
     fetchPolicy: 'cache-and-network',
   });
   const transactionsQuery = useQuery(GET_SCHOLARSHIP_APPLICATION_TRANSACTIONS, {
     variables: { applicationId },
+    skip: !canRender,
     fetchPolicy: 'cache-and-network',
   });
   const [approvedTotalAmount, setApprovedTotalAmount] = React.useState('');
@@ -74,7 +78,7 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
     }
   };
 
-  if (applicationQuery.loading && !application) {
+  if (!canRender || (applicationQuery.loading && !application)) {
     return (
       <LayoutModule disableCover title="Scholarship Application • Alumni Network of JNV Paota, Jaipur">
         <Box py={8} display="flex" justifyContent="center">
