@@ -32,7 +32,7 @@ const DynamicCropper = dynamic(() => import('react-easy-crop').then((mod) => mod
 interface ProfilePictureUploadProps {
   onBack?: () => void;
   onNext?: () => void;
-  onSuccess?: () => void;
+  onSuccess?: (updatedUser?: User) => void;
   onCancel?: () => void;
   user?: User;
 }
@@ -153,12 +153,12 @@ export default function ProfilePictureUpload({ user, onNext, onBack, onSuccess, 
             id: user?.id,
             profileImage: '',
           },
-          onCompleted: () => {
+          onCompleted: (res) => {
             client.cache.evict({ fieldName: 'getUserDetails' });
             client.cache.evict({ fieldName: 'getUserList' });
             client.cache.gc();
             onNext?.();
-            onSuccess?.();
+            onSuccess?.(res?.updateUser as User);
           },
           onError: (err) => {
             showAlert({
@@ -210,13 +210,13 @@ export default function ProfilePictureUpload({ user, onNext, onBack, onSuccess, 
           id: user?.id,
           profileImage: uploadedFileUrl,
         },
-        onCompleted: () => {
+        onCompleted: (res) => {
           client.cache.evict({ fieldName: 'getUserDetails' });
           client.cache.evict({ fieldName: 'getUserList' });
           client.cache.gc();
           setCroppedImage(uploadedFileUrl);
           onNext?.();
-          onSuccess?.();
+          onSuccess?.(res?.updateUser as User);
         },
         onError: (err) => {
           showAlert({

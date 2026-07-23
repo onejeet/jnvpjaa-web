@@ -19,14 +19,16 @@ import { GetUserDetailsDocument } from '@/apollo/hooks';
 import Dialog from '@/components/core/Dialog';
 import Image from 'next/image';
 import { ROLE_CODES } from '@/constants/access';
+import ProfilePictureUpload from '@/modules/ProfileSetup/ProfilePictureUpload';
 
 const profilePositionRoleCodes = new Set([ROLE_CODES.BATCH_COORDINATOR, ROLE_CODES.FINANCE_MANAGER]);
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
   const [openPictureView, setOpenPictureView] = React.useState<boolean>(false);
+  const [openPictureEdit, setOpenPictureEdit] = React.useState<boolean>(false);
   const { user, loading, isProfileEditable, editingProfile, saveProfile, setEditingProfile } = useProfile();
-  const { showAlert, hideAlert } = useAlert();
-  const { user: authUser, isAdmin } = useAuth();
+  const { showAlert } = useAlert();
+  const { user: authUser, isAdmin, setUser } = useAuth();
   const router = useRouter();
   const client = useApolloClient();
 
@@ -204,7 +206,13 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
         id={user?.id}
         src={user?.profileImage}
         loading={loading}
-        onClick={() => (user?.profileImage ? setOpenPictureView(true) : null)}
+        onClick={() => {
+          if (isProfileEditable) {
+            setOpenPictureEdit(true);
+            return;
+          }
+          if (user?.profileImage) setOpenPictureView(true);
+        }}
         sx={{
           width: {
             xs: 100,
@@ -225,7 +233,40 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
             md: 32,
           },
         }}
+        containerProps={{
+          sx: {
+            cursor: isProfileEditable || user?.profileImage ? 'pointer' : 'default',
+          },
+        }}
       />
+      {isProfileEditable && !loading && (
+        <Tooltip arrow placement="top" title="Update profile picture">
+          <IconButton
+            size="small"
+            onClick={() => setOpenPictureEdit(true)}
+            sx={{
+              position: 'absolute',
+              left: {
+                xs: 72,
+                md: 174,
+              },
+              bottom: {
+                xs: 0,
+                md: -18,
+              },
+              bgcolor: 'background.paper',
+              border: '1px solid',
+              borderColor: 'divider',
+              boxShadow: 1,
+              '&:hover': {
+                bgcolor: 'grey.100',
+              },
+            }}
+          >
+            <IconPencil size={16} />
+          </IconButton>
+        </Tooltip>
+      )}
       <Box
         display="flex"
         justifyContent="space-between"
@@ -333,6 +374,26 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
           <Box width="100%" minHeight="70vh">
             <Image src={user?.profileImage as string} alt="profile image" layout="responsive" objectFit="cover" />
           </Box>
+        </Dialog>
+      )}
+      {openPictureEdit && (
+        <Dialog
+          maxWidth="sm"
+          title="Update Profile Picture"
+          open={openPictureEdit}
+          onClose={() => setOpenPictureEdit(false)}
+          hideFooter
+        >
+          <ProfilePictureUpload
+            user={user}
+            onCancel={() => setOpenPictureEdit(false)}
+            onSuccess={(updatedUser) => {
+              if (updatedUser && updatedUser.id === authUser?.id) {
+                setUser(updatedUser);
+              }
+              setOpenPictureEdit(false);
+            }}
+          />
         </Dialog>
       )}
     </Box>
