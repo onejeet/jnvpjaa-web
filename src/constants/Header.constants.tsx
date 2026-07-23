@@ -191,6 +191,10 @@ export const MEMBER_HEADER_MENU: IHeaderMenuItem[] = [
         path: '/transactions',
       },
       {
+        label: 'Scholarships',
+        path: '/scholarships',
+      },
+      {
         label: 'Donate Now',
         path: '/donations',
       },

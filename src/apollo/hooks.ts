@@ -4168,7 +4168,37 @@ export type UpdateUserMutation = {
         metadata?: any | undefined;
         mobile?: string | undefined;
         nickName?: string | undefined;
+        positions?:
+          | Array<
+              | {
+                  __typename?: 'EffectivePosition';
+                  assignmentId?: string | undefined;
+                  code?: string | undefined;
+                  name?: string | undefined;
+                  termId?: string | undefined;
+                  termName?: string | undefined;
+                  validFrom?: any | undefined;
+                  validUntil?: any | undefined;
+                }
+              | undefined
+            >
+          | undefined;
         profileImage?: string | undefined;
+        roles?:
+          | Array<
+              | {
+                  __typename?: 'EffectiveRole';
+                  assignmentId?: string | undefined;
+                  code?: string | undefined;
+                  name?: string | undefined;
+                  scopeBatch?: number | undefined;
+                  scopeType?: string | undefined;
+                  validFrom?: any | undefined;
+                  validUntil?: any | undefined;
+                }
+              | undefined
+            >
+          | undefined;
         socialMedia?: any | undefined;
         updatedAt: any;
         whatsAppMobile?: string | undefined;
@@ -13082,11 +13112,29 @@ export const GetUserDetailsDocument = gql`
       metadata
       mobile
       nickName
+      positions {
+        assignmentId
+        code
+        name
+        termId
+        termName
+        validFrom
+        validUntil
+      }
       profileImage
       role {
         code
         id
         name
+      }
+      roles {
+        assignmentId
+        code
+        name
+        scopeBatch
+        scopeType
+        validFrom
+        validUntil
       }
       socialMedia
       updatedAt
