@@ -23,6 +23,39 @@ export type Scalars = {
   JSON: { input: any; output: any };
 };
 
+export type AccessAuditLog = {
+  __typename?: 'AccessAuditLog';
+  action?: Maybe<Scalars['String']['output']>;
+  actorUserId?: Maybe<Scalars['String']['output']>;
+  after?: Maybe<Scalars['JSON']['output']>;
+  before?: Maybe<Scalars['JSON']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  entityId?: Maybe<Scalars['String']['output']>;
+  entityType?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  ipAddress?: Maybe<Scalars['String']['output']>;
+  isHighRisk?: Maybe<Scalars['Boolean']['output']>;
+  reason?: Maybe<Scalars['String']['output']>;
+  requestId?: Maybe<Scalars['String']['output']>;
+  targetUserId?: Maybe<Scalars['String']['output']>;
+  userAgent?: Maybe<Scalars['String']['output']>;
+};
+
+export type AccessRole = {
+  __typename?: 'AccessRole';
+  code?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  isActive?: Maybe<Scalars['Boolean']['output']>;
+  isSystem?: Maybe<Scalars['Boolean']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+};
+
+export enum AccessScopeType {
+  Batch = 'BATCH',
+  Global = 'GLOBAL',
+}
+
 export type Address = {
   __typename?: 'Address';
   address?: Maybe<Scalars['String']['output']>;
@@ -78,6 +111,25 @@ export type AlbumBasic = {
   title?: Maybe<Scalars['String']['output']>;
   total_photos?: Maybe<Scalars['Int']['output']>;
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
+};
+
+export type AssignExecutivePositionInput = {
+  executiveTermId: Scalars['String']['input'];
+  positionCode: Scalars['String']['input'];
+  reason?: InputMaybe<Scalars['String']['input']>;
+  userId: Scalars['String']['input'];
+  validFrom: Scalars['String']['input'];
+  validUntil?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type AssignUserRoleInput = {
+  reason?: InputMaybe<Scalars['String']['input']>;
+  roleCode: Scalars['String']['input'];
+  scopeBatch?: InputMaybe<Scalars['Int']['input']>;
+  scopeType: AccessScopeType;
+  userId: Scalars['String']['input'];
+  validFrom?: InputMaybe<Scalars['String']['input']>;
+  validUntil?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type AuthPayload = {
@@ -275,6 +327,28 @@ export enum Currency {
   Usd = 'USD',
 }
 
+export type EffectivePosition = {
+  __typename?: 'EffectivePosition';
+  assignmentId?: Maybe<Scalars['String']['output']>;
+  code?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  termId?: Maybe<Scalars['String']['output']>;
+  termName?: Maybe<Scalars['String']['output']>;
+  validFrom?: Maybe<Scalars['DateTime']['output']>;
+  validUntil?: Maybe<Scalars['DateTime']['output']>;
+};
+
+export type EffectiveRole = {
+  __typename?: 'EffectiveRole';
+  assignmentId?: Maybe<Scalars['String']['output']>;
+  code?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  scopeBatch?: Maybe<Scalars['Int']['output']>;
+  scopeType?: Maybe<Scalars['String']['output']>;
+  validFrom?: Maybe<Scalars['DateTime']['output']>;
+  validUntil?: Maybe<Scalars['DateTime']['output']>;
+};
+
 export type Event = {
   __typename?: 'Event';
   adminRemark?: Maybe<Scalars['String']['output']>;
@@ -334,6 +408,73 @@ export enum EventStatus {
   RequestChanges = 'REQUEST_CHANGES',
 }
 
+export type ExecutiveCommitteeMember = {
+  __typename?: 'ExecutiveCommitteeMember';
+  assignmentId?: Maybe<Scalars['ID']['output']>;
+  batch?: Maybe<Scalars['String']['output']>;
+  designation?: Maybe<Scalars['String']['output']>;
+  email?: Maybe<Scalars['String']['output']>;
+  mobile?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  positionCode?: Maybe<Scalars['String']['output']>;
+  positionName?: Maybe<Scalars['String']['output']>;
+  profilePicture?: Maybe<Scalars['String']['output']>;
+  termId?: Maybe<Scalars['String']['output']>;
+  termName?: Maybe<Scalars['String']['output']>;
+  userId?: Maybe<Scalars['String']['output']>;
+  validFrom?: Maybe<Scalars['DateTime']['output']>;
+  validUntil?: Maybe<Scalars['DateTime']['output']>;
+};
+
+export type ExecutivePosition = {
+  __typename?: 'ExecutivePosition';
+  code?: Maybe<Scalars['String']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  isActive?: Maybe<Scalars['Boolean']['output']>;
+  isSingleSeat?: Maybe<Scalars['Boolean']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+};
+
+export type ExecutivePositionAssignment = {
+  __typename?: 'ExecutivePositionAssignment';
+  assignedByUserId?: Maybe<Scalars['String']['output']>;
+  assignmentReason?: Maybe<Scalars['String']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  executiveTerm?: Maybe<ExecutiveTerm>;
+  executiveTermId?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  position?: Maybe<ExecutivePosition>;
+  positionId?: Maybe<Scalars['String']['output']>;
+  revocationReason?: Maybe<Scalars['String']['output']>;
+  revokedAt?: Maybe<Scalars['DateTime']['output']>;
+  revokedByUserId?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  user?: Maybe<User>;
+  userId?: Maybe<Scalars['String']['output']>;
+  validFrom?: Maybe<Scalars['DateTime']['output']>;
+  validUntil?: Maybe<Scalars['DateTime']['output']>;
+};
+
+export type ExecutiveTerm = {
+  __typename?: 'ExecutiveTerm';
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  createdByUserId?: Maybe<Scalars['String']['output']>;
+  endDate?: Maybe<Scalars['DateTime']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  startDate?: Maybe<Scalars['DateTime']['output']>;
+  status?: Maybe<ExecutiveTermStatus>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+};
+
+export enum ExecutiveTermStatus {
+  Active = 'ACTIVE',
+  Closed = 'CLOSED',
+  Draft = 'DRAFT',
+}
+
 export type FilterInput = {
   batch?: InputMaybe<Scalars['Int']['input']>;
   blogId?: InputMaybe<Scalars['String']['input']>;
@@ -363,18 +504,24 @@ export type ListInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  activateExecutiveTerm?: Maybe<ExecutiveTerm>;
   addAlbumContributor?: Maybe<Album>;
   addComment?: Maybe<Comment>;
   addPhoto?: Maybe<Photo>;
   approveBlog?: Maybe<Blog>;
+  approveMemberRegistration?: Maybe<Scalars['Boolean']['output']>;
   assignBatchCoordinator?: Maybe<BatchCoordinator>;
+  assignExecutivePosition?: Maybe<ExecutivePositionAssignment>;
+  assignUserRole?: Maybe<RoleAssignment>;
   attendEvent?: Maybe<Scalars['Boolean']['output']>;
+  closeExecutiveTerm?: Maybe<ExecutiveTerm>;
   createAddress?: Maybe<Address>;
   createAlbum?: Maybe<Album>;
   createBlog?: Maybe<Blog>;
   createBusiness: Business;
   createCompanyInfo?: Maybe<CompanyInfo>;
   createEvent?: Maybe<EventBasic>;
+  createExecutiveTerm?: Maybe<ExecutiveTerm>;
   createTransaction?: Maybe<Transaction>;
   deleteAddress?: Maybe<Address>;
   deleteBlog?: Maybe<Blog>;
@@ -387,9 +534,12 @@ export type Mutation = {
   logout?: Maybe<Scalars['String']['output']>;
   publishEvent?: Maybe<Scalars['Boolean']['output']>;
   refreshToken?: Maybe<AuthPayload>;
+  rejectMemberRegistration?: Maybe<Scalars['Boolean']['output']>;
   removeBatchCoordinator?: Maybe<Scalars['Boolean']['output']>;
   requestChangesBlog?: Maybe<Blog>;
   resetPassword?: Maybe<Scalars['Boolean']['output']>;
+  revokeExecutivePosition?: Maybe<ExecutivePositionAssignment>;
+  revokeUserRole?: Maybe<RoleAssignment>;
   sendMassEmail?: Maybe<Scalars['Boolean']['output']>;
   signin?: Maybe<AuthPayload>;
   signup?: Maybe<User>;
@@ -407,6 +557,11 @@ export type Mutation = {
   verifyBusiness: Business;
   verifyEvent?: Maybe<Scalars['Boolean']['output']>;
   verifyUser?: Maybe<Scalars['Boolean']['output']>;
+};
+
+export type MutationActivateExecutiveTermArgs = {
+  reason: Scalars['String']['input'];
+  termId: Scalars['String']['input'];
 };
 
 export type MutationAddAlbumContributorArgs = {
@@ -430,13 +585,31 @@ export type MutationApproveBlogArgs = {
   id: Scalars['String']['input'];
 };
 
+export type MutationApproveMemberRegistrationArgs = {
+  reason: Scalars['String']['input'];
+  userId: Scalars['String']['input'];
+};
+
 export type MutationAssignBatchCoordinatorArgs = {
   batch: Scalars['Int']['input'];
   userId: Scalars['String']['input'];
 };
 
+export type MutationAssignExecutivePositionArgs = {
+  input: AssignExecutivePositionInput;
+};
+
+export type MutationAssignUserRoleArgs = {
+  input: AssignUserRoleInput;
+};
+
 export type MutationAttendEventArgs = {
   eventId: Scalars['Int']['input'];
+};
+
+export type MutationCloseExecutiveTermArgs = {
+  reason: Scalars['String']['input'];
+  termId: Scalars['String']['input'];
 };
 
 export type MutationCreateAddressArgs = {
@@ -497,6 +670,13 @@ export type MutationCreateEventArgs = {
   title: Scalars['String']['input'];
 };
 
+export type MutationCreateExecutiveTermArgs = {
+  endDate?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  reason: Scalars['String']['input'];
+  startDate: Scalars['String']['input'];
+};
+
 export type MutationCreateTransactionArgs = {
   amount: Scalars['Float']['input'];
   currency: Currency;
@@ -550,6 +730,11 @@ export type MutationPublishEventArgs = {
   status: EventStatus;
 };
 
+export type MutationRejectMemberRegistrationArgs = {
+  reason: Scalars['String']['input'];
+  userId: Scalars['String']['input'];
+};
+
 export type MutationRemoveBatchCoordinatorArgs = {
   batch: Scalars['Int']['input'];
   userId: Scalars['String']['input'];
@@ -563,6 +748,14 @@ export type MutationRequestChangesBlogArgs = {
 export type MutationResetPasswordArgs = {
   newPassword: Scalars['String']['input'];
   token?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type MutationRevokeExecutivePositionArgs = {
+  input: RevokeExecutivePositionInput;
+};
+
+export type MutationRevokeUserRoleArgs = {
+  input: RevokeUserRoleInput;
 };
 
 export type MutationSendMassEmailArgs = {
@@ -702,6 +895,18 @@ export type MutationVerifyUserArgs = {
   verified: Scalars['Boolean']['input'];
 };
 
+export type Permission = {
+  __typename?: 'Permission';
+  category?: Maybe<Scalars['String']['output']>;
+  code?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  isActive?: Maybe<Scalars['Boolean']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  updatedAt: Scalars['DateTime']['output'];
+};
+
 export type Photo = {
   __typename?: 'Photo';
   album?: Maybe<AlbumBasic>;
@@ -727,6 +932,10 @@ export type PhotoCredit = {
 export type Query = {
   __typename?: 'Query';
   GetCompanyInfoListByUser: Array<CompanyInfo>;
+  accessAuditEvents?: Maybe<Array<Maybe<AccessAuditLog>>>;
+  executivePositionAssignments?: Maybe<Array<Maybe<ExecutivePositionAssignment>>>;
+  executivePositions?: Maybe<Array<Maybe<ExecutivePosition>>>;
+  executiveTerms?: Maybe<Array<Maybe<ExecutiveTerm>>>;
   getAlbum?: Maybe<Album>;
   getAlbums?: Maybe<ListAlbumResponse>;
   getAllBatchCoordinators?: Maybe<Array<Maybe<BatchCoordinator>>>;
@@ -748,7 +957,14 @@ export type Query = {
   getUserAddresses?: Maybe<AddressListResponse>;
   getUserDetails?: Maybe<User>;
   getUserList?: Maybe<UserListResponse>;
+  publicExecutiveCommittee?: Maybe<Array<Maybe<ExecutiveCommitteeMember>>>;
+  roleAssignments?: Maybe<Array<Maybe<RoleAssignment>>>;
+  systemPermissions?: Maybe<Array<Maybe<Permission>>>;
+  systemRoles?: Maybe<Array<Maybe<AccessRole>>>;
   upcomingBirthdays: Array<Maybe<UserBirthday>>;
+  userExecutivePositionAssignments?: Maybe<Array<Maybe<ExecutivePositionAssignment>>>;
+  userRoleAssignments?: Maybe<Array<Maybe<RoleAssignment>>>;
+  viewerAccessContext?: Maybe<ViewerAccessContext>;
 };
 
 export type QueryGetCompanyInfoListByUserArgs = {
@@ -830,10 +1046,60 @@ export type QueryGetUserListArgs = {
   options?: InputMaybe<ListInput>;
 };
 
+export type QueryRoleAssignmentsArgs = {
+  filter?: InputMaybe<RoleAssignmentFilterInput>;
+};
+
+export type QueryUserExecutivePositionAssignmentsArgs = {
+  userId?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type QueryUserRoleAssignmentsArgs = {
+  userId?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type RevokeExecutivePositionInput = {
+  assignmentId: Scalars['String']['input'];
+  reason?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type RevokeUserRoleInput = {
+  assignmentId: Scalars['String']['input'];
+  reason?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type Role = {
   __typename?: 'Role';
+  code?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['ID']['output']>;
   name?: Maybe<Scalars['String']['output']>;
+};
+
+export type RoleAssignment = {
+  __typename?: 'RoleAssignment';
+  assignedByUserId?: Maybe<Scalars['String']['output']>;
+  assignmentReason?: Maybe<Scalars['String']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  revocationReason?: Maybe<Scalars['String']['output']>;
+  revokedAt?: Maybe<Scalars['DateTime']['output']>;
+  revokedByUserId?: Maybe<Scalars['String']['output']>;
+  role?: Maybe<AccessRole>;
+  roleId?: Maybe<Scalars['String']['output']>;
+  scopeBatch?: Maybe<Scalars['Int']['output']>;
+  scopeType?: Maybe<AccessScopeType>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  user?: Maybe<User>;
+  userId?: Maybe<Scalars['String']['output']>;
+  validFrom?: Maybe<Scalars['DateTime']['output']>;
+  validUntil?: Maybe<Scalars['DateTime']['output']>;
+};
+
+export type RoleAssignmentFilterInput = {
+  active?: InputMaybe<Scalars['Boolean']['input']>;
+  roleCode?: InputMaybe<Scalars['String']['input']>;
+  scopeBatch?: InputMaybe<Scalars['Int']['input']>;
+  userId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Transaction = {
@@ -960,6 +1226,37 @@ export type UserListResponse = {
   total?: Maybe<Scalars['Int']['output']>;
 };
 
+export type ViewerAccessContext = {
+  __typename?: 'ViewerAccessContext';
+  hasFullAccess?: Maybe<Scalars['Boolean']['output']>;
+  permissions?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  positions?: Maybe<Array<Maybe<EffectivePosition>>>;
+  roles?: Maybe<Array<Maybe<EffectiveRole>>>;
+  userId?: Maybe<Scalars['String']['output']>;
+};
+
+export type ActivateExecutiveTermMutationVariables = Exact<{
+  reason: Scalars['String']['input'];
+  termId: Scalars['String']['input'];
+}>;
+
+export type ActivateExecutiveTermMutation = {
+  __typename?: 'Mutation';
+  activateExecutiveTerm?:
+    | {
+        __typename?: 'ExecutiveTerm';
+        createdAt?: any | undefined;
+        createdByUserId?: string | undefined;
+        endDate?: any | undefined;
+        id?: string | undefined;
+        name?: string | undefined;
+        startDate?: any | undefined;
+        status?: ExecutiveTermStatus | undefined;
+        updatedAt?: any | undefined;
+      }
+    | undefined;
+};
+
 export type AddAlbumContributorMutationVariables = Exact<{
   albumId: Scalars['String']['input'];
   userId: Scalars['String']['input'];
@@ -991,7 +1288,14 @@ export type AddAlbumContributorMutation = {
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
                   profileImage?: string | undefined;
-                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                  role?:
+                    | {
+                        __typename?: 'Role';
+                        code?: string | undefined;
+                        id?: string | undefined;
+                        name?: string | undefined;
+                      }
+                    | undefined;
                 }
               | undefined
             >
@@ -1009,7 +1313,9 @@ export type AddAlbumContributorMutation = {
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
               profileImage?: string | undefined;
-              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
             }
           | undefined;
         event?:
@@ -1165,7 +1471,14 @@ export type AddAlbumContributorMutation = {
                               | undefined
                             >
                           | undefined;
-                        role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                        role?:
+                          | {
+                              __typename?: 'Role';
+                              code?: string | undefined;
+                              id?: string | undefined;
+                              name?: string | undefined;
+                            }
+                          | undefined;
                       }
                     | undefined;
                 }
@@ -1208,7 +1521,9 @@ export type AddCommentMutation = {
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
               profileImage?: string | undefined;
-              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
             }
           | undefined;
       }
@@ -1256,7 +1571,14 @@ export type AddPhotoMutation = {
                         isVerified?: boolean | undefined;
                         lastName?: string | undefined;
                         profileImage?: string | undefined;
-                        role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                        role?:
+                          | {
+                              __typename?: 'Role';
+                              code?: string | undefined;
+                              id?: string | undefined;
+                              name?: string | undefined;
+                            }
+                          | undefined;
                       }
                     | undefined
                   >
@@ -1274,7 +1596,14 @@ export type AddPhotoMutation = {
                     isVerified?: boolean | undefined;
                     lastName?: string | undefined;
                     profileImage?: string | undefined;
-                    role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                    role?:
+                      | {
+                          __typename?: 'Role';
+                          code?: string | undefined;
+                          id?: string | undefined;
+                          name?: string | undefined;
+                        }
+                      | undefined;
                   }
                 | undefined;
               event?:
@@ -1354,7 +1683,9 @@ export type AddPhotoMutation = {
                     | undefined
                   >
                 | undefined;
-              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
             }
           | undefined;
       }
@@ -1397,7 +1728,9 @@ export type ApproveBlogMutation = {
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
               profileImage?: string | undefined;
-              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
             }
           | undefined;
         comments?:
@@ -1433,6 +1766,16 @@ export type ApproveBlogMutation = {
           | undefined;
       }
     | undefined;
+};
+
+export type ApproveMemberRegistrationMutationVariables = Exact<{
+  reason: Scalars['String']['input'];
+  userId: Scalars['String']['input'];
+}>;
+
+export type ApproveMemberRegistrationMutation = {
+  __typename?: 'Mutation';
+  approveMemberRegistration?: boolean | undefined;
 };
 
 export type AssignBatchCoordinatorMutationVariables = Exact<{
@@ -1491,7 +1834,192 @@ export type AssignBatchCoordinatorMutation = {
                     | undefined
                   >
                 | undefined;
-              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
+export type AssignExecutivePositionMutationVariables = Exact<{
+  input: AssignExecutivePositionInput;
+}>;
+
+export type AssignExecutivePositionMutation = {
+  __typename?: 'Mutation';
+  assignExecutivePosition?:
+    | {
+        __typename?: 'ExecutivePositionAssignment';
+        assignedByUserId?: string | undefined;
+        assignmentReason?: string | undefined;
+        createdAt?: any | undefined;
+        executiveTermId?: string | undefined;
+        id?: string | undefined;
+        positionId?: string | undefined;
+        revocationReason?: string | undefined;
+        revokedAt?: any | undefined;
+        revokedByUserId?: string | undefined;
+        updatedAt?: any | undefined;
+        userId?: string | undefined;
+        validFrom?: any | undefined;
+        validUntil?: any | undefined;
+        executiveTerm?:
+          | {
+              __typename?: 'ExecutiveTerm';
+              createdAt?: any | undefined;
+              createdByUserId?: string | undefined;
+              endDate?: any | undefined;
+              id?: string | undefined;
+              name?: string | undefined;
+              startDate?: any | undefined;
+              status?: ExecutiveTermStatus | undefined;
+              updatedAt?: any | undefined;
+            }
+          | undefined;
+        position?:
+          | {
+              __typename?: 'ExecutivePosition';
+              code?: string | undefined;
+              createdAt?: any | undefined;
+              id?: string | undefined;
+              isActive?: boolean | undefined;
+              isSingleSeat?: boolean | undefined;
+              name?: string | undefined;
+              updatedAt?: any | undefined;
+            }
+          | undefined;
+        user?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        companyName: string;
+                        id: string;
+                        position?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
+export type AssignUserRoleMutationVariables = Exact<{
+  input: AssignUserRoleInput;
+}>;
+
+export type AssignUserRoleMutation = {
+  __typename?: 'Mutation';
+  assignUserRole?:
+    | {
+        __typename?: 'RoleAssignment';
+        assignedByUserId?: string | undefined;
+        assignmentReason?: string | undefined;
+        createdAt?: any | undefined;
+        id?: string | undefined;
+        revocationReason?: string | undefined;
+        revokedAt?: any | undefined;
+        revokedByUserId?: string | undefined;
+        roleId?: string | undefined;
+        scopeBatch?: number | undefined;
+        scopeType?: AccessScopeType | undefined;
+        updatedAt?: any | undefined;
+        userId?: string | undefined;
+        validFrom?: any | undefined;
+        validUntil?: any | undefined;
+        role?:
+          | {
+              __typename?: 'AccessRole';
+              code?: string | undefined;
+              description?: string | undefined;
+              id?: string | undefined;
+              isActive?: boolean | undefined;
+              isSystem?: boolean | undefined;
+              name?: string | undefined;
+            }
+          | undefined;
+        user?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        companyName: string;
+                        id: string;
+                        position?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
             }
           | undefined;
       }
@@ -1503,6 +2031,28 @@ export type AttendEventMutationVariables = Exact<{
 }>;
 
 export type AttendEventMutation = { __typename?: 'Mutation'; attendEvent?: boolean | undefined };
+
+export type CloseExecutiveTermMutationVariables = Exact<{
+  reason: Scalars['String']['input'];
+  termId: Scalars['String']['input'];
+}>;
+
+export type CloseExecutiveTermMutation = {
+  __typename?: 'Mutation';
+  closeExecutiveTerm?:
+    | {
+        __typename?: 'ExecutiveTerm';
+        createdAt?: any | undefined;
+        createdByUserId?: string | undefined;
+        endDate?: any | undefined;
+        id?: string | undefined;
+        name?: string | undefined;
+        startDate?: any | undefined;
+        status?: ExecutiveTermStatus | undefined;
+        updatedAt?: any | undefined;
+      }
+    | undefined;
+};
 
 export type CreateAddressMutationVariables = Exact<{
   address?: InputMaybe<Scalars['String']['input']>;
@@ -1563,7 +2113,14 @@ export type CreateAlbumMutation = {
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
                   profileImage?: string | undefined;
-                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                  role?:
+                    | {
+                        __typename?: 'Role';
+                        code?: string | undefined;
+                        id?: string | undefined;
+                        name?: string | undefined;
+                      }
+                    | undefined;
                 }
               | undefined
             >
@@ -1581,7 +2138,9 @@ export type CreateAlbumMutation = {
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
               profileImage?: string | undefined;
-              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
             }
           | undefined;
         event?:
@@ -1737,7 +2296,14 @@ export type CreateAlbumMutation = {
                               | undefined
                             >
                           | undefined;
-                        role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                        role?:
+                          | {
+                              __typename?: 'Role';
+                              code?: string | undefined;
+                              id?: string | undefined;
+                              name?: string | undefined;
+                            }
+                          | undefined;
                       }
                     | undefined;
                 }
@@ -1789,7 +2355,9 @@ export type CreateBlogMutation = {
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
               profileImage?: string | undefined;
-              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
             }
           | undefined;
         comments?:
@@ -1868,7 +2436,9 @@ export type CreateBusinessMutation = {
           isVerified?: boolean | undefined;
           lastName?: string | undefined;
           profileImage?: string | undefined;
-          role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+          role?:
+            | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+            | undefined;
         }
       | undefined;
   };
@@ -1918,7 +2488,9 @@ export type CreateCompanyInfoMutation = {
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
               profileImage?: string | undefined;
-              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
             }
           | undefined;
       }
@@ -1964,6 +2536,30 @@ export type CreateEventMutation = {
         tags?: Array<string | undefined> | undefined;
         title: string;
         total_attendies?: number | undefined;
+      }
+    | undefined;
+};
+
+export type CreateExecutiveTermMutationVariables = Exact<{
+  endDate?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  reason: Scalars['String']['input'];
+  startDate: Scalars['String']['input'];
+}>;
+
+export type CreateExecutiveTermMutation = {
+  __typename?: 'Mutation';
+  createExecutiveTerm?:
+    | {
+        __typename?: 'ExecutiveTerm';
+        createdAt?: any | undefined;
+        createdByUserId?: string | undefined;
+        endDate?: any | undefined;
+        id?: string | undefined;
+        name?: string | undefined;
+        startDate?: any | undefined;
+        status?: ExecutiveTermStatus | undefined;
+        updatedAt?: any | undefined;
       }
     | undefined;
 };
@@ -2043,7 +2639,9 @@ export type CreateTransactionMutation = {
                     | undefined
                   >
                 | undefined;
-              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
             }
           | undefined;
       }
@@ -2107,7 +2705,9 @@ export type DeleteBlogMutation = {
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
               profileImage?: string | undefined;
-              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
             }
           | undefined;
         comments?:
@@ -2180,7 +2780,9 @@ export type DeleteCompanyInfoMutation = {
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
               profileImage?: string | undefined;
-              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
             }
           | undefined;
       }
@@ -2258,7 +2860,9 @@ export type DeleteTransactionMutation = {
                     | undefined
                   >
                 | undefined;
-              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
             }
           | undefined;
       }
@@ -2313,7 +2917,9 @@ export type DeleteUserMutation = {
               | undefined
             >
           | undefined;
-        role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+        role?:
+          | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+          | undefined;
       }
     | undefined;
 };
@@ -2392,11 +2998,23 @@ export type RefreshTokenMutation = {
                     | undefined
                   >
                 | undefined;
-              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
             }
           | undefined;
       }
     | undefined;
+};
+
+export type RejectMemberRegistrationMutationVariables = Exact<{
+  reason: Scalars['String']['input'];
+  userId: Scalars['String']['input'];
+}>;
+
+export type RejectMemberRegistrationMutation = {
+  __typename?: 'Mutation';
+  rejectMemberRegistration?: boolean | undefined;
 };
 
 export type RemoveBatchCoordinatorMutationVariables = Exact<{
@@ -2443,7 +3061,9 @@ export type RequestChangesBlogMutation = {
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
               profileImage?: string | undefined;
-              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
             }
           | undefined;
         comments?:
@@ -2487,6 +3107,189 @@ export type ResetPasswordMutationVariables = Exact<{
 }>;
 
 export type ResetPasswordMutation = { __typename?: 'Mutation'; resetPassword?: boolean | undefined };
+
+export type RevokeExecutivePositionMutationVariables = Exact<{
+  input: RevokeExecutivePositionInput;
+}>;
+
+export type RevokeExecutivePositionMutation = {
+  __typename?: 'Mutation';
+  revokeExecutivePosition?:
+    | {
+        __typename?: 'ExecutivePositionAssignment';
+        assignedByUserId?: string | undefined;
+        assignmentReason?: string | undefined;
+        createdAt?: any | undefined;
+        executiveTermId?: string | undefined;
+        id?: string | undefined;
+        positionId?: string | undefined;
+        revocationReason?: string | undefined;
+        revokedAt?: any | undefined;
+        revokedByUserId?: string | undefined;
+        updatedAt?: any | undefined;
+        userId?: string | undefined;
+        validFrom?: any | undefined;
+        validUntil?: any | undefined;
+        executiveTerm?:
+          | {
+              __typename?: 'ExecutiveTerm';
+              createdAt?: any | undefined;
+              createdByUserId?: string | undefined;
+              endDate?: any | undefined;
+              id?: string | undefined;
+              name?: string | undefined;
+              startDate?: any | undefined;
+              status?: ExecutiveTermStatus | undefined;
+              updatedAt?: any | undefined;
+            }
+          | undefined;
+        position?:
+          | {
+              __typename?: 'ExecutivePosition';
+              code?: string | undefined;
+              createdAt?: any | undefined;
+              id?: string | undefined;
+              isActive?: boolean | undefined;
+              isSingleSeat?: boolean | undefined;
+              name?: string | undefined;
+              updatedAt?: any | undefined;
+            }
+          | undefined;
+        user?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        companyName: string;
+                        id: string;
+                        position?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
+export type RevokeUserRoleMutationVariables = Exact<{
+  input: RevokeUserRoleInput;
+}>;
+
+export type RevokeUserRoleMutation = {
+  __typename?: 'Mutation';
+  revokeUserRole?:
+    | {
+        __typename?: 'RoleAssignment';
+        assignedByUserId?: string | undefined;
+        assignmentReason?: string | undefined;
+        createdAt?: any | undefined;
+        id?: string | undefined;
+        revocationReason?: string | undefined;
+        revokedAt?: any | undefined;
+        revokedByUserId?: string | undefined;
+        roleId?: string | undefined;
+        scopeBatch?: number | undefined;
+        scopeType?: AccessScopeType | undefined;
+        updatedAt?: any | undefined;
+        userId?: string | undefined;
+        validFrom?: any | undefined;
+        validUntil?: any | undefined;
+        role?:
+          | {
+              __typename?: 'AccessRole';
+              code?: string | undefined;
+              description?: string | undefined;
+              id?: string | undefined;
+              isActive?: boolean | undefined;
+              isSystem?: boolean | undefined;
+              name?: string | undefined;
+            }
+          | undefined;
+        user?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        companyName: string;
+                        id: string;
+                        position?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
 
 export type SendMassEmailMutationVariables = Exact<{
   context?: InputMaybe<Scalars['JSON']['input']>;
@@ -2548,7 +3351,9 @@ export type SigninMutation = {
                     | undefined
                   >
                 | undefined;
-              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
             }
           | undefined;
       }
@@ -2610,7 +3415,9 @@ export type SignupMutation = {
               | undefined
             >
           | undefined;
-        role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+        role?:
+          | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+          | undefined;
       }
     | undefined;
 };
@@ -2675,7 +3482,14 @@ export type UpdateAlbumMutation = {
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
                   profileImage?: string | undefined;
-                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                  role?:
+                    | {
+                        __typename?: 'Role';
+                        code?: string | undefined;
+                        id?: string | undefined;
+                        name?: string | undefined;
+                      }
+                    | undefined;
                 }
               | undefined
             >
@@ -2693,7 +3507,9 @@ export type UpdateAlbumMutation = {
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
               profileImage?: string | undefined;
-              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
             }
           | undefined;
         event?:
@@ -2849,7 +3665,14 @@ export type UpdateAlbumMutation = {
                               | undefined
                             >
                           | undefined;
-                        role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                        role?:
+                          | {
+                              __typename?: 'Role';
+                              code?: string | undefined;
+                              id?: string | undefined;
+                              name?: string | undefined;
+                            }
+                          | undefined;
                       }
                     | undefined;
                 }
@@ -2916,7 +3739,9 @@ export type UpdateBatchCoordinatorMutation = {
                     | undefined
                   >
                 | undefined;
-              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
             }
           | undefined;
       }
@@ -2964,7 +3789,9 @@ export type UpdateBlogMutation = {
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
               profileImage?: string | undefined;
-              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
             }
           | undefined;
         comments?:
@@ -3044,7 +3871,9 @@ export type UpdateBusinessMutation = {
           isVerified?: boolean | undefined;
           lastName?: string | undefined;
           profileImage?: string | undefined;
-          role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+          role?:
+            | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+            | undefined;
         }
       | undefined;
   };
@@ -3101,7 +3930,9 @@ export type UpdateCompanyInfoMutation = {
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
               profileImage?: string | undefined;
-              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
             }
           | undefined;
       }
@@ -3217,7 +4048,9 @@ export type UpdateTransactionMutation = {
                     | undefined
                   >
                 | undefined;
-              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
             }
           | undefined;
       }
@@ -3288,7 +4121,9 @@ export type UpdateUserMutation = {
               | undefined
             >
           | undefined;
-        role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+        role?:
+          | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+          | undefined;
       }
     | undefined;
 };
@@ -3359,7 +4194,9 @@ export type VerifyBusinessMutation = {
           isVerified?: boolean | undefined;
           lastName?: string | undefined;
           profileImage?: string | undefined;
-          role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+          role?:
+            | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+            | undefined;
         }
       | undefined;
   };
@@ -3414,10 +4251,187 @@ export type GetCompanyInfoListByUserQuery = {
           isVerified?: boolean | undefined;
           lastName?: string | undefined;
           profileImage?: string | undefined;
-          role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+          role?:
+            | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+            | undefined;
         }
       | undefined;
   }>;
+};
+
+export type AccessAuditEventsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AccessAuditEventsQuery = {
+  __typename?: 'Query';
+  accessAuditEvents?:
+    | Array<
+        | {
+            __typename?: 'AccessAuditLog';
+            action?: string | undefined;
+            actorUserId?: string | undefined;
+            after?: any | undefined;
+            before?: any | undefined;
+            createdAt?: any | undefined;
+            entityId?: string | undefined;
+            entityType?: string | undefined;
+            id?: string | undefined;
+            ipAddress?: string | undefined;
+            isHighRisk?: boolean | undefined;
+            reason?: string | undefined;
+            requestId?: string | undefined;
+            targetUserId?: string | undefined;
+            userAgent?: string | undefined;
+          }
+        | undefined
+      >
+    | undefined;
+};
+
+export type ExecutivePositionAssignmentsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type ExecutivePositionAssignmentsQuery = {
+  __typename?: 'Query';
+  executivePositionAssignments?:
+    | Array<
+        | {
+            __typename?: 'ExecutivePositionAssignment';
+            assignedByUserId?: string | undefined;
+            assignmentReason?: string | undefined;
+            createdAt?: any | undefined;
+            executiveTermId?: string | undefined;
+            id?: string | undefined;
+            positionId?: string | undefined;
+            revocationReason?: string | undefined;
+            revokedAt?: any | undefined;
+            revokedByUserId?: string | undefined;
+            updatedAt?: any | undefined;
+            userId?: string | undefined;
+            validFrom?: any | undefined;
+            validUntil?: any | undefined;
+            executiveTerm?:
+              | {
+                  __typename?: 'ExecutiveTerm';
+                  createdAt?: any | undefined;
+                  createdByUserId?: string | undefined;
+                  endDate?: any | undefined;
+                  id?: string | undefined;
+                  name?: string | undefined;
+                  startDate?: any | undefined;
+                  status?: ExecutiveTermStatus | undefined;
+                  updatedAt?: any | undefined;
+                }
+              | undefined;
+            position?:
+              | {
+                  __typename?: 'ExecutivePosition';
+                  code?: string | undefined;
+                  createdAt?: any | undefined;
+                  id?: string | undefined;
+                  isActive?: boolean | undefined;
+                  isSingleSeat?: boolean | undefined;
+                  name?: string | undefined;
+                  updatedAt?: any | undefined;
+                }
+              | undefined;
+            user?:
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: any | undefined;
+                  email?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  hasBusiness?: boolean | undefined;
+                  id?: string | undefined;
+                  isConfidential?: boolean | undefined;
+                  isFaculty?: boolean | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  metadata?: any | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
+                  updatedAt: any;
+                  whatsAppMobile?: string | undefined;
+                  companyInfo?:
+                    | Array<
+                        | {
+                            __typename?: 'CompanyInfoBasic';
+                            companyName: string;
+                            id: string;
+                            position?: string | undefined;
+                            userId: string;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  role?:
+                    | {
+                        __typename?: 'Role';
+                        code?: string | undefined;
+                        id?: string | undefined;
+                        name?: string | undefined;
+                      }
+                    | undefined;
+                }
+              | undefined;
+          }
+        | undefined
+      >
+    | undefined;
+};
+
+export type ExecutivePositionsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type ExecutivePositionsQuery = {
+  __typename?: 'Query';
+  executivePositions?:
+    | Array<
+        | {
+            __typename?: 'ExecutivePosition';
+            code?: string | undefined;
+            createdAt?: any | undefined;
+            id?: string | undefined;
+            isActive?: boolean | undefined;
+            isSingleSeat?: boolean | undefined;
+            name?: string | undefined;
+            updatedAt?: any | undefined;
+          }
+        | undefined
+      >
+    | undefined;
+};
+
+export type ExecutiveTermsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type ExecutiveTermsQuery = {
+  __typename?: 'Query';
+  executiveTerms?:
+    | Array<
+        | {
+            __typename?: 'ExecutiveTerm';
+            createdAt?: any | undefined;
+            createdByUserId?: string | undefined;
+            endDate?: any | undefined;
+            id?: string | undefined;
+            name?: string | undefined;
+            startDate?: any | undefined;
+            status?: ExecutiveTermStatus | undefined;
+            updatedAt?: any | undefined;
+          }
+        | undefined
+      >
+    | undefined;
 };
 
 export type GetAlbumQueryVariables = Exact<{
@@ -3450,7 +4464,14 @@ export type GetAlbumQuery = {
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
                   profileImage?: string | undefined;
-                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                  role?:
+                    | {
+                        __typename?: 'Role';
+                        code?: string | undefined;
+                        id?: string | undefined;
+                        name?: string | undefined;
+                      }
+                    | undefined;
                 }
               | undefined
             >
@@ -3468,7 +4489,9 @@ export type GetAlbumQuery = {
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
               profileImage?: string | undefined;
-              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
             }
           | undefined;
         event?:
@@ -3624,7 +4647,14 @@ export type GetAlbumQuery = {
                               | undefined
                             >
                           | undefined;
-                        role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                        role?:
+                          | {
+                              __typename?: 'Role';
+                              code?: string | undefined;
+                              id?: string | undefined;
+                              name?: string | undefined;
+                            }
+                          | undefined;
                       }
                     | undefined;
                 }
@@ -3671,7 +4701,12 @@ export type GetAlbumsQuery = {
                             lastName?: string | undefined;
                             profileImage?: string | undefined;
                             role?:
-                              | { __typename?: 'Role'; id?: string | undefined; name?: string | undefined }
+                              | {
+                                  __typename?: 'Role';
+                                  code?: string | undefined;
+                                  id?: string | undefined;
+                                  name?: string | undefined;
+                                }
                               | undefined;
                           }
                         | undefined
@@ -3690,7 +4725,14 @@ export type GetAlbumsQuery = {
                         isVerified?: boolean | undefined;
                         lastName?: string | undefined;
                         profileImage?: string | undefined;
-                        role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                        role?:
+                          | {
+                              __typename?: 'Role';
+                              code?: string | undefined;
+                              id?: string | undefined;
+                              name?: string | undefined;
+                            }
+                          | undefined;
                       }
                     | undefined;
                   event?:
@@ -3780,7 +4822,14 @@ export type GetAllBatchCoordinatorsQuery = {
                         | undefined
                       >
                     | undefined;
-                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                  role?:
+                    | {
+                        __typename?: 'Role';
+                        code?: string | undefined;
+                        id?: string | undefined;
+                        name?: string | undefined;
+                      }
+                    | undefined;
                 }
               | undefined;
           }
@@ -3844,7 +4893,9 @@ export type GetBatchCoordinatorByUserIdQuery = {
                     | undefined
                   >
                 | undefined;
-              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
             }
           | undefined;
       }
@@ -3907,7 +4958,14 @@ export type GetBatchCoordinatorsByBatchQuery = {
                         | undefined
                       >
                     | undefined;
-                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                  role?:
+                    | {
+                        __typename?: 'Role';
+                        code?: string | undefined;
+                        id?: string | undefined;
+                        name?: string | undefined;
+                      }
+                    | undefined;
                 }
               | undefined;
           }
@@ -3953,7 +5011,9 @@ export type GetBlogQuery = {
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
               profileImage?: string | undefined;
-              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
             }
           | undefined;
         comments?:
@@ -4030,7 +5090,14 @@ export type GetBlogListQuery = {
                         isVerified?: boolean | undefined;
                         lastName?: string | undefined;
                         profileImage?: string | undefined;
-                        role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                        role?:
+                          | {
+                              __typename?: 'Role';
+                              code?: string | undefined;
+                              id?: string | undefined;
+                              name?: string | undefined;
+                            }
+                          | undefined;
                       }
                     | undefined;
                 }
@@ -4083,7 +5150,9 @@ export type GetBusinessQuery = {
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
               profileImage?: string | undefined;
-              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
             }
           | undefined;
       }
@@ -4137,7 +5206,14 @@ export type GetBusinessesQuery = {
                         isVerified?: boolean | undefined;
                         lastName?: string | undefined;
                         profileImage?: string | undefined;
-                        role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                        role?:
+                          | {
+                              __typename?: 'Role';
+                              code?: string | undefined;
+                              id?: string | undefined;
+                              name?: string | undefined;
+                            }
+                          | undefined;
                       }
                     | undefined;
                 }
@@ -4187,7 +5263,14 @@ export type GetCommentsQuery = {
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
                   profileImage?: string | undefined;
-                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                  role?:
+                    | {
+                        __typename?: 'Role';
+                        code?: string | undefined;
+                        id?: string | undefined;
+                        name?: string | undefined;
+                      }
+                    | undefined;
                 }
               | undefined;
           }
@@ -4231,7 +5314,9 @@ export type GetCompanyInfoQuery = {
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
               profileImage?: string | undefined;
-              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
             }
           | undefined;
       }
@@ -4270,7 +5355,9 @@ export type GetCompanyInfoListQuery = {
           isVerified?: boolean | undefined;
           lastName?: string | undefined;
           profileImage?: string | undefined;
-          role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+          role?:
+            | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+            | undefined;
         }
       | undefined;
   }>;
@@ -4320,7 +5407,14 @@ export type GetEventDetailsQuery = {
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
                   profileImage?: string | undefined;
-                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                  role?:
+                    | {
+                        __typename?: 'Role';
+                        code?: string | undefined;
+                        id?: string | undefined;
+                        name?: string | undefined;
+                      }
+                    | undefined;
                 }
               | undefined
             >
@@ -4339,7 +5433,14 @@ export type GetEventDetailsQuery = {
                   isVerified?: boolean | undefined;
                   lastName?: string | undefined;
                   profileImage?: string | undefined;
-                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                  role?:
+                    | {
+                        __typename?: 'Role';
+                        code?: string | undefined;
+                        id?: string | undefined;
+                        name?: string | undefined;
+                      }
+                    | undefined;
                 }
               | undefined
             >
@@ -4427,7 +5528,12 @@ export type GetMyPhotosQuery = {
                             lastName?: string | undefined;
                             profileImage?: string | undefined;
                             role?:
-                              | { __typename?: 'Role'; id?: string | undefined; name?: string | undefined }
+                              | {
+                                  __typename?: 'Role';
+                                  code?: string | undefined;
+                                  id?: string | undefined;
+                                  name?: string | undefined;
+                                }
                               | undefined;
                           }
                         | undefined
@@ -4446,7 +5552,14 @@ export type GetMyPhotosQuery = {
                         isVerified?: boolean | undefined;
                         lastName?: string | undefined;
                         profileImage?: string | undefined;
-                        role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                        role?:
+                          | {
+                              __typename?: 'Role';
+                              code?: string | undefined;
+                              id?: string | undefined;
+                              name?: string | undefined;
+                            }
+                          | undefined;
                       }
                     | undefined;
                   event?:
@@ -4526,7 +5639,14 @@ export type GetMyPhotosQuery = {
                         | undefined
                       >
                     | undefined;
-                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                  role?:
+                    | {
+                        __typename?: 'Role';
+                        code?: string | undefined;
+                        id?: string | undefined;
+                        name?: string | undefined;
+                      }
+                    | undefined;
                 }
               | undefined;
           }
@@ -4600,7 +5720,9 @@ export type GetTransactionQuery = {
                     | undefined
                   >
                 | undefined;
-              role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
             }
           | undefined;
       }
@@ -4677,7 +5799,14 @@ export type GetTransactionsQuery = {
                               | undefined
                             >
                           | undefined;
-                        role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                        role?:
+                          | {
+                              __typename?: 'Role';
+                              code?: string | undefined;
+                              id?: string | undefined;
+                              name?: string | undefined;
+                            }
+                          | undefined;
                       }
                     | undefined;
                 }
@@ -4764,7 +5893,9 @@ export type GetUserDetailsQuery = {
               | undefined
             >
           | undefined;
-        role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+        role?:
+          | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+          | undefined;
       }
     | undefined;
 };
@@ -4822,12 +5953,182 @@ export type GetUserListQuery = {
                         | undefined
                       >
                     | undefined;
-                  role?: { __typename?: 'Role'; id?: string | undefined; name?: string | undefined } | undefined;
+                  role?:
+                    | {
+                        __typename?: 'Role';
+                        code?: string | undefined;
+                        id?: string | undefined;
+                        name?: string | undefined;
+                      }
+                    | undefined;
                 }
               | undefined
             >
           | undefined;
       }
+    | undefined;
+};
+
+export type PublicExecutiveCommitteeQueryVariables = Exact<{ [key: string]: never }>;
+
+export type PublicExecutiveCommitteeQuery = {
+  __typename?: 'Query';
+  publicExecutiveCommittee?:
+    | Array<
+        | {
+            __typename?: 'ExecutiveCommitteeMember';
+            assignmentId?: string | undefined;
+            batch?: string | undefined;
+            designation?: string | undefined;
+            email?: string | undefined;
+            mobile?: string | undefined;
+            name?: string | undefined;
+            positionCode?: string | undefined;
+            positionName?: string | undefined;
+            profilePicture?: string | undefined;
+            termId?: string | undefined;
+            termName?: string | undefined;
+            userId?: string | undefined;
+            validFrom?: any | undefined;
+            validUntil?: any | undefined;
+          }
+        | undefined
+      >
+    | undefined;
+};
+
+export type RoleAssignmentsQueryVariables = Exact<{
+  filter?: InputMaybe<RoleAssignmentFilterInput>;
+}>;
+
+export type RoleAssignmentsQuery = {
+  __typename?: 'Query';
+  roleAssignments?:
+    | Array<
+        | {
+            __typename?: 'RoleAssignment';
+            assignedByUserId?: string | undefined;
+            assignmentReason?: string | undefined;
+            createdAt?: any | undefined;
+            id?: string | undefined;
+            revocationReason?: string | undefined;
+            revokedAt?: any | undefined;
+            revokedByUserId?: string | undefined;
+            roleId?: string | undefined;
+            scopeBatch?: number | undefined;
+            scopeType?: AccessScopeType | undefined;
+            updatedAt?: any | undefined;
+            userId?: string | undefined;
+            validFrom?: any | undefined;
+            validUntil?: any | undefined;
+            role?:
+              | {
+                  __typename?: 'AccessRole';
+                  code?: string | undefined;
+                  description?: string | undefined;
+                  id?: string | undefined;
+                  isActive?: boolean | undefined;
+                  isSystem?: boolean | undefined;
+                  name?: string | undefined;
+                }
+              | undefined;
+            user?:
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: any | undefined;
+                  email?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  hasBusiness?: boolean | undefined;
+                  id?: string | undefined;
+                  isConfidential?: boolean | undefined;
+                  isFaculty?: boolean | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  metadata?: any | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
+                  updatedAt: any;
+                  whatsAppMobile?: string | undefined;
+                  companyInfo?:
+                    | Array<
+                        | {
+                            __typename?: 'CompanyInfoBasic';
+                            companyName: string;
+                            id: string;
+                            position?: string | undefined;
+                            userId: string;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  role?:
+                    | {
+                        __typename?: 'Role';
+                        code?: string | undefined;
+                        id?: string | undefined;
+                        name?: string | undefined;
+                      }
+                    | undefined;
+                }
+              | undefined;
+          }
+        | undefined
+      >
+    | undefined;
+};
+
+export type SystemPermissionsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type SystemPermissionsQuery = {
+  __typename?: 'Query';
+  systemPermissions?:
+    | Array<
+        | {
+            __typename?: 'Permission';
+            category?: string | undefined;
+            code?: string | undefined;
+            createdAt: any;
+            description?: string | undefined;
+            id?: string | undefined;
+            isActive?: boolean | undefined;
+            name?: string | undefined;
+            updatedAt: any;
+          }
+        | undefined
+      >
+    | undefined;
+};
+
+export type SystemRolesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type SystemRolesQuery = {
+  __typename?: 'Query';
+  systemRoles?:
+    | Array<
+        | {
+            __typename?: 'AccessRole';
+            code?: string | undefined;
+            description?: string | undefined;
+            id?: string | undefined;
+            isActive?: boolean | undefined;
+            isSystem?: boolean | undefined;
+            name?: string | undefined;
+          }
+        | undefined
+      >
     | undefined;
 };
 
@@ -4853,6 +6154,301 @@ export type UpcomingBirthdaysQuery = {
   >;
 };
 
+export type UserExecutivePositionAssignmentsQueryVariables = Exact<{
+  userId?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type UserExecutivePositionAssignmentsQuery = {
+  __typename?: 'Query';
+  userExecutivePositionAssignments?:
+    | Array<
+        | {
+            __typename?: 'ExecutivePositionAssignment';
+            assignedByUserId?: string | undefined;
+            assignmentReason?: string | undefined;
+            createdAt?: any | undefined;
+            executiveTermId?: string | undefined;
+            id?: string | undefined;
+            positionId?: string | undefined;
+            revocationReason?: string | undefined;
+            revokedAt?: any | undefined;
+            revokedByUserId?: string | undefined;
+            updatedAt?: any | undefined;
+            userId?: string | undefined;
+            validFrom?: any | undefined;
+            validUntil?: any | undefined;
+            executiveTerm?:
+              | {
+                  __typename?: 'ExecutiveTerm';
+                  createdAt?: any | undefined;
+                  createdByUserId?: string | undefined;
+                  endDate?: any | undefined;
+                  id?: string | undefined;
+                  name?: string | undefined;
+                  startDate?: any | undefined;
+                  status?: ExecutiveTermStatus | undefined;
+                  updatedAt?: any | undefined;
+                }
+              | undefined;
+            position?:
+              | {
+                  __typename?: 'ExecutivePosition';
+                  code?: string | undefined;
+                  createdAt?: any | undefined;
+                  id?: string | undefined;
+                  isActive?: boolean | undefined;
+                  isSingleSeat?: boolean | undefined;
+                  name?: string | undefined;
+                  updatedAt?: any | undefined;
+                }
+              | undefined;
+            user?:
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: any | undefined;
+                  email?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  hasBusiness?: boolean | undefined;
+                  id?: string | undefined;
+                  isConfidential?: boolean | undefined;
+                  isFaculty?: boolean | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  metadata?: any | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
+                  updatedAt: any;
+                  whatsAppMobile?: string | undefined;
+                  companyInfo?:
+                    | Array<
+                        | {
+                            __typename?: 'CompanyInfoBasic';
+                            companyName: string;
+                            id: string;
+                            position?: string | undefined;
+                            userId: string;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  role?:
+                    | {
+                        __typename?: 'Role';
+                        code?: string | undefined;
+                        id?: string | undefined;
+                        name?: string | undefined;
+                      }
+                    | undefined;
+                }
+              | undefined;
+          }
+        | undefined
+      >
+    | undefined;
+};
+
+export type UserRoleAssignmentsQueryVariables = Exact<{
+  userId?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type UserRoleAssignmentsQuery = {
+  __typename?: 'Query';
+  userRoleAssignments?:
+    | Array<
+        | {
+            __typename?: 'RoleAssignment';
+            assignedByUserId?: string | undefined;
+            assignmentReason?: string | undefined;
+            createdAt?: any | undefined;
+            id?: string | undefined;
+            revocationReason?: string | undefined;
+            revokedAt?: any | undefined;
+            revokedByUserId?: string | undefined;
+            roleId?: string | undefined;
+            scopeBatch?: number | undefined;
+            scopeType?: AccessScopeType | undefined;
+            updatedAt?: any | undefined;
+            userId?: string | undefined;
+            validFrom?: any | undefined;
+            validUntil?: any | undefined;
+            role?:
+              | {
+                  __typename?: 'AccessRole';
+                  code?: string | undefined;
+                  description?: string | undefined;
+                  id?: string | undefined;
+                  isActive?: boolean | undefined;
+                  isSystem?: boolean | undefined;
+                  name?: string | undefined;
+                }
+              | undefined;
+            user?:
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: any | undefined;
+                  email?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  hasBusiness?: boolean | undefined;
+                  id?: string | undefined;
+                  isConfidential?: boolean | undefined;
+                  isFaculty?: boolean | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  metadata?: any | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
+                  updatedAt: any;
+                  whatsAppMobile?: string | undefined;
+                  companyInfo?:
+                    | Array<
+                        | {
+                            __typename?: 'CompanyInfoBasic';
+                            companyName: string;
+                            id: string;
+                            position?: string | undefined;
+                            userId: string;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  role?:
+                    | {
+                        __typename?: 'Role';
+                        code?: string | undefined;
+                        id?: string | undefined;
+                        name?: string | undefined;
+                      }
+                    | undefined;
+                }
+              | undefined;
+          }
+        | undefined
+      >
+    | undefined;
+};
+
+export type ViewerAccessContextQueryVariables = Exact<{ [key: string]: never }>;
+
+export type ViewerAccessContextQuery = {
+  __typename?: 'Query';
+  viewerAccessContext?:
+    | {
+        __typename?: 'ViewerAccessContext';
+        hasFullAccess?: boolean | undefined;
+        permissions?: Array<string | undefined> | undefined;
+        userId?: string | undefined;
+        positions?:
+          | Array<
+              | {
+                  __typename?: 'EffectivePosition';
+                  assignmentId?: string | undefined;
+                  code?: string | undefined;
+                  name?: string | undefined;
+                  termId?: string | undefined;
+                  termName?: string | undefined;
+                  validFrom?: any | undefined;
+                  validUntil?: any | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+        roles?:
+          | Array<
+              | {
+                  __typename?: 'EffectiveRole';
+                  assignmentId?: string | undefined;
+                  code?: string | undefined;
+                  name?: string | undefined;
+                  scopeBatch?: number | undefined;
+                  scopeType?: string | undefined;
+                  validFrom?: any | undefined;
+                  validUntil?: any | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+      }
+    | undefined;
+};
+
+export const ActivateExecutiveTermDocument = gql`
+  mutation activateExecutiveTerm($reason: String!, $termId: String!) {
+    activateExecutiveTerm(reason: $reason, termId: $termId) {
+      createdAt
+      createdByUserId
+      endDate
+      id
+      name
+      startDate
+      status
+      updatedAt
+    }
+  }
+`;
+export type ActivateExecutiveTermMutationFn = Apollo.MutationFunction<
+  ActivateExecutiveTermMutation,
+  ActivateExecutiveTermMutationVariables
+>;
+
+/**
+ * __useActivateExecutiveTermMutation__
+ *
+ * To run a mutation, you first call `useActivateExecutiveTermMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useActivateExecutiveTermMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [activateExecutiveTermMutation, { data, loading, error }] = useActivateExecutiveTermMutation({
+ *   variables: {
+ *      reason: // value for 'reason'
+ *      termId: // value for 'termId'
+ *   },
+ * });
+ */
+export function useActivateExecutiveTermMutation(
+  baseOptions?: Apollo.MutationHookOptions<ActivateExecutiveTermMutation, ActivateExecutiveTermMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<ActivateExecutiveTermMutation, ActivateExecutiveTermMutationVariables>(
+    ActivateExecutiveTermDocument,
+    options
+  );
+}
+export type ActivateExecutiveTermMutationHookResult = ReturnType<typeof useActivateExecutiveTermMutation>;
+export type ActivateExecutiveTermMutationResult = Apollo.MutationResult<ActivateExecutiveTermMutation>;
+export type ActivateExecutiveTermMutationOptions = Apollo.BaseMutationOptions<
+  ActivateExecutiveTermMutation,
+  ActivateExecutiveTermMutationVariables
+>;
 export const AddAlbumContributorDocument = gql`
   mutation addAlbumContributor($albumId: String!, $userId: String!) {
     addAlbumContributor(albumId: $albumId, userId: $userId) {
@@ -4868,6 +6464,7 @@ export const AddAlbumContributorDocument = gql`
         lastName
         profileImage
         role {
+          code
           id
           name
         }
@@ -4886,6 +6483,7 @@ export const AddAlbumContributorDocument = gql`
         lastName
         profileImage
         role {
+          code
           id
           name
         }
@@ -5010,6 +6608,7 @@ export const AddAlbumContributorDocument = gql`
           nickName
           profileImage
           role {
+            code
             id
             name
           }
@@ -5078,6 +6677,7 @@ export const AddCommentDocument = gql`
         lastName
         profileImage
         role {
+          code
           id
           name
         }
@@ -5139,6 +6739,7 @@ export const AddPhotoDocument = gql`
           lastName
           profileImage
           role {
+            code
             id
             name
           }
@@ -5157,6 +6758,7 @@ export const AddPhotoDocument = gql`
           lastName
           profileImage
           role {
+            code
             id
             name
           }
@@ -5231,6 +6833,7 @@ export const AddPhotoDocument = gql`
         nickName
         profileImage
         role {
+          code
           id
           name
         }
@@ -5288,6 +6891,7 @@ export const ApproveBlogDocument = gql`
         lastName
         profileImage
         role {
+          code
           id
           name
         }
@@ -5358,6 +6962,52 @@ export function useApproveBlogMutation(
 export type ApproveBlogMutationHookResult = ReturnType<typeof useApproveBlogMutation>;
 export type ApproveBlogMutationResult = Apollo.MutationResult<ApproveBlogMutation>;
 export type ApproveBlogMutationOptions = Apollo.BaseMutationOptions<ApproveBlogMutation, ApproveBlogMutationVariables>;
+export const ApproveMemberRegistrationDocument = gql`
+  mutation approveMemberRegistration($reason: String!, $userId: String!) {
+    approveMemberRegistration(reason: $reason, userId: $userId)
+  }
+`;
+export type ApproveMemberRegistrationMutationFn = Apollo.MutationFunction<
+  ApproveMemberRegistrationMutation,
+  ApproveMemberRegistrationMutationVariables
+>;
+
+/**
+ * __useApproveMemberRegistrationMutation__
+ *
+ * To run a mutation, you first call `useApproveMemberRegistrationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useApproveMemberRegistrationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [approveMemberRegistrationMutation, { data, loading, error }] = useApproveMemberRegistrationMutation({
+ *   variables: {
+ *      reason: // value for 'reason'
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useApproveMemberRegistrationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    ApproveMemberRegistrationMutation,
+    ApproveMemberRegistrationMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<ApproveMemberRegistrationMutation, ApproveMemberRegistrationMutationVariables>(
+    ApproveMemberRegistrationDocument,
+    options
+  );
+}
+export type ApproveMemberRegistrationMutationHookResult = ReturnType<typeof useApproveMemberRegistrationMutation>;
+export type ApproveMemberRegistrationMutationResult = Apollo.MutationResult<ApproveMemberRegistrationMutation>;
+export type ApproveMemberRegistrationMutationOptions = Apollo.BaseMutationOptions<
+  ApproveMemberRegistrationMutation,
+  ApproveMemberRegistrationMutationVariables
+>;
 export const AssignBatchCoordinatorDocument = gql`
   mutation assignBatchCoordinator($batch: Int!, $userId: String!) {
     assignBatchCoordinator(batch: $batch, userId: $userId) {
@@ -5396,6 +7046,7 @@ export const AssignBatchCoordinatorDocument = gql`
         nickName
         profileImage
         role {
+          code
           id
           name
         }
@@ -5445,6 +7096,220 @@ export type AssignBatchCoordinatorMutationOptions = Apollo.BaseMutationOptions<
   AssignBatchCoordinatorMutation,
   AssignBatchCoordinatorMutationVariables
 >;
+export const AssignExecutivePositionDocument = gql`
+  mutation assignExecutivePosition($input: AssignExecutivePositionInput!) {
+    assignExecutivePosition(input: $input) {
+      assignedByUserId
+      assignmentReason
+      createdAt
+      executiveTerm {
+        createdAt
+        createdByUserId
+        endDate
+        id
+        name
+        startDate
+        status
+        updatedAt
+      }
+      executiveTermId
+      id
+      position {
+        code
+        createdAt
+        id
+        isActive
+        isSingleSeat
+        name
+        updatedAt
+      }
+      positionId
+      revocationReason
+      revokedAt
+      revokedByUserId
+      updatedAt
+      user {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      userId
+      validFrom
+      validUntil
+    }
+  }
+`;
+export type AssignExecutivePositionMutationFn = Apollo.MutationFunction<
+  AssignExecutivePositionMutation,
+  AssignExecutivePositionMutationVariables
+>;
+
+/**
+ * __useAssignExecutivePositionMutation__
+ *
+ * To run a mutation, you first call `useAssignExecutivePositionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAssignExecutivePositionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [assignExecutivePositionMutation, { data, loading, error }] = useAssignExecutivePositionMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAssignExecutivePositionMutation(
+  baseOptions?: Apollo.MutationHookOptions<AssignExecutivePositionMutation, AssignExecutivePositionMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<AssignExecutivePositionMutation, AssignExecutivePositionMutationVariables>(
+    AssignExecutivePositionDocument,
+    options
+  );
+}
+export type AssignExecutivePositionMutationHookResult = ReturnType<typeof useAssignExecutivePositionMutation>;
+export type AssignExecutivePositionMutationResult = Apollo.MutationResult<AssignExecutivePositionMutation>;
+export type AssignExecutivePositionMutationOptions = Apollo.BaseMutationOptions<
+  AssignExecutivePositionMutation,
+  AssignExecutivePositionMutationVariables
+>;
+export const AssignUserRoleDocument = gql`
+  mutation assignUserRole($input: AssignUserRoleInput!) {
+    assignUserRole(input: $input) {
+      assignedByUserId
+      assignmentReason
+      createdAt
+      id
+      revocationReason
+      revokedAt
+      revokedByUserId
+      role {
+        code
+        description
+        id
+        isActive
+        isSystem
+        name
+      }
+      roleId
+      scopeBatch
+      scopeType
+      updatedAt
+      user {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      userId
+      validFrom
+      validUntil
+    }
+  }
+`;
+export type AssignUserRoleMutationFn = Apollo.MutationFunction<AssignUserRoleMutation, AssignUserRoleMutationVariables>;
+
+/**
+ * __useAssignUserRoleMutation__
+ *
+ * To run a mutation, you first call `useAssignUserRoleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAssignUserRoleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [assignUserRoleMutation, { data, loading, error }] = useAssignUserRoleMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAssignUserRoleMutation(
+  baseOptions?: Apollo.MutationHookOptions<AssignUserRoleMutation, AssignUserRoleMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<AssignUserRoleMutation, AssignUserRoleMutationVariables>(AssignUserRoleDocument, options);
+}
+export type AssignUserRoleMutationHookResult = ReturnType<typeof useAssignUserRoleMutation>;
+export type AssignUserRoleMutationResult = Apollo.MutationResult<AssignUserRoleMutation>;
+export type AssignUserRoleMutationOptions = Apollo.BaseMutationOptions<
+  AssignUserRoleMutation,
+  AssignUserRoleMutationVariables
+>;
 export const AttendEventDocument = gql`
   mutation attendEvent($eventId: Int!) {
     attendEvent(eventId: $eventId)
@@ -5478,6 +7343,58 @@ export function useAttendEventMutation(
 export type AttendEventMutationHookResult = ReturnType<typeof useAttendEventMutation>;
 export type AttendEventMutationResult = Apollo.MutationResult<AttendEventMutation>;
 export type AttendEventMutationOptions = Apollo.BaseMutationOptions<AttendEventMutation, AttendEventMutationVariables>;
+export const CloseExecutiveTermDocument = gql`
+  mutation closeExecutiveTerm($reason: String!, $termId: String!) {
+    closeExecutiveTerm(reason: $reason, termId: $termId) {
+      createdAt
+      createdByUserId
+      endDate
+      id
+      name
+      startDate
+      status
+      updatedAt
+    }
+  }
+`;
+export type CloseExecutiveTermMutationFn = Apollo.MutationFunction<
+  CloseExecutiveTermMutation,
+  CloseExecutiveTermMutationVariables
+>;
+
+/**
+ * __useCloseExecutiveTermMutation__
+ *
+ * To run a mutation, you first call `useCloseExecutiveTermMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCloseExecutiveTermMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [closeExecutiveTermMutation, { data, loading, error }] = useCloseExecutiveTermMutation({
+ *   variables: {
+ *      reason: // value for 'reason'
+ *      termId: // value for 'termId'
+ *   },
+ * });
+ */
+export function useCloseExecutiveTermMutation(
+  baseOptions?: Apollo.MutationHookOptions<CloseExecutiveTermMutation, CloseExecutiveTermMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<CloseExecutiveTermMutation, CloseExecutiveTermMutationVariables>(
+    CloseExecutiveTermDocument,
+    options
+  );
+}
+export type CloseExecutiveTermMutationHookResult = ReturnType<typeof useCloseExecutiveTermMutation>;
+export type CloseExecutiveTermMutationResult = Apollo.MutationResult<CloseExecutiveTermMutation>;
+export type CloseExecutiveTermMutationOptions = Apollo.BaseMutationOptions<
+  CloseExecutiveTermMutation,
+  CloseExecutiveTermMutationVariables
+>;
 export const CreateAddressDocument = gql`
   mutation createAddress(
     $address: String
@@ -5557,6 +7474,7 @@ export const CreateAlbumDocument = gql`
         lastName
         profileImage
         role {
+          code
           id
           name
         }
@@ -5575,6 +7493,7 @@ export const CreateAlbumDocument = gql`
         lastName
         profileImage
         role {
+          code
           id
           name
         }
@@ -5699,6 +7618,7 @@ export const CreateAlbumDocument = gql`
           nickName
           profileImage
           role {
+            code
             id
             name
           }
@@ -5775,6 +7695,7 @@ export const CreateBlogDocument = gql`
         lastName
         profileImage
         role {
+          code
           id
           name
         }
@@ -5883,6 +7804,7 @@ export const CreateBusinessDocument = gql`
         lastName
         profileImage
         role {
+          code
           id
           name
         }
@@ -5972,6 +7894,7 @@ export const CreateCompanyInfoDocument = gql`
         lastName
         profileImage
         role {
+          code
           id
           name
         }
@@ -6118,6 +8041,60 @@ export function useCreateEventMutation(
 export type CreateEventMutationHookResult = ReturnType<typeof useCreateEventMutation>;
 export type CreateEventMutationResult = Apollo.MutationResult<CreateEventMutation>;
 export type CreateEventMutationOptions = Apollo.BaseMutationOptions<CreateEventMutation, CreateEventMutationVariables>;
+export const CreateExecutiveTermDocument = gql`
+  mutation createExecutiveTerm($endDate: String, $name: String!, $reason: String!, $startDate: String!) {
+    createExecutiveTerm(endDate: $endDate, name: $name, reason: $reason, startDate: $startDate) {
+      createdAt
+      createdByUserId
+      endDate
+      id
+      name
+      startDate
+      status
+      updatedAt
+    }
+  }
+`;
+export type CreateExecutiveTermMutationFn = Apollo.MutationFunction<
+  CreateExecutiveTermMutation,
+  CreateExecutiveTermMutationVariables
+>;
+
+/**
+ * __useCreateExecutiveTermMutation__
+ *
+ * To run a mutation, you first call `useCreateExecutiveTermMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateExecutiveTermMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createExecutiveTermMutation, { data, loading, error }] = useCreateExecutiveTermMutation({
+ *   variables: {
+ *      endDate: // value for 'endDate'
+ *      name: // value for 'name'
+ *      reason: // value for 'reason'
+ *      startDate: // value for 'startDate'
+ *   },
+ * });
+ */
+export function useCreateExecutiveTermMutation(
+  baseOptions?: Apollo.MutationHookOptions<CreateExecutiveTermMutation, CreateExecutiveTermMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<CreateExecutiveTermMutation, CreateExecutiveTermMutationVariables>(
+    CreateExecutiveTermDocument,
+    options
+  );
+}
+export type CreateExecutiveTermMutationHookResult = ReturnType<typeof useCreateExecutiveTermMutation>;
+export type CreateExecutiveTermMutationResult = Apollo.MutationResult<CreateExecutiveTermMutation>;
+export type CreateExecutiveTermMutationOptions = Apollo.BaseMutationOptions<
+  CreateExecutiveTermMutation,
+  CreateExecutiveTermMutationVariables
+>;
 export const CreateTransactionDocument = gql`
   mutation createTransaction(
     $amount: Float!
@@ -6190,6 +8167,7 @@ export const CreateTransactionDocument = gql`
         nickName
         profileImage
         role {
+          code
           id
           name
         }
@@ -6309,6 +8287,7 @@ export const DeleteBlogDocument = gql`
         lastName
         profileImage
         role {
+          code
           id
           name
         }
@@ -6406,6 +8385,7 @@ export const DeleteCompanyInfoDocument = gql`
         lastName
         profileImage
         role {
+          code
           id
           name
         }
@@ -6532,6 +8512,7 @@ export const DeleteTransactionDocument = gql`
         nickName
         profileImage
         role {
+          code
           id
           name
         }
@@ -6614,6 +8595,7 @@ export const DeleteUserDocument = gql`
       nickName
       profileImage
       role {
+        code
         id
         name
       }
@@ -6833,6 +8815,7 @@ export const RefreshTokenDocument = gql`
         nickName
         profileImage
         role {
+          code
           id
           name
         }
@@ -6872,6 +8855,49 @@ export type RefreshTokenMutationResult = Apollo.MutationResult<RefreshTokenMutat
 export type RefreshTokenMutationOptions = Apollo.BaseMutationOptions<
   RefreshTokenMutation,
   RefreshTokenMutationVariables
+>;
+export const RejectMemberRegistrationDocument = gql`
+  mutation rejectMemberRegistration($reason: String!, $userId: String!) {
+    rejectMemberRegistration(reason: $reason, userId: $userId)
+  }
+`;
+export type RejectMemberRegistrationMutationFn = Apollo.MutationFunction<
+  RejectMemberRegistrationMutation,
+  RejectMemberRegistrationMutationVariables
+>;
+
+/**
+ * __useRejectMemberRegistrationMutation__
+ *
+ * To run a mutation, you first call `useRejectMemberRegistrationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRejectMemberRegistrationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [rejectMemberRegistrationMutation, { data, loading, error }] = useRejectMemberRegistrationMutation({
+ *   variables: {
+ *      reason: // value for 'reason'
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useRejectMemberRegistrationMutation(
+  baseOptions?: Apollo.MutationHookOptions<RejectMemberRegistrationMutation, RejectMemberRegistrationMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<RejectMemberRegistrationMutation, RejectMemberRegistrationMutationVariables>(
+    RejectMemberRegistrationDocument,
+    options
+  );
+}
+export type RejectMemberRegistrationMutationHookResult = ReturnType<typeof useRejectMemberRegistrationMutation>;
+export type RejectMemberRegistrationMutationResult = Apollo.MutationResult<RejectMemberRegistrationMutation>;
+export type RejectMemberRegistrationMutationOptions = Apollo.BaseMutationOptions<
+  RejectMemberRegistrationMutation,
+  RejectMemberRegistrationMutationVariables
 >;
 export const RemoveBatchCoordinatorDocument = gql`
   mutation removeBatchCoordinator($batch: Int!, $userId: String!) {
@@ -6932,6 +8958,7 @@ export const RequestChangesBlogDocument = gql`
         lastName
         profileImage
         role {
+          code
           id
           name
         }
@@ -7049,6 +9076,220 @@ export type ResetPasswordMutationOptions = Apollo.BaseMutationOptions<
   ResetPasswordMutation,
   ResetPasswordMutationVariables
 >;
+export const RevokeExecutivePositionDocument = gql`
+  mutation revokeExecutivePosition($input: RevokeExecutivePositionInput!) {
+    revokeExecutivePosition(input: $input) {
+      assignedByUserId
+      assignmentReason
+      createdAt
+      executiveTerm {
+        createdAt
+        createdByUserId
+        endDate
+        id
+        name
+        startDate
+        status
+        updatedAt
+      }
+      executiveTermId
+      id
+      position {
+        code
+        createdAt
+        id
+        isActive
+        isSingleSeat
+        name
+        updatedAt
+      }
+      positionId
+      revocationReason
+      revokedAt
+      revokedByUserId
+      updatedAt
+      user {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      userId
+      validFrom
+      validUntil
+    }
+  }
+`;
+export type RevokeExecutivePositionMutationFn = Apollo.MutationFunction<
+  RevokeExecutivePositionMutation,
+  RevokeExecutivePositionMutationVariables
+>;
+
+/**
+ * __useRevokeExecutivePositionMutation__
+ *
+ * To run a mutation, you first call `useRevokeExecutivePositionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRevokeExecutivePositionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [revokeExecutivePositionMutation, { data, loading, error }] = useRevokeExecutivePositionMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useRevokeExecutivePositionMutation(
+  baseOptions?: Apollo.MutationHookOptions<RevokeExecutivePositionMutation, RevokeExecutivePositionMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<RevokeExecutivePositionMutation, RevokeExecutivePositionMutationVariables>(
+    RevokeExecutivePositionDocument,
+    options
+  );
+}
+export type RevokeExecutivePositionMutationHookResult = ReturnType<typeof useRevokeExecutivePositionMutation>;
+export type RevokeExecutivePositionMutationResult = Apollo.MutationResult<RevokeExecutivePositionMutation>;
+export type RevokeExecutivePositionMutationOptions = Apollo.BaseMutationOptions<
+  RevokeExecutivePositionMutation,
+  RevokeExecutivePositionMutationVariables
+>;
+export const RevokeUserRoleDocument = gql`
+  mutation revokeUserRole($input: RevokeUserRoleInput!) {
+    revokeUserRole(input: $input) {
+      assignedByUserId
+      assignmentReason
+      createdAt
+      id
+      revocationReason
+      revokedAt
+      revokedByUserId
+      role {
+        code
+        description
+        id
+        isActive
+        isSystem
+        name
+      }
+      roleId
+      scopeBatch
+      scopeType
+      updatedAt
+      user {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      userId
+      validFrom
+      validUntil
+    }
+  }
+`;
+export type RevokeUserRoleMutationFn = Apollo.MutationFunction<RevokeUserRoleMutation, RevokeUserRoleMutationVariables>;
+
+/**
+ * __useRevokeUserRoleMutation__
+ *
+ * To run a mutation, you first call `useRevokeUserRoleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRevokeUserRoleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [revokeUserRoleMutation, { data, loading, error }] = useRevokeUserRoleMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useRevokeUserRoleMutation(
+  baseOptions?: Apollo.MutationHookOptions<RevokeUserRoleMutation, RevokeUserRoleMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<RevokeUserRoleMutation, RevokeUserRoleMutationVariables>(RevokeUserRoleDocument, options);
+}
+export type RevokeUserRoleMutationHookResult = ReturnType<typeof useRevokeUserRoleMutation>;
+export type RevokeUserRoleMutationResult = Apollo.MutationResult<RevokeUserRoleMutation>;
+export type RevokeUserRoleMutationOptions = Apollo.BaseMutationOptions<
+  RevokeUserRoleMutation,
+  RevokeUserRoleMutationVariables
+>;
 export const SendMassEmailDocument = gql`
   mutation sendMassEmail($context: JSON, $subject: String!, $template: String!) {
     sendMassEmail(context: $context, subject: $subject, template: $template)
@@ -7122,6 +9363,7 @@ export const SigninDocument = gql`
         nickName
         profileImage
         role {
+          code
           id
           name
         }
@@ -7211,6 +9453,7 @@ export const SignupDocument = gql`
       nickName
       profileImage
       role {
+        code
         id
         name
       }
@@ -7335,6 +9578,7 @@ export const UpdateAlbumDocument = gql`
         lastName
         profileImage
         role {
+          code
           id
           name
         }
@@ -7353,6 +9597,7 @@ export const UpdateAlbumDocument = gql`
         lastName
         profileImage
         role {
+          code
           id
           name
         }
@@ -7477,6 +9722,7 @@ export const UpdateAlbumDocument = gql`
           nickName
           profileImage
           role {
+            code
             id
             name
           }
@@ -7561,6 +9807,7 @@ export const UpdateBatchCoordinatorDocument = gql`
         nickName
         profileImage
         role {
+          code
           id
           name
         }
@@ -7633,6 +9880,7 @@ export const UpdateBlogDocument = gql`
         lastName
         profileImage
         role {
+          code
           id
           name
         }
@@ -7741,6 +9989,7 @@ export const UpdateBusinessDocument = gql`
         lastName
         profileImage
         role {
+          code
           id
           name
         }
@@ -7865,6 +10114,7 @@ export const UpdateCompanyInfoDocument = gql`
         lastName
         profileImage
         role {
+          code
           id
           name
         }
@@ -8059,6 +10309,7 @@ export const UpdateTransactionDocument = gql`
         nickName
         profileImage
         role {
+          code
           id
           name
         }
@@ -8178,6 +10429,7 @@ export const UpdateUserDocument = gql`
       nickName
       profileImage
       role {
+        code
         id
         name
       }
@@ -8315,6 +10567,7 @@ export const VerifyBusinessDocument = gql`
         lastName
         profileImage
         role {
+          code
           id
           name
         }
@@ -8452,6 +10705,7 @@ export const GetCompanyInfoListByUserDocument = gql`
         lastName
         profileImage
         role {
+          code
           id
           name
         }
@@ -8515,6 +10769,326 @@ export type GetCompanyInfoListByUserQueryResult = Apollo.QueryResult<
   GetCompanyInfoListByUserQuery,
   GetCompanyInfoListByUserQueryVariables
 >;
+export const AccessAuditEventsDocument = gql`
+  query accessAuditEvents {
+    accessAuditEvents {
+      action
+      actorUserId
+      after
+      before
+      createdAt
+      entityId
+      entityType
+      id
+      ipAddress
+      isHighRisk
+      reason
+      requestId
+      targetUserId
+      userAgent
+    }
+  }
+`;
+
+/**
+ * __useAccessAuditEventsQuery__
+ *
+ * To run a query within a React component, call `useAccessAuditEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAccessAuditEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAccessAuditEventsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAccessAuditEventsQuery(
+  baseOptions?: Apollo.QueryHookOptions<AccessAuditEventsQuery, AccessAuditEventsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<AccessAuditEventsQuery, AccessAuditEventsQueryVariables>(AccessAuditEventsDocument, options);
+}
+export function useAccessAuditEventsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<AccessAuditEventsQuery, AccessAuditEventsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<AccessAuditEventsQuery, AccessAuditEventsQueryVariables>(
+    AccessAuditEventsDocument,
+    options
+  );
+}
+export function useAccessAuditEventsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<AccessAuditEventsQuery, AccessAuditEventsQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<AccessAuditEventsQuery, AccessAuditEventsQueryVariables>(
+    AccessAuditEventsDocument,
+    options
+  );
+}
+export type AccessAuditEventsQueryHookResult = ReturnType<typeof useAccessAuditEventsQuery>;
+export type AccessAuditEventsLazyQueryHookResult = ReturnType<typeof useAccessAuditEventsLazyQuery>;
+export type AccessAuditEventsSuspenseQueryHookResult = ReturnType<typeof useAccessAuditEventsSuspenseQuery>;
+export type AccessAuditEventsQueryResult = Apollo.QueryResult<AccessAuditEventsQuery, AccessAuditEventsQueryVariables>;
+export const ExecutivePositionAssignmentsDocument = gql`
+  query executivePositionAssignments {
+    executivePositionAssignments {
+      assignedByUserId
+      assignmentReason
+      createdAt
+      executiveTerm {
+        createdAt
+        createdByUserId
+        endDate
+        id
+        name
+        startDate
+        status
+        updatedAt
+      }
+      executiveTermId
+      id
+      position {
+        code
+        createdAt
+        id
+        isActive
+        isSingleSeat
+        name
+        updatedAt
+      }
+      positionId
+      revocationReason
+      revokedAt
+      revokedByUserId
+      updatedAt
+      user {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      userId
+      validFrom
+      validUntil
+    }
+  }
+`;
+
+/**
+ * __useExecutivePositionAssignmentsQuery__
+ *
+ * To run a query within a React component, call `useExecutivePositionAssignmentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useExecutivePositionAssignmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useExecutivePositionAssignmentsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useExecutivePositionAssignmentsQuery(
+  baseOptions?: Apollo.QueryHookOptions<ExecutivePositionAssignmentsQuery, ExecutivePositionAssignmentsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ExecutivePositionAssignmentsQuery, ExecutivePositionAssignmentsQueryVariables>(
+    ExecutivePositionAssignmentsDocument,
+    options
+  );
+}
+export function useExecutivePositionAssignmentsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ExecutivePositionAssignmentsQuery,
+    ExecutivePositionAssignmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ExecutivePositionAssignmentsQuery, ExecutivePositionAssignmentsQueryVariables>(
+    ExecutivePositionAssignmentsDocument,
+    options
+  );
+}
+export function useExecutivePositionAssignmentsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<ExecutivePositionAssignmentsQuery, ExecutivePositionAssignmentsQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<ExecutivePositionAssignmentsQuery, ExecutivePositionAssignmentsQueryVariables>(
+    ExecutivePositionAssignmentsDocument,
+    options
+  );
+}
+export type ExecutivePositionAssignmentsQueryHookResult = ReturnType<typeof useExecutivePositionAssignmentsQuery>;
+export type ExecutivePositionAssignmentsLazyQueryHookResult = ReturnType<
+  typeof useExecutivePositionAssignmentsLazyQuery
+>;
+export type ExecutivePositionAssignmentsSuspenseQueryHookResult = ReturnType<
+  typeof useExecutivePositionAssignmentsSuspenseQuery
+>;
+export type ExecutivePositionAssignmentsQueryResult = Apollo.QueryResult<
+  ExecutivePositionAssignmentsQuery,
+  ExecutivePositionAssignmentsQueryVariables
+>;
+export const ExecutivePositionsDocument = gql`
+  query executivePositions {
+    executivePositions {
+      code
+      createdAt
+      id
+      isActive
+      isSingleSeat
+      name
+      updatedAt
+    }
+  }
+`;
+
+/**
+ * __useExecutivePositionsQuery__
+ *
+ * To run a query within a React component, call `useExecutivePositionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useExecutivePositionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useExecutivePositionsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useExecutivePositionsQuery(
+  baseOptions?: Apollo.QueryHookOptions<ExecutivePositionsQuery, ExecutivePositionsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ExecutivePositionsQuery, ExecutivePositionsQueryVariables>(
+    ExecutivePositionsDocument,
+    options
+  );
+}
+export function useExecutivePositionsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<ExecutivePositionsQuery, ExecutivePositionsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ExecutivePositionsQuery, ExecutivePositionsQueryVariables>(
+    ExecutivePositionsDocument,
+    options
+  );
+}
+export function useExecutivePositionsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<ExecutivePositionsQuery, ExecutivePositionsQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<ExecutivePositionsQuery, ExecutivePositionsQueryVariables>(
+    ExecutivePositionsDocument,
+    options
+  );
+}
+export type ExecutivePositionsQueryHookResult = ReturnType<typeof useExecutivePositionsQuery>;
+export type ExecutivePositionsLazyQueryHookResult = ReturnType<typeof useExecutivePositionsLazyQuery>;
+export type ExecutivePositionsSuspenseQueryHookResult = ReturnType<typeof useExecutivePositionsSuspenseQuery>;
+export type ExecutivePositionsQueryResult = Apollo.QueryResult<
+  ExecutivePositionsQuery,
+  ExecutivePositionsQueryVariables
+>;
+export const ExecutiveTermsDocument = gql`
+  query executiveTerms {
+    executiveTerms {
+      createdAt
+      createdByUserId
+      endDate
+      id
+      name
+      startDate
+      status
+      updatedAt
+    }
+  }
+`;
+
+/**
+ * __useExecutiveTermsQuery__
+ *
+ * To run a query within a React component, call `useExecutiveTermsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useExecutiveTermsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useExecutiveTermsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useExecutiveTermsQuery(
+  baseOptions?: Apollo.QueryHookOptions<ExecutiveTermsQuery, ExecutiveTermsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ExecutiveTermsQuery, ExecutiveTermsQueryVariables>(ExecutiveTermsDocument, options);
+}
+export function useExecutiveTermsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<ExecutiveTermsQuery, ExecutiveTermsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ExecutiveTermsQuery, ExecutiveTermsQueryVariables>(ExecutiveTermsDocument, options);
+}
+export function useExecutiveTermsSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ExecutiveTermsQuery, ExecutiveTermsQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<ExecutiveTermsQuery, ExecutiveTermsQueryVariables>(ExecutiveTermsDocument, options);
+}
+export type ExecutiveTermsQueryHookResult = ReturnType<typeof useExecutiveTermsQuery>;
+export type ExecutiveTermsLazyQueryHookResult = ReturnType<typeof useExecutiveTermsLazyQuery>;
+export type ExecutiveTermsSuspenseQueryHookResult = ReturnType<typeof useExecutiveTermsSuspenseQuery>;
+export type ExecutiveTermsQueryResult = Apollo.QueryResult<ExecutiveTermsQuery, ExecutiveTermsQueryVariables>;
 export const GetAlbumDocument = gql`
   query getAlbum($id: String!) {
     getAlbum(id: $id) {
@@ -8530,6 +11104,7 @@ export const GetAlbumDocument = gql`
         lastName
         profileImage
         role {
+          code
           id
           name
         }
@@ -8548,6 +11123,7 @@ export const GetAlbumDocument = gql`
         lastName
         profileImage
         role {
+          code
           id
           name
         }
@@ -8672,6 +11248,7 @@ export const GetAlbumDocument = gql`
           nickName
           profileImage
           role {
+            code
             id
             name
           }
@@ -8741,6 +11318,7 @@ export const GetAlbumsDocument = gql`
           lastName
           profileImage
           role {
+            code
             id
             name
           }
@@ -8759,6 +11337,7 @@ export const GetAlbumsDocument = gql`
           lastName
           profileImage
           role {
+            code
             id
             name
           }
@@ -8868,6 +11447,7 @@ export const GetAllBatchCoordinatorsDocument = gql`
         nickName
         profileImage
         role {
+          code
           id
           name
         }
@@ -8970,6 +11550,7 @@ export const GetBatchCoordinatorByUserIdDocument = gql`
         nickName
         profileImage
         role {
+          code
           id
           name
         }
@@ -9075,6 +11656,7 @@ export const GetBatchCoordinatorsByBatchDocument = gql`
         nickName
         profileImage
         role {
+          code
           id
           name
         }
@@ -9158,6 +11740,7 @@ export const GetBlogDocument = gql`
         lastName
         profileImage
         role {
+          code
           id
           name
         }
@@ -9252,6 +11835,7 @@ export const GetBlogListDocument = gql`
           lastName
           profileImage
           role {
+            code
             id
             name
           }
@@ -9345,6 +11929,7 @@ export const GetBusinessDocument = gql`
         lastName
         profileImage
         role {
+          code
           id
           name
         }
@@ -9428,6 +12013,7 @@ export const GetBusinessesDocument = gql`
           lastName
           profileImage
           role {
+            code
             id
             name
           }
@@ -9538,6 +12124,7 @@ export const GetCommentsDocument = gql`
         lastName
         profileImage
         role {
+          code
           id
           name
         }
@@ -9621,6 +12208,7 @@ export const GetCompanyInfoDocument = gql`
         lastName
         profileImage
         role {
+          code
           id
           name
         }
@@ -9695,6 +12283,7 @@ export const GetCompanyInfoListDocument = gql`
         lastName
         profileImage
         role {
+          code
           id
           name
         }
@@ -9771,6 +12360,7 @@ export const GetEventDetailsDocument = gql`
         lastName
         profileImage
         role {
+          code
           id
           name
         }
@@ -9797,6 +12387,7 @@ export const GetEventDetailsDocument = gql`
         lastName
         profileImage
         role {
+          code
           id
           name
         }
@@ -9936,6 +12527,7 @@ export const GetMyPhotosDocument = gql`
           lastName
           profileImage
           role {
+            code
             id
             name
           }
@@ -9954,6 +12546,7 @@ export const GetMyPhotosDocument = gql`
           lastName
           profileImage
           role {
+            code
             id
             name
           }
@@ -10028,6 +12621,7 @@ export const GetMyPhotosDocument = gql`
         nickName
         profileImage
         role {
+          code
           id
           name
         }
@@ -10125,6 +12719,7 @@ export const GetTransactionDocument = gql`
         nickName
         profileImage
         role {
+          code
           id
           name
         }
@@ -10225,6 +12820,7 @@ export const GetTransactionsDocument = gql`
           nickName
           profileImage
           role {
+            code
             id
             name
           }
@@ -10371,6 +12967,7 @@ export const GetUserDetailsDocument = gql`
       nickName
       profileImage
       role {
+        code
         id
         name
       }
@@ -10454,6 +13051,7 @@ export const GetUserListDocument = gql`
         nickName
         profileImage
         role {
+          code
           id
           name
         }
@@ -10504,6 +13102,297 @@ export type GetUserListQueryHookResult = ReturnType<typeof useGetUserListQuery>;
 export type GetUserListLazyQueryHookResult = ReturnType<typeof useGetUserListLazyQuery>;
 export type GetUserListSuspenseQueryHookResult = ReturnType<typeof useGetUserListSuspenseQuery>;
 export type GetUserListQueryResult = Apollo.QueryResult<GetUserListQuery, GetUserListQueryVariables>;
+export const PublicExecutiveCommitteeDocument = gql`
+  query publicExecutiveCommittee {
+    publicExecutiveCommittee {
+      assignmentId
+      batch
+      designation
+      email
+      mobile
+      name
+      positionCode
+      positionName
+      profilePicture
+      termId
+      termName
+      userId
+      validFrom
+      validUntil
+    }
+  }
+`;
+
+/**
+ * __usePublicExecutiveCommitteeQuery__
+ *
+ * To run a query within a React component, call `usePublicExecutiveCommitteeQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePublicExecutiveCommitteeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePublicExecutiveCommitteeQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function usePublicExecutiveCommitteeQuery(
+  baseOptions?: Apollo.QueryHookOptions<PublicExecutiveCommitteeQuery, PublicExecutiveCommitteeQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<PublicExecutiveCommitteeQuery, PublicExecutiveCommitteeQueryVariables>(
+    PublicExecutiveCommitteeDocument,
+    options
+  );
+}
+export function usePublicExecutiveCommitteeLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<PublicExecutiveCommitteeQuery, PublicExecutiveCommitteeQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<PublicExecutiveCommitteeQuery, PublicExecutiveCommitteeQueryVariables>(
+    PublicExecutiveCommitteeDocument,
+    options
+  );
+}
+export function usePublicExecutiveCommitteeSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<PublicExecutiveCommitteeQuery, PublicExecutiveCommitteeQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<PublicExecutiveCommitteeQuery, PublicExecutiveCommitteeQueryVariables>(
+    PublicExecutiveCommitteeDocument,
+    options
+  );
+}
+export type PublicExecutiveCommitteeQueryHookResult = ReturnType<typeof usePublicExecutiveCommitteeQuery>;
+export type PublicExecutiveCommitteeLazyQueryHookResult = ReturnType<typeof usePublicExecutiveCommitteeLazyQuery>;
+export type PublicExecutiveCommitteeSuspenseQueryHookResult = ReturnType<
+  typeof usePublicExecutiveCommitteeSuspenseQuery
+>;
+export type PublicExecutiveCommitteeQueryResult = Apollo.QueryResult<
+  PublicExecutiveCommitteeQuery,
+  PublicExecutiveCommitteeQueryVariables
+>;
+export const RoleAssignmentsDocument = gql`
+  query roleAssignments($filter: RoleAssignmentFilterInput) {
+    roleAssignments(filter: $filter) {
+      assignedByUserId
+      assignmentReason
+      createdAt
+      id
+      revocationReason
+      revokedAt
+      revokedByUserId
+      role {
+        code
+        description
+        id
+        isActive
+        isSystem
+        name
+      }
+      roleId
+      scopeBatch
+      scopeType
+      updatedAt
+      user {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      userId
+      validFrom
+      validUntil
+    }
+  }
+`;
+
+/**
+ * __useRoleAssignmentsQuery__
+ *
+ * To run a query within a React component, call `useRoleAssignmentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRoleAssignmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRoleAssignmentsQuery({
+ *   variables: {
+ *      filter: // value for 'filter'
+ *   },
+ * });
+ */
+export function useRoleAssignmentsQuery(
+  baseOptions?: Apollo.QueryHookOptions<RoleAssignmentsQuery, RoleAssignmentsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<RoleAssignmentsQuery, RoleAssignmentsQueryVariables>(RoleAssignmentsDocument, options);
+}
+export function useRoleAssignmentsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<RoleAssignmentsQuery, RoleAssignmentsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<RoleAssignmentsQuery, RoleAssignmentsQueryVariables>(RoleAssignmentsDocument, options);
+}
+export function useRoleAssignmentsSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<RoleAssignmentsQuery, RoleAssignmentsQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<RoleAssignmentsQuery, RoleAssignmentsQueryVariables>(RoleAssignmentsDocument, options);
+}
+export type RoleAssignmentsQueryHookResult = ReturnType<typeof useRoleAssignmentsQuery>;
+export type RoleAssignmentsLazyQueryHookResult = ReturnType<typeof useRoleAssignmentsLazyQuery>;
+export type RoleAssignmentsSuspenseQueryHookResult = ReturnType<typeof useRoleAssignmentsSuspenseQuery>;
+export type RoleAssignmentsQueryResult = Apollo.QueryResult<RoleAssignmentsQuery, RoleAssignmentsQueryVariables>;
+export const SystemPermissionsDocument = gql`
+  query systemPermissions {
+    systemPermissions {
+      category
+      code
+      createdAt
+      description
+      id
+      isActive
+      name
+      updatedAt
+    }
+  }
+`;
+
+/**
+ * __useSystemPermissionsQuery__
+ *
+ * To run a query within a React component, call `useSystemPermissionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSystemPermissionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSystemPermissionsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSystemPermissionsQuery(
+  baseOptions?: Apollo.QueryHookOptions<SystemPermissionsQuery, SystemPermissionsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<SystemPermissionsQuery, SystemPermissionsQueryVariables>(SystemPermissionsDocument, options);
+}
+export function useSystemPermissionsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<SystemPermissionsQuery, SystemPermissionsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<SystemPermissionsQuery, SystemPermissionsQueryVariables>(
+    SystemPermissionsDocument,
+    options
+  );
+}
+export function useSystemPermissionsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<SystemPermissionsQuery, SystemPermissionsQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<SystemPermissionsQuery, SystemPermissionsQueryVariables>(
+    SystemPermissionsDocument,
+    options
+  );
+}
+export type SystemPermissionsQueryHookResult = ReturnType<typeof useSystemPermissionsQuery>;
+export type SystemPermissionsLazyQueryHookResult = ReturnType<typeof useSystemPermissionsLazyQuery>;
+export type SystemPermissionsSuspenseQueryHookResult = ReturnType<typeof useSystemPermissionsSuspenseQuery>;
+export type SystemPermissionsQueryResult = Apollo.QueryResult<SystemPermissionsQuery, SystemPermissionsQueryVariables>;
+export const SystemRolesDocument = gql`
+  query systemRoles {
+    systemRoles {
+      code
+      description
+      id
+      isActive
+      isSystem
+      name
+    }
+  }
+`;
+
+/**
+ * __useSystemRolesQuery__
+ *
+ * To run a query within a React component, call `useSystemRolesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSystemRolesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSystemRolesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSystemRolesQuery(
+  baseOptions?: Apollo.QueryHookOptions<SystemRolesQuery, SystemRolesQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<SystemRolesQuery, SystemRolesQueryVariables>(SystemRolesDocument, options);
+}
+export function useSystemRolesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<SystemRolesQuery, SystemRolesQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<SystemRolesQuery, SystemRolesQueryVariables>(SystemRolesDocument, options);
+}
+export function useSystemRolesSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<SystemRolesQuery, SystemRolesQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<SystemRolesQuery, SystemRolesQueryVariables>(SystemRolesDocument, options);
+}
+export type SystemRolesQueryHookResult = ReturnType<typeof useSystemRolesQuery>;
+export type SystemRolesLazyQueryHookResult = ReturnType<typeof useSystemRolesLazyQuery>;
+export type SystemRolesSuspenseQueryHookResult = ReturnType<typeof useSystemRolesSuspenseQuery>;
+export type SystemRolesQueryResult = Apollo.QueryResult<SystemRolesQuery, SystemRolesQueryVariables>;
 export const UpcomingBirthdaysDocument = gql`
   query upcomingBirthdays {
     upcomingBirthdays {
@@ -10566,3 +13455,349 @@ export type UpcomingBirthdaysQueryHookResult = ReturnType<typeof useUpcomingBirt
 export type UpcomingBirthdaysLazyQueryHookResult = ReturnType<typeof useUpcomingBirthdaysLazyQuery>;
 export type UpcomingBirthdaysSuspenseQueryHookResult = ReturnType<typeof useUpcomingBirthdaysSuspenseQuery>;
 export type UpcomingBirthdaysQueryResult = Apollo.QueryResult<UpcomingBirthdaysQuery, UpcomingBirthdaysQueryVariables>;
+export const UserExecutivePositionAssignmentsDocument = gql`
+  query userExecutivePositionAssignments($userId: String) {
+    userExecutivePositionAssignments(userId: $userId) {
+      assignedByUserId
+      assignmentReason
+      createdAt
+      executiveTerm {
+        createdAt
+        createdByUserId
+        endDate
+        id
+        name
+        startDate
+        status
+        updatedAt
+      }
+      executiveTermId
+      id
+      position {
+        code
+        createdAt
+        id
+        isActive
+        isSingleSeat
+        name
+        updatedAt
+      }
+      positionId
+      revocationReason
+      revokedAt
+      revokedByUserId
+      updatedAt
+      user {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      userId
+      validFrom
+      validUntil
+    }
+  }
+`;
+
+/**
+ * __useUserExecutivePositionAssignmentsQuery__
+ *
+ * To run a query within a React component, call `useUserExecutivePositionAssignmentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserExecutivePositionAssignmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserExecutivePositionAssignmentsQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useUserExecutivePositionAssignmentsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    UserExecutivePositionAssignmentsQuery,
+    UserExecutivePositionAssignmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<UserExecutivePositionAssignmentsQuery, UserExecutivePositionAssignmentsQueryVariables>(
+    UserExecutivePositionAssignmentsDocument,
+    options
+  );
+}
+export function useUserExecutivePositionAssignmentsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    UserExecutivePositionAssignmentsQuery,
+    UserExecutivePositionAssignmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<UserExecutivePositionAssignmentsQuery, UserExecutivePositionAssignmentsQueryVariables>(
+    UserExecutivePositionAssignmentsDocument,
+    options
+  );
+}
+export function useUserExecutivePositionAssignmentsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        UserExecutivePositionAssignmentsQuery,
+        UserExecutivePositionAssignmentsQueryVariables
+      >
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<UserExecutivePositionAssignmentsQuery, UserExecutivePositionAssignmentsQueryVariables>(
+    UserExecutivePositionAssignmentsDocument,
+    options
+  );
+}
+export type UserExecutivePositionAssignmentsQueryHookResult = ReturnType<
+  typeof useUserExecutivePositionAssignmentsQuery
+>;
+export type UserExecutivePositionAssignmentsLazyQueryHookResult = ReturnType<
+  typeof useUserExecutivePositionAssignmentsLazyQuery
+>;
+export type UserExecutivePositionAssignmentsSuspenseQueryHookResult = ReturnType<
+  typeof useUserExecutivePositionAssignmentsSuspenseQuery
+>;
+export type UserExecutivePositionAssignmentsQueryResult = Apollo.QueryResult<
+  UserExecutivePositionAssignmentsQuery,
+  UserExecutivePositionAssignmentsQueryVariables
+>;
+export const UserRoleAssignmentsDocument = gql`
+  query userRoleAssignments($userId: String) {
+    userRoleAssignments(userId: $userId) {
+      assignedByUserId
+      assignmentReason
+      createdAt
+      id
+      revocationReason
+      revokedAt
+      revokedByUserId
+      role {
+        code
+        description
+        id
+        isActive
+        isSystem
+        name
+      }
+      roleId
+      scopeBatch
+      scopeType
+      updatedAt
+      user {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      userId
+      validFrom
+      validUntil
+    }
+  }
+`;
+
+/**
+ * __useUserRoleAssignmentsQuery__
+ *
+ * To run a query within a React component, call `useUserRoleAssignmentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserRoleAssignmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserRoleAssignmentsQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useUserRoleAssignmentsQuery(
+  baseOptions?: Apollo.QueryHookOptions<UserRoleAssignmentsQuery, UserRoleAssignmentsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<UserRoleAssignmentsQuery, UserRoleAssignmentsQueryVariables>(
+    UserRoleAssignmentsDocument,
+    options
+  );
+}
+export function useUserRoleAssignmentsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<UserRoleAssignmentsQuery, UserRoleAssignmentsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<UserRoleAssignmentsQuery, UserRoleAssignmentsQueryVariables>(
+    UserRoleAssignmentsDocument,
+    options
+  );
+}
+export function useUserRoleAssignmentsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<UserRoleAssignmentsQuery, UserRoleAssignmentsQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<UserRoleAssignmentsQuery, UserRoleAssignmentsQueryVariables>(
+    UserRoleAssignmentsDocument,
+    options
+  );
+}
+export type UserRoleAssignmentsQueryHookResult = ReturnType<typeof useUserRoleAssignmentsQuery>;
+export type UserRoleAssignmentsLazyQueryHookResult = ReturnType<typeof useUserRoleAssignmentsLazyQuery>;
+export type UserRoleAssignmentsSuspenseQueryHookResult = ReturnType<typeof useUserRoleAssignmentsSuspenseQuery>;
+export type UserRoleAssignmentsQueryResult = Apollo.QueryResult<
+  UserRoleAssignmentsQuery,
+  UserRoleAssignmentsQueryVariables
+>;
+export const ViewerAccessContextDocument = gql`
+  query viewerAccessContext {
+    viewerAccessContext {
+      hasFullAccess
+      permissions
+      positions {
+        assignmentId
+        code
+        name
+        termId
+        termName
+        validFrom
+        validUntil
+      }
+      roles {
+        assignmentId
+        code
+        name
+        scopeBatch
+        scopeType
+        validFrom
+        validUntil
+      }
+      userId
+    }
+  }
+`;
+
+/**
+ * __useViewerAccessContextQuery__
+ *
+ * To run a query within a React component, call `useViewerAccessContextQuery` and pass it any options that fit your needs.
+ * When your component renders, `useViewerAccessContextQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useViewerAccessContextQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useViewerAccessContextQuery(
+  baseOptions?: Apollo.QueryHookOptions<ViewerAccessContextQuery, ViewerAccessContextQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ViewerAccessContextQuery, ViewerAccessContextQueryVariables>(
+    ViewerAccessContextDocument,
+    options
+  );
+}
+export function useViewerAccessContextLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<ViewerAccessContextQuery, ViewerAccessContextQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ViewerAccessContextQuery, ViewerAccessContextQueryVariables>(
+    ViewerAccessContextDocument,
+    options
+  );
+}
+export function useViewerAccessContextSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<ViewerAccessContextQuery, ViewerAccessContextQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<ViewerAccessContextQuery, ViewerAccessContextQueryVariables>(
+    ViewerAccessContextDocument,
+    options
+  );
+}
+export type ViewerAccessContextQueryHookResult = ReturnType<typeof useViewerAccessContextQuery>;
+export type ViewerAccessContextLazyQueryHookResult = ReturnType<typeof useViewerAccessContextLazyQuery>;
+export type ViewerAccessContextSuspenseQueryHookResult = ReturnType<typeof useViewerAccessContextSuspenseQuery>;
+export type ViewerAccessContextQueryResult = Apollo.QueryResult<
+  ViewerAccessContextQuery,
+  ViewerAccessContextQueryVariables
+>;
