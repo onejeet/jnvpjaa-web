@@ -18,7 +18,7 @@ import { useAuth } from '@/context/AuthContext';
 import { GetUserDetailsDocument } from '@/apollo/hooks';
 import Dialog from '@/components/core/Dialog';
 import Image from 'next/image';
-import { ROLE_CODES } from '@/constants/access';
+import { ROLE_CODES, ROLE_LABELS } from '@/constants/access';
 import ProfilePictureUpload from '@/modules/ProfileSetup/ProfilePictureUpload';
 
 const profilePositionRoleCodes = new Set([ROLE_CODES.BATCH_COORDINATOR, ROLE_CODES.FINANCE_MANAGER]);
@@ -28,21 +28,24 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
   const [openPictureEdit, setOpenPictureEdit] = React.useState<boolean>(false);
   const { user, loading, isProfileEditable, editingProfile, saveProfile, setEditingProfile } = useProfile();
   const { showAlert } = useAlert();
-  const { user: authUser, isAdmin, setUser } = useAuth();
+  const { user: authUser, isAdmin, positions: authPositions, roles: authRoles, setUser } = useAuth();
   const router = useRouter();
   const client = useApolloClient();
 
   const profileSummary = React.useMemo(() => {
     const summaryParts = [];
+    const isCurrentUser = user?.id && user.id === authUser?.id;
+    const profilePositions = user?.positions?.length ? user.positions : isCurrentUser ? authPositions : [];
+    const profileRoles = user?.roles?.length ? user.roles : isCurrentUser ? authRoles : [];
     const executivePositions =
-      user?.positions
+      profilePositions
         ?.filter((position: any) => position?.name)
         .map((position: any) => position.name)
         .filter(Boolean) || [];
     const positionRoles =
-      user?.roles
+      profileRoles
         ?.filter((role: any) => profilePositionRoleCodes.has(role?.code))
-        .map((role: any) => role.name)
+        .map((role: any) => ROLE_LABELS[role.code as keyof typeof ROLE_LABELS] || role.name)
         .filter(Boolean) || [];
     const uniquePositions = Array.from(new Set([...executivePositions, ...positionRoles]));
 
@@ -55,7 +58,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
     summaryParts.push(...uniquePositions);
 
     return summaryParts.join(' • ');
-  }, [user?.batch, user?.positions, user?.roles]);
+  }, [authPositions, authRoles, authUser?.id, user?.batch, user?.id, user?.positions, user?.roles]);
 
   const handleDataPrivacyUpdate = React.useCallback(() => {
     showAlert(
