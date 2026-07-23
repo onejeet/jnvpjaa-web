@@ -1,9 +1,12 @@
 import { TextFieldProps } from '@/components/core/TextField';
-import { Control, FieldValues, InputValidationRules, RegisterOptions } from 'react-hook-form';
+import { Control, FieldPathValue, FieldValues, Path, RegisterOptions } from 'react-hook-form';
 
-export interface FormTextFieldProps extends TextFieldProps {
-  name: string;
-  control: Control<any, any>;
-  rules?: RegisterOptions<any>; // Validation rules for react-hook-form
-  defaultValue?: string;
+export interface FormTextFieldProps<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends Path<TFieldValues> = Path<TFieldValues>,
+> extends TextFieldProps {
+  name: TName;
+  control: Control<TFieldValues>;
+  rules?: RegisterOptions<TFieldValues, TName>; // Validation rules for react-hook-form
+  defaultValue?: FieldPathValue<TFieldValues, TName>;
 }

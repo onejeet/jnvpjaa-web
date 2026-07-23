@@ -1,16 +1,19 @@
 import React from 'react';
-import { Controller } from 'react-hook-form';
+import { Controller, FieldValues, Path } from 'react-hook-form';
 import { FormTextFieldProps } from './FormTextField.types';
 import TextField from '@/components/core/TextField';
 
-const FormTextField: React.FC<FormTextFieldProps> = ({
+const FormTextField = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends Path<TFieldValues> = Path<TFieldValues>,
+>({
   name,
   control,
   rules,
-  defaultValue = '',
+  defaultValue,
   helperText = '',
   ...textFieldProps
-}) => {
+}: FormTextFieldProps<TFieldValues, TName>) => {
   return (
     <Controller
       name={name}

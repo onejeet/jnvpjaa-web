@@ -1,6 +1,7 @@
 export interface ISignupFormInput {
   email: string;
   password: string;
+  'confirm-password': string;
   first_name: string;
   last_name: string;
   gender: string;
