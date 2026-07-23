@@ -1,19 +1,23 @@
 import React from 'react';
-import { Controller } from 'react-hook-form';
+import { Controller, FieldValues, Path } from 'react-hook-form';
 import { FormCheckboxProps } from './FormCheckboxField.types';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 
-const FormCheckbox: React.FC<FormCheckboxProps> = ({
+const FormCheckbox = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends Path<TFieldValues> = Path<TFieldValues>,
+>({
   name,
   control,
   rules,
-  defaultValue = false,
+  defaultValue,
   helperText = '',
   label,
+  fullWidth,
   ...checkboxProps
-}) => {
+}: FormCheckboxProps<TFieldValues, TName>) => {
   return (
     <Controller
       name={name}
@@ -23,6 +27,7 @@ const FormCheckbox: React.FC<FormCheckboxProps> = ({
       render={({ field, fieldState: { error } }) => (
         <>
           <FormControlLabel
+            sx={{ width: fullWidth ? '100%' : undefined }}
             control={
               <Checkbox
                 {...field}
