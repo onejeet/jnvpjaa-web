@@ -8,9 +8,13 @@ import { IconSearch } from '@tabler/icons-react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import React from 'react';
+import { PERMISSION_CODES } from '@/constants/access';
 
 const MembersFilters = () => {
-  const { isAdmin, user } = useAuth();
+  const { user, can } = useAuth();
+  const canManagePendingRegistrations =
+    can(PERMISSION_CODES.MEMBERSHIP_REGISTRATION_APPROVE) ||
+    can(PERMISSION_CODES.MEMBERSHIP_REGISTRATION_APPROVE_BATCH);
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -41,7 +45,7 @@ const MembersFilters = () => {
   );
 
   React.useEffect(() => {
-    if (!user || isAdmin || !searchParams.has('verified')) {
+    if (!user || canManagePendingRegistrations || !searchParams.has('verified')) {
       return;
     }
 
@@ -49,7 +53,7 @@ const MembersFilters = () => {
     params.delete('verified');
     const nextQueryString = params.toString();
     router.replace(nextQueryString ? `${pathname}?${nextQueryString}` : pathname);
-  }, [isAdmin, pathname, router, searchParams, user]);
+  }, [canManagePendingRegistrations, pathname, router, searchParams, user]);
 
   return (
     <Box container component={Grid} mb={2} spacing={2}>
@@ -90,7 +94,7 @@ const MembersFilters = () => {
           ))}
         </Select>
       </Grid>
-      {isAdmin && (
+      {canManagePendingRegistrations && (
         <Grid size={{ xs: 12, sm: 6, md: 2 }}>
           <Select
             key={searchParams.get('verified')}

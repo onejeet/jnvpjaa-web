@@ -479,6 +479,7 @@ export type FilterInput = {
   batch?: InputMaybe<Scalars['Int']['input']>;
   blogId?: InputMaybe<Scalars['String']['input']>;
   excludeBatch?: InputMaybe<Scalars['Int']['input']>;
+  excludeBatches?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
   query?: InputMaybe<Scalars['String']['input']>;
   userId?: InputMaybe<Scalars['String']['input']>;
   verified?: InputMaybe<Scalars['Boolean']['input']>;
@@ -1183,8 +1184,10 @@ export type User = {
   metadata?: Maybe<Scalars['JSON']['output']>;
   mobile?: Maybe<Scalars['String']['output']>;
   nickName?: Maybe<Scalars['String']['output']>;
+  positions?: Maybe<Array<Maybe<EffectivePosition>>>;
   profileImage?: Maybe<Scalars['String']['output']>;
   role?: Maybe<Role>;
+  roles?: Maybe<Array<Maybe<EffectiveRole>>>;
   socialMedia?: Maybe<Scalars['JSON']['output']>;
   /** Timestamp when the record was last updated */
   updatedAt: Scalars['DateTime']['output'];
@@ -2901,7 +2904,37 @@ export type DeleteUserMutation = {
         metadata?: any | undefined;
         mobile?: string | undefined;
         nickName?: string | undefined;
+        positions?:
+          | Array<
+              | {
+                  __typename?: 'EffectivePosition';
+                  assignmentId?: string | undefined;
+                  code?: string | undefined;
+                  name?: string | undefined;
+                  termId?: string | undefined;
+                  termName?: string | undefined;
+                  validFrom?: any | undefined;
+                  validUntil?: any | undefined;
+                }
+              | undefined
+            >
+          | undefined;
         profileImage?: string | undefined;
+        roles?:
+          | Array<
+              | {
+                  __typename?: 'EffectiveRole';
+                  assignmentId?: string | undefined;
+                  code?: string | undefined;
+                  name?: string | undefined;
+                  scopeBatch?: number | undefined;
+                  scopeType?: string | undefined;
+                  validFrom?: any | undefined;
+                  validUntil?: any | undefined;
+                }
+              | undefined
+            >
+          | undefined;
         socialMedia?: any | undefined;
         updatedAt: any;
         whatsAppMobile?: string | undefined;
@@ -8593,11 +8626,29 @@ export const DeleteUserDocument = gql`
       metadata
       mobile
       nickName
+      positions {
+        assignmentId
+        code
+        name
+        termId
+        termName
+        validFrom
+        validUntil
+      }
       profileImage
       role {
         code
         id
         name
+      }
+      roles {
+        assignmentId
+        code
+        name
+        scopeBatch
+        scopeType
+        validFrom
+        validUntil
       }
       socialMedia
       updatedAt

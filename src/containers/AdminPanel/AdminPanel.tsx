@@ -58,6 +58,7 @@ import { IconSend as PaperPlaneTilt, IconShieldCheck } from '@tabler/icons-react
 const batchRoles = [ROLE_CODES.BATCH_COORDINATOR, ROLE_CODES.BATCH_MENTOR];
 const roleUserPageSize = 25;
 const activeAssignmentOtherRoles = [ROLE_CODES.FINANCE_MANAGER, ROLE_CODES.PLATFORM_ADMIN, ROLE_CODES.SUPER_ADMIN];
+const excludeFacultyBatchFilter = { excludeBatches: [0] };
 const assignableRoleCodes = [
   ROLE_CODES.BATCH_COORDINATOR,
   ROLE_CODES.BATCH_MENTOR,
@@ -217,6 +218,7 @@ const AdminPanel = () => {
   const [addCoordinatorSaving, setAddCoordinatorSaving] = React.useState(false);
   const [replacementSaving, setReplacementSaving] = React.useState(false);
   const [executiveAssignDialog, setExecutiveAssignDialog] = React.useState<Partial<AlertDialogProps>>({});
+  const [roleAssignDialog, setRoleAssignDialog] = React.useState<Partial<AlertDialogProps>>({});
   const [welcomeEmailDialog, setWelcomeEmailDialog] = React.useState<Partial<AlertDialogProps>>({});
   const [roleRemovalDialog, setRoleRemovalDialog] = React.useState<Partial<AlertDialogProps>>({});
   const replacementBatch = replacementTarget?.batch ? String(replacementTarget.batch) : selectedBatch;
@@ -249,7 +251,7 @@ const AdminPanel = () => {
   const { data: executiveAssignmentData, loading: executiveAssignmentLoading } = useQuery(
     EXECUTIVE_POSITION_ASSIGNMENTS_QUERY,
     {
-      skip: !canReadCatalog || !activeAssignmentsExpanded,
+      skip: !canReadCatalog || (!activeAssignmentsExpanded && !canManageExecutivePositions),
     }
   );
   const { data: batchCoordinatorData } = useQuery(BATCH_COORDINATOR_ROLE_ASSIGNMENTS_QUERY, {
@@ -263,7 +265,11 @@ const AdminPanel = () => {
   const { data: selectedBatchUserData } = useGetUserListQuery({
     variables: {
       options: {
-        filter: { verified: true, batch: replacementBatch ? parseInt(replacementBatch, 10) : undefined },
+        filter: {
+          verified: true,
+          batch: replacementBatch ? parseInt(replacementBatch, 10) : undefined,
+          ...excludeFacultyBatchFilter,
+        },
         offset: 0,
         limit: 250,
       },
@@ -277,7 +283,7 @@ const AdminPanel = () => {
   const selectedRoleIsMentor = roleForm.roleCode === ROLE_CODES.BATCH_MENTOR;
   const selectedRoleIsCoordinator = roleForm.roleCode === ROLE_CODES.BATCH_COORDINATOR;
   const roleUserFilter = React.useMemo(() => {
-    const filter: any = { verified: true };
+    const filter: any = { verified: true, ...excludeFacultyBatchFilter };
     const trimmedSearch = roleUserSearch.trim();
     const parsedScopeBatch = roleForm.scopeBatch ? parseInt(roleForm.scopeBatch, 10) : undefined;
 
@@ -290,7 +296,7 @@ const AdminPanel = () => {
     }
 
     if (selectedRoleIsMentor) {
-      filter.excludeBatch = parsedScopeBatch;
+      filter.excludeBatches = [0, parsedScopeBatch].filter((batch) => batch !== undefined);
     }
 
     return filter;
@@ -315,7 +321,11 @@ const AdminPanel = () => {
   const { data: executiveBatchUserData, loading: executiveBatchUsersLoading } = useGetUserListQuery({
     variables: {
       options: {
-        filter: { verified: true, batch: positionForm.batch ? parseInt(positionForm.batch, 10) : undefined },
+        filter: {
+          verified: true,
+          batch: positionForm.batch ? parseInt(positionForm.batch, 10) : undefined,
+          ...excludeFacultyBatchFilter,
+        },
         offset: 0,
         limit: 250,
       },
@@ -436,9 +446,19 @@ const AdminPanel = () => {
     });
   };
 
-  const onAssignRole = async () => {
+  const closeRoleAssignDialog = () => {
+    setRoleAssignDialog({});
+  };
+
+  const executeAssignRole = async () => {
     const roleDates = roleDateForm.getValues();
     try {
+      setRoleAssignDialog({
+        open: true,
+        action: 'loading',
+        title: 'Assigning Role',
+        message: 'Assigning role to the selected member. Please wait...',
+      });
       await assignRole({
         variables: {
           input: {
@@ -458,10 +478,45 @@ const AdminPanel = () => {
       setRoleUserOffset(0);
       setRoleUserTotal(0);
       roleDateForm.reset(defaultAccessDateForm());
-      showAlert({ visible: true, type: 'success', message: 'Role assigned successfully.' });
+      setRoleAssignDialog({
+        open: true,
+        action: 'success',
+        title: 'Role Assigned',
+        message: 'Role assigned successfully.',
+        onCancel: closeRoleAssignDialog,
+      });
     } catch (error: any) {
-      showAlert({ visible: true, type: 'error', message: error?.message || 'Role assignment failed.' });
+      setRoleAssignDialog({
+        open: true,
+        action: 'error',
+        title: 'Assignment Failed',
+        message: error?.message || 'Role assignment failed.',
+        onCancel: closeRoleAssignDialog,
+      });
     }
+  };
+
+  const onAssignRole = () => {
+    const selectedRole = roles.find((role: any) => role.code === roleForm.roleCode);
+    const selectedUser = roleUsers.find((user: any) => user.id === roleForm.userId);
+    const userName =
+      `${selectedUser?.firstName || ''} ${selectedUser?.lastName || ''}`.trim() ||
+      selectedUser?.email ||
+      'the selected member';
+    const roleName = getRoleLabel(selectedRole);
+    const batchText = selectedRoleRequiresBatch && roleForm.scopeBatch ? ` for Batch ${roleForm.scopeBatch}` : '';
+
+    setRoleAssignDialog({
+      open: true,
+      action: 'update',
+      title: 'Assign Role?',
+      message: `This will assign ${roleName}${batchText} to ${userName}.`,
+      onOkay: executeAssignRole,
+      onCancel: closeRoleAssignDialog,
+      okayButtonProps: {
+        title: 'Assign',
+      },
+    });
   };
 
   const closeExecutiveAssignDialog = () => {
@@ -470,6 +525,9 @@ const AdminPanel = () => {
 
   const selectedExecutivePosition = positions.find((position: any) => position.code === positionForm.positionCode);
   const selectedExecutiveUser = executiveBatchUsers.find((user: any) => user.id === positionForm.userId);
+  const currentExecutivePositionAssignment = executiveAssignments.find(
+    (assignment: any) => assignment?.position?.code === positionForm.positionCode
+  );
 
   const refreshRoleAssignmentCaches = () => {
     void client
@@ -786,6 +844,7 @@ const AdminPanel = () => {
   };
 
   const { open: executiveAssignDialogOpen, ...executiveAssignDialogProps } = executiveAssignDialog;
+  const { open: roleAssignDialogOpen, ...roleAssignDialogProps } = roleAssignDialog;
   const { open: welcomeEmailDialogOpen, ...welcomeEmailDialogProps } = welcomeEmailDialog;
   const { open: roleRemovalDialogOpen, ...roleRemovalDialogProps } = roleRemovalDialog;
 
@@ -977,6 +1036,35 @@ const AdminPanel = () => {
                     ))}
                   </Select>
                 </FormControl>
+                <Box
+                  sx={{
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    borderRadius: 1,
+                    px: 1.5,
+                    py: 1,
+                    minHeight: 58,
+                  }}
+                >
+                  <Typography variant="caption" color="text.secondary" display="block" mb={0.5}>
+                    Currently assigned
+                  </Typography>
+                  {executiveAssignmentLoading ? (
+                    <Stack direction="row" spacing={1.5} alignItems="center">
+                      <Skeleton variant="circular" width={36} height={36} />
+                      <Box flex={1}>
+                        <Skeleton width="45%" height={18} />
+                        <Skeleton width="30%" height={16} />
+                      </Box>
+                    </Stack>
+                  ) : currentExecutivePositionAssignment?.user ? (
+                    <AssignmentUser user={currentExecutivePositionAssignment.user} />
+                  ) : (
+                    <Typography color="text.secondary" fontSize={14}>
+                      No member currently assigned.
+                    </Typography>
+                  )}
+                </Box>
                 <Grid container spacing={1}>
                   <Grid size={{ xs: 12, sm: 5 }}>
                     <Typography variant="caption" color="text.secondary">
@@ -1238,6 +1326,10 @@ const AdminPanel = () => {
           open={Boolean(executiveAssignDialogOpen)}
           onClose={closeExecutiveAssignDialog}
         />
+      )}
+
+      {roleAssignDialogOpen && (
+        <AlertDialog {...roleAssignDialogProps} open={Boolean(roleAssignDialogOpen)} onClose={closeRoleAssignDialog} />
       )}
 
       {welcomeEmailDialogOpen && (

@@ -30,6 +30,7 @@ import { useAuth } from '@/context/AuthContext';
 import EditIcon from '@mui/icons-material/Edit';
 import { useGetUserListQuery } from '@/apollo/hooks';
 import Button from '@/components/core/Button';
+import { useRouter } from 'next/navigation';
 
 const executiveCommitteePositionOrder = [
   'PRESIDENT',
@@ -47,7 +48,8 @@ const getExecutiveCommitteePositionRank = (positionCode?: string | null) => {
 };
 
 const Organizations = () => {
-  const { can } = useAuth();
+  const { can, user } = useAuth();
+  const router = useRouter();
   const canManagePositions = can(PERMISSION_CODES.IAM_EXECUTIVE_POSITION_MANAGE);
   const { data } = useQuery(PUBLIC_EXECUTIVE_COMMITTEE_QUERY);
   const [revokePosition, { loading: revokingPosition }] = useMutation(REVOKE_EXECUTIVE_POSITION_MUTATION, {
@@ -63,7 +65,7 @@ const Organizations = () => {
   const { data: userData } = useGetUserListQuery({
     variables: {
       options: {
-        filter: { verified: true },
+        filter: { verified: true, excludeBatches: [0] },
         offset: 0,
         limit: 250,
       },
@@ -156,14 +158,28 @@ const Organizations = () => {
                 <Tooltip title="Replace position holder">
                   <IconButton
                     size="small"
-                    onClick={() => openReplacementDialog(assignment)}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      openReplacementDialog(assignment);
+                    }}
                     sx={{ position: 'absolute', top: 8, right: 8, zIndex: 2, bgcolor: 'background.paper' }}
                   >
                     <EditIcon fontSize="small" />
                   </IconButton>
                 </Tooltip>
               )}
-              <ProfileCard {...card} />
+              <Box
+                onClick={() => {
+                  if (user?.id && assignment?.userId) {
+                    router.push(`/profile/${assignment.userId}`);
+                  }
+                }}
+                sx={{
+                  cursor: user?.id && assignment?.userId ? 'pointer' : 'default',
+                }}
+              >
+                <ProfileCard {...card} />
+              </Box>
             </Box>
           </Grid>
         ))}

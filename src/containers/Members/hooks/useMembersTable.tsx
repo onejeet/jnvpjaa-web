@@ -19,10 +19,11 @@ import { useApolloClient } from '@apollo/client';
 import { useAuth } from '@/context/AuthContext';
 import { IconCircleCheck, IconStar } from '@tabler/icons-react';
 import FacultyBadge from '@/components/common/FacultyBadge';
+import { PERMISSION_CODES } from '@/constants/access';
 
 const useMembersTable = () => {
   const client = useApolloClient();
-  const { isAdmin, user } = useAuth();
+  const { isAdmin, user, can, canForBatch } = useAuth();
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -35,13 +36,16 @@ const useMembersTable = () => {
 
   const { showAlert } = useAlert();
   const [handleUserVerification] = useVerifyUserMutation();
+  const canApproveRegistrations = can(PERMISSION_CODES.MEMBERSHIP_REGISTRATION_APPROVE);
+  const canApproveBatchRegistrations = can(PERMISSION_CODES.MEMBERSHIP_REGISTRATION_APPROVE_BATCH);
+  const canManagePendingRegistrations = canApproveRegistrations || canApproveBatchRegistrations;
   const verifiedFilter = React.useMemo(() => {
-    if (!isAdmin || !searchParams?.get('verified')) {
+    if (!canManagePendingRegistrations || !searchParams?.get('verified')) {
       return undefined;
     }
 
     return searchParams.get('verified') === 'true';
-  }, [isAdmin, searchParams]);
+  }, [canManagePendingRegistrations, searchParams]);
 
   const { data: userListData, loading } = useGetUserListQuery({
     variables: {
@@ -190,7 +194,7 @@ const useMembersTable = () => {
       },
     ];
 
-    if (isAdmin) {
+    if (canManagePendingRegistrations) {
       columns.push({
         field: 'actions',
         // @ts-expect-error type error
@@ -209,7 +213,11 @@ const useMembersTable = () => {
                   <Skeleton width="100%" height={30} />
                 </Box>,
               ]
-            : row?.isVerified || !isAdmin
+            : row?.isVerified ||
+                !(
+                  canApproveRegistrations ||
+                  canForBatch(PERMISSION_CODES.MEMBERSHIP_REGISTRATION_APPROVE_BATCH, row?.batch)
+                )
               ? []
               : [
                   <Box display="flex" key="buttons" gap={2}>
@@ -326,7 +334,17 @@ const useMembersTable = () => {
     }
 
     setColumns(columns);
-  }, [isAdmin, user, handleUserVerification, pathname, showAlert, router, client]);
+  }, [
+    canApproveRegistrations,
+    canForBatch,
+    canManagePendingRegistrations,
+    user,
+    handleUserVerification,
+    pathname,
+    showAlert,
+    router,
+    client,
+  ]);
 
   const onPaginationModelChange = React.useCallback((model: GridPaginationModel) => {
     setPaginationModel(model);

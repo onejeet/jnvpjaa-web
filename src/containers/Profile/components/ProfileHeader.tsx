@@ -18,6 +18,9 @@ import { useAuth } from '@/context/AuthContext';
 import { GetUserDetailsDocument } from '@/apollo/hooks';
 import Dialog from '@/components/core/Dialog';
 import Image from 'next/image';
+import { ROLE_CODES } from '@/constants/access';
+
+const profilePositionRoleCodes = new Set([ROLE_CODES.BATCH_COORDINATOR, ROLE_CODES.FINANCE_MANAGER]);
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
   const [openPictureView, setOpenPictureView] = React.useState<boolean>(false);
@@ -26,6 +29,31 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
   const { user: authUser, isAdmin } = useAuth();
   const router = useRouter();
   const client = useApolloClient();
+
+  const profileSummary = React.useMemo(() => {
+    const summaryParts = [];
+    const executivePositions =
+      user?.positions
+        ?.filter((position: any) => position?.name)
+        .map((position: any) => position.name)
+        .filter(Boolean) || [];
+    const positionRoles =
+      user?.roles
+        ?.filter((role: any) => profilePositionRoleCodes.has(role?.code))
+        .map((role: any) => role.name)
+        .filter(Boolean) || [];
+    const uniquePositions = Array.from(new Set([...executivePositions, ...positionRoles]));
+
+    if (user?.batch === 0) {
+      summaryParts.push('Faculty');
+    } else if (user?.batch) {
+      summaryParts.push(`Batch of ${user.batch}`);
+    }
+
+    summaryParts.push(...uniquePositions);
+
+    return summaryParts.join(' • ');
+  }, [user?.batch, user?.positions, user?.roles]);
 
   const handleDataPrivacyUpdate = React.useCallback(() => {
     showAlert(
@@ -228,7 +256,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
             </Box>
           }
           titleProps={{ fontWeight: 600, fontSize: '30px' }}
-          summary={user?.batch === 0 ? 'Faculty' : user?.batch ? `Batch of ${user?.batch}` : ''}
+          summary={profileSummary}
           summaryProps={{ color: 'grey.600', fontSize: '14px', mt: { xs: 0, md: 1 } }}
         />
         {isProfileEditable && !editingProfile && (
