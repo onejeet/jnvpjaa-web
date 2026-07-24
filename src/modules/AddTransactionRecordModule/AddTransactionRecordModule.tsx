@@ -3,7 +3,7 @@
 import Dialog from '@/components/core/Dialog';
 import { useAlert } from '@/context/AlertContext';
 import { useForm, useWatch } from 'react-hook-form';
-import { Box, Grid2 as Grid } from '@mui/material';
+import { Box, Grid2 as Grid, TextField } from '@mui/material';
 import FormTextField from '@/components/form/FormTextField';
 import FormCurrencyInput from '@/components/form/FormCurrencyInput';
 import FormSelectField from '@/components/form/FormSelectField';
@@ -17,11 +17,14 @@ import {
   BILLING_REFETCH_QUERIES,
   CREATE_ASSOCIATION_CREDIT,
   CREATE_ASSOCIATION_DEBIT,
+  CREATE_TRANSACTION_ATTACHMENT_UPLOAD,
+  FINALIZE_TRANSACTION_ATTACHMENT_UPLOAD,
 } from '@/apollo/billingOperations';
 
 const AddTransactionRecordModule: React.FC<any> = ({ onClose }) => {
   const client = useApolloClient();
   const { showAlert } = useAlert();
+  const [attachmentFile, setAttachmentFile] = React.useState<File | null>(null);
   const { control, handleSubmit, setValue, reset } = useForm<IAddTransactionRecordInput>({
     defaultValues: {
       type: TransactionType.Debit,
@@ -38,53 +41,93 @@ const AddTransactionRecordModule: React.FC<any> = ({ onClose }) => {
   const [createDebit, debitState] = useMutation(CREATE_ASSOCIATION_DEBIT, {
     refetchQueries: BILLING_REFETCH_QUERIES,
   });
-  const saving = creditState.loading || debitState.loading;
+  const [createAttachmentUpload, attachmentUploadState] = useMutation(CREATE_TRANSACTION_ATTACHMENT_UPLOAD);
+  const [finalizeAttachmentUpload, finalizeAttachmentState] = useMutation(FINALIZE_TRANSACTION_ATTACHMENT_UPLOAD);
+  const saving =
+    creditState.loading || debitState.loading || attachmentUploadState.loading || finalizeAttachmentState.loading;
 
   React.useEffect(() => {
     setValue('billingCategory', selectedType === TransactionType.Credit ? 'DONATION' : 'OTHER_ACTIVITY');
   }, [selectedType, setValue]);
 
-  const onSubmit = React.useCallback(
-    (data: IAddTransactionRecordInput) => {
-      const mutation = data.type === TransactionType.Credit ? createCredit : createDebit;
-      mutation({
+  const uploadAttachment = React.useCallback(
+    async (transactionId: string, file: File) => {
+      const upload = await createAttachmentUpload({
         variables: {
-          title: data.title,
-          amount: data.amount,
-          transactionDate: data?.transactionDate?.toISOString(),
-          billingCategory: data.billingCategory,
-          referenceId: data.referenceId || null,
-          method: data.method || null,
-          description: data.description || null,
-        },
-        onCompleted: () => {
-          client.cache.evict({ fieldName: 'getTransactions' });
-          client.cache.evict({ fieldName: 'getAssociationTransactions' });
-          client.cache.evict({ fieldName: 'getBillingDashboard' });
-          client.cache.evict({ fieldName: 'getAssociationWalletSummary' });
-          client.cache.gc();
-          showAlert({
-            visible: true,
-            type: 'success',
-            message: 'Billing entry recorded successfully.',
-          });
-          reset({
-            type: TransactionType.Debit,
-            billingCategory: 'OTHER_ACTIVITY',
-            transactionDate: dayjs(),
-          });
-          onClose();
-        },
-        onError: (err) => {
-          showAlert({
-            visible: true,
-            type: 'error',
-            message: err?.message || 'Something went wrong.',
-          });
+          transactionId,
+          filename: file.name,
+          mimeType: file.type || 'application/octet-stream',
+          sizeBytes: file.size,
         },
       });
+      const uploadUrl = upload.data?.createTransactionAttachmentUpload?.uploadUrl;
+      const attachmentId = upload.data?.createTransactionAttachmentUpload?.attachment?.id;
+      if (!uploadUrl || !attachmentId) throw new Error('Could not prepare attachment upload.');
+
+      const uploadResponse = await fetch(uploadUrl, {
+        method: 'PUT',
+        headers: { 'Content-Type': file.type || 'application/octet-stream' },
+        body: file,
+      });
+      if (!uploadResponse.ok) throw new Error('Attachment upload failed.');
+
+      await finalizeAttachmentUpload({ variables: { attachmentId } });
     },
-    [showAlert, client, createCredit, createDebit, reset, onClose]
+    [createAttachmentUpload, finalizeAttachmentUpload]
+  );
+
+  const refreshBillingCaches = React.useCallback(() => {
+    client.cache.evict({ fieldName: 'getTransactions' });
+    client.cache.evict({ fieldName: 'getAssociationTransactions' });
+    client.cache.evict({ fieldName: 'getBillingDashboard' });
+    client.cache.evict({ fieldName: 'getAssociationWalletSummary' });
+    client.cache.gc();
+  }, [client]);
+
+  const onSubmit = React.useCallback(
+    async (data: IAddTransactionRecordInput) => {
+      const mutation = data.type === TransactionType.Credit ? createCredit : createDebit;
+      try {
+        const result = await mutation({
+          variables: {
+            title: data.title,
+            amount: data.amount,
+            transactionDate: data?.transactionDate?.toISOString(),
+            billingCategory: data.billingCategory,
+            referenceId: data.referenceId || null,
+            method: data.method || null,
+            description: data.description || null,
+          },
+        });
+        const transactionId = result.data?.createAssociationCredit?.id || result.data?.createAssociationDebit?.id;
+        if (attachmentFile && transactionId) {
+          await uploadAttachment(transactionId, attachmentFile);
+        }
+
+        refreshBillingCaches();
+        showAlert({
+          visible: true,
+          type: 'success',
+          message: attachmentFile
+            ? 'Billing entry and attachment recorded successfully.'
+            : 'Billing entry recorded successfully.',
+        });
+        setAttachmentFile(null);
+        reset({
+          type: TransactionType.Debit,
+          billingCategory: 'OTHER_ACTIVITY',
+          transactionDate: dayjs(),
+        });
+        onClose();
+      } catch (err: any) {
+        showAlert({
+          visible: true,
+          type: 'error',
+          message: err?.message || 'Something went wrong.',
+        });
+      }
+    },
+    [attachmentFile, createCredit, createDebit, onClose, refreshBillingCaches, reset, showAlert, uploadAttachment]
   );
 
   return (
@@ -272,6 +315,22 @@ const AddTransactionRecordModule: React.FC<any> = ({ onClose }) => {
               size="small"
               name="description"
               // size="small"
+            />
+          </Grid>
+          <Grid size={{ xs: 12 }}>
+            <TextField
+              fullWidth
+              type="file"
+              label="Attachment"
+              size="small"
+              disabled={saving}
+              InputLabelProps={{ shrink: true }}
+              inputProps={{ accept: 'image/*,application/pdf' }}
+              onChange={(event) => {
+                const file = (event.target as HTMLInputElement).files?.[0] || null;
+                setAttachmentFile(file);
+              }}
+              helperText="Optional. Upload a protected image or PDF receipt/document."
             />
           </Grid>
         </Grid>

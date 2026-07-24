@@ -25,6 +25,7 @@ import {
   IconClipboardList,
   IconClock,
   IconEyeCheck,
+  IconExclamationCircle,
   IconFileText,
   IconHourglass,
   IconInfoCircle,
@@ -158,6 +159,70 @@ const getActivityAmount = (activity: any) => {
   return amount ? formatCurrency(amount) : null;
 };
 
+const getNextTimelineStep = (application: any) => {
+  if (!application?.status) return null;
+
+  switch (application.status) {
+    case 'DRAFT':
+    case 'MORE_INFO_REQUIRED':
+      return {
+        title: 'Submit application',
+        message: 'Applicant needs to review the details and submit the scholarship request.',
+      };
+    case 'ROUTING_PENDING':
+      return {
+        title: 'Assign primary mentor',
+        message: 'A mentor needs to be assigned before review can begin.',
+      };
+    case 'SUBMITTED':
+    case 'RESUBMITTED':
+      return {
+        title: 'Start mentor review',
+        message: 'Assigned mentor needs to start reviewing the application.',
+      };
+    case 'UNDER_REVIEW':
+      return {
+        title: 'Approve or request changes',
+        message: 'Assigned mentor needs to complete the review decision.',
+      };
+    case 'APPROVED':
+      return {
+        title: 'Create beneficiary payment',
+        message: 'Scholarship payment needs to be created for the beneficiary.',
+      };
+    case 'PAYMENT_CONFIRMATION_PENDING':
+      return {
+        title: 'Confirm payment receipt',
+        message: 'Beneficiary needs to upload credit proof and confirm the received amount.',
+      };
+    case 'PAYMENT_CONFIRMED_PROOF_DUE':
+    case 'PROOF_PARTIAL':
+    case 'PROOF_MORE_INFO_REQUIRED':
+    case 'PROOF_REJECTED':
+      return {
+        title: 'Submit usage proof',
+        message: 'Beneficiary needs to upload receipts or usage proof for the scholarship amount.',
+      };
+    case 'PROOF_FULL_SUBMITTED':
+      return {
+        title: 'Review usage proof',
+        message: 'Assigned mentor needs to verify the submitted usage proof.',
+      };
+    case 'WRONG_DISBURSEMENT':
+      return {
+        title: 'Resolve wrong disbursement',
+        message: 'Finance team needs to resolve the wrong disbursement case.',
+      };
+    case 'REFUND_IN_PROGRESS':
+      return {
+        title: 'Complete refund case',
+        message: 'Refund tracking needs to be completed before this request can close.',
+      };
+    default:
+      return null;
+  }
+};
+
 const DetailMetric = ({
   label,
   value,
@@ -189,7 +254,36 @@ const DetailMetric = ({
   </Paper>
 );
 
-const Timeline = ({ activities, loading }: { activities: any[]; loading: boolean }) => {
+const PendingTimelineStep = ({ step }: { step: { title: string; message: string } }) => (
+  <Step expanded completed={false}>
+    <StepLabel
+      error
+      icon={
+        <Box component="span" sx={{ display: 'inline-flex', color: 'error.main' }}>
+          <IconExclamationCircle size={24} />
+        </Box>
+      }
+      optional={
+        <Typography fontSize={12} color="error.main" fontWeight={700}>
+          Pending
+        </Typography>
+      }
+    >
+      <Typography fontWeight={700} color="error.main">
+        {step.title}
+      </Typography>
+    </StepLabel>
+    <StepContent>
+      <Typography fontSize={13} color="grey.700">
+        {step.message}
+      </Typography>
+    </StepContent>
+  </Step>
+);
+
+const Timeline = ({ activities, loading, application }: { activities: any[]; loading: boolean; application: any }) => {
+  const nextStep = getNextTimelineStep(application);
+
   if (loading) {
     return (
       <Box py={4} display="flex" justifyContent="center">
@@ -199,46 +293,58 @@ const Timeline = ({ activities, loading }: { activities: any[]; loading: boolean
   }
 
   if (!activities.length) {
-    return <Alert severity="info">Timeline will appear after the first workflow action is recorded.</Alert>;
+    return nextStep ? (
+      <Stack spacing={1.5}>
+        <Alert severity="info">Timeline will appear after the first workflow action is recorded.</Alert>
+        <Stepper activeStep={0} orientation="vertical">
+          <PendingTimelineStep step={nextStep} />
+        </Stepper>
+      </Stack>
+    ) : (
+      <Alert severity="info">Timeline will appear after the first workflow action is recorded.</Alert>
+    );
   }
 
-  return (
-    <Stepper activeStep={activities.length} orientation="vertical">
-      {[...activities]
-        .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
-        .map((activity) => {
-          const actorName = getFullName(activity.actor) || activity.actor?.email || 'System';
-          const amount = getActivityAmount(activity);
+  const sortedActivities = [...activities].sort(
+    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+  );
 
-          return (
-            <Step key={activity.id} expanded completed={!activity.isHighRisk}>
-              <StepLabel
-                error={activity.isHighRisk}
-                optional={
-                  <Typography fontSize={12} color="grey.600">
-                    {formatDateTime(activity.createdAt)}
-                  </Typography>
-                }
-              >
-                <Typography fontWeight={700}>{getActivityTitle(activity.action)}</Typography>
-              </StepLabel>
-              <StepContent>
-                <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>
-                  <ProfilePicture
-                    id={activity.actor?.id}
-                    src={activity.actor?.profileImage}
-                    title={actorName}
-                    summary={activity.actor?.batch ? `Batch ${activity.actor.batch}` : 'Workflow action'}
-                    size={30}
-                  />
-                  {amount && <Chip size="small" variant="outlined" label={amount} />}
-                  {activity.reason && <Chip size="small" variant="outlined" label={activity.reason} />}
-                  {activity.isHighRisk && <Chip size="small" color="error" variant="outlined" label="High risk" />}
-                </Stack>
-              </StepContent>
-            </Step>
-          );
-        })}
+  return (
+    <Stepper activeStep={sortedActivities.length} orientation="vertical">
+      {sortedActivities.map((activity) => {
+        const actorName = getFullName(activity.actor) || activity.actor?.email || 'System';
+        const amount = getActivityAmount(activity);
+
+        return (
+          <Step key={activity.id} expanded completed={!activity.isHighRisk}>
+            <StepLabel
+              error={activity.isHighRisk}
+              optional={
+                <Typography fontSize={12} color="grey.600">
+                  {formatDateTime(activity.createdAt)}
+                </Typography>
+              }
+            >
+              <Typography fontWeight={700}>{getActivityTitle(activity.action)}</Typography>
+            </StepLabel>
+            <StepContent>
+              <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>
+                <ProfilePicture
+                  id={activity.actor?.id}
+                  src={activity.actor?.profileImage}
+                  title={actorName}
+                  summary={activity.actor?.batch ? `Batch ${activity.actor.batch}` : 'Workflow action'}
+                  size={30}
+                />
+                {amount && <Chip size="small" variant="outlined" label={amount} />}
+                {activity.reason && <Chip size="small" variant="outlined" label={activity.reason} />}
+                {activity.isHighRisk && <Chip size="small" color="error" variant="outlined" label="High risk" />}
+              </Stack>
+            </StepContent>
+          </Step>
+        );
+      })}
+      {nextStep && <PendingTimelineStep step={nextStep} />}
     </Stepper>
   );
 };
@@ -332,6 +438,19 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
 
     await finalizeDocumentUpload({ variables: { documentId } });
     return documentId;
+  };
+
+  const uploadCreditProofIfStorageAvailable = async (transaction: any, file: File) => {
+    try {
+      return await uploadCreditProof(transaction, file);
+    } catch (error: any) {
+      const message = error?.message || '';
+      if (message.includes('Scholarship storage bucket is not configured')) {
+        toast('Storage bucket is not configured. Confirming receipt without proof upload.');
+        return null;
+      }
+      throw error;
+    }
   };
 
   if (!canRender || (applicationQuery.loading && !application)) {
@@ -517,7 +636,7 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
                           disabled={!creditProofFileByTx[transaction.id]}
                           onClick={() =>
                             runAction(async () => {
-                              const creditProofDocumentId = await uploadCreditProof(
+                              const creditProofDocumentId = await uploadCreditProofIfStorageAvailable(
                                 transaction,
                                 creditProofFileByTx[transaction.id] as File
                               );
@@ -558,7 +677,7 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
                 Timeline
               </Typography>
             </Stack>
-            <Timeline activities={activities} loading={activityQuery.loading} />
+            <Timeline activities={activities} loading={activityQuery.loading} application={application} />
           </Paper>
         </Box>
 

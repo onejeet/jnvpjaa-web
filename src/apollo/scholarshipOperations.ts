@@ -366,7 +366,7 @@ export const CONFIRM_SCHOLARSHIP_RECEIPT = gql`
   mutation confirmScholarshipTransactionReceipt(
     $transactionId: String!
     $confirmedAmount: Float!
-    $creditProofDocumentId: String!
+    $creditProofDocumentId: String
     $note: String
   ) {
     confirmScholarshipTransactionReceipt(

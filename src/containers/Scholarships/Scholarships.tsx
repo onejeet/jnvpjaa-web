@@ -344,13 +344,6 @@ const getDashboardCards = (variant: DashboardVariant): DashboardCardConfig[] => 
         icon: <IconCircleCheck size={18} />,
       },
       {
-        title: 'Awaiting your confirmation',
-        key: 'pendingIncomingAllocation',
-        type: 'currency',
-        description: 'Money recorded by finance that you still need to confirm.',
-        icon: <IconHourglass size={18} />,
-      },
-      {
         title: 'Funds in dispute',
         key: 'disputedIncomingAllocation',
         type: 'currency',
@@ -465,15 +458,8 @@ const getDashboardCards = (variant: DashboardVariant): DashboardCardConfig[] => 
         title: 'Allocated to mentors',
         key: 'totalAllocationRecorded',
         type: 'currency',
-        description: 'Total funds finance has recorded as released to mentors.',
+        description: 'Funds currently treated as confirmed with mentors after disputes are excluded.',
         icon: <IconReportMoney size={18} />,
-      },
-      {
-        title: 'Awaiting mentor confirmation',
-        key: 'pendingIncomingAllocation',
-        type: 'currency',
-        description: 'Funds released to mentors but not confirmed by them yet.',
-        icon: <IconHourglass size={18} />,
       },
       {
         title: 'Mentor allocation disputes',
@@ -1422,7 +1408,7 @@ const MentorSummaryTable = ({ mentors, loading }: { mentors: any[]; loading: boo
 
   return (
     <Paper variant="outlined" sx={{ borderRadius: 1, overflowX: 'auto' }}>
-      <Table sx={{ minWidth: 1320 }}>
+      <Table sx={{ minWidth: 1240 }}>
         <TableHead>
           <TableRow>
             <TableCell>Mentor</TableCell>
@@ -1430,7 +1416,6 @@ const MentorSummaryTable = ({ mentors, loading }: { mentors: any[]; loading: boo
             <TableCell align="right">Applications</TableCell>
             <TableCell align="right">Total disbursed to mentor</TableCell>
             <TableCell align="right">Confirmed allocation</TableCell>
-            <TableCell align="right">Pending confirmation</TableCell>
             <TableCell align="right">Disputed</TableCell>
             <TableCell align="right">Released to beneficiaries</TableCell>
             <TableCell align="right">Pending beneficiary confirmation</TableCell>
@@ -1464,7 +1449,6 @@ const MentorSummaryTable = ({ mentors, loading }: { mentors: any[]; loading: boo
                 <TableCell align="right">{summary.totalApplications || 0}</TableCell>
                 <TableCell align="right">{formatCurrency(summary.totalAllocationRecorded)}</TableCell>
                 <TableCell align="right">{formatCurrency(summary.confirmedAllocation)}</TableCell>
-                <TableCell align="right">{formatCurrency(summary.pendingIncomingAllocation)}</TableCell>
                 <TableCell align="right">{formatCurrency(summary.disputedIncomingAllocation)}</TableCell>
                 <TableCell align="right">{formatCurrency(summary.confirmedBeneficiaryDisbursement)}</TableCell>
                 <TableCell align="right">{formatCurrency(summary.pendingBeneficiaryConfirmation)}</TableCell>

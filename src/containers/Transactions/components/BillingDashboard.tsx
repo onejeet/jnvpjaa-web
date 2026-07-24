@@ -43,7 +43,8 @@ const metricCards = [
   {
     key: 'scholarshipReleasedToMentors',
     label: 'Scholarship Funds Sent to Mentors',
-    description: 'Association funds released to batch mentors for scholarship support.',
+    description:
+      'Current scholarship balance with mentors, including available mentor funds and beneficiary payments awaiting confirmation.',
     icon: IconSchool,
     color: 'primary.main',
   },
@@ -77,8 +78,8 @@ const metricCards = [
   },
   {
     key: 'pendingMentorReleaseAmount',
-    label: 'Awaiting Mentor Confirmation',
-    description: 'Funds released to mentors that have not yet been confirmed by them.',
+    label: 'Pending Beneficiary Verification',
+    description: 'Scholarship payments released by mentors that beneficiaries have not fully confirmed yet.',
     icon: IconCreditCardPay,
     color: 'warning.main',
     hideWhenZero: true,
@@ -129,7 +130,7 @@ export default function BillingDashboard() {
                       <Typography variant="body2" color="grey.700">
                         {card.label}
                       </Typography>
-                      <Typography variant="h3">
+                      <Typography variant="body1" fontWeight={700} fontSize={24}>
                         {loading ? <Skeleton width={110} /> : formatCompactCurrency(dashboard?.[card.key])}
                       </Typography>
                     </Stack>

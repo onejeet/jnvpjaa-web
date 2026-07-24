@@ -188,7 +188,7 @@ export const MEMBER_HEADER_MENU: IHeaderMenuItem[] = [
       },
       {
         label: 'Billing & Transactions',
-        path: '/transactions',
+        path: '/billing',
       },
       {
         label: 'Scholarships',

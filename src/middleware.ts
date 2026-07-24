@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const AUTH_ROUTES = ['/signin', '/signup', '/forgot-password'];
-const EXACT_PROTECTED_ROUTES = ['/admin', '/profile', '/transactions', '/change-password'];
+const EXACT_PROTECTED_ROUTES = ['/admin', '/profile', '/billing', '/transactions', '/change-password'];
 
 const isProtectedRoute = (pathname: string) => {
   return (

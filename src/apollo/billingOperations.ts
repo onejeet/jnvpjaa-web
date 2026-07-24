@@ -2,6 +2,7 @@ import { gql } from '@apollo/client';
 
 export const BILLING_REFETCH_QUERIES = [
   'getBillingDashboard',
+  'getAssociationOpeningBalanceStatus',
   'getAssociationWalletSummary',
   'getAssociationTransactions',
   'getTransactions',
@@ -61,6 +62,29 @@ export const GET_ASSOCIATION_TRANSACTIONS = gql`
         sourceType
         billingCategory
         walletImpact
+        scholarshipApplicationId
+        scholarshipMentor {
+          id
+          firstName
+          lastName
+          batch
+          profileImage
+        }
+        scholarshipBeneficiary {
+          id
+          firstName
+          lastName
+          batch
+          profileImage
+        }
+        attachments {
+          id
+          originalFilename
+          mimeType
+          sizeBytes
+          status
+          uploadedAt
+        }
         recordedByUserId
         recordedBy {
           id
@@ -76,6 +100,20 @@ export const GET_ASSOCIATION_TRANSACTIONS = gql`
           batch
           profileImage
         }
+      }
+    }
+  }
+`;
+
+export const GET_ASSOCIATION_OPENING_BALANCE_STATUS = gql`
+  query getAssociationOpeningBalanceStatus {
+    getAssociationTransactions(
+      options: { limit: 1, offset: 0 }
+      filter: { billingCategory: OPENING_BALANCE, walletImpact: true }
+    ) {
+      total
+      data {
+        id
       }
     }
   }
@@ -101,6 +139,9 @@ export const CREATE_ASSOCIATION_CREDIT = gql`
       description: $description
     ) {
       id
+      attachments {
+        id
+      }
     }
   }
 `;
@@ -125,7 +166,50 @@ export const CREATE_ASSOCIATION_DEBIT = gql`
       description: $description
     ) {
       id
+      attachments {
+        id
+      }
     }
+  }
+`;
+
+export const CREATE_TRANSACTION_ATTACHMENT_UPLOAD = gql`
+  mutation createTransactionAttachmentUpload(
+    $transactionId: String!
+    $filename: String!
+    $mimeType: String!
+    $sizeBytes: Int!
+  ) {
+    createTransactionAttachmentUpload(
+      transactionId: $transactionId
+      filename: $filename
+      mimeType: $mimeType
+      sizeBytes: $sizeBytes
+    ) {
+      uploadUrl
+      attachment {
+        id
+        originalFilename
+        mimeType
+        sizeBytes
+      }
+    }
+  }
+`;
+
+export const FINALIZE_TRANSACTION_ATTACHMENT_UPLOAD = gql`
+  mutation finalizeTransactionAttachmentUpload($attachmentId: String!) {
+    finalizeTransactionAttachmentUpload(attachmentId: $attachmentId) {
+      id
+      status
+      uploadedAt
+    }
+  }
+`;
+
+export const GET_TRANSACTION_ATTACHMENT_READ_URL = gql`
+  query getTransactionAttachmentReadUrl($attachmentId: String!) {
+    getTransactionAttachmentReadUrl(attachmentId: $attachmentId)
   }
 `;
 

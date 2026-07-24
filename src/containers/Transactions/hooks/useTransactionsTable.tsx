@@ -5,15 +5,45 @@ import Box from '@mui/material/Box';
 import { GridPaginationModel, GridRowParams } from '@mui/x-data-grid';
 import React from 'react';
 import { useQuery } from '@apollo/client';
-import { Skeleton, Typography } from '@mui/material';
+import { Skeleton, Stack, Typography } from '@mui/material';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import dayjs from 'dayjs';
-import { formatCurrency, valueToLabelFormatter } from '@/utils/helpers';
+import { formatCurrency } from '@/utils/helpers';
 import ProfilePicture from '@/components/common/ProfilePicture';
-import { IconArrowDown, IconArrowUp } from '@tabler/icons-react';
+import { IconArrowDown, IconArrowRight, IconArrowUp } from '@tabler/icons-react';
 import { GET_ASSOCIATION_TRANSACTIONS } from '@/apollo/billingOperations';
 
+const getUserName = (user: any) => `${user?.firstName || ''} ${user?.lastName || ''}`.trim();
+
+const getUserSummary = (user: any) => {
+  if (!user) return '';
+  return user.batch === 0 ? 'Faculty' : `Batch of ${user.batch}`;
+};
+
+const getAssociationParticipants = (transaction: any) => {
+  const isBeneficiaryPayment = transaction?.billingCategory === 'SCHOLARSHIP_BENEFICIARY_PAYMENT';
+  const isMentorAllocation = transaction?.billingCategory === 'SCHOLARSHIP_MENTOR_ALLOCATION';
+  const from = isBeneficiaryPayment
+    ? transaction?.scholarshipMentor || transaction?.recordedBy
+    : transaction?.recordedBy;
+  const to = isBeneficiaryPayment
+    ? transaction?.scholarshipBeneficiary || transaction?.user
+    : isMentorAllocation
+      ? transaction?.scholarshipMentor || transaction?.user
+      : transaction?.user?.id && transaction?.user?.id !== from?.id
+        ? transaction.user
+        : null;
+
+  return {
+    from: from || null,
+    to: to?.id && to.id !== from?.id ? to : null,
+  };
+};
+
 const useTransactionsTable = () => {
+  const router = useRouter();
   const [columns, setColumns] = React.useState<any[]>([]);
   const [paginationModel, setPaginationModel] = React.useState<GridPaginationModel>({
     page: 0,
@@ -76,54 +106,25 @@ const useTransactionsTable = () => {
             </Box>
           ) : (
             <Box height="100%" display="flex" alignItems="center">
-              <Typography variant="body1">{row?.title || '--'}</Typography>
-            </Box>
-          ),
-      },
-      {
-        field: 'type',
-        headerName: 'Type',
-        width: 150,
-        ...commonTableColumnProps,
-        sortable: true,
-        renderCell: ({ row }: GridRowParams) =>
-          row.loading ? (
-            <Box width="100%" height="100%" display="flex" alignItems="center">
-              {' '}
-              <Skeleton width="100%" height={30} />
-            </Box>
-          ) : (
-            <Box
-              height="100%"
-              display="flex"
-              alignItems="center"
-              sx={{
-                svg: {
-                  color: row?.type === 'DEBIT' ? 'error.main' : 'success.main',
-                },
-              }}
-            >
-              {row?.type === 'DEBIT' ? <IconArrowDown size={16} /> : <IconArrowUp size={16} />}
-              <Typography variant="h5" color={row?.type === 'DEBIT' ? 'error.main' : 'success.main'} ml={0.5}>
-                {row?.type || ''}
-              </Typography>
-            </Box>
-          ),
-      },
-      {
-        field: 'billingCategory',
-        headerName: 'Category',
-        width: 190,
-        ...commonTableColumnProps,
-        sortable: true,
-        renderCell: ({ row }: GridRowParams) =>
-          row.loading ? (
-            <Box width="100%" height="100%" display="flex" alignItems="center">
-              <Skeleton width="100%" height={30} />
-            </Box>
-          ) : (
-            <Box height="100%" display="flex" alignItems="center">
-              <Typography variant="body2">{valueToLabelFormatter(row?.billingCategory || 'OTHER_ACTIVITY')}</Typography>
+              {row?.scholarshipApplicationId ? (
+                <Typography
+                  component={Link}
+                  href={`/scholarships/${row.scholarshipApplicationId}`}
+                  variant="body1"
+                  color="primary.main"
+                  sx={{
+                    textDecoration: 'none',
+                    '&:hover': {
+                      textDecoration: 'underline',
+                    },
+                  }}
+                  onClick={(event) => event.stopPropagation()}
+                >
+                  {row?.title || '--'}
+                </Typography>
+              ) : (
+                <Typography variant="body1">{row?.title || '--'}</Typography>
+              )}
             </Box>
           ),
       },
@@ -146,52 +147,107 @@ const useTransactionsTable = () => {
               display="flex"
               alignItems="center"
               color={row?.type === 'DEBIT' ? 'error.main' : 'success.main'}
+              sx={{
+                svg: {
+                  color: row?.type === 'DEBIT' ? 'error.main' : 'success.main',
+                },
+              }}
             >
-              <Typography variant="h5">{`${formatCurrency(row?.amount)}` || ''}</Typography>
+              {row?.type === 'DEBIT' ? <IconArrowDown size={16} /> : <IconArrowUp size={16} />}
+              <Typography variant="h5" ml={0.5}>
+                {`${formatCurrency(row?.amount)}` || ''}
+              </Typography>
             </Box>
           ),
       },
       {
         field: 'user',
-        headerName: 'Recorded By',
-        width: 230,
+        headerName: 'Associations',
+        width: 360,
         flex: 1,
         ...commonTableColumnProps,
         sortable: true,
-        renderCell: ({ row }: GridRowParams) =>
-          row.loading ? (
+        renderCell: ({ row }: GridRowParams) => {
+          const { from, to } = getAssociationParticipants(row);
+
+          return row.loading ? (
             <Box width="100%" height="100%" display="flex" alignItems="center">
               {' '}
               <Skeleton width="100%" height={30} />
             </Box>
           ) : (
-            <Box height="100%" display="flex" alignItems="center">
-              {row?.recordedBy ? (
-                <ProfilePicture
-                  loading={row.loading}
-                  src={row?.recordedBy?.profileImage}
-                  title={`${row.recordedBy.firstName} ${row?.recordedBy?.lastName}`}
-                  summary={row?.recordedBy?.batch === 0 ? 'Faculty' : `Batch of ${row?.recordedBy?.batch}`}
-                  id={row?.recordedBy?.id}
-                  alt={`${row?.recordedBy?.firstName || ''} ${row?.recordedBy?.lastName || ''}`}
-                  titleComponentProps={{
-                    titleContainerProps: {
-                      className: 'title-container',
-                    },
-                  }}
-                />
+            <Stack height="100%" direction="row" alignItems="center" spacing={1} minWidth={0}>
+              {from ? (
+                <Box minWidth={0}>
+                  <ProfilePicture
+                    loading={row.loading}
+                    src={from.profileImage}
+                    title={getUserName(from)}
+                    summary={getUserSummary(from)}
+                    id={from.id}
+                    alt={getUserName(from)}
+                    maxWidth={150}
+                    containerProps={{
+                      onClick: (event) => {
+                        event.stopPropagation();
+                        router.push(`/profile/${from.id}`);
+                      },
+                    }}
+                    titleComponentProps={{
+                      titleContainerProps: {
+                        className: 'title-container',
+                      },
+                      titleProps: {
+                        noWrap: true,
+                      },
+                    }}
+                  />
+                </Box>
               ) : (
                 <Typography variant="body2" color="grey.600">
                   Historical record
                 </Typography>
               )}
-            </Box>
-          ),
+              {to && (
+                <>
+                  <Box component="span" color="grey.500" display="inline-flex" flexShrink={0}>
+                    <IconArrowRight size={16} />
+                  </Box>
+                  <Box minWidth={0}>
+                    <ProfilePicture
+                      loading={row.loading}
+                      src={to.profileImage}
+                      title={getUserName(to)}
+                      summary={getUserSummary(to)}
+                      id={to.id}
+                      alt={getUserName(to)}
+                      maxWidth={150}
+                      containerProps={{
+                        onClick: (event) => {
+                          event.stopPropagation();
+                          router.push(`/profile/${to.id}`);
+                        },
+                      }}
+                      titleComponentProps={{
+                        titleContainerProps: {
+                          className: 'title-container',
+                        },
+                        titleProps: {
+                          noWrap: true,
+                        },
+                      }}
+                    />
+                  </Box>
+                </>
+              )}
+            </Stack>
+          );
+        },
       },
     ];
 
     setColumns(columns);
-  }, []);
+  }, [router]);
 
   const onPaginationModelChange = React.useCallback((model: GridPaginationModel) => {
     setPaginationModel(model);

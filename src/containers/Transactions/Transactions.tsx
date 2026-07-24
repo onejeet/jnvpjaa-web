@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useQuery } from '@apollo/client';
 import LayoutModule from '@/layouts/Layout';
 import TransactionsTable from './components/TransactionsTable';
 import BillingDashboard from './components/BillingDashboard';
@@ -10,6 +11,7 @@ import { IconPlus, IconCirclePlus, IconWallet } from '@tabler/icons-react';
 import { useAuth } from '@/context/AuthContext';
 import AddTransactionRecordModule from '@/modules/AddTransactionRecordModule';
 import SetOpeningBalanceModule from '@/modules/SetOpeningBalanceModule';
+import { GET_ASSOCIATION_OPENING_BALANCE_STATUS } from '@/apollo/billingOperations';
 import { EXECUTIVE_POSITION_CODES, PERMISSION_CODES } from '@/constants/access';
 
 export default function Transactions() {
@@ -19,9 +21,18 @@ export default function Transactions() {
   const { can, hasPosition } = useAuth();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const canCreateTransaction = can(PERMISSION_CODES.BILLING_TRANSACTION_CREATE);
-  const canSetOpeningBalance =
+  const canManageOpeningBalance =
     can(PERMISSION_CODES.SYSTEM_FULL_ACCESS) || hasPosition(EXECUTIVE_POSITION_CODES.SECRETARY);
+  const canCreateTransaction = can(PERMISSION_CODES.BILLING_TRANSACTION_CREATE) || canManageOpeningBalance;
+  const { data: openingBalanceData, loading: openingBalanceLoading } = useQuery(
+    GET_ASSOCIATION_OPENING_BALANCE_STATUS,
+    {
+      skip: !canManageOpeningBalance,
+      fetchPolicy: 'cache-and-network',
+    }
+  );
+  const hasOpeningBalance = Number(openingBalanceData?.getAssociationTransactions?.total || 0) > 0;
+  const canSetOpeningBalance = canManageOpeningBalance && !openingBalanceLoading && !hasOpeningBalance;
 
   return (
     <LayoutModule
@@ -30,7 +41,7 @@ export default function Transactions() {
       //   containerProps={{ sx: { py: 2 } }}
     >
       <Box display="flex" alignItems="start" gap={2} justifyContent="space-between">
-        <Box>
+        <Box flex={1}>
           <Typography variant="h1">Billing & Transactions</Typography>
           <Typography color="grey.800" mb={3}>
             Track association funds, spending, scholarship releases, and audited ledger entries.
@@ -51,7 +62,7 @@ export default function Transactions() {
               )}
             </Box>
           ) : (
-            <Box display="flex" gap={1}>
+            <Box display="flex" gap={1} justifyContent="flex-end">
               {canSetOpeningBalance && (
                 <Button
                   title="Opening Balance"
@@ -62,10 +73,10 @@ export default function Transactions() {
               )}
               {canCreateTransaction && (
                 <Button
-                  title="Add Record"
+                  title="Add Transaction"
                   onClick={() => setAddRecord(true)}
                   startIcon={<IconPlus size={16} />}
-                  sx={{ width: 200 }}
+                  sx={{ width: 190 }}
                 />
               )}
             </Box>
