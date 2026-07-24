@@ -48,6 +48,7 @@ import toast from 'react-hot-toast';
 import Button from '@/components/core/Button';
 import CurrencyInput from '@/components/core/CurrencyInput';
 import Dialog from '@/components/core/Dialog';
+import AlertDialog, { AlertDialogProps } from '@/components/common/AlertDialog';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import ReactSelect from '@/components/core/ReactSelect';
 import LayoutModule from '@/layouts/Layout';
@@ -55,6 +56,10 @@ import { useAuth } from '@/context/AuthContext';
 import { EXECUTIVE_POSITION_CODES, PERMISSION_CODES, ROLE_CODES } from '@/constants/access';
 import { getBatchOptions } from '@/utils/helpers';
 import {
+  CONFIRM_MENTOR_FUND_ALLOCATION,
+  DISPUTE_MENTOR_FUND_ALLOCATION,
+  GET_MENTOR_FUND_ALLOCATIONS,
+  GET_MENTOR_SCHOLARSHIP_APPLICATIONS,
   GET_MENTOR_SCHOLARSHIP_DASHBOARD,
   GET_MY_SCHOLARSHIP_APPLICATIONS,
   GET_MY_SCHOLARSHIP_DASHBOARD,
@@ -64,6 +69,7 @@ import {
   GET_SCHOLARSHIP_ORG_DASHBOARD,
   RECORD_MENTOR_FUND_ALLOCATION,
   SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES,
+  START_SCHOLARSHIP_REVIEW,
 } from '@/apollo/scholarshipOperations';
 import { formatCurrency, getFullName, humanizeScholarshipStatus } from './helpers';
 import { useScholarshipLoginGuard } from './useScholarshipLoginGuard';
@@ -117,6 +123,93 @@ const DashboardCard = ({
 );
 
 type DashboardVariant = 'mine' | 'mentor' | 'batch' | 'org';
+type MentorWorkspaceTab = 'funds' | 'requests' | 'stats';
+
+const formatDisplayDate = (date?: string | null) => {
+  if (!date) return 'Not recorded';
+  return new Intl.DateTimeFormat('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(date));
+};
+
+const getAllocationStatusMeta = (status?: string | null) => {
+  switch (status) {
+    case 'CONFIRMED':
+      return { label: 'Confirmed by mentor', color: 'success' as const };
+    case 'DISPUTED':
+      return { label: 'Disputed by mentor', color: 'error' as const };
+    case 'PARTIALLY_DISPUTED':
+      return { label: 'Partially disputed', color: 'warning' as const };
+    case 'CANCELLED':
+    case 'REVERSED':
+    case 'CLOSED':
+      return { label: humanizeScholarshipStatus(status), color: 'default' as const };
+    default:
+      return { label: 'Needs your confirmation', color: 'warning' as const };
+  }
+};
+
+const getMentorRequestGuidance = (application: any) => {
+  switch (application.status) {
+    case 'SUBMITTED':
+    case 'RESUBMITTED':
+      return {
+        title: 'New request',
+        description: 'Open the request, verify details, and start the review.',
+        actionTitle: 'Start Review',
+      };
+    case 'UNDER_REVIEW':
+      return {
+        title: 'Review in progress',
+        description: 'Decide whether to approve, ask for more information, or reject.',
+        actionTitle: 'Review Request',
+      };
+    case 'PAYMENT_CONFIRMATION_PENDING':
+      return {
+        title: 'Waiting for beneficiary',
+        description: 'Payment was created. The beneficiary needs to confirm credit with proof.',
+        actionTitle: 'View Payment',
+      };
+    case 'PAYMENT_CONFIRMED_PROOF_DUE':
+    case 'PROOF_PARTIAL':
+      return {
+        title: 'Usage proof pending',
+        description: 'Beneficiary needs to submit usage receipts for the confirmed amount.',
+        actionTitle: 'View Proof',
+      };
+    case 'PROOF_FULL_SUBMITTED':
+      return {
+        title: 'Proof ready to verify',
+        description: 'Full usage proof is submitted and needs mentor verification.',
+        actionTitle: 'Review Proof',
+      };
+    case 'MORE_INFO_REQUIRED':
+    case 'PROOF_MORE_INFO_REQUIRED':
+      return {
+        title: 'Waiting for details',
+        description: 'More information was requested from the beneficiary.',
+        actionTitle: 'View',
+      };
+    case 'WRONG_DISBURSEMENT':
+    case 'REFUND_IN_PROGRESS':
+      return {
+        title: 'Exception case',
+        description: 'This request needs careful follow-up before it can be closed.',
+        actionTitle: 'Open Case',
+      };
+    case 'PROOF_VERIFIED':
+    case 'CLOSED':
+      return {
+        title: 'Completed',
+        description: 'No mentor action is pending right now.',
+        actionTitle: 'View',
+      };
+    default:
+      return {
+        title: humanizeScholarshipStatus(application.status),
+        description: 'Open the request to see the next available action.',
+        actionTitle: 'View',
+      };
+  }
+};
 
 const getDashboardFromData = (data: any) =>
   data?.getScholarshipOrganizationDashboard ||
@@ -491,7 +584,15 @@ const DashboardSummary = ({ data, loading, variant }: { data: any; loading: bool
   );
 };
 
-const ApplicationsTable = ({ applications, loading }: { applications: any[]; loading: boolean }) => {
+const ApplicationsTable = ({
+  applications,
+  loading,
+  actionRenderer,
+}: {
+  applications: any[];
+  loading: boolean;
+  actionRenderer?: (application: any) => React.ReactNode;
+}) => {
   if (loading) {
     return (
       <Box py={5} display="flex" justifyContent="center">
@@ -518,7 +619,7 @@ const ApplicationsTable = ({ applications, loading }: { applications: any[]; loa
             <TableCell>Mentor</TableCell>
             <TableCell>Amount</TableCell>
             <TableCell>Status</TableCell>
-            <TableCell align="right">Open</TableCell>
+            <TableCell align="right">Action</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -569,19 +670,500 @@ const ApplicationsTable = ({ applications, loading }: { applications: any[]; loa
                 </Stack>
               </TableCell>
               <TableCell align="right">
-                <Button
-                  component={Link as any}
-                  href={`/scholarships/${application.id}`}
-                  variant="text"
-                  title="View"
-                  endIcon={<IconExternalLink size={16} />}
-                />
+                {actionRenderer ? (
+                  actionRenderer(application)
+                ) : (
+                  <Button
+                    component={Link as any}
+                    href={`/scholarships/${application.id}`}
+                    variant="text"
+                    title="View"
+                    endIcon={<IconExternalLink size={16} />}
+                  />
+                )}
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
     </Paper>
+  );
+};
+
+const MentorFundsTable = ({
+  allocations,
+  loading,
+  canConfirm,
+  canDispute,
+  onConfirm,
+  onDispute,
+}: {
+  allocations: any[];
+  loading: boolean;
+  canConfirm: boolean;
+  canDispute: boolean;
+  onConfirm: (allocation: any) => void;
+  onDispute: (allocation: any) => void;
+}) => {
+  if (loading) {
+    return (
+      <Box py={5} display="flex" justifyContent="center">
+        <CircularProgress size={24} />
+      </Box>
+    );
+  }
+
+  if (!allocations.length) {
+    return (
+      <Alert severity="info" sx={{ mt: 2 }}>
+        No mentor fund release has been recorded for you yet.
+      </Alert>
+    );
+  }
+
+  return (
+    <Paper variant="outlined" sx={{ borderRadius: 1, overflowX: 'auto' }}>
+      <Table sx={{ minWidth: 980 }}>
+        <TableHead>
+          <TableRow>
+            <TableCell>Fund Release</TableCell>
+            <TableCell align="right">Released</TableCell>
+            <TableCell align="right">Confirmed</TableCell>
+            <TableCell align="right">In Dispute</TableCell>
+            <TableCell>Status</TableCell>
+            <TableCell>Transfer</TableCell>
+            <TableCell align="right">Action</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {allocations.map((allocation) => {
+            const status = getAllocationStatusMeta(allocation.status);
+            const needsMentorAction = allocation.status === 'PENDING_MENTOR_CONFIRMATION';
+
+            return (
+              <TableRow key={allocation.id} hover>
+                <TableCell>
+                  <Typography fontWeight={700}>Batch {allocation.batch} scholarship funds</Typography>
+                  <Typography fontSize={13} color="grey.600">
+                    {allocation.reference ? `Reference ${allocation.reference}` : 'No reference provided'}
+                  </Typography>
+                </TableCell>
+                <TableCell align="right">{formatCurrency(allocation.amount)}</TableCell>
+                <TableCell align="right">{formatCurrency(allocation.confirmedAmount)}</TableCell>
+                <TableCell align="right">{formatCurrency(allocation.disputedAmount)}</TableCell>
+                <TableCell>
+                  <Chip size="small" color={status.color} variant="outlined" label={status.label} />
+                </TableCell>
+                <TableCell>
+                  <Typography fontSize={14}>{formatDisplayDate(allocation.transferDate)}</Typography>
+                  <Typography fontSize={12} color="grey.600">
+                    {humanizeScholarshipStatus(allocation.method)}
+                  </Typography>
+                </TableCell>
+                <TableCell align="right">
+                  {needsMentorAction ? (
+                    <Stack direction="row" spacing={1} justifyContent="flex-end">
+                      <Button
+                        size="small"
+                        title="Confirm"
+                        startIcon={<IconCircleCheck size={15} />}
+                        disabled={!canConfirm}
+                        onClick={() => onConfirm(allocation)}
+                      />
+                      <Button
+                        size="small"
+                        variant="outlined"
+                        color="error"
+                        title="Report Issue"
+                        startIcon={<IconAlertTriangle size={15} />}
+                        disabled={!canDispute}
+                        onClick={() => onDispute(allocation)}
+                      />
+                    </Stack>
+                  ) : (
+                    <Typography fontSize={13} color="grey.600">
+                      No action needed
+                    </Typography>
+                  )}
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </Paper>
+  );
+};
+
+const MentorRequestsTable = ({
+  applications,
+  loading,
+  canStartReview,
+  onStartReview,
+  startingApplicationId,
+}: {
+  applications: any[];
+  loading: boolean;
+  canStartReview: boolean;
+  onStartReview: (application: any) => void;
+  startingApplicationId?: string | null;
+}) => (
+  <ApplicationsTable
+    applications={applications}
+    loading={loading}
+    actionRenderer={(application) => {
+      const guidance = getMentorRequestGuidance(application);
+      const canStart = canStartReview && ['SUBMITTED', 'RESUBMITTED'].includes(application.status);
+
+      return (
+        <Stack direction="row" spacing={1} justifyContent="flex-end" alignItems="center">
+          <Box textAlign="right" display={{ xs: 'none', lg: 'block' }}>
+            <Typography fontSize={13} fontWeight={700}>
+              {guidance.title}
+            </Typography>
+            <Typography fontSize={12} color="grey.600" maxWidth={260}>
+              {guidance.description}
+            </Typography>
+          </Box>
+          {canStart ? (
+            <Button
+              size="small"
+              title="Start Review"
+              startIcon={<IconEyeCheck size={15} />}
+              loading={startingApplicationId === application.id}
+              onClick={() => onStartReview(application)}
+            />
+          ) : (
+            <Button
+              component={Link as any}
+              href={`/scholarships/${application.id}`}
+              size="small"
+              variant="outlined"
+              title={guidance.actionTitle}
+              endIcon={<IconExternalLink size={15} />}
+            />
+          )}
+        </Stack>
+      );
+    }}
+  />
+);
+
+const MentorWorkspace = ({
+  dashboardData,
+  dashboardLoading,
+  applications,
+  applicationsLoading,
+  allocations,
+  allocationsLoading,
+  canConfirmAllocation,
+  canDisputeAllocation,
+  canStartReview,
+}: {
+  dashboardData: any;
+  dashboardLoading: boolean;
+  applications: any[];
+  applicationsLoading: boolean;
+  allocations: any[];
+  allocationsLoading: boolean;
+  canConfirmAllocation: boolean;
+  canDisputeAllocation: boolean;
+  canStartReview: boolean;
+}) => {
+  const [mentorTab, setMentorTab] = React.useState<MentorWorkspaceTab>('funds');
+  const [alertDialog, setAlertDialog] = React.useState<Partial<AlertDialogProps>>({});
+  const [disputeDialog, setDisputeDialog] = React.useState<{
+    allocation: any | null;
+    amount: number | null;
+    reason: string;
+    state: 'form' | 'loading' | 'success' | 'error';
+    message?: string;
+  }>({ allocation: null, amount: null, reason: '', state: 'form' });
+  const [startingApplicationId, setStartingApplicationId] = React.useState<string | null>(null);
+
+  const [confirmAllocation] = useMutation(CONFIRM_MENTOR_FUND_ALLOCATION, {
+    refetchQueries: SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES,
+  });
+  const [disputeAllocation] = useMutation(DISPUTE_MENTOR_FUND_ALLOCATION, {
+    refetchQueries: SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES,
+  });
+  const [startReview] = useMutation(START_SCHOLARSHIP_REVIEW, {
+    refetchQueries: SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES,
+  });
+
+  const pendingFundCount = allocations.filter(
+    (allocation) => allocation.status === 'PENDING_MENTOR_CONFIRMATION'
+  ).length;
+  const openRequestCount = applications.filter((application) =>
+    ['SUBMITTED', 'RESUBMITTED', 'UNDER_REVIEW', 'PROOF_FULL_SUBMITTED'].includes(application.status)
+  ).length;
+
+  const closeAlertDialog = () => setAlertDialog({});
+  const closeDisputeDialog = () => {
+    if (disputeDialog.state === 'loading') return;
+    setDisputeDialog({ allocation: null, amount: null, reason: '', state: 'form' });
+  };
+
+  const openConfirmDialog = (allocation: any) => {
+    setAlertDialog({
+      open: true,
+      action: 'update',
+      title: 'Confirm Funds Received',
+      message: (
+        <Typography>
+          Confirm that you received {formatCurrency(allocation.amount)} for Batch {allocation.batch}. Once confirmed,
+          this amount becomes available for scholarship approvals from your mentor balance.
+        </Typography>
+      ),
+      okayButtonProps: { title: 'Confirm Received' },
+      onCancel: closeAlertDialog,
+      onClose: closeAlertDialog,
+      onOkay: async () => {
+        setAlertDialog({
+          open: true,
+          action: 'loading',
+          title: 'Confirming Funds',
+          message: 'Please wait while we update your mentor fund balance.',
+          onCancel: closeAlertDialog,
+          onClose: closeAlertDialog,
+        });
+        try {
+          await confirmAllocation({ variables: { allocationId: allocation.id } });
+          setAlertDialog({
+            open: true,
+            action: 'success',
+            title: 'Funds Confirmed',
+            message: 'Your mentor fund balance has been updated.',
+            okayButtonProps: { title: 'Done' },
+            onCancel: closeAlertDialog,
+            onClose: closeAlertDialog,
+          });
+        } catch (error: any) {
+          setAlertDialog({
+            open: true,
+            action: 'error',
+            title: 'Could Not Confirm Funds',
+            message: error?.message || 'Please try again.',
+            okayButtonProps: { title: 'Close' },
+            onCancel: closeAlertDialog,
+            onClose: closeAlertDialog,
+          });
+        }
+      },
+    });
+  };
+
+  const submitDispute = async () => {
+    if (!disputeDialog.allocation || !disputeDialog.amount || !disputeDialog.reason.trim()) return;
+    setDisputeDialog((current) => ({ ...current, state: 'loading', message: undefined }));
+    try {
+      await disputeAllocation({
+        variables: {
+          allocationId: disputeDialog.allocation.id,
+          disputedAmount: disputeDialog.amount,
+          reason: disputeDialog.reason.trim(),
+        },
+      });
+      setDisputeDialog((current) => ({
+        ...current,
+        state: 'success',
+        message: 'The issue has been sent to finance for resolution.',
+      }));
+    } catch (error: any) {
+      setDisputeDialog((current) => ({
+        ...current,
+        state: 'error',
+        message: error?.message || 'Could not report the issue. Please try again.',
+      }));
+    }
+  };
+
+  const openStartReviewDialog = (application: any) => {
+    setAlertDialog({
+      open: true,
+      action: 'update',
+      title: 'Start Beneficiary Review?',
+      message: (
+        <Typography>
+          Start review for {application.referenceNumber}. This moves the request into your active review queue.
+        </Typography>
+      ),
+      okayButtonProps: { title: 'Start Review' },
+      onCancel: closeAlertDialog,
+      onClose: closeAlertDialog,
+      onOkay: async () => {
+        setStartingApplicationId(application.id);
+        setAlertDialog({
+          open: true,
+          action: 'loading',
+          title: 'Starting Review',
+          message: 'Please wait while we update the request status.',
+          onCancel: closeAlertDialog,
+          onClose: closeAlertDialog,
+        });
+        try {
+          await startReview({ variables: { applicationId: application.id } });
+          setAlertDialog({
+            open: true,
+            action: 'success',
+            title: 'Review Started',
+            message: 'The request is now ready for your review decision.',
+            okayButtonProps: { title: 'Done' },
+            onCancel: closeAlertDialog,
+            onClose: closeAlertDialog,
+          });
+        } catch (error: any) {
+          setAlertDialog({
+            open: true,
+            action: 'error',
+            title: 'Could Not Start Review',
+            message: error?.message || 'Please try again.',
+            okayButtonProps: { title: 'Close' },
+            onCancel: closeAlertDialog,
+            onClose: closeAlertDialog,
+          });
+        } finally {
+          setStartingApplicationId(null);
+        }
+      },
+    });
+  };
+
+  return (
+    <>
+      <Paper variant="outlined" sx={{ p: 2, borderRadius: 1, mb: 2 }}>
+        <Stack direction={{ xs: 'column', md: 'row' }} justifyContent="space-between" gap={2}>
+          <Box>
+            <Typography fontSize={18} fontWeight={700}>
+              Mentor Workspace
+            </Typography>
+            <Typography fontSize={14} color="grey.700">
+              Confirm funds first, then review beneficiary requests and proofs from the request queue.
+            </Typography>
+          </Box>
+          <Stack direction="row" gap={1} flexWrap="wrap">
+            {pendingFundCount > 0 && (
+              <Chip color="warning" icon={<IconHourglass size={14} />} label={`${pendingFundCount} fund action`} />
+            )}
+            {openRequestCount > 0 && (
+              <Chip color="info" icon={<IconClipboardList size={14} />} label={`${openRequestCount} request action`} />
+            )}
+          </Stack>
+        </Stack>
+      </Paper>
+
+      <Tabs value={mentorTab} onChange={(_, value) => setMentorTab(value)} sx={{ mb: 2 }}>
+        <Tab value="funds" icon={<IconWallet size={18} />} iconPosition="start" label="Funds" />
+        <Tab
+          value="requests"
+          icon={<IconClipboardList size={18} />}
+          iconPosition="start"
+          label="Beneficiary Requests"
+        />
+        <Tab value="stats" icon={<IconReportMoney size={18} />} iconPosition="start" label="Stats" />
+      </Tabs>
+
+      {mentorTab === 'funds' && (
+        <MentorFundsTable
+          allocations={allocations}
+          loading={allocationsLoading}
+          canConfirm={canConfirmAllocation}
+          canDispute={canDisputeAllocation}
+          onConfirm={openConfirmDialog}
+          onDispute={(allocation) =>
+            setDisputeDialog({
+              allocation,
+              amount: Number(allocation.disputedAmount || allocation.amount || 0) || null,
+              reason: '',
+              state: 'form',
+            })
+          }
+        />
+      )}
+
+      {mentorTab === 'requests' && (
+        <MentorRequestsTable
+          applications={applications}
+          loading={applicationsLoading}
+          canStartReview={canStartReview}
+          onStartReview={openStartReviewDialog}
+          startingApplicationId={startingApplicationId}
+        />
+      )}
+
+      {mentorTab === 'stats' && <DashboardSummary data={dashboardData} loading={dashboardLoading} variant="mentor" />}
+
+      <AlertDialog {...(alertDialog as AlertDialogProps)} open={Boolean(alertDialog.open)} />
+
+      <Dialog
+        open={Boolean(disputeDialog.allocation)}
+        maxWidth="620px"
+        title={
+          disputeDialog.state === 'success'
+            ? 'Issue Reported'
+            : disputeDialog.state === 'error'
+              ? 'Could Not Report Issue'
+              : 'Report Fund Issue'
+        }
+        subTitle={
+          disputeDialog.allocation
+            ? `Batch ${disputeDialog.allocation.batch} fund release - ${formatCurrency(
+                disputeDialog.allocation.amount
+              )}`
+            : undefined
+        }
+        onClose={closeDisputeDialog}
+        disableBackdropClick={disputeDialog.state === 'loading'}
+        footerProps={{
+          onCancel: closeDisputeDialog,
+          onOkay: disputeDialog.state === 'form' ? submitDispute : closeDisputeDialog,
+          okayButtonProps: {
+            title:
+              disputeDialog.state === 'form'
+                ? 'Submit Issue'
+                : disputeDialog.state === 'loading'
+                  ? 'Submitting...'
+                  : 'Done',
+            loading: disputeDialog.state === 'loading',
+            disabled:
+              disputeDialog.state === 'form' &&
+              (!disputeDialog.amount || !disputeDialog.reason.trim() || disputeDialog.amount <= 0),
+            color: disputeDialog.state === 'error' ? 'error' : 'primary',
+          },
+          cancelButtonProps: {
+            disabled: disputeDialog.state === 'loading',
+          },
+        }}
+      >
+        <Box p={2.5}>
+          {disputeDialog.state === 'success' || disputeDialog.state === 'error' ? (
+            <Alert severity={disputeDialog.state === 'success' ? 'success' : 'error'}>{disputeDialog.message}</Alert>
+          ) : (
+            <Stack spacing={2}>
+              <Alert severity="warning">
+                Use this only when the received amount, reference, or transfer details do not match what finance
+                recorded. Finance will review the issue before the fund can be fully settled.
+              </Alert>
+              <CurrencyInput
+                size="small"
+                label="Amount with issue"
+                value={disputeDialog.amount}
+                onValueChange={(value) => setDisputeDialog((current) => ({ ...current, amount: value }))}
+              />
+              <TextField
+                label="What is wrong?"
+                size="small"
+                value={disputeDialog.reason}
+                onChange={(event) => setDisputeDialog((current) => ({ ...current, reason: event.target.value }))}
+                placeholder="Example: received only 20,000, reference does not match, or amount not received"
+                multiline
+                minRows={3}
+              />
+            </Stack>
+          )}
+        </Box>
+      </Dialog>
+    </>
   );
 };
 
@@ -866,6 +1448,9 @@ export default function Scholarships() {
   const canReleaseMentorFunds =
     can(PERMISSION_CODES.SCHOLARSHIP_ALLOCATION_CREATE) &&
     (hasRole(ROLE_CODES.FINANCE_MANAGER) || hasPosition(EXECUTIVE_POSITION_CODES.SECRETARY));
+  const canConfirmAllocation = can(PERMISSION_CODES.SCHOLARSHIP_ALLOCATION_CONFIRM);
+  const canDisputeAllocation = can(PERMISSION_CODES.SCHOLARSHIP_ALLOCATION_DISPUTE);
+  const canStartReview = can(PERMISSION_CODES.SCHOLARSHIP_APPLICATION_READ_ASSIGNED);
   const coordinatorBatchOptions = React.useMemo(() => {
     const scopedBatches =
       roles
@@ -881,6 +1466,7 @@ export default function Scholarships() {
   const [tab, setTab] = React.useState<DashboardVariant>('mine');
   const [releaseDialogOpen, setReleaseDialogOpen] = React.useState(false);
   const showMentorSummaries = tab === 'mentor' && canReadOrg;
+  const showMentorWorkspace = tab === 'mentor' && canReadMentor && !canReadOrg;
 
   React.useEffect(() => {
     if (!canRender) return;
@@ -919,7 +1505,17 @@ export default function Scholarships() {
       options: { limit: 50, offset: 0 },
       filter: tab === 'batch' ? { batch: Number(selectedCoordinatorBatch) } : undefined,
     },
-    skip: !canRender || showMentorSummaries || (tab === 'batch' && !selectedCoordinatorBatch),
+    skip: !canRender || showMentorSummaries || showMentorWorkspace || (tab === 'batch' && !selectedCoordinatorBatch),
+    fetchPolicy: 'cache-and-network',
+  });
+  const mentorApplications = useQuery(GET_MENTOR_SCHOLARSHIP_APPLICATIONS, {
+    variables: { options: { limit: 50, offset: 0 } },
+    skip: !canRender || !showMentorWorkspace,
+    fetchPolicy: 'cache-and-network',
+  });
+  const mentorFunds = useQuery(GET_MENTOR_FUND_ALLOCATIONS, {
+    variables: { mentorUserId: user?.id, options: { limit: 50, offset: 0 } },
+    skip: !canRender || !showMentorWorkspace,
     fetchPolicy: 'cache-and-network',
   });
   const mentorSummaries = useQuery(GET_SCHOLARSHIP_MENTOR_SUMMARIES, {
@@ -1012,10 +1608,22 @@ export default function Scholarships() {
             mentors={mentorSummaries.data?.getScholarshipMentorSummaries || []}
           />
         </>
+      ) : showMentorWorkspace ? (
+        <MentorWorkspace
+          dashboardData={dashboard.data}
+          dashboardLoading={dashboard.loading}
+          applications={mentorApplications.data?.getMentorScholarshipApplications || []}
+          applicationsLoading={mentorApplications.loading}
+          allocations={mentorFunds.data?.getMentorFundAllocations || []}
+          allocationsLoading={mentorFunds.loading}
+          canConfirmAllocation={canConfirmAllocation}
+          canDisputeAllocation={canDisputeAllocation}
+          canStartReview={canStartReview}
+        />
       ) : (
         <DashboardSummary data={dashboard.data} loading={dashboard.loading} variant={tab} />
       )}
-      {!showMentorSummaries && (
+      {!showMentorSummaries && !showMentorWorkspace && (
         <>
           <Divider sx={{ my: 3 }} />
           <ApplicationsTable

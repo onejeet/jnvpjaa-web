@@ -5,6 +5,7 @@ export const SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES = [
   'getScholarshipApplications',
   'getMyScholarshipDashboard',
   'getMentorScholarshipDashboard',
+  'getMentorScholarshipApplications',
   'getBatchCoordinatorScholarshipDashboard',
   'getScholarshipOrganizationDashboard',
   'getScholarshipMentorSummaries',
@@ -229,6 +230,15 @@ export const GET_MY_SCHOLARSHIP_APPLICATIONS = gql`
   }
 `;
 
+export const GET_MENTOR_SCHOLARSHIP_APPLICATIONS = gql`
+  ${SCHOLARSHIP_APPLICATION_FIELDS}
+  query getMentorScholarshipApplications($filter: ScholarshipApplicationFilterInput, $options: ListInput) {
+    getMentorScholarshipApplications(filter: $filter, options: $options) {
+      ...ScholarshipApplicationFields
+    }
+  }
+`;
+
 export const GET_SCHOLARSHIP_APPLICATION = gql`
   ${SCHOLARSHIP_APPLICATION_FIELDS}
   query getScholarshipApplication($id: String!) {
@@ -349,6 +359,31 @@ export const CONFIRM_SCHOLARSHIP_RECEIPT = gql`
 export const REQUEST_SCHOLARSHIP_FOLLOWUP = gql`
   mutation requestScholarshipDisbursalFollowup($transactionId: String!) {
     requestScholarshipDisbursalFollowup(transactionId: $transactionId)
+  }
+`;
+
+export const CONFIRM_MENTOR_FUND_ALLOCATION = gql`
+  mutation confirmMentorFundAllocation($allocationId: String!, $confirmedAmount: Float) {
+    confirmMentorFundAllocation(allocationId: $allocationId, confirmedAmount: $confirmedAmount) {
+      id
+      amount
+      confirmedAmount
+      disputedAmount
+      status
+    }
+  }
+`;
+
+export const DISPUTE_MENTOR_FUND_ALLOCATION = gql`
+  mutation disputeMentorFundAllocation($allocationId: String!, $disputedAmount: Float!, $reason: String!) {
+    disputeMentorFundAllocation(allocationId: $allocationId, disputedAmount: $disputedAmount, reason: $reason) {
+      id
+      allocationId
+      disputedAmount
+      reason
+      status
+      createdAt
+    }
   }
 `;
 
