@@ -3,6 +3,16 @@
 import React from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { Alert, Box, Chip, CircularProgress, Divider, Paper, Stack, TextField, Typography } from '@mui/material';
+import {
+  IconBell,
+  IconCash,
+  IconCircleCheck,
+  IconClipboardList,
+  IconEyeCheck,
+  IconReceipt,
+  IconSend,
+  IconUsers,
+} from '@tabler/icons-react';
 import toast from 'react-hot-toast';
 import Button from '@/components/core/Button';
 import CurrencyInput from '@/components/core/CurrencyInput';
@@ -132,9 +142,17 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
         <Box>
           <Typography variant="h1">{application.referenceNumber}</Typography>
           <Stack direction="row" spacing={1} flexWrap="wrap" mb={2}>
-            <Chip label={humanizeScholarshipStatus(application.status)} />
-            <Chip variant="outlined" label={`Proof: ${humanizeScholarshipStatus(application.proofStatus)}`} />
-            <Chip variant="outlined" label={`Refund: ${humanizeScholarshipStatus(application.refundStatus)}`} />
+            <Chip icon={<IconClipboardList size={14} />} label={humanizeScholarshipStatus(application.status)} />
+            <Chip
+              icon={<IconReceipt size={14} />}
+              variant="outlined"
+              label={`Proof: ${humanizeScholarshipStatus(application.proofStatus)}`}
+            />
+            <Chip
+              icon={<IconCash size={14} />}
+              variant="outlined"
+              label={`Refund: ${humanizeScholarshipStatus(application.refundStatus)}`}
+            />
           </Stack>
 
           <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 1, mb: 2 }}>
@@ -168,9 +186,12 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
           </Paper>
 
           <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 1 }}>
-            <Typography fontSize={18} fontWeight={700} mb={2}>
-              Scholarship Transactions
-            </Typography>
+            <Stack direction="row" spacing={1} alignItems="center" mb={2}>
+              <IconReceipt size={20} />
+              <Typography fontSize={18} fontWeight={700}>
+                Scholarship Transactions
+              </Typography>
+            </Stack>
             {!transactions.length && <Alert severity="info">No scholarship transaction has been created yet.</Alert>}
             <Stack spacing={2}>
               {transactions.map((transaction: any) => (
@@ -184,7 +205,11 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
                         {humanizeScholarshipStatus(transaction.scholarshipStatus)}
                       </Typography>
                     </Box>
-                    <Chip size="small" label={humanizeScholarshipStatus(transaction.scholarshipProofStatus)} />
+                    <Chip
+                      size="small"
+                      icon={<IconReceipt size={14} />}
+                      label={humanizeScholarshipStatus(transaction.scholarshipProofStatus)}
+                    />
                   </Box>
                   {isOwner &&
                     ['PENDING_BENEFICIARY_CONFIRMATION', 'PARTIALLY_RECEIVED'].includes(
@@ -212,6 +237,7 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
                         />
                         <Button
                           title="Confirm Receipt"
+                          startIcon={<IconCircleCheck size={16} />}
                           loading={receiptState.loading || createDocumentState.loading || finalizeDocumentState.loading}
                           disabled={!creditProofFileByTx[transaction.id]}
                           onClick={() =>
@@ -234,6 +260,7 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
                         <Button
                           variant="outlined"
                           title="Follow Up"
+                          startIcon={<IconBell size={16} />}
                           loading={followupState.loading}
                           onClick={() =>
                             runAction(
@@ -252,9 +279,12 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
 
         <Stack spacing={2}>
           <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 1 }}>
-            <Typography fontSize={18} fontWeight={700} mb={2}>
-              People
-            </Typography>
+            <Stack direction="row" spacing={1} alignItems="center" mb={2}>
+              <IconUsers size={20} />
+              <Typography fontSize={18} fontWeight={700}>
+                People
+              </Typography>
+            </Stack>
             <ProfilePicture
               id={application.beneficiary?.id}
               src={application.beneficiary?.profileImage}
@@ -277,13 +307,17 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
           </Paper>
 
           <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 1 }}>
-            <Typography fontSize={18} fontWeight={700} mb={2}>
-              Actions
-            </Typography>
+            <Stack direction="row" spacing={1} alignItems="center" mb={2}>
+              <IconClipboardList size={20} />
+              <Typography fontSize={18} fontWeight={700}>
+                Actions
+              </Typography>
+            </Stack>
             <Stack spacing={1.5}>
               {canSubmit && (
                 <Button
                   title="Submit Application"
+                  startIcon={<IconSend size={16} />}
                   loading={submitState.loading}
                   onClick={() =>
                     runAction(
@@ -296,6 +330,7 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
               {canReview && ['SUBMITTED', 'RESUBMITTED'].includes(application.status) && (
                 <Button
                   title="Start Review"
+                  startIcon={<IconEyeCheck size={16} />}
                   loading={reviewState.loading}
                   onClick={() => runAction(() => startReview({ variables: { applicationId } }), 'Review started.')}
                 />
@@ -316,6 +351,7 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
                   />
                   <Button
                     title="Approve And Create Payment"
+                    startIcon={<IconCash size={16} />}
                     loading={approveState.loading}
                     onClick={() =>
                       runAction(

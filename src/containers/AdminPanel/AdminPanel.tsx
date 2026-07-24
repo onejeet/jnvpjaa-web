@@ -198,10 +198,15 @@ const AdminPanel = () => {
   const canReadAccess = can(PERMISSION_CODES.IAM_USER_ACCESS_READ);
   const canReadCatalog = can(PERMISSION_CODES.IAM_CATALOG_READ);
   const canManageBatchRoles = can(PERMISSION_CODES.IAM_ROLE_ASSIGNMENT_MANAGE_BATCH_ROLES);
+  const canManageFinanceManagers = can(PERMISSION_CODES.IAM_ROLE_ASSIGNMENT_MANAGE_FINANCE_MANAGER);
+  const canManagePlatformAdmins = can(PERMISSION_CODES.IAM_ROLE_ASSIGNMENT_MANAGE_PLATFORM_ADMIN);
+  const canManageSuperAdmins = can(PERMISSION_CODES.IAM_ROLE_ASSIGNMENT_MANAGE_SUPER_ADMIN);
   const canManageExecutivePositions = can(PERMISSION_CODES.IAM_EXECUTIVE_POSITION_MANAGE);
   const isSuperAdmin = hasRole(ROLE_CODES.SUPER_ADMIN);
   const canSendWelcomeEmail = isSuperAdmin;
-  const canUseAdminCenter = canReadAccess || canManageBatchRoles || canManageExecutivePositions;
+  const canManageRoleAssignments =
+    canManageBatchRoles || canManageFinanceManagers || canManagePlatformAdmins || canManageSuperAdmins;
+  const canUseAdminCenter = canReadAccess || canManageRoleAssignments || canManageExecutivePositions;
   const [activeAssignmentsExpanded, setActiveAssignmentsExpanded] = React.useState(false);
   const [assignmentTab, setAssignmentTab] = React.useState('mentors');
   const [selectedBatch, setSelectedBatch] = React.useState(getLatestBatchValue);
@@ -314,7 +319,7 @@ const AdminPanel = () => {
         limit: roleUserPageSize,
       },
     },
-    skip: !canReadAccess || (selectedRoleRequiresBatch && !roleForm.scopeBatch),
+    skip: !canManageRoleAssignments || (selectedRoleRequiresBatch && !roleForm.scopeBatch),
     notifyOnNetworkStatusChange: true,
   });
 
@@ -867,7 +872,7 @@ const AdminPanel = () => {
       )}
 
       <Grid container spacing={2}>
-        {roles.length > 0 && canReadAccess && (
+        {roles.length > 0 && canManageRoleAssignments && (
           <Grid size={{ xs: 12, md: 6 }}>
             <Paper variant="outlined" sx={{ p: 2, borderRadius: 2 }}>
               <Typography variant="h3" mb={2}>

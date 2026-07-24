@@ -365,19 +365,6 @@ export const RECORD_MENTOR_FUND_ALLOCATION = gql`
   }
 `;
 
-export const RECORD_MENTOR_FUND_ALLOCATIONS = gql`
-  mutation recordMentorFundAllocations($input: RecordMentorFundAllocationsInput!) {
-    recordMentorFundAllocations(input: $input) {
-      id
-      mentorUserId
-      batch
-      amount
-      confirmedAmount
-      status
-    }
-  }
-`;
-
 export const GET_MENTOR_FUND_ALLOCATIONS = gql`
   query getMentorFundAllocations($mentorUserId: String, $batch: Int, $options: ListInput) {
     getMentorFundAllocations(mentorUserId: $mentorUserId, batch: $batch, options: $options) {

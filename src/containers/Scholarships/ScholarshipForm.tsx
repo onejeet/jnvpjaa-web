@@ -4,6 +4,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { useMutation } from '@apollo/client';
 import { Alert, Box, MenuItem, Paper, Stack, TextField, Typography } from '@mui/material';
+import { IconBuildingBank, IconDeviceFloppy, IconFileText, IconSend } from '@tabler/icons-react';
 import toast from 'react-hot-toast';
 import Button from '@/components/core/Button';
 import CurrencyInput from '@/components/core/CurrencyInput';
@@ -127,6 +128,12 @@ export default function ScholarshipForm() {
 
         <Paper variant="outlined" sx={{ p: { xs: 2, md: 3 }, borderRadius: 1 }}>
           <Stack spacing={2.5}>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <IconFileText size={20} />
+              <Typography fontSize={18} fontWeight={700}>
+                Request Details
+              </Typography>
+            </Stack>
             <Box display="grid" gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }} gap={2}>
               <CurrencyInput
                 label="Requested amount"
@@ -175,6 +182,12 @@ export default function ScholarshipForm() {
               required
             />
 
+            <Stack direction="row" spacing={1} alignItems="center">
+              <IconBuildingBank size={20} />
+              <Typography fontSize={18} fontWeight={700}>
+                Payout Details
+              </Typography>
+            </Stack>
             <Box display="grid" gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }} gap={2}>
               <TextField
                 select
@@ -222,8 +235,19 @@ export default function ScholarshipForm() {
             </Alert>
 
             <Box display="flex" justifyContent="flex-end" gap={1.5}>
-              <Button variant="outlined" title="Save Draft" loading={loading} onClick={() => handleSave(false)} />
-              <Button title="Submit" loading={loading} onClick={() => handleSave(true)} />
+              <Button
+                variant="outlined"
+                title="Save Draft"
+                startIcon={<IconDeviceFloppy size={16} />}
+                loading={loading}
+                onClick={() => handleSave(false)}
+              />
+              <Button
+                title="Submit"
+                startIcon={<IconSend size={16} />}
+                loading={loading}
+                onClick={() => handleSave(true)}
+              />
             </Box>
           </Stack>
         </Paper>

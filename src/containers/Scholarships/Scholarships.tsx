@@ -20,9 +20,30 @@ import {
   TableRow,
   Tabs,
   TextField,
+  Tooltip,
   Typography,
 } from '@mui/material';
-import { IconCirclePlus, IconExternalLink } from '@tabler/icons-react';
+import {
+  IconAlertTriangle,
+  IconBell,
+  IconBuilding,
+  IconCalendarDue,
+  IconCash,
+  IconCircleCheck,
+  IconCirclePlus,
+  IconClipboardList,
+  IconClock,
+  IconExternalLink,
+  IconEyeCheck,
+  IconFileText,
+  IconHourglass,
+  IconInfoCircle,
+  IconReceipt,
+  IconReportMoney,
+  IconUserCheck,
+  IconUsers,
+  IconWallet,
+} from '@tabler/icons-react';
 import toast from 'react-hot-toast';
 import Button from '@/components/core/Button';
 import CurrencyInput from '@/components/core/CurrencyInput';
@@ -41,17 +62,49 @@ import {
   GET_SCHOLARSHIP_APPLICATIONS,
   GET_SCHOLARSHIP_MENTOR_SUMMARIES,
   GET_SCHOLARSHIP_ORG_DASHBOARD,
-  RECORD_MENTOR_FUND_ALLOCATIONS,
+  RECORD_MENTOR_FUND_ALLOCATION,
   SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES,
 } from '@/apollo/scholarshipOperations';
 import { formatCurrency, getFullName, humanizeScholarshipStatus } from './helpers';
 import { useScholarshipLoginGuard } from './useScholarshipLoginGuard';
 
-const DashboardCard = ({ title, value, caption }: { title: string; value: React.ReactNode; caption?: string }) => (
+type DashboardCardConfig = {
+  title: string;
+  key: string;
+  description: string;
+  type?: 'currency';
+  icon: React.ReactNode;
+};
+
+const DashboardCard = ({
+  title,
+  value,
+  description,
+  icon,
+  caption,
+}: {
+  title: string;
+  value: React.ReactNode;
+  description: string;
+  icon: React.ReactNode;
+  caption?: string;
+}) => (
   <Paper variant="outlined" sx={{ p: 2, borderRadius: 1, minHeight: 96 }}>
-    <Typography fontSize={13} color="grey.700">
-      {title}
-    </Typography>
+    <Stack direction="row" alignItems="flex-start" justifyContent="space-between" spacing={1}>
+      <Stack direction="row" alignItems="center" spacing={0.75} minWidth={0}>
+        <Box component="span" sx={{ display: 'inline-flex', color: 'primary.main' }}>
+          {icon}
+        </Box>
+        <Typography fontSize={13} color="grey.700">
+          {title}
+        </Typography>
+      </Stack>
+      <Tooltip title={description} arrow placement="top">
+        <Box component="span" sx={{ display: 'inline-flex', color: 'grey.500', cursor: 'help', mt: 0.25 }}>
+          <IconInfoCircle size={14} />
+        </Box>
+      </Tooltip>
+    </Stack>
     <Typography fontSize={24} fontWeight={700} mt={0.5}>
       {value}
     </Typography>
@@ -74,64 +127,296 @@ const getDashboardFromData = (data: any) =>
 const getMetricValue = (dashboard: any, key: string, type?: 'currency') =>
   type === 'currency' ? formatCurrency(dashboard?.[key] || 0) : dashboard?.[key] || 0;
 
-const getDashboardCards = (variant: DashboardVariant) => {
+const orgValueOnlyMetricKeys = new Set([
+  'disputedIncomingAllocation',
+  'wrongDisbursementAmount',
+  'refundRequestedAmount',
+  'refundConfirmedAmount',
+]);
+
+const getDashboardCards = (variant: DashboardVariant): DashboardCardConfig[] => {
   if (variant === 'mentor') {
     return [
-      ['Total confirmed allocation received', 'confirmedAllocation', 'currency'],
-      ['Pending incoming allocation confirmation', 'pendingIncomingAllocation', 'currency'],
-      ['Disputed incoming allocation', 'disputedIncomingAllocation', 'currency'],
-      ['Mentor custody balance', 'mentorCustodyBalance', 'currency'],
-      ['Pending beneficiary confirmation', 'pendingBeneficiaryConfirmation', 'currency'],
-      ['Confirmed beneficiary disbursement', 'confirmedBeneficiaryDisbursement', 'currency'],
-      ['Approval capacity', 'approvalCapacity', 'currency'],
-      ['Overdue usage proofs', 'overdueProof'],
-      ['Applications awaiting review', 'applicationsAwaitingReview'],
-      ['Full proofs awaiting verification', 'fullProofsAwaitingVerification'],
+      {
+        title: 'Funds confirmed',
+        key: 'confirmedAllocation',
+        type: 'currency',
+        description: 'Money released to you by finance and confirmed by you.',
+        icon: <IconCircleCheck size={18} />,
+      },
+      {
+        title: 'Awaiting your confirmation',
+        key: 'pendingIncomingAllocation',
+        type: 'currency',
+        description: 'Money recorded by finance that you still need to confirm.',
+        icon: <IconHourglass size={18} />,
+      },
+      {
+        title: 'Funds in dispute',
+        key: 'disputedIncomingAllocation',
+        type: 'currency',
+        description: 'Allocation amount you disputed or partially disputed.',
+        icon: <IconAlertTriangle size={18} />,
+      },
+      {
+        title: 'Mentor balance',
+        key: 'mentorCustodyBalance',
+        type: 'currency',
+        description: 'Confirmed funds still available with you after beneficiary releases and refunds.',
+        icon: <IconWallet size={18} />,
+      },
+      {
+        title: 'Waiting for beneficiary',
+        key: 'pendingBeneficiaryConfirmation',
+        type: 'currency',
+        description: 'Scholarship payments sent but not fully confirmed by beneficiaries yet.',
+        icon: <IconClock size={18} />,
+      },
+      {
+        title: 'Sent to beneficiaries',
+        key: 'confirmedBeneficiaryDisbursement',
+        type: 'currency',
+        description: 'Amount beneficiaries have confirmed as received.',
+        icon: <IconCash size={18} />,
+      },
+      {
+        title: 'Available to approve',
+        key: 'approvalCapacity',
+        type: 'currency',
+        description: 'Amount you can still approve for new scholarship payments.',
+        icon: <IconReportMoney size={18} />,
+      },
+      {
+        title: 'Overdue proofs',
+        key: 'overdueProof',
+        description: 'Applications where usage proof is past the due date.',
+        icon: <IconCalendarDue size={18} />,
+      },
+      {
+        title: 'Applications to review',
+        key: 'applicationsAwaitingReview',
+        description: 'Submitted applications waiting for your review.',
+        icon: <IconClipboardList size={18} />,
+      },
+      {
+        title: 'Proofs to verify',
+        key: 'fullProofsAwaitingVerification',
+        description: 'Full usage-proof submissions waiting for your decision.',
+        icon: <IconEyeCheck size={18} />,
+      },
     ];
   }
 
   if (variant === 'batch') {
     return [
-      ['Total applications', 'totalApplications'],
-      ['Submitted', 'submittedApplications'],
-      ['Under review', 'underReviewApplications'],
-      ['Needs information', 'needsInformation'],
-      ['Payment confirmation pending', 'paymentConfirmationPendingApplications'],
-      ['Proof overdue', 'overdueProof'],
-      ['Wrong disbursement', 'wrongDisbursementApplications'],
-      ['Completed applications', 'completedApplications'],
+      {
+        title: 'Applications',
+        key: 'totalApplications',
+        description: 'All scholarship applications visible for the selected batch.',
+        icon: <IconFileText size={18} />,
+      },
+      {
+        title: 'New submissions',
+        key: 'submittedApplications',
+        description: 'Applications submitted and waiting to move into review.',
+        icon: <IconClipboardList size={18} />,
+      },
+      {
+        title: 'Under review',
+        key: 'underReviewApplications',
+        description: 'Applications currently being reviewed by the assigned mentor.',
+        icon: <IconEyeCheck size={18} />,
+      },
+      {
+        title: 'Needs info',
+        key: 'needsInformation',
+        description: 'Applications or proofs where more details have been requested.',
+        icon: <IconInfoCircle size={18} />,
+      },
+      {
+        title: 'Waiting for payment confirmation',
+        key: 'paymentConfirmationPendingApplications',
+        description: 'Approved payments waiting for beneficiary receipt confirmation.',
+        icon: <IconClock size={18} />,
+      },
+      {
+        title: 'Proof overdue',
+        key: 'overdueProof',
+        description: 'Applications where usage proof is overdue.',
+        icon: <IconCalendarDue size={18} />,
+      },
+      {
+        title: 'Wrong disbursements',
+        key: 'wrongDisbursementApplications',
+        description: 'Applications marked for a possible wrong disbursement issue.',
+        icon: <IconAlertTriangle size={18} />,
+      },
+      {
+        title: 'Completed',
+        key: 'completedApplications',
+        description: 'Applications completed after required proof review.',
+        icon: <IconCircleCheck size={18} />,
+      },
     ];
   }
 
   if (variant === 'org') {
     return [
-      ['Total allocation recorded to mentors', 'totalAllocationRecorded', 'currency'],
-      ['Total confirmed by mentors', 'confirmedAllocation', 'currency'],
-      ['Pending mentor confirmation', 'pendingIncomingAllocation', 'currency'],
-      ['Disputed mentor allocations', 'disputedIncomingAllocation', 'currency'],
-      ['Total standing with mentors', 'mentorCustodyBalance', 'currency'],
-      ['Pending beneficiary confirmation', 'pendingBeneficiaryConfirmation', 'currency'],
-      ['Total confirmed disbursed to beneficiaries', 'confirmedBeneficiaryDisbursement', 'currency'],
-      ['Total completed after proof verification', 'totalCompletedAfterProofVerification', 'currency'],
-      ['Total overdue proof amount', 'overdueProofAmount', 'currency'],
-      ['Total wrong-disbursement amount', 'wrongDisbursementAmount', 'currency'],
-      ['Total refund requested', 'refundRequestedAmount', 'currency'],
-      ['Total refund confirmed', 'refundConfirmedAmount', 'currency'],
-      ['Active beneficiary count', 'activeBeneficiaryCount'],
-      ['Active mentor count', 'activeMentorCount'],
-      ['Exceptions', 'exceptionCount'],
+      {
+        title: 'Allocated to mentors',
+        key: 'totalAllocationRecorded',
+        type: 'currency',
+        description: 'Total funds finance has recorded as released to mentors.',
+        icon: <IconReportMoney size={18} />,
+      },
+      {
+        title: 'Confirmed by mentors',
+        key: 'confirmedAllocation',
+        type: 'currency',
+        description: 'Funds mentors have confirmed receiving.',
+        icon: <IconCircleCheck size={18} />,
+      },
+      {
+        title: 'Awaiting mentor confirmation',
+        key: 'pendingIncomingAllocation',
+        type: 'currency',
+        description: 'Funds released to mentors but not confirmed by them yet.',
+        icon: <IconHourglass size={18} />,
+      },
+      {
+        title: 'Mentor allocation disputes',
+        key: 'disputedIncomingAllocation',
+        type: 'currency',
+        description: 'Allocation amount disputed by mentors.',
+        icon: <IconAlertTriangle size={18} />,
+      },
+      {
+        title: 'Balance with mentors',
+        key: 'mentorCustodyBalance',
+        type: 'currency',
+        description: 'Confirmed funds currently held by mentors for scholarship payments.',
+        icon: <IconWallet size={18} />,
+      },
+      {
+        title: 'Waiting for beneficiaries',
+        key: 'pendingBeneficiaryConfirmation',
+        type: 'currency',
+        description: 'Payments sent to beneficiaries but not fully confirmed yet.',
+        icon: <IconClock size={18} />,
+      },
+      {
+        title: 'Sent to beneficiaries',
+        key: 'confirmedBeneficiaryDisbursement',
+        type: 'currency',
+        description: 'Amount beneficiaries have confirmed as received.',
+        icon: <IconCash size={18} />,
+      },
+      {
+        title: 'Completed after proof',
+        key: 'totalCompletedAfterProofVerification',
+        type: 'currency',
+        description: 'Disbursed amount linked to applications completed after proof verification.',
+        icon: <IconReceipt size={18} />,
+      },
+      {
+        title: 'Overdue proof amount',
+        key: 'overdueProofAmount',
+        type: 'currency',
+        description: 'Disbursed amount where usage proof is overdue.',
+        icon: <IconCalendarDue size={18} />,
+      },
+      {
+        title: 'Wrong disbursement amount',
+        key: 'wrongDisbursementAmount',
+        type: 'currency',
+        description: 'Amount currently marked under wrong-disbursement cases.',
+        icon: <IconAlertTriangle size={18} />,
+      },
+      {
+        title: 'Refunds requested',
+        key: 'refundRequestedAmount',
+        type: 'currency',
+        description: 'Refund amount requested from beneficiaries.',
+        icon: <IconBell size={18} />,
+      },
+      {
+        title: 'Refunds received',
+        key: 'refundConfirmedAmount',
+        type: 'currency',
+        description: 'Refund amount confirmed as received by finance or Secretary.',
+        icon: <IconCircleCheck size={18} />,
+      },
+      {
+        title: 'Active beneficiaries',
+        key: 'activeBeneficiaryCount',
+        description: 'Unique beneficiaries with active scholarship applications.',
+        icon: <IconUsers size={18} />,
+      },
+      {
+        title: 'Active mentors',
+        key: 'activeMentorCount',
+        description: 'Unique mentors assigned to active scholarship applications.',
+        icon: <IconUserCheck size={18} />,
+      },
+      {
+        title: 'Exceptions',
+        key: 'exceptionCount',
+        description:
+          'Open issues needing attention, including routing, refunds, disputes, overdue proof, and failures.',
+        icon: <IconAlertTriangle size={18} />,
+      },
     ];
   }
 
   return [
-    ['Draft requests', 'draftRequests'],
-    ['Submitted or under review', 'submittedOrUnderReview'],
-    ['Needs information', 'needsInformation'],
-    ['Awaiting payment confirmation', 'awaitingPaymentConfirmation'],
-    ['Proof due', 'proofDue'],
-    ['Partial proof', 'partialProof'],
-    ['Overdue proof', 'overdueProof'],
-    ['Completed', 'completedApplications'],
+    {
+      title: 'Drafts',
+      key: 'draftRequests',
+      description: 'Scholarship applications you started but have not submitted.',
+      icon: <IconFileText size={18} />,
+    },
+    {
+      title: 'In review',
+      key: 'submittedOrUnderReview',
+      description: 'Submitted applications that are waiting for or currently under mentor review.',
+      icon: <IconEyeCheck size={18} />,
+    },
+    {
+      title: 'Needs info',
+      key: 'needsInformation',
+      description: 'Applications or proofs where more details were requested.',
+      icon: <IconInfoCircle size={18} />,
+    },
+    {
+      title: 'Waiting for payment confirmation',
+      key: 'awaitingPaymentConfirmation',
+      description: 'Approved payments waiting for beneficiary receipt confirmation.',
+      icon: <IconClock size={18} />,
+    },
+    {
+      title: 'Proof due',
+      key: 'proofDue',
+      description: 'Applications where usage proof needs to be submitted.',
+      icon: <IconReceipt size={18} />,
+    },
+    {
+      title: 'Partial proof',
+      key: 'partialProof',
+      description: 'Proof submitted so far covers only part of the required amount.',
+      icon: <IconClipboardList size={18} />,
+    },
+    {
+      title: 'Proof overdue',
+      key: 'overdueProof',
+      description: 'Applications where usage proof is past the due date.',
+      icon: <IconCalendarDue size={18} />,
+    },
+    {
+      title: 'Completed',
+      key: 'completedApplications',
+      description: 'Applications completed after required proof review.',
+      icon: <IconCircleCheck size={18} />,
+    },
   ];
 };
 
@@ -171,6 +456,10 @@ const DashboardDatasets = ({ dashboard, variant }: { dashboard: any; variant: Da
 
 const DashboardSummary = ({ data, loading, variant }: { data: any; loading: boolean; variant: DashboardVariant }) => {
   const dashboard = getDashboardFromData(data);
+  const dashboardCards = getDashboardCards(variant).filter((card) => {
+    if (variant !== 'org' || !orgValueOnlyMetricKeys.has(card.key)) return true;
+    return Number(dashboard?.[card.key] || 0) > 0;
+  });
 
   if (loading) {
     return (
@@ -187,11 +476,13 @@ const DashboardSummary = ({ data, loading, variant }: { data: any; loading: bool
         gridTemplateColumns={{ xs: '1fr', sm: 'repeat(2, minmax(0, 1fr))', lg: 'repeat(5, minmax(0, 1fr))' }}
         gap={2}
       >
-        {getDashboardCards(variant).map(([title, key, type]) => (
+        {dashboardCards.map((card) => (
           <DashboardCard
-            key={key}
-            title={title}
-            value={getMetricValue(dashboard, key, type as 'currency' | undefined)}
+            key={card.key}
+            title={card.title}
+            description={card.description}
+            icon={card.icon}
+            value={getMetricValue(dashboard, card.key, card.type)}
           />
         ))}
       </Box>
@@ -258,14 +549,23 @@ const ApplicationsTable = ({ applications, loading }: { applications: any[]; loa
                     size={34}
                   />
                 ) : (
-                  <Chip size="small" variant="outlined" label="Routing pending" />
+                  <Chip size="small" variant="outlined" icon={<IconHourglass size={14} />} label="Routing pending" />
                 )}
               </TableCell>
               <TableCell>{formatCurrency(application.requestedAmount)}</TableCell>
               <TableCell>
                 <Stack direction="row" spacing={1} flexWrap="wrap">
-                  <Chip size="small" label={humanizeScholarshipStatus(application.status)} />
-                  <Chip size="small" variant="outlined" label={humanizeScholarshipStatus(application.proofStatus)} />
+                  <Chip
+                    size="small"
+                    icon={<IconClipboardList size={14} />}
+                    label={humanizeScholarshipStatus(application.status)}
+                  />
+                  <Chip
+                    size="small"
+                    variant="outlined"
+                    icon={<IconReceipt size={14} />}
+                    label={humanizeScholarshipStatus(application.proofStatus)}
+                  />
                 </Stack>
               </TableCell>
               <TableCell align="right">
@@ -390,28 +690,26 @@ const MentorFundReleaseDialog = ({
   mentors: any[];
 }) => {
   const [form, setForm] = React.useState<{
-    selectedMentors: any[];
+    selectedMentor: any | null;
     amount: number | null;
     transferDate: string;
     method: string;
     reference: string;
     notes: string;
   }>({
-    selectedMentors: [],
+    selectedMentor: null,
     amount: null,
     transferDate: todayDateInputValue(),
     method: 'BANK_TRANSFER',
     reference: '',
     notes: '',
   });
-  const [recordAllocations, allocationState] = useMutation(RECORD_MENTOR_FUND_ALLOCATIONS, {
+  const [recordAllocation, allocationState] = useMutation(RECORD_MENTOR_FUND_ALLOCATION, {
     refetchQueries: SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES,
   });
 
   const mentorOptions = React.useMemo(() => buildMentorReleaseOptions(mentors), [mentors]);
-  const selectedCount = form.selectedMentors.length;
   const amount = form.amount ?? 0;
-  const totalReleaseAmount = selectedCount * amount;
 
   const setField =
     (field: 'transferDate' | 'method' | 'reference' | 'notes') => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -420,7 +718,7 @@ const MentorFundReleaseDialog = ({
 
   const resetForm = () => {
     setForm({
-      selectedMentors: [],
+      selectedMentor: null,
       amount: null,
       transferDate: todayDateInputValue(),
       method: 'BANK_TRANSFER',
@@ -436,14 +734,14 @@ const MentorFundReleaseDialog = ({
   };
 
   const submitAllocation = async () => {
+    if (!form.selectedMentor) return;
+
     try {
-      await recordAllocations({
+      await recordAllocation({
         variables: {
           input: {
-            allocations: form.selectedMentors.map((mentor) => ({
-              mentorUserId: mentor.mentorUserId,
-              batch: mentor.batch,
-            })),
+            mentorUserId: form.selectedMentor.mentorUserId,
+            batch: form.selectedMentor.batch,
             amount: form.amount ?? 0,
             currency: 'INR',
             transferDate: form.transferDate,
@@ -453,7 +751,7 @@ const MentorFundReleaseDialog = ({
           },
         },
       });
-      toast.success(`Funds allocated to ${selectedCount} mentor${selectedCount === 1 ? '' : 's'}.`);
+      toast.success('Funds allocated to mentor.');
       handleClose();
     } catch (error: any) {
       toast.error(error?.message || 'Could not allocate mentor funds.');
@@ -464,8 +762,8 @@ const MentorFundReleaseDialog = ({
     <Dialog
       open={open}
       maxWidth="760px"
-      title="Allocate Funds to Mentors"
-      subTitle="Record association funds released to one or more active batch mentors."
+      title="Allocate Funds to Mentor"
+      subTitle="Record association funds released to one active batch mentor."
       onClose={handleClose}
       disableBackdropClick={allocationState.loading}
       footerProps={{
@@ -474,38 +772,37 @@ const MentorFundReleaseDialog = ({
         okayButtonProps: {
           title: 'Allocate Funds',
           loading: allocationState.loading,
-          disabled: !selectedCount || !form.amount || !form.transferDate,
+          disabled: !form.selectedMentor || !form.amount || !form.transferDate,
         },
       }}
     >
       <Box p={2.5}>
         <Alert severity="info" sx={{ mb: 2 }}>
-          This records funds released by JNVPJAA to selected mentors. Mentors will confirm the received amount before it
-          becomes available for beneficiary approvals.
+          This records funds released by JNVPJAA to a batch mentor. The mentor will confirm the received amount before
+          it becomes available for beneficiary approvals.
         </Alert>
         <Stack spacing={2}>
           <Typography variant="caption" color="text.secondary">
-            Mentors
+            Mentor
           </Typography>
           <ReactSelect
             options={mentorOptions}
-            value={form.selectedMentors}
-            placeholder="Select mentors to allocate funds"
+            value={form.selectedMentor}
+            placeholder="Select mentor to allocate funds"
             size="small"
-            isMulti
             isSearchable
             showAvatars
             noOptionsMessage="No active batch mentor found"
-            onChange={(options) =>
+            onChange={(option) =>
               setForm((current) => ({
                 ...current,
-                selectedMentors: Array.isArray(options) ? options : [],
+                selectedMentor: Array.isArray(option) ? null : option,
               }))
             }
           />
           <Box display="grid" gridTemplateColumns={{ xs: '1fr', md: '1fr 180px' }} gap={1.5}>
             <CurrencyInput
-              label="Amount per mentor"
+              label="Amount"
               size="small"
               value={form.amount}
               onValueChange={(value) => setForm((current) => ({ ...current, amount: value }))}
@@ -546,10 +843,10 @@ const MentorFundReleaseDialog = ({
           <Paper variant="outlined" sx={{ p: 1.5, borderRadius: 1, bgcolor: 'grey.50' }}>
             <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" gap={1}>
               <Typography fontSize={14} color="grey.700">
-                {selectedCount} mentor{selectedCount === 1 ? '' : 's'} selected
+                {form.selectedMentor?.label || 'No mentor selected'}
               </Typography>
               <Typography fontSize={14} fontWeight={700}>
-                Total release: {formatCurrency(totalReleaseAmount)}
+                Release amount: {formatCurrency(amount)}
               </Typography>
             </Stack>
           </Paper>
@@ -659,10 +956,14 @@ export default function Scholarships() {
       </Box>
 
       <Tabs value={tab} onChange={(_, value) => setTab(value)} sx={{ mb: 2 }}>
-        <Tab value="mine" label="My Applications" />
-        {(canReadMentor || canReadOrg) && <Tab value="mentor" label="Mentor Queue" />}
-        {canReadBatch && coordinatorBatchOptions.length > 0 && <Tab value="batch" label="Batch" />}
-        {canReadOrg && <Tab value="org" label="Organization" />}
+        <Tab value="mine" icon={<IconFileText size={18} />} iconPosition="start" label="My Requests" />
+        {(canReadMentor || canReadOrg) && (
+          <Tab value="mentor" icon={<IconWallet size={18} />} iconPosition="start" label="Mentor Funds" />
+        )}
+        {canReadBatch && coordinatorBatchOptions.length > 0 && (
+          <Tab value="batch" icon={<IconUsers size={18} />} iconPosition="start" label="Batch View" />
+        )}
+        {canReadOrg && <Tab value="org" icon={<IconBuilding size={18} />} iconPosition="start" label="Organisation" />}
       </Tabs>
 
       {tab === 'batch' && (
@@ -686,16 +987,16 @@ export default function Scholarships() {
           <Box display="flex" justifyContent="space-between" alignItems="flex-start" gap={2} mb={2}>
             <Box>
               <Typography fontSize={18} fontWeight={700}>
-                Mentor Fund Queue
+                Mentor Funds Overview
               </Typography>
               <Typography fontSize={14} color="grey.700">
-                Track mentor balances, beneficiary releases, and funds awaiting mentor confirmation.
+                Review mentor fund balances, beneficiary releases, and pending confirmations.
               </Typography>
             </Box>
             {canReleaseMentorFunds && (
               <Button
                 title="Allocate Funds"
-                startIcon={<IconCirclePlus size={16} />}
+                startIcon={<IconCash size={16} />}
                 onClick={() => setReleaseDialogOpen(true)}
                 sx={{ minWidth: 160 }}
               />
