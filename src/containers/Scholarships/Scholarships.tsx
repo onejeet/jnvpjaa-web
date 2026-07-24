@@ -123,6 +123,7 @@ const DashboardCard = ({
 );
 
 type DashboardVariant = 'mine' | 'mentor' | 'batch' | 'org';
+type MyRequestsWorkspaceTab = 'actions' | 'all' | 'stats';
 type MentorWorkspaceTab = 'funds' | 'requests' | 'stats';
 
 const formatDisplayDate = (date?: string | null) => {
@@ -206,6 +207,107 @@ const getMentorRequestGuidance = (application: any) => {
       return {
         title: humanizeScholarshipStatus(application.status),
         description: 'Open the request to see the next available action.',
+        actionTitle: 'View',
+      };
+  }
+};
+
+const getMyRequestGuidance = (application: any) => {
+  switch (application.status) {
+    case 'DRAFT':
+      return {
+        severity: 'warning' as const,
+        label: 'Draft',
+        title: 'Finish and submit',
+        description: 'Your request is saved as a draft. Submit it when the details are ready.',
+        actionTitle: 'Continue',
+      };
+    case 'MORE_INFO_REQUIRED':
+    case 'PROOF_MORE_INFO_REQUIRED':
+      return {
+        severity: 'warning' as const,
+        label: 'Needs your input',
+        title: 'More details needed',
+        description: 'The mentor has asked for more information before this can move forward.',
+        actionTitle: 'Respond',
+      };
+    case 'ROUTING_PENDING':
+      return {
+        severity: 'info' as const,
+        label: 'Mentor pending',
+        title: 'Waiting for mentor assignment',
+        description: 'Your request is submitted and waiting for an eligible mentor to be assigned.',
+        actionTitle: 'View',
+      };
+    case 'SUBMITTED':
+    case 'RESUBMITTED':
+    case 'UNDER_REVIEW':
+      return {
+        severity: 'info' as const,
+        label: 'In review',
+        title: 'Mentor review in progress',
+        description: 'Your assigned mentor is reviewing the request.',
+        actionTitle: 'View',
+      };
+    case 'PAYMENT_CONFIRMATION_PENDING':
+      return {
+        severity: 'warning' as const,
+        label: 'Confirm credit',
+        title: 'Confirm money received',
+        description: 'Upload credit proof and confirm the amount received.',
+        actionTitle: 'Confirm Receipt',
+      };
+    case 'PAYMENT_CONFIRMED_PROOF_DUE':
+    case 'PROOF_PARTIAL':
+    case 'PROOF_REJECTED':
+      return {
+        severity: 'warning' as const,
+        label: 'Proof due',
+        title: 'Submit usage proof',
+        description: 'Upload usage receipts for the scholarship amount you received.',
+        actionTitle: 'Upload Proof',
+      };
+    case 'PROOF_FULL_SUBMITTED':
+      return {
+        severity: 'info' as const,
+        label: 'Proof submitted',
+        title: 'Waiting for proof review',
+        description: 'Your mentor will verify the submitted usage proof.',
+        actionTitle: 'View Proof',
+      };
+    case 'WRONG_DISBURSEMENT':
+    case 'REFUND_IN_PROGRESS':
+      return {
+        severity: 'error' as const,
+        label: 'Needs follow-up',
+        title: 'Exception open',
+        description: 'This request needs attention because a disbursement or refund case is open.',
+        actionTitle: 'Open Case',
+      };
+    case 'REJECTED':
+    case 'CANCELLED':
+      return {
+        severity: 'error' as const,
+        label: humanizeScholarshipStatus(application.status),
+        title: 'Request closed',
+        description: 'This request is no longer active.',
+        actionTitle: 'View',
+      };
+    case 'PROOF_VERIFIED':
+    case 'CLOSED':
+      return {
+        severity: 'success' as const,
+        label: 'Completed',
+        title: 'Completed',
+        description: 'This scholarship request is complete.',
+        actionTitle: 'View',
+      };
+    default:
+      return {
+        severity: 'default' as const,
+        label: humanizeScholarshipStatus(application.status),
+        title: humanizeScholarshipStatus(application.status),
+        description: 'Open the request to see the latest details.',
         actionTitle: 'View',
       };
   }
@@ -687,6 +789,119 @@ const ApplicationsTable = ({
         </TableBody>
       </Table>
     </Paper>
+  );
+};
+
+const MyRequestsTable = ({ applications, loading }: { applications: any[]; loading: boolean }) => (
+  <ApplicationsTable
+    applications={applications}
+    loading={loading}
+    actionRenderer={(application) => {
+      const guidance = getMyRequestGuidance(application);
+
+      return (
+        <Stack direction="row" spacing={1} justifyContent="flex-end" alignItems="center">
+          <Box textAlign="right" display={{ xs: 'none', lg: 'block' }}>
+            <Chip size="small" color={guidance.severity} variant="outlined" label={guidance.label} sx={{ mb: 0.5 }} />
+            <Typography fontSize={12} color="grey.600" maxWidth={250}>
+              {guidance.description}
+            </Typography>
+          </Box>
+          <Button
+            component={Link as any}
+            href={`/scholarships/${application.id}`}
+            size="small"
+            variant={guidance.severity === 'warning' || guidance.severity === 'error' ? 'contained' : 'outlined'}
+            title={guidance.actionTitle}
+            endIcon={<IconExternalLink size={15} />}
+          />
+        </Stack>
+      );
+    }}
+  />
+);
+
+const MyRequestsWorkspace = ({
+  dashboardData,
+  dashboardLoading,
+  applications,
+  applicationsLoading,
+}: {
+  dashboardData: any;
+  dashboardLoading: boolean;
+  applications: any[];
+  applicationsLoading: boolean;
+}) => {
+  const [requestTab, setRequestTab] = React.useState<MyRequestsWorkspaceTab>('actions');
+  const actionApplications = applications.filter((application) =>
+    [
+      'DRAFT',
+      'MORE_INFO_REQUIRED',
+      'PAYMENT_CONFIRMATION_PENDING',
+      'PAYMENT_CONFIRMED_PROOF_DUE',
+      'PROOF_PARTIAL',
+      'PROOF_REJECTED',
+      'PROOF_MORE_INFO_REQUIRED',
+      'WRONG_DISBURSEMENT',
+      'REFUND_IN_PROGRESS',
+    ].includes(application.status)
+  );
+  const awaitingMentorCount = applications.filter((application) =>
+    ['ROUTING_PENDING', 'SUBMITTED', 'RESUBMITTED', 'UNDER_REVIEW', 'PROOF_FULL_SUBMITTED'].includes(application.status)
+  ).length;
+  const completedCount = applications.filter((application) =>
+    ['PROOF_VERIFIED', 'CLOSED'].includes(application.status)
+  ).length;
+
+  return (
+    <>
+      <Paper variant="outlined" sx={{ p: 2, borderRadius: 1, mb: 2 }}>
+        <Stack direction={{ xs: 'column', md: 'row' }} justifyContent="space-between" gap={2}>
+          <Box>
+            <Typography fontSize={18} fontWeight={700}>
+              My Scholarship Requests
+            </Typography>
+            <Typography fontSize={14} color="grey.700">
+              Track each request, confirm payments, and complete proof steps from one place.
+            </Typography>
+          </Box>
+          <Stack direction="row" gap={1} flexWrap="wrap">
+            {actionApplications.length > 0 && (
+              <Chip
+                color="warning"
+                icon={<IconBell size={14} />}
+                label={`${actionApplications.length} action needed`}
+              />
+            )}
+            {awaitingMentorCount > 0 && (
+              <Chip color="info" icon={<IconClock size={14} />} label={`${awaitingMentorCount} with mentor`} />
+            )}
+            {completedCount > 0 && (
+              <Chip color="success" icon={<IconCircleCheck size={14} />} label={`${completedCount} completed`} />
+            )}
+          </Stack>
+        </Stack>
+      </Paper>
+
+      <Tabs value={requestTab} onChange={(_, value) => setRequestTab(value)} sx={{ mb: 2 }}>
+        <Tab value="actions" icon={<IconBell size={18} />} iconPosition="start" label="Action Needed" />
+        <Tab value="all" icon={<IconFileText size={18} />} iconPosition="start" label="All Requests" />
+        <Tab value="stats" icon={<IconReportMoney size={18} />} iconPosition="start" label="Stats" />
+      </Tabs>
+
+      {requestTab === 'actions' && (
+        <>
+          {!applicationsLoading && !actionApplications.length && (
+            <Alert severity="success" sx={{ mb: 2 }}>
+              No action is pending from your side right now.
+            </Alert>
+          )}
+          <MyRequestsTable applications={actionApplications} loading={applicationsLoading} />
+        </>
+      )}
+      {requestTab === 'all' && <MyRequestsTable applications={applications} loading={applicationsLoading} />}
+      {requestTab === 'stats' && <DashboardSummary data={dashboardData} loading={dashboardLoading} variant="mine" />}
+    </>
   );
 };
 
@@ -1620,10 +1835,17 @@ export default function Scholarships() {
           canDisputeAllocation={canDisputeAllocation}
           canStartReview={canStartReview}
         />
+      ) : tab === 'mine' ? (
+        <MyRequestsWorkspace
+          dashboardData={dashboard.data}
+          dashboardLoading={dashboard.loading}
+          applications={applications.data?.getMyScholarshipApplications || []}
+          applicationsLoading={applications.loading}
+        />
       ) : (
         <DashboardSummary data={dashboard.data} loading={dashboard.loading} variant={tab} />
       )}
-      {!showMentorSummaries && !showMentorWorkspace && (
+      {!showMentorSummaries && !showMentorWorkspace && tab !== 'mine' && (
         <>
           <Divider sx={{ my: 3 }} />
           <ApplicationsTable

@@ -5,12 +5,18 @@ import { useMutation, useQuery } from '@apollo/client';
 import { Alert, Box, Chip, CircularProgress, Divider, Paper, Stack, TextField, Typography } from '@mui/material';
 import {
   IconBell,
+  IconCalendarDue,
   IconCash,
   IconCircleCheck,
   IconClipboardList,
+  IconClock,
   IconEyeCheck,
+  IconFileText,
+  IconHourglass,
+  IconInfoCircle,
   IconReceipt,
   IconSend,
+  IconShieldCheck,
   IconUsers,
 } from '@tabler/icons-react';
 import toast from 'react-hot-toast';
@@ -26,14 +32,209 @@ import {
   CREATE_SCHOLARSHIP_DOCUMENT_UPLOAD,
   FINALIZE_SCHOLARSHIP_DOCUMENT_UPLOAD,
   GET_SCHOLARSHIP_APPLICATION,
+  GET_SCHOLARSHIP_APPLICATION_ACTIVITY,
   GET_SCHOLARSHIP_APPLICATION_TRANSACTIONS,
   REQUEST_SCHOLARSHIP_FOLLOWUP,
   SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES,
   START_SCHOLARSHIP_REVIEW,
   SUBMIT_SCHOLARSHIP_APPLICATION,
 } from '@/apollo/scholarshipOperations';
-import { formatCurrency, getFullName, humanizeScholarshipStatus } from './helpers';
+import { formatCurrency, formatDate, formatDateTime, getFullName, humanizeScholarshipStatus } from './helpers';
 import { useScholarshipLoginGuard } from './useScholarshipLoginGuard';
+
+const getDetailGuidance = (application: any, isOwner: boolean, isAssignedMentor: boolean) => {
+  if (!application) return null;
+
+  if (isOwner) {
+    if (['DRAFT', 'MORE_INFO_REQUIRED'].includes(application.status)) {
+      return {
+        severity: 'warning' as const,
+        title: 'Your input is needed',
+        message: 'Review the details and submit the application when everything is ready.',
+      };
+    }
+    if (application.status === 'PAYMENT_CONFIRMATION_PENDING') {
+      return {
+        severity: 'warning' as const,
+        title: 'Confirm the received amount',
+        message: 'Upload credit proof and confirm the amount credited to your account.',
+      };
+    }
+    if (['PAYMENT_CONFIRMED_PROOF_DUE', 'PROOF_PARTIAL', 'PROOF_REJECTED'].includes(application.status)) {
+      return {
+        severity: 'warning' as const,
+        title: 'Usage proof is pending',
+        message: 'Upload receipts for how the scholarship amount was used.',
+      };
+    }
+  }
+
+  if (isAssignedMentor && ['SUBMITTED', 'RESUBMITTED'].includes(application.status)) {
+    return {
+      severity: 'info' as const,
+      title: 'Ready for mentor review',
+      message: 'Start the review, then approve, request more information, or reject from this page.',
+    };
+  }
+
+  if (isAssignedMentor && application.status === 'UNDER_REVIEW') {
+    return {
+      severity: 'info' as const,
+      title: 'Review in progress',
+      message: 'Confirm the approved amount and create the beneficiary payment when ready.',
+    };
+  }
+
+  if (['PROOF_VERIFIED', 'CLOSED'].includes(application.status)) {
+    return {
+      severity: 'success' as const,
+      title: 'Completed',
+      message: 'This scholarship request is complete.',
+    };
+  }
+
+  return {
+    severity: 'info' as const,
+    title: humanizeScholarshipStatus(application.status),
+    message: 'The latest state and timeline are shown below.',
+  };
+};
+
+const getActivityTitle = (action?: string | null) => {
+  switch (action) {
+    case 'SCHOLARSHIP_DRAFT_CREATED':
+      return 'Draft created';
+    case 'SCHOLARSHIP_DRAFT_UPDATED':
+      return 'Draft updated';
+    case 'SCHOLARSHIP_APPLICATION_SUBMITTED':
+      return 'Application submitted';
+    case 'SCHOLARSHIP_APPLICATION_ROUTING_PENDING':
+      return 'Mentor routing pending';
+    case 'SCHOLARSHIP_REVIEW_STARTED':
+      return 'Review started';
+    case 'SCHOLARSHIP_INFORMATION_REQUESTED':
+      return 'More information requested';
+    case 'SCHOLARSHIP_APPLICATION_REJECTED':
+      return 'Application rejected';
+    case 'SCHOLARSHIP_APPLICATION_APPROVED':
+      return 'Application approved';
+    case 'SCHOLARSHIP_RECEIPT_CONFIRMED':
+      return 'Payment receipt confirmed';
+    case 'SCHOLARSHIP_FOLLOWUP_REQUESTED':
+      return 'Payment follow-up requested';
+    case 'SCHOLARSHIP_PROOF_UPLOADED':
+      return 'Usage proof uploaded';
+    case 'SCHOLARSHIP_PROOF_REVIEWED':
+      return 'Usage proof reviewed';
+    case 'SCHOLARSHIP_WRONG_DISBURSEMENT_MARKED':
+      return 'Wrong disbursement marked';
+    default:
+      return humanizeScholarshipStatus(action);
+  }
+};
+
+const getActivityAmount = (activity: any) => {
+  const after = activity?.after || {};
+  const amount =
+    after?.approvedTotalAmount ||
+    after?.approvedAmountDisbursed ||
+    after?.scholarshipConfirmedAmount ||
+    after?.amount ||
+    after?.transaction?.amount;
+  return amount ? formatCurrency(amount) : null;
+};
+
+const DetailMetric = ({
+  label,
+  value,
+  icon,
+  caption,
+}: {
+  label: string;
+  value: React.ReactNode;
+  icon: React.ReactNode;
+  caption?: string;
+}) => (
+  <Paper variant="outlined" sx={{ p: 1.5, borderRadius: 1, height: '100%' }}>
+    <Stack direction="row" spacing={1} alignItems="center">
+      <Box component="span" sx={{ display: 'inline-flex', color: 'primary.main' }}>
+        {icon}
+      </Box>
+      <Typography fontSize={13} color="grey.700">
+        {label}
+      </Typography>
+    </Stack>
+    <Typography fontSize={20} fontWeight={700} mt={0.5}>
+      {value}
+    </Typography>
+    {caption && (
+      <Typography fontSize={12} color="grey.600">
+        {caption}
+      </Typography>
+    )}
+  </Paper>
+);
+
+const Timeline = ({ activities, loading }: { activities: any[]; loading: boolean }) => {
+  if (loading) {
+    return (
+      <Box py={4} display="flex" justifyContent="center">
+        <CircularProgress size={24} />
+      </Box>
+    );
+  }
+
+  if (!activities.length) {
+    return <Alert severity="info">Timeline will appear after the first workflow action is recorded.</Alert>;
+  }
+
+  return (
+    <Stack spacing={0}>
+      {[...activities]
+        .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+        .map((activity, index, rows) => {
+          const actorName = getFullName(activity.actor) || activity.actor?.email || 'System';
+          const amount = getActivityAmount(activity);
+
+          return (
+            <Box key={activity.id} display="grid" gridTemplateColumns="32px minmax(0, 1fr)" gap={1.5}>
+              <Box display="flex" flexDirection="column" alignItems="center">
+                <Box
+                  sx={{
+                    width: 12,
+                    height: 12,
+                    borderRadius: '50%',
+                    bgcolor: activity.isHighRisk ? 'error.main' : 'primary.main',
+                    mt: 0.75,
+                  }}
+                />
+                {index < rows.length - 1 && <Box sx={{ width: 2, flex: 1, bgcolor: 'grey.200', my: 0.5 }} />}
+              </Box>
+              <Box pb={index < rows.length - 1 ? 2 : 0}>
+                <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-between">
+                  <Typography fontWeight={700}>{getActivityTitle(activity.action)}</Typography>
+                  <Typography fontSize={12} color="grey.600">
+                    {formatDateTime(activity.createdAt)}
+                  </Typography>
+                </Stack>
+                <Stack direction="row" spacing={1} alignItems="center" mt={0.75}>
+                  <ProfilePicture
+                    id={activity.actor?.id}
+                    src={activity.actor?.profileImage}
+                    title={actorName}
+                    summary={activity.actor?.batch ? `Batch ${activity.actor.batch}` : 'Workflow action'}
+                    size={30}
+                  />
+                  {amount && <Chip size="small" variant="outlined" label={amount} />}
+                  {activity.reason && <Chip size="small" variant="outlined" label={activity.reason} />}
+                </Stack>
+              </Box>
+            </Box>
+          );
+        })}
+    </Stack>
+  );
+};
 
 export default function ScholarshipDetail({ applicationId }: { applicationId: string }) {
   const { can, user } = useAuth();
@@ -48,6 +249,11 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
     skip: !canRender,
     fetchPolicy: 'cache-and-network',
   });
+  const activityQuery = useQuery(GET_SCHOLARSHIP_APPLICATION_ACTIVITY, {
+    variables: { applicationId },
+    skip: !canRender,
+    fetchPolicy: 'cache-and-network',
+  });
   const [approvedTotalAmount, setApprovedTotalAmount] = React.useState<number | null>(null);
   const [installmentAmount, setInstallmentAmount] = React.useState<number | null>(null);
   const [confirmedAmountByTx, setConfirmedAmountByTx] = React.useState<Record<string, number | null>>({});
@@ -56,6 +262,7 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
   const refetchQueries = [
     { query: GET_SCHOLARSHIP_APPLICATION, variables: { id: applicationId } },
     { query: GET_SCHOLARSHIP_APPLICATION_TRANSACTIONS, variables: { applicationId } },
+    { query: GET_SCHOLARSHIP_APPLICATION_ACTIVITY, variables: { applicationId } },
     ...SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES,
   ];
 
@@ -69,11 +276,13 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
 
   const application = applicationQuery.data?.getScholarshipApplication;
   const transactions = transactionsQuery.data?.getScholarshipApplicationTransactions || [];
+  const activities = activityQuery.data?.getScholarshipApplicationActivity || [];
   const isOwner = application?.beneficiaryUserId === user?.id || application?.applicantUserId === user?.id;
   const isAssignedMentor = application?.assignedMentorUserId === user?.id;
   const canSubmit = isOwner && ['DRAFT', 'MORE_INFO_REQUIRED'].includes(application?.status);
   const canReview = isAssignedMentor && can(PERMISSION_CODES.SCHOLARSHIP_APPLICATION_READ_ASSIGNED);
   const canApprove = isAssignedMentor && can(PERMISSION_CODES.SCHOLARSHIP_APPLICATION_APPROVE);
+  const guidance = getDetailGuidance(application, isOwner, isAssignedMentor);
 
   React.useEffect(() => {
     if (application?.requestedAmount && approvedTotalAmount === null) {
@@ -136,11 +345,25 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
     );
   }
 
+  const approvedTotal = Number(application.approvedTotalAmount || 0);
+  const disbursedTotal = Number(application.approvedAmountDisbursed || 0);
+  const remainingApproved = Math.max(approvedTotal - disbursedTotal, 0);
+  const confirmedByBeneficiary = transactions.reduce(
+    (sum: number, transaction: any) => sum + Number(transaction.scholarshipConfirmedAmount || 0),
+    0
+  );
+
   return (
     <LayoutModule disableCover title={`${application.referenceNumber} • Scholarships`}>
-      <Box display="grid" gridTemplateColumns={{ xs: '1fr', lg: 'minmax(0, 1fr) 360px' }} gap={3}>
+      <Box display="grid" gridTemplateColumns={{ xs: '1fr', lg: 'minmax(0, 1fr) 380px' }} gap={3}>
         <Box>
-          <Typography variant="h1">{application.referenceNumber}</Typography>
+          <Box mb={2}>
+            <Typography variant="h1">{application.referenceNumber}</Typography>
+            <Typography color="grey.800" mt={0.5}>
+              {application.purpose}
+            </Typography>
+          </Box>
+
           <Stack direction="row" spacing={1} flexWrap="wrap" mb={2}>
             <Chip icon={<IconClipboardList size={14} />} label={humanizeScholarshipStatus(application.status)} />
             <Chip
@@ -155,10 +378,51 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
             />
           </Stack>
 
+          {guidance && (
+            <Alert severity={guidance.severity} sx={{ mb: 2 }}>
+              <Typography fontWeight={700}>{guidance.title}</Typography>
+              <Typography fontSize={14}>{guidance.message}</Typography>
+            </Alert>
+          )}
+
+          <Box
+            display="grid"
+            gridTemplateColumns={{ xs: '1fr', sm: 'repeat(2, minmax(0, 1fr))', xl: 'repeat(4, minmax(0, 1fr))' }}
+            gap={1.5}
+            mb={2}
+          >
+            <DetailMetric
+              label="Requested"
+              value={formatCurrency(application.requestedAmount)}
+              icon={<IconFileText size={18} />}
+            />
+            <DetailMetric
+              label="Approved"
+              value={formatCurrency(approvedTotal)}
+              icon={<IconShieldCheck size={18} />}
+              caption={approvedTotal ? `${formatCurrency(remainingApproved)} remaining` : 'Not approved yet'}
+            />
+            <DetailMetric
+              label="Released"
+              value={formatCurrency(disbursedTotal)}
+              icon={<IconCash size={18} />}
+              caption={`${formatCurrency(confirmedByBeneficiary)} confirmed by beneficiary`}
+            />
+            <DetailMetric
+              label="Proof timeline"
+              value={application.approvedProofDays ? `${application.approvedProofDays} days` : 'Not set'}
+              icon={<IconCalendarDue size={18} />}
+              caption={`Requested ${application.proposedProofDays} days`}
+            />
+          </Box>
+
           <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 1, mb: 2 }}>
-            <Typography fontSize={20} fontWeight={700}>
-              {application.purpose}
-            </Typography>
+            <Stack direction="row" spacing={1} alignItems="center" mb={1.5}>
+              <IconInfoCircle size={20} />
+              <Typography fontSize={18} fontWeight={700}>
+                Request Details
+              </Typography>
+            </Stack>
             <Typography color="grey.700" mt={1}>
               {application.reason}
             </Typography>
@@ -166,15 +430,19 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
             <Box display="grid" gridTemplateColumns={{ xs: '1fr', sm: 'repeat(3, 1fr)' }} gap={2}>
               <Box>
                 <Typography fontSize={13} color="grey.600">
-                  Requested
+                  Payment mode
                 </Typography>
-                <Typography fontWeight={700}>{formatCurrency(application.requestedAmount)}</Typography>
+                <Typography fontWeight={700}>{humanizeScholarshipStatus(application.paymentMode)}</Typography>
               </Box>
               <Box>
                 <Typography fontSize={13} color="grey.600">
-                  Disbursed
+                  First installment
                 </Typography>
-                <Typography fontWeight={700}>{formatCurrency(application.approvedAmountDisbursed)}</Typography>
+                <Typography fontWeight={700}>
+                  {application.requestedFirstInstallmentAmount
+                    ? formatCurrency(application.requestedFirstInstallmentAmount)
+                    : 'Not requested'}
+                </Typography>
               </Box>
               <Box>
                 <Typography fontSize={13} color="grey.600">
@@ -185,7 +453,7 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
             </Box>
           </Paper>
 
-          <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 1 }}>
+          <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 1, mb: 2 }}>
             <Stack direction="row" spacing={1} alignItems="center" mb={2}>
               <IconReceipt size={20} />
               <Typography fontSize={18} fontWeight={700}>
@@ -275,6 +543,16 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
               ))}
             </Stack>
           </Paper>
+
+          <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 1 }}>
+            <Stack direction="row" spacing={1} alignItems="center" mb={2}>
+              <IconClock size={20} />
+              <Typography fontSize={18} fontWeight={700}>
+                Timeline
+              </Typography>
+            </Stack>
+            <Timeline activities={activities} loading={activityQuery.loading} />
+          </Paper>
         </Box>
 
         <Stack spacing={2}>
@@ -298,12 +576,47 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
                 id={application.assignedMentor?.id}
                 src={application.assignedMentor?.profileImage}
                 title={getFullName(application.assignedMentor)}
-                summary="Assigned mentor"
+                summary={`Assigned mentor • Batch ${application.assignedMentor?.batch ?? 'NA'}`}
                 size={42}
               />
             ) : (
               <Alert severity="warning">Mentor routing is pending.</Alert>
             )}
+          </Paper>
+
+          <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 1 }}>
+            <Stack direction="row" spacing={1} alignItems="center" mb={2}>
+              <IconCalendarDue size={20} />
+              <Typography fontSize={18} fontWeight={700}>
+                Important Dates
+              </Typography>
+            </Stack>
+            <Stack spacing={1.5}>
+              <Box>
+                <Typography fontSize={13} color="grey.600">
+                  Submitted
+                </Typography>
+                <Typography fontWeight={700}>{formatDate(application.submittedAt)}</Typography>
+              </Box>
+              <Box>
+                <Typography fontSize={13} color="grey.600">
+                  Approved
+                </Typography>
+                <Typography fontWeight={700}>{formatDate(application.approvedAt)}</Typography>
+              </Box>
+              <Box>
+                <Typography fontSize={13} color="grey.600">
+                  Rejected
+                </Typography>
+                <Typography fontWeight={700}>{formatDate(application.rejectedAt)}</Typography>
+              </Box>
+              <Box>
+                <Typography fontSize={13} color="grey.600">
+                  Last activity
+                </Typography>
+                <Typography fontWeight={700}>{formatDateTime(application.lastActivityAt)}</Typography>
+              </Box>
+            </Stack>
           </Paper>
 
           <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 1 }}>
@@ -371,7 +684,7 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
                 </>
               )}
               {!canSubmit && !canReview && !canApprove && (
-                <Typography color="grey.700">No action is available for your access and current status.</Typography>
+                <Alert severity="info">No action is available for your access and the current status.</Alert>
               )}
             </Stack>
           </Paper>

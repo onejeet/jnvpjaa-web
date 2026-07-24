@@ -10,6 +10,7 @@ export const SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES = [
   'getScholarshipOrganizationDashboard',
   'getScholarshipMentorSummaries',
   'getMentorFundAllocations',
+  'getScholarshipApplicationActivity',
 ];
 
 export const SCHOLARSHIP_APPLICATION_FIELDS = gql`
@@ -253,6 +254,29 @@ export const GET_SCHOLARSHIP_APPLICATION_TRANSACTIONS = gql`
   query getScholarshipApplicationTransactions($applicationId: String!) {
     getScholarshipApplicationTransactions(applicationId: $applicationId) {
       ...ScholarshipTransactionFields
+    }
+  }
+`;
+
+export const GET_SCHOLARSHIP_APPLICATION_ACTIVITY = gql`
+  query getScholarshipApplicationActivity($applicationId: String!) {
+    getScholarshipApplicationActivity(applicationId: $applicationId) {
+      id
+      actorUserId
+      action
+      entityType
+      entityId
+      reason
+      isHighRisk
+      createdAt
+      actor {
+        id
+        firstName
+        lastName
+        email
+        batch
+        profileImage
+      }
     }
   }
 `;
