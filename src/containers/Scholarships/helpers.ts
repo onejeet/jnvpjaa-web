@@ -1,9 +1,22 @@
-export const formatCurrency = (value?: number | string | null) =>
-  new Intl.NumberFormat('en-IN', {
-    style: 'currency',
-    currency: 'INR',
-    maximumFractionDigits: 0,
-  }).format(Number(value || 0));
+const formatCompactNumber = (value: number) => {
+  const absValue = Math.abs(value);
+  const compactFormat = (divisor: number, suffix: string) => {
+    const compactValue = value / divisor;
+    const formatted = new Intl.NumberFormat('en-IN', {
+      maximumFractionDigits: Math.abs(compactValue) < 10 ? 1 : 0,
+    }).format(Number(compactValue.toFixed(Math.abs(compactValue) < 10 ? 1 : 0)));
+
+    return `${formatted}${suffix}`;
+  };
+
+  if (absValue >= 10000000) return compactFormat(10000000, 'cr');
+  if (absValue >= 100000) return compactFormat(100000, absValue < 200000 ? ' lac' : ' lacs');
+  if (absValue >= 1000) return compactFormat(1000, 'k');
+
+  return new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).format(value);
+};
+
+export const formatCurrency = (value?: number | string | null) => `₹${formatCompactNumber(Number(value || 0))}`;
 
 export const humanizeScholarshipStatus = (status?: string | null) =>
   (status || '')

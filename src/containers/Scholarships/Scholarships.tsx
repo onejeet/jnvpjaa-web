@@ -123,8 +123,8 @@ const DashboardCard = ({
 );
 
 type DashboardVariant = 'mine' | 'mentor' | 'batch' | 'org';
-type MyRequestsWorkspaceTab = 'actions' | 'all' | 'stats';
-type MentorWorkspaceTab = 'funds' | 'requests' | 'stats';
+type MyRequestsWorkspaceTab = 'actions' | 'all';
+type MentorWorkspaceTab = 'funds' | 'requests';
 
 const formatDisplayDate = (date?: string | null) => {
   if (!date) return 'Not recorded';
@@ -323,10 +323,13 @@ const getMetricValue = (dashboard: any, key: string, type?: 'currency') =>
   type === 'currency' ? formatCurrency(dashboard?.[key] || 0) : dashboard?.[key] || 0;
 
 const orgValueOnlyMetricKeys = new Set([
+  'pendingIncomingAllocation',
   'disputedIncomingAllocation',
+  'overdueProofAmount',
   'wrongDisbursementAmount',
   'refundRequestedAmount',
   'refundConfirmedAmount',
+  'exceptionCount',
 ]);
 
 const getDashboardCards = (variant: DashboardVariant): DashboardCardConfig[] => {
@@ -463,13 +466,6 @@ const getDashboardCards = (variant: DashboardVariant): DashboardCardConfig[] => 
         type: 'currency',
         description: 'Total funds finance has recorded as released to mentors.',
         icon: <IconReportMoney size={18} />,
-      },
-      {
-        title: 'Confirmed by mentors',
-        key: 'confirmedAllocation',
-        type: 'currency',
-        description: 'Funds mentors have confirmed receiving.',
-        icon: <IconCircleCheck size={18} />,
       },
       {
         title: 'Awaiting mentor confirmation',
@@ -615,39 +611,44 @@ const getDashboardCards = (variant: DashboardVariant): DashboardCardConfig[] => 
   ];
 };
 
-const StatusDataset = ({ title, rows }: { title: string; rows?: any[] }) => {
-  if (!rows?.length) return null;
+const statusGroupsForVariant = (dashboard: any, variant: DashboardVariant) => [
+  { title: 'Applications', rows: dashboard?.byStatus },
+  { title: 'Proof', rows: dashboard?.byProofStatus },
+  { title: 'Refunds', rows: dashboard?.byRefundStatus },
+  ...(variant !== 'mine' ? [{ title: 'Transactions', rows: dashboard?.byTransactionStatus }] : []),
+  ...(variant === 'mentor' || variant === 'org'
+    ? [{ title: 'Mentor funds', rows: dashboard?.byAllocationStatus }]
+    : []),
+];
+
+const DashboardStatusBanner = ({ dashboard, variant }: { dashboard: any; variant: DashboardVariant }) => {
+  const badges = statusGroupsForVariant(dashboard, variant).flatMap((group) =>
+    (group.rows || [])
+      .filter((row: any) => Number(row.count || 0) > 0)
+      .map((row: any) => ({
+        key: `${group.title}-${row.key}`,
+        label: `${group.title}: ${humanizeScholarshipStatus(row.key)} (${row.count})`,
+      }))
+  );
+
+  if (!badges.length) return null;
 
   return (
-    <Paper variant="outlined" sx={{ p: 2, borderRadius: 1 }}>
-      <Typography fontSize={14} fontWeight={700} mb={1}>
-        {title}
-      </Typography>
-      <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-        {rows.map((row) => (
-          <Chip
-            key={row.key}
-            size="small"
-            variant="outlined"
-            label={`${humanizeScholarshipStatus(row.key)}: ${row.count}`}
-          />
+    <Paper variant="outlined" sx={{ p: 1.5, borderRadius: 1, mb: 2, bgcolor: 'grey.50' }}>
+      <Stack direction="row" alignItems="center" gap={1} flexWrap="wrap">
+        <Box component="span" sx={{ display: 'inline-flex', color: 'primary.main' }}>
+          <IconClipboardList size={18} />
+        </Box>
+        <Typography fontSize={14} fontWeight={700} mr={0.5}>
+          Current status
+        </Typography>
+        {badges.map((badge) => (
+          <Chip key={badge.key} size="small" variant="outlined" label={badge.label} />
         ))}
       </Stack>
     </Paper>
   );
 };
-
-const DashboardDatasets = ({ dashboard, variant }: { dashboard: any; variant: DashboardVariant }) => (
-  <Box display="grid" gridTemplateColumns={{ xs: '1fr', md: 'repeat(2, minmax(0, 1fr))' }} gap={2} mt={2}>
-    <StatusDataset title="Application status" rows={dashboard?.byStatus} />
-    <StatusDataset title="Usage-proof status" rows={dashboard?.byProofStatus} />
-    <StatusDataset title="Refund status" rows={dashboard?.byRefundStatus} />
-    {variant !== 'mine' && <StatusDataset title="Transaction status" rows={dashboard?.byTransactionStatus} />}
-    {(variant === 'mentor' || variant === 'org') && (
-      <StatusDataset title="Mentor allocation status" rows={dashboard?.byAllocationStatus} />
-    )}
-  </Box>
-);
 
 const DashboardSummary = ({ data, loading, variant }: { data: any; loading: boolean; variant: DashboardVariant }) => {
   const dashboard = getDashboardFromData(data);
@@ -666,6 +667,7 @@ const DashboardSummary = ({ data, loading, variant }: { data: any; loading: bool
 
   return (
     <>
+      <DashboardStatusBanner dashboard={dashboard} variant={variant} />
       <Box
         display="grid"
         gridTemplateColumns={{ xs: '1fr', sm: 'repeat(2, minmax(0, 1fr))', lg: 'repeat(5, minmax(0, 1fr))' }}
@@ -681,10 +683,20 @@ const DashboardSummary = ({ data, loading, variant }: { data: any; loading: bool
           />
         ))}
       </Box>
-      <DashboardDatasets dashboard={dashboard} variant={variant} />
     </>
   );
 };
+
+const WorkspaceStatusBadges = ({ children }: { children: React.ReactNode }) => (
+  <Paper variant="outlined" sx={{ p: 1.5, borderRadius: 1, mb: 2, bgcolor: 'grey.50' }}>
+    <Stack direction="row" gap={1} flexWrap="wrap" alignItems="center">
+      <Typography fontSize={14} fontWeight={700} mr={0.5}>
+        Needs attention
+      </Typography>
+      {children}
+    </Stack>
+  </Paper>
+);
 
 const ApplicationsTable = ({
   applications,
@@ -812,8 +824,9 @@ const MyRequestsTable = ({ applications, loading }: { applications: any[]; loadi
             href={`/scholarships/${application.id}`}
             size="small"
             variant={guidance.severity === 'warning' || guidance.severity === 'error' ? 'contained' : 'outlined'}
-            title={guidance.actionTitle}
+            title="View Details"
             endIcon={<IconExternalLink size={15} />}
+            sx={{ minWidth: 122, whiteSpace: 'nowrap' }}
           />
         </Stack>
       );
@@ -865,28 +878,30 @@ const MyRequestsWorkspace = ({
               Track each request, confirm payments, and complete proof steps from one place.
             </Typography>
           </Box>
-          <Stack direction="row" gap={1} flexWrap="wrap">
-            {actionApplications.length > 0 && (
-              <Chip
-                color="warning"
-                icon={<IconBell size={14} />}
-                label={`${actionApplications.length} action needed`}
-              />
-            )}
-            {awaitingMentorCount > 0 && (
-              <Chip color="info" icon={<IconClock size={14} />} label={`${awaitingMentorCount} with mentor`} />
-            )}
-            {completedCount > 0 && (
-              <Chip color="success" icon={<IconCircleCheck size={14} />} label={`${completedCount} completed`} />
-            )}
-          </Stack>
         </Stack>
       </Paper>
+
+      <WorkspaceStatusBadges>
+        {actionApplications.length > 0 ? (
+          <Chip color="warning" icon={<IconBell size={14} />} label={`${actionApplications.length} action needed`} />
+        ) : (
+          <Chip color="success" icon={<IconCircleCheck size={14} />} label="No member action pending" />
+        )}
+        {awaitingMentorCount > 0 && (
+          <Chip color="info" icon={<IconClock size={14} />} label={`${awaitingMentorCount} with mentor`} />
+        )}
+        {completedCount > 0 && (
+          <Chip color="success" icon={<IconCircleCheck size={14} />} label={`${completedCount} completed`} />
+        )}
+      </WorkspaceStatusBadges>
+
+      <Box mb={2}>
+        <DashboardSummary data={dashboardData} loading={dashboardLoading} variant="mine" />
+      </Box>
 
       <Tabs value={requestTab} onChange={(_, value) => setRequestTab(value)} sx={{ mb: 2 }}>
         <Tab value="actions" icon={<IconBell size={18} />} iconPosition="start" label="Action Needed" />
         <Tab value="all" icon={<IconFileText size={18} />} iconPosition="start" label="All Requests" />
-        <Tab value="stats" icon={<IconReportMoney size={18} />} iconPosition="start" label="Stats" />
       </Tabs>
 
       {requestTab === 'actions' && (
@@ -896,11 +911,12 @@ const MyRequestsWorkspace = ({
               No action is pending from your side right now.
             </Alert>
           )}
-          <MyRequestsTable applications={actionApplications} loading={applicationsLoading} />
+          {(applicationsLoading || actionApplications.length > 0) && (
+            <MyRequestsTable applications={actionApplications} loading={applicationsLoading} />
+          )}
         </>
       )}
       {requestTab === 'all' && <MyRequestsTable applications={applications} loading={applicationsLoading} />}
-      {requestTab === 'stats' && <DashboardSummary data={dashboardData} loading={dashboardLoading} variant="mine" />}
     </>
   );
 };
@@ -1256,16 +1272,23 @@ const MentorWorkspace = ({
               Confirm funds first, then review beneficiary requests and proofs from the request queue.
             </Typography>
           </Box>
-          <Stack direction="row" gap={1} flexWrap="wrap">
-            {pendingFundCount > 0 && (
-              <Chip color="warning" icon={<IconHourglass size={14} />} label={`${pendingFundCount} fund action`} />
-            )}
-            {openRequestCount > 0 && (
-              <Chip color="info" icon={<IconClipboardList size={14} />} label={`${openRequestCount} request action`} />
-            )}
-          </Stack>
         </Stack>
       </Paper>
+
+      <WorkspaceStatusBadges>
+        {pendingFundCount > 0 ? (
+          <Chip color="warning" icon={<IconHourglass size={14} />} label={`${pendingFundCount} fund action`} />
+        ) : (
+          <Chip color="success" icon={<IconCircleCheck size={14} />} label="No fund confirmation pending" />
+        )}
+        {openRequestCount > 0 && (
+          <Chip color="info" icon={<IconClipboardList size={14} />} label={`${openRequestCount} request action`} />
+        )}
+      </WorkspaceStatusBadges>
+
+      <Box mb={2}>
+        <DashboardSummary data={dashboardData} loading={dashboardLoading} variant="mentor" />
+      </Box>
 
       <Tabs value={mentorTab} onChange={(_, value) => setMentorTab(value)} sx={{ mb: 2 }}>
         <Tab value="funds" icon={<IconWallet size={18} />} iconPosition="start" label="Funds" />
@@ -1275,7 +1298,6 @@ const MentorWorkspace = ({
           iconPosition="start"
           label="Beneficiary Requests"
         />
-        <Tab value="stats" icon={<IconReportMoney size={18} />} iconPosition="start" label="Stats" />
       </Tabs>
 
       {mentorTab === 'funds' && (
@@ -1305,8 +1327,6 @@ const MentorWorkspace = ({
           startingApplicationId={startingApplicationId}
         />
       )}
-
-      {mentorTab === 'stats' && <DashboardSummary data={dashboardData} loading={dashboardLoading} variant="mentor" />}
 
       <AlertDialog {...(alertDialog as AlertDialogProps)} open={Boolean(alertDialog.open)} />
 

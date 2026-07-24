@@ -2,7 +2,21 @@
 
 import React from 'react';
 import { useMutation, useQuery } from '@apollo/client';
-import { Alert, Box, Chip, CircularProgress, Divider, Paper, Stack, TextField, Typography } from '@mui/material';
+import {
+  Alert,
+  Box,
+  Chip,
+  CircularProgress,
+  Divider,
+  Paper,
+  Stack,
+  Step,
+  StepContent,
+  StepLabel,
+  Stepper,
+  TextField,
+  Typography,
+} from '@mui/material';
 import {
   IconBell,
   IconCalendarDue,
@@ -189,35 +203,27 @@ const Timeline = ({ activities, loading }: { activities: any[]; loading: boolean
   }
 
   return (
-    <Stack spacing={0}>
+    <Stepper activeStep={activities.length} orientation="vertical">
       {[...activities]
         .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
-        .map((activity, index, rows) => {
+        .map((activity) => {
           const actorName = getFullName(activity.actor) || activity.actor?.email || 'System';
           const amount = getActivityAmount(activity);
 
           return (
-            <Box key={activity.id} display="grid" gridTemplateColumns="32px minmax(0, 1fr)" gap={1.5}>
-              <Box display="flex" flexDirection="column" alignItems="center">
-                <Box
-                  sx={{
-                    width: 12,
-                    height: 12,
-                    borderRadius: '50%',
-                    bgcolor: activity.isHighRisk ? 'error.main' : 'primary.main',
-                    mt: 0.75,
-                  }}
-                />
-                {index < rows.length - 1 && <Box sx={{ width: 2, flex: 1, bgcolor: 'grey.200', my: 0.5 }} />}
-              </Box>
-              <Box pb={index < rows.length - 1 ? 2 : 0}>
-                <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-between">
-                  <Typography fontWeight={700}>{getActivityTitle(activity.action)}</Typography>
+            <Step key={activity.id} expanded completed={!activity.isHighRisk}>
+              <StepLabel
+                error={activity.isHighRisk}
+                optional={
                   <Typography fontSize={12} color="grey.600">
                     {formatDateTime(activity.createdAt)}
                   </Typography>
-                </Stack>
-                <Stack direction="row" spacing={1} alignItems="center" mt={0.75}>
+                }
+              >
+                <Typography fontWeight={700}>{getActivityTitle(activity.action)}</Typography>
+              </StepLabel>
+              <StepContent>
+                <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>
                   <ProfilePicture
                     id={activity.actor?.id}
                     src={activity.actor?.profileImage}
@@ -227,12 +233,13 @@ const Timeline = ({ activities, loading }: { activities: any[]; loading: boolean
                   />
                   {amount && <Chip size="small" variant="outlined" label={amount} />}
                   {activity.reason && <Chip size="small" variant="outlined" label={activity.reason} />}
+                  {activity.isHighRisk && <Chip size="small" color="error" variant="outlined" label="High risk" />}
                 </Stack>
-              </Box>
-            </Box>
+              </StepContent>
+            </Step>
           );
         })}
-    </Stack>
+    </Stepper>
   );
 };
 
