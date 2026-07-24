@@ -128,3 +128,29 @@ export const CREATE_ASSOCIATION_DEBIT = gql`
     }
   }
 `;
+
+export const SET_ASSOCIATION_OPENING_BALANCE = gql`
+  mutation setAssociationOpeningBalance(
+    $amount: Float!
+    $transactionDate: String
+    $referenceId: String
+    $method: String
+    $description: String
+  ) {
+    setAssociationOpeningBalance(
+      amount: $amount
+      transactionDate: $transactionDate
+      referenceId: $referenceId
+      method: $method
+      description: $description
+    ) {
+      id
+      amount
+      currency
+      type
+      billingCategory
+      walletImpact
+      transactionDate
+    }
+  }
+`;

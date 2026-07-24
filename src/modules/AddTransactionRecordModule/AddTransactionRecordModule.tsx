@@ -157,7 +157,6 @@ const AddTransactionRecordModule: React.FC<any> = ({ onClose }) => {
                       { label: 'Donation', value: 'DONATION' },
                       { label: 'Membership', value: 'MEMBERSHIP' },
                       { label: 'Event Income', value: 'EVENT' },
-                      { label: 'Opening Balance', value: 'OPENING_BALANCE' },
                       { label: 'Adjustment', value: 'ADJUSTMENT' },
                     ]
                   : [

@@ -503,6 +503,37 @@ export type ListInput = {
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type MentorFundAllocation = {
+  __typename?: 'MentorFundAllocation';
+  amount?: Maybe<Scalars['Decimal']['output']>;
+  batch?: Maybe<Scalars['Int']['output']>;
+  confirmedAmount?: Maybe<Scalars['Decimal']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  currency?: Maybe<Scalars['String']['output']>;
+  disputedAmount?: Maybe<Scalars['Decimal']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  mentorUserId?: Maybe<Scalars['String']['output']>;
+  method?: Maybe<Scalars['String']['output']>;
+  notes?: Maybe<Scalars['String']['output']>;
+  recordedByUserId?: Maybe<Scalars['String']['output']>;
+  reference?: Maybe<Scalars['String']['output']>;
+  status?: Maybe<Scalars['String']['output']>;
+  transferDate?: Maybe<Scalars['DateTime']['output']>;
+};
+
+export type MentorFundAllocationDispute = {
+  __typename?: 'MentorFundAllocationDispute';
+  allocationId?: Maybe<Scalars['String']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  disputedAmount?: Maybe<Scalars['Decimal']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  raisedByUserId?: Maybe<Scalars['String']['output']>;
+  reason?: Maybe<Scalars['String']['output']>;
+  resolutionNote?: Maybe<Scalars['String']['output']>;
+  resolutionType?: Maybe<Scalars['String']['output']>;
+  status?: Maybe<Scalars['String']['output']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   activateExecutiveTerm?: Maybe<ExecutiveTerm>;
@@ -511,11 +542,16 @@ export type Mutation = {
   addPhoto?: Maybe<Photo>;
   approveBlog?: Maybe<Blog>;
   approveMemberRegistration?: Maybe<Scalars['Boolean']['output']>;
+  approveScholarshipApplication?: Maybe<ScholarshipApplication>;
   assignBatchCoordinator?: Maybe<BatchCoordinator>;
   assignExecutivePosition?: Maybe<ExecutivePositionAssignment>;
   assignUserRole?: Maybe<RoleAssignment>;
   attendEvent?: Maybe<Scalars['Boolean']['output']>;
   closeExecutiveTerm?: Maybe<ExecutiveTerm>;
+  closeScholarshipRemainder?: Maybe<ScholarshipApplication>;
+  confirmMentorFundAllocation?: Maybe<MentorFundAllocation>;
+  confirmScholarshipRefundReceived?: Maybe<ScholarshipRefund>;
+  confirmScholarshipTransactionReceipt?: Maybe<Transaction>;
   createAddress?: Maybe<Address>;
   createAlbum?: Maybe<Album>;
   createBlog?: Maybe<Blog>;
@@ -523,6 +559,9 @@ export type Mutation = {
   createCompanyInfo?: Maybe<CompanyInfo>;
   createEvent?: Maybe<EventBasic>;
   createExecutiveTerm?: Maybe<ExecutiveTerm>;
+  createNextScholarshipInstallment?: Maybe<ScholarshipApplication>;
+  createScholarshipApplicationDraft?: Maybe<ScholarshipApplication>;
+  createScholarshipDocumentUpload?: Maybe<ScholarshipDocumentUploadResponse>;
   createTransaction?: Maybe<Transaction>;
   deleteAddress?: Maybe<Address>;
   deleteBlog?: Maybe<Blog>;
@@ -530,20 +569,37 @@ export type Mutation = {
   deleteEvent?: Maybe<Scalars['Boolean']['output']>;
   deleteTransaction?: Maybe<Transaction>;
   deleteUser?: Maybe<User>;
+  disputeMentorFundAllocation?: Maybe<MentorFundAllocationDispute>;
+  finalizeScholarshipDocumentUpload?: Maybe<ScholarshipDocument>;
   forgotPassword?: Maybe<Scalars['Boolean']['output']>;
   getPresignedUrl: Scalars['String']['output'];
   logout?: Maybe<Scalars['String']['output']>;
+  manageScholarshipRefundCase?: Maybe<ScholarshipRefund>;
+  markScholarshipWrongDisbursement?: Maybe<ScholarshipWrongDisbursementCase>;
   publishEvent?: Maybe<Scalars['Boolean']['output']>;
+  reassignScholarshipApplication?: Maybe<ScholarshipApplication>;
+  recordMentorFundAllocation?: Maybe<MentorFundAllocation>;
   refreshToken?: Maybe<AuthPayload>;
   rejectMemberRegistration?: Maybe<Scalars['Boolean']['output']>;
+  rejectScholarshipApplication?: Maybe<ScholarshipApplication>;
   removeBatchCoordinator?: Maybe<Scalars['Boolean']['output']>;
   requestChangesBlog?: Maybe<Blog>;
+  requestScholarshipApplicationInfo?: Maybe<ScholarshipApplication>;
+  requestScholarshipDisbursalFollowup?: Maybe<Scalars['Boolean']['output']>;
   resetPassword?: Maybe<Scalars['Boolean']['output']>;
+  resolveMentorAllocationDispute?: Maybe<MentorFundAllocationDispute>;
+  respondToScholarshipRefund?: Maybe<ScholarshipRefund>;
+  resubmitScholarshipApplication?: Maybe<ScholarshipApplication>;
+  reviewScholarshipUsageProof?: Maybe<ScholarshipReceiptSubmission>;
   revokeExecutivePosition?: Maybe<ExecutivePositionAssignment>;
   revokeUserRole?: Maybe<RoleAssignment>;
   sendMassEmail?: Maybe<Scalars['Boolean']['output']>;
+  setScholarshipPrimaryMentor?: Maybe<ScholarshipApplication>;
   signin?: Maybe<AuthPayload>;
   signup?: Maybe<User>;
+  startScholarshipApplicationReview?: Maybe<ScholarshipApplication>;
+  submitScholarshipApplication?: Maybe<ScholarshipApplication>;
+  submitScholarshipUsageProof?: Maybe<ScholarshipReceiptSubmission>;
   updateAddress?: Maybe<Address>;
   updateAlbum?: Maybe<Album>;
   updateBatchCoordinator?: Maybe<BatchCoordinator>;
@@ -552,6 +608,7 @@ export type Mutation = {
   updateClaps?: Maybe<Scalars['Boolean']['output']>;
   updateCompanyInfo?: Maybe<CompanyInfo>;
   updateEvent?: Maybe<EventBasic>;
+  updateScholarshipApplicationDraft?: Maybe<ScholarshipApplication>;
   updateTransaction?: Maybe<Transaction>;
   updateUser?: Maybe<User>;
   upsertMultipleAddresses?: Maybe<Array<Maybe<Address>>>;
@@ -591,6 +648,14 @@ export type MutationApproveMemberRegistrationArgs = {
   userId: Scalars['String']['input'];
 };
 
+export type MutationApproveScholarshipApplicationArgs = {
+  applicationId: Scalars['String']['input'];
+  approvedTotalAmount: Scalars['Float']['input'];
+  installmentAmount: Scalars['Float']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
+  proofDueDays?: InputMaybe<Scalars['Int']['input']>;
+};
+
 export type MutationAssignBatchCoordinatorArgs = {
   batch: Scalars['Int']['input'];
   userId: Scalars['String']['input'];
@@ -611,6 +676,29 @@ export type MutationAttendEventArgs = {
 export type MutationCloseExecutiveTermArgs = {
   reason: Scalars['String']['input'];
   termId: Scalars['String']['input'];
+};
+
+export type MutationCloseScholarshipRemainderArgs = {
+  applicationId: Scalars['String']['input'];
+  reason: Scalars['String']['input'];
+};
+
+export type MutationConfirmMentorFundAllocationArgs = {
+  allocationId: Scalars['String']['input'];
+  confirmedAmount?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type MutationConfirmScholarshipRefundReceivedArgs = {
+  confirmedAmount: Scalars['Float']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
+  reference?: InputMaybe<Scalars['String']['input']>;
+  refundId: Scalars['String']['input'];
+};
+
+export type MutationConfirmScholarshipTransactionReceiptArgs = {
+  confirmedAmount: Scalars['Float']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
+  transactionId: Scalars['String']['input'];
 };
 
 export type MutationCreateAddressArgs = {
@@ -678,6 +766,22 @@ export type MutationCreateExecutiveTermArgs = {
   startDate: Scalars['String']['input'];
 };
 
+export type MutationCreateNextScholarshipInstallmentArgs = {
+  applicationId: Scalars['String']['input'];
+  approvedTotalAmount: Scalars['Float']['input'];
+  installmentAmount: Scalars['Float']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
+  proofDueDays?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type MutationCreateScholarshipApplicationDraftArgs = {
+  input: ScholarshipApplicationInput;
+};
+
+export type MutationCreateScholarshipDocumentUploadArgs = {
+  input: ScholarshipDocumentUploadInput;
+};
+
 export type MutationCreateTransactionArgs = {
   amount: Scalars['Float']['input'];
   currency: Currency;
@@ -716,6 +820,17 @@ export type MutationDeleteUserArgs = {
   id: Scalars['String']['input'];
 };
 
+export type MutationDisputeMentorFundAllocationArgs = {
+  allocationId: Scalars['String']['input'];
+  disputedAmount: Scalars['Float']['input'];
+  reason: Scalars['String']['input'];
+};
+
+export type MutationFinalizeScholarshipDocumentUploadArgs = {
+  checksum?: InputMaybe<Scalars['String']['input']>;
+  documentId: Scalars['String']['input'];
+};
+
 export type MutationForgotPasswordArgs = {
   email: Scalars['String']['input'];
 };
@@ -726,14 +841,45 @@ export type MutationGetPresignedUrlArgs = {
   imageCategory?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type MutationManageScholarshipRefundCaseArgs = {
+  note?: InputMaybe<Scalars['String']['input']>;
+  reference?: InputMaybe<Scalars['String']['input']>;
+  refundId: Scalars['String']['input'];
+  status: Scalars['String']['input'];
+};
+
+export type MutationMarkScholarshipWrongDisbursementArgs = {
+  affectedDocumentIds?: InputMaybe<Array<Scalars['String']['input']>>;
+  disputedAmount: Scalars['Float']['input'];
+  reason: Scalars['String']['input'];
+  refundRequested?: InputMaybe<Scalars['Boolean']['input']>;
+  requestedRefundAmount?: InputMaybe<Scalars['Float']['input']>;
+  transactionId: Scalars['String']['input'];
+};
+
 export type MutationPublishEventArgs = {
   eventId: Scalars['Int']['input'];
   status: EventStatus;
 };
 
+export type MutationReassignScholarshipApplicationArgs = {
+  applicationId: Scalars['String']['input'];
+  mentorUserId: Scalars['String']['input'];
+  reason: Scalars['String']['input'];
+};
+
+export type MutationRecordMentorFundAllocationArgs = {
+  input: RecordMentorFundAllocationInput;
+};
+
 export type MutationRejectMemberRegistrationArgs = {
   reason: Scalars['String']['input'];
   userId: Scalars['String']['input'];
+};
+
+export type MutationRejectScholarshipApplicationArgs = {
+  applicationId: Scalars['String']['input'];
+  reason: Scalars['String']['input'];
 };
 
 export type MutationRemoveBatchCoordinatorArgs = {
@@ -746,9 +892,40 @@ export type MutationRequestChangesBlogArgs = {
   id: Scalars['String']['input'];
 };
 
+export type MutationRequestScholarshipApplicationInfoArgs = {
+  applicationId: Scalars['String']['input'];
+  message: Scalars['String']['input'];
+};
+
+export type MutationRequestScholarshipDisbursalFollowupArgs = {
+  transactionId: Scalars['String']['input'];
+};
+
 export type MutationResetPasswordArgs = {
   newPassword: Scalars['String']['input'];
   token?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type MutationResolveMentorAllocationDisputeArgs = {
+  disputeId: Scalars['String']['input'];
+  resolutionNote?: InputMaybe<Scalars['String']['input']>;
+  resolutionType: Scalars['String']['input'];
+};
+
+export type MutationRespondToScholarshipRefundArgs = {
+  proofDocumentId?: InputMaybe<Scalars['String']['input']>;
+  refundId: Scalars['String']['input'];
+  response: Scalars['String']['input'];
+};
+
+export type MutationResubmitScholarshipApplicationArgs = {
+  applicationId: Scalars['String']['input'];
+};
+
+export type MutationReviewScholarshipUsageProofArgs = {
+  action: ScholarshipProofReviewAction;
+  note?: InputMaybe<Scalars['String']['input']>;
+  submissionId: Scalars['String']['input'];
 };
 
 export type MutationRevokeExecutivePositionArgs = {
@@ -765,6 +942,14 @@ export type MutationSendMassEmailArgs = {
   template: Scalars['String']['input'];
 };
 
+export type MutationSetScholarshipPrimaryMentorArgs = {
+  batch: Scalars['Int']['input'];
+  mentorUserId: Scalars['String']['input'];
+  reason?: InputMaybe<Scalars['String']['input']>;
+  validFrom?: InputMaybe<Scalars['String']['input']>;
+  validUntil?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type MutationSigninArgs = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -779,6 +964,19 @@ export type MutationSignupArgs = {
   lastName: Scalars['String']['input'];
   mobile: Scalars['String']['input'];
   password: Scalars['String']['input'];
+};
+
+export type MutationStartScholarshipApplicationReviewArgs = {
+  applicationId: Scalars['String']['input'];
+};
+
+export type MutationSubmitScholarshipApplicationArgs = {
+  applicationId: Scalars['String']['input'];
+};
+
+export type MutationSubmitScholarshipUsageProofArgs = {
+  documentIds: Array<Scalars['String']['input']>;
+  transactionId: Scalars['String']['input'];
 };
 
 export type MutationUpdateAddressArgs = {
@@ -849,6 +1047,11 @@ export type MutationUpdateEventArgs = {
   summary: Scalars['String']['input'];
   tags?: InputMaybe<Array<Scalars['String']['input']>>;
   title: Scalars['String']['input'];
+};
+
+export type MutationUpdateScholarshipApplicationDraftArgs = {
+  applicationId: Scalars['String']['input'];
+  input: ScholarshipApplicationInput;
 };
 
 export type MutationUpdateTransactionArgs = {
@@ -941,6 +1144,7 @@ export type Query = {
   getAlbums?: Maybe<ListAlbumResponse>;
   getAllBatchCoordinators?: Maybe<Array<Maybe<BatchCoordinator>>>;
   getBatchCoordinatorByUserId?: Maybe<BatchCoordinator>;
+  getBatchCoordinatorScholarshipDashboard?: Maybe<ScholarshipDashboard>;
   getBatchCoordinatorsByBatch?: Maybe<Array<Maybe<BatchCoordinator>>>;
   getBlog?: Maybe<Blog>;
   getBlogList?: Maybe<BlogListResponse>;
@@ -950,9 +1154,26 @@ export type Query = {
   getComments?: Maybe<Array<Maybe<Comment>>>;
   getCompanyInfo?: Maybe<CompanyInfo>;
   getCompanyInfoList: Array<CompanyInfo>;
+  getCompletedScholarshipTransactions?: Maybe<Array<Maybe<Transaction>>>;
   getEventDetails?: Maybe<Event>;
   getEventList?: Maybe<ListEventResponse>;
+  getMentorFundAllocations?: Maybe<Array<Maybe<MentorFundAllocation>>>;
+  getMentorScholarshipApplications?: Maybe<Array<Maybe<ScholarshipApplication>>>;
+  getMentorScholarshipDashboard?: Maybe<ScholarshipDashboard>;
   getMyPhotos?: Maybe<Array<Maybe<Photo>>>;
+  getMyScholarshipApplications?: Maybe<Array<Maybe<ScholarshipApplication>>>;
+  getMyScholarshipDashboard?: Maybe<ScholarshipDashboard>;
+  getScholarshipActivity?: Maybe<Array<Maybe<ScholarshipActivityLog>>>;
+  getScholarshipApplication?: Maybe<ScholarshipApplication>;
+  getScholarshipApplicationTransactions?: Maybe<Array<Maybe<Transaction>>>;
+  getScholarshipApplications?: Maybe<Array<Maybe<ScholarshipApplication>>>;
+  getScholarshipBeneficiaryList?: Maybe<Array<Maybe<ScholarshipApplication>>>;
+  getScholarshipDocumentReadUrl?: Maybe<Scalars['String']['output']>;
+  getScholarshipExceptionQueue?: Maybe<Array<Maybe<ScholarshipApplication>>>;
+  getScholarshipMentorSummary?: Maybe<ScholarshipDashboard>;
+  getScholarshipOrganizationDashboard?: Maybe<ScholarshipDashboard>;
+  getScholarshipRefundCases?: Maybe<Array<Maybe<ScholarshipRefund>>>;
+  getScholarshipWrongDisbursementCases?: Maybe<Array<Maybe<ScholarshipWrongDisbursementCase>>>;
   getTransaction?: Maybe<Transaction>;
   getTransactions?: Maybe<TransactionListResponse>;
   getUserAddresses?: Maybe<AddressListResponse>;
@@ -986,6 +1207,10 @@ export type QueryGetAllBatchCoordinatorsArgs = {
 
 export type QueryGetBatchCoordinatorByUserIdArgs = {
   userId: Scalars['String']['input'];
+};
+
+export type QueryGetBatchCoordinatorScholarshipDashboardArgs = {
+  batch: Scalars['Int']['input'];
 };
 
 export type QueryGetBatchCoordinatorsByBatchArgs = {
@@ -1023,12 +1248,62 @@ export type QueryGetCompanyInfoArgs = {
   id?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type QueryGetCompletedScholarshipTransactionsArgs = {
+  options?: InputMaybe<ListInput>;
+};
+
 export type QueryGetEventDetailsArgs = {
   id: Scalars['Int']['input'];
 };
 
 export type QueryGetEventListArgs = {
   options?: InputMaybe<ListInput>;
+};
+
+export type QueryGetMentorFundAllocationsArgs = {
+  batch?: InputMaybe<Scalars['Int']['input']>;
+  mentorUserId?: InputMaybe<Scalars['String']['input']>;
+  options?: InputMaybe<ListInput>;
+};
+
+export type QueryGetMentorScholarshipApplicationsArgs = {
+  filter?: InputMaybe<ScholarshipApplicationFilterInput>;
+  options?: InputMaybe<ListInput>;
+};
+
+export type QueryGetMyScholarshipApplicationsArgs = {
+  options?: InputMaybe<ListInput>;
+};
+
+export type QueryGetScholarshipActivityArgs = {
+  entityId?: InputMaybe<Scalars['String']['input']>;
+  entityType?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type QueryGetScholarshipApplicationArgs = {
+  id: Scalars['String']['input'];
+};
+
+export type QueryGetScholarshipApplicationTransactionsArgs = {
+  applicationId: Scalars['String']['input'];
+};
+
+export type QueryGetScholarshipApplicationsArgs = {
+  filter?: InputMaybe<ScholarshipApplicationFilterInput>;
+  options?: InputMaybe<ListInput>;
+};
+
+export type QueryGetScholarshipBeneficiaryListArgs = {
+  filter?: InputMaybe<ScholarshipApplicationFilterInput>;
+  options?: InputMaybe<ListInput>;
+};
+
+export type QueryGetScholarshipDocumentReadUrlArgs = {
+  documentId: Scalars['String']['input'];
+};
+
+export type QueryGetScholarshipMentorSummaryArgs = {
+  mentorUserId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type QueryGetTransactionArgs = {
@@ -1057,6 +1332,17 @@ export type QueryUserExecutivePositionAssignmentsArgs = {
 
 export type QueryUserRoleAssignmentsArgs = {
   userId?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type RecordMentorFundAllocationInput = {
+  amount: Scalars['Float']['input'];
+  batch: Scalars['Int']['input'];
+  currency?: InputMaybe<Scalars['String']['input']>;
+  mentorUserId: Scalars['String']['input'];
+  method: Scalars['String']['input'];
+  notes?: InputMaybe<Scalars['String']['input']>;
+  reference?: InputMaybe<Scalars['String']['input']>;
+  transferDate: Scalars['String']['input'];
 };
 
 export type RevokeExecutivePositionInput = {
@@ -1103,6 +1389,231 @@ export type RoleAssignmentFilterInput = {
   userId?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type ScholarshipActivityLog = {
+  __typename?: 'ScholarshipActivityLog';
+  action?: Maybe<Scalars['String']['output']>;
+  actorUserId?: Maybe<Scalars['String']['output']>;
+  after?: Maybe<Scalars['JSON']['output']>;
+  before?: Maybe<Scalars['JSON']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  entityId?: Maybe<Scalars['String']['output']>;
+  entityType?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  isHighRisk?: Maybe<Scalars['Boolean']['output']>;
+  reason?: Maybe<Scalars['String']['output']>;
+};
+
+export type ScholarshipApplication = {
+  __typename?: 'ScholarshipApplication';
+  applicantUserId?: Maybe<Scalars['String']['output']>;
+  approvedAmountDisbursed?: Maybe<Scalars['Decimal']['output']>;
+  approvedAt?: Maybe<Scalars['DateTime']['output']>;
+  approvedByUserId?: Maybe<Scalars['String']['output']>;
+  approvedProofDays?: Maybe<Scalars['Int']['output']>;
+  approvedTotalAmount?: Maybe<Scalars['Decimal']['output']>;
+  assignedMentor?: Maybe<User>;
+  assignedMentorUserId?: Maybe<Scalars['String']['output']>;
+  batchSnapshot?: Maybe<Scalars['Int']['output']>;
+  beneficiary?: Maybe<User>;
+  beneficiaryUserId?: Maybe<Scalars['String']['output']>;
+  closedAt?: Maybe<Scalars['DateTime']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  lastActivityAt?: Maybe<Scalars['DateTime']['output']>;
+  paymentMode?: Maybe<ScholarshipPaymentMode>;
+  payoutMaskedSnapshot?: Maybe<Scalars['String']['output']>;
+  payoutMethod?: Maybe<ScholarshipPayoutMethod>;
+  payoutSnapshot?: Maybe<Scalars['JSON']['output']>;
+  proofStatus?: Maybe<Scalars['String']['output']>;
+  proposedProofDays?: Maybe<Scalars['Int']['output']>;
+  purpose?: Maybe<Scalars['String']['output']>;
+  reason?: Maybe<Scalars['String']['output']>;
+  referenceNumber?: Maybe<Scalars['String']['output']>;
+  refundStatus?: Maybe<Scalars['String']['output']>;
+  rejectedAt?: Maybe<Scalars['DateTime']['output']>;
+  rejectedByUserId?: Maybe<Scalars['String']['output']>;
+  rejectionReason?: Maybe<Scalars['String']['output']>;
+  requestedAmount?: Maybe<Scalars['Decimal']['output']>;
+  requestedFirstInstallmentAmount?: Maybe<Scalars['Decimal']['output']>;
+  reviewStartedAt?: Maybe<Scalars['DateTime']['output']>;
+  reviewedByUserId?: Maybe<Scalars['String']['output']>;
+  status?: Maybe<ScholarshipApplicationStatus>;
+  submittedAt?: Maybe<Scalars['DateTime']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+};
+
+export type ScholarshipApplicationFilterInput = {
+  batch?: InputMaybe<Scalars['Int']['input']>;
+  beneficiaryUserId?: InputMaybe<Scalars['String']['input']>;
+  mentorUserId?: InputMaybe<Scalars['String']['input']>;
+  status?: InputMaybe<ScholarshipApplicationStatus>;
+};
+
+export type ScholarshipApplicationInput = {
+  paymentMode: ScholarshipPaymentMode;
+  payoutMethod: ScholarshipPayoutMethod;
+  payoutSnapshot: Scalars['JSON']['input'];
+  proposedProofDays: Scalars['Int']['input'];
+  purpose: Scalars['String']['input'];
+  reason: Scalars['String']['input'];
+  requestedAmount: Scalars['Float']['input'];
+  requestedFirstInstallmentAmount?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export enum ScholarshipApplicationStatus {
+  Approved = 'APPROVED',
+  Cancelled = 'CANCELLED',
+  Closed = 'CLOSED',
+  Draft = 'DRAFT',
+  MoreInfoRequired = 'MORE_INFO_REQUIRED',
+  PaymentConfirmationPending = 'PAYMENT_CONFIRMATION_PENDING',
+  PaymentConfirmedProofDue = 'PAYMENT_CONFIRMED_PROOF_DUE',
+  ProofFullSubmitted = 'PROOF_FULL_SUBMITTED',
+  ProofMoreInfoRequired = 'PROOF_MORE_INFO_REQUIRED',
+  ProofPartial = 'PROOF_PARTIAL',
+  ProofRejected = 'PROOF_REJECTED',
+  ProofVerified = 'PROOF_VERIFIED',
+  RefundInProgress = 'REFUND_IN_PROGRESS',
+  Rejected = 'REJECTED',
+  Resubmitted = 'RESUBMITTED',
+  RoutingPending = 'ROUTING_PENDING',
+  Submitted = 'SUBMITTED',
+  UnderReview = 'UNDER_REVIEW',
+  WrongDisbursement = 'WRONG_DISBURSEMENT',
+}
+
+export type ScholarshipDashboard = {
+  __typename?: 'ScholarshipDashboard';
+  byStatus?: Maybe<Array<Maybe<ScholarshipStatusCount>>>;
+  capacity?: Maybe<ScholarshipMentorCapacity>;
+  disbursedAmount?: Maybe<Scalars['Float']['output']>;
+  exceptionCount?: Maybe<Scalars['Int']['output']>;
+  requestedAmount?: Maybe<Scalars['Float']['output']>;
+  totalApplications?: Maybe<Scalars['Int']['output']>;
+};
+
+export type ScholarshipDocument = {
+  __typename?: 'ScholarshipDocument';
+  applicationId?: Maybe<Scalars['String']['output']>;
+  category?: Maybe<ScholarshipDocumentCategory>;
+  checksum?: Maybe<Scalars['String']['output']>;
+  claimedAmount?: Maybe<Scalars['Decimal']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  mimeType?: Maybe<Scalars['String']['output']>;
+  originalFilename?: Maybe<Scalars['String']['output']>;
+  receiptDate?: Maybe<Scalars['DateTime']['output']>;
+  sizeBytes?: Maybe<Scalars['Int']['output']>;
+  status?: Maybe<Scalars['String']['output']>;
+  transactionId?: Maybe<Scalars['String']['output']>;
+  uploadedAt?: Maybe<Scalars['DateTime']['output']>;
+  uploadedByUserId?: Maybe<Scalars['String']['output']>;
+  vendorName?: Maybe<Scalars['String']['output']>;
+};
+
+export enum ScholarshipDocumentCategory {
+  AdditionalInformation = 'ADDITIONAL_INFORMATION',
+  ApplicationSupport = 'APPLICATION_SUPPORT',
+  BeneficiaryCreditProof = 'BENEFICIARY_CREDIT_PROOF',
+  RefundProof = 'REFUND_PROOF',
+  UsageReceipt = 'USAGE_RECEIPT',
+}
+
+export type ScholarshipDocumentUploadInput = {
+  applicationId: Scalars['String']['input'];
+  category: ScholarshipDocumentCategory;
+  claimedAmount?: InputMaybe<Scalars['Float']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  filename: Scalars['String']['input'];
+  mimeType: Scalars['String']['input'];
+  receiptDate?: InputMaybe<Scalars['String']['input']>;
+  sizeBytes: Scalars['Int']['input'];
+  transactionId?: InputMaybe<Scalars['String']['input']>;
+  vendorName?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type ScholarshipDocumentUploadResponse = {
+  __typename?: 'ScholarshipDocumentUploadResponse';
+  document?: Maybe<ScholarshipDocument>;
+  uploadUrl?: Maybe<Scalars['String']['output']>;
+};
+
+export type ScholarshipMentorCapacity = {
+  __typename?: 'ScholarshipMentorCapacity';
+  allocated?: Maybe<Scalars['Float']['output']>;
+  available?: Maybe<Scalars['Float']['output']>;
+  committed?: Maybe<Scalars['Float']['output']>;
+  returned?: Maybe<Scalars['Float']['output']>;
+};
+
+export enum ScholarshipPaymentMode {
+  Full = 'FULL',
+  Installment = 'INSTALLMENT',
+}
+
+export enum ScholarshipPayoutMethod {
+  BankTransfer = 'BANK_TRANSFER',
+  Upi = 'UPI',
+}
+
+export enum ScholarshipProofReviewAction {
+  Reject = 'REJECT',
+  RequestInfo = 'REQUEST_INFO',
+  Verify = 'VERIFY',
+}
+
+export type ScholarshipReceiptSubmission = {
+  __typename?: 'ScholarshipReceiptSubmission';
+  applicationId?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  reviewNote?: Maybe<Scalars['String']['output']>;
+  reviewedAt?: Maybe<Scalars['DateTime']['output']>;
+  reviewedByUserId?: Maybe<Scalars['String']['output']>;
+  status?: Maybe<Scalars['String']['output']>;
+  submissionSequence?: Maybe<Scalars['Int']['output']>;
+  submittedAt?: Maybe<Scalars['DateTime']['output']>;
+  submittedByUserId?: Maybe<Scalars['String']['output']>;
+  submittedCoverage?: Maybe<Scalars['Decimal']['output']>;
+  transactionId?: Maybe<Scalars['String']['output']>;
+};
+
+export type ScholarshipRefund = {
+  __typename?: 'ScholarshipRefund';
+  beneficiaryRefundProofDocumentId?: Maybe<Scalars['String']['output']>;
+  beneficiaryUserId?: Maybe<Scalars['String']['output']>;
+  confirmedRefundAmount?: Maybe<Scalars['Decimal']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  linkedRefundTransactionId?: Maybe<Scalars['String']['output']>;
+  originalTransactionId?: Maybe<Scalars['String']['output']>;
+  refundPaymentReference?: Maybe<Scalars['String']['output']>;
+  requestedAmount?: Maybe<Scalars['Decimal']['output']>;
+  status?: Maybe<Scalars['String']['output']>;
+  wrongDisbursementCaseId?: Maybe<Scalars['String']['output']>;
+};
+
+export type ScholarshipStatusCount = {
+  __typename?: 'ScholarshipStatusCount';
+  count?: Maybe<Scalars['Int']['output']>;
+  key?: Maybe<Scalars['String']['output']>;
+};
+
+export type ScholarshipWrongDisbursementCase = {
+  __typename?: 'ScholarshipWrongDisbursementCase';
+  affectedDocumentIds?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  applicationId?: Maybe<Scalars['String']['output']>;
+  beneficiaryResponse?: Maybe<Scalars['String']['output']>;
+  disputedAmount?: Maybe<Scalars['Decimal']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  originalTransactionId?: Maybe<Scalars['String']['output']>;
+  reason?: Maybe<Scalars['String']['output']>;
+  refundRequested?: Maybe<Scalars['Boolean']['output']>;
+  reportedAt?: Maybe<Scalars['DateTime']['output']>;
+  reportedByUserId?: Maybe<Scalars['String']['output']>;
+  requestedRefundAmount?: Maybe<Scalars['Decimal']['output']>;
+  status?: Maybe<Scalars['String']['output']>;
+};
+
 export type Transaction = {
   __typename?: 'Transaction';
   amount?: Maybe<Scalars['Decimal']['output']>;
@@ -1113,6 +1624,26 @@ export type Transaction = {
   isDonation?: Maybe<Scalars['Boolean']['output']>;
   method?: Maybe<Scalars['String']['output']>;
   referenceId?: Maybe<Scalars['String']['output']>;
+  scholarshipApplicationId?: Maybe<Scalars['String']['output']>;
+  scholarshipApprovedAt?: Maybe<Scalars['DateTime']['output']>;
+  scholarshipBatchSnapshot?: Maybe<Scalars['Int']['output']>;
+  scholarshipBeneficiaryUserId?: Maybe<Scalars['String']['output']>;
+  scholarshipCompletedAt?: Maybe<Scalars['DateTime']['output']>;
+  scholarshipConfirmedAmount?: Maybe<Scalars['Decimal']['output']>;
+  scholarshipConfirmedAt?: Maybe<Scalars['DateTime']['output']>;
+  scholarshipImmutableAt?: Maybe<Scalars['DateTime']['output']>;
+  scholarshipInstallmentSequence?: Maybe<Scalars['Int']['output']>;
+  scholarshipMaskedPayoutDestination?: Maybe<Scalars['String']['output']>;
+  scholarshipMentorUserId?: Maybe<Scalars['String']['output']>;
+  scholarshipOriginalTransactionId?: Maybe<Scalars['String']['output']>;
+  scholarshipPayoutMethod?: Maybe<Scalars['String']['output']>;
+  scholarshipProofDueAt?: Maybe<Scalars['DateTime']['output']>;
+  scholarshipProofDueDays?: Maybe<Scalars['Int']['output']>;
+  scholarshipProofStatus?: Maybe<Scalars['String']['output']>;
+  scholarshipPurposeSnapshot?: Maybe<Scalars['String']['output']>;
+  scholarshipReceivedAt?: Maybe<Scalars['DateTime']['output']>;
+  scholarshipStatus?: Maybe<Scalars['String']['output']>;
+  sourceType?: Maybe<Scalars['String']['output']>;
   status?: Maybe<TransactionStatus>;
   title?: Maybe<Scalars['String']['output']>;
   transactionDate?: Maybe<Scalars['DateTime']['output']>;
@@ -1129,10 +1660,16 @@ export type TransactionListResponse = {
 };
 
 export enum TransactionStatus {
+  Approved = 'APPROVED',
+  Cancelled = 'CANCELLED',
   Completed = 'COMPLETED',
   Failed = 'FAILED',
+  NotReceivedReported = 'NOT_RECEIVED_REPORTED',
+  PartiallyReceived = 'PARTIALLY_RECEIVED',
   Pending = 'PENDING',
+  PendingBeneficiaryConfirmation = 'PENDING_BENEFICIARY_CONFIRMATION',
   Refunded = 'REFUNDED',
+  Reversed = 'REVERSED',
 }
 
 export enum TransactionType {
@@ -1474,6 +2011,21 @@ export type AddAlbumContributorMutation = {
                               | undefined
                             >
                           | undefined;
+                        positions?:
+                          | Array<
+                              | {
+                                  __typename?: 'EffectivePosition';
+                                  assignmentId?: string | undefined;
+                                  code?: string | undefined;
+                                  name?: string | undefined;
+                                  termId?: string | undefined;
+                                  termName?: string | undefined;
+                                  validFrom?: any | undefined;
+                                  validUntil?: any | undefined;
+                                }
+                              | undefined
+                            >
+                          | undefined;
                         role?:
                           | {
                               __typename?: 'Role';
@@ -1481,6 +2033,21 @@ export type AddAlbumContributorMutation = {
                               id?: string | undefined;
                               name?: string | undefined;
                             }
+                          | undefined;
+                        roles?:
+                          | Array<
+                              | {
+                                  __typename?: 'EffectiveRole';
+                                  assignmentId?: string | undefined;
+                                  code?: string | undefined;
+                                  name?: string | undefined;
+                                  scopeBatch?: number | undefined;
+                                  scopeType?: string | undefined;
+                                  validFrom?: any | undefined;
+                                  validUntil?: any | undefined;
+                                }
+                              | undefined
+                            >
                           | undefined;
                       }
                     | undefined;
@@ -1686,8 +2253,38 @@ export type AddPhotoMutation = {
                     | undefined
                   >
                 | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
               role?:
                 | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
                 | undefined;
             }
           | undefined;
@@ -1781,6 +2378,210 @@ export type ApproveMemberRegistrationMutation = {
   approveMemberRegistration?: boolean | undefined;
 };
 
+export type ApproveScholarshipApplicationMutationVariables = Exact<{
+  applicationId: Scalars['String']['input'];
+  approvedTotalAmount: Scalars['Float']['input'];
+  installmentAmount: Scalars['Float']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
+  proofDueDays?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type ApproveScholarshipApplicationMutation = {
+  __typename?: 'Mutation';
+  approveScholarshipApplication?:
+    | {
+        __typename?: 'ScholarshipApplication';
+        applicantUserId?: string | undefined;
+        approvedAmountDisbursed?: any | undefined;
+        approvedAt?: any | undefined;
+        approvedByUserId?: string | undefined;
+        approvedProofDays?: number | undefined;
+        approvedTotalAmount?: any | undefined;
+        assignedMentorUserId?: string | undefined;
+        batchSnapshot?: number | undefined;
+        beneficiaryUserId?: string | undefined;
+        closedAt?: any | undefined;
+        createdAt?: any | undefined;
+        id?: string | undefined;
+        lastActivityAt?: any | undefined;
+        paymentMode?: ScholarshipPaymentMode | undefined;
+        payoutMaskedSnapshot?: string | undefined;
+        payoutMethod?: ScholarshipPayoutMethod | undefined;
+        payoutSnapshot?: any | undefined;
+        proofStatus?: string | undefined;
+        proposedProofDays?: number | undefined;
+        purpose?: string | undefined;
+        reason?: string | undefined;
+        referenceNumber?: string | undefined;
+        refundStatus?: string | undefined;
+        rejectedAt?: any | undefined;
+        rejectedByUserId?: string | undefined;
+        rejectionReason?: string | undefined;
+        requestedAmount?: any | undefined;
+        requestedFirstInstallmentAmount?: any | undefined;
+        reviewStartedAt?: any | undefined;
+        reviewedByUserId?: string | undefined;
+        status?: ScholarshipApplicationStatus | undefined;
+        submittedAt?: any | undefined;
+        updatedAt?: any | undefined;
+        assignedMentor?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        companyName: string;
+                        id: string;
+                        position?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+            }
+          | undefined;
+        beneficiary?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        companyName: string;
+                        id: string;
+                        position?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
 export type AssignBatchCoordinatorMutationVariables = Exact<{
   batch: Scalars['Int']['input'];
   userId: Scalars['String']['input'];
@@ -1837,8 +2638,38 @@ export type AssignBatchCoordinatorMutation = {
                     | undefined
                   >
                 | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
               role?:
                 | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
                 | undefined;
             }
           | undefined;
@@ -1935,8 +2766,38 @@ export type AssignExecutivePositionMutation = {
                     | undefined
                   >
                 | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
               role?:
                 | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
                 | undefined;
             }
           | undefined;
@@ -2020,8 +2881,38 @@ export type AssignUserRoleMutation = {
                     | undefined
                   >
                 | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
               role?:
                 | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
                 | undefined;
             }
           | undefined;
@@ -2053,6 +2944,387 @@ export type CloseExecutiveTermMutation = {
         startDate?: any | undefined;
         status?: ExecutiveTermStatus | undefined;
         updatedAt?: any | undefined;
+      }
+    | undefined;
+};
+
+export type CloseScholarshipRemainderMutationVariables = Exact<{
+  applicationId: Scalars['String']['input'];
+  reason: Scalars['String']['input'];
+}>;
+
+export type CloseScholarshipRemainderMutation = {
+  __typename?: 'Mutation';
+  closeScholarshipRemainder?:
+    | {
+        __typename?: 'ScholarshipApplication';
+        applicantUserId?: string | undefined;
+        approvedAmountDisbursed?: any | undefined;
+        approvedAt?: any | undefined;
+        approvedByUserId?: string | undefined;
+        approvedProofDays?: number | undefined;
+        approvedTotalAmount?: any | undefined;
+        assignedMentorUserId?: string | undefined;
+        batchSnapshot?: number | undefined;
+        beneficiaryUserId?: string | undefined;
+        closedAt?: any | undefined;
+        createdAt?: any | undefined;
+        id?: string | undefined;
+        lastActivityAt?: any | undefined;
+        paymentMode?: ScholarshipPaymentMode | undefined;
+        payoutMaskedSnapshot?: string | undefined;
+        payoutMethod?: ScholarshipPayoutMethod | undefined;
+        payoutSnapshot?: any | undefined;
+        proofStatus?: string | undefined;
+        proposedProofDays?: number | undefined;
+        purpose?: string | undefined;
+        reason?: string | undefined;
+        referenceNumber?: string | undefined;
+        refundStatus?: string | undefined;
+        rejectedAt?: any | undefined;
+        rejectedByUserId?: string | undefined;
+        rejectionReason?: string | undefined;
+        requestedAmount?: any | undefined;
+        requestedFirstInstallmentAmount?: any | undefined;
+        reviewStartedAt?: any | undefined;
+        reviewedByUserId?: string | undefined;
+        status?: ScholarshipApplicationStatus | undefined;
+        submittedAt?: any | undefined;
+        updatedAt?: any | undefined;
+        assignedMentor?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        companyName: string;
+                        id: string;
+                        position?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+            }
+          | undefined;
+        beneficiary?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        companyName: string;
+                        id: string;
+                        position?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
+export type ConfirmMentorFundAllocationMutationVariables = Exact<{
+  allocationId: Scalars['String']['input'];
+  confirmedAmount?: InputMaybe<Scalars['Float']['input']>;
+}>;
+
+export type ConfirmMentorFundAllocationMutation = {
+  __typename?: 'Mutation';
+  confirmMentorFundAllocation?:
+    | {
+        __typename?: 'MentorFundAllocation';
+        amount?: any | undefined;
+        batch?: number | undefined;
+        confirmedAmount?: any | undefined;
+        createdAt?: any | undefined;
+        currency?: string | undefined;
+        disputedAmount?: any | undefined;
+        id?: string | undefined;
+        mentorUserId?: string | undefined;
+        method?: string | undefined;
+        notes?: string | undefined;
+        recordedByUserId?: string | undefined;
+        reference?: string | undefined;
+        status?: string | undefined;
+        transferDate?: any | undefined;
+      }
+    | undefined;
+};
+
+export type ConfirmScholarshipRefundReceivedMutationVariables = Exact<{
+  confirmedAmount: Scalars['Float']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
+  reference?: InputMaybe<Scalars['String']['input']>;
+  refundId: Scalars['String']['input'];
+}>;
+
+export type ConfirmScholarshipRefundReceivedMutation = {
+  __typename?: 'Mutation';
+  confirmScholarshipRefundReceived?:
+    | {
+        __typename?: 'ScholarshipRefund';
+        beneficiaryRefundProofDocumentId?: string | undefined;
+        beneficiaryUserId?: string | undefined;
+        confirmedRefundAmount?: any | undefined;
+        id?: string | undefined;
+        linkedRefundTransactionId?: string | undefined;
+        originalTransactionId?: string | undefined;
+        refundPaymentReference?: string | undefined;
+        requestedAmount?: any | undefined;
+        status?: string | undefined;
+        wrongDisbursementCaseId?: string | undefined;
+      }
+    | undefined;
+};
+
+export type ConfirmScholarshipTransactionReceiptMutationVariables = Exact<{
+  confirmedAmount: Scalars['Float']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
+  transactionId: Scalars['String']['input'];
+}>;
+
+export type ConfirmScholarshipTransactionReceiptMutation = {
+  __typename?: 'Mutation';
+  confirmScholarshipTransactionReceipt?:
+    | {
+        __typename?: 'Transaction';
+        amount?: any | undefined;
+        createdAt?: any | undefined;
+        currency?: Currency | undefined;
+        description?: string | undefined;
+        id?: string | undefined;
+        isDonation?: boolean | undefined;
+        method?: string | undefined;
+        referenceId?: string | undefined;
+        scholarshipApplicationId?: string | undefined;
+        scholarshipApprovedAt?: any | undefined;
+        scholarshipBatchSnapshot?: number | undefined;
+        scholarshipBeneficiaryUserId?: string | undefined;
+        scholarshipCompletedAt?: any | undefined;
+        scholarshipConfirmedAmount?: any | undefined;
+        scholarshipConfirmedAt?: any | undefined;
+        scholarshipImmutableAt?: any | undefined;
+        scholarshipInstallmentSequence?: number | undefined;
+        scholarshipMaskedPayoutDestination?: string | undefined;
+        scholarshipMentorUserId?: string | undefined;
+        scholarshipOriginalTransactionId?: string | undefined;
+        scholarshipPayoutMethod?: string | undefined;
+        scholarshipProofDueAt?: any | undefined;
+        scholarshipProofDueDays?: number | undefined;
+        scholarshipProofStatus?: string | undefined;
+        scholarshipPurposeSnapshot?: string | undefined;
+        scholarshipReceivedAt?: any | undefined;
+        scholarshipStatus?: string | undefined;
+        sourceType?: string | undefined;
+        status?: TransactionStatus | undefined;
+        title?: string | undefined;
+        transactionDate?: any | undefined;
+        type?: TransactionType | undefined;
+        updatedAt?: any | undefined;
+        userId?: string | undefined;
+        user?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        companyName: string;
+                        id: string;
+                        position?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+            }
+          | undefined;
       }
     | undefined;
 };
@@ -2299,6 +3571,21 @@ export type CreateAlbumMutation = {
                               | undefined
                             >
                           | undefined;
+                        positions?:
+                          | Array<
+                              | {
+                                  __typename?: 'EffectivePosition';
+                                  assignmentId?: string | undefined;
+                                  code?: string | undefined;
+                                  name?: string | undefined;
+                                  termId?: string | undefined;
+                                  termName?: string | undefined;
+                                  validFrom?: any | undefined;
+                                  validUntil?: any | undefined;
+                                }
+                              | undefined
+                            >
+                          | undefined;
                         role?:
                           | {
                               __typename?: 'Role';
@@ -2306,6 +3593,21 @@ export type CreateAlbumMutation = {
                               id?: string | undefined;
                               name?: string | undefined;
                             }
+                          | undefined;
+                        roles?:
+                          | Array<
+                              | {
+                                  __typename?: 'EffectiveRole';
+                                  assignmentId?: string | undefined;
+                                  code?: string | undefined;
+                                  name?: string | undefined;
+                                  scopeBatch?: number | undefined;
+                                  scopeType?: string | undefined;
+                                  validFrom?: any | undefined;
+                                  validUntil?: any | undefined;
+                                }
+                              | undefined
+                            >
                           | undefined;
                       }
                     | undefined;
@@ -2567,6 +3869,445 @@ export type CreateExecutiveTermMutation = {
     | undefined;
 };
 
+export type CreateNextScholarshipInstallmentMutationVariables = Exact<{
+  applicationId: Scalars['String']['input'];
+  approvedTotalAmount: Scalars['Float']['input'];
+  installmentAmount: Scalars['Float']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
+  proofDueDays?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type CreateNextScholarshipInstallmentMutation = {
+  __typename?: 'Mutation';
+  createNextScholarshipInstallment?:
+    | {
+        __typename?: 'ScholarshipApplication';
+        applicantUserId?: string | undefined;
+        approvedAmountDisbursed?: any | undefined;
+        approvedAt?: any | undefined;
+        approvedByUserId?: string | undefined;
+        approvedProofDays?: number | undefined;
+        approvedTotalAmount?: any | undefined;
+        assignedMentorUserId?: string | undefined;
+        batchSnapshot?: number | undefined;
+        beneficiaryUserId?: string | undefined;
+        closedAt?: any | undefined;
+        createdAt?: any | undefined;
+        id?: string | undefined;
+        lastActivityAt?: any | undefined;
+        paymentMode?: ScholarshipPaymentMode | undefined;
+        payoutMaskedSnapshot?: string | undefined;
+        payoutMethod?: ScholarshipPayoutMethod | undefined;
+        payoutSnapshot?: any | undefined;
+        proofStatus?: string | undefined;
+        proposedProofDays?: number | undefined;
+        purpose?: string | undefined;
+        reason?: string | undefined;
+        referenceNumber?: string | undefined;
+        refundStatus?: string | undefined;
+        rejectedAt?: any | undefined;
+        rejectedByUserId?: string | undefined;
+        rejectionReason?: string | undefined;
+        requestedAmount?: any | undefined;
+        requestedFirstInstallmentAmount?: any | undefined;
+        reviewStartedAt?: any | undefined;
+        reviewedByUserId?: string | undefined;
+        status?: ScholarshipApplicationStatus | undefined;
+        submittedAt?: any | undefined;
+        updatedAt?: any | undefined;
+        assignedMentor?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        companyName: string;
+                        id: string;
+                        position?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+            }
+          | undefined;
+        beneficiary?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        companyName: string;
+                        id: string;
+                        position?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
+export type CreateScholarshipApplicationDraftMutationVariables = Exact<{
+  input: ScholarshipApplicationInput;
+}>;
+
+export type CreateScholarshipApplicationDraftMutation = {
+  __typename?: 'Mutation';
+  createScholarshipApplicationDraft?:
+    | {
+        __typename?: 'ScholarshipApplication';
+        applicantUserId?: string | undefined;
+        approvedAmountDisbursed?: any | undefined;
+        approvedAt?: any | undefined;
+        approvedByUserId?: string | undefined;
+        approvedProofDays?: number | undefined;
+        approvedTotalAmount?: any | undefined;
+        assignedMentorUserId?: string | undefined;
+        batchSnapshot?: number | undefined;
+        beneficiaryUserId?: string | undefined;
+        closedAt?: any | undefined;
+        createdAt?: any | undefined;
+        id?: string | undefined;
+        lastActivityAt?: any | undefined;
+        paymentMode?: ScholarshipPaymentMode | undefined;
+        payoutMaskedSnapshot?: string | undefined;
+        payoutMethod?: ScholarshipPayoutMethod | undefined;
+        payoutSnapshot?: any | undefined;
+        proofStatus?: string | undefined;
+        proposedProofDays?: number | undefined;
+        purpose?: string | undefined;
+        reason?: string | undefined;
+        referenceNumber?: string | undefined;
+        refundStatus?: string | undefined;
+        rejectedAt?: any | undefined;
+        rejectedByUserId?: string | undefined;
+        rejectionReason?: string | undefined;
+        requestedAmount?: any | undefined;
+        requestedFirstInstallmentAmount?: any | undefined;
+        reviewStartedAt?: any | undefined;
+        reviewedByUserId?: string | undefined;
+        status?: ScholarshipApplicationStatus | undefined;
+        submittedAt?: any | undefined;
+        updatedAt?: any | undefined;
+        assignedMentor?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        companyName: string;
+                        id: string;
+                        position?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+            }
+          | undefined;
+        beneficiary?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        companyName: string;
+                        id: string;
+                        position?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
+export type CreateScholarshipDocumentUploadMutationVariables = Exact<{
+  input: ScholarshipDocumentUploadInput;
+}>;
+
+export type CreateScholarshipDocumentUploadMutation = {
+  __typename?: 'Mutation';
+  createScholarshipDocumentUpload?:
+    | {
+        __typename?: 'ScholarshipDocumentUploadResponse';
+        uploadUrl?: string | undefined;
+        document?:
+          | {
+              __typename?: 'ScholarshipDocument';
+              applicationId?: string | undefined;
+              category?: ScholarshipDocumentCategory | undefined;
+              checksum?: string | undefined;
+              claimedAmount?: any | undefined;
+              createdAt?: any | undefined;
+              description?: string | undefined;
+              id?: string | undefined;
+              mimeType?: string | undefined;
+              originalFilename?: string | undefined;
+              receiptDate?: any | undefined;
+              sizeBytes?: number | undefined;
+              status?: string | undefined;
+              transactionId?: string | undefined;
+              uploadedAt?: any | undefined;
+              uploadedByUserId?: string | undefined;
+              vendorName?: string | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
 export type CreateTransactionMutationVariables = Exact<{
   amount: Scalars['Float']['input'];
   currency: Currency;
@@ -2594,6 +4335,26 @@ export type CreateTransactionMutation = {
         isDonation?: boolean | undefined;
         method?: string | undefined;
         referenceId?: string | undefined;
+        scholarshipApplicationId?: string | undefined;
+        scholarshipApprovedAt?: any | undefined;
+        scholarshipBatchSnapshot?: number | undefined;
+        scholarshipBeneficiaryUserId?: string | undefined;
+        scholarshipCompletedAt?: any | undefined;
+        scholarshipConfirmedAmount?: any | undefined;
+        scholarshipConfirmedAt?: any | undefined;
+        scholarshipImmutableAt?: any | undefined;
+        scholarshipInstallmentSequence?: number | undefined;
+        scholarshipMaskedPayoutDestination?: string | undefined;
+        scholarshipMentorUserId?: string | undefined;
+        scholarshipOriginalTransactionId?: string | undefined;
+        scholarshipPayoutMethod?: string | undefined;
+        scholarshipProofDueAt?: any | undefined;
+        scholarshipProofDueDays?: number | undefined;
+        scholarshipProofStatus?: string | undefined;
+        scholarshipPurposeSnapshot?: string | undefined;
+        scholarshipReceivedAt?: any | undefined;
+        scholarshipStatus?: string | undefined;
+        sourceType?: string | undefined;
         status?: TransactionStatus | undefined;
         title?: string | undefined;
         transactionDate?: any | undefined;
@@ -2642,8 +4403,38 @@ export type CreateTransactionMutation = {
                     | undefined
                   >
                 | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
               role?:
                 | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
                 | undefined;
             }
           | undefined;
@@ -2815,6 +4606,26 @@ export type DeleteTransactionMutation = {
         isDonation?: boolean | undefined;
         method?: string | undefined;
         referenceId?: string | undefined;
+        scholarshipApplicationId?: string | undefined;
+        scholarshipApprovedAt?: any | undefined;
+        scholarshipBatchSnapshot?: number | undefined;
+        scholarshipBeneficiaryUserId?: string | undefined;
+        scholarshipCompletedAt?: any | undefined;
+        scholarshipConfirmedAmount?: any | undefined;
+        scholarshipConfirmedAt?: any | undefined;
+        scholarshipImmutableAt?: any | undefined;
+        scholarshipInstallmentSequence?: number | undefined;
+        scholarshipMaskedPayoutDestination?: string | undefined;
+        scholarshipMentorUserId?: string | undefined;
+        scholarshipOriginalTransactionId?: string | undefined;
+        scholarshipPayoutMethod?: string | undefined;
+        scholarshipProofDueAt?: any | undefined;
+        scholarshipProofDueDays?: number | undefined;
+        scholarshipProofStatus?: string | undefined;
+        scholarshipPurposeSnapshot?: string | undefined;
+        scholarshipReceivedAt?: any | undefined;
+        scholarshipStatus?: string | undefined;
+        sourceType?: string | undefined;
         status?: TransactionStatus | undefined;
         title?: string | undefined;
         transactionDate?: any | undefined;
@@ -2863,8 +4674,38 @@ export type DeleteTransactionMutation = {
                     | undefined
                   >
                 | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
               role?:
                 | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
                 | undefined;
             }
           | undefined;
@@ -2904,37 +4745,7 @@ export type DeleteUserMutation = {
         metadata?: any | undefined;
         mobile?: string | undefined;
         nickName?: string | undefined;
-        positions?:
-          | Array<
-              | {
-                  __typename?: 'EffectivePosition';
-                  assignmentId?: string | undefined;
-                  code?: string | undefined;
-                  name?: string | undefined;
-                  termId?: string | undefined;
-                  termName?: string | undefined;
-                  validFrom?: any | undefined;
-                  validUntil?: any | undefined;
-                }
-              | undefined
-            >
-          | undefined;
         profileImage?: string | undefined;
-        roles?:
-          | Array<
-              | {
-                  __typename?: 'EffectiveRole';
-                  assignmentId?: string | undefined;
-                  code?: string | undefined;
-                  name?: string | undefined;
-                  scopeBatch?: number | undefined;
-                  scopeType?: string | undefined;
-                  validFrom?: any | undefined;
-                  validUntil?: any | undefined;
-                }
-              | undefined
-            >
-          | undefined;
         socialMedia?: any | undefined;
         updatedAt: any;
         whatsAppMobile?: string | undefined;
@@ -2950,9 +4761,93 @@ export type DeleteUserMutation = {
               | undefined
             >
           | undefined;
+        positions?:
+          | Array<
+              | {
+                  __typename?: 'EffectivePosition';
+                  assignmentId?: string | undefined;
+                  code?: string | undefined;
+                  name?: string | undefined;
+                  termId?: string | undefined;
+                  termName?: string | undefined;
+                  validFrom?: any | undefined;
+                  validUntil?: any | undefined;
+                }
+              | undefined
+            >
+          | undefined;
         role?:
           | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
           | undefined;
+        roles?:
+          | Array<
+              | {
+                  __typename?: 'EffectiveRole';
+                  assignmentId?: string | undefined;
+                  code?: string | undefined;
+                  name?: string | undefined;
+                  scopeBatch?: number | undefined;
+                  scopeType?: string | undefined;
+                  validFrom?: any | undefined;
+                  validUntil?: any | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+      }
+    | undefined;
+};
+
+export type DisputeMentorFundAllocationMutationVariables = Exact<{
+  allocationId: Scalars['String']['input'];
+  disputedAmount: Scalars['Float']['input'];
+  reason: Scalars['String']['input'];
+}>;
+
+export type DisputeMentorFundAllocationMutation = {
+  __typename?: 'Mutation';
+  disputeMentorFundAllocation?:
+    | {
+        __typename?: 'MentorFundAllocationDispute';
+        allocationId?: string | undefined;
+        createdAt?: any | undefined;
+        disputedAmount?: any | undefined;
+        id?: string | undefined;
+        raisedByUserId?: string | undefined;
+        reason?: string | undefined;
+        resolutionNote?: string | undefined;
+        resolutionType?: string | undefined;
+        status?: string | undefined;
+      }
+    | undefined;
+};
+
+export type FinalizeScholarshipDocumentUploadMutationVariables = Exact<{
+  checksum?: InputMaybe<Scalars['String']['input']>;
+  documentId: Scalars['String']['input'];
+}>;
+
+export type FinalizeScholarshipDocumentUploadMutation = {
+  __typename?: 'Mutation';
+  finalizeScholarshipDocumentUpload?:
+    | {
+        __typename?: 'ScholarshipDocument';
+        applicationId?: string | undefined;
+        category?: ScholarshipDocumentCategory | undefined;
+        checksum?: string | undefined;
+        claimedAmount?: any | undefined;
+        createdAt?: any | undefined;
+        description?: string | undefined;
+        id?: string | undefined;
+        mimeType?: string | undefined;
+        originalFilename?: string | undefined;
+        receiptDate?: any | undefined;
+        sizeBytes?: number | undefined;
+        status?: string | undefined;
+        transactionId?: string | undefined;
+        uploadedAt?: any | undefined;
+        uploadedByUserId?: string | undefined;
+        vendorName?: string | undefined;
       }
     | undefined;
 };
@@ -2975,12 +4870,297 @@ export type LogoutMutationVariables = Exact<{ [key: string]: never }>;
 
 export type LogoutMutation = { __typename?: 'Mutation'; logout?: string | undefined };
 
+export type ManageScholarshipRefundCaseMutationVariables = Exact<{
+  note?: InputMaybe<Scalars['String']['input']>;
+  reference?: InputMaybe<Scalars['String']['input']>;
+  refundId: Scalars['String']['input'];
+  status: Scalars['String']['input'];
+}>;
+
+export type ManageScholarshipRefundCaseMutation = {
+  __typename?: 'Mutation';
+  manageScholarshipRefundCase?:
+    | {
+        __typename?: 'ScholarshipRefund';
+        beneficiaryRefundProofDocumentId?: string | undefined;
+        beneficiaryUserId?: string | undefined;
+        confirmedRefundAmount?: any | undefined;
+        id?: string | undefined;
+        linkedRefundTransactionId?: string | undefined;
+        originalTransactionId?: string | undefined;
+        refundPaymentReference?: string | undefined;
+        requestedAmount?: any | undefined;
+        status?: string | undefined;
+        wrongDisbursementCaseId?: string | undefined;
+      }
+    | undefined;
+};
+
+export type MarkScholarshipWrongDisbursementMutationVariables = Exact<{
+  affectedDocumentIds?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
+  disputedAmount: Scalars['Float']['input'];
+  reason: Scalars['String']['input'];
+  refundRequested?: InputMaybe<Scalars['Boolean']['input']>;
+  requestedRefundAmount?: InputMaybe<Scalars['Float']['input']>;
+  transactionId: Scalars['String']['input'];
+}>;
+
+export type MarkScholarshipWrongDisbursementMutation = {
+  __typename?: 'Mutation';
+  markScholarshipWrongDisbursement?:
+    | {
+        __typename?: 'ScholarshipWrongDisbursementCase';
+        affectedDocumentIds?: Array<string | undefined> | undefined;
+        applicationId?: string | undefined;
+        beneficiaryResponse?: string | undefined;
+        disputedAmount?: any | undefined;
+        id?: string | undefined;
+        originalTransactionId?: string | undefined;
+        reason?: string | undefined;
+        refundRequested?: boolean | undefined;
+        reportedAt?: any | undefined;
+        reportedByUserId?: string | undefined;
+        requestedRefundAmount?: any | undefined;
+        status?: string | undefined;
+      }
+    | undefined;
+};
+
 export type PublishEventMutationVariables = Exact<{
   eventId: Scalars['Int']['input'];
   status: EventStatus;
 }>;
 
 export type PublishEventMutation = { __typename?: 'Mutation'; publishEvent?: boolean | undefined };
+
+export type ReassignScholarshipApplicationMutationVariables = Exact<{
+  applicationId: Scalars['String']['input'];
+  mentorUserId: Scalars['String']['input'];
+  reason: Scalars['String']['input'];
+}>;
+
+export type ReassignScholarshipApplicationMutation = {
+  __typename?: 'Mutation';
+  reassignScholarshipApplication?:
+    | {
+        __typename?: 'ScholarshipApplication';
+        applicantUserId?: string | undefined;
+        approvedAmountDisbursed?: any | undefined;
+        approvedAt?: any | undefined;
+        approvedByUserId?: string | undefined;
+        approvedProofDays?: number | undefined;
+        approvedTotalAmount?: any | undefined;
+        assignedMentorUserId?: string | undefined;
+        batchSnapshot?: number | undefined;
+        beneficiaryUserId?: string | undefined;
+        closedAt?: any | undefined;
+        createdAt?: any | undefined;
+        id?: string | undefined;
+        lastActivityAt?: any | undefined;
+        paymentMode?: ScholarshipPaymentMode | undefined;
+        payoutMaskedSnapshot?: string | undefined;
+        payoutMethod?: ScholarshipPayoutMethod | undefined;
+        payoutSnapshot?: any | undefined;
+        proofStatus?: string | undefined;
+        proposedProofDays?: number | undefined;
+        purpose?: string | undefined;
+        reason?: string | undefined;
+        referenceNumber?: string | undefined;
+        refundStatus?: string | undefined;
+        rejectedAt?: any | undefined;
+        rejectedByUserId?: string | undefined;
+        rejectionReason?: string | undefined;
+        requestedAmount?: any | undefined;
+        requestedFirstInstallmentAmount?: any | undefined;
+        reviewStartedAt?: any | undefined;
+        reviewedByUserId?: string | undefined;
+        status?: ScholarshipApplicationStatus | undefined;
+        submittedAt?: any | undefined;
+        updatedAt?: any | undefined;
+        assignedMentor?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        companyName: string;
+                        id: string;
+                        position?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+            }
+          | undefined;
+        beneficiary?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        companyName: string;
+                        id: string;
+                        position?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
+export type RecordMentorFundAllocationMutationVariables = Exact<{
+  input: RecordMentorFundAllocationInput;
+}>;
+
+export type RecordMentorFundAllocationMutation = {
+  __typename?: 'Mutation';
+  recordMentorFundAllocation?:
+    | {
+        __typename?: 'MentorFundAllocation';
+        amount?: any | undefined;
+        batch?: number | undefined;
+        confirmedAmount?: any | undefined;
+        createdAt?: any | undefined;
+        currency?: string | undefined;
+        disputedAmount?: any | undefined;
+        id?: string | undefined;
+        mentorUserId?: string | undefined;
+        method?: string | undefined;
+        notes?: string | undefined;
+        recordedByUserId?: string | undefined;
+        reference?: string | undefined;
+        status?: string | undefined;
+        transferDate?: any | undefined;
+      }
+    | undefined;
+};
 
 export type RefreshTokenMutationVariables = Exact<{ [key: string]: never }>;
 
@@ -3031,8 +5211,38 @@ export type RefreshTokenMutation = {
                     | undefined
                   >
                 | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
               role?:
                 | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
                 | undefined;
             }
           | undefined;
@@ -3048,6 +5258,207 @@ export type RejectMemberRegistrationMutationVariables = Exact<{
 export type RejectMemberRegistrationMutation = {
   __typename?: 'Mutation';
   rejectMemberRegistration?: boolean | undefined;
+};
+
+export type RejectScholarshipApplicationMutationVariables = Exact<{
+  applicationId: Scalars['String']['input'];
+  reason: Scalars['String']['input'];
+}>;
+
+export type RejectScholarshipApplicationMutation = {
+  __typename?: 'Mutation';
+  rejectScholarshipApplication?:
+    | {
+        __typename?: 'ScholarshipApplication';
+        applicantUserId?: string | undefined;
+        approvedAmountDisbursed?: any | undefined;
+        approvedAt?: any | undefined;
+        approvedByUserId?: string | undefined;
+        approvedProofDays?: number | undefined;
+        approvedTotalAmount?: any | undefined;
+        assignedMentorUserId?: string | undefined;
+        batchSnapshot?: number | undefined;
+        beneficiaryUserId?: string | undefined;
+        closedAt?: any | undefined;
+        createdAt?: any | undefined;
+        id?: string | undefined;
+        lastActivityAt?: any | undefined;
+        paymentMode?: ScholarshipPaymentMode | undefined;
+        payoutMaskedSnapshot?: string | undefined;
+        payoutMethod?: ScholarshipPayoutMethod | undefined;
+        payoutSnapshot?: any | undefined;
+        proofStatus?: string | undefined;
+        proposedProofDays?: number | undefined;
+        purpose?: string | undefined;
+        reason?: string | undefined;
+        referenceNumber?: string | undefined;
+        refundStatus?: string | undefined;
+        rejectedAt?: any | undefined;
+        rejectedByUserId?: string | undefined;
+        rejectionReason?: string | undefined;
+        requestedAmount?: any | undefined;
+        requestedFirstInstallmentAmount?: any | undefined;
+        reviewStartedAt?: any | undefined;
+        reviewedByUserId?: string | undefined;
+        status?: ScholarshipApplicationStatus | undefined;
+        submittedAt?: any | undefined;
+        updatedAt?: any | undefined;
+        assignedMentor?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        companyName: string;
+                        id: string;
+                        position?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+            }
+          | undefined;
+        beneficiary?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        companyName: string;
+                        id: string;
+                        position?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
 };
 
 export type RemoveBatchCoordinatorMutationVariables = Exact<{
@@ -3134,12 +5545,497 @@ export type RequestChangesBlogMutation = {
     | undefined;
 };
 
+export type RequestScholarshipApplicationInfoMutationVariables = Exact<{
+  applicationId: Scalars['String']['input'];
+  message: Scalars['String']['input'];
+}>;
+
+export type RequestScholarshipApplicationInfoMutation = {
+  __typename?: 'Mutation';
+  requestScholarshipApplicationInfo?:
+    | {
+        __typename?: 'ScholarshipApplication';
+        applicantUserId?: string | undefined;
+        approvedAmountDisbursed?: any | undefined;
+        approvedAt?: any | undefined;
+        approvedByUserId?: string | undefined;
+        approvedProofDays?: number | undefined;
+        approvedTotalAmount?: any | undefined;
+        assignedMentorUserId?: string | undefined;
+        batchSnapshot?: number | undefined;
+        beneficiaryUserId?: string | undefined;
+        closedAt?: any | undefined;
+        createdAt?: any | undefined;
+        id?: string | undefined;
+        lastActivityAt?: any | undefined;
+        paymentMode?: ScholarshipPaymentMode | undefined;
+        payoutMaskedSnapshot?: string | undefined;
+        payoutMethod?: ScholarshipPayoutMethod | undefined;
+        payoutSnapshot?: any | undefined;
+        proofStatus?: string | undefined;
+        proposedProofDays?: number | undefined;
+        purpose?: string | undefined;
+        reason?: string | undefined;
+        referenceNumber?: string | undefined;
+        refundStatus?: string | undefined;
+        rejectedAt?: any | undefined;
+        rejectedByUserId?: string | undefined;
+        rejectionReason?: string | undefined;
+        requestedAmount?: any | undefined;
+        requestedFirstInstallmentAmount?: any | undefined;
+        reviewStartedAt?: any | undefined;
+        reviewedByUserId?: string | undefined;
+        status?: ScholarshipApplicationStatus | undefined;
+        submittedAt?: any | undefined;
+        updatedAt?: any | undefined;
+        assignedMentor?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        companyName: string;
+                        id: string;
+                        position?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+            }
+          | undefined;
+        beneficiary?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        companyName: string;
+                        id: string;
+                        position?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
+export type RequestScholarshipDisbursalFollowupMutationVariables = Exact<{
+  transactionId: Scalars['String']['input'];
+}>;
+
+export type RequestScholarshipDisbursalFollowupMutation = {
+  __typename?: 'Mutation';
+  requestScholarshipDisbursalFollowup?: boolean | undefined;
+};
+
 export type ResetPasswordMutationVariables = Exact<{
   newPassword: Scalars['String']['input'];
   token?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 export type ResetPasswordMutation = { __typename?: 'Mutation'; resetPassword?: boolean | undefined };
+
+export type ResolveMentorAllocationDisputeMutationVariables = Exact<{
+  disputeId: Scalars['String']['input'];
+  resolutionNote?: InputMaybe<Scalars['String']['input']>;
+  resolutionType: Scalars['String']['input'];
+}>;
+
+export type ResolveMentorAllocationDisputeMutation = {
+  __typename?: 'Mutation';
+  resolveMentorAllocationDispute?:
+    | {
+        __typename?: 'MentorFundAllocationDispute';
+        allocationId?: string | undefined;
+        createdAt?: any | undefined;
+        disputedAmount?: any | undefined;
+        id?: string | undefined;
+        raisedByUserId?: string | undefined;
+        reason?: string | undefined;
+        resolutionNote?: string | undefined;
+        resolutionType?: string | undefined;
+        status?: string | undefined;
+      }
+    | undefined;
+};
+
+export type RespondToScholarshipRefundMutationVariables = Exact<{
+  proofDocumentId?: InputMaybe<Scalars['String']['input']>;
+  refundId: Scalars['String']['input'];
+  response: Scalars['String']['input'];
+}>;
+
+export type RespondToScholarshipRefundMutation = {
+  __typename?: 'Mutation';
+  respondToScholarshipRefund?:
+    | {
+        __typename?: 'ScholarshipRefund';
+        beneficiaryRefundProofDocumentId?: string | undefined;
+        beneficiaryUserId?: string | undefined;
+        confirmedRefundAmount?: any | undefined;
+        id?: string | undefined;
+        linkedRefundTransactionId?: string | undefined;
+        originalTransactionId?: string | undefined;
+        refundPaymentReference?: string | undefined;
+        requestedAmount?: any | undefined;
+        status?: string | undefined;
+        wrongDisbursementCaseId?: string | undefined;
+      }
+    | undefined;
+};
+
+export type ResubmitScholarshipApplicationMutationVariables = Exact<{
+  applicationId: Scalars['String']['input'];
+}>;
+
+export type ResubmitScholarshipApplicationMutation = {
+  __typename?: 'Mutation';
+  resubmitScholarshipApplication?:
+    | {
+        __typename?: 'ScholarshipApplication';
+        applicantUserId?: string | undefined;
+        approvedAmountDisbursed?: any | undefined;
+        approvedAt?: any | undefined;
+        approvedByUserId?: string | undefined;
+        approvedProofDays?: number | undefined;
+        approvedTotalAmount?: any | undefined;
+        assignedMentorUserId?: string | undefined;
+        batchSnapshot?: number | undefined;
+        beneficiaryUserId?: string | undefined;
+        closedAt?: any | undefined;
+        createdAt?: any | undefined;
+        id?: string | undefined;
+        lastActivityAt?: any | undefined;
+        paymentMode?: ScholarshipPaymentMode | undefined;
+        payoutMaskedSnapshot?: string | undefined;
+        payoutMethod?: ScholarshipPayoutMethod | undefined;
+        payoutSnapshot?: any | undefined;
+        proofStatus?: string | undefined;
+        proposedProofDays?: number | undefined;
+        purpose?: string | undefined;
+        reason?: string | undefined;
+        referenceNumber?: string | undefined;
+        refundStatus?: string | undefined;
+        rejectedAt?: any | undefined;
+        rejectedByUserId?: string | undefined;
+        rejectionReason?: string | undefined;
+        requestedAmount?: any | undefined;
+        requestedFirstInstallmentAmount?: any | undefined;
+        reviewStartedAt?: any | undefined;
+        reviewedByUserId?: string | undefined;
+        status?: ScholarshipApplicationStatus | undefined;
+        submittedAt?: any | undefined;
+        updatedAt?: any | undefined;
+        assignedMentor?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        companyName: string;
+                        id: string;
+                        position?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+            }
+          | undefined;
+        beneficiary?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        companyName: string;
+                        id: string;
+                        position?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
+export type ReviewScholarshipUsageProofMutationVariables = Exact<{
+  action: ScholarshipProofReviewAction;
+  note?: InputMaybe<Scalars['String']['input']>;
+  submissionId: Scalars['String']['input'];
+}>;
+
+export type ReviewScholarshipUsageProofMutation = {
+  __typename?: 'Mutation';
+  reviewScholarshipUsageProof?:
+    | {
+        __typename?: 'ScholarshipReceiptSubmission';
+        applicationId?: string | undefined;
+        id?: string | undefined;
+        reviewNote?: string | undefined;
+        reviewedAt?: any | undefined;
+        reviewedByUserId?: string | undefined;
+        status?: string | undefined;
+        submissionSequence?: number | undefined;
+        submittedAt?: any | undefined;
+        submittedByUserId?: string | undefined;
+        submittedCoverage?: any | undefined;
+        transactionId?: string | undefined;
+      }
+    | undefined;
+};
 
 export type RevokeExecutivePositionMutationVariables = Exact<{
   input: RevokeExecutivePositionInput;
@@ -3230,8 +6126,38 @@ export type RevokeExecutivePositionMutation = {
                     | undefined
                   >
                 | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
               role?:
                 | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
                 | undefined;
             }
           | undefined;
@@ -3315,8 +6241,38 @@ export type RevokeUserRoleMutation = {
                     | undefined
                   >
                 | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
               role?:
                 | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
                 | undefined;
             }
           | undefined;
@@ -3331,6 +6287,210 @@ export type SendMassEmailMutationVariables = Exact<{
 }>;
 
 export type SendMassEmailMutation = { __typename?: 'Mutation'; sendMassEmail?: boolean | undefined };
+
+export type SetScholarshipPrimaryMentorMutationVariables = Exact<{
+  batch: Scalars['Int']['input'];
+  mentorUserId: Scalars['String']['input'];
+  reason?: InputMaybe<Scalars['String']['input']>;
+  validFrom?: InputMaybe<Scalars['String']['input']>;
+  validUntil?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type SetScholarshipPrimaryMentorMutation = {
+  __typename?: 'Mutation';
+  setScholarshipPrimaryMentor?:
+    | {
+        __typename?: 'ScholarshipApplication';
+        applicantUserId?: string | undefined;
+        approvedAmountDisbursed?: any | undefined;
+        approvedAt?: any | undefined;
+        approvedByUserId?: string | undefined;
+        approvedProofDays?: number | undefined;
+        approvedTotalAmount?: any | undefined;
+        assignedMentorUserId?: string | undefined;
+        batchSnapshot?: number | undefined;
+        beneficiaryUserId?: string | undefined;
+        closedAt?: any | undefined;
+        createdAt?: any | undefined;
+        id?: string | undefined;
+        lastActivityAt?: any | undefined;
+        paymentMode?: ScholarshipPaymentMode | undefined;
+        payoutMaskedSnapshot?: string | undefined;
+        payoutMethod?: ScholarshipPayoutMethod | undefined;
+        payoutSnapshot?: any | undefined;
+        proofStatus?: string | undefined;
+        proposedProofDays?: number | undefined;
+        purpose?: string | undefined;
+        reason?: string | undefined;
+        referenceNumber?: string | undefined;
+        refundStatus?: string | undefined;
+        rejectedAt?: any | undefined;
+        rejectedByUserId?: string | undefined;
+        rejectionReason?: string | undefined;
+        requestedAmount?: any | undefined;
+        requestedFirstInstallmentAmount?: any | undefined;
+        reviewStartedAt?: any | undefined;
+        reviewedByUserId?: string | undefined;
+        status?: ScholarshipApplicationStatus | undefined;
+        submittedAt?: any | undefined;
+        updatedAt?: any | undefined;
+        assignedMentor?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        companyName: string;
+                        id: string;
+                        position?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+            }
+          | undefined;
+        beneficiary?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        companyName: string;
+                        id: string;
+                        position?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
 
 export type SigninMutationVariables = Exact<{
   email: Scalars['String']['input'];
@@ -3384,8 +6544,38 @@ export type SigninMutation = {
                     | undefined
                   >
                 | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
               role?:
                 | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
                 | undefined;
             }
           | undefined;
@@ -3432,37 +6622,7 @@ export type SignupMutation = {
         metadata?: any | undefined;
         mobile?: string | undefined;
         nickName?: string | undefined;
-        positions?:
-          | Array<
-              | {
-                  __typename?: 'EffectivePosition';
-                  assignmentId?: string | undefined;
-                  code?: string | undefined;
-                  name?: string | undefined;
-                  termId?: string | undefined;
-                  termName?: string | undefined;
-                  validFrom?: any | undefined;
-                  validUntil?: any | undefined;
-                }
-              | undefined
-            >
-          | undefined;
         profileImage?: string | undefined;
-        roles?:
-          | Array<
-              | {
-                  __typename?: 'EffectiveRole';
-                  assignmentId?: string | undefined;
-                  code?: string | undefined;
-                  name?: string | undefined;
-                  scopeBatch?: number | undefined;
-                  scopeType?: string | undefined;
-                  validFrom?: any | undefined;
-                  validUntil?: any | undefined;
-                }
-              | undefined
-            >
-          | undefined;
         socialMedia?: any | undefined;
         updatedAt: any;
         whatsAppMobile?: string | undefined;
@@ -3478,9 +6638,464 @@ export type SignupMutation = {
               | undefined
             >
           | undefined;
+        positions?:
+          | Array<
+              | {
+                  __typename?: 'EffectivePosition';
+                  assignmentId?: string | undefined;
+                  code?: string | undefined;
+                  name?: string | undefined;
+                  termId?: string | undefined;
+                  termName?: string | undefined;
+                  validFrom?: any | undefined;
+                  validUntil?: any | undefined;
+                }
+              | undefined
+            >
+          | undefined;
         role?:
           | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
           | undefined;
+        roles?:
+          | Array<
+              | {
+                  __typename?: 'EffectiveRole';
+                  assignmentId?: string | undefined;
+                  code?: string | undefined;
+                  name?: string | undefined;
+                  scopeBatch?: number | undefined;
+                  scopeType?: string | undefined;
+                  validFrom?: any | undefined;
+                  validUntil?: any | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+      }
+    | undefined;
+};
+
+export type StartScholarshipApplicationReviewMutationVariables = Exact<{
+  applicationId: Scalars['String']['input'];
+}>;
+
+export type StartScholarshipApplicationReviewMutation = {
+  __typename?: 'Mutation';
+  startScholarshipApplicationReview?:
+    | {
+        __typename?: 'ScholarshipApplication';
+        applicantUserId?: string | undefined;
+        approvedAmountDisbursed?: any | undefined;
+        approvedAt?: any | undefined;
+        approvedByUserId?: string | undefined;
+        approvedProofDays?: number | undefined;
+        approvedTotalAmount?: any | undefined;
+        assignedMentorUserId?: string | undefined;
+        batchSnapshot?: number | undefined;
+        beneficiaryUserId?: string | undefined;
+        closedAt?: any | undefined;
+        createdAt?: any | undefined;
+        id?: string | undefined;
+        lastActivityAt?: any | undefined;
+        paymentMode?: ScholarshipPaymentMode | undefined;
+        payoutMaskedSnapshot?: string | undefined;
+        payoutMethod?: ScholarshipPayoutMethod | undefined;
+        payoutSnapshot?: any | undefined;
+        proofStatus?: string | undefined;
+        proposedProofDays?: number | undefined;
+        purpose?: string | undefined;
+        reason?: string | undefined;
+        referenceNumber?: string | undefined;
+        refundStatus?: string | undefined;
+        rejectedAt?: any | undefined;
+        rejectedByUserId?: string | undefined;
+        rejectionReason?: string | undefined;
+        requestedAmount?: any | undefined;
+        requestedFirstInstallmentAmount?: any | undefined;
+        reviewStartedAt?: any | undefined;
+        reviewedByUserId?: string | undefined;
+        status?: ScholarshipApplicationStatus | undefined;
+        submittedAt?: any | undefined;
+        updatedAt?: any | undefined;
+        assignedMentor?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        companyName: string;
+                        id: string;
+                        position?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+            }
+          | undefined;
+        beneficiary?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        companyName: string;
+                        id: string;
+                        position?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
+export type SubmitScholarshipApplicationMutationVariables = Exact<{
+  applicationId: Scalars['String']['input'];
+}>;
+
+export type SubmitScholarshipApplicationMutation = {
+  __typename?: 'Mutation';
+  submitScholarshipApplication?:
+    | {
+        __typename?: 'ScholarshipApplication';
+        applicantUserId?: string | undefined;
+        approvedAmountDisbursed?: any | undefined;
+        approvedAt?: any | undefined;
+        approvedByUserId?: string | undefined;
+        approvedProofDays?: number | undefined;
+        approvedTotalAmount?: any | undefined;
+        assignedMentorUserId?: string | undefined;
+        batchSnapshot?: number | undefined;
+        beneficiaryUserId?: string | undefined;
+        closedAt?: any | undefined;
+        createdAt?: any | undefined;
+        id?: string | undefined;
+        lastActivityAt?: any | undefined;
+        paymentMode?: ScholarshipPaymentMode | undefined;
+        payoutMaskedSnapshot?: string | undefined;
+        payoutMethod?: ScholarshipPayoutMethod | undefined;
+        payoutSnapshot?: any | undefined;
+        proofStatus?: string | undefined;
+        proposedProofDays?: number | undefined;
+        purpose?: string | undefined;
+        reason?: string | undefined;
+        referenceNumber?: string | undefined;
+        refundStatus?: string | undefined;
+        rejectedAt?: any | undefined;
+        rejectedByUserId?: string | undefined;
+        rejectionReason?: string | undefined;
+        requestedAmount?: any | undefined;
+        requestedFirstInstallmentAmount?: any | undefined;
+        reviewStartedAt?: any | undefined;
+        reviewedByUserId?: string | undefined;
+        status?: ScholarshipApplicationStatus | undefined;
+        submittedAt?: any | undefined;
+        updatedAt?: any | undefined;
+        assignedMentor?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        companyName: string;
+                        id: string;
+                        position?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+            }
+          | undefined;
+        beneficiary?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        companyName: string;
+                        id: string;
+                        position?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
+export type SubmitScholarshipUsageProofMutationVariables = Exact<{
+  documentIds: Array<Scalars['String']['input']> | Scalars['String']['input'];
+  transactionId: Scalars['String']['input'];
+}>;
+
+export type SubmitScholarshipUsageProofMutation = {
+  __typename?: 'Mutation';
+  submitScholarshipUsageProof?:
+    | {
+        __typename?: 'ScholarshipReceiptSubmission';
+        applicationId?: string | undefined;
+        id?: string | undefined;
+        reviewNote?: string | undefined;
+        reviewedAt?: any | undefined;
+        reviewedByUserId?: string | undefined;
+        status?: string | undefined;
+        submissionSequence?: number | undefined;
+        submittedAt?: any | undefined;
+        submittedByUserId?: string | undefined;
+        submittedCoverage?: any | undefined;
+        transactionId?: string | undefined;
       }
     | undefined;
 };
@@ -3728,6 +7343,21 @@ export type UpdateAlbumMutation = {
                               | undefined
                             >
                           | undefined;
+                        positions?:
+                          | Array<
+                              | {
+                                  __typename?: 'EffectivePosition';
+                                  assignmentId?: string | undefined;
+                                  code?: string | undefined;
+                                  name?: string | undefined;
+                                  termId?: string | undefined;
+                                  termName?: string | undefined;
+                                  validFrom?: any | undefined;
+                                  validUntil?: any | undefined;
+                                }
+                              | undefined
+                            >
+                          | undefined;
                         role?:
                           | {
                               __typename?: 'Role';
@@ -3735,6 +7365,21 @@ export type UpdateAlbumMutation = {
                               id?: string | undefined;
                               name?: string | undefined;
                             }
+                          | undefined;
+                        roles?:
+                          | Array<
+                              | {
+                                  __typename?: 'EffectiveRole';
+                                  assignmentId?: string | undefined;
+                                  code?: string | undefined;
+                                  name?: string | undefined;
+                                  scopeBatch?: number | undefined;
+                                  scopeType?: string | undefined;
+                                  validFrom?: any | undefined;
+                                  validUntil?: any | undefined;
+                                }
+                              | undefined
+                            >
                           | undefined;
                       }
                     | undefined;
@@ -3802,8 +7447,38 @@ export type UpdateBatchCoordinatorMutation = {
                     | undefined
                   >
                 | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
               role?:
                 | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
                 | undefined;
             }
           | undefined;
@@ -4045,6 +7720,207 @@ export type UpdateEventMutation = {
     | undefined;
 };
 
+export type UpdateScholarshipApplicationDraftMutationVariables = Exact<{
+  applicationId: Scalars['String']['input'];
+  input: ScholarshipApplicationInput;
+}>;
+
+export type UpdateScholarshipApplicationDraftMutation = {
+  __typename?: 'Mutation';
+  updateScholarshipApplicationDraft?:
+    | {
+        __typename?: 'ScholarshipApplication';
+        applicantUserId?: string | undefined;
+        approvedAmountDisbursed?: any | undefined;
+        approvedAt?: any | undefined;
+        approvedByUserId?: string | undefined;
+        approvedProofDays?: number | undefined;
+        approvedTotalAmount?: any | undefined;
+        assignedMentorUserId?: string | undefined;
+        batchSnapshot?: number | undefined;
+        beneficiaryUserId?: string | undefined;
+        closedAt?: any | undefined;
+        createdAt?: any | undefined;
+        id?: string | undefined;
+        lastActivityAt?: any | undefined;
+        paymentMode?: ScholarshipPaymentMode | undefined;
+        payoutMaskedSnapshot?: string | undefined;
+        payoutMethod?: ScholarshipPayoutMethod | undefined;
+        payoutSnapshot?: any | undefined;
+        proofStatus?: string | undefined;
+        proposedProofDays?: number | undefined;
+        purpose?: string | undefined;
+        reason?: string | undefined;
+        referenceNumber?: string | undefined;
+        refundStatus?: string | undefined;
+        rejectedAt?: any | undefined;
+        rejectedByUserId?: string | undefined;
+        rejectionReason?: string | undefined;
+        requestedAmount?: any | undefined;
+        requestedFirstInstallmentAmount?: any | undefined;
+        reviewStartedAt?: any | undefined;
+        reviewedByUserId?: string | undefined;
+        status?: ScholarshipApplicationStatus | undefined;
+        submittedAt?: any | undefined;
+        updatedAt?: any | undefined;
+        assignedMentor?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        companyName: string;
+                        id: string;
+                        position?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+            }
+          | undefined;
+        beneficiary?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        companyName: string;
+                        id: string;
+                        position?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
 export type UpdateTransactionMutationVariables = Exact<{
   id: Scalars['String']['input'];
   status: TransactionStatus;
@@ -4063,6 +7939,26 @@ export type UpdateTransactionMutation = {
         isDonation?: boolean | undefined;
         method?: string | undefined;
         referenceId?: string | undefined;
+        scholarshipApplicationId?: string | undefined;
+        scholarshipApprovedAt?: any | undefined;
+        scholarshipBatchSnapshot?: number | undefined;
+        scholarshipBeneficiaryUserId?: string | undefined;
+        scholarshipCompletedAt?: any | undefined;
+        scholarshipConfirmedAmount?: any | undefined;
+        scholarshipConfirmedAt?: any | undefined;
+        scholarshipImmutableAt?: any | undefined;
+        scholarshipInstallmentSequence?: number | undefined;
+        scholarshipMaskedPayoutDestination?: string | undefined;
+        scholarshipMentorUserId?: string | undefined;
+        scholarshipOriginalTransactionId?: string | undefined;
+        scholarshipPayoutMethod?: string | undefined;
+        scholarshipProofDueAt?: any | undefined;
+        scholarshipProofDueDays?: number | undefined;
+        scholarshipProofStatus?: string | undefined;
+        scholarshipPurposeSnapshot?: string | undefined;
+        scholarshipReceivedAt?: any | undefined;
+        scholarshipStatus?: string | undefined;
+        sourceType?: string | undefined;
         status?: TransactionStatus | undefined;
         title?: string | undefined;
         transactionDate?: any | undefined;
@@ -4111,8 +8007,38 @@ export type UpdateTransactionMutation = {
                     | undefined
                   >
                 | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
               role?:
                 | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
                 | undefined;
             }
           | undefined;
@@ -4168,37 +8094,7 @@ export type UpdateUserMutation = {
         metadata?: any | undefined;
         mobile?: string | undefined;
         nickName?: string | undefined;
-        positions?:
-          | Array<
-              | {
-                  __typename?: 'EffectivePosition';
-                  assignmentId?: string | undefined;
-                  code?: string | undefined;
-                  name?: string | undefined;
-                  termId?: string | undefined;
-                  termName?: string | undefined;
-                  validFrom?: any | undefined;
-                  validUntil?: any | undefined;
-                }
-              | undefined
-            >
-          | undefined;
         profileImage?: string | undefined;
-        roles?:
-          | Array<
-              | {
-                  __typename?: 'EffectiveRole';
-                  assignmentId?: string | undefined;
-                  code?: string | undefined;
-                  name?: string | undefined;
-                  scopeBatch?: number | undefined;
-                  scopeType?: string | undefined;
-                  validFrom?: any | undefined;
-                  validUntil?: any | undefined;
-                }
-              | undefined
-            >
-          | undefined;
         socialMedia?: any | undefined;
         updatedAt: any;
         whatsAppMobile?: string | undefined;
@@ -4214,8 +8110,38 @@ export type UpdateUserMutation = {
               | undefined
             >
           | undefined;
+        positions?:
+          | Array<
+              | {
+                  __typename?: 'EffectivePosition';
+                  assignmentId?: string | undefined;
+                  code?: string | undefined;
+                  name?: string | undefined;
+                  termId?: string | undefined;
+                  termName?: string | undefined;
+                  validFrom?: any | undefined;
+                  validUntil?: any | undefined;
+                }
+              | undefined
+            >
+          | undefined;
         role?:
           | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+          | undefined;
+        roles?:
+          | Array<
+              | {
+                  __typename?: 'EffectiveRole';
+                  assignmentId?: string | undefined;
+                  code?: string | undefined;
+                  name?: string | undefined;
+                  scopeBatch?: number | undefined;
+                  scopeType?: string | undefined;
+                  validFrom?: any | undefined;
+                  validUntil?: any | undefined;
+                }
+              | undefined
+            >
           | undefined;
       }
     | undefined;
@@ -4468,6 +8394,21 @@ export type ExecutivePositionAssignmentsQuery = {
                         | undefined
                       >
                     | undefined;
+                  positions?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectivePosition';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            termId?: string | undefined;
+                            termName?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
                   role?:
                     | {
                         __typename?: 'Role';
@@ -4475,6 +8416,21 @@ export type ExecutivePositionAssignmentsQuery = {
                         id?: string | undefined;
                         name?: string | undefined;
                       }
+                    | undefined;
+                  roles?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectiveRole';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            scopeBatch?: number | undefined;
+                            scopeType?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
                     | undefined;
                 }
               | undefined;
@@ -4740,6 +8696,21 @@ export type GetAlbumQuery = {
                               | undefined
                             >
                           | undefined;
+                        positions?:
+                          | Array<
+                              | {
+                                  __typename?: 'EffectivePosition';
+                                  assignmentId?: string | undefined;
+                                  code?: string | undefined;
+                                  name?: string | undefined;
+                                  termId?: string | undefined;
+                                  termName?: string | undefined;
+                                  validFrom?: any | undefined;
+                                  validUntil?: any | undefined;
+                                }
+                              | undefined
+                            >
+                          | undefined;
                         role?:
                           | {
                               __typename?: 'Role';
@@ -4747,6 +8718,21 @@ export type GetAlbumQuery = {
                               id?: string | undefined;
                               name?: string | undefined;
                             }
+                          | undefined;
+                        roles?:
+                          | Array<
+                              | {
+                                  __typename?: 'EffectiveRole';
+                                  assignmentId?: string | undefined;
+                                  code?: string | undefined;
+                                  name?: string | undefined;
+                                  scopeBatch?: number | undefined;
+                                  scopeType?: string | undefined;
+                                  validFrom?: any | undefined;
+                                  validUntil?: any | undefined;
+                                }
+                              | undefined
+                            >
                           | undefined;
                       }
                     | undefined;
@@ -4915,6 +8901,21 @@ export type GetAllBatchCoordinatorsQuery = {
                         | undefined
                       >
                     | undefined;
+                  positions?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectivePosition';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            termId?: string | undefined;
+                            termName?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
                   role?:
                     | {
                         __typename?: 'Role';
@@ -4922,6 +8923,21 @@ export type GetAllBatchCoordinatorsQuery = {
                         id?: string | undefined;
                         name?: string | undefined;
                       }
+                    | undefined;
+                  roles?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectiveRole';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            scopeBatch?: number | undefined;
+                            scopeType?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
                     | undefined;
                 }
               | undefined;
@@ -4986,9 +9002,71 @@ export type GetBatchCoordinatorByUserIdQuery = {
                     | undefined
                   >
                 | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
               role?:
                 | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
                 | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
+export type GetBatchCoordinatorScholarshipDashboardQueryVariables = Exact<{
+  batch: Scalars['Int']['input'];
+}>;
+
+export type GetBatchCoordinatorScholarshipDashboardQuery = {
+  __typename?: 'Query';
+  getBatchCoordinatorScholarshipDashboard?:
+    | {
+        __typename?: 'ScholarshipDashboard';
+        disbursedAmount?: number | undefined;
+        exceptionCount?: number | undefined;
+        requestedAmount?: number | undefined;
+        totalApplications?: number | undefined;
+        byStatus?:
+          | Array<
+              | { __typename?: 'ScholarshipStatusCount'; count?: number | undefined; key?: string | undefined }
+              | undefined
+            >
+          | undefined;
+        capacity?:
+          | {
+              __typename?: 'ScholarshipMentorCapacity';
+              allocated?: number | undefined;
+              available?: number | undefined;
+              committed?: number | undefined;
+              returned?: number | undefined;
             }
           | undefined;
       }
@@ -5051,6 +9129,21 @@ export type GetBatchCoordinatorsByBatchQuery = {
                         | undefined
                       >
                     | undefined;
+                  positions?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectivePosition';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            termId?: string | undefined;
+                            termName?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
                   role?:
                     | {
                         __typename?: 'Role';
@@ -5058,6 +9151,21 @@ export type GetBatchCoordinatorsByBatchQuery = {
                         id?: string | undefined;
                         name?: string | undefined;
                       }
+                    | undefined;
+                  roles?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectiveRole';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            scopeBatch?: number | undefined;
+                            scopeType?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
                     | undefined;
                 }
               | undefined;
@@ -5456,6 +9564,138 @@ export type GetCompanyInfoListQuery = {
   }>;
 };
 
+export type GetCompletedScholarshipTransactionsQueryVariables = Exact<{
+  options?: InputMaybe<ListInput>;
+}>;
+
+export type GetCompletedScholarshipTransactionsQuery = {
+  __typename?: 'Query';
+  getCompletedScholarshipTransactions?:
+    | Array<
+        | {
+            __typename?: 'Transaction';
+            amount?: any | undefined;
+            createdAt?: any | undefined;
+            currency?: Currency | undefined;
+            description?: string | undefined;
+            id?: string | undefined;
+            isDonation?: boolean | undefined;
+            method?: string | undefined;
+            referenceId?: string | undefined;
+            scholarshipApplicationId?: string | undefined;
+            scholarshipApprovedAt?: any | undefined;
+            scholarshipBatchSnapshot?: number | undefined;
+            scholarshipBeneficiaryUserId?: string | undefined;
+            scholarshipCompletedAt?: any | undefined;
+            scholarshipConfirmedAmount?: any | undefined;
+            scholarshipConfirmedAt?: any | undefined;
+            scholarshipImmutableAt?: any | undefined;
+            scholarshipInstallmentSequence?: number | undefined;
+            scholarshipMaskedPayoutDestination?: string | undefined;
+            scholarshipMentorUserId?: string | undefined;
+            scholarshipOriginalTransactionId?: string | undefined;
+            scholarshipPayoutMethod?: string | undefined;
+            scholarshipProofDueAt?: any | undefined;
+            scholarshipProofDueDays?: number | undefined;
+            scholarshipProofStatus?: string | undefined;
+            scholarshipPurposeSnapshot?: string | undefined;
+            scholarshipReceivedAt?: any | undefined;
+            scholarshipStatus?: string | undefined;
+            sourceType?: string | undefined;
+            status?: TransactionStatus | undefined;
+            title?: string | undefined;
+            transactionDate?: any | undefined;
+            type?: TransactionType | undefined;
+            updatedAt?: any | undefined;
+            userId?: string | undefined;
+            user?:
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: any | undefined;
+                  email?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  hasBusiness?: boolean | undefined;
+                  id?: string | undefined;
+                  isConfidential?: boolean | undefined;
+                  isFaculty?: boolean | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  metadata?: any | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
+                  updatedAt: any;
+                  whatsAppMobile?: string | undefined;
+                  companyInfo?:
+                    | Array<
+                        | {
+                            __typename?: 'CompanyInfoBasic';
+                            companyName: string;
+                            id: string;
+                            position?: string | undefined;
+                            userId: string;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  positions?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectivePosition';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            termId?: string | undefined;
+                            termName?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  role?:
+                    | {
+                        __typename?: 'Role';
+                        code?: string | undefined;
+                        id?: string | undefined;
+                        name?: string | undefined;
+                      }
+                    | undefined;
+                  roles?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectiveRole';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            scopeBatch?: number | undefined;
+                            scopeType?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                }
+              | undefined;
+          }
+        | undefined
+      >
+    | undefined;
+};
+
 export type GetEventDetailsQueryVariables = Exact<{
   id: Scalars['Int']['input'];
 }>;
@@ -5577,6 +9817,282 @@ export type GetEventListQuery = {
                 }
               | undefined
             >
+          | undefined;
+      }
+    | undefined;
+};
+
+export type GetMentorFundAllocationsQueryVariables = Exact<{
+  batch?: InputMaybe<Scalars['Int']['input']>;
+  mentorUserId?: InputMaybe<Scalars['String']['input']>;
+  options?: InputMaybe<ListInput>;
+}>;
+
+export type GetMentorFundAllocationsQuery = {
+  __typename?: 'Query';
+  getMentorFundAllocations?:
+    | Array<
+        | {
+            __typename?: 'MentorFundAllocation';
+            amount?: any | undefined;
+            batch?: number | undefined;
+            confirmedAmount?: any | undefined;
+            createdAt?: any | undefined;
+            currency?: string | undefined;
+            disputedAmount?: any | undefined;
+            id?: string | undefined;
+            mentorUserId?: string | undefined;
+            method?: string | undefined;
+            notes?: string | undefined;
+            recordedByUserId?: string | undefined;
+            reference?: string | undefined;
+            status?: string | undefined;
+            transferDate?: any | undefined;
+          }
+        | undefined
+      >
+    | undefined;
+};
+
+export type GetMentorScholarshipApplicationsQueryVariables = Exact<{
+  filter?: InputMaybe<ScholarshipApplicationFilterInput>;
+  options?: InputMaybe<ListInput>;
+}>;
+
+export type GetMentorScholarshipApplicationsQuery = {
+  __typename?: 'Query';
+  getMentorScholarshipApplications?:
+    | Array<
+        | {
+            __typename?: 'ScholarshipApplication';
+            applicantUserId?: string | undefined;
+            approvedAmountDisbursed?: any | undefined;
+            approvedAt?: any | undefined;
+            approvedByUserId?: string | undefined;
+            approvedProofDays?: number | undefined;
+            approvedTotalAmount?: any | undefined;
+            assignedMentorUserId?: string | undefined;
+            batchSnapshot?: number | undefined;
+            beneficiaryUserId?: string | undefined;
+            closedAt?: any | undefined;
+            createdAt?: any | undefined;
+            id?: string | undefined;
+            lastActivityAt?: any | undefined;
+            paymentMode?: ScholarshipPaymentMode | undefined;
+            payoutMaskedSnapshot?: string | undefined;
+            payoutMethod?: ScholarshipPayoutMethod | undefined;
+            payoutSnapshot?: any | undefined;
+            proofStatus?: string | undefined;
+            proposedProofDays?: number | undefined;
+            purpose?: string | undefined;
+            reason?: string | undefined;
+            referenceNumber?: string | undefined;
+            refundStatus?: string | undefined;
+            rejectedAt?: any | undefined;
+            rejectedByUserId?: string | undefined;
+            rejectionReason?: string | undefined;
+            requestedAmount?: any | undefined;
+            requestedFirstInstallmentAmount?: any | undefined;
+            reviewStartedAt?: any | undefined;
+            reviewedByUserId?: string | undefined;
+            status?: ScholarshipApplicationStatus | undefined;
+            submittedAt?: any | undefined;
+            updatedAt?: any | undefined;
+            assignedMentor?:
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: any | undefined;
+                  email?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  hasBusiness?: boolean | undefined;
+                  id?: string | undefined;
+                  isConfidential?: boolean | undefined;
+                  isFaculty?: boolean | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  metadata?: any | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
+                  updatedAt: any;
+                  whatsAppMobile?: string | undefined;
+                  companyInfo?:
+                    | Array<
+                        | {
+                            __typename?: 'CompanyInfoBasic';
+                            companyName: string;
+                            id: string;
+                            position?: string | undefined;
+                            userId: string;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  positions?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectivePosition';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            termId?: string | undefined;
+                            termName?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  role?:
+                    | {
+                        __typename?: 'Role';
+                        code?: string | undefined;
+                        id?: string | undefined;
+                        name?: string | undefined;
+                      }
+                    | undefined;
+                  roles?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectiveRole';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            scopeBatch?: number | undefined;
+                            scopeType?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                }
+              | undefined;
+            beneficiary?:
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: any | undefined;
+                  email?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  hasBusiness?: boolean | undefined;
+                  id?: string | undefined;
+                  isConfidential?: boolean | undefined;
+                  isFaculty?: boolean | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  metadata?: any | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
+                  updatedAt: any;
+                  whatsAppMobile?: string | undefined;
+                  companyInfo?:
+                    | Array<
+                        | {
+                            __typename?: 'CompanyInfoBasic';
+                            companyName: string;
+                            id: string;
+                            position?: string | undefined;
+                            userId: string;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  positions?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectivePosition';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            termId?: string | undefined;
+                            termName?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  role?:
+                    | {
+                        __typename?: 'Role';
+                        code?: string | undefined;
+                        id?: string | undefined;
+                        name?: string | undefined;
+                      }
+                    | undefined;
+                  roles?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectiveRole';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            scopeBatch?: number | undefined;
+                            scopeType?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                }
+              | undefined;
+          }
+        | undefined
+      >
+    | undefined;
+};
+
+export type GetMentorScholarshipDashboardQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetMentorScholarshipDashboardQuery = {
+  __typename?: 'Query';
+  getMentorScholarshipDashboard?:
+    | {
+        __typename?: 'ScholarshipDashboard';
+        disbursedAmount?: number | undefined;
+        exceptionCount?: number | undefined;
+        requestedAmount?: number | undefined;
+        totalApplications?: number | undefined;
+        byStatus?:
+          | Array<
+              | { __typename?: 'ScholarshipStatusCount'; count?: number | undefined; key?: string | undefined }
+              | undefined
+            >
+          | undefined;
+        capacity?:
+          | {
+              __typename?: 'ScholarshipMentorCapacity';
+              allocated?: number | undefined;
+              available?: number | undefined;
+              committed?: number | undefined;
+              returned?: number | undefined;
+            }
           | undefined;
       }
     | undefined;
@@ -5732,6 +10248,21 @@ export type GetMyPhotosQuery = {
                         | undefined
                       >
                     | undefined;
+                  positions?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectivePosition';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            termId?: string | undefined;
+                            termName?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
                   role?:
                     | {
                         __typename?: 'Role';
@@ -5740,8 +10271,1385 @@ export type GetMyPhotosQuery = {
                         name?: string | undefined;
                       }
                     | undefined;
+                  roles?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectiveRole';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            scopeBatch?: number | undefined;
+                            scopeType?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
                 }
               | undefined;
+          }
+        | undefined
+      >
+    | undefined;
+};
+
+export type GetMyScholarshipApplicationsQueryVariables = Exact<{
+  options?: InputMaybe<ListInput>;
+}>;
+
+export type GetMyScholarshipApplicationsQuery = {
+  __typename?: 'Query';
+  getMyScholarshipApplications?:
+    | Array<
+        | {
+            __typename?: 'ScholarshipApplication';
+            applicantUserId?: string | undefined;
+            approvedAmountDisbursed?: any | undefined;
+            approvedAt?: any | undefined;
+            approvedByUserId?: string | undefined;
+            approvedProofDays?: number | undefined;
+            approvedTotalAmount?: any | undefined;
+            assignedMentorUserId?: string | undefined;
+            batchSnapshot?: number | undefined;
+            beneficiaryUserId?: string | undefined;
+            closedAt?: any | undefined;
+            createdAt?: any | undefined;
+            id?: string | undefined;
+            lastActivityAt?: any | undefined;
+            paymentMode?: ScholarshipPaymentMode | undefined;
+            payoutMaskedSnapshot?: string | undefined;
+            payoutMethod?: ScholarshipPayoutMethod | undefined;
+            payoutSnapshot?: any | undefined;
+            proofStatus?: string | undefined;
+            proposedProofDays?: number | undefined;
+            purpose?: string | undefined;
+            reason?: string | undefined;
+            referenceNumber?: string | undefined;
+            refundStatus?: string | undefined;
+            rejectedAt?: any | undefined;
+            rejectedByUserId?: string | undefined;
+            rejectionReason?: string | undefined;
+            requestedAmount?: any | undefined;
+            requestedFirstInstallmentAmount?: any | undefined;
+            reviewStartedAt?: any | undefined;
+            reviewedByUserId?: string | undefined;
+            status?: ScholarshipApplicationStatus | undefined;
+            submittedAt?: any | undefined;
+            updatedAt?: any | undefined;
+            assignedMentor?:
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: any | undefined;
+                  email?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  hasBusiness?: boolean | undefined;
+                  id?: string | undefined;
+                  isConfidential?: boolean | undefined;
+                  isFaculty?: boolean | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  metadata?: any | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
+                  updatedAt: any;
+                  whatsAppMobile?: string | undefined;
+                  companyInfo?:
+                    | Array<
+                        | {
+                            __typename?: 'CompanyInfoBasic';
+                            companyName: string;
+                            id: string;
+                            position?: string | undefined;
+                            userId: string;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  positions?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectivePosition';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            termId?: string | undefined;
+                            termName?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  role?:
+                    | {
+                        __typename?: 'Role';
+                        code?: string | undefined;
+                        id?: string | undefined;
+                        name?: string | undefined;
+                      }
+                    | undefined;
+                  roles?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectiveRole';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            scopeBatch?: number | undefined;
+                            scopeType?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                }
+              | undefined;
+            beneficiary?:
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: any | undefined;
+                  email?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  hasBusiness?: boolean | undefined;
+                  id?: string | undefined;
+                  isConfidential?: boolean | undefined;
+                  isFaculty?: boolean | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  metadata?: any | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
+                  updatedAt: any;
+                  whatsAppMobile?: string | undefined;
+                  companyInfo?:
+                    | Array<
+                        | {
+                            __typename?: 'CompanyInfoBasic';
+                            companyName: string;
+                            id: string;
+                            position?: string | undefined;
+                            userId: string;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  positions?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectivePosition';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            termId?: string | undefined;
+                            termName?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  role?:
+                    | {
+                        __typename?: 'Role';
+                        code?: string | undefined;
+                        id?: string | undefined;
+                        name?: string | undefined;
+                      }
+                    | undefined;
+                  roles?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectiveRole';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            scopeBatch?: number | undefined;
+                            scopeType?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                }
+              | undefined;
+          }
+        | undefined
+      >
+    | undefined;
+};
+
+export type GetMyScholarshipDashboardQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetMyScholarshipDashboardQuery = {
+  __typename?: 'Query';
+  getMyScholarshipDashboard?:
+    | {
+        __typename?: 'ScholarshipDashboard';
+        disbursedAmount?: number | undefined;
+        exceptionCount?: number | undefined;
+        requestedAmount?: number | undefined;
+        totalApplications?: number | undefined;
+        byStatus?:
+          | Array<
+              | { __typename?: 'ScholarshipStatusCount'; count?: number | undefined; key?: string | undefined }
+              | undefined
+            >
+          | undefined;
+        capacity?:
+          | {
+              __typename?: 'ScholarshipMentorCapacity';
+              allocated?: number | undefined;
+              available?: number | undefined;
+              committed?: number | undefined;
+              returned?: number | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
+export type GetScholarshipActivityQueryVariables = Exact<{
+  entityId?: InputMaybe<Scalars['String']['input']>;
+  entityType?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type GetScholarshipActivityQuery = {
+  __typename?: 'Query';
+  getScholarshipActivity?:
+    | Array<
+        | {
+            __typename?: 'ScholarshipActivityLog';
+            action?: string | undefined;
+            actorUserId?: string | undefined;
+            after?: any | undefined;
+            before?: any | undefined;
+            createdAt?: any | undefined;
+            entityId?: string | undefined;
+            entityType?: string | undefined;
+            id?: string | undefined;
+            isHighRisk?: boolean | undefined;
+            reason?: string | undefined;
+          }
+        | undefined
+      >
+    | undefined;
+};
+
+export type GetScholarshipApplicationQueryVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+export type GetScholarshipApplicationQuery = {
+  __typename?: 'Query';
+  getScholarshipApplication?:
+    | {
+        __typename?: 'ScholarshipApplication';
+        applicantUserId?: string | undefined;
+        approvedAmountDisbursed?: any | undefined;
+        approvedAt?: any | undefined;
+        approvedByUserId?: string | undefined;
+        approvedProofDays?: number | undefined;
+        approvedTotalAmount?: any | undefined;
+        assignedMentorUserId?: string | undefined;
+        batchSnapshot?: number | undefined;
+        beneficiaryUserId?: string | undefined;
+        closedAt?: any | undefined;
+        createdAt?: any | undefined;
+        id?: string | undefined;
+        lastActivityAt?: any | undefined;
+        paymentMode?: ScholarshipPaymentMode | undefined;
+        payoutMaskedSnapshot?: string | undefined;
+        payoutMethod?: ScholarshipPayoutMethod | undefined;
+        payoutSnapshot?: any | undefined;
+        proofStatus?: string | undefined;
+        proposedProofDays?: number | undefined;
+        purpose?: string | undefined;
+        reason?: string | undefined;
+        referenceNumber?: string | undefined;
+        refundStatus?: string | undefined;
+        rejectedAt?: any | undefined;
+        rejectedByUserId?: string | undefined;
+        rejectionReason?: string | undefined;
+        requestedAmount?: any | undefined;
+        requestedFirstInstallmentAmount?: any | undefined;
+        reviewStartedAt?: any | undefined;
+        reviewedByUserId?: string | undefined;
+        status?: ScholarshipApplicationStatus | undefined;
+        submittedAt?: any | undefined;
+        updatedAt?: any | undefined;
+        assignedMentor?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        companyName: string;
+                        id: string;
+                        position?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+            }
+          | undefined;
+        beneficiary?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+              companyInfo?:
+                | Array<
+                    | {
+                        __typename?: 'CompanyInfoBasic';
+                        companyName: string;
+                        id: string;
+                        position?: string | undefined;
+                        userId: string;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              role?:
+                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
+export type GetScholarshipApplicationTransactionsQueryVariables = Exact<{
+  applicationId: Scalars['String']['input'];
+}>;
+
+export type GetScholarshipApplicationTransactionsQuery = {
+  __typename?: 'Query';
+  getScholarshipApplicationTransactions?:
+    | Array<
+        | {
+            __typename?: 'Transaction';
+            amount?: any | undefined;
+            createdAt?: any | undefined;
+            currency?: Currency | undefined;
+            description?: string | undefined;
+            id?: string | undefined;
+            isDonation?: boolean | undefined;
+            method?: string | undefined;
+            referenceId?: string | undefined;
+            scholarshipApplicationId?: string | undefined;
+            scholarshipApprovedAt?: any | undefined;
+            scholarshipBatchSnapshot?: number | undefined;
+            scholarshipBeneficiaryUserId?: string | undefined;
+            scholarshipCompletedAt?: any | undefined;
+            scholarshipConfirmedAmount?: any | undefined;
+            scholarshipConfirmedAt?: any | undefined;
+            scholarshipImmutableAt?: any | undefined;
+            scholarshipInstallmentSequence?: number | undefined;
+            scholarshipMaskedPayoutDestination?: string | undefined;
+            scholarshipMentorUserId?: string | undefined;
+            scholarshipOriginalTransactionId?: string | undefined;
+            scholarshipPayoutMethod?: string | undefined;
+            scholarshipProofDueAt?: any | undefined;
+            scholarshipProofDueDays?: number | undefined;
+            scholarshipProofStatus?: string | undefined;
+            scholarshipPurposeSnapshot?: string | undefined;
+            scholarshipReceivedAt?: any | undefined;
+            scholarshipStatus?: string | undefined;
+            sourceType?: string | undefined;
+            status?: TransactionStatus | undefined;
+            title?: string | undefined;
+            transactionDate?: any | undefined;
+            type?: TransactionType | undefined;
+            updatedAt?: any | undefined;
+            userId?: string | undefined;
+            user?:
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: any | undefined;
+                  email?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  hasBusiness?: boolean | undefined;
+                  id?: string | undefined;
+                  isConfidential?: boolean | undefined;
+                  isFaculty?: boolean | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  metadata?: any | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
+                  updatedAt: any;
+                  whatsAppMobile?: string | undefined;
+                  companyInfo?:
+                    | Array<
+                        | {
+                            __typename?: 'CompanyInfoBasic';
+                            companyName: string;
+                            id: string;
+                            position?: string | undefined;
+                            userId: string;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  positions?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectivePosition';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            termId?: string | undefined;
+                            termName?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  role?:
+                    | {
+                        __typename?: 'Role';
+                        code?: string | undefined;
+                        id?: string | undefined;
+                        name?: string | undefined;
+                      }
+                    | undefined;
+                  roles?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectiveRole';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            scopeBatch?: number | undefined;
+                            scopeType?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                }
+              | undefined;
+          }
+        | undefined
+      >
+    | undefined;
+};
+
+export type GetScholarshipApplicationsQueryVariables = Exact<{
+  filter?: InputMaybe<ScholarshipApplicationFilterInput>;
+  options?: InputMaybe<ListInput>;
+}>;
+
+export type GetScholarshipApplicationsQuery = {
+  __typename?: 'Query';
+  getScholarshipApplications?:
+    | Array<
+        | {
+            __typename?: 'ScholarshipApplication';
+            applicantUserId?: string | undefined;
+            approvedAmountDisbursed?: any | undefined;
+            approvedAt?: any | undefined;
+            approvedByUserId?: string | undefined;
+            approvedProofDays?: number | undefined;
+            approvedTotalAmount?: any | undefined;
+            assignedMentorUserId?: string | undefined;
+            batchSnapshot?: number | undefined;
+            beneficiaryUserId?: string | undefined;
+            closedAt?: any | undefined;
+            createdAt?: any | undefined;
+            id?: string | undefined;
+            lastActivityAt?: any | undefined;
+            paymentMode?: ScholarshipPaymentMode | undefined;
+            payoutMaskedSnapshot?: string | undefined;
+            payoutMethod?: ScholarshipPayoutMethod | undefined;
+            payoutSnapshot?: any | undefined;
+            proofStatus?: string | undefined;
+            proposedProofDays?: number | undefined;
+            purpose?: string | undefined;
+            reason?: string | undefined;
+            referenceNumber?: string | undefined;
+            refundStatus?: string | undefined;
+            rejectedAt?: any | undefined;
+            rejectedByUserId?: string | undefined;
+            rejectionReason?: string | undefined;
+            requestedAmount?: any | undefined;
+            requestedFirstInstallmentAmount?: any | undefined;
+            reviewStartedAt?: any | undefined;
+            reviewedByUserId?: string | undefined;
+            status?: ScholarshipApplicationStatus | undefined;
+            submittedAt?: any | undefined;
+            updatedAt?: any | undefined;
+            assignedMentor?:
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: any | undefined;
+                  email?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  hasBusiness?: boolean | undefined;
+                  id?: string | undefined;
+                  isConfidential?: boolean | undefined;
+                  isFaculty?: boolean | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  metadata?: any | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
+                  updatedAt: any;
+                  whatsAppMobile?: string | undefined;
+                  companyInfo?:
+                    | Array<
+                        | {
+                            __typename?: 'CompanyInfoBasic';
+                            companyName: string;
+                            id: string;
+                            position?: string | undefined;
+                            userId: string;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  positions?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectivePosition';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            termId?: string | undefined;
+                            termName?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  role?:
+                    | {
+                        __typename?: 'Role';
+                        code?: string | undefined;
+                        id?: string | undefined;
+                        name?: string | undefined;
+                      }
+                    | undefined;
+                  roles?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectiveRole';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            scopeBatch?: number | undefined;
+                            scopeType?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                }
+              | undefined;
+            beneficiary?:
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: any | undefined;
+                  email?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  hasBusiness?: boolean | undefined;
+                  id?: string | undefined;
+                  isConfidential?: boolean | undefined;
+                  isFaculty?: boolean | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  metadata?: any | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
+                  updatedAt: any;
+                  whatsAppMobile?: string | undefined;
+                  companyInfo?:
+                    | Array<
+                        | {
+                            __typename?: 'CompanyInfoBasic';
+                            companyName: string;
+                            id: string;
+                            position?: string | undefined;
+                            userId: string;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  positions?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectivePosition';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            termId?: string | undefined;
+                            termName?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  role?:
+                    | {
+                        __typename?: 'Role';
+                        code?: string | undefined;
+                        id?: string | undefined;
+                        name?: string | undefined;
+                      }
+                    | undefined;
+                  roles?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectiveRole';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            scopeBatch?: number | undefined;
+                            scopeType?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                }
+              | undefined;
+          }
+        | undefined
+      >
+    | undefined;
+};
+
+export type GetScholarshipBeneficiaryListQueryVariables = Exact<{
+  filter?: InputMaybe<ScholarshipApplicationFilterInput>;
+  options?: InputMaybe<ListInput>;
+}>;
+
+export type GetScholarshipBeneficiaryListQuery = {
+  __typename?: 'Query';
+  getScholarshipBeneficiaryList?:
+    | Array<
+        | {
+            __typename?: 'ScholarshipApplication';
+            applicantUserId?: string | undefined;
+            approvedAmountDisbursed?: any | undefined;
+            approvedAt?: any | undefined;
+            approvedByUserId?: string | undefined;
+            approvedProofDays?: number | undefined;
+            approvedTotalAmount?: any | undefined;
+            assignedMentorUserId?: string | undefined;
+            batchSnapshot?: number | undefined;
+            beneficiaryUserId?: string | undefined;
+            closedAt?: any | undefined;
+            createdAt?: any | undefined;
+            id?: string | undefined;
+            lastActivityAt?: any | undefined;
+            paymentMode?: ScholarshipPaymentMode | undefined;
+            payoutMaskedSnapshot?: string | undefined;
+            payoutMethod?: ScholarshipPayoutMethod | undefined;
+            payoutSnapshot?: any | undefined;
+            proofStatus?: string | undefined;
+            proposedProofDays?: number | undefined;
+            purpose?: string | undefined;
+            reason?: string | undefined;
+            referenceNumber?: string | undefined;
+            refundStatus?: string | undefined;
+            rejectedAt?: any | undefined;
+            rejectedByUserId?: string | undefined;
+            rejectionReason?: string | undefined;
+            requestedAmount?: any | undefined;
+            requestedFirstInstallmentAmount?: any | undefined;
+            reviewStartedAt?: any | undefined;
+            reviewedByUserId?: string | undefined;
+            status?: ScholarshipApplicationStatus | undefined;
+            submittedAt?: any | undefined;
+            updatedAt?: any | undefined;
+            assignedMentor?:
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: any | undefined;
+                  email?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  hasBusiness?: boolean | undefined;
+                  id?: string | undefined;
+                  isConfidential?: boolean | undefined;
+                  isFaculty?: boolean | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  metadata?: any | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
+                  updatedAt: any;
+                  whatsAppMobile?: string | undefined;
+                  companyInfo?:
+                    | Array<
+                        | {
+                            __typename?: 'CompanyInfoBasic';
+                            companyName: string;
+                            id: string;
+                            position?: string | undefined;
+                            userId: string;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  positions?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectivePosition';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            termId?: string | undefined;
+                            termName?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  role?:
+                    | {
+                        __typename?: 'Role';
+                        code?: string | undefined;
+                        id?: string | undefined;
+                        name?: string | undefined;
+                      }
+                    | undefined;
+                  roles?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectiveRole';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            scopeBatch?: number | undefined;
+                            scopeType?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                }
+              | undefined;
+            beneficiary?:
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: any | undefined;
+                  email?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  hasBusiness?: boolean | undefined;
+                  id?: string | undefined;
+                  isConfidential?: boolean | undefined;
+                  isFaculty?: boolean | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  metadata?: any | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
+                  updatedAt: any;
+                  whatsAppMobile?: string | undefined;
+                  companyInfo?:
+                    | Array<
+                        | {
+                            __typename?: 'CompanyInfoBasic';
+                            companyName: string;
+                            id: string;
+                            position?: string | undefined;
+                            userId: string;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  positions?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectivePosition';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            termId?: string | undefined;
+                            termName?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  role?:
+                    | {
+                        __typename?: 'Role';
+                        code?: string | undefined;
+                        id?: string | undefined;
+                        name?: string | undefined;
+                      }
+                    | undefined;
+                  roles?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectiveRole';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            scopeBatch?: number | undefined;
+                            scopeType?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                }
+              | undefined;
+          }
+        | undefined
+      >
+    | undefined;
+};
+
+export type GetScholarshipDocumentReadUrlQueryVariables = Exact<{
+  documentId: Scalars['String']['input'];
+}>;
+
+export type GetScholarshipDocumentReadUrlQuery = {
+  __typename?: 'Query';
+  getScholarshipDocumentReadUrl?: string | undefined;
+};
+
+export type GetScholarshipExceptionQueueQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetScholarshipExceptionQueueQuery = {
+  __typename?: 'Query';
+  getScholarshipExceptionQueue?:
+    | Array<
+        | {
+            __typename?: 'ScholarshipApplication';
+            applicantUserId?: string | undefined;
+            approvedAmountDisbursed?: any | undefined;
+            approvedAt?: any | undefined;
+            approvedByUserId?: string | undefined;
+            approvedProofDays?: number | undefined;
+            approvedTotalAmount?: any | undefined;
+            assignedMentorUserId?: string | undefined;
+            batchSnapshot?: number | undefined;
+            beneficiaryUserId?: string | undefined;
+            closedAt?: any | undefined;
+            createdAt?: any | undefined;
+            id?: string | undefined;
+            lastActivityAt?: any | undefined;
+            paymentMode?: ScholarshipPaymentMode | undefined;
+            payoutMaskedSnapshot?: string | undefined;
+            payoutMethod?: ScholarshipPayoutMethod | undefined;
+            payoutSnapshot?: any | undefined;
+            proofStatus?: string | undefined;
+            proposedProofDays?: number | undefined;
+            purpose?: string | undefined;
+            reason?: string | undefined;
+            referenceNumber?: string | undefined;
+            refundStatus?: string | undefined;
+            rejectedAt?: any | undefined;
+            rejectedByUserId?: string | undefined;
+            rejectionReason?: string | undefined;
+            requestedAmount?: any | undefined;
+            requestedFirstInstallmentAmount?: any | undefined;
+            reviewStartedAt?: any | undefined;
+            reviewedByUserId?: string | undefined;
+            status?: ScholarshipApplicationStatus | undefined;
+            submittedAt?: any | undefined;
+            updatedAt?: any | undefined;
+            assignedMentor?:
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: any | undefined;
+                  email?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  hasBusiness?: boolean | undefined;
+                  id?: string | undefined;
+                  isConfidential?: boolean | undefined;
+                  isFaculty?: boolean | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  metadata?: any | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
+                  updatedAt: any;
+                  whatsAppMobile?: string | undefined;
+                  companyInfo?:
+                    | Array<
+                        | {
+                            __typename?: 'CompanyInfoBasic';
+                            companyName: string;
+                            id: string;
+                            position?: string | undefined;
+                            userId: string;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  positions?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectivePosition';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            termId?: string | undefined;
+                            termName?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  role?:
+                    | {
+                        __typename?: 'Role';
+                        code?: string | undefined;
+                        id?: string | undefined;
+                        name?: string | undefined;
+                      }
+                    | undefined;
+                  roles?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectiveRole';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            scopeBatch?: number | undefined;
+                            scopeType?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                }
+              | undefined;
+            beneficiary?:
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: any | undefined;
+                  email?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  hasBusiness?: boolean | undefined;
+                  id?: string | undefined;
+                  isConfidential?: boolean | undefined;
+                  isFaculty?: boolean | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  metadata?: any | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
+                  updatedAt: any;
+                  whatsAppMobile?: string | undefined;
+                  companyInfo?:
+                    | Array<
+                        | {
+                            __typename?: 'CompanyInfoBasic';
+                            companyName: string;
+                            id: string;
+                            position?: string | undefined;
+                            userId: string;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  positions?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectivePosition';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            termId?: string | undefined;
+                            termName?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  role?:
+                    | {
+                        __typename?: 'Role';
+                        code?: string | undefined;
+                        id?: string | undefined;
+                        name?: string | undefined;
+                      }
+                    | undefined;
+                  roles?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectiveRole';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            scopeBatch?: number | undefined;
+                            scopeType?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                }
+              | undefined;
+          }
+        | undefined
+      >
+    | undefined;
+};
+
+export type GetScholarshipMentorSummaryQueryVariables = Exact<{
+  mentorUserId?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type GetScholarshipMentorSummaryQuery = {
+  __typename?: 'Query';
+  getScholarshipMentorSummary?:
+    | {
+        __typename?: 'ScholarshipDashboard';
+        disbursedAmount?: number | undefined;
+        exceptionCount?: number | undefined;
+        requestedAmount?: number | undefined;
+        totalApplications?: number | undefined;
+        byStatus?:
+          | Array<
+              | { __typename?: 'ScholarshipStatusCount'; count?: number | undefined; key?: string | undefined }
+              | undefined
+            >
+          | undefined;
+        capacity?:
+          | {
+              __typename?: 'ScholarshipMentorCapacity';
+              allocated?: number | undefined;
+              available?: number | undefined;
+              committed?: number | undefined;
+              returned?: number | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
+export type GetScholarshipOrganizationDashboardQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetScholarshipOrganizationDashboardQuery = {
+  __typename?: 'Query';
+  getScholarshipOrganizationDashboard?:
+    | {
+        __typename?: 'ScholarshipDashboard';
+        disbursedAmount?: number | undefined;
+        exceptionCount?: number | undefined;
+        requestedAmount?: number | undefined;
+        totalApplications?: number | undefined;
+        byStatus?:
+          | Array<
+              | { __typename?: 'ScholarshipStatusCount'; count?: number | undefined; key?: string | undefined }
+              | undefined
+            >
+          | undefined;
+        capacity?:
+          | {
+              __typename?: 'ScholarshipMentorCapacity';
+              allocated?: number | undefined;
+              available?: number | undefined;
+              committed?: number | undefined;
+              returned?: number | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
+export type GetScholarshipRefundCasesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetScholarshipRefundCasesQuery = {
+  __typename?: 'Query';
+  getScholarshipRefundCases?:
+    | Array<
+        | {
+            __typename?: 'ScholarshipRefund';
+            beneficiaryRefundProofDocumentId?: string | undefined;
+            beneficiaryUserId?: string | undefined;
+            confirmedRefundAmount?: any | undefined;
+            id?: string | undefined;
+            linkedRefundTransactionId?: string | undefined;
+            originalTransactionId?: string | undefined;
+            refundPaymentReference?: string | undefined;
+            requestedAmount?: any | undefined;
+            status?: string | undefined;
+            wrongDisbursementCaseId?: string | undefined;
+          }
+        | undefined
+      >
+    | undefined;
+};
+
+export type GetScholarshipWrongDisbursementCasesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetScholarshipWrongDisbursementCasesQuery = {
+  __typename?: 'Query';
+  getScholarshipWrongDisbursementCases?:
+    | Array<
+        | {
+            __typename?: 'ScholarshipWrongDisbursementCase';
+            affectedDocumentIds?: Array<string | undefined> | undefined;
+            applicationId?: string | undefined;
+            beneficiaryResponse?: string | undefined;
+            disputedAmount?: any | undefined;
+            id?: string | undefined;
+            originalTransactionId?: string | undefined;
+            reason?: string | undefined;
+            refundRequested?: boolean | undefined;
+            reportedAt?: any | undefined;
+            reportedByUserId?: string | undefined;
+            requestedRefundAmount?: any | undefined;
+            status?: string | undefined;
           }
         | undefined
       >
@@ -5765,6 +11673,26 @@ export type GetTransactionQuery = {
         isDonation?: boolean | undefined;
         method?: string | undefined;
         referenceId?: string | undefined;
+        scholarshipApplicationId?: string | undefined;
+        scholarshipApprovedAt?: any | undefined;
+        scholarshipBatchSnapshot?: number | undefined;
+        scholarshipBeneficiaryUserId?: string | undefined;
+        scholarshipCompletedAt?: any | undefined;
+        scholarshipConfirmedAmount?: any | undefined;
+        scholarshipConfirmedAt?: any | undefined;
+        scholarshipImmutableAt?: any | undefined;
+        scholarshipInstallmentSequence?: number | undefined;
+        scholarshipMaskedPayoutDestination?: string | undefined;
+        scholarshipMentorUserId?: string | undefined;
+        scholarshipOriginalTransactionId?: string | undefined;
+        scholarshipPayoutMethod?: string | undefined;
+        scholarshipProofDueAt?: any | undefined;
+        scholarshipProofDueDays?: number | undefined;
+        scholarshipProofStatus?: string | undefined;
+        scholarshipPurposeSnapshot?: string | undefined;
+        scholarshipReceivedAt?: any | undefined;
+        scholarshipStatus?: string | undefined;
+        sourceType?: string | undefined;
         status?: TransactionStatus | undefined;
         title?: string | undefined;
         transactionDate?: any | undefined;
@@ -5813,8 +11741,38 @@ export type GetTransactionQuery = {
                     | undefined
                   >
                 | undefined;
+              positions?:
+                | Array<
+                    | {
+                        __typename?: 'EffectivePosition';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        termId?: string | undefined;
+                        termName?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
               role?:
                 | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+                | undefined;
+              roles?:
+                | Array<
+                    | {
+                        __typename?: 'EffectiveRole';
+                        assignmentId?: string | undefined;
+                        code?: string | undefined;
+                        name?: string | undefined;
+                        scopeBatch?: number | undefined;
+                        scopeType?: string | undefined;
+                        validFrom?: any | undefined;
+                        validUntil?: any | undefined;
+                      }
+                    | undefined
+                  >
                 | undefined;
             }
           | undefined;
@@ -5844,6 +11802,26 @@ export type GetTransactionsQuery = {
                   isDonation?: boolean | undefined;
                   method?: string | undefined;
                   referenceId?: string | undefined;
+                  scholarshipApplicationId?: string | undefined;
+                  scholarshipApprovedAt?: any | undefined;
+                  scholarshipBatchSnapshot?: number | undefined;
+                  scholarshipBeneficiaryUserId?: string | undefined;
+                  scholarshipCompletedAt?: any | undefined;
+                  scholarshipConfirmedAmount?: any | undefined;
+                  scholarshipConfirmedAt?: any | undefined;
+                  scholarshipImmutableAt?: any | undefined;
+                  scholarshipInstallmentSequence?: number | undefined;
+                  scholarshipMaskedPayoutDestination?: string | undefined;
+                  scholarshipMentorUserId?: string | undefined;
+                  scholarshipOriginalTransactionId?: string | undefined;
+                  scholarshipPayoutMethod?: string | undefined;
+                  scholarshipProofDueAt?: any | undefined;
+                  scholarshipProofDueDays?: number | undefined;
+                  scholarshipProofStatus?: string | undefined;
+                  scholarshipPurposeSnapshot?: string | undefined;
+                  scholarshipReceivedAt?: any | undefined;
+                  scholarshipStatus?: string | undefined;
+                  sourceType?: string | undefined;
                   status?: TransactionStatus | undefined;
                   title?: string | undefined;
                   transactionDate?: any | undefined;
@@ -5892,6 +11870,21 @@ export type GetTransactionsQuery = {
                               | undefined
                             >
                           | undefined;
+                        positions?:
+                          | Array<
+                              | {
+                                  __typename?: 'EffectivePosition';
+                                  assignmentId?: string | undefined;
+                                  code?: string | undefined;
+                                  name?: string | undefined;
+                                  termId?: string | undefined;
+                                  termName?: string | undefined;
+                                  validFrom?: any | undefined;
+                                  validUntil?: any | undefined;
+                                }
+                              | undefined
+                            >
+                          | undefined;
                         role?:
                           | {
                               __typename?: 'Role';
@@ -5899,6 +11892,21 @@ export type GetTransactionsQuery = {
                               id?: string | undefined;
                               name?: string | undefined;
                             }
+                          | undefined;
+                        roles?:
+                          | Array<
+                              | {
+                                  __typename?: 'EffectiveRole';
+                                  assignmentId?: string | undefined;
+                                  code?: string | undefined;
+                                  name?: string | undefined;
+                                  scopeBatch?: number | undefined;
+                                  scopeType?: string | undefined;
+                                  validFrom?: any | undefined;
+                                  validUntil?: any | undefined;
+                                }
+                              | undefined
+                            >
                           | undefined;
                       }
                     | undefined;
@@ -5986,8 +11994,38 @@ export type GetUserDetailsQuery = {
               | undefined
             >
           | undefined;
+        positions?:
+          | Array<
+              | {
+                  __typename?: 'EffectivePosition';
+                  assignmentId?: string | undefined;
+                  code?: string | undefined;
+                  name?: string | undefined;
+                  termId?: string | undefined;
+                  termName?: string | undefined;
+                  validFrom?: any | undefined;
+                  validUntil?: any | undefined;
+                }
+              | undefined
+            >
+          | undefined;
         role?:
           | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
+          | undefined;
+        roles?:
+          | Array<
+              | {
+                  __typename?: 'EffectiveRole';
+                  assignmentId?: string | undefined;
+                  code?: string | undefined;
+                  name?: string | undefined;
+                  scopeBatch?: number | undefined;
+                  scopeType?: string | undefined;
+                  validFrom?: any | undefined;
+                  validUntil?: any | undefined;
+                }
+              | undefined
+            >
           | undefined;
       }
     | undefined;
@@ -6046,6 +12084,21 @@ export type GetUserListQuery = {
                         | undefined
                       >
                     | undefined;
+                  positions?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectivePosition';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            termId?: string | undefined;
+                            termName?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
                   role?:
                     | {
                         __typename?: 'Role';
@@ -6053,6 +12106,21 @@ export type GetUserListQuery = {
                         id?: string | undefined;
                         name?: string | undefined;
                       }
+                    | undefined;
+                  roles?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectiveRole';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            scopeBatch?: number | undefined;
+                            scopeType?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
                     | undefined;
                 }
               | undefined
@@ -6167,6 +12235,21 @@ export type RoleAssignmentsQuery = {
                         | undefined
                       >
                     | undefined;
+                  positions?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectivePosition';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            termId?: string | undefined;
+                            termName?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
                   role?:
                     | {
                         __typename?: 'Role';
@@ -6174,6 +12257,21 @@ export type RoleAssignmentsQuery = {
                         id?: string | undefined;
                         name?: string | undefined;
                       }
+                    | undefined;
+                  roles?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectiveRole';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            scopeBatch?: number | undefined;
+                            scopeType?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
                     | undefined;
                 }
               | undefined;
@@ -6337,6 +12435,21 @@ export type UserExecutivePositionAssignmentsQuery = {
                         | undefined
                       >
                     | undefined;
+                  positions?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectivePosition';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            termId?: string | undefined;
+                            termName?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
                   role?:
                     | {
                         __typename?: 'Role';
@@ -6344,6 +12457,21 @@ export type UserExecutivePositionAssignmentsQuery = {
                         id?: string | undefined;
                         name?: string | undefined;
                       }
+                    | undefined;
+                  roles?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectiveRole';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            scopeBatch?: number | undefined;
+                            scopeType?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
                     | undefined;
                 }
               | undefined;
@@ -6430,6 +12558,21 @@ export type UserRoleAssignmentsQuery = {
                         | undefined
                       >
                     | undefined;
+                  positions?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectivePosition';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            termId?: string | undefined;
+                            termName?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
                   role?:
                     | {
                         __typename?: 'Role';
@@ -6437,6 +12580,21 @@ export type UserRoleAssignmentsQuery = {
                         id?: string | undefined;
                         name?: string | undefined;
                       }
+                    | undefined;
+                  roles?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectiveRole';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            scopeBatch?: number | undefined;
+                            scopeType?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
                     | undefined;
                 }
               | undefined;
@@ -6699,11 +12857,29 @@ export const AddAlbumContributorDocument = gql`
           metadata
           mobile
           nickName
+          positions {
+            assignmentId
+            code
+            name
+            termId
+            termName
+            validFrom
+            validUntil
+          }
           profileImage
           role {
             code
             id
             name
+          }
+          roles {
+            assignmentId
+            code
+            name
+            scopeBatch
+            scopeType
+            validFrom
+            validUntil
           }
           socialMedia
           updatedAt
@@ -6924,11 +13100,29 @@ export const AddPhotoDocument = gql`
         metadata
         mobile
         nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
         profileImage
         role {
           code
           id
           name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
         }
         socialMedia
         updatedAt
@@ -7101,6 +13295,219 @@ export type ApproveMemberRegistrationMutationOptions = Apollo.BaseMutationOption
   ApproveMemberRegistrationMutation,
   ApproveMemberRegistrationMutationVariables
 >;
+export const ApproveScholarshipApplicationDocument = gql`
+  mutation approveScholarshipApplication(
+    $applicationId: String!
+    $approvedTotalAmount: Float!
+    $installmentAmount: Float!
+    $note: String
+    $proofDueDays: Int
+  ) {
+    approveScholarshipApplication(
+      applicationId: $applicationId
+      approvedTotalAmount: $approvedTotalAmount
+      installmentAmount: $installmentAmount
+      note: $note
+      proofDueDays: $proofDueDays
+    ) {
+      applicantUserId
+      approvedAmountDisbursed
+      approvedAt
+      approvedByUserId
+      approvedProofDays
+      approvedTotalAmount
+      assignedMentor {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      assignedMentorUserId
+      batchSnapshot
+      beneficiary {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      beneficiaryUserId
+      closedAt
+      createdAt
+      id
+      lastActivityAt
+      paymentMode
+      payoutMaskedSnapshot
+      payoutMethod
+      payoutSnapshot
+      proofStatus
+      proposedProofDays
+      purpose
+      reason
+      referenceNumber
+      refundStatus
+      rejectedAt
+      rejectedByUserId
+      rejectionReason
+      requestedAmount
+      requestedFirstInstallmentAmount
+      reviewStartedAt
+      reviewedByUserId
+      status
+      submittedAt
+      updatedAt
+    }
+  }
+`;
+export type ApproveScholarshipApplicationMutationFn = Apollo.MutationFunction<
+  ApproveScholarshipApplicationMutation,
+  ApproveScholarshipApplicationMutationVariables
+>;
+
+/**
+ * __useApproveScholarshipApplicationMutation__
+ *
+ * To run a mutation, you first call `useApproveScholarshipApplicationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useApproveScholarshipApplicationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [approveScholarshipApplicationMutation, { data, loading, error }] = useApproveScholarshipApplicationMutation({
+ *   variables: {
+ *      applicationId: // value for 'applicationId'
+ *      approvedTotalAmount: // value for 'approvedTotalAmount'
+ *      installmentAmount: // value for 'installmentAmount'
+ *      note: // value for 'note'
+ *      proofDueDays: // value for 'proofDueDays'
+ *   },
+ * });
+ */
+export function useApproveScholarshipApplicationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    ApproveScholarshipApplicationMutation,
+    ApproveScholarshipApplicationMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<ApproveScholarshipApplicationMutation, ApproveScholarshipApplicationMutationVariables>(
+    ApproveScholarshipApplicationDocument,
+    options
+  );
+}
+export type ApproveScholarshipApplicationMutationHookResult = ReturnType<
+  typeof useApproveScholarshipApplicationMutation
+>;
+export type ApproveScholarshipApplicationMutationResult = Apollo.MutationResult<ApproveScholarshipApplicationMutation>;
+export type ApproveScholarshipApplicationMutationOptions = Apollo.BaseMutationOptions<
+  ApproveScholarshipApplicationMutation,
+  ApproveScholarshipApplicationMutationVariables
+>;
 export const AssignBatchCoordinatorDocument = gql`
   mutation assignBatchCoordinator($batch: Int!, $userId: String!) {
     assignBatchCoordinator(batch: $batch, userId: $userId) {
@@ -7137,11 +13544,29 @@ export const AssignBatchCoordinatorDocument = gql`
         metadata
         mobile
         nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
         profileImage
         role {
           code
           id
           name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
         }
         socialMedia
         updatedAt
@@ -7251,11 +13676,29 @@ export const AssignExecutivePositionDocument = gql`
         metadata
         mobile
         nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
         profileImage
         role {
           code
           id
           name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
         }
         socialMedia
         updatedAt
@@ -7356,11 +13799,29 @@ export const AssignUserRoleDocument = gql`
         metadata
         mobile
         nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
         profileImage
         role {
           code
           id
           name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
         }
         socialMedia
         updatedAt
@@ -7487,6 +13948,482 @@ export type CloseExecutiveTermMutationResult = Apollo.MutationResult<CloseExecut
 export type CloseExecutiveTermMutationOptions = Apollo.BaseMutationOptions<
   CloseExecutiveTermMutation,
   CloseExecutiveTermMutationVariables
+>;
+export const CloseScholarshipRemainderDocument = gql`
+  mutation closeScholarshipRemainder($applicationId: String!, $reason: String!) {
+    closeScholarshipRemainder(applicationId: $applicationId, reason: $reason) {
+      applicantUserId
+      approvedAmountDisbursed
+      approvedAt
+      approvedByUserId
+      approvedProofDays
+      approvedTotalAmount
+      assignedMentor {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      assignedMentorUserId
+      batchSnapshot
+      beneficiary {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      beneficiaryUserId
+      closedAt
+      createdAt
+      id
+      lastActivityAt
+      paymentMode
+      payoutMaskedSnapshot
+      payoutMethod
+      payoutSnapshot
+      proofStatus
+      proposedProofDays
+      purpose
+      reason
+      referenceNumber
+      refundStatus
+      rejectedAt
+      rejectedByUserId
+      rejectionReason
+      requestedAmount
+      requestedFirstInstallmentAmount
+      reviewStartedAt
+      reviewedByUserId
+      status
+      submittedAt
+      updatedAt
+    }
+  }
+`;
+export type CloseScholarshipRemainderMutationFn = Apollo.MutationFunction<
+  CloseScholarshipRemainderMutation,
+  CloseScholarshipRemainderMutationVariables
+>;
+
+/**
+ * __useCloseScholarshipRemainderMutation__
+ *
+ * To run a mutation, you first call `useCloseScholarshipRemainderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCloseScholarshipRemainderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [closeScholarshipRemainderMutation, { data, loading, error }] = useCloseScholarshipRemainderMutation({
+ *   variables: {
+ *      applicationId: // value for 'applicationId'
+ *      reason: // value for 'reason'
+ *   },
+ * });
+ */
+export function useCloseScholarshipRemainderMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CloseScholarshipRemainderMutation,
+    CloseScholarshipRemainderMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<CloseScholarshipRemainderMutation, CloseScholarshipRemainderMutationVariables>(
+    CloseScholarshipRemainderDocument,
+    options
+  );
+}
+export type CloseScholarshipRemainderMutationHookResult = ReturnType<typeof useCloseScholarshipRemainderMutation>;
+export type CloseScholarshipRemainderMutationResult = Apollo.MutationResult<CloseScholarshipRemainderMutation>;
+export type CloseScholarshipRemainderMutationOptions = Apollo.BaseMutationOptions<
+  CloseScholarshipRemainderMutation,
+  CloseScholarshipRemainderMutationVariables
+>;
+export const ConfirmMentorFundAllocationDocument = gql`
+  mutation confirmMentorFundAllocation($allocationId: String!, $confirmedAmount: Float) {
+    confirmMentorFundAllocation(allocationId: $allocationId, confirmedAmount: $confirmedAmount) {
+      amount
+      batch
+      confirmedAmount
+      createdAt
+      currency
+      disputedAmount
+      id
+      mentorUserId
+      method
+      notes
+      recordedByUserId
+      reference
+      status
+      transferDate
+    }
+  }
+`;
+export type ConfirmMentorFundAllocationMutationFn = Apollo.MutationFunction<
+  ConfirmMentorFundAllocationMutation,
+  ConfirmMentorFundAllocationMutationVariables
+>;
+
+/**
+ * __useConfirmMentorFundAllocationMutation__
+ *
+ * To run a mutation, you first call `useConfirmMentorFundAllocationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useConfirmMentorFundAllocationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [confirmMentorFundAllocationMutation, { data, loading, error }] = useConfirmMentorFundAllocationMutation({
+ *   variables: {
+ *      allocationId: // value for 'allocationId'
+ *      confirmedAmount: // value for 'confirmedAmount'
+ *   },
+ * });
+ */
+export function useConfirmMentorFundAllocationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    ConfirmMentorFundAllocationMutation,
+    ConfirmMentorFundAllocationMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<ConfirmMentorFundAllocationMutation, ConfirmMentorFundAllocationMutationVariables>(
+    ConfirmMentorFundAllocationDocument,
+    options
+  );
+}
+export type ConfirmMentorFundAllocationMutationHookResult = ReturnType<typeof useConfirmMentorFundAllocationMutation>;
+export type ConfirmMentorFundAllocationMutationResult = Apollo.MutationResult<ConfirmMentorFundAllocationMutation>;
+export type ConfirmMentorFundAllocationMutationOptions = Apollo.BaseMutationOptions<
+  ConfirmMentorFundAllocationMutation,
+  ConfirmMentorFundAllocationMutationVariables
+>;
+export const ConfirmScholarshipRefundReceivedDocument = gql`
+  mutation confirmScholarshipRefundReceived(
+    $confirmedAmount: Float!
+    $note: String
+    $reference: String
+    $refundId: String!
+  ) {
+    confirmScholarshipRefundReceived(
+      confirmedAmount: $confirmedAmount
+      note: $note
+      reference: $reference
+      refundId: $refundId
+    ) {
+      beneficiaryRefundProofDocumentId
+      beneficiaryUserId
+      confirmedRefundAmount
+      id
+      linkedRefundTransactionId
+      originalTransactionId
+      refundPaymentReference
+      requestedAmount
+      status
+      wrongDisbursementCaseId
+    }
+  }
+`;
+export type ConfirmScholarshipRefundReceivedMutationFn = Apollo.MutationFunction<
+  ConfirmScholarshipRefundReceivedMutation,
+  ConfirmScholarshipRefundReceivedMutationVariables
+>;
+
+/**
+ * __useConfirmScholarshipRefundReceivedMutation__
+ *
+ * To run a mutation, you first call `useConfirmScholarshipRefundReceivedMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useConfirmScholarshipRefundReceivedMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [confirmScholarshipRefundReceivedMutation, { data, loading, error }] = useConfirmScholarshipRefundReceivedMutation({
+ *   variables: {
+ *      confirmedAmount: // value for 'confirmedAmount'
+ *      note: // value for 'note'
+ *      reference: // value for 'reference'
+ *      refundId: // value for 'refundId'
+ *   },
+ * });
+ */
+export function useConfirmScholarshipRefundReceivedMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    ConfirmScholarshipRefundReceivedMutation,
+    ConfirmScholarshipRefundReceivedMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    ConfirmScholarshipRefundReceivedMutation,
+    ConfirmScholarshipRefundReceivedMutationVariables
+  >(ConfirmScholarshipRefundReceivedDocument, options);
+}
+export type ConfirmScholarshipRefundReceivedMutationHookResult = ReturnType<
+  typeof useConfirmScholarshipRefundReceivedMutation
+>;
+export type ConfirmScholarshipRefundReceivedMutationResult =
+  Apollo.MutationResult<ConfirmScholarshipRefundReceivedMutation>;
+export type ConfirmScholarshipRefundReceivedMutationOptions = Apollo.BaseMutationOptions<
+  ConfirmScholarshipRefundReceivedMutation,
+  ConfirmScholarshipRefundReceivedMutationVariables
+>;
+export const ConfirmScholarshipTransactionReceiptDocument = gql`
+  mutation confirmScholarshipTransactionReceipt($confirmedAmount: Float!, $note: String, $transactionId: String!) {
+    confirmScholarshipTransactionReceipt(
+      confirmedAmount: $confirmedAmount
+      note: $note
+      transactionId: $transactionId
+    ) {
+      amount
+      createdAt
+      currency
+      description
+      id
+      isDonation
+      method
+      referenceId
+      scholarshipApplicationId
+      scholarshipApprovedAt
+      scholarshipBatchSnapshot
+      scholarshipBeneficiaryUserId
+      scholarshipCompletedAt
+      scholarshipConfirmedAmount
+      scholarshipConfirmedAt
+      scholarshipImmutableAt
+      scholarshipInstallmentSequence
+      scholarshipMaskedPayoutDestination
+      scholarshipMentorUserId
+      scholarshipOriginalTransactionId
+      scholarshipPayoutMethod
+      scholarshipProofDueAt
+      scholarshipProofDueDays
+      scholarshipProofStatus
+      scholarshipPurposeSnapshot
+      scholarshipReceivedAt
+      scholarshipStatus
+      sourceType
+      status
+      title
+      transactionDate
+      type
+      updatedAt
+      user {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      userId
+    }
+  }
+`;
+export type ConfirmScholarshipTransactionReceiptMutationFn = Apollo.MutationFunction<
+  ConfirmScholarshipTransactionReceiptMutation,
+  ConfirmScholarshipTransactionReceiptMutationVariables
+>;
+
+/**
+ * __useConfirmScholarshipTransactionReceiptMutation__
+ *
+ * To run a mutation, you first call `useConfirmScholarshipTransactionReceiptMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useConfirmScholarshipTransactionReceiptMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [confirmScholarshipTransactionReceiptMutation, { data, loading, error }] = useConfirmScholarshipTransactionReceiptMutation({
+ *   variables: {
+ *      confirmedAmount: // value for 'confirmedAmount'
+ *      note: // value for 'note'
+ *      transactionId: // value for 'transactionId'
+ *   },
+ * });
+ */
+export function useConfirmScholarshipTransactionReceiptMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    ConfirmScholarshipTransactionReceiptMutation,
+    ConfirmScholarshipTransactionReceiptMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    ConfirmScholarshipTransactionReceiptMutation,
+    ConfirmScholarshipTransactionReceiptMutationVariables
+  >(ConfirmScholarshipTransactionReceiptDocument, options);
+}
+export type ConfirmScholarshipTransactionReceiptMutationHookResult = ReturnType<
+  typeof useConfirmScholarshipTransactionReceiptMutation
+>;
+export type ConfirmScholarshipTransactionReceiptMutationResult =
+  Apollo.MutationResult<ConfirmScholarshipTransactionReceiptMutation>;
+export type ConfirmScholarshipTransactionReceiptMutationOptions = Apollo.BaseMutationOptions<
+  ConfirmScholarshipTransactionReceiptMutation,
+  ConfirmScholarshipTransactionReceiptMutationVariables
 >;
 export const CreateAddressDocument = gql`
   mutation createAddress(
@@ -7709,11 +14646,29 @@ export const CreateAlbumDocument = gql`
           metadata
           mobile
           nickName
+          positions {
+            assignmentId
+            code
+            name
+            termId
+            termName
+            validFrom
+            validUntil
+          }
           profileImage
           role {
             code
             id
             name
+          }
+          roles {
+            assignmentId
+            code
+            name
+            scopeBatch
+            scopeType
+            validFrom
+            validUntil
           }
           socialMedia
           updatedAt
@@ -8188,6 +15143,486 @@ export type CreateExecutiveTermMutationOptions = Apollo.BaseMutationOptions<
   CreateExecutiveTermMutation,
   CreateExecutiveTermMutationVariables
 >;
+export const CreateNextScholarshipInstallmentDocument = gql`
+  mutation createNextScholarshipInstallment(
+    $applicationId: String!
+    $approvedTotalAmount: Float!
+    $installmentAmount: Float!
+    $note: String
+    $proofDueDays: Int
+  ) {
+    createNextScholarshipInstallment(
+      applicationId: $applicationId
+      approvedTotalAmount: $approvedTotalAmount
+      installmentAmount: $installmentAmount
+      note: $note
+      proofDueDays: $proofDueDays
+    ) {
+      applicantUserId
+      approvedAmountDisbursed
+      approvedAt
+      approvedByUserId
+      approvedProofDays
+      approvedTotalAmount
+      assignedMentor {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      assignedMentorUserId
+      batchSnapshot
+      beneficiary {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      beneficiaryUserId
+      closedAt
+      createdAt
+      id
+      lastActivityAt
+      paymentMode
+      payoutMaskedSnapshot
+      payoutMethod
+      payoutSnapshot
+      proofStatus
+      proposedProofDays
+      purpose
+      reason
+      referenceNumber
+      refundStatus
+      rejectedAt
+      rejectedByUserId
+      rejectionReason
+      requestedAmount
+      requestedFirstInstallmentAmount
+      reviewStartedAt
+      reviewedByUserId
+      status
+      submittedAt
+      updatedAt
+    }
+  }
+`;
+export type CreateNextScholarshipInstallmentMutationFn = Apollo.MutationFunction<
+  CreateNextScholarshipInstallmentMutation,
+  CreateNextScholarshipInstallmentMutationVariables
+>;
+
+/**
+ * __useCreateNextScholarshipInstallmentMutation__
+ *
+ * To run a mutation, you first call `useCreateNextScholarshipInstallmentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateNextScholarshipInstallmentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createNextScholarshipInstallmentMutation, { data, loading, error }] = useCreateNextScholarshipInstallmentMutation({
+ *   variables: {
+ *      applicationId: // value for 'applicationId'
+ *      approvedTotalAmount: // value for 'approvedTotalAmount'
+ *      installmentAmount: // value for 'installmentAmount'
+ *      note: // value for 'note'
+ *      proofDueDays: // value for 'proofDueDays'
+ *   },
+ * });
+ */
+export function useCreateNextScholarshipInstallmentMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateNextScholarshipInstallmentMutation,
+    CreateNextScholarshipInstallmentMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateNextScholarshipInstallmentMutation,
+    CreateNextScholarshipInstallmentMutationVariables
+  >(CreateNextScholarshipInstallmentDocument, options);
+}
+export type CreateNextScholarshipInstallmentMutationHookResult = ReturnType<
+  typeof useCreateNextScholarshipInstallmentMutation
+>;
+export type CreateNextScholarshipInstallmentMutationResult =
+  Apollo.MutationResult<CreateNextScholarshipInstallmentMutation>;
+export type CreateNextScholarshipInstallmentMutationOptions = Apollo.BaseMutationOptions<
+  CreateNextScholarshipInstallmentMutation,
+  CreateNextScholarshipInstallmentMutationVariables
+>;
+export const CreateScholarshipApplicationDraftDocument = gql`
+  mutation createScholarshipApplicationDraft($input: ScholarshipApplicationInput!) {
+    createScholarshipApplicationDraft(input: $input) {
+      applicantUserId
+      approvedAmountDisbursed
+      approvedAt
+      approvedByUserId
+      approvedProofDays
+      approvedTotalAmount
+      assignedMentor {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      assignedMentorUserId
+      batchSnapshot
+      beneficiary {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      beneficiaryUserId
+      closedAt
+      createdAt
+      id
+      lastActivityAt
+      paymentMode
+      payoutMaskedSnapshot
+      payoutMethod
+      payoutSnapshot
+      proofStatus
+      proposedProofDays
+      purpose
+      reason
+      referenceNumber
+      refundStatus
+      rejectedAt
+      rejectedByUserId
+      rejectionReason
+      requestedAmount
+      requestedFirstInstallmentAmount
+      reviewStartedAt
+      reviewedByUserId
+      status
+      submittedAt
+      updatedAt
+    }
+  }
+`;
+export type CreateScholarshipApplicationDraftMutationFn = Apollo.MutationFunction<
+  CreateScholarshipApplicationDraftMutation,
+  CreateScholarshipApplicationDraftMutationVariables
+>;
+
+/**
+ * __useCreateScholarshipApplicationDraftMutation__
+ *
+ * To run a mutation, you first call `useCreateScholarshipApplicationDraftMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateScholarshipApplicationDraftMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createScholarshipApplicationDraftMutation, { data, loading, error }] = useCreateScholarshipApplicationDraftMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateScholarshipApplicationDraftMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateScholarshipApplicationDraftMutation,
+    CreateScholarshipApplicationDraftMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateScholarshipApplicationDraftMutation,
+    CreateScholarshipApplicationDraftMutationVariables
+  >(CreateScholarshipApplicationDraftDocument, options);
+}
+export type CreateScholarshipApplicationDraftMutationHookResult = ReturnType<
+  typeof useCreateScholarshipApplicationDraftMutation
+>;
+export type CreateScholarshipApplicationDraftMutationResult =
+  Apollo.MutationResult<CreateScholarshipApplicationDraftMutation>;
+export type CreateScholarshipApplicationDraftMutationOptions = Apollo.BaseMutationOptions<
+  CreateScholarshipApplicationDraftMutation,
+  CreateScholarshipApplicationDraftMutationVariables
+>;
+export const CreateScholarshipDocumentUploadDocument = gql`
+  mutation createScholarshipDocumentUpload($input: ScholarshipDocumentUploadInput!) {
+    createScholarshipDocumentUpload(input: $input) {
+      document {
+        applicationId
+        category
+        checksum
+        claimedAmount
+        createdAt
+        description
+        id
+        mimeType
+        originalFilename
+        receiptDate
+        sizeBytes
+        status
+        transactionId
+        uploadedAt
+        uploadedByUserId
+        vendorName
+      }
+      uploadUrl
+    }
+  }
+`;
+export type CreateScholarshipDocumentUploadMutationFn = Apollo.MutationFunction<
+  CreateScholarshipDocumentUploadMutation,
+  CreateScholarshipDocumentUploadMutationVariables
+>;
+
+/**
+ * __useCreateScholarshipDocumentUploadMutation__
+ *
+ * To run a mutation, you first call `useCreateScholarshipDocumentUploadMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateScholarshipDocumentUploadMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createScholarshipDocumentUploadMutation, { data, loading, error }] = useCreateScholarshipDocumentUploadMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateScholarshipDocumentUploadMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateScholarshipDocumentUploadMutation,
+    CreateScholarshipDocumentUploadMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<CreateScholarshipDocumentUploadMutation, CreateScholarshipDocumentUploadMutationVariables>(
+    CreateScholarshipDocumentUploadDocument,
+    options
+  );
+}
+export type CreateScholarshipDocumentUploadMutationHookResult = ReturnType<
+  typeof useCreateScholarshipDocumentUploadMutation
+>;
+export type CreateScholarshipDocumentUploadMutationResult =
+  Apollo.MutationResult<CreateScholarshipDocumentUploadMutation>;
+export type CreateScholarshipDocumentUploadMutationOptions = Apollo.BaseMutationOptions<
+  CreateScholarshipDocumentUploadMutation,
+  CreateScholarshipDocumentUploadMutationVariables
+>;
 export const CreateTransactionDocument = gql`
   mutation createTransaction(
     $amount: Float!
@@ -8223,6 +15658,26 @@ export const CreateTransactionDocument = gql`
       isDonation
       method
       referenceId
+      scholarshipApplicationId
+      scholarshipApprovedAt
+      scholarshipBatchSnapshot
+      scholarshipBeneficiaryUserId
+      scholarshipCompletedAt
+      scholarshipConfirmedAmount
+      scholarshipConfirmedAt
+      scholarshipImmutableAt
+      scholarshipInstallmentSequence
+      scholarshipMaskedPayoutDestination
+      scholarshipMentorUserId
+      scholarshipOriginalTransactionId
+      scholarshipPayoutMethod
+      scholarshipProofDueAt
+      scholarshipProofDueDays
+      scholarshipProofStatus
+      scholarshipPurposeSnapshot
+      scholarshipReceivedAt
+      scholarshipStatus
+      sourceType
       status
       title
       transactionDate
@@ -8258,11 +15713,29 @@ export const CreateTransactionDocument = gql`
         metadata
         mobile
         nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
         profileImage
         role {
           code
           id
           name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
         }
         socialMedia
         updatedAt
@@ -8568,6 +16041,26 @@ export const DeleteTransactionDocument = gql`
       isDonation
       method
       referenceId
+      scholarshipApplicationId
+      scholarshipApprovedAt
+      scholarshipBatchSnapshot
+      scholarshipBeneficiaryUserId
+      scholarshipCompletedAt
+      scholarshipConfirmedAmount
+      scholarshipConfirmedAt
+      scholarshipImmutableAt
+      scholarshipInstallmentSequence
+      scholarshipMaskedPayoutDestination
+      scholarshipMentorUserId
+      scholarshipOriginalTransactionId
+      scholarshipPayoutMethod
+      scholarshipProofDueAt
+      scholarshipProofDueDays
+      scholarshipProofStatus
+      scholarshipPurposeSnapshot
+      scholarshipReceivedAt
+      scholarshipStatus
+      sourceType
       status
       title
       transactionDate
@@ -8603,11 +16096,29 @@ export const DeleteTransactionDocument = gql`
         metadata
         mobile
         nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
         profileImage
         role {
           code
           id
           name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
         }
         socialMedia
         updatedAt
@@ -8744,6 +16255,129 @@ export function useDeleteUserMutation(
 export type DeleteUserMutationHookResult = ReturnType<typeof useDeleteUserMutation>;
 export type DeleteUserMutationResult = Apollo.MutationResult<DeleteUserMutation>;
 export type DeleteUserMutationOptions = Apollo.BaseMutationOptions<DeleteUserMutation, DeleteUserMutationVariables>;
+export const DisputeMentorFundAllocationDocument = gql`
+  mutation disputeMentorFundAllocation($allocationId: String!, $disputedAmount: Float!, $reason: String!) {
+    disputeMentorFundAllocation(allocationId: $allocationId, disputedAmount: $disputedAmount, reason: $reason) {
+      allocationId
+      createdAt
+      disputedAmount
+      id
+      raisedByUserId
+      reason
+      resolutionNote
+      resolutionType
+      status
+    }
+  }
+`;
+export type DisputeMentorFundAllocationMutationFn = Apollo.MutationFunction<
+  DisputeMentorFundAllocationMutation,
+  DisputeMentorFundAllocationMutationVariables
+>;
+
+/**
+ * __useDisputeMentorFundAllocationMutation__
+ *
+ * To run a mutation, you first call `useDisputeMentorFundAllocationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDisputeMentorFundAllocationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [disputeMentorFundAllocationMutation, { data, loading, error }] = useDisputeMentorFundAllocationMutation({
+ *   variables: {
+ *      allocationId: // value for 'allocationId'
+ *      disputedAmount: // value for 'disputedAmount'
+ *      reason: // value for 'reason'
+ *   },
+ * });
+ */
+export function useDisputeMentorFundAllocationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DisputeMentorFundAllocationMutation,
+    DisputeMentorFundAllocationMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<DisputeMentorFundAllocationMutation, DisputeMentorFundAllocationMutationVariables>(
+    DisputeMentorFundAllocationDocument,
+    options
+  );
+}
+export type DisputeMentorFundAllocationMutationHookResult = ReturnType<typeof useDisputeMentorFundAllocationMutation>;
+export type DisputeMentorFundAllocationMutationResult = Apollo.MutationResult<DisputeMentorFundAllocationMutation>;
+export type DisputeMentorFundAllocationMutationOptions = Apollo.BaseMutationOptions<
+  DisputeMentorFundAllocationMutation,
+  DisputeMentorFundAllocationMutationVariables
+>;
+export const FinalizeScholarshipDocumentUploadDocument = gql`
+  mutation finalizeScholarshipDocumentUpload($checksum: String, $documentId: String!) {
+    finalizeScholarshipDocumentUpload(checksum: $checksum, documentId: $documentId) {
+      applicationId
+      category
+      checksum
+      claimedAmount
+      createdAt
+      description
+      id
+      mimeType
+      originalFilename
+      receiptDate
+      sizeBytes
+      status
+      transactionId
+      uploadedAt
+      uploadedByUserId
+      vendorName
+    }
+  }
+`;
+export type FinalizeScholarshipDocumentUploadMutationFn = Apollo.MutationFunction<
+  FinalizeScholarshipDocumentUploadMutation,
+  FinalizeScholarshipDocumentUploadMutationVariables
+>;
+
+/**
+ * __useFinalizeScholarshipDocumentUploadMutation__
+ *
+ * To run a mutation, you first call `useFinalizeScholarshipDocumentUploadMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useFinalizeScholarshipDocumentUploadMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [finalizeScholarshipDocumentUploadMutation, { data, loading, error }] = useFinalizeScholarshipDocumentUploadMutation({
+ *   variables: {
+ *      checksum: // value for 'checksum'
+ *      documentId: // value for 'documentId'
+ *   },
+ * });
+ */
+export function useFinalizeScholarshipDocumentUploadMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    FinalizeScholarshipDocumentUploadMutation,
+    FinalizeScholarshipDocumentUploadMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    FinalizeScholarshipDocumentUploadMutation,
+    FinalizeScholarshipDocumentUploadMutationVariables
+  >(FinalizeScholarshipDocumentUploadDocument, options);
+}
+export type FinalizeScholarshipDocumentUploadMutationHookResult = ReturnType<
+  typeof useFinalizeScholarshipDocumentUploadMutation
+>;
+export type FinalizeScholarshipDocumentUploadMutationResult =
+  Apollo.MutationResult<FinalizeScholarshipDocumentUploadMutation>;
+export type FinalizeScholarshipDocumentUploadMutationOptions = Apollo.BaseMutationOptions<
+  FinalizeScholarshipDocumentUploadMutation,
+  FinalizeScholarshipDocumentUploadMutationVariables
+>;
 export const ForgotPasswordDocument = gql`
   mutation forgotPassword($email: String!) {
     forgotPassword(email: $email)
@@ -8854,6 +16488,145 @@ export function useLogoutMutation(baseOptions?: Apollo.MutationHookOptions<Logou
 export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
 export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
+export const ManageScholarshipRefundCaseDocument = gql`
+  mutation manageScholarshipRefundCase($note: String, $reference: String, $refundId: String!, $status: String!) {
+    manageScholarshipRefundCase(note: $note, reference: $reference, refundId: $refundId, status: $status) {
+      beneficiaryRefundProofDocumentId
+      beneficiaryUserId
+      confirmedRefundAmount
+      id
+      linkedRefundTransactionId
+      originalTransactionId
+      refundPaymentReference
+      requestedAmount
+      status
+      wrongDisbursementCaseId
+    }
+  }
+`;
+export type ManageScholarshipRefundCaseMutationFn = Apollo.MutationFunction<
+  ManageScholarshipRefundCaseMutation,
+  ManageScholarshipRefundCaseMutationVariables
+>;
+
+/**
+ * __useManageScholarshipRefundCaseMutation__
+ *
+ * To run a mutation, you first call `useManageScholarshipRefundCaseMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useManageScholarshipRefundCaseMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [manageScholarshipRefundCaseMutation, { data, loading, error }] = useManageScholarshipRefundCaseMutation({
+ *   variables: {
+ *      note: // value for 'note'
+ *      reference: // value for 'reference'
+ *      refundId: // value for 'refundId'
+ *      status: // value for 'status'
+ *   },
+ * });
+ */
+export function useManageScholarshipRefundCaseMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    ManageScholarshipRefundCaseMutation,
+    ManageScholarshipRefundCaseMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<ManageScholarshipRefundCaseMutation, ManageScholarshipRefundCaseMutationVariables>(
+    ManageScholarshipRefundCaseDocument,
+    options
+  );
+}
+export type ManageScholarshipRefundCaseMutationHookResult = ReturnType<typeof useManageScholarshipRefundCaseMutation>;
+export type ManageScholarshipRefundCaseMutationResult = Apollo.MutationResult<ManageScholarshipRefundCaseMutation>;
+export type ManageScholarshipRefundCaseMutationOptions = Apollo.BaseMutationOptions<
+  ManageScholarshipRefundCaseMutation,
+  ManageScholarshipRefundCaseMutationVariables
+>;
+export const MarkScholarshipWrongDisbursementDocument = gql`
+  mutation markScholarshipWrongDisbursement(
+    $affectedDocumentIds: [String!]
+    $disputedAmount: Float!
+    $reason: String!
+    $refundRequested: Boolean
+    $requestedRefundAmount: Float
+    $transactionId: String!
+  ) {
+    markScholarshipWrongDisbursement(
+      affectedDocumentIds: $affectedDocumentIds
+      disputedAmount: $disputedAmount
+      reason: $reason
+      refundRequested: $refundRequested
+      requestedRefundAmount: $requestedRefundAmount
+      transactionId: $transactionId
+    ) {
+      affectedDocumentIds
+      applicationId
+      beneficiaryResponse
+      disputedAmount
+      id
+      originalTransactionId
+      reason
+      refundRequested
+      reportedAt
+      reportedByUserId
+      requestedRefundAmount
+      status
+    }
+  }
+`;
+export type MarkScholarshipWrongDisbursementMutationFn = Apollo.MutationFunction<
+  MarkScholarshipWrongDisbursementMutation,
+  MarkScholarshipWrongDisbursementMutationVariables
+>;
+
+/**
+ * __useMarkScholarshipWrongDisbursementMutation__
+ *
+ * To run a mutation, you first call `useMarkScholarshipWrongDisbursementMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMarkScholarshipWrongDisbursementMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [markScholarshipWrongDisbursementMutation, { data, loading, error }] = useMarkScholarshipWrongDisbursementMutation({
+ *   variables: {
+ *      affectedDocumentIds: // value for 'affectedDocumentIds'
+ *      disputedAmount: // value for 'disputedAmount'
+ *      reason: // value for 'reason'
+ *      refundRequested: // value for 'refundRequested'
+ *      requestedRefundAmount: // value for 'requestedRefundAmount'
+ *      transactionId: // value for 'transactionId'
+ *   },
+ * });
+ */
+export function useMarkScholarshipWrongDisbursementMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    MarkScholarshipWrongDisbursementMutation,
+    MarkScholarshipWrongDisbursementMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    MarkScholarshipWrongDisbursementMutation,
+    MarkScholarshipWrongDisbursementMutationVariables
+  >(MarkScholarshipWrongDisbursementDocument, options);
+}
+export type MarkScholarshipWrongDisbursementMutationHookResult = ReturnType<
+  typeof useMarkScholarshipWrongDisbursementMutation
+>;
+export type MarkScholarshipWrongDisbursementMutationResult =
+  Apollo.MutationResult<MarkScholarshipWrongDisbursementMutation>;
+export type MarkScholarshipWrongDisbursementMutationOptions = Apollo.BaseMutationOptions<
+  MarkScholarshipWrongDisbursementMutation,
+  MarkScholarshipWrongDisbursementMutationVariables
+>;
 export const PublishEventDocument = gql`
   mutation publishEvent($eventId: Int!, $status: EventStatus!) {
     publishEvent(eventId: $eventId, status: $status)
@@ -8891,6 +16664,266 @@ export type PublishEventMutationOptions = Apollo.BaseMutationOptions<
   PublishEventMutation,
   PublishEventMutationVariables
 >;
+export const ReassignScholarshipApplicationDocument = gql`
+  mutation reassignScholarshipApplication($applicationId: String!, $mentorUserId: String!, $reason: String!) {
+    reassignScholarshipApplication(applicationId: $applicationId, mentorUserId: $mentorUserId, reason: $reason) {
+      applicantUserId
+      approvedAmountDisbursed
+      approvedAt
+      approvedByUserId
+      approvedProofDays
+      approvedTotalAmount
+      assignedMentor {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      assignedMentorUserId
+      batchSnapshot
+      beneficiary {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      beneficiaryUserId
+      closedAt
+      createdAt
+      id
+      lastActivityAt
+      paymentMode
+      payoutMaskedSnapshot
+      payoutMethod
+      payoutSnapshot
+      proofStatus
+      proposedProofDays
+      purpose
+      reason
+      referenceNumber
+      refundStatus
+      rejectedAt
+      rejectedByUserId
+      rejectionReason
+      requestedAmount
+      requestedFirstInstallmentAmount
+      reviewStartedAt
+      reviewedByUserId
+      status
+      submittedAt
+      updatedAt
+    }
+  }
+`;
+export type ReassignScholarshipApplicationMutationFn = Apollo.MutationFunction<
+  ReassignScholarshipApplicationMutation,
+  ReassignScholarshipApplicationMutationVariables
+>;
+
+/**
+ * __useReassignScholarshipApplicationMutation__
+ *
+ * To run a mutation, you first call `useReassignScholarshipApplicationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useReassignScholarshipApplicationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [reassignScholarshipApplicationMutation, { data, loading, error }] = useReassignScholarshipApplicationMutation({
+ *   variables: {
+ *      applicationId: // value for 'applicationId'
+ *      mentorUserId: // value for 'mentorUserId'
+ *      reason: // value for 'reason'
+ *   },
+ * });
+ */
+export function useReassignScholarshipApplicationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    ReassignScholarshipApplicationMutation,
+    ReassignScholarshipApplicationMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<ReassignScholarshipApplicationMutation, ReassignScholarshipApplicationMutationVariables>(
+    ReassignScholarshipApplicationDocument,
+    options
+  );
+}
+export type ReassignScholarshipApplicationMutationHookResult = ReturnType<
+  typeof useReassignScholarshipApplicationMutation
+>;
+export type ReassignScholarshipApplicationMutationResult =
+  Apollo.MutationResult<ReassignScholarshipApplicationMutation>;
+export type ReassignScholarshipApplicationMutationOptions = Apollo.BaseMutationOptions<
+  ReassignScholarshipApplicationMutation,
+  ReassignScholarshipApplicationMutationVariables
+>;
+export const RecordMentorFundAllocationDocument = gql`
+  mutation recordMentorFundAllocation($input: RecordMentorFundAllocationInput!) {
+    recordMentorFundAllocation(input: $input) {
+      amount
+      batch
+      confirmedAmount
+      createdAt
+      currency
+      disputedAmount
+      id
+      mentorUserId
+      method
+      notes
+      recordedByUserId
+      reference
+      status
+      transferDate
+    }
+  }
+`;
+export type RecordMentorFundAllocationMutationFn = Apollo.MutationFunction<
+  RecordMentorFundAllocationMutation,
+  RecordMentorFundAllocationMutationVariables
+>;
+
+/**
+ * __useRecordMentorFundAllocationMutation__
+ *
+ * To run a mutation, you first call `useRecordMentorFundAllocationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRecordMentorFundAllocationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [recordMentorFundAllocationMutation, { data, loading, error }] = useRecordMentorFundAllocationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useRecordMentorFundAllocationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RecordMentorFundAllocationMutation,
+    RecordMentorFundAllocationMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<RecordMentorFundAllocationMutation, RecordMentorFundAllocationMutationVariables>(
+    RecordMentorFundAllocationDocument,
+    options
+  );
+}
+export type RecordMentorFundAllocationMutationHookResult = ReturnType<typeof useRecordMentorFundAllocationMutation>;
+export type RecordMentorFundAllocationMutationResult = Apollo.MutationResult<RecordMentorFundAllocationMutation>;
+export type RecordMentorFundAllocationMutationOptions = Apollo.BaseMutationOptions<
+  RecordMentorFundAllocationMutation,
+  RecordMentorFundAllocationMutationVariables
+>;
 export const RefreshTokenDocument = gql`
   mutation refreshToken {
     refreshToken {
@@ -8924,11 +16957,29 @@ export const RefreshTokenDocument = gql`
         metadata
         mobile
         nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
         profileImage
         role {
           code
           id
           name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
         }
         socialMedia
         updatedAt
@@ -9009,6 +17060,202 @@ export type RejectMemberRegistrationMutationResult = Apollo.MutationResult<Rejec
 export type RejectMemberRegistrationMutationOptions = Apollo.BaseMutationOptions<
   RejectMemberRegistrationMutation,
   RejectMemberRegistrationMutationVariables
+>;
+export const RejectScholarshipApplicationDocument = gql`
+  mutation rejectScholarshipApplication($applicationId: String!, $reason: String!) {
+    rejectScholarshipApplication(applicationId: $applicationId, reason: $reason) {
+      applicantUserId
+      approvedAmountDisbursed
+      approvedAt
+      approvedByUserId
+      approvedProofDays
+      approvedTotalAmount
+      assignedMentor {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      assignedMentorUserId
+      batchSnapshot
+      beneficiary {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      beneficiaryUserId
+      closedAt
+      createdAt
+      id
+      lastActivityAt
+      paymentMode
+      payoutMaskedSnapshot
+      payoutMethod
+      payoutSnapshot
+      proofStatus
+      proposedProofDays
+      purpose
+      reason
+      referenceNumber
+      refundStatus
+      rejectedAt
+      rejectedByUserId
+      rejectionReason
+      requestedAmount
+      requestedFirstInstallmentAmount
+      reviewStartedAt
+      reviewedByUserId
+      status
+      submittedAt
+      updatedAt
+    }
+  }
+`;
+export type RejectScholarshipApplicationMutationFn = Apollo.MutationFunction<
+  RejectScholarshipApplicationMutation,
+  RejectScholarshipApplicationMutationVariables
+>;
+
+/**
+ * __useRejectScholarshipApplicationMutation__
+ *
+ * To run a mutation, you first call `useRejectScholarshipApplicationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRejectScholarshipApplicationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [rejectScholarshipApplicationMutation, { data, loading, error }] = useRejectScholarshipApplicationMutation({
+ *   variables: {
+ *      applicationId: // value for 'applicationId'
+ *      reason: // value for 'reason'
+ *   },
+ * });
+ */
+export function useRejectScholarshipApplicationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RejectScholarshipApplicationMutation,
+    RejectScholarshipApplicationMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<RejectScholarshipApplicationMutation, RejectScholarshipApplicationMutationVariables>(
+    RejectScholarshipApplicationDocument,
+    options
+  );
+}
+export type RejectScholarshipApplicationMutationHookResult = ReturnType<typeof useRejectScholarshipApplicationMutation>;
+export type RejectScholarshipApplicationMutationResult = Apollo.MutationResult<RejectScholarshipApplicationMutation>;
+export type RejectScholarshipApplicationMutationOptions = Apollo.BaseMutationOptions<
+  RejectScholarshipApplicationMutation,
+  RejectScholarshipApplicationMutationVariables
 >;
 export const RemoveBatchCoordinatorDocument = gql`
   mutation removeBatchCoordinator($batch: Int!, $userId: String!) {
@@ -9150,6 +17397,253 @@ export type RequestChangesBlogMutationOptions = Apollo.BaseMutationOptions<
   RequestChangesBlogMutation,
   RequestChangesBlogMutationVariables
 >;
+export const RequestScholarshipApplicationInfoDocument = gql`
+  mutation requestScholarshipApplicationInfo($applicationId: String!, $message: String!) {
+    requestScholarshipApplicationInfo(applicationId: $applicationId, message: $message) {
+      applicantUserId
+      approvedAmountDisbursed
+      approvedAt
+      approvedByUserId
+      approvedProofDays
+      approvedTotalAmount
+      assignedMentor {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      assignedMentorUserId
+      batchSnapshot
+      beneficiary {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      beneficiaryUserId
+      closedAt
+      createdAt
+      id
+      lastActivityAt
+      paymentMode
+      payoutMaskedSnapshot
+      payoutMethod
+      payoutSnapshot
+      proofStatus
+      proposedProofDays
+      purpose
+      reason
+      referenceNumber
+      refundStatus
+      rejectedAt
+      rejectedByUserId
+      rejectionReason
+      requestedAmount
+      requestedFirstInstallmentAmount
+      reviewStartedAt
+      reviewedByUserId
+      status
+      submittedAt
+      updatedAt
+    }
+  }
+`;
+export type RequestScholarshipApplicationInfoMutationFn = Apollo.MutationFunction<
+  RequestScholarshipApplicationInfoMutation,
+  RequestScholarshipApplicationInfoMutationVariables
+>;
+
+/**
+ * __useRequestScholarshipApplicationInfoMutation__
+ *
+ * To run a mutation, you first call `useRequestScholarshipApplicationInfoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRequestScholarshipApplicationInfoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [requestScholarshipApplicationInfoMutation, { data, loading, error }] = useRequestScholarshipApplicationInfoMutation({
+ *   variables: {
+ *      applicationId: // value for 'applicationId'
+ *      message: // value for 'message'
+ *   },
+ * });
+ */
+export function useRequestScholarshipApplicationInfoMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RequestScholarshipApplicationInfoMutation,
+    RequestScholarshipApplicationInfoMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    RequestScholarshipApplicationInfoMutation,
+    RequestScholarshipApplicationInfoMutationVariables
+  >(RequestScholarshipApplicationInfoDocument, options);
+}
+export type RequestScholarshipApplicationInfoMutationHookResult = ReturnType<
+  typeof useRequestScholarshipApplicationInfoMutation
+>;
+export type RequestScholarshipApplicationInfoMutationResult =
+  Apollo.MutationResult<RequestScholarshipApplicationInfoMutation>;
+export type RequestScholarshipApplicationInfoMutationOptions = Apollo.BaseMutationOptions<
+  RequestScholarshipApplicationInfoMutation,
+  RequestScholarshipApplicationInfoMutationVariables
+>;
+export const RequestScholarshipDisbursalFollowupDocument = gql`
+  mutation requestScholarshipDisbursalFollowup($transactionId: String!) {
+    requestScholarshipDisbursalFollowup(transactionId: $transactionId)
+  }
+`;
+export type RequestScholarshipDisbursalFollowupMutationFn = Apollo.MutationFunction<
+  RequestScholarshipDisbursalFollowupMutation,
+  RequestScholarshipDisbursalFollowupMutationVariables
+>;
+
+/**
+ * __useRequestScholarshipDisbursalFollowupMutation__
+ *
+ * To run a mutation, you first call `useRequestScholarshipDisbursalFollowupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRequestScholarshipDisbursalFollowupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [requestScholarshipDisbursalFollowupMutation, { data, loading, error }] = useRequestScholarshipDisbursalFollowupMutation({
+ *   variables: {
+ *      transactionId: // value for 'transactionId'
+ *   },
+ * });
+ */
+export function useRequestScholarshipDisbursalFollowupMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RequestScholarshipDisbursalFollowupMutation,
+    RequestScholarshipDisbursalFollowupMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    RequestScholarshipDisbursalFollowupMutation,
+    RequestScholarshipDisbursalFollowupMutationVariables
+  >(RequestScholarshipDisbursalFollowupDocument, options);
+}
+export type RequestScholarshipDisbursalFollowupMutationHookResult = ReturnType<
+  typeof useRequestScholarshipDisbursalFollowupMutation
+>;
+export type RequestScholarshipDisbursalFollowupMutationResult =
+  Apollo.MutationResult<RequestScholarshipDisbursalFollowupMutation>;
+export type RequestScholarshipDisbursalFollowupMutationOptions = Apollo.BaseMutationOptions<
+  RequestScholarshipDisbursalFollowupMutation,
+  RequestScholarshipDisbursalFollowupMutationVariables
+>;
 export const ResetPasswordDocument = gql`
   mutation resetPassword($newPassword: String!, $token: String) {
     resetPassword(newPassword: $newPassword, token: $token)
@@ -9186,6 +17680,385 @@ export type ResetPasswordMutationResult = Apollo.MutationResult<ResetPasswordMut
 export type ResetPasswordMutationOptions = Apollo.BaseMutationOptions<
   ResetPasswordMutation,
   ResetPasswordMutationVariables
+>;
+export const ResolveMentorAllocationDisputeDocument = gql`
+  mutation resolveMentorAllocationDispute($disputeId: String!, $resolutionNote: String, $resolutionType: String!) {
+    resolveMentorAllocationDispute(
+      disputeId: $disputeId
+      resolutionNote: $resolutionNote
+      resolutionType: $resolutionType
+    ) {
+      allocationId
+      createdAt
+      disputedAmount
+      id
+      raisedByUserId
+      reason
+      resolutionNote
+      resolutionType
+      status
+    }
+  }
+`;
+export type ResolveMentorAllocationDisputeMutationFn = Apollo.MutationFunction<
+  ResolveMentorAllocationDisputeMutation,
+  ResolveMentorAllocationDisputeMutationVariables
+>;
+
+/**
+ * __useResolveMentorAllocationDisputeMutation__
+ *
+ * To run a mutation, you first call `useResolveMentorAllocationDisputeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useResolveMentorAllocationDisputeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [resolveMentorAllocationDisputeMutation, { data, loading, error }] = useResolveMentorAllocationDisputeMutation({
+ *   variables: {
+ *      disputeId: // value for 'disputeId'
+ *      resolutionNote: // value for 'resolutionNote'
+ *      resolutionType: // value for 'resolutionType'
+ *   },
+ * });
+ */
+export function useResolveMentorAllocationDisputeMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    ResolveMentorAllocationDisputeMutation,
+    ResolveMentorAllocationDisputeMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<ResolveMentorAllocationDisputeMutation, ResolveMentorAllocationDisputeMutationVariables>(
+    ResolveMentorAllocationDisputeDocument,
+    options
+  );
+}
+export type ResolveMentorAllocationDisputeMutationHookResult = ReturnType<
+  typeof useResolveMentorAllocationDisputeMutation
+>;
+export type ResolveMentorAllocationDisputeMutationResult =
+  Apollo.MutationResult<ResolveMentorAllocationDisputeMutation>;
+export type ResolveMentorAllocationDisputeMutationOptions = Apollo.BaseMutationOptions<
+  ResolveMentorAllocationDisputeMutation,
+  ResolveMentorAllocationDisputeMutationVariables
+>;
+export const RespondToScholarshipRefundDocument = gql`
+  mutation respondToScholarshipRefund($proofDocumentId: String, $refundId: String!, $response: String!) {
+    respondToScholarshipRefund(proofDocumentId: $proofDocumentId, refundId: $refundId, response: $response) {
+      beneficiaryRefundProofDocumentId
+      beneficiaryUserId
+      confirmedRefundAmount
+      id
+      linkedRefundTransactionId
+      originalTransactionId
+      refundPaymentReference
+      requestedAmount
+      status
+      wrongDisbursementCaseId
+    }
+  }
+`;
+export type RespondToScholarshipRefundMutationFn = Apollo.MutationFunction<
+  RespondToScholarshipRefundMutation,
+  RespondToScholarshipRefundMutationVariables
+>;
+
+/**
+ * __useRespondToScholarshipRefundMutation__
+ *
+ * To run a mutation, you first call `useRespondToScholarshipRefundMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRespondToScholarshipRefundMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [respondToScholarshipRefundMutation, { data, loading, error }] = useRespondToScholarshipRefundMutation({
+ *   variables: {
+ *      proofDocumentId: // value for 'proofDocumentId'
+ *      refundId: // value for 'refundId'
+ *      response: // value for 'response'
+ *   },
+ * });
+ */
+export function useRespondToScholarshipRefundMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RespondToScholarshipRefundMutation,
+    RespondToScholarshipRefundMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<RespondToScholarshipRefundMutation, RespondToScholarshipRefundMutationVariables>(
+    RespondToScholarshipRefundDocument,
+    options
+  );
+}
+export type RespondToScholarshipRefundMutationHookResult = ReturnType<typeof useRespondToScholarshipRefundMutation>;
+export type RespondToScholarshipRefundMutationResult = Apollo.MutationResult<RespondToScholarshipRefundMutation>;
+export type RespondToScholarshipRefundMutationOptions = Apollo.BaseMutationOptions<
+  RespondToScholarshipRefundMutation,
+  RespondToScholarshipRefundMutationVariables
+>;
+export const ResubmitScholarshipApplicationDocument = gql`
+  mutation resubmitScholarshipApplication($applicationId: String!) {
+    resubmitScholarshipApplication(applicationId: $applicationId) {
+      applicantUserId
+      approvedAmountDisbursed
+      approvedAt
+      approvedByUserId
+      approvedProofDays
+      approvedTotalAmount
+      assignedMentor {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      assignedMentorUserId
+      batchSnapshot
+      beneficiary {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      beneficiaryUserId
+      closedAt
+      createdAt
+      id
+      lastActivityAt
+      paymentMode
+      payoutMaskedSnapshot
+      payoutMethod
+      payoutSnapshot
+      proofStatus
+      proposedProofDays
+      purpose
+      reason
+      referenceNumber
+      refundStatus
+      rejectedAt
+      rejectedByUserId
+      rejectionReason
+      requestedAmount
+      requestedFirstInstallmentAmount
+      reviewStartedAt
+      reviewedByUserId
+      status
+      submittedAt
+      updatedAt
+    }
+  }
+`;
+export type ResubmitScholarshipApplicationMutationFn = Apollo.MutationFunction<
+  ResubmitScholarshipApplicationMutation,
+  ResubmitScholarshipApplicationMutationVariables
+>;
+
+/**
+ * __useResubmitScholarshipApplicationMutation__
+ *
+ * To run a mutation, you first call `useResubmitScholarshipApplicationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useResubmitScholarshipApplicationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [resubmitScholarshipApplicationMutation, { data, loading, error }] = useResubmitScholarshipApplicationMutation({
+ *   variables: {
+ *      applicationId: // value for 'applicationId'
+ *   },
+ * });
+ */
+export function useResubmitScholarshipApplicationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    ResubmitScholarshipApplicationMutation,
+    ResubmitScholarshipApplicationMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<ResubmitScholarshipApplicationMutation, ResubmitScholarshipApplicationMutationVariables>(
+    ResubmitScholarshipApplicationDocument,
+    options
+  );
+}
+export type ResubmitScholarshipApplicationMutationHookResult = ReturnType<
+  typeof useResubmitScholarshipApplicationMutation
+>;
+export type ResubmitScholarshipApplicationMutationResult =
+  Apollo.MutationResult<ResubmitScholarshipApplicationMutation>;
+export type ResubmitScholarshipApplicationMutationOptions = Apollo.BaseMutationOptions<
+  ResubmitScholarshipApplicationMutation,
+  ResubmitScholarshipApplicationMutationVariables
+>;
+export const ReviewScholarshipUsageProofDocument = gql`
+  mutation reviewScholarshipUsageProof($action: ScholarshipProofReviewAction!, $note: String, $submissionId: String!) {
+    reviewScholarshipUsageProof(action: $action, note: $note, submissionId: $submissionId) {
+      applicationId
+      id
+      reviewNote
+      reviewedAt
+      reviewedByUserId
+      status
+      submissionSequence
+      submittedAt
+      submittedByUserId
+      submittedCoverage
+      transactionId
+    }
+  }
+`;
+export type ReviewScholarshipUsageProofMutationFn = Apollo.MutationFunction<
+  ReviewScholarshipUsageProofMutation,
+  ReviewScholarshipUsageProofMutationVariables
+>;
+
+/**
+ * __useReviewScholarshipUsageProofMutation__
+ *
+ * To run a mutation, you first call `useReviewScholarshipUsageProofMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useReviewScholarshipUsageProofMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [reviewScholarshipUsageProofMutation, { data, loading, error }] = useReviewScholarshipUsageProofMutation({
+ *   variables: {
+ *      action: // value for 'action'
+ *      note: // value for 'note'
+ *      submissionId: // value for 'submissionId'
+ *   },
+ * });
+ */
+export function useReviewScholarshipUsageProofMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    ReviewScholarshipUsageProofMutation,
+    ReviewScholarshipUsageProofMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<ReviewScholarshipUsageProofMutation, ReviewScholarshipUsageProofMutationVariables>(
+    ReviewScholarshipUsageProofDocument,
+    options
+  );
+}
+export type ReviewScholarshipUsageProofMutationHookResult = ReturnType<typeof useReviewScholarshipUsageProofMutation>;
+export type ReviewScholarshipUsageProofMutationResult = Apollo.MutationResult<ReviewScholarshipUsageProofMutation>;
+export type ReviewScholarshipUsageProofMutationOptions = Apollo.BaseMutationOptions<
+  ReviewScholarshipUsageProofMutation,
+  ReviewScholarshipUsageProofMutationVariables
 >;
 export const RevokeExecutivePositionDocument = gql`
   mutation revokeExecutivePosition($input: RevokeExecutivePositionInput!) {
@@ -9249,11 +18122,29 @@ export const RevokeExecutivePositionDocument = gql`
         metadata
         mobile
         nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
         profileImage
         role {
           code
           id
           name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
         }
         socialMedia
         updatedAt
@@ -9354,11 +18245,29 @@ export const RevokeUserRoleDocument = gql`
         metadata
         mobile
         nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
         profileImage
         role {
           code
           id
           name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
         }
         socialMedia
         updatedAt
@@ -9439,6 +18348,217 @@ export type SendMassEmailMutationOptions = Apollo.BaseMutationOptions<
   SendMassEmailMutation,
   SendMassEmailMutationVariables
 >;
+export const SetScholarshipPrimaryMentorDocument = gql`
+  mutation setScholarshipPrimaryMentor(
+    $batch: Int!
+    $mentorUserId: String!
+    $reason: String
+    $validFrom: String
+    $validUntil: String
+  ) {
+    setScholarshipPrimaryMentor(
+      batch: $batch
+      mentorUserId: $mentorUserId
+      reason: $reason
+      validFrom: $validFrom
+      validUntil: $validUntil
+    ) {
+      applicantUserId
+      approvedAmountDisbursed
+      approvedAt
+      approvedByUserId
+      approvedProofDays
+      approvedTotalAmount
+      assignedMentor {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      assignedMentorUserId
+      batchSnapshot
+      beneficiary {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      beneficiaryUserId
+      closedAt
+      createdAt
+      id
+      lastActivityAt
+      paymentMode
+      payoutMaskedSnapshot
+      payoutMethod
+      payoutSnapshot
+      proofStatus
+      proposedProofDays
+      purpose
+      reason
+      referenceNumber
+      refundStatus
+      rejectedAt
+      rejectedByUserId
+      rejectionReason
+      requestedAmount
+      requestedFirstInstallmentAmount
+      reviewStartedAt
+      reviewedByUserId
+      status
+      submittedAt
+      updatedAt
+    }
+  }
+`;
+export type SetScholarshipPrimaryMentorMutationFn = Apollo.MutationFunction<
+  SetScholarshipPrimaryMentorMutation,
+  SetScholarshipPrimaryMentorMutationVariables
+>;
+
+/**
+ * __useSetScholarshipPrimaryMentorMutation__
+ *
+ * To run a mutation, you first call `useSetScholarshipPrimaryMentorMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetScholarshipPrimaryMentorMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setScholarshipPrimaryMentorMutation, { data, loading, error }] = useSetScholarshipPrimaryMentorMutation({
+ *   variables: {
+ *      batch: // value for 'batch'
+ *      mentorUserId: // value for 'mentorUserId'
+ *      reason: // value for 'reason'
+ *      validFrom: // value for 'validFrom'
+ *      validUntil: // value for 'validUntil'
+ *   },
+ * });
+ */
+export function useSetScholarshipPrimaryMentorMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SetScholarshipPrimaryMentorMutation,
+    SetScholarshipPrimaryMentorMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<SetScholarshipPrimaryMentorMutation, SetScholarshipPrimaryMentorMutationVariables>(
+    SetScholarshipPrimaryMentorDocument,
+    options
+  );
+}
+export type SetScholarshipPrimaryMentorMutationHookResult = ReturnType<typeof useSetScholarshipPrimaryMentorMutation>;
+export type SetScholarshipPrimaryMentorMutationResult = Apollo.MutationResult<SetScholarshipPrimaryMentorMutation>;
+export type SetScholarshipPrimaryMentorMutationOptions = Apollo.BaseMutationOptions<
+  SetScholarshipPrimaryMentorMutation,
+  SetScholarshipPrimaryMentorMutationVariables
+>;
 export const SigninDocument = gql`
   mutation signin($email: String!, $password: String!) {
     signin(email: $email, password: $password) {
@@ -9472,11 +18592,29 @@ export const SigninDocument = gql`
         metadata
         mobile
         nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
         profileImage
         role {
           code
           id
           name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
         }
         socialMedia
         updatedAt
@@ -9625,6 +18763,457 @@ export function useSignupMutation(baseOptions?: Apollo.MutationHookOptions<Signu
 export type SignupMutationHookResult = ReturnType<typeof useSignupMutation>;
 export type SignupMutationResult = Apollo.MutationResult<SignupMutation>;
 export type SignupMutationOptions = Apollo.BaseMutationOptions<SignupMutation, SignupMutationVariables>;
+export const StartScholarshipApplicationReviewDocument = gql`
+  mutation startScholarshipApplicationReview($applicationId: String!) {
+    startScholarshipApplicationReview(applicationId: $applicationId) {
+      applicantUserId
+      approvedAmountDisbursed
+      approvedAt
+      approvedByUserId
+      approvedProofDays
+      approvedTotalAmount
+      assignedMentor {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      assignedMentorUserId
+      batchSnapshot
+      beneficiary {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      beneficiaryUserId
+      closedAt
+      createdAt
+      id
+      lastActivityAt
+      paymentMode
+      payoutMaskedSnapshot
+      payoutMethod
+      payoutSnapshot
+      proofStatus
+      proposedProofDays
+      purpose
+      reason
+      referenceNumber
+      refundStatus
+      rejectedAt
+      rejectedByUserId
+      rejectionReason
+      requestedAmount
+      requestedFirstInstallmentAmount
+      reviewStartedAt
+      reviewedByUserId
+      status
+      submittedAt
+      updatedAt
+    }
+  }
+`;
+export type StartScholarshipApplicationReviewMutationFn = Apollo.MutationFunction<
+  StartScholarshipApplicationReviewMutation,
+  StartScholarshipApplicationReviewMutationVariables
+>;
+
+/**
+ * __useStartScholarshipApplicationReviewMutation__
+ *
+ * To run a mutation, you first call `useStartScholarshipApplicationReviewMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStartScholarshipApplicationReviewMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [startScholarshipApplicationReviewMutation, { data, loading, error }] = useStartScholarshipApplicationReviewMutation({
+ *   variables: {
+ *      applicationId: // value for 'applicationId'
+ *   },
+ * });
+ */
+export function useStartScholarshipApplicationReviewMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    StartScholarshipApplicationReviewMutation,
+    StartScholarshipApplicationReviewMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    StartScholarshipApplicationReviewMutation,
+    StartScholarshipApplicationReviewMutationVariables
+  >(StartScholarshipApplicationReviewDocument, options);
+}
+export type StartScholarshipApplicationReviewMutationHookResult = ReturnType<
+  typeof useStartScholarshipApplicationReviewMutation
+>;
+export type StartScholarshipApplicationReviewMutationResult =
+  Apollo.MutationResult<StartScholarshipApplicationReviewMutation>;
+export type StartScholarshipApplicationReviewMutationOptions = Apollo.BaseMutationOptions<
+  StartScholarshipApplicationReviewMutation,
+  StartScholarshipApplicationReviewMutationVariables
+>;
+export const SubmitScholarshipApplicationDocument = gql`
+  mutation submitScholarshipApplication($applicationId: String!) {
+    submitScholarshipApplication(applicationId: $applicationId) {
+      applicantUserId
+      approvedAmountDisbursed
+      approvedAt
+      approvedByUserId
+      approvedProofDays
+      approvedTotalAmount
+      assignedMentor {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      assignedMentorUserId
+      batchSnapshot
+      beneficiary {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      beneficiaryUserId
+      closedAt
+      createdAt
+      id
+      lastActivityAt
+      paymentMode
+      payoutMaskedSnapshot
+      payoutMethod
+      payoutSnapshot
+      proofStatus
+      proposedProofDays
+      purpose
+      reason
+      referenceNumber
+      refundStatus
+      rejectedAt
+      rejectedByUserId
+      rejectionReason
+      requestedAmount
+      requestedFirstInstallmentAmount
+      reviewStartedAt
+      reviewedByUserId
+      status
+      submittedAt
+      updatedAt
+    }
+  }
+`;
+export type SubmitScholarshipApplicationMutationFn = Apollo.MutationFunction<
+  SubmitScholarshipApplicationMutation,
+  SubmitScholarshipApplicationMutationVariables
+>;
+
+/**
+ * __useSubmitScholarshipApplicationMutation__
+ *
+ * To run a mutation, you first call `useSubmitScholarshipApplicationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSubmitScholarshipApplicationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [submitScholarshipApplicationMutation, { data, loading, error }] = useSubmitScholarshipApplicationMutation({
+ *   variables: {
+ *      applicationId: // value for 'applicationId'
+ *   },
+ * });
+ */
+export function useSubmitScholarshipApplicationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SubmitScholarshipApplicationMutation,
+    SubmitScholarshipApplicationMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<SubmitScholarshipApplicationMutation, SubmitScholarshipApplicationMutationVariables>(
+    SubmitScholarshipApplicationDocument,
+    options
+  );
+}
+export type SubmitScholarshipApplicationMutationHookResult = ReturnType<typeof useSubmitScholarshipApplicationMutation>;
+export type SubmitScholarshipApplicationMutationResult = Apollo.MutationResult<SubmitScholarshipApplicationMutation>;
+export type SubmitScholarshipApplicationMutationOptions = Apollo.BaseMutationOptions<
+  SubmitScholarshipApplicationMutation,
+  SubmitScholarshipApplicationMutationVariables
+>;
+export const SubmitScholarshipUsageProofDocument = gql`
+  mutation submitScholarshipUsageProof($documentIds: [String!]!, $transactionId: String!) {
+    submitScholarshipUsageProof(documentIds: $documentIds, transactionId: $transactionId) {
+      applicationId
+      id
+      reviewNote
+      reviewedAt
+      reviewedByUserId
+      status
+      submissionSequence
+      submittedAt
+      submittedByUserId
+      submittedCoverage
+      transactionId
+    }
+  }
+`;
+export type SubmitScholarshipUsageProofMutationFn = Apollo.MutationFunction<
+  SubmitScholarshipUsageProofMutation,
+  SubmitScholarshipUsageProofMutationVariables
+>;
+
+/**
+ * __useSubmitScholarshipUsageProofMutation__
+ *
+ * To run a mutation, you first call `useSubmitScholarshipUsageProofMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSubmitScholarshipUsageProofMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [submitScholarshipUsageProofMutation, { data, loading, error }] = useSubmitScholarshipUsageProofMutation({
+ *   variables: {
+ *      documentIds: // value for 'documentIds'
+ *      transactionId: // value for 'transactionId'
+ *   },
+ * });
+ */
+export function useSubmitScholarshipUsageProofMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SubmitScholarshipUsageProofMutation,
+    SubmitScholarshipUsageProofMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<SubmitScholarshipUsageProofMutation, SubmitScholarshipUsageProofMutationVariables>(
+    SubmitScholarshipUsageProofDocument,
+    options
+  );
+}
+export type SubmitScholarshipUsageProofMutationHookResult = ReturnType<typeof useSubmitScholarshipUsageProofMutation>;
+export type SubmitScholarshipUsageProofMutationResult = Apollo.MutationResult<SubmitScholarshipUsageProofMutation>;
+export type SubmitScholarshipUsageProofMutationOptions = Apollo.BaseMutationOptions<
+  SubmitScholarshipUsageProofMutation,
+  SubmitScholarshipUsageProofMutationVariables
+>;
 export const UpdateAddressDocument = gql`
   mutation updateAddress(
     $address: String
@@ -9849,11 +19438,29 @@ export const UpdateAlbumDocument = gql`
           metadata
           mobile
           nickName
+          positions {
+            assignmentId
+            code
+            name
+            termId
+            termName
+            validFrom
+            validUntil
+          }
           profileImage
           role {
             code
             id
             name
+          }
+          roles {
+            assignmentId
+            code
+            name
+            scopeBatch
+            scopeType
+            validFrom
+            validUntil
           }
           socialMedia
           updatedAt
@@ -9934,11 +19541,29 @@ export const UpdateBatchCoordinatorDocument = gql`
         metadata
         mobile
         nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
         profileImage
         role {
           code
           id
           name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
         }
         socialMedia
         updatedAt
@@ -10390,6 +20015,205 @@ export function useUpdateEventMutation(
 export type UpdateEventMutationHookResult = ReturnType<typeof useUpdateEventMutation>;
 export type UpdateEventMutationResult = Apollo.MutationResult<UpdateEventMutation>;
 export type UpdateEventMutationOptions = Apollo.BaseMutationOptions<UpdateEventMutation, UpdateEventMutationVariables>;
+export const UpdateScholarshipApplicationDraftDocument = gql`
+  mutation updateScholarshipApplicationDraft($applicationId: String!, $input: ScholarshipApplicationInput!) {
+    updateScholarshipApplicationDraft(applicationId: $applicationId, input: $input) {
+      applicantUserId
+      approvedAmountDisbursed
+      approvedAt
+      approvedByUserId
+      approvedProofDays
+      approvedTotalAmount
+      assignedMentor {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      assignedMentorUserId
+      batchSnapshot
+      beneficiary {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      beneficiaryUserId
+      closedAt
+      createdAt
+      id
+      lastActivityAt
+      paymentMode
+      payoutMaskedSnapshot
+      payoutMethod
+      payoutSnapshot
+      proofStatus
+      proposedProofDays
+      purpose
+      reason
+      referenceNumber
+      refundStatus
+      rejectedAt
+      rejectedByUserId
+      rejectionReason
+      requestedAmount
+      requestedFirstInstallmentAmount
+      reviewStartedAt
+      reviewedByUserId
+      status
+      submittedAt
+      updatedAt
+    }
+  }
+`;
+export type UpdateScholarshipApplicationDraftMutationFn = Apollo.MutationFunction<
+  UpdateScholarshipApplicationDraftMutation,
+  UpdateScholarshipApplicationDraftMutationVariables
+>;
+
+/**
+ * __useUpdateScholarshipApplicationDraftMutation__
+ *
+ * To run a mutation, you first call `useUpdateScholarshipApplicationDraftMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateScholarshipApplicationDraftMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateScholarshipApplicationDraftMutation, { data, loading, error }] = useUpdateScholarshipApplicationDraftMutation({
+ *   variables: {
+ *      applicationId: // value for 'applicationId'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateScholarshipApplicationDraftMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateScholarshipApplicationDraftMutation,
+    UpdateScholarshipApplicationDraftMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateScholarshipApplicationDraftMutation,
+    UpdateScholarshipApplicationDraftMutationVariables
+  >(UpdateScholarshipApplicationDraftDocument, options);
+}
+export type UpdateScholarshipApplicationDraftMutationHookResult = ReturnType<
+  typeof useUpdateScholarshipApplicationDraftMutation
+>;
+export type UpdateScholarshipApplicationDraftMutationResult =
+  Apollo.MutationResult<UpdateScholarshipApplicationDraftMutation>;
+export type UpdateScholarshipApplicationDraftMutationOptions = Apollo.BaseMutationOptions<
+  UpdateScholarshipApplicationDraftMutation,
+  UpdateScholarshipApplicationDraftMutationVariables
+>;
 export const UpdateTransactionDocument = gql`
   mutation updateTransaction($id: String!, $status: TransactionStatus!) {
     updateTransaction(id: $id, status: $status) {
@@ -10401,6 +20225,26 @@ export const UpdateTransactionDocument = gql`
       isDonation
       method
       referenceId
+      scholarshipApplicationId
+      scholarshipApprovedAt
+      scholarshipBatchSnapshot
+      scholarshipBeneficiaryUserId
+      scholarshipCompletedAt
+      scholarshipConfirmedAmount
+      scholarshipConfirmedAt
+      scholarshipImmutableAt
+      scholarshipInstallmentSequence
+      scholarshipMaskedPayoutDestination
+      scholarshipMentorUserId
+      scholarshipOriginalTransactionId
+      scholarshipPayoutMethod
+      scholarshipProofDueAt
+      scholarshipProofDueDays
+      scholarshipProofStatus
+      scholarshipPurposeSnapshot
+      scholarshipReceivedAt
+      scholarshipStatus
+      sourceType
       status
       title
       transactionDate
@@ -10436,11 +20280,29 @@ export const UpdateTransactionDocument = gql`
         metadata
         mobile
         nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
         profileImage
         role {
           code
           id
           name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
         }
         socialMedia
         updatedAt
@@ -10896,6 +20758,15 @@ export function useGetCompanyInfoListByUserLazyQuery(
     options
   );
 }
+// @ts-ignore
+export function useGetCompanyInfoListByUserSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<GetCompanyInfoListByUserQuery, GetCompanyInfoListByUserQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetCompanyInfoListByUserQuery, GetCompanyInfoListByUserQueryVariables>;
+export function useGetCompanyInfoListByUserSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetCompanyInfoListByUserQuery, GetCompanyInfoListByUserQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetCompanyInfoListByUserQuery | undefined, GetCompanyInfoListByUserQueryVariables>;
 export function useGetCompanyInfoListByUserSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
@@ -10967,10 +20838,17 @@ export function useAccessAuditEventsLazyQuery(
     options
   );
 }
+// @ts-ignore
+export function useAccessAuditEventsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<AccessAuditEventsQuery, AccessAuditEventsQueryVariables>
+): Apollo.UseSuspenseQueryResult<AccessAuditEventsQuery, AccessAuditEventsQueryVariables>;
 export function useAccessAuditEventsSuspenseQuery(
   baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<AccessAuditEventsQuery, AccessAuditEventsQueryVariables>
+    Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<AccessAuditEventsQuery, AccessAuditEventsQueryVariables>
+): Apollo.UseSuspenseQueryResult<AccessAuditEventsQuery | undefined, AccessAuditEventsQueryVariables>;
+export function useAccessAuditEventsSuspenseQuery(
+  baseOptions?:
+    Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<AccessAuditEventsQuery, AccessAuditEventsQueryVariables>
 ) {
   const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<AccessAuditEventsQuery, AccessAuditEventsQueryVariables>(
@@ -11044,11 +20922,29 @@ export const ExecutivePositionAssignmentsDocument = gql`
         metadata
         mobile
         nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
         profileImage
         role {
           code
           id
           name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
         }
         socialMedia
         updatedAt
@@ -11097,6 +20993,21 @@ export function useExecutivePositionAssignmentsLazyQuery(
     options
   );
 }
+// @ts-ignore
+export function useExecutivePositionAssignmentsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    ExecutivePositionAssignmentsQuery,
+    ExecutivePositionAssignmentsQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<ExecutivePositionAssignmentsQuery, ExecutivePositionAssignmentsQueryVariables>;
+export function useExecutivePositionAssignmentsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<ExecutivePositionAssignmentsQuery, ExecutivePositionAssignmentsQueryVariables>
+): Apollo.UseSuspenseQueryResult<
+  ExecutivePositionAssignmentsQuery | undefined,
+  ExecutivePositionAssignmentsQueryVariables
+>;
 export function useExecutivePositionAssignmentsSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
@@ -11166,10 +21077,17 @@ export function useExecutivePositionsLazyQuery(
     options
   );
 }
+// @ts-ignore
+export function useExecutivePositionsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ExecutivePositionsQuery, ExecutivePositionsQueryVariables>
+): Apollo.UseSuspenseQueryResult<ExecutivePositionsQuery, ExecutivePositionsQueryVariables>;
 export function useExecutivePositionsSuspenseQuery(
   baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ExecutivePositionsQuery, ExecutivePositionsQueryVariables>
+    Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ExecutivePositionsQuery, ExecutivePositionsQueryVariables>
+): Apollo.UseSuspenseQueryResult<ExecutivePositionsQuery | undefined, ExecutivePositionsQueryVariables>;
+export function useExecutivePositionsSuspenseQuery(
+  baseOptions?:
+    Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ExecutivePositionsQuery, ExecutivePositionsQueryVariables>
 ) {
   const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<ExecutivePositionsQuery, ExecutivePositionsQueryVariables>(
@@ -11226,6 +21144,13 @@ export function useExecutiveTermsLazyQuery(
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<ExecutiveTermsQuery, ExecutiveTermsQueryVariables>(ExecutiveTermsDocument, options);
 }
+// @ts-ignore
+export function useExecutiveTermsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ExecutiveTermsQuery, ExecutiveTermsQueryVariables>
+): Apollo.UseSuspenseQueryResult<ExecutiveTermsQuery, ExecutiveTermsQueryVariables>;
+export function useExecutiveTermsSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ExecutiveTermsQuery, ExecutiveTermsQueryVariables>
+): Apollo.UseSuspenseQueryResult<ExecutiveTermsQuery | undefined, ExecutiveTermsQueryVariables>;
 export function useExecutiveTermsSuspenseQuery(
   baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ExecutiveTermsQuery, ExecutiveTermsQueryVariables>
 ) {
@@ -11393,11 +21318,29 @@ export const GetAlbumDocument = gql`
           metadata
           mobile
           nickName
+          positions {
+            assignmentId
+            code
+            name
+            termId
+            termName
+            validFrom
+            validUntil
+          }
           profileImage
           role {
             code
             id
             name
+          }
+          roles {
+            assignmentId
+            code
+            name
+            scopeBatch
+            scopeType
+            validFrom
+            validUntil
           }
           socialMedia
           updatedAt
@@ -11439,6 +21382,13 @@ export function useGetAlbumLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<G
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<GetAlbumQuery, GetAlbumQueryVariables>(GetAlbumDocument, options);
 }
+// @ts-ignore
+export function useGetAlbumSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<GetAlbumQuery, GetAlbumQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetAlbumQuery, GetAlbumQueryVariables>;
+export function useGetAlbumSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAlbumQuery, GetAlbumQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetAlbumQuery | undefined, GetAlbumQueryVariables>;
 export function useGetAlbumSuspenseQuery(
   baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAlbumQuery, GetAlbumQueryVariables>
 ) {
@@ -11546,6 +21496,13 @@ export function useGetAlbumsLazyQuery(
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<GetAlbumsQuery, GetAlbumsQueryVariables>(GetAlbumsDocument, options);
 }
+// @ts-ignore
+export function useGetAlbumsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<GetAlbumsQuery, GetAlbumsQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetAlbumsQuery, GetAlbumsQueryVariables>;
+export function useGetAlbumsSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAlbumsQuery, GetAlbumsQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetAlbumsQuery | undefined, GetAlbumsQueryVariables>;
 export function useGetAlbumsSuspenseQuery(
   baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAlbumsQuery, GetAlbumsQueryVariables>
 ) {
@@ -11592,11 +21549,29 @@ export const GetAllBatchCoordinatorsDocument = gql`
         metadata
         mobile
         nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
         profileImage
         role {
           code
           id
           name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
         }
         socialMedia
         updatedAt
@@ -11641,6 +21616,15 @@ export function useGetAllBatchCoordinatorsLazyQuery(
     options
   );
 }
+// @ts-ignore
+export function useGetAllBatchCoordinatorsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<GetAllBatchCoordinatorsQuery, GetAllBatchCoordinatorsQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetAllBatchCoordinatorsQuery, GetAllBatchCoordinatorsQueryVariables>;
+export function useGetAllBatchCoordinatorsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetAllBatchCoordinatorsQuery, GetAllBatchCoordinatorsQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetAllBatchCoordinatorsQuery | undefined, GetAllBatchCoordinatorsQueryVariables>;
 export function useGetAllBatchCoordinatorsSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
@@ -11695,11 +21679,29 @@ export const GetBatchCoordinatorByUserIdDocument = gql`
         metadata
         mobile
         nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
         profileImage
         role {
           code
           id
           name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
         }
         socialMedia
         updatedAt
@@ -11745,6 +21747,21 @@ export function useGetBatchCoordinatorByUserIdLazyQuery(
     options
   );
 }
+// @ts-ignore
+export function useGetBatchCoordinatorByUserIdSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetBatchCoordinatorByUserIdQuery,
+    GetBatchCoordinatorByUserIdQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<GetBatchCoordinatorByUserIdQuery, GetBatchCoordinatorByUserIdQueryVariables>;
+export function useGetBatchCoordinatorByUserIdSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetBatchCoordinatorByUserIdQuery, GetBatchCoordinatorByUserIdQueryVariables>
+): Apollo.UseSuspenseQueryResult<
+  GetBatchCoordinatorByUserIdQuery | undefined,
+  GetBatchCoordinatorByUserIdQueryVariables
+>;
 export function useGetBatchCoordinatorByUserIdSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
@@ -11764,6 +21781,116 @@ export type GetBatchCoordinatorByUserIdSuspenseQueryHookResult = ReturnType<
 export type GetBatchCoordinatorByUserIdQueryResult = Apollo.QueryResult<
   GetBatchCoordinatorByUserIdQuery,
   GetBatchCoordinatorByUserIdQueryVariables
+>;
+export const GetBatchCoordinatorScholarshipDashboardDocument = gql`
+  query getBatchCoordinatorScholarshipDashboard($batch: Int!) {
+    getBatchCoordinatorScholarshipDashboard(batch: $batch) {
+      byStatus {
+        count
+        key
+      }
+      capacity {
+        allocated
+        available
+        committed
+        returned
+      }
+      disbursedAmount
+      exceptionCount
+      requestedAmount
+      totalApplications
+    }
+  }
+`;
+
+/**
+ * __useGetBatchCoordinatorScholarshipDashboardQuery__
+ *
+ * To run a query within a React component, call `useGetBatchCoordinatorScholarshipDashboardQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBatchCoordinatorScholarshipDashboardQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBatchCoordinatorScholarshipDashboardQuery({
+ *   variables: {
+ *      batch: // value for 'batch'
+ *   },
+ * });
+ */
+export function useGetBatchCoordinatorScholarshipDashboardQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetBatchCoordinatorScholarshipDashboardQuery,
+    GetBatchCoordinatorScholarshipDashboardQueryVariables
+  > &
+    ({ variables: GetBatchCoordinatorScholarshipDashboardQueryVariables; skip?: boolean } | { skip: boolean })
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetBatchCoordinatorScholarshipDashboardQuery,
+    GetBatchCoordinatorScholarshipDashboardQueryVariables
+  >(GetBatchCoordinatorScholarshipDashboardDocument, options);
+}
+export function useGetBatchCoordinatorScholarshipDashboardLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetBatchCoordinatorScholarshipDashboardQuery,
+    GetBatchCoordinatorScholarshipDashboardQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetBatchCoordinatorScholarshipDashboardQuery,
+    GetBatchCoordinatorScholarshipDashboardQueryVariables
+  >(GetBatchCoordinatorScholarshipDashboardDocument, options);
+}
+// @ts-ignore
+export function useGetBatchCoordinatorScholarshipDashboardSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetBatchCoordinatorScholarshipDashboardQuery,
+    GetBatchCoordinatorScholarshipDashboardQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<
+  GetBatchCoordinatorScholarshipDashboardQuery,
+  GetBatchCoordinatorScholarshipDashboardQueryVariables
+>;
+export function useGetBatchCoordinatorScholarshipDashboardSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetBatchCoordinatorScholarshipDashboardQuery,
+        GetBatchCoordinatorScholarshipDashboardQueryVariables
+      >
+): Apollo.UseSuspenseQueryResult<
+  GetBatchCoordinatorScholarshipDashboardQuery | undefined,
+  GetBatchCoordinatorScholarshipDashboardQueryVariables
+>;
+export function useGetBatchCoordinatorScholarshipDashboardSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetBatchCoordinatorScholarshipDashboardQuery,
+        GetBatchCoordinatorScholarshipDashboardQueryVariables
+      >
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetBatchCoordinatorScholarshipDashboardQuery,
+    GetBatchCoordinatorScholarshipDashboardQueryVariables
+  >(GetBatchCoordinatorScholarshipDashboardDocument, options);
+}
+export type GetBatchCoordinatorScholarshipDashboardQueryHookResult = ReturnType<
+  typeof useGetBatchCoordinatorScholarshipDashboardQuery
+>;
+export type GetBatchCoordinatorScholarshipDashboardLazyQueryHookResult = ReturnType<
+  typeof useGetBatchCoordinatorScholarshipDashboardLazyQuery
+>;
+export type GetBatchCoordinatorScholarshipDashboardSuspenseQueryHookResult = ReturnType<
+  typeof useGetBatchCoordinatorScholarshipDashboardSuspenseQuery
+>;
+export type GetBatchCoordinatorScholarshipDashboardQueryResult = Apollo.QueryResult<
+  GetBatchCoordinatorScholarshipDashboardQuery,
+  GetBatchCoordinatorScholarshipDashboardQueryVariables
 >;
 export const GetBatchCoordinatorsByBatchDocument = gql`
   query getBatchCoordinatorsByBatch($batch: Int!) {
@@ -11801,11 +21928,29 @@ export const GetBatchCoordinatorsByBatchDocument = gql`
         metadata
         mobile
         nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
         profileImage
         role {
           code
           id
           name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
         }
         socialMedia
         updatedAt
@@ -11851,6 +21996,21 @@ export function useGetBatchCoordinatorsByBatchLazyQuery(
     options
   );
 }
+// @ts-ignore
+export function useGetBatchCoordinatorsByBatchSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetBatchCoordinatorsByBatchQuery,
+    GetBatchCoordinatorsByBatchQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<GetBatchCoordinatorsByBatchQuery, GetBatchCoordinatorsByBatchQueryVariables>;
+export function useGetBatchCoordinatorsByBatchSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetBatchCoordinatorsByBatchQuery, GetBatchCoordinatorsByBatchQueryVariables>
+): Apollo.UseSuspenseQueryResult<
+  GetBatchCoordinatorsByBatchQuery | undefined,
+  GetBatchCoordinatorsByBatchQueryVariables
+>;
 export function useGetBatchCoordinatorsByBatchSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
@@ -11956,6 +22116,13 @@ export function useGetBlogLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ge
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<GetBlogQuery, GetBlogQueryVariables>(GetBlogDocument, options);
 }
+// @ts-ignore
+export function useGetBlogSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<GetBlogQuery, GetBlogQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetBlogQuery, GetBlogQueryVariables>;
+export function useGetBlogSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetBlogQuery, GetBlogQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetBlogQuery | undefined, GetBlogQueryVariables>;
 export function useGetBlogSuspenseQuery(
   baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetBlogQuery, GetBlogQueryVariables>
 ) {
@@ -12033,6 +22200,13 @@ export function useGetBlogListLazyQuery(
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<GetBlogListQuery, GetBlogListQueryVariables>(GetBlogListDocument, options);
 }
+// @ts-ignore
+export function useGetBlogListSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<GetBlogListQuery, GetBlogListQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetBlogListQuery, GetBlogListQueryVariables>;
+export function useGetBlogListSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetBlogListQuery, GetBlogListQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetBlogListQuery | undefined, GetBlogListQueryVariables>;
 export function useGetBlogListSuspenseQuery(
   baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetBlogListQuery, GetBlogListQueryVariables>
 ) {
@@ -12116,6 +22290,13 @@ export function useGetBusinessLazyQuery(
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<GetBusinessQuery, GetBusinessQueryVariables>(GetBusinessDocument, options);
 }
+// @ts-ignore
+export function useGetBusinessSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<GetBusinessQuery, GetBusinessQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetBusinessQuery, GetBusinessQueryVariables>;
+export function useGetBusinessSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetBusinessQuery, GetBusinessQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetBusinessQuery | undefined, GetBusinessQueryVariables>;
 export function useGetBusinessSuspenseQuery(
   baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetBusinessQuery, GetBusinessQueryVariables>
 ) {
@@ -12201,6 +22382,13 @@ export function useGetBusinessesLazyQuery(
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<GetBusinessesQuery, GetBusinessesQueryVariables>(GetBusinessesDocument, options);
 }
+// @ts-ignore
+export function useGetBusinessesSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<GetBusinessesQuery, GetBusinessesQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetBusinessesQuery, GetBusinessesQueryVariables>;
+export function useGetBusinessesSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetBusinessesQuery, GetBusinessesQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetBusinessesQuery | undefined, GetBusinessesQueryVariables>;
 export function useGetBusinessesSuspenseQuery(
   baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetBusinessesQuery, GetBusinessesQueryVariables>
 ) {
@@ -12246,6 +22434,13 @@ export function useGetClapsCountLazyQuery(
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<GetClapsCountQuery, GetClapsCountQueryVariables>(GetClapsCountDocument, options);
 }
+// @ts-ignore
+export function useGetClapsCountSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<GetClapsCountQuery, GetClapsCountQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetClapsCountQuery, GetClapsCountQueryVariables>;
+export function useGetClapsCountSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetClapsCountQuery, GetClapsCountQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetClapsCountQuery | undefined, GetClapsCountQueryVariables>;
 export function useGetClapsCountSuspenseQuery(
   baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetClapsCountQuery, GetClapsCountQueryVariables>
 ) {
@@ -12318,6 +22513,13 @@ export function useGetCommentsLazyQuery(
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<GetCommentsQuery, GetCommentsQueryVariables>(GetCommentsDocument, options);
 }
+// @ts-ignore
+export function useGetCommentsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<GetCommentsQuery, GetCommentsQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetCommentsQuery, GetCommentsQueryVariables>;
+export function useGetCommentsSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCommentsQuery, GetCommentsQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetCommentsQuery | undefined, GetCommentsQueryVariables>;
 export function useGetCommentsSuspenseQuery(
   baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCommentsQuery, GetCommentsQueryVariables>
 ) {
@@ -12393,6 +22595,13 @@ export function useGetCompanyInfoLazyQuery(
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<GetCompanyInfoQuery, GetCompanyInfoQueryVariables>(GetCompanyInfoDocument, options);
 }
+// @ts-ignore
+export function useGetCompanyInfoSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<GetCompanyInfoQuery, GetCompanyInfoQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetCompanyInfoQuery, GetCompanyInfoQueryVariables>;
+export function useGetCompanyInfoSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCompanyInfoQuery, GetCompanyInfoQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetCompanyInfoQuery | undefined, GetCompanyInfoQueryVariables>;
 export function useGetCompanyInfoSuspenseQuery(
   baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCompanyInfoQuery, GetCompanyInfoQueryVariables>
 ) {
@@ -12473,10 +22682,17 @@ export function useGetCompanyInfoListLazyQuery(
     options
   );
 }
+// @ts-ignore
+export function useGetCompanyInfoListSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<GetCompanyInfoListQuery, GetCompanyInfoListQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetCompanyInfoListQuery, GetCompanyInfoListQueryVariables>;
 export function useGetCompanyInfoListSuspenseQuery(
   baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<GetCompanyInfoListQuery, GetCompanyInfoListQueryVariables>
+    Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCompanyInfoListQuery, GetCompanyInfoListQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetCompanyInfoListQuery | undefined, GetCompanyInfoListQueryVariables>;
+export function useGetCompanyInfoListSuspenseQuery(
+  baseOptions?:
+    Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCompanyInfoListQuery, GetCompanyInfoListQueryVariables>
 ) {
   const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<GetCompanyInfoListQuery, GetCompanyInfoListQueryVariables>(
@@ -12490,6 +22706,193 @@ export type GetCompanyInfoListSuspenseQueryHookResult = ReturnType<typeof useGet
 export type GetCompanyInfoListQueryResult = Apollo.QueryResult<
   GetCompanyInfoListQuery,
   GetCompanyInfoListQueryVariables
+>;
+export const GetCompletedScholarshipTransactionsDocument = gql`
+  query getCompletedScholarshipTransactions($options: ListInput) {
+    getCompletedScholarshipTransactions(options: $options) {
+      amount
+      createdAt
+      currency
+      description
+      id
+      isDonation
+      method
+      referenceId
+      scholarshipApplicationId
+      scholarshipApprovedAt
+      scholarshipBatchSnapshot
+      scholarshipBeneficiaryUserId
+      scholarshipCompletedAt
+      scholarshipConfirmedAmount
+      scholarshipConfirmedAt
+      scholarshipImmutableAt
+      scholarshipInstallmentSequence
+      scholarshipMaskedPayoutDestination
+      scholarshipMentorUserId
+      scholarshipOriginalTransactionId
+      scholarshipPayoutMethod
+      scholarshipProofDueAt
+      scholarshipProofDueDays
+      scholarshipProofStatus
+      scholarshipPurposeSnapshot
+      scholarshipReceivedAt
+      scholarshipStatus
+      sourceType
+      status
+      title
+      transactionDate
+      type
+      updatedAt
+      user {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      userId
+    }
+  }
+`;
+
+/**
+ * __useGetCompletedScholarshipTransactionsQuery__
+ *
+ * To run a query within a React component, call `useGetCompletedScholarshipTransactionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCompletedScholarshipTransactionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCompletedScholarshipTransactionsQuery({
+ *   variables: {
+ *      options: // value for 'options'
+ *   },
+ * });
+ */
+export function useGetCompletedScholarshipTransactionsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetCompletedScholarshipTransactionsQuery,
+    GetCompletedScholarshipTransactionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetCompletedScholarshipTransactionsQuery, GetCompletedScholarshipTransactionsQueryVariables>(
+    GetCompletedScholarshipTransactionsDocument,
+    options
+  );
+}
+export function useGetCompletedScholarshipTransactionsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetCompletedScholarshipTransactionsQuery,
+    GetCompletedScholarshipTransactionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetCompletedScholarshipTransactionsQuery,
+    GetCompletedScholarshipTransactionsQueryVariables
+  >(GetCompletedScholarshipTransactionsDocument, options);
+}
+// @ts-ignore
+export function useGetCompletedScholarshipTransactionsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetCompletedScholarshipTransactionsQuery,
+    GetCompletedScholarshipTransactionsQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<
+  GetCompletedScholarshipTransactionsQuery,
+  GetCompletedScholarshipTransactionsQueryVariables
+>;
+export function useGetCompletedScholarshipTransactionsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCompletedScholarshipTransactionsQuery,
+        GetCompletedScholarshipTransactionsQueryVariables
+      >
+): Apollo.UseSuspenseQueryResult<
+  GetCompletedScholarshipTransactionsQuery | undefined,
+  GetCompletedScholarshipTransactionsQueryVariables
+>;
+export function useGetCompletedScholarshipTransactionsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCompletedScholarshipTransactionsQuery,
+        GetCompletedScholarshipTransactionsQueryVariables
+      >
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetCompletedScholarshipTransactionsQuery,
+    GetCompletedScholarshipTransactionsQueryVariables
+  >(GetCompletedScholarshipTransactionsDocument, options);
+}
+export type GetCompletedScholarshipTransactionsQueryHookResult = ReturnType<
+  typeof useGetCompletedScholarshipTransactionsQuery
+>;
+export type GetCompletedScholarshipTransactionsLazyQueryHookResult = ReturnType<
+  typeof useGetCompletedScholarshipTransactionsLazyQuery
+>;
+export type GetCompletedScholarshipTransactionsSuspenseQueryHookResult = ReturnType<
+  typeof useGetCompletedScholarshipTransactionsSuspenseQuery
+>;
+export type GetCompletedScholarshipTransactionsQueryResult = Apollo.QueryResult<
+  GetCompletedScholarshipTransactionsQuery,
+  GetCompletedScholarshipTransactionsQueryVariables
 >;
 export const GetEventDetailsDocument = gql`
   query getEventDetails($id: Int!) {
@@ -12582,6 +22985,13 @@ export function useGetEventDetailsLazyQuery(
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<GetEventDetailsQuery, GetEventDetailsQueryVariables>(GetEventDetailsDocument, options);
 }
+// @ts-ignore
+export function useGetEventDetailsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<GetEventDetailsQuery, GetEventDetailsQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetEventDetailsQuery, GetEventDetailsQueryVariables>;
+export function useGetEventDetailsSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetEventDetailsQuery, GetEventDetailsQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetEventDetailsQuery | undefined, GetEventDetailsQueryVariables>;
 export function useGetEventDetailsSuspenseQuery(
   baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetEventDetailsQuery, GetEventDetailsQueryVariables>
 ) {
@@ -12648,6 +23058,13 @@ export function useGetEventListLazyQuery(
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<GetEventListQuery, GetEventListQueryVariables>(GetEventListDocument, options);
 }
+// @ts-ignore
+export function useGetEventListSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<GetEventListQuery, GetEventListQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetEventListQuery, GetEventListQueryVariables>;
+export function useGetEventListSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetEventListQuery, GetEventListQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetEventListQuery | undefined, GetEventListQueryVariables>;
 export function useGetEventListSuspenseQuery(
   baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetEventListQuery, GetEventListQueryVariables>
 ) {
@@ -12658,6 +23075,428 @@ export type GetEventListQueryHookResult = ReturnType<typeof useGetEventListQuery
 export type GetEventListLazyQueryHookResult = ReturnType<typeof useGetEventListLazyQuery>;
 export type GetEventListSuspenseQueryHookResult = ReturnType<typeof useGetEventListSuspenseQuery>;
 export type GetEventListQueryResult = Apollo.QueryResult<GetEventListQuery, GetEventListQueryVariables>;
+export const GetMentorFundAllocationsDocument = gql`
+  query getMentorFundAllocations($batch: Int, $mentorUserId: String, $options: ListInput) {
+    getMentorFundAllocations(batch: $batch, mentorUserId: $mentorUserId, options: $options) {
+      amount
+      batch
+      confirmedAmount
+      createdAt
+      currency
+      disputedAmount
+      id
+      mentorUserId
+      method
+      notes
+      recordedByUserId
+      reference
+      status
+      transferDate
+    }
+  }
+`;
+
+/**
+ * __useGetMentorFundAllocationsQuery__
+ *
+ * To run a query within a React component, call `useGetMentorFundAllocationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMentorFundAllocationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMentorFundAllocationsQuery({
+ *   variables: {
+ *      batch: // value for 'batch'
+ *      mentorUserId: // value for 'mentorUserId'
+ *      options: // value for 'options'
+ *   },
+ * });
+ */
+export function useGetMentorFundAllocationsQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetMentorFundAllocationsQuery, GetMentorFundAllocationsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetMentorFundAllocationsQuery, GetMentorFundAllocationsQueryVariables>(
+    GetMentorFundAllocationsDocument,
+    options
+  );
+}
+export function useGetMentorFundAllocationsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetMentorFundAllocationsQuery, GetMentorFundAllocationsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetMentorFundAllocationsQuery, GetMentorFundAllocationsQueryVariables>(
+    GetMentorFundAllocationsDocument,
+    options
+  );
+}
+// @ts-ignore
+export function useGetMentorFundAllocationsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<GetMentorFundAllocationsQuery, GetMentorFundAllocationsQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetMentorFundAllocationsQuery, GetMentorFundAllocationsQueryVariables>;
+export function useGetMentorFundAllocationsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetMentorFundAllocationsQuery, GetMentorFundAllocationsQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetMentorFundAllocationsQuery | undefined, GetMentorFundAllocationsQueryVariables>;
+export function useGetMentorFundAllocationsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetMentorFundAllocationsQuery, GetMentorFundAllocationsQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetMentorFundAllocationsQuery, GetMentorFundAllocationsQueryVariables>(
+    GetMentorFundAllocationsDocument,
+    options
+  );
+}
+export type GetMentorFundAllocationsQueryHookResult = ReturnType<typeof useGetMentorFundAllocationsQuery>;
+export type GetMentorFundAllocationsLazyQueryHookResult = ReturnType<typeof useGetMentorFundAllocationsLazyQuery>;
+export type GetMentorFundAllocationsSuspenseQueryHookResult = ReturnType<
+  typeof useGetMentorFundAllocationsSuspenseQuery
+>;
+export type GetMentorFundAllocationsQueryResult = Apollo.QueryResult<
+  GetMentorFundAllocationsQuery,
+  GetMentorFundAllocationsQueryVariables
+>;
+export const GetMentorScholarshipApplicationsDocument = gql`
+  query getMentorScholarshipApplications($filter: ScholarshipApplicationFilterInput, $options: ListInput) {
+    getMentorScholarshipApplications(filter: $filter, options: $options) {
+      applicantUserId
+      approvedAmountDisbursed
+      approvedAt
+      approvedByUserId
+      approvedProofDays
+      approvedTotalAmount
+      assignedMentor {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      assignedMentorUserId
+      batchSnapshot
+      beneficiary {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      beneficiaryUserId
+      closedAt
+      createdAt
+      id
+      lastActivityAt
+      paymentMode
+      payoutMaskedSnapshot
+      payoutMethod
+      payoutSnapshot
+      proofStatus
+      proposedProofDays
+      purpose
+      reason
+      referenceNumber
+      refundStatus
+      rejectedAt
+      rejectedByUserId
+      rejectionReason
+      requestedAmount
+      requestedFirstInstallmentAmount
+      reviewStartedAt
+      reviewedByUserId
+      status
+      submittedAt
+      updatedAt
+    }
+  }
+`;
+
+/**
+ * __useGetMentorScholarshipApplicationsQuery__
+ *
+ * To run a query within a React component, call `useGetMentorScholarshipApplicationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMentorScholarshipApplicationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMentorScholarshipApplicationsQuery({
+ *   variables: {
+ *      filter: // value for 'filter'
+ *      options: // value for 'options'
+ *   },
+ * });
+ */
+export function useGetMentorScholarshipApplicationsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetMentorScholarshipApplicationsQuery,
+    GetMentorScholarshipApplicationsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetMentorScholarshipApplicationsQuery, GetMentorScholarshipApplicationsQueryVariables>(
+    GetMentorScholarshipApplicationsDocument,
+    options
+  );
+}
+export function useGetMentorScholarshipApplicationsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetMentorScholarshipApplicationsQuery,
+    GetMentorScholarshipApplicationsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetMentorScholarshipApplicationsQuery, GetMentorScholarshipApplicationsQueryVariables>(
+    GetMentorScholarshipApplicationsDocument,
+    options
+  );
+}
+// @ts-ignore
+export function useGetMentorScholarshipApplicationsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetMentorScholarshipApplicationsQuery,
+    GetMentorScholarshipApplicationsQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<GetMentorScholarshipApplicationsQuery, GetMentorScholarshipApplicationsQueryVariables>;
+export function useGetMentorScholarshipApplicationsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetMentorScholarshipApplicationsQuery,
+        GetMentorScholarshipApplicationsQueryVariables
+      >
+): Apollo.UseSuspenseQueryResult<
+  GetMentorScholarshipApplicationsQuery | undefined,
+  GetMentorScholarshipApplicationsQueryVariables
+>;
+export function useGetMentorScholarshipApplicationsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetMentorScholarshipApplicationsQuery,
+        GetMentorScholarshipApplicationsQueryVariables
+      >
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetMentorScholarshipApplicationsQuery, GetMentorScholarshipApplicationsQueryVariables>(
+    GetMentorScholarshipApplicationsDocument,
+    options
+  );
+}
+export type GetMentorScholarshipApplicationsQueryHookResult = ReturnType<
+  typeof useGetMentorScholarshipApplicationsQuery
+>;
+export type GetMentorScholarshipApplicationsLazyQueryHookResult = ReturnType<
+  typeof useGetMentorScholarshipApplicationsLazyQuery
+>;
+export type GetMentorScholarshipApplicationsSuspenseQueryHookResult = ReturnType<
+  typeof useGetMentorScholarshipApplicationsSuspenseQuery
+>;
+export type GetMentorScholarshipApplicationsQueryResult = Apollo.QueryResult<
+  GetMentorScholarshipApplicationsQuery,
+  GetMentorScholarshipApplicationsQueryVariables
+>;
+export const GetMentorScholarshipDashboardDocument = gql`
+  query getMentorScholarshipDashboard {
+    getMentorScholarshipDashboard {
+      byStatus {
+        count
+        key
+      }
+      capacity {
+        allocated
+        available
+        committed
+        returned
+      }
+      disbursedAmount
+      exceptionCount
+      requestedAmount
+      totalApplications
+    }
+  }
+`;
+
+/**
+ * __useGetMentorScholarshipDashboardQuery__
+ *
+ * To run a query within a React component, call `useGetMentorScholarshipDashboardQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMentorScholarshipDashboardQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMentorScholarshipDashboardQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetMentorScholarshipDashboardQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetMentorScholarshipDashboardQuery, GetMentorScholarshipDashboardQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetMentorScholarshipDashboardQuery, GetMentorScholarshipDashboardQueryVariables>(
+    GetMentorScholarshipDashboardDocument,
+    options
+  );
+}
+export function useGetMentorScholarshipDashboardLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetMentorScholarshipDashboardQuery,
+    GetMentorScholarshipDashboardQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetMentorScholarshipDashboardQuery, GetMentorScholarshipDashboardQueryVariables>(
+    GetMentorScholarshipDashboardDocument,
+    options
+  );
+}
+// @ts-ignore
+export function useGetMentorScholarshipDashboardSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetMentorScholarshipDashboardQuery,
+    GetMentorScholarshipDashboardQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<GetMentorScholarshipDashboardQuery, GetMentorScholarshipDashboardQueryVariables>;
+export function useGetMentorScholarshipDashboardSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetMentorScholarshipDashboardQuery, GetMentorScholarshipDashboardQueryVariables>
+): Apollo.UseSuspenseQueryResult<
+  GetMentorScholarshipDashboardQuery | undefined,
+  GetMentorScholarshipDashboardQueryVariables
+>;
+export function useGetMentorScholarshipDashboardSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetMentorScholarshipDashboardQuery, GetMentorScholarshipDashboardQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetMentorScholarshipDashboardQuery, GetMentorScholarshipDashboardQueryVariables>(
+    GetMentorScholarshipDashboardDocument,
+    options
+  );
+}
+export type GetMentorScholarshipDashboardQueryHookResult = ReturnType<typeof useGetMentorScholarshipDashboardQuery>;
+export type GetMentorScholarshipDashboardLazyQueryHookResult = ReturnType<
+  typeof useGetMentorScholarshipDashboardLazyQuery
+>;
+export type GetMentorScholarshipDashboardSuspenseQueryHookResult = ReturnType<
+  typeof useGetMentorScholarshipDashboardSuspenseQuery
+>;
+export type GetMentorScholarshipDashboardQueryResult = Apollo.QueryResult<
+  GetMentorScholarshipDashboardQuery,
+  GetMentorScholarshipDashboardQueryVariables
+>;
 export const GetMyPhotosDocument = gql`
   query getMyPhotos {
     getMyPhotos {
@@ -12766,11 +23605,29 @@ export const GetMyPhotosDocument = gql`
         metadata
         mobile
         nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
         profileImage
         role {
           code
           id
           name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
         }
         socialMedia
         updatedAt
@@ -12808,6 +23665,13 @@ export function useGetMyPhotosLazyQuery(
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<GetMyPhotosQuery, GetMyPhotosQueryVariables>(GetMyPhotosDocument, options);
 }
+// @ts-ignore
+export function useGetMyPhotosSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<GetMyPhotosQuery, GetMyPhotosQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetMyPhotosQuery, GetMyPhotosQueryVariables>;
+export function useGetMyPhotosSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetMyPhotosQuery, GetMyPhotosQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetMyPhotosQuery | undefined, GetMyPhotosQueryVariables>;
 export function useGetMyPhotosSuspenseQuery(
   baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetMyPhotosQuery, GetMyPhotosQueryVariables>
 ) {
@@ -12818,9 +23682,621 @@ export type GetMyPhotosQueryHookResult = ReturnType<typeof useGetMyPhotosQuery>;
 export type GetMyPhotosLazyQueryHookResult = ReturnType<typeof useGetMyPhotosLazyQuery>;
 export type GetMyPhotosSuspenseQueryHookResult = ReturnType<typeof useGetMyPhotosSuspenseQuery>;
 export type GetMyPhotosQueryResult = Apollo.QueryResult<GetMyPhotosQuery, GetMyPhotosQueryVariables>;
-export const GetTransactionDocument = gql`
-  query getTransaction($id: String!) {
-    getTransaction(id: $id) {
+export const GetMyScholarshipApplicationsDocument = gql`
+  query getMyScholarshipApplications($options: ListInput) {
+    getMyScholarshipApplications(options: $options) {
+      applicantUserId
+      approvedAmountDisbursed
+      approvedAt
+      approvedByUserId
+      approvedProofDays
+      approvedTotalAmount
+      assignedMentor {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      assignedMentorUserId
+      batchSnapshot
+      beneficiary {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      beneficiaryUserId
+      closedAt
+      createdAt
+      id
+      lastActivityAt
+      paymentMode
+      payoutMaskedSnapshot
+      payoutMethod
+      payoutSnapshot
+      proofStatus
+      proposedProofDays
+      purpose
+      reason
+      referenceNumber
+      refundStatus
+      rejectedAt
+      rejectedByUserId
+      rejectionReason
+      requestedAmount
+      requestedFirstInstallmentAmount
+      reviewStartedAt
+      reviewedByUserId
+      status
+      submittedAt
+      updatedAt
+    }
+  }
+`;
+
+/**
+ * __useGetMyScholarshipApplicationsQuery__
+ *
+ * To run a query within a React component, call `useGetMyScholarshipApplicationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMyScholarshipApplicationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMyScholarshipApplicationsQuery({
+ *   variables: {
+ *      options: // value for 'options'
+ *   },
+ * });
+ */
+export function useGetMyScholarshipApplicationsQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetMyScholarshipApplicationsQuery, GetMyScholarshipApplicationsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetMyScholarshipApplicationsQuery, GetMyScholarshipApplicationsQueryVariables>(
+    GetMyScholarshipApplicationsDocument,
+    options
+  );
+}
+export function useGetMyScholarshipApplicationsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetMyScholarshipApplicationsQuery,
+    GetMyScholarshipApplicationsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetMyScholarshipApplicationsQuery, GetMyScholarshipApplicationsQueryVariables>(
+    GetMyScholarshipApplicationsDocument,
+    options
+  );
+}
+// @ts-ignore
+export function useGetMyScholarshipApplicationsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetMyScholarshipApplicationsQuery,
+    GetMyScholarshipApplicationsQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<GetMyScholarshipApplicationsQuery, GetMyScholarshipApplicationsQueryVariables>;
+export function useGetMyScholarshipApplicationsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetMyScholarshipApplicationsQuery, GetMyScholarshipApplicationsQueryVariables>
+): Apollo.UseSuspenseQueryResult<
+  GetMyScholarshipApplicationsQuery | undefined,
+  GetMyScholarshipApplicationsQueryVariables
+>;
+export function useGetMyScholarshipApplicationsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetMyScholarshipApplicationsQuery, GetMyScholarshipApplicationsQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetMyScholarshipApplicationsQuery, GetMyScholarshipApplicationsQueryVariables>(
+    GetMyScholarshipApplicationsDocument,
+    options
+  );
+}
+export type GetMyScholarshipApplicationsQueryHookResult = ReturnType<typeof useGetMyScholarshipApplicationsQuery>;
+export type GetMyScholarshipApplicationsLazyQueryHookResult = ReturnType<
+  typeof useGetMyScholarshipApplicationsLazyQuery
+>;
+export type GetMyScholarshipApplicationsSuspenseQueryHookResult = ReturnType<
+  typeof useGetMyScholarshipApplicationsSuspenseQuery
+>;
+export type GetMyScholarshipApplicationsQueryResult = Apollo.QueryResult<
+  GetMyScholarshipApplicationsQuery,
+  GetMyScholarshipApplicationsQueryVariables
+>;
+export const GetMyScholarshipDashboardDocument = gql`
+  query getMyScholarshipDashboard {
+    getMyScholarshipDashboard {
+      byStatus {
+        count
+        key
+      }
+      capacity {
+        allocated
+        available
+        committed
+        returned
+      }
+      disbursedAmount
+      exceptionCount
+      requestedAmount
+      totalApplications
+    }
+  }
+`;
+
+/**
+ * __useGetMyScholarshipDashboardQuery__
+ *
+ * To run a query within a React component, call `useGetMyScholarshipDashboardQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMyScholarshipDashboardQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMyScholarshipDashboardQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetMyScholarshipDashboardQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetMyScholarshipDashboardQuery, GetMyScholarshipDashboardQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetMyScholarshipDashboardQuery, GetMyScholarshipDashboardQueryVariables>(
+    GetMyScholarshipDashboardDocument,
+    options
+  );
+}
+export function useGetMyScholarshipDashboardLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetMyScholarshipDashboardQuery, GetMyScholarshipDashboardQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetMyScholarshipDashboardQuery, GetMyScholarshipDashboardQueryVariables>(
+    GetMyScholarshipDashboardDocument,
+    options
+  );
+}
+// @ts-ignore
+export function useGetMyScholarshipDashboardSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<GetMyScholarshipDashboardQuery, GetMyScholarshipDashboardQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetMyScholarshipDashboardQuery, GetMyScholarshipDashboardQueryVariables>;
+export function useGetMyScholarshipDashboardSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetMyScholarshipDashboardQuery, GetMyScholarshipDashboardQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetMyScholarshipDashboardQuery | undefined, GetMyScholarshipDashboardQueryVariables>;
+export function useGetMyScholarshipDashboardSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetMyScholarshipDashboardQuery, GetMyScholarshipDashboardQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetMyScholarshipDashboardQuery, GetMyScholarshipDashboardQueryVariables>(
+    GetMyScholarshipDashboardDocument,
+    options
+  );
+}
+export type GetMyScholarshipDashboardQueryHookResult = ReturnType<typeof useGetMyScholarshipDashboardQuery>;
+export type GetMyScholarshipDashboardLazyQueryHookResult = ReturnType<typeof useGetMyScholarshipDashboardLazyQuery>;
+export type GetMyScholarshipDashboardSuspenseQueryHookResult = ReturnType<
+  typeof useGetMyScholarshipDashboardSuspenseQuery
+>;
+export type GetMyScholarshipDashboardQueryResult = Apollo.QueryResult<
+  GetMyScholarshipDashboardQuery,
+  GetMyScholarshipDashboardQueryVariables
+>;
+export const GetScholarshipActivityDocument = gql`
+  query getScholarshipActivity($entityId: String, $entityType: String) {
+    getScholarshipActivity(entityId: $entityId, entityType: $entityType) {
+      action
+      actorUserId
+      after
+      before
+      createdAt
+      entityId
+      entityType
+      id
+      isHighRisk
+      reason
+    }
+  }
+`;
+
+/**
+ * __useGetScholarshipActivityQuery__
+ *
+ * To run a query within a React component, call `useGetScholarshipActivityQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetScholarshipActivityQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetScholarshipActivityQuery({
+ *   variables: {
+ *      entityId: // value for 'entityId'
+ *      entityType: // value for 'entityType'
+ *   },
+ * });
+ */
+export function useGetScholarshipActivityQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetScholarshipActivityQuery, GetScholarshipActivityQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetScholarshipActivityQuery, GetScholarshipActivityQueryVariables>(
+    GetScholarshipActivityDocument,
+    options
+  );
+}
+export function useGetScholarshipActivityLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetScholarshipActivityQuery, GetScholarshipActivityQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetScholarshipActivityQuery, GetScholarshipActivityQueryVariables>(
+    GetScholarshipActivityDocument,
+    options
+  );
+}
+// @ts-ignore
+export function useGetScholarshipActivitySuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<GetScholarshipActivityQuery, GetScholarshipActivityQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetScholarshipActivityQuery, GetScholarshipActivityQueryVariables>;
+export function useGetScholarshipActivitySuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetScholarshipActivityQuery, GetScholarshipActivityQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetScholarshipActivityQuery | undefined, GetScholarshipActivityQueryVariables>;
+export function useGetScholarshipActivitySuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetScholarshipActivityQuery, GetScholarshipActivityQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetScholarshipActivityQuery, GetScholarshipActivityQueryVariables>(
+    GetScholarshipActivityDocument,
+    options
+  );
+}
+export type GetScholarshipActivityQueryHookResult = ReturnType<typeof useGetScholarshipActivityQuery>;
+export type GetScholarshipActivityLazyQueryHookResult = ReturnType<typeof useGetScholarshipActivityLazyQuery>;
+export type GetScholarshipActivitySuspenseQueryHookResult = ReturnType<typeof useGetScholarshipActivitySuspenseQuery>;
+export type GetScholarshipActivityQueryResult = Apollo.QueryResult<
+  GetScholarshipActivityQuery,
+  GetScholarshipActivityQueryVariables
+>;
+export const GetScholarshipApplicationDocument = gql`
+  query getScholarshipApplication($id: String!) {
+    getScholarshipApplication(id: $id) {
+      applicantUserId
+      approvedAmountDisbursed
+      approvedAt
+      approvedByUserId
+      approvedProofDays
+      approvedTotalAmount
+      assignedMentor {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      assignedMentorUserId
+      batchSnapshot
+      beneficiary {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      beneficiaryUserId
+      closedAt
+      createdAt
+      id
+      lastActivityAt
+      paymentMode
+      payoutMaskedSnapshot
+      payoutMethod
+      payoutSnapshot
+      proofStatus
+      proposedProofDays
+      purpose
+      reason
+      referenceNumber
+      refundStatus
+      rejectedAt
+      rejectedByUserId
+      rejectionReason
+      requestedAmount
+      requestedFirstInstallmentAmount
+      reviewStartedAt
+      reviewedByUserId
+      status
+      submittedAt
+      updatedAt
+    }
+  }
+`;
+
+/**
+ * __useGetScholarshipApplicationQuery__
+ *
+ * To run a query within a React component, call `useGetScholarshipApplicationQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetScholarshipApplicationQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetScholarshipApplicationQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetScholarshipApplicationQuery(
+  baseOptions: Apollo.QueryHookOptions<GetScholarshipApplicationQuery, GetScholarshipApplicationQueryVariables> &
+    ({ variables: GetScholarshipApplicationQueryVariables; skip?: boolean } | { skip: boolean })
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetScholarshipApplicationQuery, GetScholarshipApplicationQueryVariables>(
+    GetScholarshipApplicationDocument,
+    options
+  );
+}
+export function useGetScholarshipApplicationLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetScholarshipApplicationQuery, GetScholarshipApplicationQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetScholarshipApplicationQuery, GetScholarshipApplicationQueryVariables>(
+    GetScholarshipApplicationDocument,
+    options
+  );
+}
+// @ts-ignore
+export function useGetScholarshipApplicationSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<GetScholarshipApplicationQuery, GetScholarshipApplicationQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetScholarshipApplicationQuery, GetScholarshipApplicationQueryVariables>;
+export function useGetScholarshipApplicationSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetScholarshipApplicationQuery, GetScholarshipApplicationQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetScholarshipApplicationQuery | undefined, GetScholarshipApplicationQueryVariables>;
+export function useGetScholarshipApplicationSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetScholarshipApplicationQuery, GetScholarshipApplicationQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetScholarshipApplicationQuery, GetScholarshipApplicationQueryVariables>(
+    GetScholarshipApplicationDocument,
+    options
+  );
+}
+export type GetScholarshipApplicationQueryHookResult = ReturnType<typeof useGetScholarshipApplicationQuery>;
+export type GetScholarshipApplicationLazyQueryHookResult = ReturnType<typeof useGetScholarshipApplicationLazyQuery>;
+export type GetScholarshipApplicationSuspenseQueryHookResult = ReturnType<
+  typeof useGetScholarshipApplicationSuspenseQuery
+>;
+export type GetScholarshipApplicationQueryResult = Apollo.QueryResult<
+  GetScholarshipApplicationQuery,
+  GetScholarshipApplicationQueryVariables
+>;
+export const GetScholarshipApplicationTransactionsDocument = gql`
+  query getScholarshipApplicationTransactions($applicationId: String!) {
+    getScholarshipApplicationTransactions(applicationId: $applicationId) {
       amount
       createdAt
       currency
@@ -12829,6 +24305,26 @@ export const GetTransactionDocument = gql`
       isDonation
       method
       referenceId
+      scholarshipApplicationId
+      scholarshipApprovedAt
+      scholarshipBatchSnapshot
+      scholarshipBeneficiaryUserId
+      scholarshipCompletedAt
+      scholarshipConfirmedAmount
+      scholarshipConfirmedAt
+      scholarshipImmutableAt
+      scholarshipInstallmentSequence
+      scholarshipMaskedPayoutDestination
+      scholarshipMentorUserId
+      scholarshipOriginalTransactionId
+      scholarshipPayoutMethod
+      scholarshipProofDueAt
+      scholarshipProofDueDays
+      scholarshipProofStatus
+      scholarshipPurposeSnapshot
+      scholarshipReceivedAt
+      scholarshipStatus
+      sourceType
       status
       title
       transactionDate
@@ -12864,11 +24360,1367 @@ export const GetTransactionDocument = gql`
         metadata
         mobile
         nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
         profileImage
         role {
           code
           id
           name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      userId
+    }
+  }
+`;
+
+/**
+ * __useGetScholarshipApplicationTransactionsQuery__
+ *
+ * To run a query within a React component, call `useGetScholarshipApplicationTransactionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetScholarshipApplicationTransactionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetScholarshipApplicationTransactionsQuery({
+ *   variables: {
+ *      applicationId: // value for 'applicationId'
+ *   },
+ * });
+ */
+export function useGetScholarshipApplicationTransactionsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetScholarshipApplicationTransactionsQuery,
+    GetScholarshipApplicationTransactionsQueryVariables
+  > &
+    ({ variables: GetScholarshipApplicationTransactionsQueryVariables; skip?: boolean } | { skip: boolean })
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetScholarshipApplicationTransactionsQuery,
+    GetScholarshipApplicationTransactionsQueryVariables
+  >(GetScholarshipApplicationTransactionsDocument, options);
+}
+export function useGetScholarshipApplicationTransactionsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetScholarshipApplicationTransactionsQuery,
+    GetScholarshipApplicationTransactionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetScholarshipApplicationTransactionsQuery,
+    GetScholarshipApplicationTransactionsQueryVariables
+  >(GetScholarshipApplicationTransactionsDocument, options);
+}
+// @ts-ignore
+export function useGetScholarshipApplicationTransactionsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetScholarshipApplicationTransactionsQuery,
+    GetScholarshipApplicationTransactionsQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<
+  GetScholarshipApplicationTransactionsQuery,
+  GetScholarshipApplicationTransactionsQueryVariables
+>;
+export function useGetScholarshipApplicationTransactionsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetScholarshipApplicationTransactionsQuery,
+        GetScholarshipApplicationTransactionsQueryVariables
+      >
+): Apollo.UseSuspenseQueryResult<
+  GetScholarshipApplicationTransactionsQuery | undefined,
+  GetScholarshipApplicationTransactionsQueryVariables
+>;
+export function useGetScholarshipApplicationTransactionsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetScholarshipApplicationTransactionsQuery,
+        GetScholarshipApplicationTransactionsQueryVariables
+      >
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetScholarshipApplicationTransactionsQuery,
+    GetScholarshipApplicationTransactionsQueryVariables
+  >(GetScholarshipApplicationTransactionsDocument, options);
+}
+export type GetScholarshipApplicationTransactionsQueryHookResult = ReturnType<
+  typeof useGetScholarshipApplicationTransactionsQuery
+>;
+export type GetScholarshipApplicationTransactionsLazyQueryHookResult = ReturnType<
+  typeof useGetScholarshipApplicationTransactionsLazyQuery
+>;
+export type GetScholarshipApplicationTransactionsSuspenseQueryHookResult = ReturnType<
+  typeof useGetScholarshipApplicationTransactionsSuspenseQuery
+>;
+export type GetScholarshipApplicationTransactionsQueryResult = Apollo.QueryResult<
+  GetScholarshipApplicationTransactionsQuery,
+  GetScholarshipApplicationTransactionsQueryVariables
+>;
+export const GetScholarshipApplicationsDocument = gql`
+  query getScholarshipApplications($filter: ScholarshipApplicationFilterInput, $options: ListInput) {
+    getScholarshipApplications(filter: $filter, options: $options) {
+      applicantUserId
+      approvedAmountDisbursed
+      approvedAt
+      approvedByUserId
+      approvedProofDays
+      approvedTotalAmount
+      assignedMentor {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      assignedMentorUserId
+      batchSnapshot
+      beneficiary {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      beneficiaryUserId
+      closedAt
+      createdAt
+      id
+      lastActivityAt
+      paymentMode
+      payoutMaskedSnapshot
+      payoutMethod
+      payoutSnapshot
+      proofStatus
+      proposedProofDays
+      purpose
+      reason
+      referenceNumber
+      refundStatus
+      rejectedAt
+      rejectedByUserId
+      rejectionReason
+      requestedAmount
+      requestedFirstInstallmentAmount
+      reviewStartedAt
+      reviewedByUserId
+      status
+      submittedAt
+      updatedAt
+    }
+  }
+`;
+
+/**
+ * __useGetScholarshipApplicationsQuery__
+ *
+ * To run a query within a React component, call `useGetScholarshipApplicationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetScholarshipApplicationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetScholarshipApplicationsQuery({
+ *   variables: {
+ *      filter: // value for 'filter'
+ *      options: // value for 'options'
+ *   },
+ * });
+ */
+export function useGetScholarshipApplicationsQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetScholarshipApplicationsQuery, GetScholarshipApplicationsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetScholarshipApplicationsQuery, GetScholarshipApplicationsQueryVariables>(
+    GetScholarshipApplicationsDocument,
+    options
+  );
+}
+export function useGetScholarshipApplicationsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetScholarshipApplicationsQuery, GetScholarshipApplicationsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetScholarshipApplicationsQuery, GetScholarshipApplicationsQueryVariables>(
+    GetScholarshipApplicationsDocument,
+    options
+  );
+}
+// @ts-ignore
+export function useGetScholarshipApplicationsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetScholarshipApplicationsQuery,
+    GetScholarshipApplicationsQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<GetScholarshipApplicationsQuery, GetScholarshipApplicationsQueryVariables>;
+export function useGetScholarshipApplicationsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetScholarshipApplicationsQuery, GetScholarshipApplicationsQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetScholarshipApplicationsQuery | undefined, GetScholarshipApplicationsQueryVariables>;
+export function useGetScholarshipApplicationsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetScholarshipApplicationsQuery, GetScholarshipApplicationsQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetScholarshipApplicationsQuery, GetScholarshipApplicationsQueryVariables>(
+    GetScholarshipApplicationsDocument,
+    options
+  );
+}
+export type GetScholarshipApplicationsQueryHookResult = ReturnType<typeof useGetScholarshipApplicationsQuery>;
+export type GetScholarshipApplicationsLazyQueryHookResult = ReturnType<typeof useGetScholarshipApplicationsLazyQuery>;
+export type GetScholarshipApplicationsSuspenseQueryHookResult = ReturnType<
+  typeof useGetScholarshipApplicationsSuspenseQuery
+>;
+export type GetScholarshipApplicationsQueryResult = Apollo.QueryResult<
+  GetScholarshipApplicationsQuery,
+  GetScholarshipApplicationsQueryVariables
+>;
+export const GetScholarshipBeneficiaryListDocument = gql`
+  query getScholarshipBeneficiaryList($filter: ScholarshipApplicationFilterInput, $options: ListInput) {
+    getScholarshipBeneficiaryList(filter: $filter, options: $options) {
+      applicantUserId
+      approvedAmountDisbursed
+      approvedAt
+      approvedByUserId
+      approvedProofDays
+      approvedTotalAmount
+      assignedMentor {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      assignedMentorUserId
+      batchSnapshot
+      beneficiary {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      beneficiaryUserId
+      closedAt
+      createdAt
+      id
+      lastActivityAt
+      paymentMode
+      payoutMaskedSnapshot
+      payoutMethod
+      payoutSnapshot
+      proofStatus
+      proposedProofDays
+      purpose
+      reason
+      referenceNumber
+      refundStatus
+      rejectedAt
+      rejectedByUserId
+      rejectionReason
+      requestedAmount
+      requestedFirstInstallmentAmount
+      reviewStartedAt
+      reviewedByUserId
+      status
+      submittedAt
+      updatedAt
+    }
+  }
+`;
+
+/**
+ * __useGetScholarshipBeneficiaryListQuery__
+ *
+ * To run a query within a React component, call `useGetScholarshipBeneficiaryListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetScholarshipBeneficiaryListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetScholarshipBeneficiaryListQuery({
+ *   variables: {
+ *      filter: // value for 'filter'
+ *      options: // value for 'options'
+ *   },
+ * });
+ */
+export function useGetScholarshipBeneficiaryListQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetScholarshipBeneficiaryListQuery, GetScholarshipBeneficiaryListQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetScholarshipBeneficiaryListQuery, GetScholarshipBeneficiaryListQueryVariables>(
+    GetScholarshipBeneficiaryListDocument,
+    options
+  );
+}
+export function useGetScholarshipBeneficiaryListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetScholarshipBeneficiaryListQuery,
+    GetScholarshipBeneficiaryListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetScholarshipBeneficiaryListQuery, GetScholarshipBeneficiaryListQueryVariables>(
+    GetScholarshipBeneficiaryListDocument,
+    options
+  );
+}
+// @ts-ignore
+export function useGetScholarshipBeneficiaryListSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetScholarshipBeneficiaryListQuery,
+    GetScholarshipBeneficiaryListQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<GetScholarshipBeneficiaryListQuery, GetScholarshipBeneficiaryListQueryVariables>;
+export function useGetScholarshipBeneficiaryListSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetScholarshipBeneficiaryListQuery, GetScholarshipBeneficiaryListQueryVariables>
+): Apollo.UseSuspenseQueryResult<
+  GetScholarshipBeneficiaryListQuery | undefined,
+  GetScholarshipBeneficiaryListQueryVariables
+>;
+export function useGetScholarshipBeneficiaryListSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetScholarshipBeneficiaryListQuery, GetScholarshipBeneficiaryListQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetScholarshipBeneficiaryListQuery, GetScholarshipBeneficiaryListQueryVariables>(
+    GetScholarshipBeneficiaryListDocument,
+    options
+  );
+}
+export type GetScholarshipBeneficiaryListQueryHookResult = ReturnType<typeof useGetScholarshipBeneficiaryListQuery>;
+export type GetScholarshipBeneficiaryListLazyQueryHookResult = ReturnType<
+  typeof useGetScholarshipBeneficiaryListLazyQuery
+>;
+export type GetScholarshipBeneficiaryListSuspenseQueryHookResult = ReturnType<
+  typeof useGetScholarshipBeneficiaryListSuspenseQuery
+>;
+export type GetScholarshipBeneficiaryListQueryResult = Apollo.QueryResult<
+  GetScholarshipBeneficiaryListQuery,
+  GetScholarshipBeneficiaryListQueryVariables
+>;
+export const GetScholarshipDocumentReadUrlDocument = gql`
+  query getScholarshipDocumentReadUrl($documentId: String!) {
+    getScholarshipDocumentReadUrl(documentId: $documentId)
+  }
+`;
+
+/**
+ * __useGetScholarshipDocumentReadUrlQuery__
+ *
+ * To run a query within a React component, call `useGetScholarshipDocumentReadUrlQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetScholarshipDocumentReadUrlQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetScholarshipDocumentReadUrlQuery({
+ *   variables: {
+ *      documentId: // value for 'documentId'
+ *   },
+ * });
+ */
+export function useGetScholarshipDocumentReadUrlQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetScholarshipDocumentReadUrlQuery,
+    GetScholarshipDocumentReadUrlQueryVariables
+  > &
+    ({ variables: GetScholarshipDocumentReadUrlQueryVariables; skip?: boolean } | { skip: boolean })
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetScholarshipDocumentReadUrlQuery, GetScholarshipDocumentReadUrlQueryVariables>(
+    GetScholarshipDocumentReadUrlDocument,
+    options
+  );
+}
+export function useGetScholarshipDocumentReadUrlLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetScholarshipDocumentReadUrlQuery,
+    GetScholarshipDocumentReadUrlQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetScholarshipDocumentReadUrlQuery, GetScholarshipDocumentReadUrlQueryVariables>(
+    GetScholarshipDocumentReadUrlDocument,
+    options
+  );
+}
+// @ts-ignore
+export function useGetScholarshipDocumentReadUrlSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetScholarshipDocumentReadUrlQuery,
+    GetScholarshipDocumentReadUrlQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<GetScholarshipDocumentReadUrlQuery, GetScholarshipDocumentReadUrlQueryVariables>;
+export function useGetScholarshipDocumentReadUrlSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetScholarshipDocumentReadUrlQuery, GetScholarshipDocumentReadUrlQueryVariables>
+): Apollo.UseSuspenseQueryResult<
+  GetScholarshipDocumentReadUrlQuery | undefined,
+  GetScholarshipDocumentReadUrlQueryVariables
+>;
+export function useGetScholarshipDocumentReadUrlSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetScholarshipDocumentReadUrlQuery, GetScholarshipDocumentReadUrlQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetScholarshipDocumentReadUrlQuery, GetScholarshipDocumentReadUrlQueryVariables>(
+    GetScholarshipDocumentReadUrlDocument,
+    options
+  );
+}
+export type GetScholarshipDocumentReadUrlQueryHookResult = ReturnType<typeof useGetScholarshipDocumentReadUrlQuery>;
+export type GetScholarshipDocumentReadUrlLazyQueryHookResult = ReturnType<
+  typeof useGetScholarshipDocumentReadUrlLazyQuery
+>;
+export type GetScholarshipDocumentReadUrlSuspenseQueryHookResult = ReturnType<
+  typeof useGetScholarshipDocumentReadUrlSuspenseQuery
+>;
+export type GetScholarshipDocumentReadUrlQueryResult = Apollo.QueryResult<
+  GetScholarshipDocumentReadUrlQuery,
+  GetScholarshipDocumentReadUrlQueryVariables
+>;
+export const GetScholarshipExceptionQueueDocument = gql`
+  query getScholarshipExceptionQueue {
+    getScholarshipExceptionQueue {
+      applicantUserId
+      approvedAmountDisbursed
+      approvedAt
+      approvedByUserId
+      approvedProofDays
+      approvedTotalAmount
+      assignedMentor {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      assignedMentorUserId
+      batchSnapshot
+      beneficiary {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      beneficiaryUserId
+      closedAt
+      createdAt
+      id
+      lastActivityAt
+      paymentMode
+      payoutMaskedSnapshot
+      payoutMethod
+      payoutSnapshot
+      proofStatus
+      proposedProofDays
+      purpose
+      reason
+      referenceNumber
+      refundStatus
+      rejectedAt
+      rejectedByUserId
+      rejectionReason
+      requestedAmount
+      requestedFirstInstallmentAmount
+      reviewStartedAt
+      reviewedByUserId
+      status
+      submittedAt
+      updatedAt
+    }
+  }
+`;
+
+/**
+ * __useGetScholarshipExceptionQueueQuery__
+ *
+ * To run a query within a React component, call `useGetScholarshipExceptionQueueQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetScholarshipExceptionQueueQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetScholarshipExceptionQueueQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetScholarshipExceptionQueueQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetScholarshipExceptionQueueQuery, GetScholarshipExceptionQueueQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetScholarshipExceptionQueueQuery, GetScholarshipExceptionQueueQueryVariables>(
+    GetScholarshipExceptionQueueDocument,
+    options
+  );
+}
+export function useGetScholarshipExceptionQueueLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetScholarshipExceptionQueueQuery,
+    GetScholarshipExceptionQueueQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetScholarshipExceptionQueueQuery, GetScholarshipExceptionQueueQueryVariables>(
+    GetScholarshipExceptionQueueDocument,
+    options
+  );
+}
+// @ts-ignore
+export function useGetScholarshipExceptionQueueSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetScholarshipExceptionQueueQuery,
+    GetScholarshipExceptionQueueQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<GetScholarshipExceptionQueueQuery, GetScholarshipExceptionQueueQueryVariables>;
+export function useGetScholarshipExceptionQueueSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetScholarshipExceptionQueueQuery, GetScholarshipExceptionQueueQueryVariables>
+): Apollo.UseSuspenseQueryResult<
+  GetScholarshipExceptionQueueQuery | undefined,
+  GetScholarshipExceptionQueueQueryVariables
+>;
+export function useGetScholarshipExceptionQueueSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetScholarshipExceptionQueueQuery, GetScholarshipExceptionQueueQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetScholarshipExceptionQueueQuery, GetScholarshipExceptionQueueQueryVariables>(
+    GetScholarshipExceptionQueueDocument,
+    options
+  );
+}
+export type GetScholarshipExceptionQueueQueryHookResult = ReturnType<typeof useGetScholarshipExceptionQueueQuery>;
+export type GetScholarshipExceptionQueueLazyQueryHookResult = ReturnType<
+  typeof useGetScholarshipExceptionQueueLazyQuery
+>;
+export type GetScholarshipExceptionQueueSuspenseQueryHookResult = ReturnType<
+  typeof useGetScholarshipExceptionQueueSuspenseQuery
+>;
+export type GetScholarshipExceptionQueueQueryResult = Apollo.QueryResult<
+  GetScholarshipExceptionQueueQuery,
+  GetScholarshipExceptionQueueQueryVariables
+>;
+export const GetScholarshipMentorSummaryDocument = gql`
+  query getScholarshipMentorSummary($mentorUserId: String) {
+    getScholarshipMentorSummary(mentorUserId: $mentorUserId) {
+      byStatus {
+        count
+        key
+      }
+      capacity {
+        allocated
+        available
+        committed
+        returned
+      }
+      disbursedAmount
+      exceptionCount
+      requestedAmount
+      totalApplications
+    }
+  }
+`;
+
+/**
+ * __useGetScholarshipMentorSummaryQuery__
+ *
+ * To run a query within a React component, call `useGetScholarshipMentorSummaryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetScholarshipMentorSummaryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetScholarshipMentorSummaryQuery({
+ *   variables: {
+ *      mentorUserId: // value for 'mentorUserId'
+ *   },
+ * });
+ */
+export function useGetScholarshipMentorSummaryQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetScholarshipMentorSummaryQuery, GetScholarshipMentorSummaryQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetScholarshipMentorSummaryQuery, GetScholarshipMentorSummaryQueryVariables>(
+    GetScholarshipMentorSummaryDocument,
+    options
+  );
+}
+export function useGetScholarshipMentorSummaryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetScholarshipMentorSummaryQuery, GetScholarshipMentorSummaryQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetScholarshipMentorSummaryQuery, GetScholarshipMentorSummaryQueryVariables>(
+    GetScholarshipMentorSummaryDocument,
+    options
+  );
+}
+// @ts-ignore
+export function useGetScholarshipMentorSummarySuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetScholarshipMentorSummaryQuery,
+    GetScholarshipMentorSummaryQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<GetScholarshipMentorSummaryQuery, GetScholarshipMentorSummaryQueryVariables>;
+export function useGetScholarshipMentorSummarySuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetScholarshipMentorSummaryQuery, GetScholarshipMentorSummaryQueryVariables>
+): Apollo.UseSuspenseQueryResult<
+  GetScholarshipMentorSummaryQuery | undefined,
+  GetScholarshipMentorSummaryQueryVariables
+>;
+export function useGetScholarshipMentorSummarySuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetScholarshipMentorSummaryQuery, GetScholarshipMentorSummaryQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetScholarshipMentorSummaryQuery, GetScholarshipMentorSummaryQueryVariables>(
+    GetScholarshipMentorSummaryDocument,
+    options
+  );
+}
+export type GetScholarshipMentorSummaryQueryHookResult = ReturnType<typeof useGetScholarshipMentorSummaryQuery>;
+export type GetScholarshipMentorSummaryLazyQueryHookResult = ReturnType<typeof useGetScholarshipMentorSummaryLazyQuery>;
+export type GetScholarshipMentorSummarySuspenseQueryHookResult = ReturnType<
+  typeof useGetScholarshipMentorSummarySuspenseQuery
+>;
+export type GetScholarshipMentorSummaryQueryResult = Apollo.QueryResult<
+  GetScholarshipMentorSummaryQuery,
+  GetScholarshipMentorSummaryQueryVariables
+>;
+export const GetScholarshipOrganizationDashboardDocument = gql`
+  query getScholarshipOrganizationDashboard {
+    getScholarshipOrganizationDashboard {
+      byStatus {
+        count
+        key
+      }
+      capacity {
+        allocated
+        available
+        committed
+        returned
+      }
+      disbursedAmount
+      exceptionCount
+      requestedAmount
+      totalApplications
+    }
+  }
+`;
+
+/**
+ * __useGetScholarshipOrganizationDashboardQuery__
+ *
+ * To run a query within a React component, call `useGetScholarshipOrganizationDashboardQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetScholarshipOrganizationDashboardQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetScholarshipOrganizationDashboardQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetScholarshipOrganizationDashboardQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetScholarshipOrganizationDashboardQuery,
+    GetScholarshipOrganizationDashboardQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetScholarshipOrganizationDashboardQuery, GetScholarshipOrganizationDashboardQueryVariables>(
+    GetScholarshipOrganizationDashboardDocument,
+    options
+  );
+}
+export function useGetScholarshipOrganizationDashboardLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetScholarshipOrganizationDashboardQuery,
+    GetScholarshipOrganizationDashboardQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetScholarshipOrganizationDashboardQuery,
+    GetScholarshipOrganizationDashboardQueryVariables
+  >(GetScholarshipOrganizationDashboardDocument, options);
+}
+// @ts-ignore
+export function useGetScholarshipOrganizationDashboardSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetScholarshipOrganizationDashboardQuery,
+    GetScholarshipOrganizationDashboardQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<
+  GetScholarshipOrganizationDashboardQuery,
+  GetScholarshipOrganizationDashboardQueryVariables
+>;
+export function useGetScholarshipOrganizationDashboardSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetScholarshipOrganizationDashboardQuery,
+        GetScholarshipOrganizationDashboardQueryVariables
+      >
+): Apollo.UseSuspenseQueryResult<
+  GetScholarshipOrganizationDashboardQuery | undefined,
+  GetScholarshipOrganizationDashboardQueryVariables
+>;
+export function useGetScholarshipOrganizationDashboardSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetScholarshipOrganizationDashboardQuery,
+        GetScholarshipOrganizationDashboardQueryVariables
+      >
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetScholarshipOrganizationDashboardQuery,
+    GetScholarshipOrganizationDashboardQueryVariables
+  >(GetScholarshipOrganizationDashboardDocument, options);
+}
+export type GetScholarshipOrganizationDashboardQueryHookResult = ReturnType<
+  typeof useGetScholarshipOrganizationDashboardQuery
+>;
+export type GetScholarshipOrganizationDashboardLazyQueryHookResult = ReturnType<
+  typeof useGetScholarshipOrganizationDashboardLazyQuery
+>;
+export type GetScholarshipOrganizationDashboardSuspenseQueryHookResult = ReturnType<
+  typeof useGetScholarshipOrganizationDashboardSuspenseQuery
+>;
+export type GetScholarshipOrganizationDashboardQueryResult = Apollo.QueryResult<
+  GetScholarshipOrganizationDashboardQuery,
+  GetScholarshipOrganizationDashboardQueryVariables
+>;
+export const GetScholarshipRefundCasesDocument = gql`
+  query getScholarshipRefundCases {
+    getScholarshipRefundCases {
+      beneficiaryRefundProofDocumentId
+      beneficiaryUserId
+      confirmedRefundAmount
+      id
+      linkedRefundTransactionId
+      originalTransactionId
+      refundPaymentReference
+      requestedAmount
+      status
+      wrongDisbursementCaseId
+    }
+  }
+`;
+
+/**
+ * __useGetScholarshipRefundCasesQuery__
+ *
+ * To run a query within a React component, call `useGetScholarshipRefundCasesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetScholarshipRefundCasesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetScholarshipRefundCasesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetScholarshipRefundCasesQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetScholarshipRefundCasesQuery, GetScholarshipRefundCasesQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetScholarshipRefundCasesQuery, GetScholarshipRefundCasesQueryVariables>(
+    GetScholarshipRefundCasesDocument,
+    options
+  );
+}
+export function useGetScholarshipRefundCasesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetScholarshipRefundCasesQuery, GetScholarshipRefundCasesQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetScholarshipRefundCasesQuery, GetScholarshipRefundCasesQueryVariables>(
+    GetScholarshipRefundCasesDocument,
+    options
+  );
+}
+// @ts-ignore
+export function useGetScholarshipRefundCasesSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<GetScholarshipRefundCasesQuery, GetScholarshipRefundCasesQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetScholarshipRefundCasesQuery, GetScholarshipRefundCasesQueryVariables>;
+export function useGetScholarshipRefundCasesSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetScholarshipRefundCasesQuery, GetScholarshipRefundCasesQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetScholarshipRefundCasesQuery | undefined, GetScholarshipRefundCasesQueryVariables>;
+export function useGetScholarshipRefundCasesSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetScholarshipRefundCasesQuery, GetScholarshipRefundCasesQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetScholarshipRefundCasesQuery, GetScholarshipRefundCasesQueryVariables>(
+    GetScholarshipRefundCasesDocument,
+    options
+  );
+}
+export type GetScholarshipRefundCasesQueryHookResult = ReturnType<typeof useGetScholarshipRefundCasesQuery>;
+export type GetScholarshipRefundCasesLazyQueryHookResult = ReturnType<typeof useGetScholarshipRefundCasesLazyQuery>;
+export type GetScholarshipRefundCasesSuspenseQueryHookResult = ReturnType<
+  typeof useGetScholarshipRefundCasesSuspenseQuery
+>;
+export type GetScholarshipRefundCasesQueryResult = Apollo.QueryResult<
+  GetScholarshipRefundCasesQuery,
+  GetScholarshipRefundCasesQueryVariables
+>;
+export const GetScholarshipWrongDisbursementCasesDocument = gql`
+  query getScholarshipWrongDisbursementCases {
+    getScholarshipWrongDisbursementCases {
+      affectedDocumentIds
+      applicationId
+      beneficiaryResponse
+      disputedAmount
+      id
+      originalTransactionId
+      reason
+      refundRequested
+      reportedAt
+      reportedByUserId
+      requestedRefundAmount
+      status
+    }
+  }
+`;
+
+/**
+ * __useGetScholarshipWrongDisbursementCasesQuery__
+ *
+ * To run a query within a React component, call `useGetScholarshipWrongDisbursementCasesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetScholarshipWrongDisbursementCasesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetScholarshipWrongDisbursementCasesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetScholarshipWrongDisbursementCasesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetScholarshipWrongDisbursementCasesQuery,
+    GetScholarshipWrongDisbursementCasesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetScholarshipWrongDisbursementCasesQuery, GetScholarshipWrongDisbursementCasesQueryVariables>(
+    GetScholarshipWrongDisbursementCasesDocument,
+    options
+  );
+}
+export function useGetScholarshipWrongDisbursementCasesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetScholarshipWrongDisbursementCasesQuery,
+    GetScholarshipWrongDisbursementCasesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetScholarshipWrongDisbursementCasesQuery,
+    GetScholarshipWrongDisbursementCasesQueryVariables
+  >(GetScholarshipWrongDisbursementCasesDocument, options);
+}
+// @ts-ignore
+export function useGetScholarshipWrongDisbursementCasesSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetScholarshipWrongDisbursementCasesQuery,
+    GetScholarshipWrongDisbursementCasesQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<
+  GetScholarshipWrongDisbursementCasesQuery,
+  GetScholarshipWrongDisbursementCasesQueryVariables
+>;
+export function useGetScholarshipWrongDisbursementCasesSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetScholarshipWrongDisbursementCasesQuery,
+        GetScholarshipWrongDisbursementCasesQueryVariables
+      >
+): Apollo.UseSuspenseQueryResult<
+  GetScholarshipWrongDisbursementCasesQuery | undefined,
+  GetScholarshipWrongDisbursementCasesQueryVariables
+>;
+export function useGetScholarshipWrongDisbursementCasesSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetScholarshipWrongDisbursementCasesQuery,
+        GetScholarshipWrongDisbursementCasesQueryVariables
+      >
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetScholarshipWrongDisbursementCasesQuery,
+    GetScholarshipWrongDisbursementCasesQueryVariables
+  >(GetScholarshipWrongDisbursementCasesDocument, options);
+}
+export type GetScholarshipWrongDisbursementCasesQueryHookResult = ReturnType<
+  typeof useGetScholarshipWrongDisbursementCasesQuery
+>;
+export type GetScholarshipWrongDisbursementCasesLazyQueryHookResult = ReturnType<
+  typeof useGetScholarshipWrongDisbursementCasesLazyQuery
+>;
+export type GetScholarshipWrongDisbursementCasesSuspenseQueryHookResult = ReturnType<
+  typeof useGetScholarshipWrongDisbursementCasesSuspenseQuery
+>;
+export type GetScholarshipWrongDisbursementCasesQueryResult = Apollo.QueryResult<
+  GetScholarshipWrongDisbursementCasesQuery,
+  GetScholarshipWrongDisbursementCasesQueryVariables
+>;
+export const GetTransactionDocument = gql`
+  query getTransaction($id: String!) {
+    getTransaction(id: $id) {
+      amount
+      createdAt
+      currency
+      description
+      id
+      isDonation
+      method
+      referenceId
+      scholarshipApplicationId
+      scholarshipApprovedAt
+      scholarshipBatchSnapshot
+      scholarshipBeneficiaryUserId
+      scholarshipCompletedAt
+      scholarshipConfirmedAmount
+      scholarshipConfirmedAt
+      scholarshipImmutableAt
+      scholarshipInstallmentSequence
+      scholarshipMaskedPayoutDestination
+      scholarshipMentorUserId
+      scholarshipOriginalTransactionId
+      scholarshipPayoutMethod
+      scholarshipProofDueAt
+      scholarshipProofDueDays
+      scholarshipProofStatus
+      scholarshipPurposeSnapshot
+      scholarshipReceivedAt
+      scholarshipStatus
+      sourceType
+      status
+      title
+      transactionDate
+      type
+      updatedAt
+      user {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
         }
         socialMedia
         updatedAt
@@ -12908,6 +25760,13 @@ export function useGetTransactionLazyQuery(
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<GetTransactionQuery, GetTransactionQueryVariables>(GetTransactionDocument, options);
 }
+// @ts-ignore
+export function useGetTransactionSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<GetTransactionQuery, GetTransactionQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetTransactionQuery, GetTransactionQueryVariables>;
+export function useGetTransactionSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetTransactionQuery, GetTransactionQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetTransactionQuery | undefined, GetTransactionQueryVariables>;
 export function useGetTransactionSuspenseQuery(
   baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetTransactionQuery, GetTransactionQueryVariables>
 ) {
@@ -12930,6 +25789,26 @@ export const GetTransactionsDocument = gql`
         isDonation
         method
         referenceId
+        scholarshipApplicationId
+        scholarshipApprovedAt
+        scholarshipBatchSnapshot
+        scholarshipBeneficiaryUserId
+        scholarshipCompletedAt
+        scholarshipConfirmedAmount
+        scholarshipConfirmedAt
+        scholarshipImmutableAt
+        scholarshipInstallmentSequence
+        scholarshipMaskedPayoutDestination
+        scholarshipMentorUserId
+        scholarshipOriginalTransactionId
+        scholarshipPayoutMethod
+        scholarshipProofDueAt
+        scholarshipProofDueDays
+        scholarshipProofStatus
+        scholarshipPurposeSnapshot
+        scholarshipReceivedAt
+        scholarshipStatus
+        sourceType
         status
         title
         transactionDate
@@ -12965,11 +25844,29 @@ export const GetTransactionsDocument = gql`
           metadata
           mobile
           nickName
+          positions {
+            assignmentId
+            code
+            name
+            termId
+            termName
+            validFrom
+            validUntil
+          }
           profileImage
           role {
             code
             id
             name
+          }
+          roles {
+            assignmentId
+            code
+            name
+            scopeBatch
+            scopeType
+            validFrom
+            validUntil
           }
           socialMedia
           updatedAt
@@ -13010,6 +25907,13 @@ export function useGetTransactionsLazyQuery(
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<GetTransactionsQuery, GetTransactionsQueryVariables>(GetTransactionsDocument, options);
 }
+// @ts-ignore
+export function useGetTransactionsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<GetTransactionsQuery, GetTransactionsQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetTransactionsQuery, GetTransactionsQueryVariables>;
+export function useGetTransactionsSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetTransactionsQuery, GetTransactionsQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetTransactionsQuery | undefined, GetTransactionsQueryVariables>;
 export function useGetTransactionsSuspenseQuery(
   baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetTransactionsQuery, GetTransactionsQueryVariables>
 ) {
@@ -13065,10 +25969,17 @@ export function useGetUserAddressesLazyQuery(
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<GetUserAddressesQuery, GetUserAddressesQueryVariables>(GetUserAddressesDocument, options);
 }
+// @ts-ignore
+export function useGetUserAddressesSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<GetUserAddressesQuery, GetUserAddressesQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetUserAddressesQuery, GetUserAddressesQueryVariables>;
 export function useGetUserAddressesSuspenseQuery(
   baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<GetUserAddressesQuery, GetUserAddressesQueryVariables>
+    Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetUserAddressesQuery, GetUserAddressesQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetUserAddressesQuery | undefined, GetUserAddressesQueryVariables>;
+export function useGetUserAddressesSuspenseQuery(
+  baseOptions?:
+    Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetUserAddressesQuery, GetUserAddressesQueryVariables>
 ) {
   const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<GetUserAddressesQuery, GetUserAddressesQueryVariables>(
@@ -13171,6 +26082,13 @@ export function useGetUserDetailsLazyQuery(
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<GetUserDetailsQuery, GetUserDetailsQueryVariables>(GetUserDetailsDocument, options);
 }
+// @ts-ignore
+export function useGetUserDetailsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<GetUserDetailsQuery, GetUserDetailsQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetUserDetailsQuery, GetUserDetailsQueryVariables>;
+export function useGetUserDetailsSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetUserDetailsQuery, GetUserDetailsQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetUserDetailsQuery | undefined, GetUserDetailsQueryVariables>;
 export function useGetUserDetailsSuspenseQuery(
   baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetUserDetailsQuery, GetUserDetailsQueryVariables>
 ) {
@@ -13214,11 +26132,29 @@ export const GetUserListDocument = gql`
         metadata
         mobile
         nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
         profileImage
         role {
           code
           id
           name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
         }
         socialMedia
         updatedAt
@@ -13257,6 +26193,13 @@ export function useGetUserListLazyQuery(
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<GetUserListQuery, GetUserListQueryVariables>(GetUserListDocument, options);
 }
+// @ts-ignore
+export function useGetUserListSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<GetUserListQuery, GetUserListQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetUserListQuery, GetUserListQueryVariables>;
+export function useGetUserListSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetUserListQuery, GetUserListQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetUserListQuery | undefined, GetUserListQueryVariables>;
 export function useGetUserListSuspenseQuery(
   baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetUserListQuery, GetUserListQueryVariables>
 ) {
@@ -13321,6 +26264,15 @@ export function usePublicExecutiveCommitteeLazyQuery(
     options
   );
 }
+// @ts-ignore
+export function usePublicExecutiveCommitteeSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<PublicExecutiveCommitteeQuery, PublicExecutiveCommitteeQueryVariables>
+): Apollo.UseSuspenseQueryResult<PublicExecutiveCommitteeQuery, PublicExecutiveCommitteeQueryVariables>;
+export function usePublicExecutiveCommitteeSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<PublicExecutiveCommitteeQuery, PublicExecutiveCommitteeQueryVariables>
+): Apollo.UseSuspenseQueryResult<PublicExecutiveCommitteeQuery | undefined, PublicExecutiveCommitteeQueryVariables>;
 export function usePublicExecutiveCommitteeSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
@@ -13393,11 +26345,29 @@ export const RoleAssignmentsDocument = gql`
         metadata
         mobile
         nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
         profileImage
         role {
           code
           id
           name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
         }
         socialMedia
         updatedAt
@@ -13438,6 +26408,13 @@ export function useRoleAssignmentsLazyQuery(
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<RoleAssignmentsQuery, RoleAssignmentsQueryVariables>(RoleAssignmentsDocument, options);
 }
+// @ts-ignore
+export function useRoleAssignmentsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<RoleAssignmentsQuery, RoleAssignmentsQueryVariables>
+): Apollo.UseSuspenseQueryResult<RoleAssignmentsQuery, RoleAssignmentsQueryVariables>;
+export function useRoleAssignmentsSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<RoleAssignmentsQuery, RoleAssignmentsQueryVariables>
+): Apollo.UseSuspenseQueryResult<RoleAssignmentsQuery | undefined, RoleAssignmentsQueryVariables>;
 export function useRoleAssignmentsSuspenseQuery(
   baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<RoleAssignmentsQuery, RoleAssignmentsQueryVariables>
 ) {
@@ -13493,10 +26470,17 @@ export function useSystemPermissionsLazyQuery(
     options
   );
 }
+// @ts-ignore
+export function useSystemPermissionsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<SystemPermissionsQuery, SystemPermissionsQueryVariables>
+): Apollo.UseSuspenseQueryResult<SystemPermissionsQuery, SystemPermissionsQueryVariables>;
 export function useSystemPermissionsSuspenseQuery(
   baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<SystemPermissionsQuery, SystemPermissionsQueryVariables>
+    Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<SystemPermissionsQuery, SystemPermissionsQueryVariables>
+): Apollo.UseSuspenseQueryResult<SystemPermissionsQuery | undefined, SystemPermissionsQueryVariables>;
+export function useSystemPermissionsSuspenseQuery(
+  baseOptions?:
+    Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<SystemPermissionsQuery, SystemPermissionsQueryVariables>
 ) {
   const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<SystemPermissionsQuery, SystemPermissionsQueryVariables>(
@@ -13548,6 +26532,13 @@ export function useSystemRolesLazyQuery(
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<SystemRolesQuery, SystemRolesQueryVariables>(SystemRolesDocument, options);
 }
+// @ts-ignore
+export function useSystemRolesSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<SystemRolesQuery, SystemRolesQueryVariables>
+): Apollo.UseSuspenseQueryResult<SystemRolesQuery, SystemRolesQueryVariables>;
+export function useSystemRolesSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<SystemRolesQuery, SystemRolesQueryVariables>
+): Apollo.UseSuspenseQueryResult<SystemRolesQuery | undefined, SystemRolesQueryVariables>;
 export function useSystemRolesSuspenseQuery(
   baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<SystemRolesQuery, SystemRolesQueryVariables>
 ) {
@@ -13605,10 +26596,17 @@ export function useUpcomingBirthdaysLazyQuery(
     options
   );
 }
+// @ts-ignore
+export function useUpcomingBirthdaysSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<UpcomingBirthdaysQuery, UpcomingBirthdaysQueryVariables>
+): Apollo.UseSuspenseQueryResult<UpcomingBirthdaysQuery, UpcomingBirthdaysQueryVariables>;
 export function useUpcomingBirthdaysSuspenseQuery(
   baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<UpcomingBirthdaysQuery, UpcomingBirthdaysQueryVariables>
+    Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<UpcomingBirthdaysQuery, UpcomingBirthdaysQueryVariables>
+): Apollo.UseSuspenseQueryResult<UpcomingBirthdaysQuery | undefined, UpcomingBirthdaysQueryVariables>;
+export function useUpcomingBirthdaysSuspenseQuery(
+  baseOptions?:
+    Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<UpcomingBirthdaysQuery, UpcomingBirthdaysQueryVariables>
 ) {
   const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<UpcomingBirthdaysQuery, UpcomingBirthdaysQueryVariables>(
@@ -13682,11 +26680,29 @@ export const UserExecutivePositionAssignmentsDocument = gql`
         metadata
         mobile
         nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
         profileImage
         role {
           code
           id
           name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
         }
         socialMedia
         updatedAt
@@ -13739,6 +26755,24 @@ export function useUserExecutivePositionAssignmentsLazyQuery(
     options
   );
 }
+// @ts-ignore
+export function useUserExecutivePositionAssignmentsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    UserExecutivePositionAssignmentsQuery,
+    UserExecutivePositionAssignmentsQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<UserExecutivePositionAssignmentsQuery, UserExecutivePositionAssignmentsQueryVariables>;
+export function useUserExecutivePositionAssignmentsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        UserExecutivePositionAssignmentsQuery,
+        UserExecutivePositionAssignmentsQueryVariables
+      >
+): Apollo.UseSuspenseQueryResult<
+  UserExecutivePositionAssignmentsQuery | undefined,
+  UserExecutivePositionAssignmentsQueryVariables
+>;
 export function useUserExecutivePositionAssignmentsSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
@@ -13818,11 +26852,29 @@ export const UserRoleAssignmentsDocument = gql`
         metadata
         mobile
         nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
         profileImage
         role {
           code
           id
           name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
         }
         socialMedia
         updatedAt
@@ -13869,10 +26921,17 @@ export function useUserRoleAssignmentsLazyQuery(
     options
   );
 }
+// @ts-ignore
+export function useUserRoleAssignmentsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<UserRoleAssignmentsQuery, UserRoleAssignmentsQueryVariables>
+): Apollo.UseSuspenseQueryResult<UserRoleAssignmentsQuery, UserRoleAssignmentsQueryVariables>;
 export function useUserRoleAssignmentsSuspenseQuery(
   baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<UserRoleAssignmentsQuery, UserRoleAssignmentsQueryVariables>
+    Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<UserRoleAssignmentsQuery, UserRoleAssignmentsQueryVariables>
+): Apollo.UseSuspenseQueryResult<UserRoleAssignmentsQuery | undefined, UserRoleAssignmentsQueryVariables>;
+export function useUserRoleAssignmentsSuspenseQuery(
+  baseOptions?:
+    Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<UserRoleAssignmentsQuery, UserRoleAssignmentsQueryVariables>
 ) {
   const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<UserRoleAssignmentsQuery, UserRoleAssignmentsQueryVariables>(
@@ -13948,10 +27007,17 @@ export function useViewerAccessContextLazyQuery(
     options
   );
 }
+// @ts-ignore
+export function useViewerAccessContextSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ViewerAccessContextQuery, ViewerAccessContextQueryVariables>
+): Apollo.UseSuspenseQueryResult<ViewerAccessContextQuery, ViewerAccessContextQueryVariables>;
 export function useViewerAccessContextSuspenseQuery(
   baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ViewerAccessContextQuery, ViewerAccessContextQueryVariables>
+    Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ViewerAccessContextQuery, ViewerAccessContextQueryVariables>
+): Apollo.UseSuspenseQueryResult<ViewerAccessContextQuery | undefined, ViewerAccessContextQueryVariables>;
+export function useViewerAccessContextSuspenseQuery(
+  baseOptions?:
+    Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ViewerAccessContextQuery, ViewerAccessContextQueryVariables>
 ) {
   const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<ViewerAccessContextQuery, ViewerAccessContextQueryVariables>(
