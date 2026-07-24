@@ -71,6 +71,7 @@ import {
   SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES,
   START_SCHOLARSHIP_REVIEW,
 } from '@/apollo/scholarshipOperations';
+import { BILLING_REFETCH_QUERIES, GET_ASSOCIATION_WALLET_SUMMARY } from '@/apollo/billingOperations';
 import { formatCurrency, getFullName, humanizeScholarshipStatus } from './helpers';
 import { useScholarshipLoginGuard } from './useScholarshipLoginGuard';
 
@@ -1522,11 +1523,17 @@ const MentorFundReleaseDialog = ({
     notes: '',
   });
   const [recordAllocation, allocationState] = useMutation(RECORD_MENTOR_FUND_ALLOCATION, {
-    refetchQueries: SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES,
+    refetchQueries: [...SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES, ...BILLING_REFETCH_QUERIES],
+  });
+  const walletQuery = useQuery(GET_ASSOCIATION_WALLET_SUMMARY, {
+    skip: !open,
+    fetchPolicy: 'cache-and-network',
   });
 
   const mentorOptions = React.useMemo(() => buildMentorReleaseOptions(mentors), [mentors]);
   const amount = form.amount ?? 0;
+  const availableFunds = Number(walletQuery.data?.getAssociationWalletSummary?.availableFunds || 0);
+  const hasInsufficientFunds = amount > 0 && availableFunds < amount;
 
   const setField =
     (field: 'transferDate' | 'method' | 'reference' | 'notes') => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -1552,6 +1559,10 @@ const MentorFundReleaseDialog = ({
 
   const submitAllocation = async () => {
     if (!form.selectedMentor) return;
+    if (hasInsufficientFunds) {
+      toast.error('Association funds are not enough for this release.');
+      return;
+    }
 
     try {
       await recordAllocation({
@@ -1589,7 +1600,7 @@ const MentorFundReleaseDialog = ({
         okayButtonProps: {
           title: 'Allocate Funds',
           loading: allocationState.loading,
-          disabled: !form.selectedMentor || !form.amount || !form.transferDate,
+          disabled: !form.selectedMentor || !form.amount || !form.transferDate || hasInsufficientFunds,
         },
       }}
     >
@@ -1599,6 +1610,16 @@ const MentorFundReleaseDialog = ({
           it becomes available for beneficiary approvals.
         </Alert>
         <Stack spacing={2}>
+          <Paper variant="outlined" sx={{ p: 1.5, borderRadius: 1, bgcolor: 'success.50' }}>
+            <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" gap={1}>
+              <Typography fontSize={14} color="grey.700">
+                Available association funds
+              </Typography>
+              <Typography fontSize={16} fontWeight={800}>
+                {walletQuery.loading ? 'Loading...' : formatCurrency(availableFunds)}
+              </Typography>
+            </Stack>
+          </Paper>
           <Typography variant="caption" color="text.secondary">
             Mentor
           </Typography>
@@ -1622,6 +1643,8 @@ const MentorFundReleaseDialog = ({
               label="Amount"
               size="small"
               value={form.amount}
+              error={hasInsufficientFunds}
+              helperText={hasInsufficientFunds ? 'Amount is higher than available association funds.' : ''}
               onValueChange={(value) => setForm((current) => ({ ...current, amount: value }))}
             />
             <TextField

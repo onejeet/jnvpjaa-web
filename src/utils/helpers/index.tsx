@@ -222,6 +222,19 @@ export function formatCurrency(amount: number, currency?: string) {
   }).format(amount);
 }
 
+export function formatCompactCurrency(amount?: number | string | null, currency?: string) {
+  const value = Number(amount || 0);
+  const formatter = new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: currency || 'INR',
+    notation: 'compact',
+    compactDisplay: 'short',
+    maximumFractionDigits: Math.abs(value) < 10000 ? 0 : 1,
+  });
+
+  return formatter.format(value).replace('T', 'K');
+}
+
 export const isBirthdayToday = (dob?: string) => {
   if (!dob) return false;
   const birthDate = dayjs.utc(dob);

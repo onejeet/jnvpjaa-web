@@ -8,59 +8,72 @@ import FormTextField from '@/components/form/FormTextField';
 import FormCurrencyInput from '@/components/form/FormCurrencyInput';
 import FormSelectField from '@/components/form/FormSelectField';
 import FormDateTimeField from '@/components/form/FormDateTimeField';
-import { Currency, TransactionStatus, TransactionType, useCreateTransactionMutation } from '@/apollo/hooks';
-import { useApolloClient } from '@apollo/client';
+import { TransactionType } from '@/apollo/hooks';
+import { useApolloClient, useMutation } from '@apollo/client';
 import dayjs from 'dayjs';
 import { IAddTransactionRecordInput } from './AddTransactionRecordModule.types';
 import React from 'react';
-import { useAuth } from '@/context/AuthContext';
+import {
+  BILLING_REFETCH_QUERIES,
+  CREATE_ASSOCIATION_CREDIT,
+  CREATE_ASSOCIATION_DEBIT,
+} from '@/apollo/billingOperations';
 
 const AddTransactionRecordModule: React.FC<any> = ({ onClose }) => {
-  const { user } = useAuth();
   const client = useApolloClient();
   const { showAlert } = useAlert();
-  const {
-    control,
-    handleSubmit,
-    setValue,
-    reset,
-    getValues,
-    formState: { errors },
-  } = useForm<IAddTransactionRecordInput>({
+  const { control, handleSubmit, setValue, reset } = useForm<IAddTransactionRecordInput>({
     defaultValues: {
       type: TransactionType.Debit,
+      billingCategory: 'OTHER_ACTIVITY',
       transactionDate: dayjs(),
       method: 'BankTransfer',
     },
   });
 
-  console.log('PP: getValues', getValues());
+  const selectedType = useWatch({ control, name: 'type' });
+  const [createCredit, creditState] = useMutation(CREATE_ASSOCIATION_CREDIT, {
+    refetchQueries: BILLING_REFETCH_QUERIES,
+  });
+  const [createDebit, debitState] = useMutation(CREATE_ASSOCIATION_DEBIT, {
+    refetchQueries: BILLING_REFETCH_QUERIES,
+  });
+  const saving = creditState.loading || debitState.loading;
 
-  const [createTransaction, { loading: saving }] = useCreateTransactionMutation();
+  React.useEffect(() => {
+    setValue('billingCategory', selectedType === TransactionType.Credit ? 'DONATION' : 'OTHER_ACTIVITY');
+  }, [selectedType, setValue]);
 
   const onSubmit = React.useCallback(
     (data: IAddTransactionRecordInput) => {
-      createTransaction({
+      const mutation = data.type === TransactionType.Credit ? createCredit : createDebit;
+      mutation({
         variables: {
-          ...data,
-          status: TransactionStatus.Completed,
-          userId: user?.id,
+          title: data.title,
           amount: data.amount,
-          currency: Currency.Inr,
           transactionDate: data?.transactionDate?.toISOString(),
+          billingCategory: data.billingCategory,
+          referenceId: data.referenceId || null,
+          method: data.method || null,
+          description: data.description || null,
         },
         onCompleted: () => {
           client.cache.evict({ fieldName: 'getTransactions' });
+          client.cache.evict({ fieldName: 'getAssociationTransactions' });
+          client.cache.evict({ fieldName: 'getBillingDashboard' });
+          client.cache.evict({ fieldName: 'getAssociationWalletSummary' });
           client.cache.gc();
           showAlert({
             visible: true,
             type: 'success',
-            message: 'Transaction added successfully.',
+            message: 'Billing entry recorded successfully.',
           });
           reset({
             type: TransactionType.Debit,
+            billingCategory: 'OTHER_ACTIVITY',
             transactionDate: dayjs(),
           });
+          onClose();
         },
         onError: (err) => {
           showAlert({
@@ -71,13 +84,13 @@ const AddTransactionRecordModule: React.FC<any> = ({ onClose }) => {
         },
       });
     },
-    [user, showAlert, client, createTransaction, reset]
+    [showAlert, client, createCredit, createDebit, reset, onClose]
   );
 
   return (
     <Dialog
       open
-      title="Add Transaction"
+      title="Record Billing Entry"
       disableBackdropClick
       onClose={onClose}
       footerProps={{
@@ -129,7 +142,36 @@ const AddTransactionRecordModule: React.FC<any> = ({ onClose }) => {
               }}
             />
           </Grid>
-          <Grid size={{ xs: 12, sm: 9 }}>
+          <Grid size={{ xs: 12, sm: 4 }}>
+            <FormSelectField
+              control={control}
+              name="billingCategory"
+              selectProps={{
+                size: 'small',
+                id: 'billingCategory',
+                disabled: saving,
+              }}
+              options={
+                selectedType === TransactionType.Credit
+                  ? [
+                      { label: 'Donation', value: 'DONATION' },
+                      { label: 'Membership', value: 'MEMBERSHIP' },
+                      { label: 'Event Income', value: 'EVENT' },
+                      { label: 'Opening Balance', value: 'OPENING_BALANCE' },
+                      { label: 'Adjustment', value: 'ADJUSTMENT' },
+                    ]
+                  : [
+                      { label: 'Other Activity', value: 'OTHER_ACTIVITY' },
+                      { label: 'Event Spending', value: 'EVENT' },
+                      { label: 'Adjustment', value: 'ADJUSTMENT' },
+                    ]
+              }
+              rules={{
+                required: 'Required',
+              }}
+            />
+          </Grid>
+          <Grid size={{ xs: 12, sm: 5 }}>
             <FormTextField
               fullWidth
               id="title"

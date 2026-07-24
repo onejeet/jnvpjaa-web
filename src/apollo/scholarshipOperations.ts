@@ -420,6 +420,7 @@ export const RECORD_MENTOR_FUND_ALLOCATION = gql`
       amount
       confirmedAmount
       status
+      associationTransactionId
     }
   }
 `;
@@ -438,6 +439,7 @@ export const GET_MENTOR_FUND_ALLOCATIONS = gql`
       reference
       notes
       status
+      associationTransactionId
       createdAt
     }
   }

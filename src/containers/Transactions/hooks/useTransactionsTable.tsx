@@ -4,43 +4,31 @@ import { commonTableColumnProps } from '@/constants/General.contants';
 import Box from '@mui/material/Box';
 import { GridPaginationModel, GridRowParams } from '@mui/x-data-grid';
 import React from 'react';
-import { useGetTransactionsQuery } from '@/apollo/hooks';
+import { useQuery } from '@apollo/client';
 import { Skeleton, Typography } from '@mui/material';
-import { useRouter } from 'next/navigation';
-
-import { useSearchParams } from 'next/navigation';
-
-import { useAlert } from '@/context/AlertContext';
-import { useApolloClient } from '@apollo/client';
-import { useAuth } from '@/context/AuthContext';
 
 import dayjs from 'dayjs';
-import { formatCurrency, getCurrencySymbol } from '@/utils/helpers';
+import { formatCurrency, valueToLabelFormatter } from '@/utils/helpers';
 import ProfilePicture from '@/components/common/ProfilePicture';
-import VerifiedBadge from '@/components/common/FacultyBadge';
 import { IconArrowDown, IconArrowUp } from '@tabler/icons-react';
+import { GET_ASSOCIATION_TRANSACTIONS } from '@/apollo/billingOperations';
 
 const useTransactionsTable = () => {
-  const client = useApolloClient();
-  const { isAdmin, user } = useAuth();
-  const searchParams = useSearchParams();
-  const router = useRouter();
   const [columns, setColumns] = React.useState<any[]>([]);
   const [paginationModel, setPaginationModel] = React.useState<GridPaginationModel>({
     page: 0,
     pageSize: 50,
   });
 
-  const { showAlert } = useAlert();
-
-  const { data: transactionsData, loading } = useGetTransactionsQuery({
+  const { data: transactionsData, loading } = useQuery(GET_ASSOCIATION_TRANSACTIONS, {
     variables: {
       options: {
-        offset: paginationModel?.page || 0,
+        offset: (paginationModel?.page || 0) * (paginationModel?.pageSize || 10),
         limit: paginationModel?.pageSize || 10,
       },
     },
     notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'cache-and-network',
   });
 
   React.useEffect(() => {
@@ -123,6 +111,23 @@ const useTransactionsTable = () => {
           ),
       },
       {
+        field: 'billingCategory',
+        headerName: 'Category',
+        width: 190,
+        ...commonTableColumnProps,
+        sortable: true,
+        renderCell: ({ row }: GridRowParams) =>
+          row.loading ? (
+            <Box width="100%" height="100%" display="flex" alignItems="center">
+              <Skeleton width="100%" height={30} />
+            </Box>
+          ) : (
+            <Box height="100%" display="flex" alignItems="center">
+              <Typography variant="body2">{valueToLabelFormatter(row?.billingCategory || 'OTHER_ACTIVITY')}</Typography>
+            </Box>
+          ),
+      },
+      {
         field: 'amount',
         headerName: 'Amount',
         width: 150,
@@ -148,7 +153,7 @@ const useTransactionsTable = () => {
       },
       {
         field: 'user',
-        headerName: 'Added By',
+        headerName: 'Recorded By',
         width: 230,
         flex: 1,
         ...commonTableColumnProps,
@@ -161,32 +166,32 @@ const useTransactionsTable = () => {
             </Box>
           ) : (
             <Box height="100%" display="flex" alignItems="center">
-              <ProfilePicture
-                loading={row.loading}
-                src={row?.user?.profileImage}
-                title={`${row.user.firstName} ${row?.user?.lastName}`}
-                summary={row?.user?.batch === 0 ? 'Faculty' : `Batch of ${row?.user?.batch}`}
-                id={row?.user?.id}
-                alt={`${row?.user?.firstname || ''} ${row?.user?.lastname || ''}`}
-                titleComponentProps={{
-                  titleContainerProps: {
-                    className: 'title-container',
-                  },
-                }}
-
-                // titleProps={{
-                //   fontSize: '14px',
-                //   lineHeight: '16.41px',
-                //   bgcolor: 'none',
-                // }}
-              />
+              {row?.recordedBy ? (
+                <ProfilePicture
+                  loading={row.loading}
+                  src={row?.recordedBy?.profileImage}
+                  title={`${row.recordedBy.firstName} ${row?.recordedBy?.lastName}`}
+                  summary={row?.recordedBy?.batch === 0 ? 'Faculty' : `Batch of ${row?.recordedBy?.batch}`}
+                  id={row?.recordedBy?.id}
+                  alt={`${row?.recordedBy?.firstName || ''} ${row?.recordedBy?.lastName || ''}`}
+                  titleComponentProps={{
+                    titleContainerProps: {
+                      className: 'title-container',
+                    },
+                  }}
+                />
+              ) : (
+                <Typography variant="body2" color="grey.600">
+                  Historical record
+                </Typography>
+              )}
             </Box>
           ),
       },
     ];
 
     setColumns(columns);
-  }, [isAdmin, user]);
+  }, []);
 
   const onPaginationModelChange = React.useCallback((model: GridPaginationModel) => {
     setPaginationModel(model);
@@ -201,15 +206,14 @@ const useTransactionsTable = () => {
         };
       });
     }
-    return transactionsData?.getTransactions?.data || [];
+    return transactionsData?.getAssociationTransactions?.data || [];
   }, [loading, transactionsData, paginationModel]);
 
-  console.log('ZZ: rows', rows);
   return {
     rows,
     loading,
     columns,
-    rowCount: transactionsData?.getTransactions?.total || 0,
+    rowCount: transactionsData?.getAssociationTransactions?.total || 0,
     paginationModel,
     onPaginationModelChange,
     // state,

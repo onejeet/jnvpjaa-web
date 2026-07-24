@@ -8,6 +8,7 @@ export interface IAddTransactionRecordInput {
   amount: number;
   currency: string;
   status: TransactionStatus;
+  billingCategory?: string;
   description?: string;
   method?: string;
   referenceId?: string;
