@@ -8,6 +8,7 @@ import { useForm, useWatch } from 'react-hook-form';
 import { Box, CircularProgress, Grid2 as Grid, IconButton, Typography } from '@mui/material';
 import FormTextField from '@/components/form/FormTextField';
 import FormSelectField from '@/components/form/FormSelectField';
+import FormCurrencyInput from '@/components/form/FormCurrencyInput';
 import { INewEventFormInput } from './NewEvent.types';
 import Button from '@/components/core/Button';
 import FormDateTimeField from '@/components/form/FormDateTimeField';
@@ -22,14 +23,7 @@ import {
 } from '@/apollo/hooks';
 import { paths } from '@/config/paths';
 import TipTapTextEditor from '@/modules/TipTapTextEditor';
-import {
-  IconCurrencyRupee,
-  IconDeviceFloppy,
-  IconWorld,
-  IconMapPin,
-  IconPencil,
-  IconUpload,
-} from '@tabler/icons-react';
+import { IconDeviceFloppy, IconWorld, IconMapPin, IconPencil, IconUpload } from '@tabler/icons-react';
 // import { useApolloClient } from '@apollo/client';
 import { EVENT_CATEGORIES, eventHostingmedium } from '@/constants/Events.constants';
 import dayjs from 'dayjs';
@@ -414,16 +408,14 @@ const NewEvent = () => {
           />
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
-          <FormTextField
+          <FormCurrencyInput
             fullWidth
             id="price"
             label="Price"
             control={control}
             disabled={saving}
-            startAdornment={<IconCurrencyRupee size={18} />}
             name="price"
             size="small"
-            type="number"
             helperText="Optional"
             // rules={{
             //   required: 'Required',

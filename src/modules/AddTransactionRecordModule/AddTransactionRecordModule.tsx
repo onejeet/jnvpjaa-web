@@ -5,10 +5,10 @@ import { useAlert } from '@/context/AlertContext';
 import { useForm, useWatch } from 'react-hook-form';
 import { Box, Grid2 as Grid } from '@mui/material';
 import FormTextField from '@/components/form/FormTextField';
+import FormCurrencyInput from '@/components/form/FormCurrencyInput';
 import FormSelectField from '@/components/form/FormSelectField';
 import FormDateTimeField from '@/components/form/FormDateTimeField';
 import { Currency, TransactionStatus, TransactionType, useCreateTransactionMutation } from '@/apollo/hooks';
-import { IconCurrencyRupee } from '@tabler/icons-react';
 import { useApolloClient } from '@apollo/client';
 import dayjs from 'dayjs';
 import { IAddTransactionRecordInput } from './AddTransactionRecordModule.types';
@@ -45,7 +45,7 @@ const AddTransactionRecordModule: React.FC<any> = ({ onClose }) => {
           ...data,
           status: TransactionStatus.Completed,
           userId: user?.id,
-          amount: parseFloat(data?.amount),
+          amount: data.amount,
           currency: Currency.Inr,
           transactionDate: data?.transactionDate?.toISOString(),
         },
@@ -161,16 +161,14 @@ const AddTransactionRecordModule: React.FC<any> = ({ onClose }) => {
             />
           </Grid>
           <Grid size={{ xs: 12, sm: 6 }}>
-            <FormTextField
+            <FormCurrencyInput
               fullWidth
               id="amount"
               label="Amount"
               control={control}
               disabled={saving}
-              startAdornment={<IconCurrencyRupee size={18} />}
               name="amount"
               size="small"
-              type="number"
               rules={{
                 required: 'Required',
               }}

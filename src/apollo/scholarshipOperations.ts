@@ -1,5 +1,16 @@
 import { gql } from '@apollo/client';
 
+export const SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES = [
+  'getMyScholarshipApplications',
+  'getScholarshipApplications',
+  'getMyScholarshipDashboard',
+  'getMentorScholarshipDashboard',
+  'getBatchCoordinatorScholarshipDashboard',
+  'getScholarshipOrganizationDashboard',
+  'getScholarshipMentorSummaries',
+  'getMentorFundAllocations',
+];
+
 export const SCHOLARSHIP_APPLICATION_FIELDS = gql`
   fragment ScholarshipApplicationFields on ScholarshipApplication {
     id
@@ -293,12 +304,41 @@ export const APPROVE_SCHOLARSHIP_APPLICATION = gql`
   }
 `;
 
+export const CREATE_SCHOLARSHIP_DOCUMENT_UPLOAD = gql`
+  mutation createScholarshipDocumentUpload($input: ScholarshipDocumentUploadInput!) {
+    createScholarshipDocumentUpload(input: $input) {
+      uploadUrl
+      document {
+        id
+        category
+        status
+      }
+    }
+  }
+`;
+
+export const FINALIZE_SCHOLARSHIP_DOCUMENT_UPLOAD = gql`
+  mutation finalizeScholarshipDocumentUpload($documentId: String!, $checksum: String) {
+    finalizeScholarshipDocumentUpload(documentId: $documentId, checksum: $checksum) {
+      id
+      category
+      status
+    }
+  }
+`;
+
 export const CONFIRM_SCHOLARSHIP_RECEIPT = gql`
   ${SCHOLARSHIP_TRANSACTION_FIELDS}
-  mutation confirmScholarshipTransactionReceipt($transactionId: String!, $confirmedAmount: Float!, $note: String) {
+  mutation confirmScholarshipTransactionReceipt(
+    $transactionId: String!
+    $confirmedAmount: Float!
+    $creditProofDocumentId: String!
+    $note: String
+  ) {
     confirmScholarshipTransactionReceipt(
       transactionId: $transactionId
       confirmedAmount: $confirmedAmount
+      creditProofDocumentId: $creditProofDocumentId
       note: $note
     ) {
       ...ScholarshipTransactionFields
@@ -315,6 +355,19 @@ export const REQUEST_SCHOLARSHIP_FOLLOWUP = gql`
 export const RECORD_MENTOR_FUND_ALLOCATION = gql`
   mutation recordMentorFundAllocation($input: RecordMentorFundAllocationInput!) {
     recordMentorFundAllocation(input: $input) {
+      id
+      mentorUserId
+      batch
+      amount
+      confirmedAmount
+      status
+    }
+  }
+`;
+
+export const RECORD_MENTOR_FUND_ALLOCATIONS = gql`
+  mutation recordMentorFundAllocations($input: RecordMentorFundAllocationsInput!) {
+    recordMentorFundAllocations(input: $input) {
       id
       mentorUserId
       batch

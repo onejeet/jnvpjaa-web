@@ -6,15 +6,36 @@ import { useMutation } from '@apollo/client';
 import { Alert, Box, MenuItem, Paper, Stack, TextField, Typography } from '@mui/material';
 import toast from 'react-hot-toast';
 import Button from '@/components/core/Button';
+import CurrencyInput from '@/components/core/CurrencyInput';
 import LayoutModule from '@/layouts/Layout';
 import { useAuth } from '@/context/AuthContext';
-import { CREATE_SCHOLARSHIP_DRAFT, SUBMIT_SCHOLARSHIP_APPLICATION } from '@/apollo/scholarshipOperations';
+import {
+  CREATE_SCHOLARSHIP_DRAFT,
+  SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES,
+  SUBMIT_SCHOLARSHIP_APPLICATION,
+} from '@/apollo/scholarshipOperations';
 import { useScholarshipLoginGuard } from './useScholarshipLoginGuard';
 
-const initialForm = {
-  requestedAmount: '',
+type ScholarshipFormState = {
+  requestedAmount: number | null;
+  paymentMode: string;
+  requestedFirstInstallmentAmount: number | null;
+  purpose: string;
+  reason: string;
+  proposedProofDays: string;
+  payoutMethod: string;
+  upiId: string;
+  accountHolderName: string;
+  accountNumber: string;
+  confirmAccountNumber: string;
+  ifsc: string;
+  bankName: string;
+};
+
+const initialForm: ScholarshipFormState = {
+  requestedAmount: null,
   paymentMode: 'FULL',
-  requestedFirstInstallmentAmount: '',
+  requestedFirstInstallmentAmount: null,
   purpose: '',
   reason: '',
   proposedProofDays: '30',
@@ -27,11 +48,11 @@ const initialForm = {
   bankName: '',
 };
 
-const buildInput = (form: typeof initialForm) => ({
-  requestedAmount: Number(form.requestedAmount),
+const buildInput = (form: ScholarshipFormState) => ({
+  requestedAmount: form.requestedAmount ?? 0,
   paymentMode: form.paymentMode,
   requestedFirstInstallmentAmount:
-    form.paymentMode === 'INSTALLMENT' ? Number(form.requestedFirstInstallmentAmount) : null,
+    form.paymentMode === 'INSTALLMENT' ? (form.requestedFirstInstallmentAmount ?? 0) : null,
   purpose: form.purpose,
   reason: form.reason,
   proposedProofDays: Number(form.proposedProofDays),
@@ -53,15 +74,21 @@ export default function ScholarshipForm() {
   const { user } = useAuth();
   const canRender = useScholarshipLoginGuard(user?.id);
   const [form, setForm] = React.useState(initialForm);
-  const [createDraft, createState] = useMutation(CREATE_SCHOLARSHIP_DRAFT);
+  const [createDraft, createState] = useMutation(CREATE_SCHOLARSHIP_DRAFT, {
+    refetchQueries: SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES,
+  });
   const [submitApplication, submitState] = useMutation(SUBMIT_SCHOLARSHIP_APPLICATION, {
-    refetchQueries: ['getMyScholarshipApplications', 'getMyScholarshipDashboard'],
+    refetchQueries: SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES,
   });
 
   const loading = createState.loading || submitState.loading;
 
-  const setField = (field: keyof typeof initialForm) => (event: React.ChangeEvent<HTMLInputElement>) => {
+  const setField = (field: keyof ScholarshipFormState) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setForm((current) => ({ ...current, [field]: event.target.value }));
+  };
+
+  const setAmountField = (field: 'requestedAmount' | 'requestedFirstInstallmentAmount') => (value: number | null) => {
+    setForm((current) => ({ ...current, [field]: value }));
   };
 
   const handleSave = async (submitAfterCreate: boolean) => {
@@ -101,12 +128,11 @@ export default function ScholarshipForm() {
         <Paper variant="outlined" sx={{ p: { xs: 2, md: 3 }, borderRadius: 1 }}>
           <Stack spacing={2.5}>
             <Box display="grid" gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }} gap={2}>
-              <TextField
+              <CurrencyInput
                 label="Requested amount"
                 size="small"
-                type="number"
                 value={form.requestedAmount}
-                onChange={setField('requestedAmount')}
+                onValueChange={setAmountField('requestedAmount')}
                 required
               />
               <TextField
@@ -120,12 +146,11 @@ export default function ScholarshipForm() {
                 <MenuItem value="INSTALLMENT">Installment</MenuItem>
               </TextField>
               {form.paymentMode === 'INSTALLMENT' && (
-                <TextField
+                <CurrencyInput
                   label="First installment amount"
                   size="small"
-                  type="number"
                   value={form.requestedFirstInstallmentAmount}
-                  onChange={setField('requestedFirstInstallmentAmount')}
+                  onValueChange={setAmountField('requestedFirstInstallmentAmount')}
                   required
                 />
               )}

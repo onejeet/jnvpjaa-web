@@ -5,6 +5,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { Alert, Box, Chip, CircularProgress, Divider, Paper, Stack, TextField, Typography } from '@mui/material';
 import toast from 'react-hot-toast';
 import Button from '@/components/core/Button';
+import CurrencyInput from '@/components/core/CurrencyInput';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import LayoutModule from '@/layouts/Layout';
 import { useAuth } from '@/context/AuthContext';
@@ -12,9 +13,12 @@ import { PERMISSION_CODES } from '@/constants/access';
 import {
   APPROVE_SCHOLARSHIP_APPLICATION,
   CONFIRM_SCHOLARSHIP_RECEIPT,
+  CREATE_SCHOLARSHIP_DOCUMENT_UPLOAD,
+  FINALIZE_SCHOLARSHIP_DOCUMENT_UPLOAD,
   GET_SCHOLARSHIP_APPLICATION,
   GET_SCHOLARSHIP_APPLICATION_TRANSACTIONS,
   REQUEST_SCHOLARSHIP_FOLLOWUP,
+  SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES,
   START_SCHOLARSHIP_REVIEW,
   SUBMIT_SCHOLARSHIP_APPLICATION,
 } from '@/apollo/scholarshipOperations';
@@ -34,24 +38,23 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
     skip: !canRender,
     fetchPolicy: 'cache-and-network',
   });
-  const [approvedTotalAmount, setApprovedTotalAmount] = React.useState('');
-  const [installmentAmount, setInstallmentAmount] = React.useState('');
-  const [confirmedAmountByTx, setConfirmedAmountByTx] = React.useState<Record<string, string>>({});
+  const [approvedTotalAmount, setApprovedTotalAmount] = React.useState<number | null>(null);
+  const [installmentAmount, setInstallmentAmount] = React.useState<number | null>(null);
+  const [confirmedAmountByTx, setConfirmedAmountByTx] = React.useState<Record<string, number | null>>({});
+  const [creditProofFileByTx, setCreditProofFileByTx] = React.useState<Record<string, File | null>>({});
 
   const refetchQueries = [
     { query: GET_SCHOLARSHIP_APPLICATION, variables: { id: applicationId } },
     { query: GET_SCHOLARSHIP_APPLICATION_TRANSACTIONS, variables: { applicationId } },
-    'getScholarshipApplications',
-    'getMyScholarshipApplications',
-    'getMyScholarshipDashboard',
-    'getMentorScholarshipDashboard',
-    'getScholarshipOrganizationDashboard',
+    ...SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES,
   ];
 
   const [submitApplication, submitState] = useMutation(SUBMIT_SCHOLARSHIP_APPLICATION, { refetchQueries });
   const [startReview, reviewState] = useMutation(START_SCHOLARSHIP_REVIEW, { refetchQueries });
   const [approveApplication, approveState] = useMutation(APPROVE_SCHOLARSHIP_APPLICATION, { refetchQueries });
   const [confirmReceipt, receiptState] = useMutation(CONFIRM_SCHOLARSHIP_RECEIPT, { refetchQueries });
+  const [createDocumentUpload, createDocumentState] = useMutation(CREATE_SCHOLARSHIP_DOCUMENT_UPLOAD);
+  const [finalizeDocumentUpload, finalizeDocumentState] = useMutation(FINALIZE_SCHOLARSHIP_DOCUMENT_UPLOAD);
   const [requestFollowup, followupState] = useMutation(REQUEST_SCHOLARSHIP_FOLLOWUP);
 
   const application = applicationQuery.data?.getScholarshipApplication;
@@ -63,9 +66,9 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
   const canApprove = isAssignedMentor && can(PERMISSION_CODES.SCHOLARSHIP_APPLICATION_APPROVE);
 
   React.useEffect(() => {
-    if (application?.requestedAmount && !approvedTotalAmount) {
-      setApprovedTotalAmount(String(application.requestedAmount));
-      setInstallmentAmount(String(application.requestedFirstInstallmentAmount || application.requestedAmount));
+    if (application?.requestedAmount && approvedTotalAmount === null) {
+      setApprovedTotalAmount(Number(application.requestedAmount));
+      setInstallmentAmount(Number(application.requestedFirstInstallmentAmount || application.requestedAmount));
     }
   }, [application?.requestedAmount, application?.requestedFirstInstallmentAmount, approvedTotalAmount]);
 
@@ -76,6 +79,33 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
     } catch (error: any) {
       toast.error(error?.message || 'Action failed.');
     }
+  };
+  const uploadCreditProof = async (transaction: any, file: File) => {
+    const upload = await createDocumentUpload({
+      variables: {
+        input: {
+          applicationId: application.id,
+          transactionId: transaction.id,
+          category: 'BENEFICIARY_CREDIT_PROOF',
+          filename: file.name,
+          mimeType: file.type || 'application/octet-stream',
+          sizeBytes: file.size,
+        },
+      },
+    });
+    const uploadUrl = upload.data?.createScholarshipDocumentUpload?.uploadUrl;
+    const documentId = upload.data?.createScholarshipDocumentUpload?.document?.id;
+    if (!uploadUrl || !documentId) throw new Error('Could not prepare credit proof upload.');
+
+    const uploadResponse = await fetch(uploadUrl, {
+      method: 'PUT',
+      headers: { 'Content-Type': file.type || 'application/octet-stream' },
+      body: file,
+    });
+    if (!uploadResponse.ok) throw new Error('Credit proof upload failed.');
+
+    await finalizeDocumentUpload({ variables: { documentId } });
+    return documentId;
   };
 
   if (!canRender || (applicationQuery.loading && !application)) {
@@ -156,46 +186,64 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
                     </Box>
                     <Chip size="small" label={humanizeScholarshipStatus(transaction.scholarshipProofStatus)} />
                   </Box>
-                  {isOwner && transaction.scholarshipStatus === 'PENDING_BENEFICIARY_CONFIRMATION' && (
-                    <Box display="grid" gridTemplateColumns={{ xs: '1fr', sm: '1fr auto auto' }} gap={1.5} mt={2}>
-                      <TextField
-                        size="small"
-                        type="number"
-                        label="Amount received"
-                        value={confirmedAmountByTx[transaction.id] || transaction.amount}
-                        onChange={(event) =>
-                          setConfirmedAmountByTx((current) => ({ ...current, [transaction.id]: event.target.value }))
-                        }
-                      />
-                      <Button
-                        title="Confirm Receipt"
-                        loading={receiptState.loading}
-                        onClick={() =>
-                          runAction(
-                            () =>
-                              confirmReceipt({
+                  {isOwner &&
+                    ['PENDING_BENEFICIARY_CONFIRMATION', 'PARTIALLY_RECEIVED'].includes(
+                      transaction.scholarshipStatus
+                    ) && (
+                      <Box display="grid" gridTemplateColumns={{ xs: '1fr', sm: '1fr 1fr auto auto' }} gap={1.5} mt={2}>
+                        <CurrencyInput
+                          size="small"
+                          label="Amount received"
+                          value={confirmedAmountByTx[transaction.id] ?? transaction.amount}
+                          onValueChange={(value) =>
+                            setConfirmedAmountByTx((current) => ({ ...current, [transaction.id]: value }))
+                          }
+                        />
+                        <TextField
+                          size="small"
+                          type="file"
+                          label="Credit proof"
+                          InputLabelProps={{ shrink: true }}
+                          inputProps={{ accept: 'image/*,application/pdf' }}
+                          onChange={(event) => {
+                            const file = (event.target as HTMLInputElement).files?.[0] || null;
+                            setCreditProofFileByTx((current) => ({ ...current, [transaction.id]: file }));
+                          }}
+                        />
+                        <Button
+                          title="Confirm Receipt"
+                          loading={receiptState.loading || createDocumentState.loading || finalizeDocumentState.loading}
+                          disabled={!creditProofFileByTx[transaction.id]}
+                          onClick={() =>
+                            runAction(async () => {
+                              const creditProofDocumentId = await uploadCreditProof(
+                                transaction,
+                                creditProofFileByTx[transaction.id] as File
+                              );
+                              await confirmReceipt({
                                 variables: {
                                   transactionId: transaction.id,
-                                  confirmedAmount: Number(confirmedAmountByTx[transaction.id] || transaction.amount),
+                                  confirmedAmount: confirmedAmountByTx[transaction.id] ?? Number(transaction.amount),
+                                  creditProofDocumentId,
                                 },
-                              }),
-                            'Receipt confirmed.'
-                          )
-                        }
-                      />
-                      <Button
-                        variant="outlined"
-                        title="Follow Up"
-                        loading={followupState.loading}
-                        onClick={() =>
-                          runAction(
-                            () => requestFollowup({ variables: { transactionId: transaction.id } }),
-                            'Follow-up requested.'
-                          )
-                        }
-                      />
-                    </Box>
-                  )}
+                              });
+                              setCreditProofFileByTx((current) => ({ ...current, [transaction.id]: null }));
+                            }, 'Receipt confirmed.')
+                          }
+                        />
+                        <Button
+                          variant="outlined"
+                          title="Follow Up"
+                          loading={followupState.loading}
+                          onClick={() =>
+                            runAction(
+                              () => requestFollowup({ variables: { transactionId: transaction.id } }),
+                              'Follow-up requested.'
+                            )
+                          }
+                        />
+                      </Box>
+                    )}
                 </Paper>
               ))}
             </Stack>
@@ -254,19 +302,17 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
               )}
               {canApprove && ['UNDER_REVIEW', 'SUBMITTED', 'RESUBMITTED'].includes(application.status) && (
                 <>
-                  <TextField
+                  <CurrencyInput
                     size="small"
-                    type="number"
                     label="Approved total amount"
                     value={approvedTotalAmount}
-                    onChange={(event) => setApprovedTotalAmount(event.target.value)}
+                    onValueChange={setApprovedTotalAmount}
                   />
-                  <TextField
+                  <CurrencyInput
                     size="small"
-                    type="number"
                     label="Installment amount"
                     value={installmentAmount}
-                    onChange={(event) => setInstallmentAmount(event.target.value)}
+                    onValueChange={setInstallmentAmount}
                   />
                   <Button
                     title="Approve And Create Payment"
@@ -277,8 +323,8 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
                           approveApplication({
                             variables: {
                               applicationId,
-                              approvedTotalAmount: Number(approvedTotalAmount),
-                              installmentAmount: Number(installmentAmount),
+                              approvedTotalAmount: approvedTotalAmount ?? 0,
+                              installmentAmount: installmentAmount ?? 0,
                               proofDueDays: application.proposedProofDays,
                             },
                           }),

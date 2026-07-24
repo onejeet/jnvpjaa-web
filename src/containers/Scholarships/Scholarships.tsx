@@ -24,13 +24,14 @@ import {
 } from '@mui/material';
 import { IconCirclePlus, IconExternalLink } from '@tabler/icons-react';
 import toast from 'react-hot-toast';
-import { ROLE_ASSIGNMENTS_QUERY } from '@/apollo/accessOperations';
 import Button from '@/components/core/Button';
+import CurrencyInput from '@/components/core/CurrencyInput';
+import Dialog from '@/components/core/Dialog';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import ReactSelect from '@/components/core/ReactSelect';
 import LayoutModule from '@/layouts/Layout';
 import { useAuth } from '@/context/AuthContext';
-import { PERMISSION_CODES, ROLE_CODES } from '@/constants/access';
+import { EXECUTIVE_POSITION_CODES, PERMISSION_CODES, ROLE_CODES } from '@/constants/access';
 import { getBatchOptions } from '@/utils/helpers';
 import {
   GET_MENTOR_SCHOLARSHIP_DASHBOARD,
@@ -40,7 +41,8 @@ import {
   GET_SCHOLARSHIP_APPLICATIONS,
   GET_SCHOLARSHIP_MENTOR_SUMMARIES,
   GET_SCHOLARSHIP_ORG_DASHBOARD,
-  RECORD_MENTOR_FUND_ALLOCATION,
+  RECORD_MENTOR_FUND_ALLOCATIONS,
+  SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES,
 } from '@/apollo/scholarshipOperations';
 import { formatCurrency, getFullName, humanizeScholarshipStatus } from './helpers';
 import { useScholarshipLoginGuard } from './useScholarshipLoginGuard';
@@ -363,80 +365,86 @@ const MentorSummaryTable = ({ mentors, loading }: { mentors: any[]; loading: boo
 
 const todayDateInputValue = () => new Date().toISOString().slice(0, 10);
 
-const getLatestBatchValue = () => {
-  const batches = getBatchOptions()
-    .map((batch) => Number(batch.value))
-    .filter((batch) => batch > 0);
-  return Math.max(...batches).toString();
-};
+const buildMentorReleaseOptions = (mentors: any[]) =>
+  mentors.flatMap((row) => {
+    const mentor = row.mentor;
+    const name = getFullName(mentor) || mentor?.email || 'Batch Mentor';
+    return (row.assignedBatches || []).map((batch: number) => ({
+      value: `${row.mentorUserId}:${batch}`,
+      label: `${name} - Mentor of Batch ${batch}`,
+      title: name,
+      summary: `Mentor of Batch ${batch}${mentor?.email ? ` • ${mentor.email}` : ''}`,
+      avatarUrl: mentor?.profileImage || undefined,
+      mentorUserId: row.mentorUserId,
+      batch,
+    }));
+  });
 
-const AllocationPanel = () => {
-  const batchOptions = React.useMemo(
-    () => getBatchOptions().map((batch) => ({ value: String(batch.value), label: batch.label })),
-    []
-  );
-  const [form, setForm] = React.useState({
-    batch: getLatestBatchValue(),
-    mentorUserId: '',
-    amount: '',
+const MentorFundReleaseDialog = ({
+  open,
+  onClose,
+  mentors,
+}: {
+  open: boolean;
+  onClose: () => void;
+  mentors: any[];
+}) => {
+  const [form, setForm] = React.useState<{
+    selectedMentors: any[];
+    amount: number | null;
+    transferDate: string;
+    method: string;
+    reference: string;
+    notes: string;
+  }>({
+    selectedMentors: [],
+    amount: null,
     transferDate: todayDateInputValue(),
     method: 'BANK_TRANSFER',
     reference: '',
     notes: '',
   });
-  const [recordAllocation, allocationState] = useMutation(RECORD_MENTOR_FUND_ALLOCATION, {
-    refetchQueries: [
-      'getMentorFundAllocations',
-      'getMentorScholarshipDashboard',
-      'getScholarshipOrganizationDashboard',
-    ],
+  const [recordAllocations, allocationState] = useMutation(RECORD_MENTOR_FUND_ALLOCATIONS, {
+    refetchQueries: SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES,
   });
 
-  const mentorAssignments = useQuery(ROLE_ASSIGNMENTS_QUERY, {
-    variables: {
-      filter: {
-        roleCode: ROLE_CODES.BATCH_MENTOR,
-        scopeBatch: form.batch ? parseInt(form.batch, 10) : undefined,
-        active: true,
-      },
-    },
-    skip: !form.batch,
-    fetchPolicy: 'cache-and-network',
-  });
+  const mentorOptions = React.useMemo(() => buildMentorReleaseOptions(mentors), [mentors]);
+  const selectedCount = form.selectedMentors.length;
+  const amount = form.amount ?? 0;
+  const totalReleaseAmount = selectedCount * amount;
 
-  const mentorOptions = React.useMemo(
-    () =>
-      (mentorAssignments.data?.roleAssignments || [])
-        .filter((assignment: any) => assignment?.user)
-        .map((assignment: any) => {
-          const user = assignment.user;
-          const name = getFullName(user) || user.email || 'Batch Mentor';
-          return {
-            value: user.id,
-            label: `${name} - Batch ${user.batch ?? 'NA'}`,
-            title: name,
-            summary: `Batch ${user.batch ?? 'NA'}`,
-            avatarUrl: user.profileImage || undefined,
-          };
-        }),
-    [mentorAssignments.data?.roleAssignments]
-  );
+  const setField =
+    (field: 'transferDate' | 'method' | 'reference' | 'notes') => (event: React.ChangeEvent<HTMLInputElement>) => {
+      setForm((current) => ({ ...current, [field]: event.target.value }));
+    };
 
-  const selectedBatchOption = batchOptions.find((option) => option.value === form.batch) || null;
-  const selectedMentorOption = mentorOptions.find((option: any) => option.value === form.mentorUserId) || null;
+  const resetForm = () => {
+    setForm({
+      selectedMentors: [],
+      amount: null,
+      transferDate: todayDateInputValue(),
+      method: 'BANK_TRANSFER',
+      reference: '',
+      notes: '',
+    });
+  };
 
-  const setField = (field: keyof typeof form) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    setForm((current) => ({ ...current, [field]: event.target.value }));
+  const handleClose = () => {
+    if (allocationState.loading) return;
+    resetForm();
+    onClose();
   };
 
   const submitAllocation = async () => {
     try {
-      await recordAllocation({
+      await recordAllocations({
         variables: {
           input: {
-            mentorUserId: form.mentorUserId,
-            batch: parseInt(form.batch, 10),
-            amount: Number(form.amount),
+            allocations: form.selectedMentors.map((mentor) => ({
+              mentorUserId: mentor.mentorUserId,
+              batch: mentor.batch,
+            })),
+            amount: form.amount ?? 0,
             currency: 'INR',
             transferDate: form.transferDate,
             method: form.method,
@@ -445,108 +453,122 @@ const AllocationPanel = () => {
           },
         },
       });
-      setForm((current) => ({
-        ...current,
-        mentorUserId: '',
-        amount: '',
-        reference: '',
-        notes: '',
-      }));
-      toast.success('Mentor fund disbursal recorded.');
+      toast.success(`Funds allocated to ${selectedCount} mentor${selectedCount === 1 ? '' : 's'}.`);
+      handleClose();
     } catch (error: any) {
-      toast.error(error?.message || 'Could not record mentor fund disbursal.');
+      toast.error(error?.message || 'Could not allocate mentor funds.');
     }
   };
 
   return (
-    <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 1, mb: 3 }}>
-      <Typography fontSize={18} fontWeight={700} mb={2}>
-        Record Mentor Fund Disbursal
-      </Typography>
-      <Box display="grid" gridTemplateColumns={{ xs: '1fr', md: '160px minmax(220px, 1fr) 160px 160px' }} gap={1.5}>
-        <Box>
+    <Dialog
+      open={open}
+      maxWidth="760px"
+      title="Allocate Funds to Mentors"
+      subTitle="Record association funds released to one or more active batch mentors."
+      onClose={handleClose}
+      disableBackdropClick={allocationState.loading}
+      footerProps={{
+        onCancel: handleClose,
+        onOkay: submitAllocation,
+        okayButtonProps: {
+          title: 'Allocate Funds',
+          loading: allocationState.loading,
+          disabled: !selectedCount || !form.amount || !form.transferDate,
+        },
+      }}
+    >
+      <Box p={2.5}>
+        <Alert severity="info" sx={{ mb: 2 }}>
+          This records funds released by JNVPJAA to selected mentors. Mentors will confirm the received amount before it
+          becomes available for beneficiary approvals.
+        </Alert>
+        <Stack spacing={2}>
           <Typography variant="caption" color="text.secondary">
-            Mentor batch
-          </Typography>
-          <ReactSelect
-            options={batchOptions}
-            value={selectedBatchOption}
-            placeholder="Select batch"
-            size="small"
-            isSearchable
-            onChange={(option) => {
-              const selected = option as any;
-              setForm((current) => ({
-                ...current,
-                batch: selected?.value || '',
-                mentorUserId: '',
-              }));
-            }}
-          />
-        </Box>
-        <Box>
-          <Typography variant="caption" color="text.secondary">
-            Batch Mentor
+            Mentors
           </Typography>
           <ReactSelect
             options={mentorOptions}
-            value={selectedMentorOption}
-            placeholder="Select active batch mentor"
+            value={form.selectedMentors}
+            placeholder="Select mentors to allocate funds"
             size="small"
+            isMulti
             isSearchable
             showAvatars
-            isLoading={mentorAssignments.loading}
             noOptionsMessage="No active batch mentor found"
-            onChange={(option) => {
-              const selected = option as any;
-              setForm((current) => ({ ...current, mentorUserId: selected?.value || '' }));
-            }}
+            onChange={(options) =>
+              setForm((current) => ({
+                ...current,
+                selectedMentors: Array.isArray(options) ? options : [],
+              }))
+            }
           />
-        </Box>
-        <TextField label="Amount" size="small" type="number" value={form.amount} onChange={setField('amount')} />
-        <TextField
-          label="Transfer date"
-          size="small"
-          type="date"
-          value={form.transferDate}
-          onChange={setField('transferDate')}
-          InputLabelProps={{ shrink: true }}
-        />
-        <TextField select label="Method" size="small" value={form.method} onChange={setField('method')}>
-          <MenuItem value="BANK_TRANSFER">Bank transfer</MenuItem>
-          <MenuItem value="UPI">UPI</MenuItem>
-          <MenuItem value="CHEQUE">Cheque</MenuItem>
-          <MenuItem value="CASH">Cash</MenuItem>
-        </TextField>
-        <TextField label="Reference" size="small" value={form.reference} onChange={setField('reference')} />
-        <TextField
-          label="Notes"
-          size="small"
-          value={form.notes}
-          onChange={setField('notes')}
-          sx={{ gridColumn: { xs: 'auto', md: 'span 2' } }}
-        />
+          <Box display="grid" gridTemplateColumns={{ xs: '1fr', md: '1fr 180px' }} gap={1.5}>
+            <CurrencyInput
+              label="Amount per mentor"
+              size="small"
+              value={form.amount}
+              onValueChange={(value) => setForm((current) => ({ ...current, amount: value }))}
+            />
+            <TextField
+              label="Transfer date"
+              size="small"
+              type="date"
+              value={form.transferDate}
+              onChange={setField('transferDate')}
+              InputLabelProps={{ shrink: true }}
+            />
+          </Box>
+          <Box display="grid" gridTemplateColumns={{ xs: '1fr', md: '180px 1fr' }} gap={1.5}>
+            <TextField select label="Transfer method" size="small" value={form.method} onChange={setField('method')}>
+              <MenuItem value="BANK_TRANSFER">Bank transfer</MenuItem>
+              <MenuItem value="UPI">UPI</MenuItem>
+              <MenuItem value="CHEQUE">Cheque</MenuItem>
+              <MenuItem value="CASH">Cash</MenuItem>
+            </TextField>
+            <TextField
+              label="Reference ID"
+              size="small"
+              value={form.reference}
+              onChange={setField('reference')}
+              placeholder="UTR, cheque number, or internal reference"
+            />
+          </Box>
+          <TextField
+            label="Internal note"
+            size="small"
+            value={form.notes}
+            onChange={setField('notes')}
+            placeholder="Optional context for finance records"
+            multiline
+            minRows={2}
+          />
+          <Paper variant="outlined" sx={{ p: 1.5, borderRadius: 1, bgcolor: 'grey.50' }}>
+            <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" gap={1}>
+              <Typography fontSize={14} color="grey.700">
+                {selectedCount} mentor{selectedCount === 1 ? '' : 's'} selected
+              </Typography>
+              <Typography fontSize={14} fontWeight={700}>
+                Total release: {formatCurrency(totalReleaseAmount)}
+              </Typography>
+            </Stack>
+          </Paper>
+        </Stack>
       </Box>
-      <Box display="flex" justifyContent="flex-end" mt={2}>
-        <Button
-          title="Record Disbursal"
-          loading={allocationState.loading}
-          disabled={!form.batch || !form.mentorUserId || !form.amount || !form.transferDate}
-          onClick={submitAllocation}
-        />
-      </Box>
-    </Paper>
+    </Dialog>
   );
 };
 
 export default function Scholarships() {
-  const { can, user, roles, access } = useAuth();
+  const { can, user, roles, access, hasRole, hasPosition } = useAuth();
   const canRender = useScholarshipLoginGuard(user?.id);
   const canCreate = can(PERMISSION_CODES.SCHOLARSHIP_APPLICATION_CREATE);
   const canReadOrg = can(PERMISSION_CODES.SCHOLARSHIP_DASHBOARD_READ_ORG);
   const canReadMentor = can(PERMISSION_CODES.SCHOLARSHIP_DASHBOARD_READ_MENTOR);
   const canReadBatch = can(PERMISSION_CODES.SCHOLARSHIP_DASHBOARD_READ_BATCH);
-  const canRecordAllocation = can(PERMISSION_CODES.SCHOLARSHIP_ALLOCATION_CREATE);
+  const canReleaseMentorFunds =
+    can(PERMISSION_CODES.SCHOLARSHIP_ALLOCATION_CREATE) &&
+    (hasRole(ROLE_CODES.FINANCE_MANAGER) || hasPosition(EXECUTIVE_POSITION_CODES.SECRETARY));
   const coordinatorBatchOptions = React.useMemo(() => {
     const scopedBatches =
       roles
@@ -560,6 +582,7 @@ export default function Scholarships() {
   }, [access?.hasFullAccess, roles]);
   const [selectedCoordinatorBatch, setSelectedCoordinatorBatch] = React.useState('');
   const [tab, setTab] = React.useState<DashboardVariant>('mine');
+  const [releaseDialogOpen, setReleaseDialogOpen] = React.useState(false);
   const showMentorSummaries = tab === 'mentor' && canReadOrg;
 
   React.useEffect(() => {
@@ -659,18 +682,37 @@ export default function Scholarships() {
       )}
 
       {showMentorSummaries ? (
-        <MentorSummaryTable
-          mentors={mentorSummaries.data?.getScholarshipMentorSummaries || []}
-          loading={mentorSummaries.loading}
-        />
+        <>
+          <Box display="flex" justifyContent="space-between" alignItems="flex-start" gap={2} mb={2}>
+            <Box>
+              <Typography fontSize={18} fontWeight={700}>
+                Mentor Fund Queue
+              </Typography>
+              <Typography fontSize={14} color="grey.700">
+                Track mentor balances, beneficiary releases, and funds awaiting mentor confirmation.
+              </Typography>
+            </Box>
+            {canReleaseMentorFunds && (
+              <Button
+                title="Allocate Funds"
+                startIcon={<IconCirclePlus size={16} />}
+                onClick={() => setReleaseDialogOpen(true)}
+                sx={{ minWidth: 160 }}
+              />
+            )}
+          </Box>
+          <MentorSummaryTable
+            mentors={mentorSummaries.data?.getScholarshipMentorSummaries || []}
+            loading={mentorSummaries.loading}
+          />
+          <MentorFundReleaseDialog
+            open={releaseDialogOpen}
+            onClose={() => setReleaseDialogOpen(false)}
+            mentors={mentorSummaries.data?.getScholarshipMentorSummaries || []}
+          />
+        </>
       ) : (
         <DashboardSummary data={dashboard.data} loading={dashboard.loading} variant={tab} />
-      )}
-      {canRecordAllocation && (
-        <>
-          <Divider sx={{ my: 3 }} />
-          <AllocationPanel />
-        </>
       )}
       {!showMentorSummaries && (
         <>
