@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Suspense } from 'react';
 import LayoutModule from '@/layouts/Layout';
 import MembersFilters from './components/MembersFilters';
 import MmembersTable from './components/MembersTable';
@@ -20,8 +20,10 @@ export default function Members() {
           </Typography>
         </Box>
       </Box>
-      <MembersFilters />
-      <MmembersTable />
+      <Suspense fallback={null}>
+        <MembersFilters />
+        <MmembersTable />
+      </Suspense>
     </LayoutModule>
   );
 }

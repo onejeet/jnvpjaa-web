@@ -1,7 +1,7 @@
 'use client';
 
-import React, { createContext, Suspense, useContext, useEffect, useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import LoadingIndicator from '@/components/common/LoadingIndicator';
 import { AuthProviderProps, LoadingDataProps, TAuthContextData } from './AuthContext.types';
 import { Box } from '@mui/material';
@@ -42,7 +42,6 @@ const getSafeRedirectPath = (encodedPath?: string | null) => {
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
 
   const client = useApolloClient();
   const { showAlert } = useAlert();
@@ -109,7 +108,9 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const redirectOnSignin = React.useCallback(
     async (customPass?: boolean) => {
       if (isAuthPage || customPass) {
-        const redirectPath = getSafeRedirectPath(searchParams.get('r'));
+        const redirectParam =
+          typeof window === 'undefined' ? null : new URLSearchParams(window.location.search).get('r');
+        const redirectPath = getSafeRedirectPath(redirectParam);
         if (redirectPath) {
           await router.push(redirectPath);
         } else {
@@ -118,7 +119,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
       setLoadingData({ loading: false });
     },
-    [router, isAuthPage, searchParams]
+    [router, isAuthPage]
   );
 
   const redirectToSignin = React.useCallback(
@@ -275,41 +276,39 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, [can, hasRole, user]);
 
   return (
-    <Suspense fallback={<LoadingIndicator isBackdrop />}>
-      <AuthContext.Provider
-        value={{
-          user,
-          access,
-          roles,
-          positions,
-          permissions,
-          isAdmin,
-          hasRole,
-          hasPosition,
-          can,
-          canForBatch,
-          checkAuth,
-          setUser,
-          logoutUser,
-          isAuthPage,
-          setLoadingData,
-          redirectToSignin,
-          redirectOnSignin,
-        }}
-      >
-        {isLoading ? (
-          <Box width="100%" minHeight="100vh" display="flex" justifyContent="center" alignItems="center">
-            <LoadingIndicator isBackdrop={false} />
-          </Box>
-        ) : null}
-        {/* The Children's will not load while loading is in progress
-         * until specifically mentioned by using renderPageInBackground
-         */}
-        {Boolean(!isLoading || loadingData?.renderPageInBackground) && (
-          <Box sx={{ visibility: isLoading ? 'hidden' : 'visible' }}>{children}</Box>
-        )}
-      </AuthContext.Provider>
-    </Suspense>
+    <AuthContext.Provider
+      value={{
+        user,
+        access,
+        roles,
+        positions,
+        permissions,
+        isAdmin,
+        hasRole,
+        hasPosition,
+        can,
+        canForBatch,
+        checkAuth,
+        setUser,
+        logoutUser,
+        isAuthPage,
+        setLoadingData,
+        redirectToSignin,
+        redirectOnSignin,
+      }}
+    >
+      {isLoading ? (
+        <Box width="100%" minHeight="100vh" display="flex" justifyContent="center" alignItems="center">
+          <LoadingIndicator isBackdrop={false} />
+        </Box>
+      ) : null}
+      {/* The Children's will not load while loading is in progress
+       * until specifically mentioned by using renderPageInBackground
+       */}
+      {Boolean(!isLoading || loadingData?.renderPageInBackground) && (
+        <Box sx={{ visibility: isLoading ? 'hidden' : 'visible' }}>{children}</Box>
+      )}
+    </AuthContext.Provider>
   );
 };
 
