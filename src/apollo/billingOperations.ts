@@ -6,6 +6,10 @@ export const BILLING_REFETCH_QUERIES = [
   'getAssociationWalletSummary',
   'getAssociationTransactions',
   'getTransactions',
+];
+
+export const BILLING_SCHOLARSHIP_REFETCH_QUERIES = [
+  ...BILLING_REFETCH_QUERIES,
   'getScholarshipOrganizationDashboard',
   'getScholarshipMentorSummaries',
   'getMentorFundAllocations',
@@ -77,14 +81,6 @@ export const GET_ASSOCIATION_TRANSACTIONS = gql`
           batch
           profileImage
         }
-        attachments {
-          id
-          originalFilename
-          mimeType
-          sizeBytes
-          status
-          uploadedAt
-        }
         recordedByUserId
         recordedBy {
           id
@@ -100,6 +96,64 @@ export const GET_ASSOCIATION_TRANSACTIONS = gql`
           batch
           profileImage
         }
+      }
+    }
+  }
+`;
+
+export const GET_TRANSACTION_DETAILS = gql`
+  query getTransaction($id: String!) {
+    getTransaction(id: $id) {
+      id
+      title
+      amount
+      currency
+      type
+      status
+      transactionDate
+      referenceId
+      method
+      description
+      sourceType
+      billingCategory
+      walletImpact
+      scholarshipApplicationId
+      scholarshipMentor {
+        id
+        firstName
+        lastName
+        batch
+        profileImage
+      }
+      scholarshipBeneficiary {
+        id
+        firstName
+        lastName
+        batch
+        profileImage
+      }
+      attachments {
+        id
+        originalFilename
+        mimeType
+        sizeBytes
+        status
+        uploadedAt
+      }
+      recordedByUserId
+      recordedBy {
+        id
+        firstName
+        lastName
+        batch
+        profileImage
+      }
+      user {
+        id
+        firstName
+        lastName
+        batch
+        profileImage
       }
     }
   }
@@ -139,9 +193,6 @@ export const CREATE_ASSOCIATION_CREDIT = gql`
       description: $description
     ) {
       id
-      attachments {
-        id
-      }
     }
   }
 `;
@@ -166,9 +217,6 @@ export const CREATE_ASSOCIATION_DEBIT = gql`
       description: $description
     ) {
       id
-      attachments {
-        id
-      }
     }
   }
 `;

@@ -35,12 +35,8 @@ const AddTransactionRecordModule: React.FC<any> = ({ onClose }) => {
   });
 
   const selectedType = useWatch({ control, name: 'type' });
-  const [createCredit, creditState] = useMutation(CREATE_ASSOCIATION_CREDIT, {
-    refetchQueries: BILLING_REFETCH_QUERIES,
-  });
-  const [createDebit, debitState] = useMutation(CREATE_ASSOCIATION_DEBIT, {
-    refetchQueries: BILLING_REFETCH_QUERIES,
-  });
+  const [createCredit, creditState] = useMutation(CREATE_ASSOCIATION_CREDIT);
+  const [createDebit, debitState] = useMutation(CREATE_ASSOCIATION_DEBIT);
   const [createAttachmentUpload, attachmentUploadState] = useMutation(CREATE_TRANSACTION_ATTACHMENT_UPLOAD);
   const [finalizeAttachmentUpload, finalizeAttachmentState] = useMutation(FINALIZE_TRANSACTION_ATTACHMENT_UPLOAD);
   const saving =
@@ -76,12 +72,8 @@ const AddTransactionRecordModule: React.FC<any> = ({ onClose }) => {
     [createAttachmentUpload, finalizeAttachmentUpload]
   );
 
-  const refreshBillingCaches = React.useCallback(() => {
-    client.cache.evict({ fieldName: 'getTransactions' });
-    client.cache.evict({ fieldName: 'getAssociationTransactions' });
-    client.cache.evict({ fieldName: 'getBillingDashboard' });
-    client.cache.evict({ fieldName: 'getAssociationWalletSummary' });
-    client.cache.gc();
+  const refreshBillingQueries = React.useCallback(() => {
+    return client.refetchQueries({ include: BILLING_REFETCH_QUERIES });
   }, [client]);
 
   const onSubmit = React.useCallback(
@@ -104,7 +96,7 @@ const AddTransactionRecordModule: React.FC<any> = ({ onClose }) => {
           await uploadAttachment(transactionId, attachmentFile);
         }
 
-        refreshBillingCaches();
+        await refreshBillingQueries();
         showAlert({
           visible: true,
           type: 'success',
@@ -127,7 +119,7 @@ const AddTransactionRecordModule: React.FC<any> = ({ onClose }) => {
         });
       }
     },
-    [attachmentFile, createCredit, createDebit, onClose, refreshBillingCaches, reset, showAlert, uploadAttachment]
+    [attachmentFile, createCredit, createDebit, onClose, refreshBillingQueries, reset, showAlert, uploadAttachment]
   );
 
   return (

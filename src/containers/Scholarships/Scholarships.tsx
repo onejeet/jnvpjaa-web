@@ -71,7 +71,7 @@ import {
   SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES,
   START_SCHOLARSHIP_REVIEW,
 } from '@/apollo/scholarshipOperations';
-import { BILLING_REFETCH_QUERIES, GET_ASSOCIATION_WALLET_SUMMARY } from '@/apollo/billingOperations';
+import { BILLING_SCHOLARSHIP_REFETCH_QUERIES, GET_ASSOCIATION_WALLET_SUMMARY } from '@/apollo/billingOperations';
 import { formatCurrency, getFullName, humanizeScholarshipStatus } from './helpers';
 import { useScholarshipLoginGuard } from './useScholarshipLoginGuard';
 
@@ -1507,7 +1507,7 @@ const MentorFundReleaseDialog = ({
     notes: '',
   });
   const [recordAllocation, allocationState] = useMutation(RECORD_MENTOR_FUND_ALLOCATION, {
-    refetchQueries: [...SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES, ...BILLING_REFETCH_QUERIES],
+    refetchQueries: [...SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES, ...BILLING_SCHOLARSHIP_REFETCH_QUERIES],
   });
   const walletQuery = useQuery(GET_ASSOCIATION_WALLET_SUMMARY, {
     skip: !open,

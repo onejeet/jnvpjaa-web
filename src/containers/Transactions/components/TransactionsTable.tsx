@@ -13,7 +13,7 @@ import { GridRowParams } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
 import { IconArrowRight, IconExternalLink, IconPaperclip } from '@tabler/icons-react';
 import Button from '@/components/core/Button';
-import { GET_TRANSACTION_ATTACHMENT_READ_URL } from '@/apollo/billingOperations';
+import { GET_TRANSACTION_ATTACHMENT_READ_URL, GET_TRANSACTION_DETAILS } from '@/apollo/billingOperations';
 
 const DetailItem = ({ label, value }: { label: string; value?: React.ReactNode }) => (
   <Box>
@@ -243,13 +243,26 @@ const TransactionDetailsDialog = ({ transaction, onClose }: { transaction: any; 
 };
 
 const TransactionsTable = () => {
+  const client = useApolloClient();
   const [selectedTransaction, setSelectedTransaction] = React.useState<any | null>(null);
   const { rows, loading, columns, rowCount, paginationModel, onPaginationModelChange } = useTransactionsTable();
 
-  const handleRowClick = React.useCallback((params: GridRowParams) => {
-    if (params.row?.loading) return;
-    setSelectedTransaction(params.row);
-  }, []);
+  const handleRowClick = React.useCallback(
+    async (params: GridRowParams) => {
+      if (params.row?.loading) return;
+      try {
+        const result = await client.query({
+          query: GET_TRANSACTION_DETAILS,
+          variables: { id: params.row.id },
+          fetchPolicy: 'network-only',
+        });
+        setSelectedTransaction(result.data?.getTransaction || params.row);
+      } catch {
+        setSelectedTransaction(params.row);
+      }
+    },
+    [client]
+  );
 
   return (
     <>

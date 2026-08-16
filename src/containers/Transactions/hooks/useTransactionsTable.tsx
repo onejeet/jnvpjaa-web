@@ -42,9 +42,40 @@ const getAssociationParticipants = (transaction: any) => {
   };
 };
 
+const TransactionParticipantProfile = React.memo(
+  ({ user, loading, onOpenProfile }: { user: any; loading?: boolean; onOpenProfile: (userId: string) => void }) => {
+    const name = getUserName(user);
+    return (
+      <ProfilePicture
+        loading={loading}
+        src={user.profileImage}
+        title={name}
+        summary={getUserSummary(user)}
+        id={user.id}
+        alt={name}
+        maxWidth={150}
+        containerProps={{
+          onClick: (event) => {
+            event.stopPropagation();
+            onOpenProfile(user.id);
+          },
+        }}
+        titleComponentProps={{
+          titleContainerProps: {
+            className: 'title-container',
+          },
+          titleProps: {
+            noWrap: true,
+          },
+        }}
+      />
+    );
+  }
+);
+TransactionParticipantProfile.displayName = 'TransactionParticipantProfile';
+
 const useTransactionsTable = () => {
   const router = useRouter();
-  const [columns, setColumns] = React.useState<any[]>([]);
   const [paginationModel, setPaginationModel] = React.useState<GridPaginationModel>({
     page: 0,
     pageSize: 50,
@@ -61,8 +92,10 @@ const useTransactionsTable = () => {
     fetchPolicy: 'cache-and-network',
   });
 
-  React.useEffect(() => {
-    const columns = [
+  const openProfile = React.useCallback((userId: string) => router.push(`/profile/${userId}`), [router]);
+
+  const columns = React.useMemo<any[]>(
+    () => [
       {
         field: 'date',
         headerName: 'Date',
@@ -179,29 +212,7 @@ const useTransactionsTable = () => {
             <Stack height="100%" direction="row" alignItems="center" spacing={1} minWidth={0}>
               {from ? (
                 <Box minWidth={0}>
-                  <ProfilePicture
-                    loading={row.loading}
-                    src={from.profileImage}
-                    title={getUserName(from)}
-                    summary={getUserSummary(from)}
-                    id={from.id}
-                    alt={getUserName(from)}
-                    maxWidth={150}
-                    containerProps={{
-                      onClick: (event) => {
-                        event.stopPropagation();
-                        router.push(`/profile/${from.id}`);
-                      },
-                    }}
-                    titleComponentProps={{
-                      titleContainerProps: {
-                        className: 'title-container',
-                      },
-                      titleProps: {
-                        noWrap: true,
-                      },
-                    }}
-                  />
+                  <TransactionParticipantProfile user={from} loading={row.loading} onOpenProfile={openProfile} />
                 </Box>
               ) : (
                 <Typography variant="body2" color="grey.600">
@@ -214,29 +225,7 @@ const useTransactionsTable = () => {
                     <IconArrowRight size={16} />
                   </Box>
                   <Box minWidth={0}>
-                    <ProfilePicture
-                      loading={row.loading}
-                      src={to.profileImage}
-                      title={getUserName(to)}
-                      summary={getUserSummary(to)}
-                      id={to.id}
-                      alt={getUserName(to)}
-                      maxWidth={150}
-                      containerProps={{
-                        onClick: (event) => {
-                          event.stopPropagation();
-                          router.push(`/profile/${to.id}`);
-                        },
-                      }}
-                      titleComponentProps={{
-                        titleContainerProps: {
-                          className: 'title-container',
-                        },
-                        titleProps: {
-                          noWrap: true,
-                        },
-                      }}
-                    />
+                    <TransactionParticipantProfile user={to} loading={row.loading} onOpenProfile={openProfile} />
                   </Box>
                 </>
               )}
@@ -244,10 +233,9 @@ const useTransactionsTable = () => {
           );
         },
       },
-    ];
-
-    setColumns(columns);
-  }, [router]);
+    ],
+    [openProfile]
+  );
 
   const onPaginationModelChange = React.useCallback((model: GridPaginationModel) => {
     setPaginationModel(model);
