@@ -19,7 +19,7 @@ const LayoutProvider = ({ children }: LayoutProviderProps) => {
   const [settings, setSettings] = React.useState<SettingsProps>(defaultProvider.settings);
   const { mode } = settings;
 
-  const theme = createTheme(modes[mode]);
+  const theme = React.useMemo(() => createTheme(modes[mode]), [mode]);
 
   return (
     <LayoutContext.Provider
