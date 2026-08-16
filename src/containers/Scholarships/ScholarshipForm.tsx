@@ -2,19 +2,22 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { useMutation } from '@apollo/client';
-import { Alert, Box, MenuItem, Paper, Stack, TextField, Typography } from '@mui/material';
+import { useApolloClient, useMutation } from '@apollo/client';
+import { Alert, Box, MenuItem, Paper, Stack, Typography } from '@mui/material';
 import { IconBuildingBank, IconDeviceFloppy, IconFileText, IconSend } from '@tabler/icons-react';
 import toast from 'react-hot-toast';
 import Button from '@/components/core/Button';
 import CurrencyInput from '@/components/core/CurrencyInput';
+import TextField from '@/components/core/TextField';
 import LayoutModule from '@/layouts/Layout';
 import { useAuth } from '@/context/AuthContext';
 import {
   CREATE_SCHOLARSHIP_DRAFT,
-  SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES,
+  SCHOLARSHIP_APPLICATION_CACHE_FIELDS,
+  SCHOLARSHIP_DASHBOARD_CACHE_FIELDS,
   SUBMIT_SCHOLARSHIP_APPLICATION,
 } from '@/apollo/scholarshipOperations';
+import { invalidateActiveQueryFields } from '@/apollo/cacheInvalidation';
 import { useScholarshipLoginGuard } from './useScholarshipLoginGuard';
 
 type ScholarshipFormState = {
@@ -71,16 +74,13 @@ const buildInput = (form: ScholarshipFormState) => ({
 });
 
 export default function ScholarshipForm() {
+  const client = useApolloClient();
   const router = useRouter();
   const { user } = useAuth();
   const canRender = useScholarshipLoginGuard(user?.id);
   const [form, setForm] = React.useState(initialForm);
-  const [createDraft, createState] = useMutation(CREATE_SCHOLARSHIP_DRAFT, {
-    refetchQueries: SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES,
-  });
-  const [submitApplication, submitState] = useMutation(SUBMIT_SCHOLARSHIP_APPLICATION, {
-    refetchQueries: SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES,
-  });
+  const [createDraft, createState] = useMutation(CREATE_SCHOLARSHIP_DRAFT);
+  const [submitApplication, submitState] = useMutation(SUBMIT_SCHOLARSHIP_APPLICATION);
 
   const loading = createState.loading || submitState.loading;
 
@@ -102,6 +102,10 @@ export default function ScholarshipForm() {
       } else {
         toast.success('Scholarship draft saved.');
       }
+      await invalidateActiveQueryFields(client, [
+        ...SCHOLARSHIP_DASHBOARD_CACHE_FIELDS,
+        ...SCHOLARSHIP_APPLICATION_CACHE_FIELDS,
+      ]);
       router.push(application?.id ? `/scholarships/${application.id}` : '/scholarships');
     } catch (error: any) {
       toast.error(error?.message || 'Could not save scholarship application.');
@@ -127,15 +131,21 @@ export default function ScholarshipForm() {
         </Typography>
 
         <Paper variant="outlined" sx={{ p: { xs: 2, md: 3 }, borderRadius: 1 }}>
-          <Stack spacing={2.5}>
+          <Stack spacing={{ xs: 4, md: 3 }}>
             <Stack direction="row" spacing={1} alignItems="center">
               <IconFileText size={20} />
               <Typography fontSize={18} fontWeight={700}>
                 Request Details
               </Typography>
             </Stack>
-            <Box display="grid" gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }} gap={2}>
+            <Box
+              display="grid"
+              gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }}
+              columnGap={3}
+              rowGap={{ xs: 4, md: 3 }}
+            >
               <CurrencyInput
+                fullWidth
                 label="Requested amount"
                 size="small"
                 value={form.requestedAmount}
@@ -143,6 +153,7 @@ export default function ScholarshipForm() {
                 required
               />
               <TextField
+                fullWidth
                 select
                 label="Payment mode"
                 size="small"
@@ -154,6 +165,7 @@ export default function ScholarshipForm() {
               </TextField>
               {form.paymentMode === 'INSTALLMENT' && (
                 <CurrencyInput
+                  fullWidth
                   label="First installment amount"
                   size="small"
                   value={form.requestedFirstInstallmentAmount}
@@ -162,6 +174,7 @@ export default function ScholarshipForm() {
                 />
               )}
               <TextField
+                fullWidth
                 label="Proof days"
                 size="small"
                 type="number"
@@ -171,8 +184,16 @@ export default function ScholarshipForm() {
               />
             </Box>
 
-            <TextField label="Purpose" size="small" value={form.purpose} onChange={setField('purpose')} required />
             <TextField
+              fullWidth
+              label="Purpose"
+              size="small"
+              value={form.purpose}
+              onChange={setField('purpose')}
+              required
+            />
+            <TextField
+              fullWidth
               label="Reason"
               size="small"
               value={form.reason}
@@ -188,8 +209,14 @@ export default function ScholarshipForm() {
                 Payout Details
               </Typography>
             </Stack>
-            <Box display="grid" gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }} gap={2}>
+            <Box
+              display="grid"
+              gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }}
+              columnGap={3}
+              rowGap={{ xs: 4, md: 3 }}
+            >
               <TextField
+                fullWidth
                 select
                 label="Payout method"
                 size="small"
@@ -200,10 +227,18 @@ export default function ScholarshipForm() {
                 <MenuItem value="BANK_TRANSFER">Bank transfer</MenuItem>
               </TextField>
               {form.payoutMethod === 'UPI' ? (
-                <TextField label="UPI ID" size="small" value={form.upiId} onChange={setField('upiId')} required />
+                <TextField
+                  fullWidth
+                  label="UPI ID"
+                  size="small"
+                  value={form.upiId}
+                  onChange={setField('upiId')}
+                  required
+                />
               ) : (
                 <>
                   <TextField
+                    fullWidth
                     label="Account holder name"
                     size="small"
                     value={form.accountHolderName}
@@ -211,6 +246,7 @@ export default function ScholarshipForm() {
                     required
                   />
                   <TextField
+                    fullWidth
                     label="Account number"
                     size="small"
                     value={form.accountNumber}
@@ -218,14 +254,28 @@ export default function ScholarshipForm() {
                     required
                   />
                   <TextField
+                    fullWidth
                     label="Confirm account number"
                     size="small"
                     value={form.confirmAccountNumber}
                     onChange={setField('confirmAccountNumber')}
                     required
                   />
-                  <TextField label="IFSC" size="small" value={form.ifsc} onChange={setField('ifsc')} required />
-                  <TextField label="Bank name" size="small" value={form.bankName} onChange={setField('bankName')} />
+                  <TextField
+                    fullWidth
+                    label="IFSC"
+                    size="small"
+                    value={form.ifsc}
+                    onChange={setField('ifsc')}
+                    required
+                  />
+                  <TextField
+                    fullWidth
+                    label="Bank name"
+                    size="small"
+                    value={form.bankName}
+                    onChange={setField('bankName')}
+                  />
                 </>
               )}
             </Box>

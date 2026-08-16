@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { useMutation, useQuery } from '@apollo/client';
+import { useApolloClient, useMutation, useQuery } from '@apollo/client';
 import {
   Alert,
   Box,
@@ -19,7 +19,6 @@ import {
   TableHead,
   TableRow,
   Tabs,
-  TextField,
   Tooltip,
   Typography,
 } from '@mui/material';
@@ -48,6 +47,7 @@ import toast from 'react-hot-toast';
 import Button from '@/components/core/Button';
 import CurrencyInput from '@/components/core/CurrencyInput';
 import Dialog from '@/components/core/Dialog';
+import TextField from '@/components/core/TextField';
 import AlertDialog, { AlertDialogProps } from '@/components/common/AlertDialog';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import ReactSelect from '@/components/core/ReactSelect';
@@ -68,10 +68,11 @@ import {
   GET_SCHOLARSHIP_MENTOR_SUMMARIES,
   GET_SCHOLARSHIP_ORG_DASHBOARD,
   RECORD_MENTOR_FUND_ALLOCATION,
-  SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES,
+  SCHOLARSHIP_DASHBOARD_CACHE_FIELDS,
   START_SCHOLARSHIP_REVIEW,
 } from '@/apollo/scholarshipOperations';
-import { BILLING_SCHOLARSHIP_REFETCH_QUERIES, GET_ASSOCIATION_WALLET_SUMMARY } from '@/apollo/billingOperations';
+import { GET_ASSOCIATION_WALLET_SUMMARY } from '@/apollo/billingOperations';
+import { invalidateActiveQueryFields, invalidateBillingLedgerQueries } from '@/apollo/cacheInvalidation';
 import { formatCurrency, getFullName, humanizeScholarshipStatus } from './helpers';
 import { useScholarshipLoginGuard } from './useScholarshipLoginGuard';
 
@@ -83,7 +84,7 @@ type DashboardCardConfig = {
   icon: React.ReactNode;
 };
 
-const DashboardCard = ({
+const DashboardCardComponent = ({
   title,
   value,
   description,
@@ -122,14 +123,22 @@ const DashboardCard = ({
     )}
   </Paper>
 );
+const DashboardCard = React.memo(DashboardCardComponent);
+DashboardCard.displayName = 'DashboardCard';
 
 type DashboardVariant = 'mine' | 'mentor' | 'batch' | 'org';
 type MyRequestsWorkspaceTab = 'actions' | 'all';
 type MentorWorkspaceTab = 'funds' | 'requests';
 
+const displayDateFormatter = new Intl.DateTimeFormat('en-IN', {
+  day: '2-digit',
+  month: 'short',
+  year: 'numeric',
+});
+
 const formatDisplayDate = (date?: string | null) => {
   if (!date) return 'Not recorded';
-  return new Intl.DateTimeFormat('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(date));
+  return displayDateFormatter.format(new Date(date));
 };
 
 const getAllocationStatusMeta = (status?: string | null) => {
@@ -598,51 +607,24 @@ const getDashboardCards = (variant: DashboardVariant): DashboardCardConfig[] => 
   ];
 };
 
-const statusGroupsForVariant = (dashboard: any, variant: DashboardVariant) => [
-  { title: 'Applications', rows: dashboard?.byStatus },
-  { title: 'Proof', rows: dashboard?.byProofStatus },
-  { title: 'Refunds', rows: dashboard?.byRefundStatus },
-  ...(variant !== 'mine' ? [{ title: 'Transactions', rows: dashboard?.byTransactionStatus }] : []),
-  ...(variant === 'mentor' || variant === 'org'
-    ? [{ title: 'Mentor funds', rows: dashboard?.byAllocationStatus }]
-    : []),
-];
-
-const DashboardStatusBanner = ({ dashboard, variant }: { dashboard: any; variant: DashboardVariant }) => {
-  const badges = statusGroupsForVariant(dashboard, variant).flatMap((group) =>
-    (group.rows || [])
-      .filter((row: any) => Number(row.count || 0) > 0)
-      .map((row: any) => ({
-        key: `${group.title}-${row.key}`,
-        label: `${group.title}: ${humanizeScholarshipStatus(row.key)} (${row.count})`,
-      }))
-  );
-
-  if (!badges.length) return null;
-
-  return (
-    <Paper variant="outlined" sx={{ p: 1.5, borderRadius: 1, mb: 2, bgcolor: 'grey.50' }}>
-      <Stack direction="row" alignItems="center" gap={1} flexWrap="wrap">
-        <Box component="span" sx={{ display: 'inline-flex', color: 'primary.main' }}>
-          <IconClipboardList size={18} />
-        </Box>
-        <Typography fontSize={14} fontWeight={700} mr={0.5}>
-          Current status
-        </Typography>
-        {badges.map((badge) => (
-          <Chip key={badge.key} size="small" variant="outlined" label={badge.label} />
-        ))}
-      </Stack>
-    </Paper>
-  );
-};
-
-const DashboardSummary = ({ data, loading, variant }: { data: any; loading: boolean; variant: DashboardVariant }) => {
+const DashboardSummaryComponent = ({
+  data,
+  loading,
+  variant,
+}: {
+  data: any;
+  loading: boolean;
+  variant: DashboardVariant;
+}) => {
   const dashboard = getDashboardFromData(data);
-  const dashboardCards = getDashboardCards(variant).filter((card) => {
-    if (variant !== 'org' || !orgValueOnlyMetricKeys.has(card.key)) return true;
-    return Number(dashboard?.[card.key] || 0) > 0;
-  });
+  const dashboardCards = React.useMemo(
+    () =>
+      getDashboardCards(variant).filter((card) => {
+        if (variant !== 'org' || !orgValueOnlyMetricKeys.has(card.key)) return true;
+        return Number(dashboard?.[card.key] || 0) > 0;
+      }),
+    [dashboard, variant]
+  );
 
   if (loading) {
     return (
@@ -654,7 +636,6 @@ const DashboardSummary = ({ data, loading, variant }: { data: any; loading: bool
 
   return (
     <>
-      <DashboardStatusBanner dashboard={dashboard} variant={variant} />
       <Box
         display="grid"
         gridTemplateColumns={{ xs: '1fr', sm: 'repeat(2, minmax(0, 1fr))', lg: 'repeat(5, minmax(0, 1fr))' }}
@@ -673,6 +654,8 @@ const DashboardSummary = ({ data, loading, variant }: { data: any; loading: bool
     </>
   );
 };
+const DashboardSummary = React.memo(DashboardSummaryComponent);
+DashboardSummary.displayName = 'DashboardSummary';
 
 const WorkspaceStatusBadges = ({ children }: { children: React.ReactNode }) => (
   <Paper variant="outlined" sx={{ p: 1.5, borderRadius: 1, mb: 2, bgcolor: 'grey.50' }}>
@@ -685,7 +668,7 @@ const WorkspaceStatusBadges = ({ children }: { children: React.ReactNode }) => (
   </Paper>
 );
 
-const ApplicationsTable = ({
+const ApplicationsTableComponent = ({
   applications,
   loading,
   actionRenderer,
@@ -790,6 +773,8 @@ const ApplicationsTable = ({
     </Paper>
   );
 };
+const ApplicationsTable = React.memo(ApplicationsTableComponent);
+ApplicationsTable.displayName = 'ApplicationsTable';
 
 const MyRequestsTable = ({ applications, loading }: { applications: any[]; loading: boolean }) => (
   <ApplicationsTable
@@ -833,8 +818,8 @@ const MyRequestsWorkspace = ({
   applicationsLoading: boolean;
 }) => {
   const [requestTab, setRequestTab] = React.useState<MyRequestsWorkspaceTab>('actions');
-  const actionApplications = applications.filter((application) =>
-    [
+  const { actionApplications, awaitingMentorCount, completedCount } = React.useMemo(() => {
+    const actionStatuses = new Set([
       'DRAFT',
       'MORE_INFO_REQUIRED',
       'PAYMENT_CONFIRMATION_PENDING',
@@ -844,14 +829,30 @@ const MyRequestsWorkspace = ({
       'PROOF_MORE_INFO_REQUIRED',
       'WRONG_DISBURSEMENT',
       'REFUND_IN_PROGRESS',
-    ].includes(application.status)
-  );
-  const awaitingMentorCount = applications.filter((application) =>
-    ['ROUTING_PENDING', 'SUBMITTED', 'RESUBMITTED', 'UNDER_REVIEW', 'PROOF_FULL_SUBMITTED'].includes(application.status)
-  ).length;
-  const completedCount = applications.filter((application) =>
-    ['PROOF_VERIFIED', 'CLOSED'].includes(application.status)
-  ).length;
+    ]);
+    const awaitingStatuses = new Set([
+      'ROUTING_PENDING',
+      'SUBMITTED',
+      'RESUBMITTED',
+      'UNDER_REVIEW',
+      'PROOF_FULL_SUBMITTED',
+    ]);
+    const actionItems: any[] = [];
+    let awaitingCount = 0;
+    let doneCount = 0;
+
+    applications.forEach((application) => {
+      if (actionStatuses.has(application.status)) actionItems.push(application);
+      if (awaitingStatuses.has(application.status)) awaitingCount += 1;
+      if (application.status === 'PROOF_VERIFIED' || application.status === 'CLOSED') doneCount += 1;
+    });
+
+    return {
+      actionApplications: actionItems,
+      awaitingMentorCount: awaitingCount,
+      completedCount: doneCount,
+    };
+  }, [applications]);
 
   return (
     <>
@@ -908,7 +909,7 @@ const MyRequestsWorkspace = ({
   );
 };
 
-const MentorFundsTable = ({
+const MentorFundsTableComponent = ({
   allocations,
   loading,
   canConfirm,
@@ -1012,8 +1013,10 @@ const MentorFundsTable = ({
     </Paper>
   );
 };
+const MentorFundsTable = React.memo(MentorFundsTableComponent);
+MentorFundsTable.displayName = 'MentorFundsTable';
 
-const MentorRequestsTable = ({
+const MentorRequestsTableComponent = ({
   applications,
   loading,
   canStartReview,
@@ -1066,6 +1069,8 @@ const MentorRequestsTable = ({
     }}
   />
 );
+const MentorRequestsTable = React.memo(MentorRequestsTableComponent);
+MentorRequestsTable.displayName = 'MentorRequestsTable';
 
 const MentorWorkspace = ({
   dashboardData,
@@ -1077,6 +1082,8 @@ const MentorWorkspace = ({
   canConfirmAllocation,
   canDisputeAllocation,
   canStartReview,
+  mentorTab,
+  onMentorTabChange,
 }: {
   dashboardData: any;
   dashboardLoading: boolean;
@@ -1087,8 +1094,10 @@ const MentorWorkspace = ({
   canConfirmAllocation: boolean;
   canDisputeAllocation: boolean;
   canStartReview: boolean;
+  mentorTab: MentorWorkspaceTab;
+  onMentorTabChange: (tab: MentorWorkspaceTab) => void;
 }) => {
-  const [mentorTab, setMentorTab] = React.useState<MentorWorkspaceTab>('funds');
+  const client = useApolloClient();
   const [alertDialog, setAlertDialog] = React.useState<Partial<AlertDialogProps>>({});
   const [disputeDialog, setDisputeDialog] = React.useState<{
     allocation: any | null;
@@ -1099,77 +1108,101 @@ const MentorWorkspace = ({
   }>({ allocation: null, amount: null, reason: '', state: 'form' });
   const [startingApplicationId, setStartingApplicationId] = React.useState<string | null>(null);
 
-  const [confirmAllocation] = useMutation(CONFIRM_MENTOR_FUND_ALLOCATION, {
-    refetchQueries: SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES,
-  });
-  const [disputeAllocation] = useMutation(DISPUTE_MENTOR_FUND_ALLOCATION, {
-    refetchQueries: SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES,
-  });
-  const [startReview] = useMutation(START_SCHOLARSHIP_REVIEW, {
-    refetchQueries: SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES,
-  });
+  const [confirmAllocation] = useMutation(CONFIRM_MENTOR_FUND_ALLOCATION);
+  const [disputeAllocation] = useMutation(DISPUTE_MENTOR_FUND_ALLOCATION);
+  const [startReview] = useMutation(START_SCHOLARSHIP_REVIEW);
 
-  const pendingFundCount = allocations.filter(
-    (allocation) => allocation.status === 'PENDING_MENTOR_CONFIRMATION'
-  ).length;
-  const openRequestCount = applications.filter((application) =>
-    ['SUBMITTED', 'RESUBMITTED', 'UNDER_REVIEW', 'PROOF_FULL_SUBMITTED'].includes(application.status)
-  ).length;
+  const { pendingFundCount, openRequestCount } = React.useMemo(() => {
+    const mentorDashboard = getDashboardFromData(dashboardData);
+    const loadedPendingFundCount = allocations.filter(
+      (allocation) => allocation.status === 'PENDING_MENTOR_CONFIRMATION'
+    ).length;
+    const loadedOpenRequestCount = applications.filter((application) =>
+      ['SUBMITTED', 'RESUBMITTED', 'UNDER_REVIEW', 'PROOF_FULL_SUBMITTED'].includes(application.status)
+    ).length;
 
-  const closeAlertDialog = () => setAlertDialog({});
+    return {
+      pendingFundCount:
+        loadedPendingFundCount ||
+        Number(
+          mentorDashboard?.byAllocationStatus?.find((status: any) => status.key === 'PENDING_MENTOR_CONFIRMATION')
+            ?.count || 0
+        ),
+      openRequestCount:
+        loadedOpenRequestCount ||
+        Number(mentorDashboard?.applicationsAwaitingReview || 0) +
+          Number(mentorDashboard?.fullProofsAwaitingVerification || 0),
+    };
+  }, [allocations, applications, dashboardData]);
+
+  const closeAlertDialog = React.useCallback(() => setAlertDialog({}), []);
   const closeDisputeDialog = () => {
     if (disputeDialog.state === 'loading') return;
     setDisputeDialog({ allocation: null, amount: null, reason: '', state: 'form' });
   };
 
-  const openConfirmDialog = (allocation: any) => {
-    setAlertDialog({
-      open: true,
-      action: 'update',
-      title: 'Confirm Funds Received',
-      message: (
-        <Typography>
-          Confirm that you received {formatCurrency(allocation.amount)} for Batch {allocation.batch}. Once confirmed,
-          this amount becomes available for scholarship approvals from your mentor balance.
-        </Typography>
-      ),
-      okayButtonProps: { title: 'Confirm Received' },
-      onCancel: closeAlertDialog,
-      onClose: closeAlertDialog,
-      onOkay: async () => {
-        setAlertDialog({
-          open: true,
-          action: 'loading',
-          title: 'Confirming Funds',
-          message: 'Please wait while we update your mentor fund balance.',
-          onCancel: closeAlertDialog,
-          onClose: closeAlertDialog,
-        });
-        try {
-          await confirmAllocation({ variables: { allocationId: allocation.id } });
+  const openConfirmDialog = React.useCallback(
+    (allocation: any) => {
+      setAlertDialog({
+        open: true,
+        action: 'update',
+        title: 'Confirm Funds Received',
+        message: (
+          <Typography>
+            Confirm that you received {formatCurrency(allocation.amount)} for Batch {allocation.batch}. Once confirmed,
+            this amount becomes available for scholarship approvals from your mentor balance.
+          </Typography>
+        ),
+        okayButtonProps: { title: 'Confirm Received' },
+        onCancel: closeAlertDialog,
+        onClose: closeAlertDialog,
+        onOkay: async () => {
           setAlertDialog({
             open: true,
-            action: 'success',
-            title: 'Funds Confirmed',
-            message: 'Your mentor fund balance has been updated.',
-            okayButtonProps: { title: 'Done' },
+            action: 'loading',
+            title: 'Confirming Funds',
+            message: 'Please wait while we update your mentor fund balance.',
             onCancel: closeAlertDialog,
             onClose: closeAlertDialog,
           });
-        } catch (error: any) {
-          setAlertDialog({
-            open: true,
-            action: 'error',
-            title: 'Could Not Confirm Funds',
-            message: error?.message || 'Please try again.',
-            okayButtonProps: { title: 'Close' },
-            onCancel: closeAlertDialog,
-            onClose: closeAlertDialog,
-          });
-        }
-      },
+          try {
+            await confirmAllocation({ variables: { allocationId: allocation.id } });
+            await invalidateActiveQueryFields(client, SCHOLARSHIP_DASHBOARD_CACHE_FIELDS);
+            await invalidateBillingLedgerQueries(client, { invalidateWallet: false });
+            setAlertDialog({
+              open: true,
+              action: 'success',
+              title: 'Funds Confirmed',
+              message: 'Your mentor fund balance has been updated.',
+              okayButtonProps: { title: 'Done' },
+              onCancel: closeAlertDialog,
+              onClose: closeAlertDialog,
+            });
+          } catch (error: any) {
+            setAlertDialog({
+              open: true,
+              action: 'error',
+              title: 'Could Not Confirm Funds',
+              message: error?.message || 'Please try again.',
+              okayButtonProps: { title: 'Close' },
+              onCancel: closeAlertDialog,
+              onClose: closeAlertDialog,
+            });
+          }
+        },
+      });
+    },
+    [client, closeAlertDialog, confirmAllocation]
+  );
+
+  const openDisputeDialog = React.useCallback((allocation: any) => {
+    setDisputeDialog({
+      allocation,
+      amount: Number(allocation.disputedAmount || allocation.amount || 0) || null,
+      reason: '',
+      state: 'form',
     });
-  };
+  }, []);
 
   const submitDispute = async () => {
     if (!disputeDialog.allocation || !disputeDialog.amount || !disputeDialog.reason.trim()) return;
@@ -1182,6 +1215,8 @@ const MentorWorkspace = ({
           reason: disputeDialog.reason.trim(),
         },
       });
+      await invalidateActiveQueryFields(client, ['getMentorFundAllocations', ...SCHOLARSHIP_DASHBOARD_CACHE_FIELDS]);
+      await invalidateBillingLedgerQueries(client, { invalidateWallet: false });
       setDisputeDialog((current) => ({
         ...current,
         state: 'success',
@@ -1196,56 +1231,60 @@ const MentorWorkspace = ({
     }
   };
 
-  const openStartReviewDialog = (application: any) => {
-    setAlertDialog({
-      open: true,
-      action: 'update',
-      title: 'Start Beneficiary Review?',
-      message: (
-        <Typography>
-          Start review for {application.referenceNumber}. This moves the request into your active review queue.
-        </Typography>
-      ),
-      okayButtonProps: { title: 'Start Review' },
-      onCancel: closeAlertDialog,
-      onClose: closeAlertDialog,
-      onOkay: async () => {
-        setStartingApplicationId(application.id);
-        setAlertDialog({
-          open: true,
-          action: 'loading',
-          title: 'Starting Review',
-          message: 'Please wait while we update the request status.',
-          onCancel: closeAlertDialog,
-          onClose: closeAlertDialog,
-        });
-        try {
-          await startReview({ variables: { applicationId: application.id } });
+  const openStartReviewDialog = React.useCallback(
+    (application: any) => {
+      setAlertDialog({
+        open: true,
+        action: 'update',
+        title: 'Start Beneficiary Review?',
+        message: (
+          <Typography>
+            Start review for {application.referenceNumber}. This moves the request into your active review queue.
+          </Typography>
+        ),
+        okayButtonProps: { title: 'Start Review' },
+        onCancel: closeAlertDialog,
+        onClose: closeAlertDialog,
+        onOkay: async () => {
+          setStartingApplicationId(application.id);
           setAlertDialog({
             open: true,
-            action: 'success',
-            title: 'Review Started',
-            message: 'The request is now ready for your review decision.',
-            okayButtonProps: { title: 'Done' },
+            action: 'loading',
+            title: 'Starting Review',
+            message: 'Please wait while we update the request status.',
             onCancel: closeAlertDialog,
             onClose: closeAlertDialog,
           });
-        } catch (error: any) {
-          setAlertDialog({
-            open: true,
-            action: 'error',
-            title: 'Could Not Start Review',
-            message: error?.message || 'Please try again.',
-            okayButtonProps: { title: 'Close' },
-            onCancel: closeAlertDialog,
-            onClose: closeAlertDialog,
-          });
-        } finally {
-          setStartingApplicationId(null);
-        }
-      },
-    });
-  };
+          try {
+            await startReview({ variables: { applicationId: application.id } });
+            await invalidateActiveQueryFields(client, SCHOLARSHIP_DASHBOARD_CACHE_FIELDS);
+            setAlertDialog({
+              open: true,
+              action: 'success',
+              title: 'Review Started',
+              message: 'The request is now ready for your review decision.',
+              okayButtonProps: { title: 'Done' },
+              onCancel: closeAlertDialog,
+              onClose: closeAlertDialog,
+            });
+          } catch (error: any) {
+            setAlertDialog({
+              open: true,
+              action: 'error',
+              title: 'Could Not Start Review',
+              message: error?.message || 'Please try again.',
+              okayButtonProps: { title: 'Close' },
+              onCancel: closeAlertDialog,
+              onClose: closeAlertDialog,
+            });
+          } finally {
+            setStartingApplicationId(null);
+          }
+        },
+      });
+    },
+    [client, closeAlertDialog, startReview]
+  );
 
   return (
     <>
@@ -1277,7 +1316,7 @@ const MentorWorkspace = ({
         <DashboardSummary data={dashboardData} loading={dashboardLoading} variant="mentor" />
       </Box>
 
-      <Tabs value={mentorTab} onChange={(_, value) => setMentorTab(value)} sx={{ mb: 2 }}>
+      <Tabs value={mentorTab} onChange={(_, value) => onMentorTabChange(value)} sx={{ mb: 2 }}>
         <Tab value="funds" icon={<IconWallet size={18} />} iconPosition="start" label="Funds" />
         <Tab
           value="requests"
@@ -1294,14 +1333,7 @@ const MentorWorkspace = ({
           canConfirm={canConfirmAllocation}
           canDispute={canDisputeAllocation}
           onConfirm={openConfirmDialog}
-          onDispute={(allocation) =>
-            setDisputeDialog({
-              allocation,
-              amount: Number(allocation.disputedAmount || allocation.amount || 0) || null,
-              reason: '',
-              state: 'form',
-            })
-          }
+          onDispute={openDisputeDialog}
         />
       )}
 
@@ -1361,18 +1393,20 @@ const MentorWorkspace = ({
           {disputeDialog.state === 'success' || disputeDialog.state === 'error' ? (
             <Alert severity={disputeDialog.state === 'success' ? 'success' : 'error'}>{disputeDialog.message}</Alert>
           ) : (
-            <Stack spacing={2}>
+            <Stack spacing={{ xs: 4, md: 3 }}>
               <Alert severity="warning">
                 Use this only when the received amount, reference, or transfer details do not match what finance
                 recorded. Finance will review the issue before the fund can be fully settled.
               </Alert>
               <CurrencyInput
+                fullWidth
                 size="small"
                 label="Amount with issue"
                 value={disputeDialog.amount}
                 onValueChange={(value) => setDisputeDialog((current) => ({ ...current, amount: value }))}
               />
               <TextField
+                fullWidth
                 label="What is wrong?"
                 size="small"
                 value={disputeDialog.reason}
@@ -1389,7 +1423,9 @@ const MentorWorkspace = ({
   );
 };
 
-const MentorSummaryTable = ({ mentors, loading }: { mentors: any[]; loading: boolean }) => {
+const MentorSummaryTable = React.memo(({ mentors, loading }: { mentors: any[]; loading: boolean }) => {
+  const [selectedMentor, setSelectedMentor] = React.useState<any | null>(null);
+
   if (loading) {
     return (
       <Box py={5} display="flex" justifyContent="center">
@@ -1406,64 +1442,128 @@ const MentorSummaryTable = ({ mentors, loading }: { mentors: any[]; loading: boo
     );
   }
 
+  const selectedSummary = selectedMentor?.summary || {};
+
   return (
-    <Paper variant="outlined" sx={{ borderRadius: 1, overflowX: 'auto' }}>
-      <Table sx={{ minWidth: 1240 }}>
-        <TableHead>
-          <TableRow>
-            <TableCell>Mentor</TableCell>
-            <TableCell>Assigned batches</TableCell>
-            <TableCell align="right">Applications</TableCell>
-            <TableCell align="right">Total disbursed to mentor</TableCell>
-            <TableCell align="right">Confirmed allocation</TableCell>
-            <TableCell align="right">Disputed</TableCell>
-            <TableCell align="right">Released to beneficiaries</TableCell>
-            <TableCell align="right">Pending beneficiary confirmation</TableCell>
-            <TableCell align="right">Custody balance</TableCell>
-            <TableCell align="right">Available capacity</TableCell>
-            <TableCell align="right">Active beneficiaries</TableCell>
-            <TableCell align="right">Overdue proof amount</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {mentors.map((row) => {
-            const summary = row.summary || {};
-            return (
-              <TableRow key={row.mentorUserId} hover>
-                <TableCell>
-                  <ProfilePicture
-                    id={row.mentor?.id}
-                    src={row.mentor?.profileImage}
-                    title={getFullName(row.mentor) || row.mentor?.email || 'Batch Mentor'}
-                    summary={row.mentor?.email}
-                    size={38}
-                  />
-                </TableCell>
-                <TableCell>
-                  <Stack direction="row" gap={0.75} flexWrap="wrap">
-                    {(row.assignedBatches || []).map((batch: number) => (
-                      <Chip key={batch} size="small" variant="outlined" label={`Batch ${batch}`} />
-                    ))}
-                  </Stack>
-                </TableCell>
-                <TableCell align="right">{summary.totalApplications || 0}</TableCell>
-                <TableCell align="right">{formatCurrency(summary.totalAllocationRecorded)}</TableCell>
-                <TableCell align="right">{formatCurrency(summary.confirmedAllocation)}</TableCell>
-                <TableCell align="right">{formatCurrency(summary.disputedIncomingAllocation)}</TableCell>
-                <TableCell align="right">{formatCurrency(summary.confirmedBeneficiaryDisbursement)}</TableCell>
-                <TableCell align="right">{formatCurrency(summary.pendingBeneficiaryConfirmation)}</TableCell>
-                <TableCell align="right">{formatCurrency(summary.mentorCustodyBalance)}</TableCell>
-                <TableCell align="right">{formatCurrency(summary.approvalCapacity)}</TableCell>
-                <TableCell align="right">{summary.activeBeneficiaryCount || 0}</TableCell>
-                <TableCell align="right">{formatCurrency(summary.overdueProofAmount)}</TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
-    </Paper>
+    <>
+      <Paper variant="outlined" sx={{ borderRadius: 1, overflowX: 'auto' }}>
+        <Table sx={{ minWidth: 780 }}>
+          <TableHead>
+            <TableRow>
+              <TableCell>Mentor</TableCell>
+              <TableCell>Assigned batches</TableCell>
+              <TableCell align="right">Funds with mentor</TableCell>
+              <TableCell align="right">Available to approve</TableCell>
+              <TableCell align="right">Pending confirmation</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {mentors.map((row) => {
+              const summary = row.summary || {};
+              const openDetails = () => setSelectedMentor(row);
+              return (
+                <TableRow
+                  key={row.mentorUserId}
+                  hover
+                  tabIndex={0}
+                  onClick={openDetails}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                      event.preventDefault();
+                      openDetails();
+                    }
+                  }}
+                  sx={{ cursor: 'pointer' }}
+                >
+                  <TableCell>
+                    <Box onClick={(event) => event.stopPropagation()}>
+                      <ProfilePicture
+                        id={row.mentor?.id}
+                        src={row.mentor?.profileImage}
+                        title={getFullName(row.mentor) || row.mentor?.email || 'Batch Mentor'}
+                        summary={row.mentor?.email}
+                        size={38}
+                      />
+                    </Box>
+                  </TableCell>
+                  <TableCell>
+                    <Stack direction="row" gap={0.75} flexWrap="wrap">
+                      {(row.assignedBatches || []).map((batch: number) => (
+                        <Chip key={batch} size="small" variant="outlined" label={`Batch ${batch}`} />
+                      ))}
+                    </Stack>
+                  </TableCell>
+                  <TableCell align="right">{formatCurrency(summary.mentorCustodyBalance)}</TableCell>
+                  <TableCell align="right">{formatCurrency(summary.approvalCapacity)}</TableCell>
+                  <TableCell align="right">{formatCurrency(summary.pendingBeneficiaryConfirmation)}</TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </Paper>
+
+      <Dialog
+        open={Boolean(selectedMentor)}
+        maxWidth="760px"
+        title="Mentor Fund Details"
+        subTitle={
+          selectedMentor
+            ? `${getFullName(selectedMentor.mentor) || selectedMentor.mentor?.email || 'Batch Mentor'} fund overview`
+            : undefined
+        }
+        hideFooter
+        onClose={() => setSelectedMentor(null)}
+      >
+        {selectedMentor && (
+          <Box p={2.5}>
+            <Stack spacing={2.5}>
+              <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" gap={2}>
+                <ProfilePicture
+                  id={selectedMentor.mentor?.id}
+                  src={selectedMentor.mentor?.profileImage}
+                  title={getFullName(selectedMentor.mentor) || selectedMentor.mentor?.email || 'Batch Mentor'}
+                  summary={selectedMentor.mentor?.email}
+                  size={44}
+                />
+                <Stack direction="row" gap={0.75} flexWrap="wrap" justifyContent={{ sm: 'flex-end' }}>
+                  {(selectedMentor.assignedBatches || []).map((batch: number) => (
+                    <Chip key={batch} size="small" variant="outlined" label={`Batch ${batch}`} />
+                  ))}
+                </Stack>
+              </Stack>
+              <Divider />
+              <Box display="grid" gridTemplateColumns={{ xs: '1fr', sm: 'repeat(2, minmax(0, 1fr))' }} gap={1.5}>
+                {[
+                  ['Applications', selectedSummary.totalApplications || 0],
+                  ['Active beneficiaries', selectedSummary.activeBeneficiaryCount || 0],
+                  ['Total released to mentor', formatCurrency(selectedSummary.totalAllocationRecorded)],
+                  ['Confirmed allocation', formatCurrency(selectedSummary.confirmedAllocation)],
+                  ['Allocation in dispute', formatCurrency(selectedSummary.disputedIncomingAllocation)],
+                  ['Funds with mentor', formatCurrency(selectedSummary.mentorCustodyBalance)],
+                  ['Available to approve', formatCurrency(selectedSummary.approvalCapacity)],
+                  ['Released to beneficiaries', formatCurrency(selectedSummary.confirmedBeneficiaryDisbursement)],
+                  ['Pending beneficiary confirmation', formatCurrency(selectedSummary.pendingBeneficiaryConfirmation)],
+                  ['Overdue proof amount', formatCurrency(selectedSummary.overdueProofAmount)],
+                ].map(([label, value]) => (
+                  <Paper key={String(label)} variant="outlined" sx={{ p: 1.5, borderRadius: 1 }}>
+                    <Typography fontSize={12} color="grey.600">
+                      {label}
+                    </Typography>
+                    <Typography fontSize={17} fontWeight={700} mt={0.25}>
+                      {value}
+                    </Typography>
+                  </Paper>
+                ))}
+              </Box>
+            </Stack>
+          </Box>
+        )}
+      </Dialog>
+    </>
   );
-};
+});
+MentorSummaryTable.displayName = 'MentorSummaryTable';
 
 const todayDateInputValue = () => new Date().toISOString().slice(0, 10);
 
@@ -1491,6 +1591,7 @@ const MentorFundReleaseDialog = ({
   onClose: () => void;
   mentors: any[];
 }) => {
+  const client = useApolloClient();
   const [form, setForm] = React.useState<{
     selectedMentor: any | null;
     amount: number | null;
@@ -1506,9 +1607,7 @@ const MentorFundReleaseDialog = ({
     reference: '',
     notes: '',
   });
-  const [recordAllocation, allocationState] = useMutation(RECORD_MENTOR_FUND_ALLOCATION, {
-    refetchQueries: [...SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES, ...BILLING_SCHOLARSHIP_REFETCH_QUERIES],
-  });
+  const [recordAllocation, allocationState] = useMutation(RECORD_MENTOR_FUND_ALLOCATION);
   const walletQuery = useQuery(GET_ASSOCIATION_WALLET_SUMMARY, {
     skip: !open,
     fetchPolicy: 'cache-and-network',
@@ -1563,6 +1662,22 @@ const MentorFundReleaseDialog = ({
           },
         },
       });
+      client.cache.modify({
+        id: 'ROOT_QUERY',
+        fields: {
+          getAssociationWalletSummary(existing) {
+            if (!existing) return existing;
+            const releasedAmount = Number(form.amount || 0);
+            return {
+              ...existing,
+              totalDebits: Number(existing.totalDebits || 0) + releasedAmount,
+              availableFunds: Number(existing.availableFunds || 0) - releasedAmount,
+            };
+          },
+        },
+      });
+      await invalidateActiveQueryFields(client, [...SCHOLARSHIP_DASHBOARD_CACHE_FIELDS, 'getMentorFundAllocations']);
+      await invalidateBillingLedgerQueries(client, { invalidateWallet: false });
       toast.success('Funds allocated to mentor.');
       handleClose();
     } catch (error: any) {
@@ -1593,7 +1708,7 @@ const MentorFundReleaseDialog = ({
           This records funds released by JNVPJAA to a batch mentor. The mentor will confirm the received amount before
           it becomes available for beneficiary approvals.
         </Alert>
-        <Stack spacing={2}>
+        <Stack spacing={{ xs: 4, md: 3 }}>
           <Paper variant="outlined" sx={{ p: 1.5, borderRadius: 1, bgcolor: 'success.50' }}>
             <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" gap={1}>
               <Typography fontSize={14} color="grey.700">
@@ -1604,26 +1719,34 @@ const MentorFundReleaseDialog = ({
               </Typography>
             </Stack>
           </Paper>
-          <Typography variant="caption" color="text.secondary">
-            Mentor
-          </Typography>
-          <ReactSelect
-            options={mentorOptions}
-            value={form.selectedMentor}
-            placeholder="Select mentor to allocate funds"
-            size="small"
-            isSearchable
-            showAvatars
-            noOptionsMessage="No active batch mentor found"
-            onChange={(option) =>
-              setForm((current) => ({
-                ...current,
-                selectedMentor: Array.isArray(option) ? null : option,
-              }))
-            }
-          />
-          <Box display="grid" gridTemplateColumns={{ xs: '1fr', md: '1fr 180px' }} gap={1.5}>
+          <Box>
+            <Typography variant="caption" color="text.secondary">
+              Mentor
+            </Typography>
+            <ReactSelect
+              options={mentorOptions}
+              value={form.selectedMentor}
+              placeholder="Select mentor to allocate funds"
+              size="small"
+              isSearchable
+              showAvatars
+              noOptionsMessage="No active batch mentor found"
+              onChange={(option) =>
+                setForm((current) => ({
+                  ...current,
+                  selectedMentor: Array.isArray(option) ? null : option,
+                }))
+              }
+            />
+          </Box>
+          <Box
+            display="grid"
+            gridTemplateColumns={{ xs: '1fr', md: '1fr 180px' }}
+            columnGap={3}
+            rowGap={{ xs: 4, md: 3 }}
+          >
             <CurrencyInput
+              fullWidth
               label="Amount"
               size="small"
               value={form.amount}
@@ -1632,6 +1755,7 @@ const MentorFundReleaseDialog = ({
               onValueChange={(value) => setForm((current) => ({ ...current, amount: value }))}
             />
             <TextField
+              fullWidth
               label="Transfer date"
               size="small"
               type="date"
@@ -1640,14 +1764,27 @@ const MentorFundReleaseDialog = ({
               InputLabelProps={{ shrink: true }}
             />
           </Box>
-          <Box display="grid" gridTemplateColumns={{ xs: '1fr', md: '180px 1fr' }} gap={1.5}>
-            <TextField select label="Transfer method" size="small" value={form.method} onChange={setField('method')}>
+          <Box
+            display="grid"
+            gridTemplateColumns={{ xs: '1fr', md: '180px 1fr' }}
+            columnGap={3}
+            rowGap={{ xs: 4, md: 3 }}
+          >
+            <TextField
+              fullWidth
+              select
+              label="Transfer method"
+              size="small"
+              value={form.method}
+              onChange={setField('method')}
+            >
               <MenuItem value="BANK_TRANSFER">Bank transfer</MenuItem>
               <MenuItem value="UPI">UPI</MenuItem>
               <MenuItem value="CHEQUE">Cheque</MenuItem>
               <MenuItem value="CASH">Cash</MenuItem>
             </TextField>
             <TextField
+              fullWidth
               label="Reference ID"
               size="small"
               value={form.reference}
@@ -1656,6 +1793,7 @@ const MentorFundReleaseDialog = ({
             />
           </Box>
           <TextField
+            fullWidth
             label="Internal note"
             size="small"
             value={form.notes}
@@ -1681,12 +1819,13 @@ const MentorFundReleaseDialog = ({
 };
 
 export default function Scholarships() {
-  const { can, user, roles, access, hasRole, hasPosition } = useAuth();
+  const { can, user, roles, hasRole, hasPosition } = useAuth();
   const canRender = useScholarshipLoginGuard(user?.id);
   const canCreate = can(PERMISSION_CODES.SCHOLARSHIP_APPLICATION_CREATE);
   const canReadOrg = can(PERMISSION_CODES.SCHOLARSHIP_DASHBOARD_READ_ORG);
   const canReadMentor = can(PERMISSION_CODES.SCHOLARSHIP_DASHBOARD_READ_MENTOR);
   const canReadBatch = can(PERMISSION_CODES.SCHOLARSHIP_DASHBOARD_READ_BATCH);
+  const canAccessBatchView = canReadBatch || canReadOrg;
   const canReleaseMentorFunds =
     can(PERMISSION_CODES.SCHOLARSHIP_ALLOCATION_CREATE) &&
     (hasRole(ROLE_CODES.FINANCE_MANAGER) || hasPosition(EXECUTIVE_POSITION_CODES.SECRETARY));
@@ -1698,14 +1837,23 @@ export default function Scholarships() {
       roles
         ?.filter((role: any) => role.code === ROLE_CODES.BATCH_COORDINATOR && role.scopeBatch)
         .map((role: any) => Number(role.scopeBatch)) || [];
-    const batches = access?.hasFullAccess ? getBatchOptions().map((batch) => Number(batch.value)) : scopedBatches;
+    const batches = canReadOrg ? getBatchOptions().map((batch) => Number(batch.value)) : scopedBatches;
     return Array.from(new Set(batches))
       .filter((batch) => batch > 0)
       .sort((a, b) => b - a)
       .map((batch) => ({ value: String(batch), label: `Batch ${batch}` }));
-  }, [access?.hasFullAccess, roles]);
+  }, [canReadOrg, roles]);
   const [selectedCoordinatorBatch, setSelectedCoordinatorBatch] = React.useState('');
-  const [tab, setTab] = React.useState<DashboardVariant>('mine');
+  const [tab, setTab] = React.useState<DashboardVariant>(() =>
+    canReadOrg
+      ? 'org'
+      : canReadMentor
+        ? 'mentor'
+        : canAccessBatchView && coordinatorBatchOptions.length
+          ? 'batch'
+          : 'mine'
+  );
+  const [mentorWorkspaceTab, setMentorWorkspaceTab] = React.useState<MentorWorkspaceTab>('funds');
   const [releaseDialogOpen, setReleaseDialogOpen] = React.useState(false);
   const showMentorSummaries = tab === 'mentor' && canReadOrg;
   const showMentorWorkspace = tab === 'mentor' && canReadMentor && !canReadOrg;
@@ -1716,10 +1864,10 @@ export default function Scholarships() {
       setTab('org');
     } else if (canReadMentor) {
       setTab('mentor');
-    } else if (canReadBatch && coordinatorBatchOptions.length) {
+    } else if (canAccessBatchView && coordinatorBatchOptions.length) {
       setTab('batch');
     }
-  }, [canReadBatch, canReadMentor, canReadOrg, canRender, coordinatorBatchOptions.length]);
+  }, [canAccessBatchView, canReadMentor, canReadOrg, canRender, coordinatorBatchOptions.length]);
 
   React.useEffect(() => {
     if (!selectedCoordinatorBatch && coordinatorBatchOptions.length) {
@@ -1740,7 +1888,7 @@ export default function Scholarships() {
   const dashboard = useQuery(dashboardQuery, {
     variables: tab === 'batch' ? { batch: Number(selectedCoordinatorBatch) } : undefined,
     skip: !canRender || showMentorSummaries || (tab === 'batch' && !selectedCoordinatorBatch),
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-first',
   });
   const applications = useQuery(applicationsQuery, {
     variables: {
@@ -1748,21 +1896,21 @@ export default function Scholarships() {
       filter: tab === 'batch' ? { batch: Number(selectedCoordinatorBatch) } : undefined,
     },
     skip: !canRender || showMentorSummaries || showMentorWorkspace || (tab === 'batch' && !selectedCoordinatorBatch),
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-first',
   });
   const mentorApplications = useQuery(GET_MENTOR_SCHOLARSHIP_APPLICATIONS, {
     variables: { options: { limit: 50, offset: 0 } },
-    skip: !canRender || !showMentorWorkspace,
-    fetchPolicy: 'cache-and-network',
+    skip: !canRender || !showMentorWorkspace || mentorWorkspaceTab !== 'requests',
+    fetchPolicy: 'cache-first',
   });
   const mentorFunds = useQuery(GET_MENTOR_FUND_ALLOCATIONS, {
     variables: { mentorUserId: user?.id, options: { limit: 50, offset: 0 } },
-    skip: !canRender || !showMentorWorkspace,
-    fetchPolicy: 'cache-and-network',
+    skip: !canRender || !showMentorWorkspace || mentorWorkspaceTab !== 'funds',
+    fetchPolicy: 'cache-first',
   });
   const mentorSummaries = useQuery(GET_SCHOLARSHIP_MENTOR_SUMMARIES, {
     skip: !canRender || !showMentorSummaries,
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-first',
   });
 
   if (!canRender) {
@@ -1798,7 +1946,7 @@ export default function Scholarships() {
         {(canReadMentor || canReadOrg) && (
           <Tab value="mentor" icon={<IconWallet size={18} />} iconPosition="start" label="Mentor Funds" />
         )}
-        {canReadBatch && coordinatorBatchOptions.length > 0 && (
+        {canAccessBatchView && coordinatorBatchOptions.length > 0 && (
           <Tab value="batch" icon={<IconUsers size={18} />} iconPosition="start" label="Batch View" />
         )}
         {canReadOrg && <Tab value="org" icon={<IconBuilding size={18} />} iconPosition="start" label="Organisation" />}
@@ -1806,17 +1954,20 @@ export default function Scholarships() {
 
       {tab === 'batch' && (
         <Box maxWidth={240} mb={2}>
-          <ReactSelect
-            options={coordinatorBatchOptions}
-            value={coordinatorBatchOptions.find((option) => option.value === selectedCoordinatorBatch) || null}
-            placeholder="Select batch"
+          <TextField
+            fullWidth
+            select
+            label="Batch"
             size="small"
-            isSearchable
-            onChange={(option) => {
-              const selected = option as any;
-              setSelectedCoordinatorBatch(selected?.value || '');
-            }}
-          />
+            value={selectedCoordinatorBatch}
+            onChange={(event) => setSelectedCoordinatorBatch(event.target.value)}
+          >
+            {coordinatorBatchOptions.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </TextField>
         </Box>
       )}
 
@@ -1861,6 +2012,8 @@ export default function Scholarships() {
           canConfirmAllocation={canConfirmAllocation}
           canDisputeAllocation={canDisputeAllocation}
           canStartReview={canStartReview}
+          mentorTab={mentorWorkspaceTab}
+          onMentorTabChange={setMentorWorkspaceTab}
         />
       ) : tab === 'mine' ? (
         <MyRequestsWorkspace

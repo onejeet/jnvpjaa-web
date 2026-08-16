@@ -28,7 +28,7 @@ export default function Transactions() {
     GET_ASSOCIATION_OPENING_BALANCE_STATUS,
     {
       skip: !canManageOpeningBalance,
-      fetchPolicy: 'cache-and-network',
+      fetchPolicy: 'cache-first',
     }
   );
   const hasOpeningBalance = Number(openingBalanceData?.getAssociationTransactions?.total || 0) > 0;

@@ -88,8 +88,7 @@ const useTransactionsTable = () => {
         limit: paginationModel?.pageSize || 10,
       },
     },
-    notifyOnNetworkStatusChange: true,
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-first',
   });
 
   const openProfile = React.useCallback((userId: string) => router.push(`/profile/${userId}`), [router]);
@@ -251,7 +250,7 @@ const useTransactionsTable = () => {
       });
     }
     return transactionsData?.getAssociationTransactions?.data || [];
-  }, [loading, transactionsData, paginationModel]);
+  }, [loading, paginationModel.pageSize, transactionsData]);
 
   return {
     rows,

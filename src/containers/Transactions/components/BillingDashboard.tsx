@@ -88,7 +88,7 @@ const metricCards = [
 
 export default function BillingDashboard() {
   const { data, loading, error } = useQuery(GET_BILLING_DASHBOARD, {
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-first',
   });
   const dashboard = data?.getBillingDashboard;
 

@@ -254,7 +254,7 @@ const TransactionsTable = () => {
         const result = await client.query({
           query: GET_TRANSACTION_DETAILS,
           variables: { id: params.row.id },
-          fetchPolicy: 'network-only',
+          fetchPolicy: 'cache-first',
         });
         setSelectedTransaction(result.data?.getTransaction || params.row);
       } catch {

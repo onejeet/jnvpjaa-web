@@ -1,20 +1,21 @@
 'use client';
 
 import React from 'react';
-import { useMutation, useQuery } from '@apollo/client';
+import { useApolloClient, useMutation, useQuery } from '@apollo/client';
 import {
   Alert,
   Box,
   Chip,
   CircularProgress,
   Divider,
+  IconButton,
   Paper,
   Stack,
   Step,
   StepContent,
   StepLabel,
   Stepper,
-  TextField,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import {
@@ -29,6 +30,7 @@ import {
   IconFileText,
   IconHourglass,
   IconInfoCircle,
+  IconPencil,
   IconReceipt,
   IconSend,
   IconShieldCheck,
@@ -37,6 +39,9 @@ import {
 import toast from 'react-hot-toast';
 import Button from '@/components/core/Button';
 import CurrencyInput from '@/components/core/CurrencyInput';
+import Dialog from '@/components/core/Dialog';
+import ReactSelect from '@/components/core/ReactSelect';
+import TextField from '@/components/core/TextField';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import LayoutModule from '@/layouts/Layout';
 import { useAuth } from '@/context/AuthContext';
@@ -46,15 +51,18 @@ import {
   CONFIRM_SCHOLARSHIP_RECEIPT,
   CREATE_SCHOLARSHIP_DOCUMENT_UPLOAD,
   FINALIZE_SCHOLARSHIP_DOCUMENT_UPLOAD,
+  GET_ELIGIBLE_SCHOLARSHIP_MENTORS,
   GET_SCHOLARSHIP_APPLICATION,
   GET_SCHOLARSHIP_APPLICATION_ACTIVITY,
   GET_SCHOLARSHIP_APPLICATION_TRANSACTIONS,
   REQUEST_SCHOLARSHIP_FOLLOWUP,
-  SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES,
+  REASSIGN_SCHOLARSHIP_APPLICATION,
+  SCHOLARSHIP_DASHBOARD_CACHE_FIELDS,
   START_SCHOLARSHIP_REVIEW,
   SUBMIT_SCHOLARSHIP_APPLICATION,
 } from '@/apollo/scholarshipOperations';
-import { formatCurrency, formatDate, formatDateTime, getFullName, humanizeScholarshipStatus } from './helpers';
+import { invalidateActiveQueryFields, invalidateBillingLedgerQueries } from '@/apollo/cacheInvalidation';
+import { formatCurrency, formatDateTime, getFullName, humanizeScholarshipStatus } from './helpers';
 import { useScholarshipLoginGuard } from './useScholarshipLoginGuard';
 
 const getDetailGuidance = (application: any, isOwner: boolean, isAssignedMentor: boolean) => {
@@ -125,9 +133,11 @@ const getActivityTitle = (action?: string | null) => {
       return 'Application submitted';
     case 'SCHOLARSHIP_APPLICATION_ROUTING_PENDING':
       return 'Mentor routing pending';
+    case 'SCHOLARSHIP_APPLICATION_REASSIGNED':
+      return 'Mentor reassigned';
     case 'SCHOLARSHIP_REVIEW_STARTED':
       return 'Review started';
-    case 'SCHOLARSHIP_INFORMATION_REQUESTED':
+    case 'SCHOLARSHIP_INFO_REQUESTED':
       return 'More information requested';
     case 'SCHOLARSHIP_APPLICATION_REJECTED':
       return 'Application rejected';
@@ -135,7 +145,7 @@ const getActivityTitle = (action?: string | null) => {
       return 'Application approved';
     case 'SCHOLARSHIP_RECEIPT_CONFIRMED':
       return 'Payment receipt confirmed';
-    case 'SCHOLARSHIP_FOLLOWUP_REQUESTED':
+    case 'DISBURSAL_FOLLOWUP_REQUESTED':
       return 'Payment follow-up requested';
     case 'SCHOLARSHIP_PROOF_UPLOADED':
       return 'Usage proof uploaded';
@@ -147,6 +157,12 @@ const getActivityTitle = (action?: string | null) => {
       return humanizeScholarshipStatus(action);
   }
 };
+
+const CompletedTimelineIcon = () => (
+  <Box component="span" sx={{ display: 'inline-flex', color: 'success.main' }}>
+    <IconCircleCheck size={24} />
+  </Box>
+);
 
 const getActivityAmount = (activity: any) => {
   const after = activity?.after || {};
@@ -312,13 +328,17 @@ const Timeline = ({ activities, loading, application }: { activities: any[]; loa
   return (
     <Stepper activeStep={sortedActivities.length} orientation="vertical">
       {sortedActivities.map((activity) => {
-        const actorName = getFullName(activity.actor) || activity.actor?.email || 'System';
+        const isMentorReassignment = activity.action === 'SCHOLARSHIP_APPLICATION_REASSIGNED';
+        const isRoutingPending = activity.action === 'SCHOLARSHIP_APPLICATION_ROUTING_PENDING';
+        const timelineUser = isMentorReassignment ? activity.assignedMentor : activity.actor;
+        const timelineUserName = getFullName(timelineUser) || timelineUser?.email || 'System';
+        const showUser = !isRoutingPending && Boolean(timelineUser);
         const amount = getActivityAmount(activity);
-
+        const hasDetails = showUser || amount || activity.reason || activity.isHighRisk;
         return (
-          <Step key={activity.id} expanded completed={!activity.isHighRisk}>
+          <Step key={activity.id} expanded completed>
             <StepLabel
-              error={activity.isHighRisk}
+              icon={<CompletedTimelineIcon />}
               optional={
                 <Typography fontSize={12} color="grey.600">
                   {formatDateTime(activity.createdAt)}
@@ -327,20 +347,30 @@ const Timeline = ({ activities, loading, application }: { activities: any[]; loa
             >
               <Typography fontWeight={700}>{getActivityTitle(activity.action)}</Typography>
             </StepLabel>
-            <StepContent>
-              <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>
-                <ProfilePicture
-                  id={activity.actor?.id}
-                  src={activity.actor?.profileImage}
-                  title={actorName}
-                  summary={activity.actor?.batch ? `Batch ${activity.actor.batch}` : 'Workflow action'}
-                  size={30}
-                />
-                {amount && <Chip size="small" variant="outlined" label={amount} />}
-                {activity.reason && <Chip size="small" variant="outlined" label={activity.reason} />}
-                {activity.isHighRisk && <Chip size="small" color="error" variant="outlined" label="High risk" />}
-              </Stack>
-            </StepContent>
+            {hasDetails && (
+              <StepContent>
+                <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>
+                  {showUser && (
+                    <ProfilePicture
+                      id={timelineUser.id}
+                      src={timelineUser.profileImage}
+                      title={timelineUserName}
+                      summary={
+                        isMentorReassignment
+                          ? `New assigned mentor • Batch ${timelineUser.batch ?? 'NA'}`
+                          : timelineUser.batch
+                            ? `Batch ${timelineUser.batch}`
+                            : 'Workflow action'
+                      }
+                      size={30}
+                    />
+                  )}
+                  {amount && <Chip size="small" variant="outlined" label={amount} />}
+                  {activity.reason && <Chip size="small" variant="outlined" label={activity.reason} />}
+                  {activity.isHighRisk && <Chip size="small" color="error" variant="outlined" label="High risk" />}
+                </Stack>
+              </StepContent>
+            )}
           </Step>
         );
       })}
@@ -350,44 +380,47 @@ const Timeline = ({ activities, loading, application }: { activities: any[]; loa
 };
 
 export default function ScholarshipDetail({ applicationId }: { applicationId: string }) {
+  const client = useApolloClient();
   const { can, user } = useAuth();
   const canRender = useScholarshipLoginGuard(user?.id);
   const applicationQuery = useQuery(GET_SCHOLARSHIP_APPLICATION, {
     variables: { id: applicationId },
     skip: !canRender,
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-first',
   });
   const transactionsQuery = useQuery(GET_SCHOLARSHIP_APPLICATION_TRANSACTIONS, {
     variables: { applicationId },
     skip: !canRender,
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-first',
   });
   const activityQuery = useQuery(GET_SCHOLARSHIP_APPLICATION_ACTIVITY, {
     variables: { applicationId },
     skip: !canRender,
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-first',
   });
   const [approvedTotalAmount, setApprovedTotalAmount] = React.useState<number | null>(null);
   const [installmentAmount, setInstallmentAmount] = React.useState<number | null>(null);
   const [confirmedAmountByTx, setConfirmedAmountByTx] = React.useState<Record<string, number | null>>({});
   const [creditProofFileByTx, setCreditProofFileByTx] = React.useState<Record<string, File | null>>({});
+  const [reassignOpen, setReassignOpen] = React.useState(false);
+  const [selectedMentor, setSelectedMentor] = React.useState<any>(null);
+  const [reassignmentReason, setReassignmentReason] = React.useState('');
 
-  const refetchQueries = [
-    { query: GET_SCHOLARSHIP_APPLICATION, variables: { id: applicationId } },
-    { query: GET_SCHOLARSHIP_APPLICATION_TRANSACTIONS, variables: { applicationId } },
-    { query: GET_SCHOLARSHIP_APPLICATION_ACTIVITY, variables: { applicationId } },
-    ...SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES,
-  ];
-
-  const [submitApplication, submitState] = useMutation(SUBMIT_SCHOLARSHIP_APPLICATION, { refetchQueries });
-  const [startReview, reviewState] = useMutation(START_SCHOLARSHIP_REVIEW, { refetchQueries });
-  const [approveApplication, approveState] = useMutation(APPROVE_SCHOLARSHIP_APPLICATION, { refetchQueries });
-  const [confirmReceipt, receiptState] = useMutation(CONFIRM_SCHOLARSHIP_RECEIPT, { refetchQueries });
+  const [submitApplication, submitState] = useMutation(SUBMIT_SCHOLARSHIP_APPLICATION);
+  const [startReview, reviewState] = useMutation(START_SCHOLARSHIP_REVIEW);
+  const [approveApplication, approveState] = useMutation(APPROVE_SCHOLARSHIP_APPLICATION);
+  const [confirmReceipt, receiptState] = useMutation(CONFIRM_SCHOLARSHIP_RECEIPT);
   const [createDocumentUpload, createDocumentState] = useMutation(CREATE_SCHOLARSHIP_DOCUMENT_UPLOAD);
   const [finalizeDocumentUpload, finalizeDocumentState] = useMutation(FINALIZE_SCHOLARSHIP_DOCUMENT_UPLOAD);
   const [requestFollowup, followupState] = useMutation(REQUEST_SCHOLARSHIP_FOLLOWUP);
+  const [reassignApplication, reassignState] = useMutation(REASSIGN_SCHOLARSHIP_APPLICATION);
 
   const application = applicationQuery.data?.getScholarshipApplication;
+  const eligibleMentorsQuery = useQuery(GET_ELIGIBLE_SCHOLARSHIP_MENTORS, {
+    variables: { batch: application?.batchSnapshot ?? 0 },
+    skip: !reassignOpen || !application?.batchSnapshot,
+    fetchPolicy: 'cache-first',
+  });
   const transactions = transactionsQuery.data?.getScholarshipApplicationTransactions || [];
   const activities = activityQuery.data?.getScholarshipApplicationActivity || [];
   const isOwner = application?.beneficiaryUserId === user?.id || application?.applicantUserId === user?.id;
@@ -395,7 +428,23 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
   const canSubmit = isOwner && ['DRAFT', 'MORE_INFO_REQUIRED'].includes(application?.status);
   const canReview = isAssignedMentor && can(PERMISSION_CODES.SCHOLARSHIP_APPLICATION_READ_ASSIGNED);
   const canApprove = isAssignedMentor && can(PERMISSION_CODES.SCHOLARSHIP_APPLICATION_APPROVE);
+  const canReassign =
+    can(PERMISSION_CODES.SCHOLARSHIP_APPLICATION_REASSIGN) &&
+    ['ROUTING_PENDING', 'SUBMITTED', 'RESUBMITTED', 'UNDER_REVIEW', 'MORE_INFO_REQUIRED'].includes(application?.status);
   const guidance = getDetailGuidance(application, isOwner, isAssignedMentor);
+  const mentorOptions = React.useMemo(
+    () =>
+      (eligibleMentorsQuery.data?.getEligibleScholarshipMentors || [])
+        .filter((mentor: any) => mentor.id !== application?.assignedMentorUserId)
+        .map((mentor: any) => ({
+          value: mentor.id,
+          label: getFullName(mentor) || `Batch ${mentor.batch} mentor`,
+          title: getFullName(mentor),
+          summary: `Batch ${mentor.batch ?? 'NA'}`,
+          avatarUrl: mentor.profileImage,
+        })),
+    [eligibleMentorsQuery.data?.getEligibleScholarshipMentors, application?.assignedMentorUserId]
+  );
 
   React.useEffect(() => {
     if (application?.requestedAmount && approvedTotalAmount === null) {
@@ -404,13 +453,54 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
     }
   }, [application?.requestedAmount, application?.requestedFirstInstallmentAmount, approvedTotalAmount]);
 
-  const runAction = async (action: () => Promise<any>, success: string) => {
+  const runAction = async (
+    action: () => Promise<any>,
+    success: string,
+    cacheFields: readonly string[] = ['getScholarshipApplicationActivity', ...SCHOLARSHIP_DASHBOARD_CACHE_FIELDS],
+    invalidateBilling = false
+  ) => {
     try {
       await action();
+      await invalidateActiveQueryFields(client, cacheFields);
+      if (invalidateBilling) {
+        await invalidateBillingLedgerQueries(client, { invalidateWallet: false });
+      }
       toast.success(success);
+      return true;
     } catch (error: any) {
       toast.error(error?.message || 'Action failed.');
+      return false;
     }
+  };
+
+  const closeReassignDialog = () => {
+    if (reassignState.loading) return;
+    setReassignOpen(false);
+    setSelectedMentor(null);
+    setReassignmentReason('');
+  };
+
+  const submitReassignment = async () => {
+    if (!selectedMentor || !reassignmentReason.trim()) return;
+    const succeeded = await runAction(
+      () =>
+        reassignApplication({
+          variables: {
+            applicationId,
+            mentorUserId: selectedMentor.value,
+            reason: reassignmentReason.trim(),
+          },
+        }),
+      application.status === 'ROUTING_PENDING' ? 'Mentor assigned.' : 'Mentor changed.',
+      [
+        'getScholarshipApplicationActivity',
+        'getMyScholarshipApplications',
+        'getMentorScholarshipApplications',
+        'getScholarshipApplications',
+        ...SCHOLARSHIP_DASHBOARD_CACHE_FIELDS,
+      ]
+    );
+    if (succeeded) closeReassignDialog();
   };
   const uploadCreditProof = async (transaction: any, file: File) => {
     const upload = await createDocumentUpload({
@@ -490,18 +580,35 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
             </Typography>
           </Box>
 
-          <Stack direction="row" spacing={1} flexWrap="wrap" mb={2}>
-            <Chip icon={<IconClipboardList size={14} />} label={humanizeScholarshipStatus(application.status)} />
-            <Chip
-              icon={<IconReceipt size={14} />}
-              variant="outlined"
-              label={`Proof: ${humanizeScholarshipStatus(application.proofStatus)}`}
-            />
-            <Chip
-              icon={<IconCash size={14} />}
-              variant="outlined"
-              label={`Refund: ${humanizeScholarshipStatus(application.refundStatus)}`}
-            />
+          <Stack
+            direction="row"
+            alignItems="center"
+            flexWrap="wrap"
+            useFlexGap
+            columnGap={1}
+            rowGap={0.5}
+            mb={2}
+            color="grey.600"
+          >
+            <Typography component="span" fontSize={14} fontWeight={700} color="grey.900">
+              {humanizeScholarshipStatus(application.status)}
+            </Typography>
+            <Box component="span" display="inline-flex" alignItems="center" gap={1}>
+              <Typography component="span" fontSize={14} color="grey.400" aria-hidden>
+                •
+              </Typography>
+              <Typography component="span" fontSize={14}>
+                Proof {humanizeScholarshipStatus(application.proofStatus).toLowerCase()}
+              </Typography>
+            </Box>
+            <Box component="span" display="inline-flex" alignItems="center" gap={1}>
+              <Typography component="span" fontSize={14} color="grey.400" aria-hidden>
+                •
+              </Typography>
+              <Typography component="span" fontSize={14}>
+                Refund {humanizeScholarshipStatus(application.refundStatus).toLowerCase()}
+              </Typography>
+            </Box>
           </Stack>
 
           {guidance && (
@@ -609,8 +716,15 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
                     ['PENDING_BENEFICIARY_CONFIRMATION', 'PARTIALLY_RECEIVED'].includes(
                       transaction.scholarshipStatus
                     ) && (
-                      <Box display="grid" gridTemplateColumns={{ xs: '1fr', sm: '1fr 1fr auto auto' }} gap={1.5} mt={2}>
+                      <Box
+                        display="grid"
+                        gridTemplateColumns={{ xs: '1fr', sm: '1fr 1fr auto auto' }}
+                        columnGap={3}
+                        rowGap={{ xs: 4, sm: 3 }}
+                        mt={2}
+                      >
                         <CurrencyInput
+                          fullWidth
                           size="small"
                           label="Amount received"
                           value={confirmedAmountByTx[transaction.id] ?? transaction.amount}
@@ -619,6 +733,7 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
                           }
                         />
                         <TextField
+                          fullWidth
                           size="small"
                           type="file"
                           label="Credit proof"
@@ -635,20 +750,29 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
                           loading={receiptState.loading || createDocumentState.loading || finalizeDocumentState.loading}
                           disabled={!creditProofFileByTx[transaction.id]}
                           onClick={() =>
-                            runAction(async () => {
-                              const creditProofDocumentId = await uploadCreditProofIfStorageAvailable(
-                                transaction,
-                                creditProofFileByTx[transaction.id] as File
-                              );
-                              await confirmReceipt({
-                                variables: {
-                                  transactionId: transaction.id,
-                                  confirmedAmount: confirmedAmountByTx[transaction.id] ?? Number(transaction.amount),
-                                  creditProofDocumentId,
-                                },
-                              });
-                              setCreditProofFileByTx((current) => ({ ...current, [transaction.id]: null }));
-                            }, 'Receipt confirmed.')
+                            runAction(
+                              async () => {
+                                const creditProofDocumentId = await uploadCreditProofIfStorageAvailable(
+                                  transaction,
+                                  creditProofFileByTx[transaction.id] as File
+                                );
+                                await confirmReceipt({
+                                  variables: {
+                                    transactionId: transaction.id,
+                                    confirmedAmount: confirmedAmountByTx[transaction.id] ?? Number(transaction.amount),
+                                    creditProofDocumentId,
+                                  },
+                                });
+                                setCreditProofFileByTx((current) => ({ ...current, [transaction.id]: null }));
+                              },
+                              'Receipt confirmed.',
+                              [
+                                'getScholarshipApplication',
+                                'getScholarshipApplicationActivity',
+                                ...SCHOLARSHIP_DASHBOARD_CACHE_FIELDS,
+                              ],
+                              true
+                            )
                           }
                         />
                         <Button
@@ -659,7 +783,8 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
                           onClick={() =>
                             runAction(
                               () => requestFollowup({ variables: { transactionId: transaction.id } }),
-                              'Follow-up requested.'
+                              'Follow-up requested.',
+                              ['getScholarshipApplicationActivity']
                             )
                           }
                         />
@@ -668,16 +793,6 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
                 </Paper>
               ))}
             </Stack>
-          </Paper>
-
-          <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 1 }}>
-            <Stack direction="row" spacing={1} alignItems="center" mb={2}>
-              <IconClock size={20} />
-              <Typography fontSize={18} fontWeight={700}>
-                Timeline
-              </Typography>
-            </Stack>
-            <Timeline activities={activities} loading={activityQuery.loading} application={application} />
           </Paper>
         </Box>
 
@@ -697,52 +812,37 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
               size={42}
             />
             <Divider sx={{ my: 2 }} />
-            {application.assignedMentor ? (
-              <ProfilePicture
-                id={application.assignedMentor?.id}
-                src={application.assignedMentor?.profileImage}
-                title={getFullName(application.assignedMentor)}
-                summary={`Assigned mentor • Batch ${application.assignedMentor?.batch ?? 'NA'}`}
-                size={42}
-              />
-            ) : (
-              <Alert severity="warning">Mentor routing is pending.</Alert>
-            )}
-          </Paper>
-
-          <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 1 }}>
-            <Stack direction="row" spacing={1} alignItems="center" mb={2}>
-              <IconCalendarDue size={20} />
-              <Typography fontSize={18} fontWeight={700}>
-                Important Dates
-              </Typography>
-            </Stack>
-            <Stack spacing={1.5}>
-              <Box>
-                <Typography fontSize={13} color="grey.600">
-                  Submitted
-                </Typography>
-                <Typography fontWeight={700}>{formatDate(application.submittedAt)}</Typography>
+            <Box display="flex" alignItems="center" gap={1}>
+              <Box flex={1} minWidth={0}>
+                {application.assignedMentor ? (
+                  <ProfilePicture
+                    id={application.assignedMentor?.id}
+                    src={application.assignedMentor?.profileImage}
+                    title={getFullName(application.assignedMentor)}
+                    summary={
+                      application.status === 'ROUTING_PENDING'
+                        ? 'Temporary routing owner • Secretary'
+                        : `Assigned mentor • Batch ${application.assignedMentor?.batch ?? 'NA'}`
+                    }
+                    size={42}
+                  />
+                ) : (
+                  <Alert severity="warning">Mentor routing is pending.</Alert>
+                )}
               </Box>
-              <Box>
-                <Typography fontSize={13} color="grey.600">
-                  Approved
-                </Typography>
-                <Typography fontWeight={700}>{formatDate(application.approvedAt)}</Typography>
-              </Box>
-              <Box>
-                <Typography fontSize={13} color="grey.600">
-                  Rejected
-                </Typography>
-                <Typography fontWeight={700}>{formatDate(application.rejectedAt)}</Typography>
-              </Box>
-              <Box>
-                <Typography fontSize={13} color="grey.600">
-                  Last activity
-                </Typography>
-                <Typography fontWeight={700}>{formatDateTime(application.lastActivityAt)}</Typography>
-              </Box>
-            </Stack>
+              {canReassign && (
+                <Tooltip title={application.assignedMentor ? 'Change mentor' : 'Assign mentor'}>
+                  <IconButton
+                    size="small"
+                    color="primary"
+                    aria-label={application.assignedMentor ? 'Change mentor' : 'Assign mentor'}
+                    onClick={() => setReassignOpen(true)}
+                  >
+                    <IconPencil size={18} />
+                  </IconButton>
+                </Tooltip>
+              )}
+            </Box>
           </Paper>
 
           <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 1 }}>
@@ -777,12 +877,14 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
               {canApprove && ['UNDER_REVIEW', 'SUBMITTED', 'RESUBMITTED'].includes(application.status) && (
                 <>
                   <CurrencyInput
+                    fullWidth
                     size="small"
                     label="Approved total amount"
                     value={approvedTotalAmount}
                     onValueChange={setApprovedTotalAmount}
                   />
                   <CurrencyInput
+                    fullWidth
                     size="small"
                     label="Installment amount"
                     value={installmentAmount}
@@ -803,7 +905,13 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
                               proofDueDays: application.proposedProofDays,
                             },
                           }),
-                        'Scholarship payment created for beneficiary confirmation.'
+                        'Scholarship payment created for beneficiary confirmation.',
+                        [
+                          'getScholarshipApplicationTransactions',
+                          'getScholarshipApplicationActivity',
+                          ...SCHOLARSHIP_DASHBOARD_CACHE_FIELDS,
+                        ],
+                        true
                       )
                     }
                   />
@@ -814,8 +922,70 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
               )}
             </Stack>
           </Paper>
+
+          <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 1 }}>
+            <Stack direction="row" spacing={1} alignItems="center" mb={2}>
+              <IconClock size={20} />
+              <Typography fontSize={18} fontWeight={700}>
+                Timeline
+              </Typography>
+            </Stack>
+            <Timeline activities={activities} loading={activityQuery.loading} application={application} />
+          </Paper>
         </Stack>
       </Box>
+
+      <Dialog
+        open={reassignOpen}
+        maxWidth="560px"
+        title={application.status === 'ROUTING_PENDING' ? 'Assign Scholarship Mentor' : 'Change Scholarship Mentor'}
+        subTitle={`Choose an eligible mentor for beneficiary batch ${application.batchSnapshot}.`}
+        onClose={closeReassignDialog}
+        disableBackdropClick={reassignState.loading}
+        footerProps={{
+          onCancel: closeReassignDialog,
+          onOkay: submitReassignment,
+          okayButtonProps: {
+            title: application.status === 'ROUTING_PENDING' ? 'Assign Mentor' : 'Change Mentor',
+            loading: reassignState.loading,
+            disabled: !selectedMentor || !reassignmentReason.trim(),
+          },
+        }}
+      >
+        <Stack spacing={{ xs: 4, md: 3 }} p={2.5}>
+          <Alert severity="info">
+            Only active mentors assigned to this beneficiary batch are available. The mentor must belong to a different
+            batch.
+          </Alert>
+          <Box>
+            <Typography variant="caption" color="text.secondary">
+              Mentor
+            </Typography>
+            <ReactSelect
+              options={mentorOptions}
+              value={selectedMentor}
+              placeholder="Select an eligible mentor"
+              size="small"
+              isSearchable
+              showAvatars
+              isLoading={eligibleMentorsQuery.loading}
+              noOptionsMessage="No other eligible mentor is available"
+              onChange={(option) => setSelectedMentor(Array.isArray(option) ? null : option)}
+            />
+          </Box>
+          <TextField
+            fullWidth
+            label="Reason"
+            size="small"
+            value={reassignmentReason}
+            onChange={(event) => setReassignmentReason(event.target.value)}
+            required
+            multiline
+            minRows={2}
+            placeholder="Why is this mentor being assigned?"
+          />
+        </Stack>
+      </Dialog>
     </LayoutModule>
   );
 }

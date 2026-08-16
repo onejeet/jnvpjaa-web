@@ -1,17 +1,18 @@
 import { gql } from '@apollo/client';
 
-export const SCHOLARSHIP_DASHBOARD_REFETCH_QUERIES = [
-  'getMyScholarshipApplications',
-  'getScholarshipApplications',
+export const SCHOLARSHIP_DASHBOARD_CACHE_FIELDS = [
   'getMyScholarshipDashboard',
   'getMentorScholarshipDashboard',
-  'getMentorScholarshipApplications',
   'getBatchCoordinatorScholarshipDashboard',
   'getScholarshipOrganizationDashboard',
   'getScholarshipMentorSummaries',
-  'getMentorFundAllocations',
-  'getScholarshipApplicationActivity',
-];
+] as const;
+
+export const SCHOLARSHIP_APPLICATION_CACHE_FIELDS = [
+  'getMyScholarshipApplications',
+  'getScholarshipApplications',
+  'getMentorScholarshipApplications',
+] as const;
 
 export const SCHOLARSHIP_APPLICATION_FIELDS = gql`
   fragment ScholarshipApplicationFields on ScholarshipApplication {
@@ -249,6 +250,18 @@ export const GET_SCHOLARSHIP_APPLICATION = gql`
   }
 `;
 
+export const GET_ELIGIBLE_SCHOLARSHIP_MENTORS = gql`
+  query getEligibleScholarshipMentors($batch: Int!) {
+    getEligibleScholarshipMentors(batch: $batch) {
+      id
+      firstName
+      lastName
+      batch
+      profileImage
+    }
+  }
+`;
+
 export const GET_SCHOLARSHIP_APPLICATION_TRANSACTIONS = gql`
   ${SCHOLARSHIP_TRANSACTION_FIELDS}
   query getScholarshipApplicationTransactions($applicationId: String!) {
@@ -270,6 +283,14 @@ export const GET_SCHOLARSHIP_APPLICATION_ACTIVITY = gql`
       isHighRisk
       createdAt
       actor {
+        id
+        firstName
+        lastName
+        email
+        batch
+        profileImage
+      }
+      assignedMentor {
         id
         firstName
         lastName
@@ -312,6 +333,15 @@ export const START_SCHOLARSHIP_REVIEW = gql`
   ${SCHOLARSHIP_APPLICATION_FIELDS}
   mutation startScholarshipApplicationReview($applicationId: String!) {
     startScholarshipApplicationReview(applicationId: $applicationId) {
+      ...ScholarshipApplicationFields
+    }
+  }
+`;
+
+export const REASSIGN_SCHOLARSHIP_APPLICATION = gql`
+  ${SCHOLARSHIP_APPLICATION_FIELDS}
+  mutation reassignScholarshipApplication($applicationId: String!, $mentorUserId: String!, $reason: String!) {
+    reassignScholarshipApplication(applicationId: $applicationId, mentorUserId: $mentorUserId, reason: $reason) {
       ...ScholarshipApplicationFields
     }
   }

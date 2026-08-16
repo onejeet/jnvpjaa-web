@@ -6,10 +6,11 @@ import { Alert, Box, Grid2 as Grid, Typography } from '@mui/material';
 import dayjs, { Dayjs } from 'dayjs';
 import { useForm } from 'react-hook-form';
 import {
-  BILLING_REFETCH_QUERIES,
+  BILLING_CACHE_FIELDS,
   GET_ASSOCIATION_WALLET_SUMMARY,
   SET_ASSOCIATION_OPENING_BALANCE,
 } from '@/apollo/billingOperations';
+import { invalidateActiveQueryFields } from '@/apollo/cacheInvalidation';
 import Dialog from '@/components/core/Dialog';
 import FormCurrencyInput from '@/components/form/FormCurrencyInput';
 import FormDateTimeField from '@/components/form/FormDateTimeField';
@@ -43,42 +44,35 @@ const SetOpeningBalanceModule: React.FC<{ onClose: () => void }> = ({ onClose })
     },
   });
 
-  const [setOpeningBalance, { loading }] = useMutation(SET_ASSOCIATION_OPENING_BALANCE, {
-    refetchQueries: BILLING_REFETCH_QUERIES,
-  });
+  const [setOpeningBalance, { loading }] = useMutation(SET_ASSOCIATION_OPENING_BALANCE);
   const wallet = data?.getAssociationWalletSummary;
 
   const onSubmit = React.useCallback(
-    (formData: ISetOpeningBalanceInput) => {
-      setOpeningBalance({
-        variables: {
-          amount: formData.amount,
-          transactionDate: formData.transactionDate?.toISOString(),
-          referenceId: formData.referenceId || null,
-          method: formData.method || null,
-          description: formData.description || null,
-        },
-        onCompleted: () => {
-          client.cache.evict({ fieldName: 'getTransactions' });
-          client.cache.evict({ fieldName: 'getAssociationTransactions' });
-          client.cache.evict({ fieldName: 'getBillingDashboard' });
-          client.cache.evict({ fieldName: 'getAssociationWalletSummary' });
-          client.cache.gc();
-          showAlert({
-            visible: true,
-            type: 'success',
-            message: 'Opening balance recorded. Future ledger entries will update the association wallet.',
-          });
-          onClose();
-        },
-        onError: (err) => {
-          showAlert({
-            visible: true,
-            type: 'error',
-            message: err?.message || 'Unable to record opening balance.',
-          });
-        },
-      });
+    async (formData: ISetOpeningBalanceInput) => {
+      try {
+        await setOpeningBalance({
+          variables: {
+            amount: formData.amount,
+            transactionDate: formData.transactionDate?.toISOString(),
+            referenceId: formData.referenceId || null,
+            method: formData.method || null,
+            description: formData.description || null,
+          },
+        });
+        await invalidateActiveQueryFields(client, BILLING_CACHE_FIELDS);
+        showAlert({
+          visible: true,
+          type: 'success',
+          message: 'Opening balance recorded. Future ledger entries will update the association wallet.',
+        });
+        onClose();
+      } catch (err: any) {
+        showAlert({
+          visible: true,
+          type: 'error',
+          message: err?.message || 'Unable to record opening balance.',
+        });
+      }
     },
     [client, onClose, setOpeningBalance, showAlert]
   );

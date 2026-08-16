@@ -178,12 +178,6 @@ const AssignmentUser = ({ user, showEmail = false }: { user: any; showEmail?: bo
   />
 );
 
-const evictRoleAssignmentCaches = (cache: any) => {
-  cache.evict({ fieldName: 'roleAssignments' });
-  cache.evict({ fieldName: 'getAllBatchCoordinators' });
-  cache.gc();
-};
-
 const evictExecutiveAssignmentCaches = (cache: any) => {
   cache.evict({ fieldName: 'executivePositionAssignments' });
   cache.evict({ fieldName: 'publicExecutiveCommittee' });
@@ -234,14 +228,8 @@ const AdminPanel = () => {
     defaultValues: defaultAccessDateForm(),
   });
 
-  const [assignRole, { loading: assigningRole }] = useMutation(ASSIGN_USER_ROLE_MUTATION, {
-    refetchQueries: ['roleAssignments', 'batchCoordinatorRoleAssignments', 'viewerAccessContext'],
-    awaitRefetchQueries: true,
-    update: evictRoleAssignmentCaches,
-  });
-  const [revokeRole] = useMutation(REVOKE_USER_ROLE_MUTATION, {
-    update: evictRoleAssignmentCaches,
-  });
+  const [assignRole, { loading: assigningRole }] = useMutation(ASSIGN_USER_ROLE_MUTATION);
+  const [revokeRole] = useMutation(REVOKE_USER_ROLE_MUTATION);
   const [assignPosition] = useMutation(ASSIGN_EXECUTIVE_POSITION_MUTATION, {
     update: evictExecutiveAssignmentCaches,
   });
@@ -477,6 +465,7 @@ const AdminPanel = () => {
           },
         },
       });
+      refreshRoleAssignmentCaches();
       setRoleForm(getDefaultRoleAssignmentForm());
       setRoleUserSearch('');
       setRoleUsers([]);
@@ -537,7 +526,13 @@ const AdminPanel = () => {
   const refreshRoleAssignmentCaches = () => {
     void client
       .refetchQueries({
-        include: ['roleAssignments', 'batchCoordinatorRoleAssignments', 'viewerAccessContext'],
+        updateCache(cache) {
+          cache.evict({ id: 'ROOT_QUERY', fieldName: 'roleAssignments' });
+          cache.evict({ id: 'ROOT_QUERY', fieldName: 'getAllBatchCoordinators' });
+        },
+        onQueryUpdated(observableQuery) {
+          return observableQuery.refetch();
+        },
       })
       .catch((error) => {
         console.error('Role assignment cache refresh failed:', error);
@@ -662,6 +657,7 @@ const AdminPanel = () => {
           },
         },
       });
+      refreshRoleAssignmentCaches();
       closeAddCoordinatorDialog(true);
       showAlert({ visible: true, type: 'success', message: 'Batch coordinator added successfully.' });
     } catch (error: any) {
@@ -684,7 +680,6 @@ const AdminPanel = () => {
           },
         },
       });
-      refreshRoleAssignmentCaches();
       await assignRole({
         variables: {
           input: {
@@ -701,6 +696,7 @@ const AdminPanel = () => {
     } catch (error: any) {
       showAlert({ visible: true, type: 'error', message: error?.message || 'Replacement failed.' });
     } finally {
+      refreshRoleAssignmentCaches();
       setReplacementSaving(false);
     }
   };

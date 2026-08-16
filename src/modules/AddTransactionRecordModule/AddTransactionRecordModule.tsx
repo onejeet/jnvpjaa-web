@@ -14,12 +14,12 @@ import dayjs from 'dayjs';
 import { IAddTransactionRecordInput } from './AddTransactionRecordModule.types';
 import React from 'react';
 import {
-  BILLING_REFETCH_QUERIES,
   CREATE_ASSOCIATION_CREDIT,
   CREATE_ASSOCIATION_DEBIT,
   CREATE_TRANSACTION_ATTACHMENT_UPLOAD,
   FINALIZE_TRANSACTION_ATTACHMENT_UPLOAD,
 } from '@/apollo/billingOperations';
+import { invalidateBillingLedgerQueries } from '@/apollo/cacheInvalidation';
 
 const AddTransactionRecordModule: React.FC<any> = ({ onClose }) => {
   const client = useApolloClient();
@@ -73,7 +73,7 @@ const AddTransactionRecordModule: React.FC<any> = ({ onClose }) => {
   );
 
   const refreshBillingQueries = React.useCallback(() => {
-    return client.refetchQueries({ include: BILLING_REFETCH_QUERIES });
+    return invalidateBillingLedgerQueries(client);
   }, [client]);
 
   const onSubmit = React.useCallback(

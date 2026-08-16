@@ -1,19 +1,10 @@
 import { gql } from '@apollo/client';
 
-export const BILLING_REFETCH_QUERIES = [
+export const BILLING_CACHE_FIELDS = [
   'getBillingDashboard',
-  'getAssociationOpeningBalanceStatus',
   'getAssociationWalletSummary',
   'getAssociationTransactions',
-  'getTransactions',
-];
-
-export const BILLING_SCHOLARSHIP_REFETCH_QUERIES = [
-  ...BILLING_REFETCH_QUERIES,
-  'getScholarshipOrganizationDashboard',
-  'getScholarshipMentorSummaries',
-  'getMentorFundAllocations',
-];
+] as const;
 
 export const GET_BILLING_DASHBOARD = gql`
   query getBillingDashboard {
