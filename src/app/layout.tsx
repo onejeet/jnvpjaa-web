@@ -202,6 +202,7 @@ const appleStartupImages = [
 ];
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://jnvpjaa.org'),
   applicationName: 'JNVPJAA',
   title: {
     template: '%s | JNVPJAA',
