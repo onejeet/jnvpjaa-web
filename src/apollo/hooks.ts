@@ -10939,8 +10939,7 @@ export function useAccessAuditEventsLazyQuery(
 }
 export function useAccessAuditEventsSuspenseQuery(
   baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<AccessAuditEventsQuery, AccessAuditEventsQueryVariables>
+    Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<AccessAuditEventsQuery, AccessAuditEventsQueryVariables>
 ) {
   const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<AccessAuditEventsQuery, AccessAuditEventsQueryVariables>(
@@ -11138,8 +11137,7 @@ export function useExecutivePositionsLazyQuery(
 }
 export function useExecutivePositionsSuspenseQuery(
   baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ExecutivePositionsQuery, ExecutivePositionsQueryVariables>
+    Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ExecutivePositionsQuery, ExecutivePositionsQueryVariables>
 ) {
   const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<ExecutivePositionsQuery, ExecutivePositionsQueryVariables>(
@@ -12445,8 +12443,7 @@ export function useGetCompanyInfoListLazyQuery(
 }
 export function useGetCompanyInfoListSuspenseQuery(
   baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<GetCompanyInfoListQuery, GetCompanyInfoListQueryVariables>
+    Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCompanyInfoListQuery, GetCompanyInfoListQueryVariables>
 ) {
   const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<GetCompanyInfoListQuery, GetCompanyInfoListQueryVariables>(
@@ -13037,8 +13034,7 @@ export function useGetUserAddressesLazyQuery(
 }
 export function useGetUserAddressesSuspenseQuery(
   baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<GetUserAddressesQuery, GetUserAddressesQueryVariables>
+    Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetUserAddressesQuery, GetUserAddressesQueryVariables>
 ) {
   const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<GetUserAddressesQuery, GetUserAddressesQueryVariables>(
@@ -13447,8 +13443,7 @@ export function useSystemPermissionsLazyQuery(
 }
 export function useSystemPermissionsSuspenseQuery(
   baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<SystemPermissionsQuery, SystemPermissionsQueryVariables>
+    Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<SystemPermissionsQuery, SystemPermissionsQueryVariables>
 ) {
   const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<SystemPermissionsQuery, SystemPermissionsQueryVariables>(
@@ -13559,8 +13554,7 @@ export function useUpcomingBirthdaysLazyQuery(
 }
 export function useUpcomingBirthdaysSuspenseQuery(
   baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<UpcomingBirthdaysQuery, UpcomingBirthdaysQueryVariables>
+    Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<UpcomingBirthdaysQuery, UpcomingBirthdaysQueryVariables>
 ) {
   const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<UpcomingBirthdaysQuery, UpcomingBirthdaysQueryVariables>(
@@ -13823,8 +13817,7 @@ export function useUserRoleAssignmentsLazyQuery(
 }
 export function useUserRoleAssignmentsSuspenseQuery(
   baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<UserRoleAssignmentsQuery, UserRoleAssignmentsQueryVariables>
+    Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<UserRoleAssignmentsQuery, UserRoleAssignmentsQueryVariables>
 ) {
   const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<UserRoleAssignmentsQuery, UserRoleAssignmentsQueryVariables>(
@@ -13902,8 +13895,7 @@ export function useViewerAccessContextLazyQuery(
 }
 export function useViewerAccessContextSuspenseQuery(
   baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ViewerAccessContextQuery, ViewerAccessContextQueryVariables>
+    Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ViewerAccessContextQuery, ViewerAccessContextQueryVariables>
 ) {
   const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<ViewerAccessContextQuery, ViewerAccessContextQueryVariables>(
