@@ -201,32 +201,15 @@ const appleStartupImages = [
   },
 ];
 
+import { defaultMetadata, generateSchema } from '@/config/seo.config';
+
 export const metadata: Metadata = {
-  metadataBase: new URL('https://jnvpjaa.org'),
-  applicationName: 'JNVPJAA',
-  title: {
-    template: '%s | JNVPJAA',
-    default: 'JNVPJAA • Alumni Network of JNV Paota, Jaipur',
-  },
-  description:
-    'The Official Alumni Network of Jawahar Navodaya Vidyalaya Paota, Jaipur. JNVs are a testament to innovative state-sponsored education in India.',
-  manifest: '/manifest.json',
-  icons: {
-    icon: [
-      { url: '/favicon.png' },
-      { url: '/icons/icon-192.png', type: 'image/png', sizes: '192x192' },
-      { url: '/icons/icon-512.png', type: 'image/png', sizes: '512x512' },
-    ],
-    apple: [{ url: '/icons/icon-512.png' }],
-  },
+  ...defaultMetadata,
   appleWebApp: {
     capable: true,
     title: 'JNVPJAA',
     statusBarStyle: 'default',
     startupImage: appleStartupImages,
-  },
-  other: {
-    'mobile-web-app-capable': 'yes',
   },
 };
 
@@ -241,6 +224,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <head>
         <link href="https://fonts.googleapis.com/css2?family=Playwrite+CU:wght@400&display=swap" rel="stylesheet" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(generateSchema.organization()) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(generateSchema.website()) }}
+        />
       </head>
       <body className={dmSans.className}>
         <Providers>
