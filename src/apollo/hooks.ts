@@ -132,6 +132,24 @@ export type AssignUserRoleInput = {
   validUntil?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type AssociationTransactionFilter = {
+  billingCategory?: InputMaybe<BillingCategory>;
+  search?: InputMaybe<Scalars['String']['input']>;
+  sourceType?: InputMaybe<TransactionSourceType>;
+  status?: InputMaybe<TransactionStatus>;
+  type?: InputMaybe<TransactionType>;
+  walletImpact?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type AssociationWalletSummary = {
+  __typename?: 'AssociationWalletSummary';
+  availableFunds?: Maybe<Scalars['Float']['output']>;
+  currency?: Maybe<Scalars['String']['output']>;
+  pendingDebits?: Maybe<Scalars['Float']['output']>;
+  totalCredits?: Maybe<Scalars['Float']['output']>;
+  totalDebits?: Maybe<Scalars['Float']['output']>;
+};
+
 export type AuthPayload = {
   __typename?: 'AuthPayload';
   user?: Maybe<User>;
@@ -145,6 +163,36 @@ export type BatchCoordinator = {
   id?: Maybe<Scalars['String']['output']>;
   user?: Maybe<User>;
   userId?: Maybe<Scalars['String']['output']>;
+};
+
+export enum BillingCategory {
+  Adjustment = 'ADJUSTMENT',
+  Donation = 'DONATION',
+  Event = 'EVENT',
+  Membership = 'MEMBERSHIP',
+  OpeningBalance = 'OPENING_BALANCE',
+  OtherActivity = 'OTHER_ACTIVITY',
+  ScholarshipBeneficiaryPayment = 'SCHOLARSHIP_BENEFICIARY_PAYMENT',
+  ScholarshipMentorAllocation = 'SCHOLARSHIP_MENTOR_ALLOCATION',
+  ScholarshipRefund = 'SCHOLARSHIP_REFUND',
+}
+
+export type BillingDashboard = {
+  __typename?: 'BillingDashboard';
+  adjustmentsAndRefunds?: Maybe<Scalars['Float']['output']>;
+  availableFunds?: Maybe<Scalars['Float']['output']>;
+  currency?: Maybe<Scalars['String']['output']>;
+  disputedMentorReleaseAmount?: Maybe<Scalars['Float']['output']>;
+  donationsReceived?: Maybe<Scalars['Float']['output']>;
+  eventReceived?: Maybe<Scalars['Float']['output']>;
+  membershipReceived?: Maybe<Scalars['Float']['output']>;
+  otherActivitySpending?: Maybe<Scalars['Float']['output']>;
+  pendingDebits?: Maybe<Scalars['Float']['output']>;
+  pendingMentorReleaseAmount?: Maybe<Scalars['Float']['output']>;
+  scholarshipPaidToBeneficiaries?: Maybe<Scalars['Float']['output']>;
+  scholarshipReleasedToMentors?: Maybe<Scalars['Float']['output']>;
+  totalCredits?: Maybe<Scalars['Float']['output']>;
+  totalDebits?: Maybe<Scalars['Float']['output']>;
 };
 
 export type Blog = {
@@ -506,6 +554,8 @@ export type ListInput = {
 export type MentorFundAllocation = {
   __typename?: 'MentorFundAllocation';
   amount?: Maybe<Scalars['Decimal']['output']>;
+  associationTransaction?: Maybe<Transaction>;
+  associationTransactionId?: Maybe<Scalars['String']['output']>;
   batch?: Maybe<Scalars['Int']['output']>;
   confirmedAmount?: Maybe<Scalars['Decimal']['output']>;
   createdAt?: Maybe<Scalars['DateTime']['output']>;
@@ -554,6 +604,9 @@ export type Mutation = {
   confirmScholarshipTransactionReceipt?: Maybe<Transaction>;
   createAddress?: Maybe<Address>;
   createAlbum?: Maybe<Album>;
+  createAssociationAdjustment?: Maybe<Transaction>;
+  createAssociationCredit?: Maybe<Transaction>;
+  createAssociationDebit?: Maybe<Transaction>;
   createBlog?: Maybe<Blog>;
   createBusiness: Business;
   createCompanyInfo?: Maybe<CompanyInfo>;
@@ -563,6 +616,7 @@ export type Mutation = {
   createScholarshipApplicationDraft?: Maybe<ScholarshipApplication>;
   createScholarshipDocumentUpload?: Maybe<ScholarshipDocumentUploadResponse>;
   createTransaction?: Maybe<Transaction>;
+  createTransactionAttachmentUpload?: Maybe<TransactionAttachmentUploadResponse>;
   deleteAddress?: Maybe<Address>;
   deleteBlog?: Maybe<Blog>;
   deleteCompanyInfo?: Maybe<CompanyInfo>;
@@ -571,6 +625,7 @@ export type Mutation = {
   deleteUser?: Maybe<User>;
   disputeMentorFundAllocation?: Maybe<MentorFundAllocationDispute>;
   finalizeScholarshipDocumentUpload?: Maybe<ScholarshipDocument>;
+  finalizeTransactionAttachmentUpload?: Maybe<TransactionAttachment>;
   forgotPassword?: Maybe<Scalars['Boolean']['output']>;
   getPresignedUrl: Scalars['String']['output'];
   logout?: Maybe<Scalars['String']['output']>;
@@ -590,10 +645,12 @@ export type Mutation = {
   resolveMentorAllocationDispute?: Maybe<MentorFundAllocationDispute>;
   respondToScholarshipRefund?: Maybe<ScholarshipRefund>;
   resubmitScholarshipApplication?: Maybe<ScholarshipApplication>;
+  reverseAssociationTransaction?: Maybe<Transaction>;
   reviewScholarshipUsageProof?: Maybe<ScholarshipReceiptSubmission>;
   revokeExecutivePosition?: Maybe<ExecutivePositionAssignment>;
   revokeUserRole?: Maybe<RoleAssignment>;
   sendMassEmail?: Maybe<Scalars['Boolean']['output']>;
+  setAssociationOpeningBalance?: Maybe<Transaction>;
   setScholarshipPrimaryMentor?: Maybe<ScholarshipApplication>;
   signin?: Maybe<AuthPayload>;
   signup?: Maybe<User>;
@@ -697,6 +754,7 @@ export type MutationConfirmScholarshipRefundReceivedArgs = {
 
 export type MutationConfirmScholarshipTransactionReceiptArgs = {
   confirmedAmount: Scalars['Float']['input'];
+  creditProofDocumentId?: InputMaybe<Scalars['String']['input']>;
   note?: InputMaybe<Scalars['String']['input']>;
   transactionId: Scalars['String']['input'];
 };
@@ -715,6 +773,36 @@ export type MutationCreateAlbumArgs = {
   description?: InputMaybe<Scalars['String']['input']>;
   eventId?: InputMaybe<Scalars['Int']['input']>;
   title: Scalars['String']['input'];
+};
+
+export type MutationCreateAssociationAdjustmentArgs = {
+  amount: Scalars['Float']['input'];
+  description: Scalars['String']['input'];
+  method?: InputMaybe<Scalars['String']['input']>;
+  referenceId?: InputMaybe<Scalars['String']['input']>;
+  title: Scalars['String']['input'];
+  transactionDate?: InputMaybe<Scalars['String']['input']>;
+  type: TransactionType;
+};
+
+export type MutationCreateAssociationCreditArgs = {
+  amount: Scalars['Float']['input'];
+  billingCategory?: InputMaybe<BillingCategory>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  method?: InputMaybe<Scalars['String']['input']>;
+  referenceId?: InputMaybe<Scalars['String']['input']>;
+  title: Scalars['String']['input'];
+  transactionDate?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type MutationCreateAssociationDebitArgs = {
+  amount: Scalars['Float']['input'];
+  billingCategory?: InputMaybe<BillingCategory>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  method?: InputMaybe<Scalars['String']['input']>;
+  referenceId?: InputMaybe<Scalars['String']['input']>;
+  title: Scalars['String']['input'];
+  transactionDate?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type MutationCreateBlogArgs = {
@@ -784,6 +872,7 @@ export type MutationCreateScholarshipDocumentUploadArgs = {
 
 export type MutationCreateTransactionArgs = {
   amount: Scalars['Float']['input'];
+  billingCategory?: InputMaybe<BillingCategory>;
   currency: Currency;
   description?: InputMaybe<Scalars['String']['input']>;
   isDonation?: InputMaybe<Scalars['Boolean']['input']>;
@@ -794,6 +883,13 @@ export type MutationCreateTransactionArgs = {
   transactionDate: Scalars['String']['input'];
   type: TransactionType;
   userId: Scalars['String']['input'];
+};
+
+export type MutationCreateTransactionAttachmentUploadArgs = {
+  filename: Scalars['String']['input'];
+  mimeType: Scalars['String']['input'];
+  sizeBytes: Scalars['Int']['input'];
+  transactionId: Scalars['String']['input'];
 };
 
 export type MutationDeleteAddressArgs = {
@@ -829,6 +925,10 @@ export type MutationDisputeMentorFundAllocationArgs = {
 export type MutationFinalizeScholarshipDocumentUploadArgs = {
   checksum?: InputMaybe<Scalars['String']['input']>;
   documentId: Scalars['String']['input'];
+};
+
+export type MutationFinalizeTransactionAttachmentUploadArgs = {
+  attachmentId: Scalars['String']['input'];
 };
 
 export type MutationForgotPasswordArgs = {
@@ -922,6 +1022,13 @@ export type MutationResubmitScholarshipApplicationArgs = {
   applicationId: Scalars['String']['input'];
 };
 
+export type MutationReverseAssociationTransactionArgs = {
+  reason: Scalars['String']['input'];
+  referenceId?: InputMaybe<Scalars['String']['input']>;
+  transactionDate?: InputMaybe<Scalars['String']['input']>;
+  transactionId: Scalars['String']['input'];
+};
+
 export type MutationReviewScholarshipUsageProofArgs = {
   action: ScholarshipProofReviewAction;
   note?: InputMaybe<Scalars['String']['input']>;
@@ -940,6 +1047,14 @@ export type MutationSendMassEmailArgs = {
   context?: InputMaybe<Scalars['JSON']['input']>;
   subject: Scalars['String']['input'];
   template: Scalars['String']['input'];
+};
+
+export type MutationSetAssociationOpeningBalanceArgs = {
+  amount: Scalars['Float']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
+  method?: InputMaybe<Scalars['String']['input']>;
+  referenceId?: InputMaybe<Scalars['String']['input']>;
+  transactionDate?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type MutationSetScholarshipPrimaryMentorArgs = {
@@ -1143,9 +1258,12 @@ export type Query = {
   getAlbum?: Maybe<Album>;
   getAlbums?: Maybe<ListAlbumResponse>;
   getAllBatchCoordinators?: Maybe<Array<Maybe<BatchCoordinator>>>;
+  getAssociationTransactions?: Maybe<TransactionListResponse>;
+  getAssociationWalletSummary?: Maybe<AssociationWalletSummary>;
   getBatchCoordinatorByUserId?: Maybe<BatchCoordinator>;
   getBatchCoordinatorScholarshipDashboard?: Maybe<ScholarshipDashboard>;
   getBatchCoordinatorsByBatch?: Maybe<Array<Maybe<BatchCoordinator>>>;
+  getBillingDashboard?: Maybe<BillingDashboard>;
   getBlog?: Maybe<Blog>;
   getBlogList?: Maybe<BlogListResponse>;
   getBusiness?: Maybe<Business>;
@@ -1155,6 +1273,7 @@ export type Query = {
   getCompanyInfo?: Maybe<CompanyInfo>;
   getCompanyInfoList: Array<CompanyInfo>;
   getCompletedScholarshipTransactions?: Maybe<Array<Maybe<Transaction>>>;
+  getEligibleScholarshipMentors?: Maybe<Array<Maybe<UserBasic>>>;
   getEventDetails?: Maybe<Event>;
   getEventList?: Maybe<ListEventResponse>;
   getMentorFundAllocations?: Maybe<Array<Maybe<MentorFundAllocation>>>;
@@ -1165,16 +1284,19 @@ export type Query = {
   getMyScholarshipDashboard?: Maybe<ScholarshipDashboard>;
   getScholarshipActivity?: Maybe<Array<Maybe<ScholarshipActivityLog>>>;
   getScholarshipApplication?: Maybe<ScholarshipApplication>;
+  getScholarshipApplicationActivity?: Maybe<Array<Maybe<ScholarshipActivityLog>>>;
   getScholarshipApplicationTransactions?: Maybe<Array<Maybe<Transaction>>>;
   getScholarshipApplications?: Maybe<Array<Maybe<ScholarshipApplication>>>;
   getScholarshipBeneficiaryList?: Maybe<Array<Maybe<ScholarshipApplication>>>;
   getScholarshipDocumentReadUrl?: Maybe<Scalars['String']['output']>;
   getScholarshipExceptionQueue?: Maybe<Array<Maybe<ScholarshipApplication>>>;
+  getScholarshipMentorSummaries?: Maybe<Array<Maybe<ScholarshipMentorSummaryRow>>>;
   getScholarshipMentorSummary?: Maybe<ScholarshipDashboard>;
   getScholarshipOrganizationDashboard?: Maybe<ScholarshipDashboard>;
   getScholarshipRefundCases?: Maybe<Array<Maybe<ScholarshipRefund>>>;
   getScholarshipWrongDisbursementCases?: Maybe<Array<Maybe<ScholarshipWrongDisbursementCase>>>;
   getTransaction?: Maybe<Transaction>;
+  getTransactionAttachmentReadUrl?: Maybe<Scalars['String']['output']>;
   getTransactions?: Maybe<TransactionListResponse>;
   getUserAddresses?: Maybe<AddressListResponse>;
   getUserDetails?: Maybe<User>;
@@ -1202,6 +1324,11 @@ export type QueryGetAlbumsArgs = {
 };
 
 export type QueryGetAllBatchCoordinatorsArgs = {
+  options?: InputMaybe<ListInput>;
+};
+
+export type QueryGetAssociationTransactionsArgs = {
+  filter?: InputMaybe<AssociationTransactionFilter>;
   options?: InputMaybe<ListInput>;
 };
 
@@ -1252,6 +1379,10 @@ export type QueryGetCompletedScholarshipTransactionsArgs = {
   options?: InputMaybe<ListInput>;
 };
 
+export type QueryGetEligibleScholarshipMentorsArgs = {
+  batch: Scalars['Int']['input'];
+};
+
 export type QueryGetEventDetailsArgs = {
   id: Scalars['Int']['input'];
 };
@@ -1284,6 +1415,10 @@ export type QueryGetScholarshipApplicationArgs = {
   id: Scalars['String']['input'];
 };
 
+export type QueryGetScholarshipApplicationActivityArgs = {
+  applicationId: Scalars['String']['input'];
+};
+
 export type QueryGetScholarshipApplicationTransactionsArgs = {
   applicationId: Scalars['String']['input'];
 };
@@ -1310,7 +1445,12 @@ export type QueryGetTransactionArgs = {
   id: Scalars['String']['input'];
 };
 
+export type QueryGetTransactionAttachmentReadUrlArgs = {
+  attachmentId: Scalars['String']['input'];
+};
+
 export type QueryGetTransactionsArgs = {
+  filter?: InputMaybe<AssociationTransactionFilter>;
   options?: InputMaybe<ListInput>;
 };
 
@@ -1392,8 +1532,10 @@ export type RoleAssignmentFilterInput = {
 export type ScholarshipActivityLog = {
   __typename?: 'ScholarshipActivityLog';
   action?: Maybe<Scalars['String']['output']>;
+  actor?: Maybe<User>;
   actorUserId?: Maybe<Scalars['String']['output']>;
   after?: Maybe<Scalars['JSON']['output']>;
+  assignedMentor?: Maybe<User>;
   before?: Maybe<Scalars['JSON']['output']>;
   createdAt?: Maybe<Scalars['DateTime']['output']>;
   entityId?: Maybe<Scalars['String']['output']>;
@@ -1484,12 +1626,60 @@ export enum ScholarshipApplicationStatus {
 
 export type ScholarshipDashboard = {
   __typename?: 'ScholarshipDashboard';
+  activeBeneficiaryCount?: Maybe<Scalars['Int']['output']>;
+  activeMentorCount?: Maybe<Scalars['Int']['output']>;
+  allocationDisputeCount?: Maybe<Scalars['Int']['output']>;
+  applicationsAwaitingReview?: Maybe<Scalars['Int']['output']>;
+  approvalCapacity?: Maybe<Scalars['Float']['output']>;
+  approvedAdjustments?: Maybe<Scalars['Float']['output']>;
+  awaitingPaymentConfirmation?: Maybe<Scalars['Int']['output']>;
+  beneficiaryNonReceiptCount?: Maybe<Scalars['Int']['output']>;
+  byAllocationStatus?: Maybe<Array<Maybe<ScholarshipStatusCount>>>;
+  byProofStatus?: Maybe<Array<Maybe<ScholarshipStatusCount>>>;
+  byRefundStatus?: Maybe<Array<Maybe<ScholarshipStatusCount>>>;
   byStatus?: Maybe<Array<Maybe<ScholarshipStatusCount>>>;
+  byTransactionStatus?: Maybe<Array<Maybe<ScholarshipStatusCount>>>;
   capacity?: Maybe<ScholarshipMentorCapacity>;
+  completedApplications?: Maybe<Scalars['Int']['output']>;
+  completedTransactionCount?: Maybe<Scalars['Int']['output']>;
+  confirmedAllocation?: Maybe<Scalars['Float']['output']>;
+  confirmedBeneficiaryDisbursement?: Maybe<Scalars['Float']['output']>;
   disbursedAmount?: Maybe<Scalars['Float']['output']>;
+  disputedIncomingAllocation?: Maybe<Scalars['Float']['output']>;
+  disputedMentorAllocations?: Maybe<Scalars['Int']['output']>;
+  draftRequests?: Maybe<Scalars['Int']['output']>;
   exceptionCount?: Maybe<Scalars['Int']['output']>;
+  failedNotificationCount?: Maybe<Scalars['Int']['output']>;
+  fullProofsAwaitingVerification?: Maybe<Scalars['Int']['output']>;
+  mentorCustodyBalance?: Maybe<Scalars['Float']['output']>;
+  missingMentorRoutingCount?: Maybe<Scalars['Int']['output']>;
+  needsInformation?: Maybe<Scalars['Int']['output']>;
+  openRefundCaseCount?: Maybe<Scalars['Int']['output']>;
+  overdueProof?: Maybe<Scalars['Int']['output']>;
+  overdueProofAmount?: Maybe<Scalars['Float']['output']>;
+  partialProof?: Maybe<Scalars['Int']['output']>;
+  partialReceiptMismatchCount?: Maybe<Scalars['Int']['output']>;
+  paymentConfirmationPendingApplications?: Maybe<Scalars['Int']['output']>;
+  pendingBeneficiaryConfirmation?: Maybe<Scalars['Float']['output']>;
+  pendingBeneficiaryConfirmationCount?: Maybe<Scalars['Int']['output']>;
+  pendingIncomingAllocation?: Maybe<Scalars['Float']['output']>;
+  proofDue?: Maybe<Scalars['Int']['output']>;
+  refundConfirmedAmount?: Maybe<Scalars['Float']['output']>;
+  refundReconciliationPendingCount?: Maybe<Scalars['Int']['output']>;
+  refundRequestedAmount?: Maybe<Scalars['Float']['output']>;
+  refundResponsePendingCount?: Maybe<Scalars['Int']['output']>;
+  rejectedApplications?: Maybe<Scalars['Int']['output']>;
   requestedAmount?: Maybe<Scalars['Float']['output']>;
+  returnedAmount?: Maybe<Scalars['Float']['output']>;
+  routingPendingApplications?: Maybe<Scalars['Int']['output']>;
+  submittedApplications?: Maybe<Scalars['Int']['output']>;
+  submittedOrUnderReview?: Maybe<Scalars['Int']['output']>;
+  totalAllocationRecorded?: Maybe<Scalars['Float']['output']>;
   totalApplications?: Maybe<Scalars['Int']['output']>;
+  totalCompletedAfterProofVerification?: Maybe<Scalars['Float']['output']>;
+  underReviewApplications?: Maybe<Scalars['Int']['output']>;
+  wrongDisbursementAmount?: Maybe<Scalars['Float']['output']>;
+  wrongDisbursementApplications?: Maybe<Scalars['Int']['output']>;
 };
 
 export type ScholarshipDocument = {
@@ -1545,6 +1735,14 @@ export type ScholarshipMentorCapacity = {
   available?: Maybe<Scalars['Float']['output']>;
   committed?: Maybe<Scalars['Float']['output']>;
   returned?: Maybe<Scalars['Float']['output']>;
+};
+
+export type ScholarshipMentorSummaryRow = {
+  __typename?: 'ScholarshipMentorSummaryRow';
+  assignedBatches?: Maybe<Array<Maybe<Scalars['Int']['output']>>>;
+  mentor?: Maybe<User>;
+  mentorUserId?: Maybe<Scalars['String']['output']>;
+  summary?: Maybe<ScholarshipDashboard>;
 };
 
 export enum ScholarshipPaymentMode {
@@ -1617,16 +1815,25 @@ export type ScholarshipWrongDisbursementCase = {
 export type Transaction = {
   __typename?: 'Transaction';
   amount?: Maybe<Scalars['Decimal']['output']>;
+  attachments?: Maybe<Array<Maybe<TransactionAttachment>>>;
+  billingCategory?: Maybe<BillingCategory>;
   createdAt?: Maybe<Scalars['DateTime']['output']>;
   currency?: Maybe<Currency>;
   description?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['String']['output']>;
+  immutableAt?: Maybe<Scalars['DateTime']['output']>;
   isDonation?: Maybe<Scalars['Boolean']['output']>;
+  linkedTransaction?: Maybe<Transaction>;
+  linkedTransactionId?: Maybe<Scalars['String']['output']>;
+  metadata?: Maybe<Scalars['JSON']['output']>;
   method?: Maybe<Scalars['String']['output']>;
+  recordedBy?: Maybe<User>;
+  recordedByUserId?: Maybe<Scalars['String']['output']>;
   referenceId?: Maybe<Scalars['String']['output']>;
   scholarshipApplicationId?: Maybe<Scalars['String']['output']>;
   scholarshipApprovedAt?: Maybe<Scalars['DateTime']['output']>;
   scholarshipBatchSnapshot?: Maybe<Scalars['Int']['output']>;
+  scholarshipBeneficiary?: Maybe<User>;
   scholarshipBeneficiaryUserId?: Maybe<Scalars['String']['output']>;
   scholarshipCompletedAt?: Maybe<Scalars['DateTime']['output']>;
   scholarshipConfirmedAmount?: Maybe<Scalars['Decimal']['output']>;
@@ -1634,6 +1841,7 @@ export type Transaction = {
   scholarshipImmutableAt?: Maybe<Scalars['DateTime']['output']>;
   scholarshipInstallmentSequence?: Maybe<Scalars['Int']['output']>;
   scholarshipMaskedPayoutDestination?: Maybe<Scalars['String']['output']>;
+  scholarshipMentor?: Maybe<User>;
   scholarshipMentorUserId?: Maybe<Scalars['String']['output']>;
   scholarshipOriginalTransactionId?: Maybe<Scalars['String']['output']>;
   scholarshipPayoutMethod?: Maybe<Scalars['String']['output']>;
@@ -1643,7 +1851,7 @@ export type Transaction = {
   scholarshipPurposeSnapshot?: Maybe<Scalars['String']['output']>;
   scholarshipReceivedAt?: Maybe<Scalars['DateTime']['output']>;
   scholarshipStatus?: Maybe<Scalars['String']['output']>;
-  sourceType?: Maybe<Scalars['String']['output']>;
+  sourceType?: Maybe<TransactionSourceType>;
   status?: Maybe<TransactionStatus>;
   title?: Maybe<Scalars['String']['output']>;
   transactionDate?: Maybe<Scalars['DateTime']['output']>;
@@ -1651,6 +1859,26 @@ export type Transaction = {
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
   user?: Maybe<User>;
   userId?: Maybe<Scalars['String']['output']>;
+  walletImpact?: Maybe<Scalars['Boolean']['output']>;
+};
+
+export type TransactionAttachment = {
+  __typename?: 'TransactionAttachment';
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  mimeType?: Maybe<Scalars['String']['output']>;
+  originalFilename?: Maybe<Scalars['String']['output']>;
+  sizeBytes?: Maybe<Scalars['Int']['output']>;
+  status?: Maybe<Scalars['String']['output']>;
+  transactionId?: Maybe<Scalars['String']['output']>;
+  uploadedAt?: Maybe<Scalars['DateTime']['output']>;
+  uploadedByUserId?: Maybe<Scalars['String']['output']>;
+};
+
+export type TransactionAttachmentUploadResponse = {
+  __typename?: 'TransactionAttachmentUploadResponse';
+  attachment?: Maybe<TransactionAttachment>;
+  uploadUrl?: Maybe<Scalars['String']['output']>;
 };
 
 export type TransactionListResponse = {
@@ -1658,6 +1886,15 @@ export type TransactionListResponse = {
   data?: Maybe<Array<Maybe<Transaction>>>;
   total?: Maybe<Scalars['Int']['output']>;
 };
+
+export enum TransactionSourceType {
+  Donation = 'DONATION',
+  Manual = 'MANUAL',
+  Scholarship = 'SCHOLARSHIP',
+  ScholarshipAdjustment = 'SCHOLARSHIP_ADJUSTMENT',
+  ScholarshipRefund = 'SCHOLARSHIP_REFUND',
+  ScholarshipReversal = 'SCHOLARSHIP_REVERSAL',
+}
 
 export enum TransactionStatus {
   Approved = 'APPROVED',
@@ -3160,6 +3397,7 @@ export type ConfirmMentorFundAllocationMutation = {
     | {
         __typename?: 'MentorFundAllocation';
         amount?: any | undefined;
+        associationTransactionId?: string | undefined;
         batch?: number | undefined;
         confirmedAmount?: any | undefined;
         createdAt?: any | undefined;
@@ -3173,6 +3411,631 @@ export type ConfirmMentorFundAllocationMutation = {
         reference?: string | undefined;
         status?: string | undefined;
         transferDate?: any | undefined;
+        associationTransaction?:
+          | {
+              __typename?: 'Transaction';
+              amount?: any | undefined;
+              billingCategory?: BillingCategory | undefined;
+              createdAt?: any | undefined;
+              currency?: Currency | undefined;
+              description?: string | undefined;
+              id?: string | undefined;
+              immutableAt?: any | undefined;
+              isDonation?: boolean | undefined;
+              linkedTransactionId?: string | undefined;
+              metadata?: any | undefined;
+              method?: string | undefined;
+              recordedByUserId?: string | undefined;
+              referenceId?: string | undefined;
+              scholarshipApplicationId?: string | undefined;
+              scholarshipApprovedAt?: any | undefined;
+              scholarshipBatchSnapshot?: number | undefined;
+              scholarshipBeneficiaryUserId?: string | undefined;
+              scholarshipCompletedAt?: any | undefined;
+              scholarshipConfirmedAmount?: any | undefined;
+              scholarshipConfirmedAt?: any | undefined;
+              scholarshipImmutableAt?: any | undefined;
+              scholarshipInstallmentSequence?: number | undefined;
+              scholarshipMaskedPayoutDestination?: string | undefined;
+              scholarshipMentorUserId?: string | undefined;
+              scholarshipOriginalTransactionId?: string | undefined;
+              scholarshipPayoutMethod?: string | undefined;
+              scholarshipProofDueAt?: any | undefined;
+              scholarshipProofDueDays?: number | undefined;
+              scholarshipProofStatus?: string | undefined;
+              scholarshipPurposeSnapshot?: string | undefined;
+              scholarshipReceivedAt?: any | undefined;
+              scholarshipStatus?: string | undefined;
+              sourceType?: TransactionSourceType | undefined;
+              status?: TransactionStatus | undefined;
+              title?: string | undefined;
+              transactionDate?: any | undefined;
+              type?: TransactionType | undefined;
+              updatedAt?: any | undefined;
+              userId?: string | undefined;
+              walletImpact?: boolean | undefined;
+              attachments?:
+                | Array<
+                    | {
+                        __typename?: 'TransactionAttachment';
+                        createdAt?: any | undefined;
+                        id?: string | undefined;
+                        mimeType?: string | undefined;
+                        originalFilename?: string | undefined;
+                        sizeBytes?: number | undefined;
+                        status?: string | undefined;
+                        transactionId?: string | undefined;
+                        uploadedAt?: any | undefined;
+                        uploadedByUserId?: string | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              linkedTransaction?:
+                | {
+                    __typename?: 'Transaction';
+                    amount?: any | undefined;
+                    billingCategory?: BillingCategory | undefined;
+                    createdAt?: any | undefined;
+                    currency?: Currency | undefined;
+                    description?: string | undefined;
+                    id?: string | undefined;
+                    immutableAt?: any | undefined;
+                    isDonation?: boolean | undefined;
+                    linkedTransactionId?: string | undefined;
+                    metadata?: any | undefined;
+                    method?: string | undefined;
+                    recordedByUserId?: string | undefined;
+                    referenceId?: string | undefined;
+                    scholarshipApplicationId?: string | undefined;
+                    scholarshipApprovedAt?: any | undefined;
+                    scholarshipBatchSnapshot?: number | undefined;
+                    scholarshipBeneficiaryUserId?: string | undefined;
+                    scholarshipCompletedAt?: any | undefined;
+                    scholarshipConfirmedAmount?: any | undefined;
+                    scholarshipConfirmedAt?: any | undefined;
+                    scholarshipImmutableAt?: any | undefined;
+                    scholarshipInstallmentSequence?: number | undefined;
+                    scholarshipMaskedPayoutDestination?: string | undefined;
+                    scholarshipMentorUserId?: string | undefined;
+                    scholarshipOriginalTransactionId?: string | undefined;
+                    scholarshipPayoutMethod?: string | undefined;
+                    scholarshipProofDueAt?: any | undefined;
+                    scholarshipProofDueDays?: number | undefined;
+                    scholarshipProofStatus?: string | undefined;
+                    scholarshipPurposeSnapshot?: string | undefined;
+                    scholarshipReceivedAt?: any | undefined;
+                    scholarshipStatus?: string | undefined;
+                    sourceType?: TransactionSourceType | undefined;
+                    status?: TransactionStatus | undefined;
+                    title?: string | undefined;
+                    transactionDate?: any | undefined;
+                    type?: TransactionType | undefined;
+                    updatedAt?: any | undefined;
+                    userId?: string | undefined;
+                    walletImpact?: boolean | undefined;
+                    attachments?:
+                      | Array<
+                          | {
+                              __typename?: 'TransactionAttachment';
+                              createdAt?: any | undefined;
+                              id?: string | undefined;
+                              mimeType?: string | undefined;
+                              originalFilename?: string | undefined;
+                              sizeBytes?: number | undefined;
+                              status?: string | undefined;
+                              transactionId?: string | undefined;
+                              uploadedAt?: any | undefined;
+                              uploadedByUserId?: string | undefined;
+                            }
+                          | undefined
+                        >
+                      | undefined;
+                    linkedTransaction?:
+                      | {
+                          __typename?: 'Transaction';
+                          amount?: any | undefined;
+                          billingCategory?: BillingCategory | undefined;
+                          createdAt?: any | undefined;
+                          currency?: Currency | undefined;
+                          description?: string | undefined;
+                          id?: string | undefined;
+                          immutableAt?: any | undefined;
+                          isDonation?: boolean | undefined;
+                          linkedTransactionId?: string | undefined;
+                          metadata?: any | undefined;
+                          method?: string | undefined;
+                          recordedByUserId?: string | undefined;
+                          referenceId?: string | undefined;
+                          scholarshipApplicationId?: string | undefined;
+                          scholarshipApprovedAt?: any | undefined;
+                          scholarshipBatchSnapshot?: number | undefined;
+                          scholarshipBeneficiaryUserId?: string | undefined;
+                          scholarshipCompletedAt?: any | undefined;
+                          scholarshipConfirmedAmount?: any | undefined;
+                          scholarshipConfirmedAt?: any | undefined;
+                          scholarshipImmutableAt?: any | undefined;
+                          scholarshipInstallmentSequence?: number | undefined;
+                          scholarshipMaskedPayoutDestination?: string | undefined;
+                          scholarshipMentorUserId?: string | undefined;
+                          scholarshipOriginalTransactionId?: string | undefined;
+                          scholarshipPayoutMethod?: string | undefined;
+                          scholarshipProofDueAt?: any | undefined;
+                          scholarshipProofDueDays?: number | undefined;
+                          scholarshipProofStatus?: string | undefined;
+                          scholarshipPurposeSnapshot?: string | undefined;
+                          scholarshipReceivedAt?: any | undefined;
+                          scholarshipStatus?: string | undefined;
+                          sourceType?: TransactionSourceType | undefined;
+                          status?: TransactionStatus | undefined;
+                          title?: string | undefined;
+                          transactionDate?: any | undefined;
+                          type?: TransactionType | undefined;
+                          updatedAt?: any | undefined;
+                          userId?: string | undefined;
+                          walletImpact?: boolean | undefined;
+                          recordedBy?:
+                            | {
+                                __typename?: 'User';
+                                aboutMe?: string | undefined;
+                                batch?: number | undefined;
+                                createdAt: any;
+                                disabled?: boolean | undefined;
+                                displayName?: string | undefined;
+                                dob?: any | undefined;
+                                email?: string | undefined;
+                                emergencyMobile?: string | undefined;
+                                extraEmail?: string | undefined;
+                                extraMobile?: string | undefined;
+                                firstName?: string | undefined;
+                                gender?: string | undefined;
+                                google_auth_id?: string | undefined;
+                                hasBusiness?: boolean | undefined;
+                                id?: string | undefined;
+                                isConfidential?: boolean | undefined;
+                                isFaculty?: boolean | undefined;
+                                isVerified?: boolean | undefined;
+                                lastName?: string | undefined;
+                                membershipYear?: number | undefined;
+                                metadata?: any | undefined;
+                                mobile?: string | undefined;
+                                nickName?: string | undefined;
+                                profileImage?: string | undefined;
+                                socialMedia?: any | undefined;
+                                updatedAt: any;
+                                whatsAppMobile?: string | undefined;
+                              }
+                            | undefined;
+                          scholarshipBeneficiary?:
+                            | {
+                                __typename?: 'User';
+                                aboutMe?: string | undefined;
+                                batch?: number | undefined;
+                                createdAt: any;
+                                disabled?: boolean | undefined;
+                                displayName?: string | undefined;
+                                dob?: any | undefined;
+                                email?: string | undefined;
+                                emergencyMobile?: string | undefined;
+                                extraEmail?: string | undefined;
+                                extraMobile?: string | undefined;
+                                firstName?: string | undefined;
+                                gender?: string | undefined;
+                                google_auth_id?: string | undefined;
+                                hasBusiness?: boolean | undefined;
+                                id?: string | undefined;
+                                isConfidential?: boolean | undefined;
+                                isFaculty?: boolean | undefined;
+                                isVerified?: boolean | undefined;
+                                lastName?: string | undefined;
+                                membershipYear?: number | undefined;
+                                metadata?: any | undefined;
+                                mobile?: string | undefined;
+                                nickName?: string | undefined;
+                                profileImage?: string | undefined;
+                                socialMedia?: any | undefined;
+                                updatedAt: any;
+                                whatsAppMobile?: string | undefined;
+                              }
+                            | undefined;
+                          scholarshipMentor?:
+                            | {
+                                __typename?: 'User';
+                                aboutMe?: string | undefined;
+                                batch?: number | undefined;
+                                createdAt: any;
+                                disabled?: boolean | undefined;
+                                displayName?: string | undefined;
+                                dob?: any | undefined;
+                                email?: string | undefined;
+                                emergencyMobile?: string | undefined;
+                                extraEmail?: string | undefined;
+                                extraMobile?: string | undefined;
+                                firstName?: string | undefined;
+                                gender?: string | undefined;
+                                google_auth_id?: string | undefined;
+                                hasBusiness?: boolean | undefined;
+                                id?: string | undefined;
+                                isConfidential?: boolean | undefined;
+                                isFaculty?: boolean | undefined;
+                                isVerified?: boolean | undefined;
+                                lastName?: string | undefined;
+                                membershipYear?: number | undefined;
+                                metadata?: any | undefined;
+                                mobile?: string | undefined;
+                                nickName?: string | undefined;
+                                profileImage?: string | undefined;
+                                socialMedia?: any | undefined;
+                                updatedAt: any;
+                                whatsAppMobile?: string | undefined;
+                              }
+                            | undefined;
+                          user?:
+                            | {
+                                __typename?: 'User';
+                                aboutMe?: string | undefined;
+                                batch?: number | undefined;
+                                createdAt: any;
+                                disabled?: boolean | undefined;
+                                displayName?: string | undefined;
+                                dob?: any | undefined;
+                                email?: string | undefined;
+                                emergencyMobile?: string | undefined;
+                                extraEmail?: string | undefined;
+                                extraMobile?: string | undefined;
+                                firstName?: string | undefined;
+                                gender?: string | undefined;
+                                google_auth_id?: string | undefined;
+                                hasBusiness?: boolean | undefined;
+                                id?: string | undefined;
+                                isConfidential?: boolean | undefined;
+                                isFaculty?: boolean | undefined;
+                                isVerified?: boolean | undefined;
+                                lastName?: string | undefined;
+                                membershipYear?: number | undefined;
+                                metadata?: any | undefined;
+                                mobile?: string | undefined;
+                                nickName?: string | undefined;
+                                profileImage?: string | undefined;
+                                socialMedia?: any | undefined;
+                                updatedAt: any;
+                                whatsAppMobile?: string | undefined;
+                              }
+                            | undefined;
+                        }
+                      | undefined;
+                  }
+                | undefined;
+              recordedBy?:
+                | {
+                    __typename?: 'User';
+                    aboutMe?: string | undefined;
+                    batch?: number | undefined;
+                    createdAt: any;
+                    disabled?: boolean | undefined;
+                    displayName?: string | undefined;
+                    dob?: any | undefined;
+                    email?: string | undefined;
+                    emergencyMobile?: string | undefined;
+                    extraEmail?: string | undefined;
+                    extraMobile?: string | undefined;
+                    firstName?: string | undefined;
+                    gender?: string | undefined;
+                    google_auth_id?: string | undefined;
+                    hasBusiness?: boolean | undefined;
+                    id?: string | undefined;
+                    isConfidential?: boolean | undefined;
+                    isFaculty?: boolean | undefined;
+                    isVerified?: boolean | undefined;
+                    lastName?: string | undefined;
+                    membershipYear?: number | undefined;
+                    metadata?: any | undefined;
+                    mobile?: string | undefined;
+                    nickName?: string | undefined;
+                    profileImage?: string | undefined;
+                    socialMedia?: any | undefined;
+                    updatedAt: any;
+                    whatsAppMobile?: string | undefined;
+                    companyInfo?:
+                      | Array<
+                          | {
+                              __typename?: 'CompanyInfoBasic';
+                              companyName: string;
+                              id: string;
+                              position?: string | undefined;
+                              userId: string;
+                            }
+                          | undefined
+                        >
+                      | undefined;
+                    positions?:
+                      | Array<
+                          | {
+                              __typename?: 'EffectivePosition';
+                              assignmentId?: string | undefined;
+                              code?: string | undefined;
+                              name?: string | undefined;
+                              termId?: string | undefined;
+                              termName?: string | undefined;
+                              validFrom?: any | undefined;
+                              validUntil?: any | undefined;
+                            }
+                          | undefined
+                        >
+                      | undefined;
+                    role?:
+                      | {
+                          __typename?: 'Role';
+                          code?: string | undefined;
+                          id?: string | undefined;
+                          name?: string | undefined;
+                        }
+                      | undefined;
+                    roles?:
+                      | Array<
+                          | {
+                              __typename?: 'EffectiveRole';
+                              assignmentId?: string | undefined;
+                              code?: string | undefined;
+                              name?: string | undefined;
+                              scopeBatch?: number | undefined;
+                              scopeType?: string | undefined;
+                              validFrom?: any | undefined;
+                              validUntil?: any | undefined;
+                            }
+                          | undefined
+                        >
+                      | undefined;
+                  }
+                | undefined;
+              scholarshipBeneficiary?:
+                | {
+                    __typename?: 'User';
+                    aboutMe?: string | undefined;
+                    batch?: number | undefined;
+                    createdAt: any;
+                    disabled?: boolean | undefined;
+                    displayName?: string | undefined;
+                    dob?: any | undefined;
+                    email?: string | undefined;
+                    emergencyMobile?: string | undefined;
+                    extraEmail?: string | undefined;
+                    extraMobile?: string | undefined;
+                    firstName?: string | undefined;
+                    gender?: string | undefined;
+                    google_auth_id?: string | undefined;
+                    hasBusiness?: boolean | undefined;
+                    id?: string | undefined;
+                    isConfidential?: boolean | undefined;
+                    isFaculty?: boolean | undefined;
+                    isVerified?: boolean | undefined;
+                    lastName?: string | undefined;
+                    membershipYear?: number | undefined;
+                    metadata?: any | undefined;
+                    mobile?: string | undefined;
+                    nickName?: string | undefined;
+                    profileImage?: string | undefined;
+                    socialMedia?: any | undefined;
+                    updatedAt: any;
+                    whatsAppMobile?: string | undefined;
+                    companyInfo?:
+                      | Array<
+                          | {
+                              __typename?: 'CompanyInfoBasic';
+                              companyName: string;
+                              id: string;
+                              position?: string | undefined;
+                              userId: string;
+                            }
+                          | undefined
+                        >
+                      | undefined;
+                    positions?:
+                      | Array<
+                          | {
+                              __typename?: 'EffectivePosition';
+                              assignmentId?: string | undefined;
+                              code?: string | undefined;
+                              name?: string | undefined;
+                              termId?: string | undefined;
+                              termName?: string | undefined;
+                              validFrom?: any | undefined;
+                              validUntil?: any | undefined;
+                            }
+                          | undefined
+                        >
+                      | undefined;
+                    role?:
+                      | {
+                          __typename?: 'Role';
+                          code?: string | undefined;
+                          id?: string | undefined;
+                          name?: string | undefined;
+                        }
+                      | undefined;
+                    roles?:
+                      | Array<
+                          | {
+                              __typename?: 'EffectiveRole';
+                              assignmentId?: string | undefined;
+                              code?: string | undefined;
+                              name?: string | undefined;
+                              scopeBatch?: number | undefined;
+                              scopeType?: string | undefined;
+                              validFrom?: any | undefined;
+                              validUntil?: any | undefined;
+                            }
+                          | undefined
+                        >
+                      | undefined;
+                  }
+                | undefined;
+              scholarshipMentor?:
+                | {
+                    __typename?: 'User';
+                    aboutMe?: string | undefined;
+                    batch?: number | undefined;
+                    createdAt: any;
+                    disabled?: boolean | undefined;
+                    displayName?: string | undefined;
+                    dob?: any | undefined;
+                    email?: string | undefined;
+                    emergencyMobile?: string | undefined;
+                    extraEmail?: string | undefined;
+                    extraMobile?: string | undefined;
+                    firstName?: string | undefined;
+                    gender?: string | undefined;
+                    google_auth_id?: string | undefined;
+                    hasBusiness?: boolean | undefined;
+                    id?: string | undefined;
+                    isConfidential?: boolean | undefined;
+                    isFaculty?: boolean | undefined;
+                    isVerified?: boolean | undefined;
+                    lastName?: string | undefined;
+                    membershipYear?: number | undefined;
+                    metadata?: any | undefined;
+                    mobile?: string | undefined;
+                    nickName?: string | undefined;
+                    profileImage?: string | undefined;
+                    socialMedia?: any | undefined;
+                    updatedAt: any;
+                    whatsAppMobile?: string | undefined;
+                    companyInfo?:
+                      | Array<
+                          | {
+                              __typename?: 'CompanyInfoBasic';
+                              companyName: string;
+                              id: string;
+                              position?: string | undefined;
+                              userId: string;
+                            }
+                          | undefined
+                        >
+                      | undefined;
+                    positions?:
+                      | Array<
+                          | {
+                              __typename?: 'EffectivePosition';
+                              assignmentId?: string | undefined;
+                              code?: string | undefined;
+                              name?: string | undefined;
+                              termId?: string | undefined;
+                              termName?: string | undefined;
+                              validFrom?: any | undefined;
+                              validUntil?: any | undefined;
+                            }
+                          | undefined
+                        >
+                      | undefined;
+                    role?:
+                      | {
+                          __typename?: 'Role';
+                          code?: string | undefined;
+                          id?: string | undefined;
+                          name?: string | undefined;
+                        }
+                      | undefined;
+                    roles?:
+                      | Array<
+                          | {
+                              __typename?: 'EffectiveRole';
+                              assignmentId?: string | undefined;
+                              code?: string | undefined;
+                              name?: string | undefined;
+                              scopeBatch?: number | undefined;
+                              scopeType?: string | undefined;
+                              validFrom?: any | undefined;
+                              validUntil?: any | undefined;
+                            }
+                          | undefined
+                        >
+                      | undefined;
+                  }
+                | undefined;
+              user?:
+                | {
+                    __typename?: 'User';
+                    aboutMe?: string | undefined;
+                    batch?: number | undefined;
+                    createdAt: any;
+                    disabled?: boolean | undefined;
+                    displayName?: string | undefined;
+                    dob?: any | undefined;
+                    email?: string | undefined;
+                    emergencyMobile?: string | undefined;
+                    extraEmail?: string | undefined;
+                    extraMobile?: string | undefined;
+                    firstName?: string | undefined;
+                    gender?: string | undefined;
+                    google_auth_id?: string | undefined;
+                    hasBusiness?: boolean | undefined;
+                    id?: string | undefined;
+                    isConfidential?: boolean | undefined;
+                    isFaculty?: boolean | undefined;
+                    isVerified?: boolean | undefined;
+                    lastName?: string | undefined;
+                    membershipYear?: number | undefined;
+                    metadata?: any | undefined;
+                    mobile?: string | undefined;
+                    nickName?: string | undefined;
+                    profileImage?: string | undefined;
+                    socialMedia?: any | undefined;
+                    updatedAt: any;
+                    whatsAppMobile?: string | undefined;
+                    companyInfo?:
+                      | Array<
+                          | {
+                              __typename?: 'CompanyInfoBasic';
+                              companyName: string;
+                              id: string;
+                              position?: string | undefined;
+                              userId: string;
+                            }
+                          | undefined
+                        >
+                      | undefined;
+                    positions?:
+                      | Array<
+                          | {
+                              __typename?: 'EffectivePosition';
+                              assignmentId?: string | undefined;
+                              code?: string | undefined;
+                              name?: string | undefined;
+                              termId?: string | undefined;
+                              termName?: string | undefined;
+                              validFrom?: any | undefined;
+                              validUntil?: any | undefined;
+                            }
+                          | undefined
+                        >
+                      | undefined;
+                    role?:
+                      | {
+                          __typename?: 'Role';
+                          code?: string | undefined;
+                          id?: string | undefined;
+                          name?: string | undefined;
+                        }
+                      | undefined;
+                    roles?:
+                      | Array<
+                          | {
+                              __typename?: 'EffectiveRole';
+                              assignmentId?: string | undefined;
+                              code?: string | undefined;
+                              name?: string | undefined;
+                              scopeBatch?: number | undefined;
+                              scopeType?: string | undefined;
+                              validFrom?: any | undefined;
+                              validUntil?: any | undefined;
+                            }
+                          | undefined
+                        >
+                      | undefined;
+                  }
+                | undefined;
+            }
+          | undefined;
       }
     | undefined;
 };
@@ -3205,6 +4068,7 @@ export type ConfirmScholarshipRefundReceivedMutation = {
 
 export type ConfirmScholarshipTransactionReceiptMutationVariables = Exact<{
   confirmedAmount: Scalars['Float']['input'];
+  creditProofDocumentId?: InputMaybe<Scalars['String']['input']>;
   note?: InputMaybe<Scalars['String']['input']>;
   transactionId: Scalars['String']['input'];
 }>;
@@ -3215,12 +4079,17 @@ export type ConfirmScholarshipTransactionReceiptMutation = {
     | {
         __typename?: 'Transaction';
         amount?: any | undefined;
+        billingCategory?: BillingCategory | undefined;
         createdAt?: any | undefined;
         currency?: Currency | undefined;
         description?: string | undefined;
         id?: string | undefined;
+        immutableAt?: any | undefined;
         isDonation?: boolean | undefined;
+        linkedTransactionId?: string | undefined;
+        metadata?: any | undefined;
         method?: string | undefined;
+        recordedByUserId?: string | undefined;
         referenceId?: string | undefined;
         scholarshipApplicationId?: string | undefined;
         scholarshipApprovedAt?: any | undefined;
@@ -3241,13 +4110,562 @@ export type ConfirmScholarshipTransactionReceiptMutation = {
         scholarshipPurposeSnapshot?: string | undefined;
         scholarshipReceivedAt?: any | undefined;
         scholarshipStatus?: string | undefined;
-        sourceType?: string | undefined;
+        sourceType?: TransactionSourceType | undefined;
         status?: TransactionStatus | undefined;
         title?: string | undefined;
         transactionDate?: any | undefined;
         type?: TransactionType | undefined;
         updatedAt?: any | undefined;
         userId?: string | undefined;
+        walletImpact?: boolean | undefined;
+        attachments?:
+          | Array<
+              | {
+                  __typename?: 'TransactionAttachment';
+                  createdAt?: any | undefined;
+                  id?: string | undefined;
+                  mimeType?: string | undefined;
+                  originalFilename?: string | undefined;
+                  sizeBytes?: number | undefined;
+                  status?: string | undefined;
+                  transactionId?: string | undefined;
+                  uploadedAt?: any | undefined;
+                  uploadedByUserId?: string | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+        linkedTransaction?:
+          | {
+              __typename?: 'Transaction';
+              amount?: any | undefined;
+              billingCategory?: BillingCategory | undefined;
+              createdAt?: any | undefined;
+              currency?: Currency | undefined;
+              description?: string | undefined;
+              id?: string | undefined;
+              immutableAt?: any | undefined;
+              isDonation?: boolean | undefined;
+              linkedTransactionId?: string | undefined;
+              metadata?: any | undefined;
+              method?: string | undefined;
+              recordedByUserId?: string | undefined;
+              referenceId?: string | undefined;
+              scholarshipApplicationId?: string | undefined;
+              scholarshipApprovedAt?: any | undefined;
+              scholarshipBatchSnapshot?: number | undefined;
+              scholarshipBeneficiaryUserId?: string | undefined;
+              scholarshipCompletedAt?: any | undefined;
+              scholarshipConfirmedAmount?: any | undefined;
+              scholarshipConfirmedAt?: any | undefined;
+              scholarshipImmutableAt?: any | undefined;
+              scholarshipInstallmentSequence?: number | undefined;
+              scholarshipMaskedPayoutDestination?: string | undefined;
+              scholarshipMentorUserId?: string | undefined;
+              scholarshipOriginalTransactionId?: string | undefined;
+              scholarshipPayoutMethod?: string | undefined;
+              scholarshipProofDueAt?: any | undefined;
+              scholarshipProofDueDays?: number | undefined;
+              scholarshipProofStatus?: string | undefined;
+              scholarshipPurposeSnapshot?: string | undefined;
+              scholarshipReceivedAt?: any | undefined;
+              scholarshipStatus?: string | undefined;
+              sourceType?: TransactionSourceType | undefined;
+              status?: TransactionStatus | undefined;
+              title?: string | undefined;
+              transactionDate?: any | undefined;
+              type?: TransactionType | undefined;
+              updatedAt?: any | undefined;
+              userId?: string | undefined;
+              walletImpact?: boolean | undefined;
+              attachments?:
+                | Array<
+                    | {
+                        __typename?: 'TransactionAttachment';
+                        createdAt?: any | undefined;
+                        id?: string | undefined;
+                        mimeType?: string | undefined;
+                        originalFilename?: string | undefined;
+                        sizeBytes?: number | undefined;
+                        status?: string | undefined;
+                        transactionId?: string | undefined;
+                        uploadedAt?: any | undefined;
+                        uploadedByUserId?: string | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              linkedTransaction?:
+                | {
+                    __typename?: 'Transaction';
+                    amount?: any | undefined;
+                    billingCategory?: BillingCategory | undefined;
+                    createdAt?: any | undefined;
+                    currency?: Currency | undefined;
+                    description?: string | undefined;
+                    id?: string | undefined;
+                    immutableAt?: any | undefined;
+                    isDonation?: boolean | undefined;
+                    linkedTransactionId?: string | undefined;
+                    metadata?: any | undefined;
+                    method?: string | undefined;
+                    recordedByUserId?: string | undefined;
+                    referenceId?: string | undefined;
+                    scholarshipApplicationId?: string | undefined;
+                    scholarshipApprovedAt?: any | undefined;
+                    scholarshipBatchSnapshot?: number | undefined;
+                    scholarshipBeneficiaryUserId?: string | undefined;
+                    scholarshipCompletedAt?: any | undefined;
+                    scholarshipConfirmedAmount?: any | undefined;
+                    scholarshipConfirmedAt?: any | undefined;
+                    scholarshipImmutableAt?: any | undefined;
+                    scholarshipInstallmentSequence?: number | undefined;
+                    scholarshipMaskedPayoutDestination?: string | undefined;
+                    scholarshipMentorUserId?: string | undefined;
+                    scholarshipOriginalTransactionId?: string | undefined;
+                    scholarshipPayoutMethod?: string | undefined;
+                    scholarshipProofDueAt?: any | undefined;
+                    scholarshipProofDueDays?: number | undefined;
+                    scholarshipProofStatus?: string | undefined;
+                    scholarshipPurposeSnapshot?: string | undefined;
+                    scholarshipReceivedAt?: any | undefined;
+                    scholarshipStatus?: string | undefined;
+                    sourceType?: TransactionSourceType | undefined;
+                    status?: TransactionStatus | undefined;
+                    title?: string | undefined;
+                    transactionDate?: any | undefined;
+                    type?: TransactionType | undefined;
+                    updatedAt?: any | undefined;
+                    userId?: string | undefined;
+                    walletImpact?: boolean | undefined;
+                    recordedBy?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                    scholarshipBeneficiary?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                    scholarshipMentor?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                    user?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                  }
+                | undefined;
+            }
+          | undefined;
+        recordedBy?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
+          | undefined;
+        scholarshipBeneficiary?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
+          | undefined;
+        scholarshipMentor?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
+          | undefined;
         user?:
           | {
               __typename?: 'User';
@@ -3278,51 +4696,6 @@ export type ConfirmScholarshipTransactionReceiptMutation = {
               socialMedia?: any | undefined;
               updatedAt: any;
               whatsAppMobile?: string | undefined;
-              companyInfo?:
-                | Array<
-                    | {
-                        __typename?: 'CompanyInfoBasic';
-                        companyName: string;
-                        id: string;
-                        position?: string | undefined;
-                        userId: string;
-                      }
-                    | undefined
-                  >
-                | undefined;
-              positions?:
-                | Array<
-                    | {
-                        __typename?: 'EffectivePosition';
-                        assignmentId?: string | undefined;
-                        code?: string | undefined;
-                        name?: string | undefined;
-                        termId?: string | undefined;
-                        termName?: string | undefined;
-                        validFrom?: any | undefined;
-                        validUntil?: any | undefined;
-                      }
-                    | undefined
-                  >
-                | undefined;
-              role?:
-                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
-                | undefined;
-              roles?:
-                | Array<
-                    | {
-                        __typename?: 'EffectiveRole';
-                        assignmentId?: string | undefined;
-                        code?: string | undefined;
-                        name?: string | undefined;
-                        scopeBatch?: number | undefined;
-                        scopeType?: string | undefined;
-                        validFrom?: any | undefined;
-                        validUntil?: any | undefined;
-                      }
-                    | undefined
-                  >
-                | undefined;
             }
           | undefined;
       }
@@ -3614,6 +4987,1923 @@ export type CreateAlbumMutation = {
                 }
               | undefined
             >
+          | undefined;
+      }
+    | undefined;
+};
+
+export type CreateAssociationAdjustmentMutationVariables = Exact<{
+  amount: Scalars['Float']['input'];
+  description: Scalars['String']['input'];
+  method?: InputMaybe<Scalars['String']['input']>;
+  referenceId?: InputMaybe<Scalars['String']['input']>;
+  title: Scalars['String']['input'];
+  transactionDate?: InputMaybe<Scalars['String']['input']>;
+  type: TransactionType;
+}>;
+
+export type CreateAssociationAdjustmentMutation = {
+  __typename?: 'Mutation';
+  createAssociationAdjustment?:
+    | {
+        __typename?: 'Transaction';
+        amount?: any | undefined;
+        billingCategory?: BillingCategory | undefined;
+        createdAt?: any | undefined;
+        currency?: Currency | undefined;
+        description?: string | undefined;
+        id?: string | undefined;
+        immutableAt?: any | undefined;
+        isDonation?: boolean | undefined;
+        linkedTransactionId?: string | undefined;
+        metadata?: any | undefined;
+        method?: string | undefined;
+        recordedByUserId?: string | undefined;
+        referenceId?: string | undefined;
+        scholarshipApplicationId?: string | undefined;
+        scholarshipApprovedAt?: any | undefined;
+        scholarshipBatchSnapshot?: number | undefined;
+        scholarshipBeneficiaryUserId?: string | undefined;
+        scholarshipCompletedAt?: any | undefined;
+        scholarshipConfirmedAmount?: any | undefined;
+        scholarshipConfirmedAt?: any | undefined;
+        scholarshipImmutableAt?: any | undefined;
+        scholarshipInstallmentSequence?: number | undefined;
+        scholarshipMaskedPayoutDestination?: string | undefined;
+        scholarshipMentorUserId?: string | undefined;
+        scholarshipOriginalTransactionId?: string | undefined;
+        scholarshipPayoutMethod?: string | undefined;
+        scholarshipProofDueAt?: any | undefined;
+        scholarshipProofDueDays?: number | undefined;
+        scholarshipProofStatus?: string | undefined;
+        scholarshipPurposeSnapshot?: string | undefined;
+        scholarshipReceivedAt?: any | undefined;
+        scholarshipStatus?: string | undefined;
+        sourceType?: TransactionSourceType | undefined;
+        status?: TransactionStatus | undefined;
+        title?: string | undefined;
+        transactionDate?: any | undefined;
+        type?: TransactionType | undefined;
+        updatedAt?: any | undefined;
+        userId?: string | undefined;
+        walletImpact?: boolean | undefined;
+        attachments?:
+          | Array<
+              | {
+                  __typename?: 'TransactionAttachment';
+                  createdAt?: any | undefined;
+                  id?: string | undefined;
+                  mimeType?: string | undefined;
+                  originalFilename?: string | undefined;
+                  sizeBytes?: number | undefined;
+                  status?: string | undefined;
+                  transactionId?: string | undefined;
+                  uploadedAt?: any | undefined;
+                  uploadedByUserId?: string | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+        linkedTransaction?:
+          | {
+              __typename?: 'Transaction';
+              amount?: any | undefined;
+              billingCategory?: BillingCategory | undefined;
+              createdAt?: any | undefined;
+              currency?: Currency | undefined;
+              description?: string | undefined;
+              id?: string | undefined;
+              immutableAt?: any | undefined;
+              isDonation?: boolean | undefined;
+              linkedTransactionId?: string | undefined;
+              metadata?: any | undefined;
+              method?: string | undefined;
+              recordedByUserId?: string | undefined;
+              referenceId?: string | undefined;
+              scholarshipApplicationId?: string | undefined;
+              scholarshipApprovedAt?: any | undefined;
+              scholarshipBatchSnapshot?: number | undefined;
+              scholarshipBeneficiaryUserId?: string | undefined;
+              scholarshipCompletedAt?: any | undefined;
+              scholarshipConfirmedAmount?: any | undefined;
+              scholarshipConfirmedAt?: any | undefined;
+              scholarshipImmutableAt?: any | undefined;
+              scholarshipInstallmentSequence?: number | undefined;
+              scholarshipMaskedPayoutDestination?: string | undefined;
+              scholarshipMentorUserId?: string | undefined;
+              scholarshipOriginalTransactionId?: string | undefined;
+              scholarshipPayoutMethod?: string | undefined;
+              scholarshipProofDueAt?: any | undefined;
+              scholarshipProofDueDays?: number | undefined;
+              scholarshipProofStatus?: string | undefined;
+              scholarshipPurposeSnapshot?: string | undefined;
+              scholarshipReceivedAt?: any | undefined;
+              scholarshipStatus?: string | undefined;
+              sourceType?: TransactionSourceType | undefined;
+              status?: TransactionStatus | undefined;
+              title?: string | undefined;
+              transactionDate?: any | undefined;
+              type?: TransactionType | undefined;
+              updatedAt?: any | undefined;
+              userId?: string | undefined;
+              walletImpact?: boolean | undefined;
+              attachments?:
+                | Array<
+                    | {
+                        __typename?: 'TransactionAttachment';
+                        createdAt?: any | undefined;
+                        id?: string | undefined;
+                        mimeType?: string | undefined;
+                        originalFilename?: string | undefined;
+                        sizeBytes?: number | undefined;
+                        status?: string | undefined;
+                        transactionId?: string | undefined;
+                        uploadedAt?: any | undefined;
+                        uploadedByUserId?: string | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              linkedTransaction?:
+                | {
+                    __typename?: 'Transaction';
+                    amount?: any | undefined;
+                    billingCategory?: BillingCategory | undefined;
+                    createdAt?: any | undefined;
+                    currency?: Currency | undefined;
+                    description?: string | undefined;
+                    id?: string | undefined;
+                    immutableAt?: any | undefined;
+                    isDonation?: boolean | undefined;
+                    linkedTransactionId?: string | undefined;
+                    metadata?: any | undefined;
+                    method?: string | undefined;
+                    recordedByUserId?: string | undefined;
+                    referenceId?: string | undefined;
+                    scholarshipApplicationId?: string | undefined;
+                    scholarshipApprovedAt?: any | undefined;
+                    scholarshipBatchSnapshot?: number | undefined;
+                    scholarshipBeneficiaryUserId?: string | undefined;
+                    scholarshipCompletedAt?: any | undefined;
+                    scholarshipConfirmedAmount?: any | undefined;
+                    scholarshipConfirmedAt?: any | undefined;
+                    scholarshipImmutableAt?: any | undefined;
+                    scholarshipInstallmentSequence?: number | undefined;
+                    scholarshipMaskedPayoutDestination?: string | undefined;
+                    scholarshipMentorUserId?: string | undefined;
+                    scholarshipOriginalTransactionId?: string | undefined;
+                    scholarshipPayoutMethod?: string | undefined;
+                    scholarshipProofDueAt?: any | undefined;
+                    scholarshipProofDueDays?: number | undefined;
+                    scholarshipProofStatus?: string | undefined;
+                    scholarshipPurposeSnapshot?: string | undefined;
+                    scholarshipReceivedAt?: any | undefined;
+                    scholarshipStatus?: string | undefined;
+                    sourceType?: TransactionSourceType | undefined;
+                    status?: TransactionStatus | undefined;
+                    title?: string | undefined;
+                    transactionDate?: any | undefined;
+                    type?: TransactionType | undefined;
+                    updatedAt?: any | undefined;
+                    userId?: string | undefined;
+                    walletImpact?: boolean | undefined;
+                    recordedBy?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                    scholarshipBeneficiary?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                    scholarshipMentor?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                    user?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                  }
+                | undefined;
+            }
+          | undefined;
+        recordedBy?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
+          | undefined;
+        scholarshipBeneficiary?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
+          | undefined;
+        scholarshipMentor?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
+          | undefined;
+        user?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
+export type CreateAssociationCreditMutationVariables = Exact<{
+  amount: Scalars['Float']['input'];
+  billingCategory?: InputMaybe<BillingCategory>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  method?: InputMaybe<Scalars['String']['input']>;
+  referenceId?: InputMaybe<Scalars['String']['input']>;
+  title: Scalars['String']['input'];
+  transactionDate?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type CreateAssociationCreditMutation = {
+  __typename?: 'Mutation';
+  createAssociationCredit?:
+    | {
+        __typename?: 'Transaction';
+        amount?: any | undefined;
+        billingCategory?: BillingCategory | undefined;
+        createdAt?: any | undefined;
+        currency?: Currency | undefined;
+        description?: string | undefined;
+        id?: string | undefined;
+        immutableAt?: any | undefined;
+        isDonation?: boolean | undefined;
+        linkedTransactionId?: string | undefined;
+        metadata?: any | undefined;
+        method?: string | undefined;
+        recordedByUserId?: string | undefined;
+        referenceId?: string | undefined;
+        scholarshipApplicationId?: string | undefined;
+        scholarshipApprovedAt?: any | undefined;
+        scholarshipBatchSnapshot?: number | undefined;
+        scholarshipBeneficiaryUserId?: string | undefined;
+        scholarshipCompletedAt?: any | undefined;
+        scholarshipConfirmedAmount?: any | undefined;
+        scholarshipConfirmedAt?: any | undefined;
+        scholarshipImmutableAt?: any | undefined;
+        scholarshipInstallmentSequence?: number | undefined;
+        scholarshipMaskedPayoutDestination?: string | undefined;
+        scholarshipMentorUserId?: string | undefined;
+        scholarshipOriginalTransactionId?: string | undefined;
+        scholarshipPayoutMethod?: string | undefined;
+        scholarshipProofDueAt?: any | undefined;
+        scholarshipProofDueDays?: number | undefined;
+        scholarshipProofStatus?: string | undefined;
+        scholarshipPurposeSnapshot?: string | undefined;
+        scholarshipReceivedAt?: any | undefined;
+        scholarshipStatus?: string | undefined;
+        sourceType?: TransactionSourceType | undefined;
+        status?: TransactionStatus | undefined;
+        title?: string | undefined;
+        transactionDate?: any | undefined;
+        type?: TransactionType | undefined;
+        updatedAt?: any | undefined;
+        userId?: string | undefined;
+        walletImpact?: boolean | undefined;
+        attachments?:
+          | Array<
+              | {
+                  __typename?: 'TransactionAttachment';
+                  createdAt?: any | undefined;
+                  id?: string | undefined;
+                  mimeType?: string | undefined;
+                  originalFilename?: string | undefined;
+                  sizeBytes?: number | undefined;
+                  status?: string | undefined;
+                  transactionId?: string | undefined;
+                  uploadedAt?: any | undefined;
+                  uploadedByUserId?: string | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+        linkedTransaction?:
+          | {
+              __typename?: 'Transaction';
+              amount?: any | undefined;
+              billingCategory?: BillingCategory | undefined;
+              createdAt?: any | undefined;
+              currency?: Currency | undefined;
+              description?: string | undefined;
+              id?: string | undefined;
+              immutableAt?: any | undefined;
+              isDonation?: boolean | undefined;
+              linkedTransactionId?: string | undefined;
+              metadata?: any | undefined;
+              method?: string | undefined;
+              recordedByUserId?: string | undefined;
+              referenceId?: string | undefined;
+              scholarshipApplicationId?: string | undefined;
+              scholarshipApprovedAt?: any | undefined;
+              scholarshipBatchSnapshot?: number | undefined;
+              scholarshipBeneficiaryUserId?: string | undefined;
+              scholarshipCompletedAt?: any | undefined;
+              scholarshipConfirmedAmount?: any | undefined;
+              scholarshipConfirmedAt?: any | undefined;
+              scholarshipImmutableAt?: any | undefined;
+              scholarshipInstallmentSequence?: number | undefined;
+              scholarshipMaskedPayoutDestination?: string | undefined;
+              scholarshipMentorUserId?: string | undefined;
+              scholarshipOriginalTransactionId?: string | undefined;
+              scholarshipPayoutMethod?: string | undefined;
+              scholarshipProofDueAt?: any | undefined;
+              scholarshipProofDueDays?: number | undefined;
+              scholarshipProofStatus?: string | undefined;
+              scholarshipPurposeSnapshot?: string | undefined;
+              scholarshipReceivedAt?: any | undefined;
+              scholarshipStatus?: string | undefined;
+              sourceType?: TransactionSourceType | undefined;
+              status?: TransactionStatus | undefined;
+              title?: string | undefined;
+              transactionDate?: any | undefined;
+              type?: TransactionType | undefined;
+              updatedAt?: any | undefined;
+              userId?: string | undefined;
+              walletImpact?: boolean | undefined;
+              attachments?:
+                | Array<
+                    | {
+                        __typename?: 'TransactionAttachment';
+                        createdAt?: any | undefined;
+                        id?: string | undefined;
+                        mimeType?: string | undefined;
+                        originalFilename?: string | undefined;
+                        sizeBytes?: number | undefined;
+                        status?: string | undefined;
+                        transactionId?: string | undefined;
+                        uploadedAt?: any | undefined;
+                        uploadedByUserId?: string | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              linkedTransaction?:
+                | {
+                    __typename?: 'Transaction';
+                    amount?: any | undefined;
+                    billingCategory?: BillingCategory | undefined;
+                    createdAt?: any | undefined;
+                    currency?: Currency | undefined;
+                    description?: string | undefined;
+                    id?: string | undefined;
+                    immutableAt?: any | undefined;
+                    isDonation?: boolean | undefined;
+                    linkedTransactionId?: string | undefined;
+                    metadata?: any | undefined;
+                    method?: string | undefined;
+                    recordedByUserId?: string | undefined;
+                    referenceId?: string | undefined;
+                    scholarshipApplicationId?: string | undefined;
+                    scholarshipApprovedAt?: any | undefined;
+                    scholarshipBatchSnapshot?: number | undefined;
+                    scholarshipBeneficiaryUserId?: string | undefined;
+                    scholarshipCompletedAt?: any | undefined;
+                    scholarshipConfirmedAmount?: any | undefined;
+                    scholarshipConfirmedAt?: any | undefined;
+                    scholarshipImmutableAt?: any | undefined;
+                    scholarshipInstallmentSequence?: number | undefined;
+                    scholarshipMaskedPayoutDestination?: string | undefined;
+                    scholarshipMentorUserId?: string | undefined;
+                    scholarshipOriginalTransactionId?: string | undefined;
+                    scholarshipPayoutMethod?: string | undefined;
+                    scholarshipProofDueAt?: any | undefined;
+                    scholarshipProofDueDays?: number | undefined;
+                    scholarshipProofStatus?: string | undefined;
+                    scholarshipPurposeSnapshot?: string | undefined;
+                    scholarshipReceivedAt?: any | undefined;
+                    scholarshipStatus?: string | undefined;
+                    sourceType?: TransactionSourceType | undefined;
+                    status?: TransactionStatus | undefined;
+                    title?: string | undefined;
+                    transactionDate?: any | undefined;
+                    type?: TransactionType | undefined;
+                    updatedAt?: any | undefined;
+                    userId?: string | undefined;
+                    walletImpact?: boolean | undefined;
+                    recordedBy?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                    scholarshipBeneficiary?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                    scholarshipMentor?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                    user?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                  }
+                | undefined;
+            }
+          | undefined;
+        recordedBy?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
+          | undefined;
+        scholarshipBeneficiary?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
+          | undefined;
+        scholarshipMentor?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
+          | undefined;
+        user?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
+export type CreateAssociationDebitMutationVariables = Exact<{
+  amount: Scalars['Float']['input'];
+  billingCategory?: InputMaybe<BillingCategory>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  method?: InputMaybe<Scalars['String']['input']>;
+  referenceId?: InputMaybe<Scalars['String']['input']>;
+  title: Scalars['String']['input'];
+  transactionDate?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type CreateAssociationDebitMutation = {
+  __typename?: 'Mutation';
+  createAssociationDebit?:
+    | {
+        __typename?: 'Transaction';
+        amount?: any | undefined;
+        billingCategory?: BillingCategory | undefined;
+        createdAt?: any | undefined;
+        currency?: Currency | undefined;
+        description?: string | undefined;
+        id?: string | undefined;
+        immutableAt?: any | undefined;
+        isDonation?: boolean | undefined;
+        linkedTransactionId?: string | undefined;
+        metadata?: any | undefined;
+        method?: string | undefined;
+        recordedByUserId?: string | undefined;
+        referenceId?: string | undefined;
+        scholarshipApplicationId?: string | undefined;
+        scholarshipApprovedAt?: any | undefined;
+        scholarshipBatchSnapshot?: number | undefined;
+        scholarshipBeneficiaryUserId?: string | undefined;
+        scholarshipCompletedAt?: any | undefined;
+        scholarshipConfirmedAmount?: any | undefined;
+        scholarshipConfirmedAt?: any | undefined;
+        scholarshipImmutableAt?: any | undefined;
+        scholarshipInstallmentSequence?: number | undefined;
+        scholarshipMaskedPayoutDestination?: string | undefined;
+        scholarshipMentorUserId?: string | undefined;
+        scholarshipOriginalTransactionId?: string | undefined;
+        scholarshipPayoutMethod?: string | undefined;
+        scholarshipProofDueAt?: any | undefined;
+        scholarshipProofDueDays?: number | undefined;
+        scholarshipProofStatus?: string | undefined;
+        scholarshipPurposeSnapshot?: string | undefined;
+        scholarshipReceivedAt?: any | undefined;
+        scholarshipStatus?: string | undefined;
+        sourceType?: TransactionSourceType | undefined;
+        status?: TransactionStatus | undefined;
+        title?: string | undefined;
+        transactionDate?: any | undefined;
+        type?: TransactionType | undefined;
+        updatedAt?: any | undefined;
+        userId?: string | undefined;
+        walletImpact?: boolean | undefined;
+        attachments?:
+          | Array<
+              | {
+                  __typename?: 'TransactionAttachment';
+                  createdAt?: any | undefined;
+                  id?: string | undefined;
+                  mimeType?: string | undefined;
+                  originalFilename?: string | undefined;
+                  sizeBytes?: number | undefined;
+                  status?: string | undefined;
+                  transactionId?: string | undefined;
+                  uploadedAt?: any | undefined;
+                  uploadedByUserId?: string | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+        linkedTransaction?:
+          | {
+              __typename?: 'Transaction';
+              amount?: any | undefined;
+              billingCategory?: BillingCategory | undefined;
+              createdAt?: any | undefined;
+              currency?: Currency | undefined;
+              description?: string | undefined;
+              id?: string | undefined;
+              immutableAt?: any | undefined;
+              isDonation?: boolean | undefined;
+              linkedTransactionId?: string | undefined;
+              metadata?: any | undefined;
+              method?: string | undefined;
+              recordedByUserId?: string | undefined;
+              referenceId?: string | undefined;
+              scholarshipApplicationId?: string | undefined;
+              scholarshipApprovedAt?: any | undefined;
+              scholarshipBatchSnapshot?: number | undefined;
+              scholarshipBeneficiaryUserId?: string | undefined;
+              scholarshipCompletedAt?: any | undefined;
+              scholarshipConfirmedAmount?: any | undefined;
+              scholarshipConfirmedAt?: any | undefined;
+              scholarshipImmutableAt?: any | undefined;
+              scholarshipInstallmentSequence?: number | undefined;
+              scholarshipMaskedPayoutDestination?: string | undefined;
+              scholarshipMentorUserId?: string | undefined;
+              scholarshipOriginalTransactionId?: string | undefined;
+              scholarshipPayoutMethod?: string | undefined;
+              scholarshipProofDueAt?: any | undefined;
+              scholarshipProofDueDays?: number | undefined;
+              scholarshipProofStatus?: string | undefined;
+              scholarshipPurposeSnapshot?: string | undefined;
+              scholarshipReceivedAt?: any | undefined;
+              scholarshipStatus?: string | undefined;
+              sourceType?: TransactionSourceType | undefined;
+              status?: TransactionStatus | undefined;
+              title?: string | undefined;
+              transactionDate?: any | undefined;
+              type?: TransactionType | undefined;
+              updatedAt?: any | undefined;
+              userId?: string | undefined;
+              walletImpact?: boolean | undefined;
+              attachments?:
+                | Array<
+                    | {
+                        __typename?: 'TransactionAttachment';
+                        createdAt?: any | undefined;
+                        id?: string | undefined;
+                        mimeType?: string | undefined;
+                        originalFilename?: string | undefined;
+                        sizeBytes?: number | undefined;
+                        status?: string | undefined;
+                        transactionId?: string | undefined;
+                        uploadedAt?: any | undefined;
+                        uploadedByUserId?: string | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              linkedTransaction?:
+                | {
+                    __typename?: 'Transaction';
+                    amount?: any | undefined;
+                    billingCategory?: BillingCategory | undefined;
+                    createdAt?: any | undefined;
+                    currency?: Currency | undefined;
+                    description?: string | undefined;
+                    id?: string | undefined;
+                    immutableAt?: any | undefined;
+                    isDonation?: boolean | undefined;
+                    linkedTransactionId?: string | undefined;
+                    metadata?: any | undefined;
+                    method?: string | undefined;
+                    recordedByUserId?: string | undefined;
+                    referenceId?: string | undefined;
+                    scholarshipApplicationId?: string | undefined;
+                    scholarshipApprovedAt?: any | undefined;
+                    scholarshipBatchSnapshot?: number | undefined;
+                    scholarshipBeneficiaryUserId?: string | undefined;
+                    scholarshipCompletedAt?: any | undefined;
+                    scholarshipConfirmedAmount?: any | undefined;
+                    scholarshipConfirmedAt?: any | undefined;
+                    scholarshipImmutableAt?: any | undefined;
+                    scholarshipInstallmentSequence?: number | undefined;
+                    scholarshipMaskedPayoutDestination?: string | undefined;
+                    scholarshipMentorUserId?: string | undefined;
+                    scholarshipOriginalTransactionId?: string | undefined;
+                    scholarshipPayoutMethod?: string | undefined;
+                    scholarshipProofDueAt?: any | undefined;
+                    scholarshipProofDueDays?: number | undefined;
+                    scholarshipProofStatus?: string | undefined;
+                    scholarshipPurposeSnapshot?: string | undefined;
+                    scholarshipReceivedAt?: any | undefined;
+                    scholarshipStatus?: string | undefined;
+                    sourceType?: TransactionSourceType | undefined;
+                    status?: TransactionStatus | undefined;
+                    title?: string | undefined;
+                    transactionDate?: any | undefined;
+                    type?: TransactionType | undefined;
+                    updatedAt?: any | undefined;
+                    userId?: string | undefined;
+                    walletImpact?: boolean | undefined;
+                    recordedBy?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                    scholarshipBeneficiary?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                    scholarshipMentor?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                    user?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                  }
+                | undefined;
+            }
+          | undefined;
+        recordedBy?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
+          | undefined;
+        scholarshipBeneficiary?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
+          | undefined;
+        scholarshipMentor?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
+          | undefined;
+        user?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
           | undefined;
       }
     | undefined;
@@ -4310,6 +7600,7 @@ export type CreateScholarshipDocumentUploadMutation = {
 
 export type CreateTransactionMutationVariables = Exact<{
   amount: Scalars['Float']['input'];
+  billingCategory?: InputMaybe<BillingCategory>;
   currency: Currency;
   description?: InputMaybe<Scalars['String']['input']>;
   isDonation?: InputMaybe<Scalars['Boolean']['input']>;
@@ -4328,12 +7619,17 @@ export type CreateTransactionMutation = {
     | {
         __typename?: 'Transaction';
         amount?: any | undefined;
+        billingCategory?: BillingCategory | undefined;
         createdAt?: any | undefined;
         currency?: Currency | undefined;
         description?: string | undefined;
         id?: string | undefined;
+        immutableAt?: any | undefined;
         isDonation?: boolean | undefined;
+        linkedTransactionId?: string | undefined;
+        metadata?: any | undefined;
         method?: string | undefined;
+        recordedByUserId?: string | undefined;
         referenceId?: string | undefined;
         scholarshipApplicationId?: string | undefined;
         scholarshipApprovedAt?: any | undefined;
@@ -4354,13 +7650,562 @@ export type CreateTransactionMutation = {
         scholarshipPurposeSnapshot?: string | undefined;
         scholarshipReceivedAt?: any | undefined;
         scholarshipStatus?: string | undefined;
-        sourceType?: string | undefined;
+        sourceType?: TransactionSourceType | undefined;
         status?: TransactionStatus | undefined;
         title?: string | undefined;
         transactionDate?: any | undefined;
         type?: TransactionType | undefined;
         updatedAt?: any | undefined;
         userId?: string | undefined;
+        walletImpact?: boolean | undefined;
+        attachments?:
+          | Array<
+              | {
+                  __typename?: 'TransactionAttachment';
+                  createdAt?: any | undefined;
+                  id?: string | undefined;
+                  mimeType?: string | undefined;
+                  originalFilename?: string | undefined;
+                  sizeBytes?: number | undefined;
+                  status?: string | undefined;
+                  transactionId?: string | undefined;
+                  uploadedAt?: any | undefined;
+                  uploadedByUserId?: string | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+        linkedTransaction?:
+          | {
+              __typename?: 'Transaction';
+              amount?: any | undefined;
+              billingCategory?: BillingCategory | undefined;
+              createdAt?: any | undefined;
+              currency?: Currency | undefined;
+              description?: string | undefined;
+              id?: string | undefined;
+              immutableAt?: any | undefined;
+              isDonation?: boolean | undefined;
+              linkedTransactionId?: string | undefined;
+              metadata?: any | undefined;
+              method?: string | undefined;
+              recordedByUserId?: string | undefined;
+              referenceId?: string | undefined;
+              scholarshipApplicationId?: string | undefined;
+              scholarshipApprovedAt?: any | undefined;
+              scholarshipBatchSnapshot?: number | undefined;
+              scholarshipBeneficiaryUserId?: string | undefined;
+              scholarshipCompletedAt?: any | undefined;
+              scholarshipConfirmedAmount?: any | undefined;
+              scholarshipConfirmedAt?: any | undefined;
+              scholarshipImmutableAt?: any | undefined;
+              scholarshipInstallmentSequence?: number | undefined;
+              scholarshipMaskedPayoutDestination?: string | undefined;
+              scholarshipMentorUserId?: string | undefined;
+              scholarshipOriginalTransactionId?: string | undefined;
+              scholarshipPayoutMethod?: string | undefined;
+              scholarshipProofDueAt?: any | undefined;
+              scholarshipProofDueDays?: number | undefined;
+              scholarshipProofStatus?: string | undefined;
+              scholarshipPurposeSnapshot?: string | undefined;
+              scholarshipReceivedAt?: any | undefined;
+              scholarshipStatus?: string | undefined;
+              sourceType?: TransactionSourceType | undefined;
+              status?: TransactionStatus | undefined;
+              title?: string | undefined;
+              transactionDate?: any | undefined;
+              type?: TransactionType | undefined;
+              updatedAt?: any | undefined;
+              userId?: string | undefined;
+              walletImpact?: boolean | undefined;
+              attachments?:
+                | Array<
+                    | {
+                        __typename?: 'TransactionAttachment';
+                        createdAt?: any | undefined;
+                        id?: string | undefined;
+                        mimeType?: string | undefined;
+                        originalFilename?: string | undefined;
+                        sizeBytes?: number | undefined;
+                        status?: string | undefined;
+                        transactionId?: string | undefined;
+                        uploadedAt?: any | undefined;
+                        uploadedByUserId?: string | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              linkedTransaction?:
+                | {
+                    __typename?: 'Transaction';
+                    amount?: any | undefined;
+                    billingCategory?: BillingCategory | undefined;
+                    createdAt?: any | undefined;
+                    currency?: Currency | undefined;
+                    description?: string | undefined;
+                    id?: string | undefined;
+                    immutableAt?: any | undefined;
+                    isDonation?: boolean | undefined;
+                    linkedTransactionId?: string | undefined;
+                    metadata?: any | undefined;
+                    method?: string | undefined;
+                    recordedByUserId?: string | undefined;
+                    referenceId?: string | undefined;
+                    scholarshipApplicationId?: string | undefined;
+                    scholarshipApprovedAt?: any | undefined;
+                    scholarshipBatchSnapshot?: number | undefined;
+                    scholarshipBeneficiaryUserId?: string | undefined;
+                    scholarshipCompletedAt?: any | undefined;
+                    scholarshipConfirmedAmount?: any | undefined;
+                    scholarshipConfirmedAt?: any | undefined;
+                    scholarshipImmutableAt?: any | undefined;
+                    scholarshipInstallmentSequence?: number | undefined;
+                    scholarshipMaskedPayoutDestination?: string | undefined;
+                    scholarshipMentorUserId?: string | undefined;
+                    scholarshipOriginalTransactionId?: string | undefined;
+                    scholarshipPayoutMethod?: string | undefined;
+                    scholarshipProofDueAt?: any | undefined;
+                    scholarshipProofDueDays?: number | undefined;
+                    scholarshipProofStatus?: string | undefined;
+                    scholarshipPurposeSnapshot?: string | undefined;
+                    scholarshipReceivedAt?: any | undefined;
+                    scholarshipStatus?: string | undefined;
+                    sourceType?: TransactionSourceType | undefined;
+                    status?: TransactionStatus | undefined;
+                    title?: string | undefined;
+                    transactionDate?: any | undefined;
+                    type?: TransactionType | undefined;
+                    updatedAt?: any | undefined;
+                    userId?: string | undefined;
+                    walletImpact?: boolean | undefined;
+                    recordedBy?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                    scholarshipBeneficiary?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                    scholarshipMentor?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                    user?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                  }
+                | undefined;
+            }
+          | undefined;
+        recordedBy?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
+          | undefined;
+        scholarshipBeneficiary?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
+          | undefined;
+        scholarshipMentor?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
+          | undefined;
         user?:
           | {
               __typename?: 'User';
@@ -4391,51 +8236,37 @@ export type CreateTransactionMutation = {
               socialMedia?: any | undefined;
               updatedAt: any;
               whatsAppMobile?: string | undefined;
-              companyInfo?:
-                | Array<
-                    | {
-                        __typename?: 'CompanyInfoBasic';
-                        companyName: string;
-                        id: string;
-                        position?: string | undefined;
-                        userId: string;
-                      }
-                    | undefined
-                  >
-                | undefined;
-              positions?:
-                | Array<
-                    | {
-                        __typename?: 'EffectivePosition';
-                        assignmentId?: string | undefined;
-                        code?: string | undefined;
-                        name?: string | undefined;
-                        termId?: string | undefined;
-                        termName?: string | undefined;
-                        validFrom?: any | undefined;
-                        validUntil?: any | undefined;
-                      }
-                    | undefined
-                  >
-                | undefined;
-              role?:
-                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
-                | undefined;
-              roles?:
-                | Array<
-                    | {
-                        __typename?: 'EffectiveRole';
-                        assignmentId?: string | undefined;
-                        code?: string | undefined;
-                        name?: string | undefined;
-                        scopeBatch?: number | undefined;
-                        scopeType?: string | undefined;
-                        validFrom?: any | undefined;
-                        validUntil?: any | undefined;
-                      }
-                    | undefined
-                  >
-                | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
+export type CreateTransactionAttachmentUploadMutationVariables = Exact<{
+  filename: Scalars['String']['input'];
+  mimeType: Scalars['String']['input'];
+  sizeBytes: Scalars['Int']['input'];
+  transactionId: Scalars['String']['input'];
+}>;
+
+export type CreateTransactionAttachmentUploadMutation = {
+  __typename?: 'Mutation';
+  createTransactionAttachmentUpload?:
+    | {
+        __typename?: 'TransactionAttachmentUploadResponse';
+        uploadUrl?: string | undefined;
+        attachment?:
+          | {
+              __typename?: 'TransactionAttachment';
+              createdAt?: any | undefined;
+              id?: string | undefined;
+              mimeType?: string | undefined;
+              originalFilename?: string | undefined;
+              sizeBytes?: number | undefined;
+              status?: string | undefined;
+              transactionId?: string | undefined;
+              uploadedAt?: any | undefined;
+              uploadedByUserId?: string | undefined;
             }
           | undefined;
       }
@@ -4599,12 +8430,17 @@ export type DeleteTransactionMutation = {
     | {
         __typename?: 'Transaction';
         amount?: any | undefined;
+        billingCategory?: BillingCategory | undefined;
         createdAt?: any | undefined;
         currency?: Currency | undefined;
         description?: string | undefined;
         id?: string | undefined;
+        immutableAt?: any | undefined;
         isDonation?: boolean | undefined;
+        linkedTransactionId?: string | undefined;
+        metadata?: any | undefined;
         method?: string | undefined;
+        recordedByUserId?: string | undefined;
         referenceId?: string | undefined;
         scholarshipApplicationId?: string | undefined;
         scholarshipApprovedAt?: any | undefined;
@@ -4625,13 +8461,562 @@ export type DeleteTransactionMutation = {
         scholarshipPurposeSnapshot?: string | undefined;
         scholarshipReceivedAt?: any | undefined;
         scholarshipStatus?: string | undefined;
-        sourceType?: string | undefined;
+        sourceType?: TransactionSourceType | undefined;
         status?: TransactionStatus | undefined;
         title?: string | undefined;
         transactionDate?: any | undefined;
         type?: TransactionType | undefined;
         updatedAt?: any | undefined;
         userId?: string | undefined;
+        walletImpact?: boolean | undefined;
+        attachments?:
+          | Array<
+              | {
+                  __typename?: 'TransactionAttachment';
+                  createdAt?: any | undefined;
+                  id?: string | undefined;
+                  mimeType?: string | undefined;
+                  originalFilename?: string | undefined;
+                  sizeBytes?: number | undefined;
+                  status?: string | undefined;
+                  transactionId?: string | undefined;
+                  uploadedAt?: any | undefined;
+                  uploadedByUserId?: string | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+        linkedTransaction?:
+          | {
+              __typename?: 'Transaction';
+              amount?: any | undefined;
+              billingCategory?: BillingCategory | undefined;
+              createdAt?: any | undefined;
+              currency?: Currency | undefined;
+              description?: string | undefined;
+              id?: string | undefined;
+              immutableAt?: any | undefined;
+              isDonation?: boolean | undefined;
+              linkedTransactionId?: string | undefined;
+              metadata?: any | undefined;
+              method?: string | undefined;
+              recordedByUserId?: string | undefined;
+              referenceId?: string | undefined;
+              scholarshipApplicationId?: string | undefined;
+              scholarshipApprovedAt?: any | undefined;
+              scholarshipBatchSnapshot?: number | undefined;
+              scholarshipBeneficiaryUserId?: string | undefined;
+              scholarshipCompletedAt?: any | undefined;
+              scholarshipConfirmedAmount?: any | undefined;
+              scholarshipConfirmedAt?: any | undefined;
+              scholarshipImmutableAt?: any | undefined;
+              scholarshipInstallmentSequence?: number | undefined;
+              scholarshipMaskedPayoutDestination?: string | undefined;
+              scholarshipMentorUserId?: string | undefined;
+              scholarshipOriginalTransactionId?: string | undefined;
+              scholarshipPayoutMethod?: string | undefined;
+              scholarshipProofDueAt?: any | undefined;
+              scholarshipProofDueDays?: number | undefined;
+              scholarshipProofStatus?: string | undefined;
+              scholarshipPurposeSnapshot?: string | undefined;
+              scholarshipReceivedAt?: any | undefined;
+              scholarshipStatus?: string | undefined;
+              sourceType?: TransactionSourceType | undefined;
+              status?: TransactionStatus | undefined;
+              title?: string | undefined;
+              transactionDate?: any | undefined;
+              type?: TransactionType | undefined;
+              updatedAt?: any | undefined;
+              userId?: string | undefined;
+              walletImpact?: boolean | undefined;
+              attachments?:
+                | Array<
+                    | {
+                        __typename?: 'TransactionAttachment';
+                        createdAt?: any | undefined;
+                        id?: string | undefined;
+                        mimeType?: string | undefined;
+                        originalFilename?: string | undefined;
+                        sizeBytes?: number | undefined;
+                        status?: string | undefined;
+                        transactionId?: string | undefined;
+                        uploadedAt?: any | undefined;
+                        uploadedByUserId?: string | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              linkedTransaction?:
+                | {
+                    __typename?: 'Transaction';
+                    amount?: any | undefined;
+                    billingCategory?: BillingCategory | undefined;
+                    createdAt?: any | undefined;
+                    currency?: Currency | undefined;
+                    description?: string | undefined;
+                    id?: string | undefined;
+                    immutableAt?: any | undefined;
+                    isDonation?: boolean | undefined;
+                    linkedTransactionId?: string | undefined;
+                    metadata?: any | undefined;
+                    method?: string | undefined;
+                    recordedByUserId?: string | undefined;
+                    referenceId?: string | undefined;
+                    scholarshipApplicationId?: string | undefined;
+                    scholarshipApprovedAt?: any | undefined;
+                    scholarshipBatchSnapshot?: number | undefined;
+                    scholarshipBeneficiaryUserId?: string | undefined;
+                    scholarshipCompletedAt?: any | undefined;
+                    scholarshipConfirmedAmount?: any | undefined;
+                    scholarshipConfirmedAt?: any | undefined;
+                    scholarshipImmutableAt?: any | undefined;
+                    scholarshipInstallmentSequence?: number | undefined;
+                    scholarshipMaskedPayoutDestination?: string | undefined;
+                    scholarshipMentorUserId?: string | undefined;
+                    scholarshipOriginalTransactionId?: string | undefined;
+                    scholarshipPayoutMethod?: string | undefined;
+                    scholarshipProofDueAt?: any | undefined;
+                    scholarshipProofDueDays?: number | undefined;
+                    scholarshipProofStatus?: string | undefined;
+                    scholarshipPurposeSnapshot?: string | undefined;
+                    scholarshipReceivedAt?: any | undefined;
+                    scholarshipStatus?: string | undefined;
+                    sourceType?: TransactionSourceType | undefined;
+                    status?: TransactionStatus | undefined;
+                    title?: string | undefined;
+                    transactionDate?: any | undefined;
+                    type?: TransactionType | undefined;
+                    updatedAt?: any | undefined;
+                    userId?: string | undefined;
+                    walletImpact?: boolean | undefined;
+                    recordedBy?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                    scholarshipBeneficiary?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                    scholarshipMentor?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                    user?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                  }
+                | undefined;
+            }
+          | undefined;
+        recordedBy?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
+          | undefined;
+        scholarshipBeneficiary?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
+          | undefined;
+        scholarshipMentor?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
+          | undefined;
         user?:
           | {
               __typename?: 'User';
@@ -4662,51 +9047,6 @@ export type DeleteTransactionMutation = {
               socialMedia?: any | undefined;
               updatedAt: any;
               whatsAppMobile?: string | undefined;
-              companyInfo?:
-                | Array<
-                    | {
-                        __typename?: 'CompanyInfoBasic';
-                        companyName: string;
-                        id: string;
-                        position?: string | undefined;
-                        userId: string;
-                      }
-                    | undefined
-                  >
-                | undefined;
-              positions?:
-                | Array<
-                    | {
-                        __typename?: 'EffectivePosition';
-                        assignmentId?: string | undefined;
-                        code?: string | undefined;
-                        name?: string | undefined;
-                        termId?: string | undefined;
-                        termName?: string | undefined;
-                        validFrom?: any | undefined;
-                        validUntil?: any | undefined;
-                      }
-                    | undefined
-                  >
-                | undefined;
-              role?:
-                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
-                | undefined;
-              roles?:
-                | Array<
-                    | {
-                        __typename?: 'EffectiveRole';
-                        assignmentId?: string | undefined;
-                        code?: string | undefined;
-                        name?: string | undefined;
-                        scopeBatch?: number | undefined;
-                        scopeType?: string | undefined;
-                        validFrom?: any | undefined;
-                        validUntil?: any | undefined;
-                      }
-                    | undefined
-                  >
-                | undefined;
             }
           | undefined;
       }
@@ -4848,6 +9188,28 @@ export type FinalizeScholarshipDocumentUploadMutation = {
         uploadedAt?: any | undefined;
         uploadedByUserId?: string | undefined;
         vendorName?: string | undefined;
+      }
+    | undefined;
+};
+
+export type FinalizeTransactionAttachmentUploadMutationVariables = Exact<{
+  attachmentId: Scalars['String']['input'];
+}>;
+
+export type FinalizeTransactionAttachmentUploadMutation = {
+  __typename?: 'Mutation';
+  finalizeTransactionAttachmentUpload?:
+    | {
+        __typename?: 'TransactionAttachment';
+        createdAt?: any | undefined;
+        id?: string | undefined;
+        mimeType?: string | undefined;
+        originalFilename?: string | undefined;
+        sizeBytes?: number | undefined;
+        status?: string | undefined;
+        transactionId?: string | undefined;
+        uploadedAt?: any | undefined;
+        uploadedByUserId?: string | undefined;
       }
     | undefined;
 };
@@ -5145,6 +9507,7 @@ export type RecordMentorFundAllocationMutation = {
     | {
         __typename?: 'MentorFundAllocation';
         amount?: any | undefined;
+        associationTransactionId?: string | undefined;
         batch?: number | undefined;
         confirmedAmount?: any | undefined;
         createdAt?: any | undefined;
@@ -5158,6 +9521,631 @@ export type RecordMentorFundAllocationMutation = {
         reference?: string | undefined;
         status?: string | undefined;
         transferDate?: any | undefined;
+        associationTransaction?:
+          | {
+              __typename?: 'Transaction';
+              amount?: any | undefined;
+              billingCategory?: BillingCategory | undefined;
+              createdAt?: any | undefined;
+              currency?: Currency | undefined;
+              description?: string | undefined;
+              id?: string | undefined;
+              immutableAt?: any | undefined;
+              isDonation?: boolean | undefined;
+              linkedTransactionId?: string | undefined;
+              metadata?: any | undefined;
+              method?: string | undefined;
+              recordedByUserId?: string | undefined;
+              referenceId?: string | undefined;
+              scholarshipApplicationId?: string | undefined;
+              scholarshipApprovedAt?: any | undefined;
+              scholarshipBatchSnapshot?: number | undefined;
+              scholarshipBeneficiaryUserId?: string | undefined;
+              scholarshipCompletedAt?: any | undefined;
+              scholarshipConfirmedAmount?: any | undefined;
+              scholarshipConfirmedAt?: any | undefined;
+              scholarshipImmutableAt?: any | undefined;
+              scholarshipInstallmentSequence?: number | undefined;
+              scholarshipMaskedPayoutDestination?: string | undefined;
+              scholarshipMentorUserId?: string | undefined;
+              scholarshipOriginalTransactionId?: string | undefined;
+              scholarshipPayoutMethod?: string | undefined;
+              scholarshipProofDueAt?: any | undefined;
+              scholarshipProofDueDays?: number | undefined;
+              scholarshipProofStatus?: string | undefined;
+              scholarshipPurposeSnapshot?: string | undefined;
+              scholarshipReceivedAt?: any | undefined;
+              scholarshipStatus?: string | undefined;
+              sourceType?: TransactionSourceType | undefined;
+              status?: TransactionStatus | undefined;
+              title?: string | undefined;
+              transactionDate?: any | undefined;
+              type?: TransactionType | undefined;
+              updatedAt?: any | undefined;
+              userId?: string | undefined;
+              walletImpact?: boolean | undefined;
+              attachments?:
+                | Array<
+                    | {
+                        __typename?: 'TransactionAttachment';
+                        createdAt?: any | undefined;
+                        id?: string | undefined;
+                        mimeType?: string | undefined;
+                        originalFilename?: string | undefined;
+                        sizeBytes?: number | undefined;
+                        status?: string | undefined;
+                        transactionId?: string | undefined;
+                        uploadedAt?: any | undefined;
+                        uploadedByUserId?: string | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              linkedTransaction?:
+                | {
+                    __typename?: 'Transaction';
+                    amount?: any | undefined;
+                    billingCategory?: BillingCategory | undefined;
+                    createdAt?: any | undefined;
+                    currency?: Currency | undefined;
+                    description?: string | undefined;
+                    id?: string | undefined;
+                    immutableAt?: any | undefined;
+                    isDonation?: boolean | undefined;
+                    linkedTransactionId?: string | undefined;
+                    metadata?: any | undefined;
+                    method?: string | undefined;
+                    recordedByUserId?: string | undefined;
+                    referenceId?: string | undefined;
+                    scholarshipApplicationId?: string | undefined;
+                    scholarshipApprovedAt?: any | undefined;
+                    scholarshipBatchSnapshot?: number | undefined;
+                    scholarshipBeneficiaryUserId?: string | undefined;
+                    scholarshipCompletedAt?: any | undefined;
+                    scholarshipConfirmedAmount?: any | undefined;
+                    scholarshipConfirmedAt?: any | undefined;
+                    scholarshipImmutableAt?: any | undefined;
+                    scholarshipInstallmentSequence?: number | undefined;
+                    scholarshipMaskedPayoutDestination?: string | undefined;
+                    scholarshipMentorUserId?: string | undefined;
+                    scholarshipOriginalTransactionId?: string | undefined;
+                    scholarshipPayoutMethod?: string | undefined;
+                    scholarshipProofDueAt?: any | undefined;
+                    scholarshipProofDueDays?: number | undefined;
+                    scholarshipProofStatus?: string | undefined;
+                    scholarshipPurposeSnapshot?: string | undefined;
+                    scholarshipReceivedAt?: any | undefined;
+                    scholarshipStatus?: string | undefined;
+                    sourceType?: TransactionSourceType | undefined;
+                    status?: TransactionStatus | undefined;
+                    title?: string | undefined;
+                    transactionDate?: any | undefined;
+                    type?: TransactionType | undefined;
+                    updatedAt?: any | undefined;
+                    userId?: string | undefined;
+                    walletImpact?: boolean | undefined;
+                    attachments?:
+                      | Array<
+                          | {
+                              __typename?: 'TransactionAttachment';
+                              createdAt?: any | undefined;
+                              id?: string | undefined;
+                              mimeType?: string | undefined;
+                              originalFilename?: string | undefined;
+                              sizeBytes?: number | undefined;
+                              status?: string | undefined;
+                              transactionId?: string | undefined;
+                              uploadedAt?: any | undefined;
+                              uploadedByUserId?: string | undefined;
+                            }
+                          | undefined
+                        >
+                      | undefined;
+                    linkedTransaction?:
+                      | {
+                          __typename?: 'Transaction';
+                          amount?: any | undefined;
+                          billingCategory?: BillingCategory | undefined;
+                          createdAt?: any | undefined;
+                          currency?: Currency | undefined;
+                          description?: string | undefined;
+                          id?: string | undefined;
+                          immutableAt?: any | undefined;
+                          isDonation?: boolean | undefined;
+                          linkedTransactionId?: string | undefined;
+                          metadata?: any | undefined;
+                          method?: string | undefined;
+                          recordedByUserId?: string | undefined;
+                          referenceId?: string | undefined;
+                          scholarshipApplicationId?: string | undefined;
+                          scholarshipApprovedAt?: any | undefined;
+                          scholarshipBatchSnapshot?: number | undefined;
+                          scholarshipBeneficiaryUserId?: string | undefined;
+                          scholarshipCompletedAt?: any | undefined;
+                          scholarshipConfirmedAmount?: any | undefined;
+                          scholarshipConfirmedAt?: any | undefined;
+                          scholarshipImmutableAt?: any | undefined;
+                          scholarshipInstallmentSequence?: number | undefined;
+                          scholarshipMaskedPayoutDestination?: string | undefined;
+                          scholarshipMentorUserId?: string | undefined;
+                          scholarshipOriginalTransactionId?: string | undefined;
+                          scholarshipPayoutMethod?: string | undefined;
+                          scholarshipProofDueAt?: any | undefined;
+                          scholarshipProofDueDays?: number | undefined;
+                          scholarshipProofStatus?: string | undefined;
+                          scholarshipPurposeSnapshot?: string | undefined;
+                          scholarshipReceivedAt?: any | undefined;
+                          scholarshipStatus?: string | undefined;
+                          sourceType?: TransactionSourceType | undefined;
+                          status?: TransactionStatus | undefined;
+                          title?: string | undefined;
+                          transactionDate?: any | undefined;
+                          type?: TransactionType | undefined;
+                          updatedAt?: any | undefined;
+                          userId?: string | undefined;
+                          walletImpact?: boolean | undefined;
+                          recordedBy?:
+                            | {
+                                __typename?: 'User';
+                                aboutMe?: string | undefined;
+                                batch?: number | undefined;
+                                createdAt: any;
+                                disabled?: boolean | undefined;
+                                displayName?: string | undefined;
+                                dob?: any | undefined;
+                                email?: string | undefined;
+                                emergencyMobile?: string | undefined;
+                                extraEmail?: string | undefined;
+                                extraMobile?: string | undefined;
+                                firstName?: string | undefined;
+                                gender?: string | undefined;
+                                google_auth_id?: string | undefined;
+                                hasBusiness?: boolean | undefined;
+                                id?: string | undefined;
+                                isConfidential?: boolean | undefined;
+                                isFaculty?: boolean | undefined;
+                                isVerified?: boolean | undefined;
+                                lastName?: string | undefined;
+                                membershipYear?: number | undefined;
+                                metadata?: any | undefined;
+                                mobile?: string | undefined;
+                                nickName?: string | undefined;
+                                profileImage?: string | undefined;
+                                socialMedia?: any | undefined;
+                                updatedAt: any;
+                                whatsAppMobile?: string | undefined;
+                              }
+                            | undefined;
+                          scholarshipBeneficiary?:
+                            | {
+                                __typename?: 'User';
+                                aboutMe?: string | undefined;
+                                batch?: number | undefined;
+                                createdAt: any;
+                                disabled?: boolean | undefined;
+                                displayName?: string | undefined;
+                                dob?: any | undefined;
+                                email?: string | undefined;
+                                emergencyMobile?: string | undefined;
+                                extraEmail?: string | undefined;
+                                extraMobile?: string | undefined;
+                                firstName?: string | undefined;
+                                gender?: string | undefined;
+                                google_auth_id?: string | undefined;
+                                hasBusiness?: boolean | undefined;
+                                id?: string | undefined;
+                                isConfidential?: boolean | undefined;
+                                isFaculty?: boolean | undefined;
+                                isVerified?: boolean | undefined;
+                                lastName?: string | undefined;
+                                membershipYear?: number | undefined;
+                                metadata?: any | undefined;
+                                mobile?: string | undefined;
+                                nickName?: string | undefined;
+                                profileImage?: string | undefined;
+                                socialMedia?: any | undefined;
+                                updatedAt: any;
+                                whatsAppMobile?: string | undefined;
+                              }
+                            | undefined;
+                          scholarshipMentor?:
+                            | {
+                                __typename?: 'User';
+                                aboutMe?: string | undefined;
+                                batch?: number | undefined;
+                                createdAt: any;
+                                disabled?: boolean | undefined;
+                                displayName?: string | undefined;
+                                dob?: any | undefined;
+                                email?: string | undefined;
+                                emergencyMobile?: string | undefined;
+                                extraEmail?: string | undefined;
+                                extraMobile?: string | undefined;
+                                firstName?: string | undefined;
+                                gender?: string | undefined;
+                                google_auth_id?: string | undefined;
+                                hasBusiness?: boolean | undefined;
+                                id?: string | undefined;
+                                isConfidential?: boolean | undefined;
+                                isFaculty?: boolean | undefined;
+                                isVerified?: boolean | undefined;
+                                lastName?: string | undefined;
+                                membershipYear?: number | undefined;
+                                metadata?: any | undefined;
+                                mobile?: string | undefined;
+                                nickName?: string | undefined;
+                                profileImage?: string | undefined;
+                                socialMedia?: any | undefined;
+                                updatedAt: any;
+                                whatsAppMobile?: string | undefined;
+                              }
+                            | undefined;
+                          user?:
+                            | {
+                                __typename?: 'User';
+                                aboutMe?: string | undefined;
+                                batch?: number | undefined;
+                                createdAt: any;
+                                disabled?: boolean | undefined;
+                                displayName?: string | undefined;
+                                dob?: any | undefined;
+                                email?: string | undefined;
+                                emergencyMobile?: string | undefined;
+                                extraEmail?: string | undefined;
+                                extraMobile?: string | undefined;
+                                firstName?: string | undefined;
+                                gender?: string | undefined;
+                                google_auth_id?: string | undefined;
+                                hasBusiness?: boolean | undefined;
+                                id?: string | undefined;
+                                isConfidential?: boolean | undefined;
+                                isFaculty?: boolean | undefined;
+                                isVerified?: boolean | undefined;
+                                lastName?: string | undefined;
+                                membershipYear?: number | undefined;
+                                metadata?: any | undefined;
+                                mobile?: string | undefined;
+                                nickName?: string | undefined;
+                                profileImage?: string | undefined;
+                                socialMedia?: any | undefined;
+                                updatedAt: any;
+                                whatsAppMobile?: string | undefined;
+                              }
+                            | undefined;
+                        }
+                      | undefined;
+                  }
+                | undefined;
+              recordedBy?:
+                | {
+                    __typename?: 'User';
+                    aboutMe?: string | undefined;
+                    batch?: number | undefined;
+                    createdAt: any;
+                    disabled?: boolean | undefined;
+                    displayName?: string | undefined;
+                    dob?: any | undefined;
+                    email?: string | undefined;
+                    emergencyMobile?: string | undefined;
+                    extraEmail?: string | undefined;
+                    extraMobile?: string | undefined;
+                    firstName?: string | undefined;
+                    gender?: string | undefined;
+                    google_auth_id?: string | undefined;
+                    hasBusiness?: boolean | undefined;
+                    id?: string | undefined;
+                    isConfidential?: boolean | undefined;
+                    isFaculty?: boolean | undefined;
+                    isVerified?: boolean | undefined;
+                    lastName?: string | undefined;
+                    membershipYear?: number | undefined;
+                    metadata?: any | undefined;
+                    mobile?: string | undefined;
+                    nickName?: string | undefined;
+                    profileImage?: string | undefined;
+                    socialMedia?: any | undefined;
+                    updatedAt: any;
+                    whatsAppMobile?: string | undefined;
+                    companyInfo?:
+                      | Array<
+                          | {
+                              __typename?: 'CompanyInfoBasic';
+                              companyName: string;
+                              id: string;
+                              position?: string | undefined;
+                              userId: string;
+                            }
+                          | undefined
+                        >
+                      | undefined;
+                    positions?:
+                      | Array<
+                          | {
+                              __typename?: 'EffectivePosition';
+                              assignmentId?: string | undefined;
+                              code?: string | undefined;
+                              name?: string | undefined;
+                              termId?: string | undefined;
+                              termName?: string | undefined;
+                              validFrom?: any | undefined;
+                              validUntil?: any | undefined;
+                            }
+                          | undefined
+                        >
+                      | undefined;
+                    role?:
+                      | {
+                          __typename?: 'Role';
+                          code?: string | undefined;
+                          id?: string | undefined;
+                          name?: string | undefined;
+                        }
+                      | undefined;
+                    roles?:
+                      | Array<
+                          | {
+                              __typename?: 'EffectiveRole';
+                              assignmentId?: string | undefined;
+                              code?: string | undefined;
+                              name?: string | undefined;
+                              scopeBatch?: number | undefined;
+                              scopeType?: string | undefined;
+                              validFrom?: any | undefined;
+                              validUntil?: any | undefined;
+                            }
+                          | undefined
+                        >
+                      | undefined;
+                  }
+                | undefined;
+              scholarshipBeneficiary?:
+                | {
+                    __typename?: 'User';
+                    aboutMe?: string | undefined;
+                    batch?: number | undefined;
+                    createdAt: any;
+                    disabled?: boolean | undefined;
+                    displayName?: string | undefined;
+                    dob?: any | undefined;
+                    email?: string | undefined;
+                    emergencyMobile?: string | undefined;
+                    extraEmail?: string | undefined;
+                    extraMobile?: string | undefined;
+                    firstName?: string | undefined;
+                    gender?: string | undefined;
+                    google_auth_id?: string | undefined;
+                    hasBusiness?: boolean | undefined;
+                    id?: string | undefined;
+                    isConfidential?: boolean | undefined;
+                    isFaculty?: boolean | undefined;
+                    isVerified?: boolean | undefined;
+                    lastName?: string | undefined;
+                    membershipYear?: number | undefined;
+                    metadata?: any | undefined;
+                    mobile?: string | undefined;
+                    nickName?: string | undefined;
+                    profileImage?: string | undefined;
+                    socialMedia?: any | undefined;
+                    updatedAt: any;
+                    whatsAppMobile?: string | undefined;
+                    companyInfo?:
+                      | Array<
+                          | {
+                              __typename?: 'CompanyInfoBasic';
+                              companyName: string;
+                              id: string;
+                              position?: string | undefined;
+                              userId: string;
+                            }
+                          | undefined
+                        >
+                      | undefined;
+                    positions?:
+                      | Array<
+                          | {
+                              __typename?: 'EffectivePosition';
+                              assignmentId?: string | undefined;
+                              code?: string | undefined;
+                              name?: string | undefined;
+                              termId?: string | undefined;
+                              termName?: string | undefined;
+                              validFrom?: any | undefined;
+                              validUntil?: any | undefined;
+                            }
+                          | undefined
+                        >
+                      | undefined;
+                    role?:
+                      | {
+                          __typename?: 'Role';
+                          code?: string | undefined;
+                          id?: string | undefined;
+                          name?: string | undefined;
+                        }
+                      | undefined;
+                    roles?:
+                      | Array<
+                          | {
+                              __typename?: 'EffectiveRole';
+                              assignmentId?: string | undefined;
+                              code?: string | undefined;
+                              name?: string | undefined;
+                              scopeBatch?: number | undefined;
+                              scopeType?: string | undefined;
+                              validFrom?: any | undefined;
+                              validUntil?: any | undefined;
+                            }
+                          | undefined
+                        >
+                      | undefined;
+                  }
+                | undefined;
+              scholarshipMentor?:
+                | {
+                    __typename?: 'User';
+                    aboutMe?: string | undefined;
+                    batch?: number | undefined;
+                    createdAt: any;
+                    disabled?: boolean | undefined;
+                    displayName?: string | undefined;
+                    dob?: any | undefined;
+                    email?: string | undefined;
+                    emergencyMobile?: string | undefined;
+                    extraEmail?: string | undefined;
+                    extraMobile?: string | undefined;
+                    firstName?: string | undefined;
+                    gender?: string | undefined;
+                    google_auth_id?: string | undefined;
+                    hasBusiness?: boolean | undefined;
+                    id?: string | undefined;
+                    isConfidential?: boolean | undefined;
+                    isFaculty?: boolean | undefined;
+                    isVerified?: boolean | undefined;
+                    lastName?: string | undefined;
+                    membershipYear?: number | undefined;
+                    metadata?: any | undefined;
+                    mobile?: string | undefined;
+                    nickName?: string | undefined;
+                    profileImage?: string | undefined;
+                    socialMedia?: any | undefined;
+                    updatedAt: any;
+                    whatsAppMobile?: string | undefined;
+                    companyInfo?:
+                      | Array<
+                          | {
+                              __typename?: 'CompanyInfoBasic';
+                              companyName: string;
+                              id: string;
+                              position?: string | undefined;
+                              userId: string;
+                            }
+                          | undefined
+                        >
+                      | undefined;
+                    positions?:
+                      | Array<
+                          | {
+                              __typename?: 'EffectivePosition';
+                              assignmentId?: string | undefined;
+                              code?: string | undefined;
+                              name?: string | undefined;
+                              termId?: string | undefined;
+                              termName?: string | undefined;
+                              validFrom?: any | undefined;
+                              validUntil?: any | undefined;
+                            }
+                          | undefined
+                        >
+                      | undefined;
+                    role?:
+                      | {
+                          __typename?: 'Role';
+                          code?: string | undefined;
+                          id?: string | undefined;
+                          name?: string | undefined;
+                        }
+                      | undefined;
+                    roles?:
+                      | Array<
+                          | {
+                              __typename?: 'EffectiveRole';
+                              assignmentId?: string | undefined;
+                              code?: string | undefined;
+                              name?: string | undefined;
+                              scopeBatch?: number | undefined;
+                              scopeType?: string | undefined;
+                              validFrom?: any | undefined;
+                              validUntil?: any | undefined;
+                            }
+                          | undefined
+                        >
+                      | undefined;
+                  }
+                | undefined;
+              user?:
+                | {
+                    __typename?: 'User';
+                    aboutMe?: string | undefined;
+                    batch?: number | undefined;
+                    createdAt: any;
+                    disabled?: boolean | undefined;
+                    displayName?: string | undefined;
+                    dob?: any | undefined;
+                    email?: string | undefined;
+                    emergencyMobile?: string | undefined;
+                    extraEmail?: string | undefined;
+                    extraMobile?: string | undefined;
+                    firstName?: string | undefined;
+                    gender?: string | undefined;
+                    google_auth_id?: string | undefined;
+                    hasBusiness?: boolean | undefined;
+                    id?: string | undefined;
+                    isConfidential?: boolean | undefined;
+                    isFaculty?: boolean | undefined;
+                    isVerified?: boolean | undefined;
+                    lastName?: string | undefined;
+                    membershipYear?: number | undefined;
+                    metadata?: any | undefined;
+                    mobile?: string | undefined;
+                    nickName?: string | undefined;
+                    profileImage?: string | undefined;
+                    socialMedia?: any | undefined;
+                    updatedAt: any;
+                    whatsAppMobile?: string | undefined;
+                    companyInfo?:
+                      | Array<
+                          | {
+                              __typename?: 'CompanyInfoBasic';
+                              companyName: string;
+                              id: string;
+                              position?: string | undefined;
+                              userId: string;
+                            }
+                          | undefined
+                        >
+                      | undefined;
+                    positions?:
+                      | Array<
+                          | {
+                              __typename?: 'EffectivePosition';
+                              assignmentId?: string | undefined;
+                              code?: string | undefined;
+                              name?: string | undefined;
+                              termId?: string | undefined;
+                              termName?: string | undefined;
+                              validFrom?: any | undefined;
+                              validUntil?: any | undefined;
+                            }
+                          | undefined
+                        >
+                      | undefined;
+                    role?:
+                      | {
+                          __typename?: 'Role';
+                          code?: string | undefined;
+                          id?: string | undefined;
+                          name?: string | undefined;
+                        }
+                      | undefined;
+                    roles?:
+                      | Array<
+                          | {
+                              __typename?: 'EffectiveRole';
+                              assignmentId?: string | undefined;
+                              code?: string | undefined;
+                              name?: string | undefined;
+                              scopeBatch?: number | undefined;
+                              scopeType?: string | undefined;
+                              validFrom?: any | undefined;
+                              validUntil?: any | undefined;
+                            }
+                          | undefined
+                        >
+                      | undefined;
+                  }
+                | undefined;
+            }
+          | undefined;
       }
     | undefined;
 };
@@ -6011,6 +10999,642 @@ export type ResubmitScholarshipApplicationMutation = {
     | undefined;
 };
 
+export type ReverseAssociationTransactionMutationVariables = Exact<{
+  reason: Scalars['String']['input'];
+  referenceId?: InputMaybe<Scalars['String']['input']>;
+  transactionDate?: InputMaybe<Scalars['String']['input']>;
+  transactionId: Scalars['String']['input'];
+}>;
+
+export type ReverseAssociationTransactionMutation = {
+  __typename?: 'Mutation';
+  reverseAssociationTransaction?:
+    | {
+        __typename?: 'Transaction';
+        amount?: any | undefined;
+        billingCategory?: BillingCategory | undefined;
+        createdAt?: any | undefined;
+        currency?: Currency | undefined;
+        description?: string | undefined;
+        id?: string | undefined;
+        immutableAt?: any | undefined;
+        isDonation?: boolean | undefined;
+        linkedTransactionId?: string | undefined;
+        metadata?: any | undefined;
+        method?: string | undefined;
+        recordedByUserId?: string | undefined;
+        referenceId?: string | undefined;
+        scholarshipApplicationId?: string | undefined;
+        scholarshipApprovedAt?: any | undefined;
+        scholarshipBatchSnapshot?: number | undefined;
+        scholarshipBeneficiaryUserId?: string | undefined;
+        scholarshipCompletedAt?: any | undefined;
+        scholarshipConfirmedAmount?: any | undefined;
+        scholarshipConfirmedAt?: any | undefined;
+        scholarshipImmutableAt?: any | undefined;
+        scholarshipInstallmentSequence?: number | undefined;
+        scholarshipMaskedPayoutDestination?: string | undefined;
+        scholarshipMentorUserId?: string | undefined;
+        scholarshipOriginalTransactionId?: string | undefined;
+        scholarshipPayoutMethod?: string | undefined;
+        scholarshipProofDueAt?: any | undefined;
+        scholarshipProofDueDays?: number | undefined;
+        scholarshipProofStatus?: string | undefined;
+        scholarshipPurposeSnapshot?: string | undefined;
+        scholarshipReceivedAt?: any | undefined;
+        scholarshipStatus?: string | undefined;
+        sourceType?: TransactionSourceType | undefined;
+        status?: TransactionStatus | undefined;
+        title?: string | undefined;
+        transactionDate?: any | undefined;
+        type?: TransactionType | undefined;
+        updatedAt?: any | undefined;
+        userId?: string | undefined;
+        walletImpact?: boolean | undefined;
+        attachments?:
+          | Array<
+              | {
+                  __typename?: 'TransactionAttachment';
+                  createdAt?: any | undefined;
+                  id?: string | undefined;
+                  mimeType?: string | undefined;
+                  originalFilename?: string | undefined;
+                  sizeBytes?: number | undefined;
+                  status?: string | undefined;
+                  transactionId?: string | undefined;
+                  uploadedAt?: any | undefined;
+                  uploadedByUserId?: string | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+        linkedTransaction?:
+          | {
+              __typename?: 'Transaction';
+              amount?: any | undefined;
+              billingCategory?: BillingCategory | undefined;
+              createdAt?: any | undefined;
+              currency?: Currency | undefined;
+              description?: string | undefined;
+              id?: string | undefined;
+              immutableAt?: any | undefined;
+              isDonation?: boolean | undefined;
+              linkedTransactionId?: string | undefined;
+              metadata?: any | undefined;
+              method?: string | undefined;
+              recordedByUserId?: string | undefined;
+              referenceId?: string | undefined;
+              scholarshipApplicationId?: string | undefined;
+              scholarshipApprovedAt?: any | undefined;
+              scholarshipBatchSnapshot?: number | undefined;
+              scholarshipBeneficiaryUserId?: string | undefined;
+              scholarshipCompletedAt?: any | undefined;
+              scholarshipConfirmedAmount?: any | undefined;
+              scholarshipConfirmedAt?: any | undefined;
+              scholarshipImmutableAt?: any | undefined;
+              scholarshipInstallmentSequence?: number | undefined;
+              scholarshipMaskedPayoutDestination?: string | undefined;
+              scholarshipMentorUserId?: string | undefined;
+              scholarshipOriginalTransactionId?: string | undefined;
+              scholarshipPayoutMethod?: string | undefined;
+              scholarshipProofDueAt?: any | undefined;
+              scholarshipProofDueDays?: number | undefined;
+              scholarshipProofStatus?: string | undefined;
+              scholarshipPurposeSnapshot?: string | undefined;
+              scholarshipReceivedAt?: any | undefined;
+              scholarshipStatus?: string | undefined;
+              sourceType?: TransactionSourceType | undefined;
+              status?: TransactionStatus | undefined;
+              title?: string | undefined;
+              transactionDate?: any | undefined;
+              type?: TransactionType | undefined;
+              updatedAt?: any | undefined;
+              userId?: string | undefined;
+              walletImpact?: boolean | undefined;
+              attachments?:
+                | Array<
+                    | {
+                        __typename?: 'TransactionAttachment';
+                        createdAt?: any | undefined;
+                        id?: string | undefined;
+                        mimeType?: string | undefined;
+                        originalFilename?: string | undefined;
+                        sizeBytes?: number | undefined;
+                        status?: string | undefined;
+                        transactionId?: string | undefined;
+                        uploadedAt?: any | undefined;
+                        uploadedByUserId?: string | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              linkedTransaction?:
+                | {
+                    __typename?: 'Transaction';
+                    amount?: any | undefined;
+                    billingCategory?: BillingCategory | undefined;
+                    createdAt?: any | undefined;
+                    currency?: Currency | undefined;
+                    description?: string | undefined;
+                    id?: string | undefined;
+                    immutableAt?: any | undefined;
+                    isDonation?: boolean | undefined;
+                    linkedTransactionId?: string | undefined;
+                    metadata?: any | undefined;
+                    method?: string | undefined;
+                    recordedByUserId?: string | undefined;
+                    referenceId?: string | undefined;
+                    scholarshipApplicationId?: string | undefined;
+                    scholarshipApprovedAt?: any | undefined;
+                    scholarshipBatchSnapshot?: number | undefined;
+                    scholarshipBeneficiaryUserId?: string | undefined;
+                    scholarshipCompletedAt?: any | undefined;
+                    scholarshipConfirmedAmount?: any | undefined;
+                    scholarshipConfirmedAt?: any | undefined;
+                    scholarshipImmutableAt?: any | undefined;
+                    scholarshipInstallmentSequence?: number | undefined;
+                    scholarshipMaskedPayoutDestination?: string | undefined;
+                    scholarshipMentorUserId?: string | undefined;
+                    scholarshipOriginalTransactionId?: string | undefined;
+                    scholarshipPayoutMethod?: string | undefined;
+                    scholarshipProofDueAt?: any | undefined;
+                    scholarshipProofDueDays?: number | undefined;
+                    scholarshipProofStatus?: string | undefined;
+                    scholarshipPurposeSnapshot?: string | undefined;
+                    scholarshipReceivedAt?: any | undefined;
+                    scholarshipStatus?: string | undefined;
+                    sourceType?: TransactionSourceType | undefined;
+                    status?: TransactionStatus | undefined;
+                    title?: string | undefined;
+                    transactionDate?: any | undefined;
+                    type?: TransactionType | undefined;
+                    updatedAt?: any | undefined;
+                    userId?: string | undefined;
+                    walletImpact?: boolean | undefined;
+                    recordedBy?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                    scholarshipBeneficiary?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                    scholarshipMentor?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                    user?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                  }
+                | undefined;
+            }
+          | undefined;
+        recordedBy?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
+          | undefined;
+        scholarshipBeneficiary?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
+          | undefined;
+        scholarshipMentor?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
+          | undefined;
+        user?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
+
 export type ReviewScholarshipUsageProofMutationVariables = Exact<{
   action: ScholarshipProofReviewAction;
   note?: InputMaybe<Scalars['String']['input']>;
@@ -6287,6 +11911,643 @@ export type SendMassEmailMutationVariables = Exact<{
 }>;
 
 export type SendMassEmailMutation = { __typename?: 'Mutation'; sendMassEmail?: boolean | undefined };
+
+export type SetAssociationOpeningBalanceMutationVariables = Exact<{
+  amount: Scalars['Float']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
+  method?: InputMaybe<Scalars['String']['input']>;
+  referenceId?: InputMaybe<Scalars['String']['input']>;
+  transactionDate?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type SetAssociationOpeningBalanceMutation = {
+  __typename?: 'Mutation';
+  setAssociationOpeningBalance?:
+    | {
+        __typename?: 'Transaction';
+        amount?: any | undefined;
+        billingCategory?: BillingCategory | undefined;
+        createdAt?: any | undefined;
+        currency?: Currency | undefined;
+        description?: string | undefined;
+        id?: string | undefined;
+        immutableAt?: any | undefined;
+        isDonation?: boolean | undefined;
+        linkedTransactionId?: string | undefined;
+        metadata?: any | undefined;
+        method?: string | undefined;
+        recordedByUserId?: string | undefined;
+        referenceId?: string | undefined;
+        scholarshipApplicationId?: string | undefined;
+        scholarshipApprovedAt?: any | undefined;
+        scholarshipBatchSnapshot?: number | undefined;
+        scholarshipBeneficiaryUserId?: string | undefined;
+        scholarshipCompletedAt?: any | undefined;
+        scholarshipConfirmedAmount?: any | undefined;
+        scholarshipConfirmedAt?: any | undefined;
+        scholarshipImmutableAt?: any | undefined;
+        scholarshipInstallmentSequence?: number | undefined;
+        scholarshipMaskedPayoutDestination?: string | undefined;
+        scholarshipMentorUserId?: string | undefined;
+        scholarshipOriginalTransactionId?: string | undefined;
+        scholarshipPayoutMethod?: string | undefined;
+        scholarshipProofDueAt?: any | undefined;
+        scholarshipProofDueDays?: number | undefined;
+        scholarshipProofStatus?: string | undefined;
+        scholarshipPurposeSnapshot?: string | undefined;
+        scholarshipReceivedAt?: any | undefined;
+        scholarshipStatus?: string | undefined;
+        sourceType?: TransactionSourceType | undefined;
+        status?: TransactionStatus | undefined;
+        title?: string | undefined;
+        transactionDate?: any | undefined;
+        type?: TransactionType | undefined;
+        updatedAt?: any | undefined;
+        userId?: string | undefined;
+        walletImpact?: boolean | undefined;
+        attachments?:
+          | Array<
+              | {
+                  __typename?: 'TransactionAttachment';
+                  createdAt?: any | undefined;
+                  id?: string | undefined;
+                  mimeType?: string | undefined;
+                  originalFilename?: string | undefined;
+                  sizeBytes?: number | undefined;
+                  status?: string | undefined;
+                  transactionId?: string | undefined;
+                  uploadedAt?: any | undefined;
+                  uploadedByUserId?: string | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+        linkedTransaction?:
+          | {
+              __typename?: 'Transaction';
+              amount?: any | undefined;
+              billingCategory?: BillingCategory | undefined;
+              createdAt?: any | undefined;
+              currency?: Currency | undefined;
+              description?: string | undefined;
+              id?: string | undefined;
+              immutableAt?: any | undefined;
+              isDonation?: boolean | undefined;
+              linkedTransactionId?: string | undefined;
+              metadata?: any | undefined;
+              method?: string | undefined;
+              recordedByUserId?: string | undefined;
+              referenceId?: string | undefined;
+              scholarshipApplicationId?: string | undefined;
+              scholarshipApprovedAt?: any | undefined;
+              scholarshipBatchSnapshot?: number | undefined;
+              scholarshipBeneficiaryUserId?: string | undefined;
+              scholarshipCompletedAt?: any | undefined;
+              scholarshipConfirmedAmount?: any | undefined;
+              scholarshipConfirmedAt?: any | undefined;
+              scholarshipImmutableAt?: any | undefined;
+              scholarshipInstallmentSequence?: number | undefined;
+              scholarshipMaskedPayoutDestination?: string | undefined;
+              scholarshipMentorUserId?: string | undefined;
+              scholarshipOriginalTransactionId?: string | undefined;
+              scholarshipPayoutMethod?: string | undefined;
+              scholarshipProofDueAt?: any | undefined;
+              scholarshipProofDueDays?: number | undefined;
+              scholarshipProofStatus?: string | undefined;
+              scholarshipPurposeSnapshot?: string | undefined;
+              scholarshipReceivedAt?: any | undefined;
+              scholarshipStatus?: string | undefined;
+              sourceType?: TransactionSourceType | undefined;
+              status?: TransactionStatus | undefined;
+              title?: string | undefined;
+              transactionDate?: any | undefined;
+              type?: TransactionType | undefined;
+              updatedAt?: any | undefined;
+              userId?: string | undefined;
+              walletImpact?: boolean | undefined;
+              attachments?:
+                | Array<
+                    | {
+                        __typename?: 'TransactionAttachment';
+                        createdAt?: any | undefined;
+                        id?: string | undefined;
+                        mimeType?: string | undefined;
+                        originalFilename?: string | undefined;
+                        sizeBytes?: number | undefined;
+                        status?: string | undefined;
+                        transactionId?: string | undefined;
+                        uploadedAt?: any | undefined;
+                        uploadedByUserId?: string | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              linkedTransaction?:
+                | {
+                    __typename?: 'Transaction';
+                    amount?: any | undefined;
+                    billingCategory?: BillingCategory | undefined;
+                    createdAt?: any | undefined;
+                    currency?: Currency | undefined;
+                    description?: string | undefined;
+                    id?: string | undefined;
+                    immutableAt?: any | undefined;
+                    isDonation?: boolean | undefined;
+                    linkedTransactionId?: string | undefined;
+                    metadata?: any | undefined;
+                    method?: string | undefined;
+                    recordedByUserId?: string | undefined;
+                    referenceId?: string | undefined;
+                    scholarshipApplicationId?: string | undefined;
+                    scholarshipApprovedAt?: any | undefined;
+                    scholarshipBatchSnapshot?: number | undefined;
+                    scholarshipBeneficiaryUserId?: string | undefined;
+                    scholarshipCompletedAt?: any | undefined;
+                    scholarshipConfirmedAmount?: any | undefined;
+                    scholarshipConfirmedAt?: any | undefined;
+                    scholarshipImmutableAt?: any | undefined;
+                    scholarshipInstallmentSequence?: number | undefined;
+                    scholarshipMaskedPayoutDestination?: string | undefined;
+                    scholarshipMentorUserId?: string | undefined;
+                    scholarshipOriginalTransactionId?: string | undefined;
+                    scholarshipPayoutMethod?: string | undefined;
+                    scholarshipProofDueAt?: any | undefined;
+                    scholarshipProofDueDays?: number | undefined;
+                    scholarshipProofStatus?: string | undefined;
+                    scholarshipPurposeSnapshot?: string | undefined;
+                    scholarshipReceivedAt?: any | undefined;
+                    scholarshipStatus?: string | undefined;
+                    sourceType?: TransactionSourceType | undefined;
+                    status?: TransactionStatus | undefined;
+                    title?: string | undefined;
+                    transactionDate?: any | undefined;
+                    type?: TransactionType | undefined;
+                    updatedAt?: any | undefined;
+                    userId?: string | undefined;
+                    walletImpact?: boolean | undefined;
+                    recordedBy?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                    scholarshipBeneficiary?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                    scholarshipMentor?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                    user?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                  }
+                | undefined;
+            }
+          | undefined;
+        recordedBy?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
+          | undefined;
+        scholarshipBeneficiary?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
+          | undefined;
+        scholarshipMentor?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
+          | undefined;
+        user?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
+          | undefined;
+      }
+    | undefined;
+};
 
 export type SetScholarshipPrimaryMentorMutationVariables = Exact<{
   batch: Scalars['Int']['input'];
@@ -7932,12 +14193,17 @@ export type UpdateTransactionMutation = {
     | {
         __typename?: 'Transaction';
         amount?: any | undefined;
+        billingCategory?: BillingCategory | undefined;
         createdAt?: any | undefined;
         currency?: Currency | undefined;
         description?: string | undefined;
         id?: string | undefined;
+        immutableAt?: any | undefined;
         isDonation?: boolean | undefined;
+        linkedTransactionId?: string | undefined;
+        metadata?: any | undefined;
         method?: string | undefined;
+        recordedByUserId?: string | undefined;
         referenceId?: string | undefined;
         scholarshipApplicationId?: string | undefined;
         scholarshipApprovedAt?: any | undefined;
@@ -7958,13 +14224,562 @@ export type UpdateTransactionMutation = {
         scholarshipPurposeSnapshot?: string | undefined;
         scholarshipReceivedAt?: any | undefined;
         scholarshipStatus?: string | undefined;
-        sourceType?: string | undefined;
+        sourceType?: TransactionSourceType | undefined;
         status?: TransactionStatus | undefined;
         title?: string | undefined;
         transactionDate?: any | undefined;
         type?: TransactionType | undefined;
         updatedAt?: any | undefined;
         userId?: string | undefined;
+        walletImpact?: boolean | undefined;
+        attachments?:
+          | Array<
+              | {
+                  __typename?: 'TransactionAttachment';
+                  createdAt?: any | undefined;
+                  id?: string | undefined;
+                  mimeType?: string | undefined;
+                  originalFilename?: string | undefined;
+                  sizeBytes?: number | undefined;
+                  status?: string | undefined;
+                  transactionId?: string | undefined;
+                  uploadedAt?: any | undefined;
+                  uploadedByUserId?: string | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+        linkedTransaction?:
+          | {
+              __typename?: 'Transaction';
+              amount?: any | undefined;
+              billingCategory?: BillingCategory | undefined;
+              createdAt?: any | undefined;
+              currency?: Currency | undefined;
+              description?: string | undefined;
+              id?: string | undefined;
+              immutableAt?: any | undefined;
+              isDonation?: boolean | undefined;
+              linkedTransactionId?: string | undefined;
+              metadata?: any | undefined;
+              method?: string | undefined;
+              recordedByUserId?: string | undefined;
+              referenceId?: string | undefined;
+              scholarshipApplicationId?: string | undefined;
+              scholarshipApprovedAt?: any | undefined;
+              scholarshipBatchSnapshot?: number | undefined;
+              scholarshipBeneficiaryUserId?: string | undefined;
+              scholarshipCompletedAt?: any | undefined;
+              scholarshipConfirmedAmount?: any | undefined;
+              scholarshipConfirmedAt?: any | undefined;
+              scholarshipImmutableAt?: any | undefined;
+              scholarshipInstallmentSequence?: number | undefined;
+              scholarshipMaskedPayoutDestination?: string | undefined;
+              scholarshipMentorUserId?: string | undefined;
+              scholarshipOriginalTransactionId?: string | undefined;
+              scholarshipPayoutMethod?: string | undefined;
+              scholarshipProofDueAt?: any | undefined;
+              scholarshipProofDueDays?: number | undefined;
+              scholarshipProofStatus?: string | undefined;
+              scholarshipPurposeSnapshot?: string | undefined;
+              scholarshipReceivedAt?: any | undefined;
+              scholarshipStatus?: string | undefined;
+              sourceType?: TransactionSourceType | undefined;
+              status?: TransactionStatus | undefined;
+              title?: string | undefined;
+              transactionDate?: any | undefined;
+              type?: TransactionType | undefined;
+              updatedAt?: any | undefined;
+              userId?: string | undefined;
+              walletImpact?: boolean | undefined;
+              attachments?:
+                | Array<
+                    | {
+                        __typename?: 'TransactionAttachment';
+                        createdAt?: any | undefined;
+                        id?: string | undefined;
+                        mimeType?: string | undefined;
+                        originalFilename?: string | undefined;
+                        sizeBytes?: number | undefined;
+                        status?: string | undefined;
+                        transactionId?: string | undefined;
+                        uploadedAt?: any | undefined;
+                        uploadedByUserId?: string | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              linkedTransaction?:
+                | {
+                    __typename?: 'Transaction';
+                    amount?: any | undefined;
+                    billingCategory?: BillingCategory | undefined;
+                    createdAt?: any | undefined;
+                    currency?: Currency | undefined;
+                    description?: string | undefined;
+                    id?: string | undefined;
+                    immutableAt?: any | undefined;
+                    isDonation?: boolean | undefined;
+                    linkedTransactionId?: string | undefined;
+                    metadata?: any | undefined;
+                    method?: string | undefined;
+                    recordedByUserId?: string | undefined;
+                    referenceId?: string | undefined;
+                    scholarshipApplicationId?: string | undefined;
+                    scholarshipApprovedAt?: any | undefined;
+                    scholarshipBatchSnapshot?: number | undefined;
+                    scholarshipBeneficiaryUserId?: string | undefined;
+                    scholarshipCompletedAt?: any | undefined;
+                    scholarshipConfirmedAmount?: any | undefined;
+                    scholarshipConfirmedAt?: any | undefined;
+                    scholarshipImmutableAt?: any | undefined;
+                    scholarshipInstallmentSequence?: number | undefined;
+                    scholarshipMaskedPayoutDestination?: string | undefined;
+                    scholarshipMentorUserId?: string | undefined;
+                    scholarshipOriginalTransactionId?: string | undefined;
+                    scholarshipPayoutMethod?: string | undefined;
+                    scholarshipProofDueAt?: any | undefined;
+                    scholarshipProofDueDays?: number | undefined;
+                    scholarshipProofStatus?: string | undefined;
+                    scholarshipPurposeSnapshot?: string | undefined;
+                    scholarshipReceivedAt?: any | undefined;
+                    scholarshipStatus?: string | undefined;
+                    sourceType?: TransactionSourceType | undefined;
+                    status?: TransactionStatus | undefined;
+                    title?: string | undefined;
+                    transactionDate?: any | undefined;
+                    type?: TransactionType | undefined;
+                    updatedAt?: any | undefined;
+                    userId?: string | undefined;
+                    walletImpact?: boolean | undefined;
+                    recordedBy?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                    scholarshipBeneficiary?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                    scholarshipMentor?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                    user?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                  }
+                | undefined;
+            }
+          | undefined;
+        recordedBy?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
+          | undefined;
+        scholarshipBeneficiary?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
+          | undefined;
+        scholarshipMentor?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
+          | undefined;
         user?:
           | {
               __typename?: 'User';
@@ -7995,51 +14810,6 @@ export type UpdateTransactionMutation = {
               socialMedia?: any | undefined;
               updatedAt: any;
               whatsAppMobile?: string | undefined;
-              companyInfo?:
-                | Array<
-                    | {
-                        __typename?: 'CompanyInfoBasic';
-                        companyName: string;
-                        id: string;
-                        position?: string | undefined;
-                        userId: string;
-                      }
-                    | undefined
-                  >
-                | undefined;
-              positions?:
-                | Array<
-                    | {
-                        __typename?: 'EffectivePosition';
-                        assignmentId?: string | undefined;
-                        code?: string | undefined;
-                        name?: string | undefined;
-                        termId?: string | undefined;
-                        termName?: string | undefined;
-                        validFrom?: any | undefined;
-                        validUntil?: any | undefined;
-                      }
-                    | undefined
-                  >
-                | undefined;
-              role?:
-                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
-                | undefined;
-              roles?:
-                | Array<
-                    | {
-                        __typename?: 'EffectiveRole';
-                        assignmentId?: string | undefined;
-                        code?: string | undefined;
-                        name?: string | undefined;
-                        scopeBatch?: number | undefined;
-                        scopeType?: string | undefined;
-                        validFrom?: any | undefined;
-                        validUntil?: any | undefined;
-                      }
-                    | undefined
-                  >
-                | undefined;
             }
           | undefined;
       }
@@ -8947,6 +15717,665 @@ export type GetAllBatchCoordinatorsQuery = {
     | undefined;
 };
 
+export type GetAssociationTransactionsQueryVariables = Exact<{
+  filter?: InputMaybe<AssociationTransactionFilter>;
+  options?: InputMaybe<ListInput>;
+}>;
+
+export type GetAssociationTransactionsQuery = {
+  __typename?: 'Query';
+  getAssociationTransactions?:
+    | {
+        __typename?: 'TransactionListResponse';
+        total?: number | undefined;
+        data?:
+          | Array<
+              | {
+                  __typename?: 'Transaction';
+                  amount?: any | undefined;
+                  billingCategory?: BillingCategory | undefined;
+                  createdAt?: any | undefined;
+                  currency?: Currency | undefined;
+                  description?: string | undefined;
+                  id?: string | undefined;
+                  immutableAt?: any | undefined;
+                  isDonation?: boolean | undefined;
+                  linkedTransactionId?: string | undefined;
+                  metadata?: any | undefined;
+                  method?: string | undefined;
+                  recordedByUserId?: string | undefined;
+                  referenceId?: string | undefined;
+                  scholarshipApplicationId?: string | undefined;
+                  scholarshipApprovedAt?: any | undefined;
+                  scholarshipBatchSnapshot?: number | undefined;
+                  scholarshipBeneficiaryUserId?: string | undefined;
+                  scholarshipCompletedAt?: any | undefined;
+                  scholarshipConfirmedAmount?: any | undefined;
+                  scholarshipConfirmedAt?: any | undefined;
+                  scholarshipImmutableAt?: any | undefined;
+                  scholarshipInstallmentSequence?: number | undefined;
+                  scholarshipMaskedPayoutDestination?: string | undefined;
+                  scholarshipMentorUserId?: string | undefined;
+                  scholarshipOriginalTransactionId?: string | undefined;
+                  scholarshipPayoutMethod?: string | undefined;
+                  scholarshipProofDueAt?: any | undefined;
+                  scholarshipProofDueDays?: number | undefined;
+                  scholarshipProofStatus?: string | undefined;
+                  scholarshipPurposeSnapshot?: string | undefined;
+                  scholarshipReceivedAt?: any | undefined;
+                  scholarshipStatus?: string | undefined;
+                  sourceType?: TransactionSourceType | undefined;
+                  status?: TransactionStatus | undefined;
+                  title?: string | undefined;
+                  transactionDate?: any | undefined;
+                  type?: TransactionType | undefined;
+                  updatedAt?: any | undefined;
+                  userId?: string | undefined;
+                  walletImpact?: boolean | undefined;
+                  attachments?:
+                    | Array<
+                        | {
+                            __typename?: 'TransactionAttachment';
+                            createdAt?: any | undefined;
+                            id?: string | undefined;
+                            mimeType?: string | undefined;
+                            originalFilename?: string | undefined;
+                            sizeBytes?: number | undefined;
+                            status?: string | undefined;
+                            transactionId?: string | undefined;
+                            uploadedAt?: any | undefined;
+                            uploadedByUserId?: string | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  linkedTransaction?:
+                    | {
+                        __typename?: 'Transaction';
+                        amount?: any | undefined;
+                        billingCategory?: BillingCategory | undefined;
+                        createdAt?: any | undefined;
+                        currency?: Currency | undefined;
+                        description?: string | undefined;
+                        id?: string | undefined;
+                        immutableAt?: any | undefined;
+                        isDonation?: boolean | undefined;
+                        linkedTransactionId?: string | undefined;
+                        metadata?: any | undefined;
+                        method?: string | undefined;
+                        recordedByUserId?: string | undefined;
+                        referenceId?: string | undefined;
+                        scholarshipApplicationId?: string | undefined;
+                        scholarshipApprovedAt?: any | undefined;
+                        scholarshipBatchSnapshot?: number | undefined;
+                        scholarshipBeneficiaryUserId?: string | undefined;
+                        scholarshipCompletedAt?: any | undefined;
+                        scholarshipConfirmedAmount?: any | undefined;
+                        scholarshipConfirmedAt?: any | undefined;
+                        scholarshipImmutableAt?: any | undefined;
+                        scholarshipInstallmentSequence?: number | undefined;
+                        scholarshipMaskedPayoutDestination?: string | undefined;
+                        scholarshipMentorUserId?: string | undefined;
+                        scholarshipOriginalTransactionId?: string | undefined;
+                        scholarshipPayoutMethod?: string | undefined;
+                        scholarshipProofDueAt?: any | undefined;
+                        scholarshipProofDueDays?: number | undefined;
+                        scholarshipProofStatus?: string | undefined;
+                        scholarshipPurposeSnapshot?: string | undefined;
+                        scholarshipReceivedAt?: any | undefined;
+                        scholarshipStatus?: string | undefined;
+                        sourceType?: TransactionSourceType | undefined;
+                        status?: TransactionStatus | undefined;
+                        title?: string | undefined;
+                        transactionDate?: any | undefined;
+                        type?: TransactionType | undefined;
+                        updatedAt?: any | undefined;
+                        userId?: string | undefined;
+                        walletImpact?: boolean | undefined;
+                        attachments?:
+                          | Array<
+                              | {
+                                  __typename?: 'TransactionAttachment';
+                                  createdAt?: any | undefined;
+                                  id?: string | undefined;
+                                  mimeType?: string | undefined;
+                                  originalFilename?: string | undefined;
+                                  sizeBytes?: number | undefined;
+                                  status?: string | undefined;
+                                  transactionId?: string | undefined;
+                                  uploadedAt?: any | undefined;
+                                  uploadedByUserId?: string | undefined;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                        linkedTransaction?:
+                          | {
+                              __typename?: 'Transaction';
+                              amount?: any | undefined;
+                              billingCategory?: BillingCategory | undefined;
+                              createdAt?: any | undefined;
+                              currency?: Currency | undefined;
+                              description?: string | undefined;
+                              id?: string | undefined;
+                              immutableAt?: any | undefined;
+                              isDonation?: boolean | undefined;
+                              linkedTransactionId?: string | undefined;
+                              metadata?: any | undefined;
+                              method?: string | undefined;
+                              recordedByUserId?: string | undefined;
+                              referenceId?: string | undefined;
+                              scholarshipApplicationId?: string | undefined;
+                              scholarshipApprovedAt?: any | undefined;
+                              scholarshipBatchSnapshot?: number | undefined;
+                              scholarshipBeneficiaryUserId?: string | undefined;
+                              scholarshipCompletedAt?: any | undefined;
+                              scholarshipConfirmedAmount?: any | undefined;
+                              scholarshipConfirmedAt?: any | undefined;
+                              scholarshipImmutableAt?: any | undefined;
+                              scholarshipInstallmentSequence?: number | undefined;
+                              scholarshipMaskedPayoutDestination?: string | undefined;
+                              scholarshipMentorUserId?: string | undefined;
+                              scholarshipOriginalTransactionId?: string | undefined;
+                              scholarshipPayoutMethod?: string | undefined;
+                              scholarshipProofDueAt?: any | undefined;
+                              scholarshipProofDueDays?: number | undefined;
+                              scholarshipProofStatus?: string | undefined;
+                              scholarshipPurposeSnapshot?: string | undefined;
+                              scholarshipReceivedAt?: any | undefined;
+                              scholarshipStatus?: string | undefined;
+                              sourceType?: TransactionSourceType | undefined;
+                              status?: TransactionStatus | undefined;
+                              title?: string | undefined;
+                              transactionDate?: any | undefined;
+                              type?: TransactionType | undefined;
+                              updatedAt?: any | undefined;
+                              userId?: string | undefined;
+                              walletImpact?: boolean | undefined;
+                              recordedBy?:
+                                | {
+                                    __typename?: 'User';
+                                    aboutMe?: string | undefined;
+                                    batch?: number | undefined;
+                                    createdAt: any;
+                                    disabled?: boolean | undefined;
+                                    displayName?: string | undefined;
+                                    dob?: any | undefined;
+                                    email?: string | undefined;
+                                    emergencyMobile?: string | undefined;
+                                    extraEmail?: string | undefined;
+                                    extraMobile?: string | undefined;
+                                    firstName?: string | undefined;
+                                    gender?: string | undefined;
+                                    google_auth_id?: string | undefined;
+                                    hasBusiness?: boolean | undefined;
+                                    id?: string | undefined;
+                                    isConfidential?: boolean | undefined;
+                                    isFaculty?: boolean | undefined;
+                                    isVerified?: boolean | undefined;
+                                    lastName?: string | undefined;
+                                    membershipYear?: number | undefined;
+                                    metadata?: any | undefined;
+                                    mobile?: string | undefined;
+                                    nickName?: string | undefined;
+                                    profileImage?: string | undefined;
+                                    socialMedia?: any | undefined;
+                                    updatedAt: any;
+                                    whatsAppMobile?: string | undefined;
+                                  }
+                                | undefined;
+                              scholarshipBeneficiary?:
+                                | {
+                                    __typename?: 'User';
+                                    aboutMe?: string | undefined;
+                                    batch?: number | undefined;
+                                    createdAt: any;
+                                    disabled?: boolean | undefined;
+                                    displayName?: string | undefined;
+                                    dob?: any | undefined;
+                                    email?: string | undefined;
+                                    emergencyMobile?: string | undefined;
+                                    extraEmail?: string | undefined;
+                                    extraMobile?: string | undefined;
+                                    firstName?: string | undefined;
+                                    gender?: string | undefined;
+                                    google_auth_id?: string | undefined;
+                                    hasBusiness?: boolean | undefined;
+                                    id?: string | undefined;
+                                    isConfidential?: boolean | undefined;
+                                    isFaculty?: boolean | undefined;
+                                    isVerified?: boolean | undefined;
+                                    lastName?: string | undefined;
+                                    membershipYear?: number | undefined;
+                                    metadata?: any | undefined;
+                                    mobile?: string | undefined;
+                                    nickName?: string | undefined;
+                                    profileImage?: string | undefined;
+                                    socialMedia?: any | undefined;
+                                    updatedAt: any;
+                                    whatsAppMobile?: string | undefined;
+                                  }
+                                | undefined;
+                              scholarshipMentor?:
+                                | {
+                                    __typename?: 'User';
+                                    aboutMe?: string | undefined;
+                                    batch?: number | undefined;
+                                    createdAt: any;
+                                    disabled?: boolean | undefined;
+                                    displayName?: string | undefined;
+                                    dob?: any | undefined;
+                                    email?: string | undefined;
+                                    emergencyMobile?: string | undefined;
+                                    extraEmail?: string | undefined;
+                                    extraMobile?: string | undefined;
+                                    firstName?: string | undefined;
+                                    gender?: string | undefined;
+                                    google_auth_id?: string | undefined;
+                                    hasBusiness?: boolean | undefined;
+                                    id?: string | undefined;
+                                    isConfidential?: boolean | undefined;
+                                    isFaculty?: boolean | undefined;
+                                    isVerified?: boolean | undefined;
+                                    lastName?: string | undefined;
+                                    membershipYear?: number | undefined;
+                                    metadata?: any | undefined;
+                                    mobile?: string | undefined;
+                                    nickName?: string | undefined;
+                                    profileImage?: string | undefined;
+                                    socialMedia?: any | undefined;
+                                    updatedAt: any;
+                                    whatsAppMobile?: string | undefined;
+                                  }
+                                | undefined;
+                              user?:
+                                | {
+                                    __typename?: 'User';
+                                    aboutMe?: string | undefined;
+                                    batch?: number | undefined;
+                                    createdAt: any;
+                                    disabled?: boolean | undefined;
+                                    displayName?: string | undefined;
+                                    dob?: any | undefined;
+                                    email?: string | undefined;
+                                    emergencyMobile?: string | undefined;
+                                    extraEmail?: string | undefined;
+                                    extraMobile?: string | undefined;
+                                    firstName?: string | undefined;
+                                    gender?: string | undefined;
+                                    google_auth_id?: string | undefined;
+                                    hasBusiness?: boolean | undefined;
+                                    id?: string | undefined;
+                                    isConfidential?: boolean | undefined;
+                                    isFaculty?: boolean | undefined;
+                                    isVerified?: boolean | undefined;
+                                    lastName?: string | undefined;
+                                    membershipYear?: number | undefined;
+                                    metadata?: any | undefined;
+                                    mobile?: string | undefined;
+                                    nickName?: string | undefined;
+                                    profileImage?: string | undefined;
+                                    socialMedia?: any | undefined;
+                                    updatedAt: any;
+                                    whatsAppMobile?: string | undefined;
+                                  }
+                                | undefined;
+                            }
+                          | undefined;
+                      }
+                    | undefined;
+                  recordedBy?:
+                    | {
+                        __typename?: 'User';
+                        aboutMe?: string | undefined;
+                        batch?: number | undefined;
+                        createdAt: any;
+                        disabled?: boolean | undefined;
+                        displayName?: string | undefined;
+                        dob?: any | undefined;
+                        email?: string | undefined;
+                        emergencyMobile?: string | undefined;
+                        extraEmail?: string | undefined;
+                        extraMobile?: string | undefined;
+                        firstName?: string | undefined;
+                        gender?: string | undefined;
+                        google_auth_id?: string | undefined;
+                        hasBusiness?: boolean | undefined;
+                        id?: string | undefined;
+                        isConfidential?: boolean | undefined;
+                        isFaculty?: boolean | undefined;
+                        isVerified?: boolean | undefined;
+                        lastName?: string | undefined;
+                        membershipYear?: number | undefined;
+                        metadata?: any | undefined;
+                        mobile?: string | undefined;
+                        nickName?: string | undefined;
+                        profileImage?: string | undefined;
+                        socialMedia?: any | undefined;
+                        updatedAt: any;
+                        whatsAppMobile?: string | undefined;
+                        companyInfo?:
+                          | Array<
+                              | {
+                                  __typename?: 'CompanyInfoBasic';
+                                  companyName: string;
+                                  id: string;
+                                  position?: string | undefined;
+                                  userId: string;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                        positions?:
+                          | Array<
+                              | {
+                                  __typename?: 'EffectivePosition';
+                                  assignmentId?: string | undefined;
+                                  code?: string | undefined;
+                                  name?: string | undefined;
+                                  termId?: string | undefined;
+                                  termName?: string | undefined;
+                                  validFrom?: any | undefined;
+                                  validUntil?: any | undefined;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                        role?:
+                          | {
+                              __typename?: 'Role';
+                              code?: string | undefined;
+                              id?: string | undefined;
+                              name?: string | undefined;
+                            }
+                          | undefined;
+                        roles?:
+                          | Array<
+                              | {
+                                  __typename?: 'EffectiveRole';
+                                  assignmentId?: string | undefined;
+                                  code?: string | undefined;
+                                  name?: string | undefined;
+                                  scopeBatch?: number | undefined;
+                                  scopeType?: string | undefined;
+                                  validFrom?: any | undefined;
+                                  validUntil?: any | undefined;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                      }
+                    | undefined;
+                  scholarshipBeneficiary?:
+                    | {
+                        __typename?: 'User';
+                        aboutMe?: string | undefined;
+                        batch?: number | undefined;
+                        createdAt: any;
+                        disabled?: boolean | undefined;
+                        displayName?: string | undefined;
+                        dob?: any | undefined;
+                        email?: string | undefined;
+                        emergencyMobile?: string | undefined;
+                        extraEmail?: string | undefined;
+                        extraMobile?: string | undefined;
+                        firstName?: string | undefined;
+                        gender?: string | undefined;
+                        google_auth_id?: string | undefined;
+                        hasBusiness?: boolean | undefined;
+                        id?: string | undefined;
+                        isConfidential?: boolean | undefined;
+                        isFaculty?: boolean | undefined;
+                        isVerified?: boolean | undefined;
+                        lastName?: string | undefined;
+                        membershipYear?: number | undefined;
+                        metadata?: any | undefined;
+                        mobile?: string | undefined;
+                        nickName?: string | undefined;
+                        profileImage?: string | undefined;
+                        socialMedia?: any | undefined;
+                        updatedAt: any;
+                        whatsAppMobile?: string | undefined;
+                        companyInfo?:
+                          | Array<
+                              | {
+                                  __typename?: 'CompanyInfoBasic';
+                                  companyName: string;
+                                  id: string;
+                                  position?: string | undefined;
+                                  userId: string;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                        positions?:
+                          | Array<
+                              | {
+                                  __typename?: 'EffectivePosition';
+                                  assignmentId?: string | undefined;
+                                  code?: string | undefined;
+                                  name?: string | undefined;
+                                  termId?: string | undefined;
+                                  termName?: string | undefined;
+                                  validFrom?: any | undefined;
+                                  validUntil?: any | undefined;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                        role?:
+                          | {
+                              __typename?: 'Role';
+                              code?: string | undefined;
+                              id?: string | undefined;
+                              name?: string | undefined;
+                            }
+                          | undefined;
+                        roles?:
+                          | Array<
+                              | {
+                                  __typename?: 'EffectiveRole';
+                                  assignmentId?: string | undefined;
+                                  code?: string | undefined;
+                                  name?: string | undefined;
+                                  scopeBatch?: number | undefined;
+                                  scopeType?: string | undefined;
+                                  validFrom?: any | undefined;
+                                  validUntil?: any | undefined;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                      }
+                    | undefined;
+                  scholarshipMentor?:
+                    | {
+                        __typename?: 'User';
+                        aboutMe?: string | undefined;
+                        batch?: number | undefined;
+                        createdAt: any;
+                        disabled?: boolean | undefined;
+                        displayName?: string | undefined;
+                        dob?: any | undefined;
+                        email?: string | undefined;
+                        emergencyMobile?: string | undefined;
+                        extraEmail?: string | undefined;
+                        extraMobile?: string | undefined;
+                        firstName?: string | undefined;
+                        gender?: string | undefined;
+                        google_auth_id?: string | undefined;
+                        hasBusiness?: boolean | undefined;
+                        id?: string | undefined;
+                        isConfidential?: boolean | undefined;
+                        isFaculty?: boolean | undefined;
+                        isVerified?: boolean | undefined;
+                        lastName?: string | undefined;
+                        membershipYear?: number | undefined;
+                        metadata?: any | undefined;
+                        mobile?: string | undefined;
+                        nickName?: string | undefined;
+                        profileImage?: string | undefined;
+                        socialMedia?: any | undefined;
+                        updatedAt: any;
+                        whatsAppMobile?: string | undefined;
+                        companyInfo?:
+                          | Array<
+                              | {
+                                  __typename?: 'CompanyInfoBasic';
+                                  companyName: string;
+                                  id: string;
+                                  position?: string | undefined;
+                                  userId: string;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                        positions?:
+                          | Array<
+                              | {
+                                  __typename?: 'EffectivePosition';
+                                  assignmentId?: string | undefined;
+                                  code?: string | undefined;
+                                  name?: string | undefined;
+                                  termId?: string | undefined;
+                                  termName?: string | undefined;
+                                  validFrom?: any | undefined;
+                                  validUntil?: any | undefined;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                        role?:
+                          | {
+                              __typename?: 'Role';
+                              code?: string | undefined;
+                              id?: string | undefined;
+                              name?: string | undefined;
+                            }
+                          | undefined;
+                        roles?:
+                          | Array<
+                              | {
+                                  __typename?: 'EffectiveRole';
+                                  assignmentId?: string | undefined;
+                                  code?: string | undefined;
+                                  name?: string | undefined;
+                                  scopeBatch?: number | undefined;
+                                  scopeType?: string | undefined;
+                                  validFrom?: any | undefined;
+                                  validUntil?: any | undefined;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                      }
+                    | undefined;
+                  user?:
+                    | {
+                        __typename?: 'User';
+                        aboutMe?: string | undefined;
+                        batch?: number | undefined;
+                        createdAt: any;
+                        disabled?: boolean | undefined;
+                        displayName?: string | undefined;
+                        dob?: any | undefined;
+                        email?: string | undefined;
+                        emergencyMobile?: string | undefined;
+                        extraEmail?: string | undefined;
+                        extraMobile?: string | undefined;
+                        firstName?: string | undefined;
+                        gender?: string | undefined;
+                        google_auth_id?: string | undefined;
+                        hasBusiness?: boolean | undefined;
+                        id?: string | undefined;
+                        isConfidential?: boolean | undefined;
+                        isFaculty?: boolean | undefined;
+                        isVerified?: boolean | undefined;
+                        lastName?: string | undefined;
+                        membershipYear?: number | undefined;
+                        metadata?: any | undefined;
+                        mobile?: string | undefined;
+                        nickName?: string | undefined;
+                        profileImage?: string | undefined;
+                        socialMedia?: any | undefined;
+                        updatedAt: any;
+                        whatsAppMobile?: string | undefined;
+                        companyInfo?:
+                          | Array<
+                              | {
+                                  __typename?: 'CompanyInfoBasic';
+                                  companyName: string;
+                                  id: string;
+                                  position?: string | undefined;
+                                  userId: string;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                        positions?:
+                          | Array<
+                              | {
+                                  __typename?: 'EffectivePosition';
+                                  assignmentId?: string | undefined;
+                                  code?: string | undefined;
+                                  name?: string | undefined;
+                                  termId?: string | undefined;
+                                  termName?: string | undefined;
+                                  validFrom?: any | undefined;
+                                  validUntil?: any | undefined;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                        role?:
+                          | {
+                              __typename?: 'Role';
+                              code?: string | undefined;
+                              id?: string | undefined;
+                              name?: string | undefined;
+                            }
+                          | undefined;
+                        roles?:
+                          | Array<
+                              | {
+                                  __typename?: 'EffectiveRole';
+                                  assignmentId?: string | undefined;
+                                  code?: string | undefined;
+                                  name?: string | undefined;
+                                  scopeBatch?: number | undefined;
+                                  scopeType?: string | undefined;
+                                  validFrom?: any | undefined;
+                                  validUntil?: any | undefined;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                      }
+                    | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+      }
+    | undefined;
+};
+
+export type GetAssociationWalletSummaryQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetAssociationWalletSummaryQuery = {
+  __typename?: 'Query';
+  getAssociationWalletSummary?:
+    | {
+        __typename?: 'AssociationWalletSummary';
+        availableFunds?: number | undefined;
+        currency?: string | undefined;
+        pendingDebits?: number | undefined;
+        totalCredits?: number | undefined;
+        totalDebits?: number | undefined;
+      }
+    | undefined;
+};
+
 export type GetBatchCoordinatorByUserIdQueryVariables = Exact<{
   userId: Scalars['String']['input'];
 }>;
@@ -9050,11 +16479,79 @@ export type GetBatchCoordinatorScholarshipDashboardQuery = {
   getBatchCoordinatorScholarshipDashboard?:
     | {
         __typename?: 'ScholarshipDashboard';
+        activeBeneficiaryCount?: number | undefined;
+        activeMentorCount?: number | undefined;
+        allocationDisputeCount?: number | undefined;
+        applicationsAwaitingReview?: number | undefined;
+        approvalCapacity?: number | undefined;
+        approvedAdjustments?: number | undefined;
+        awaitingPaymentConfirmation?: number | undefined;
+        beneficiaryNonReceiptCount?: number | undefined;
+        completedApplications?: number | undefined;
+        completedTransactionCount?: number | undefined;
+        confirmedAllocation?: number | undefined;
+        confirmedBeneficiaryDisbursement?: number | undefined;
         disbursedAmount?: number | undefined;
+        disputedIncomingAllocation?: number | undefined;
+        disputedMentorAllocations?: number | undefined;
+        draftRequests?: number | undefined;
         exceptionCount?: number | undefined;
+        failedNotificationCount?: number | undefined;
+        fullProofsAwaitingVerification?: number | undefined;
+        mentorCustodyBalance?: number | undefined;
+        missingMentorRoutingCount?: number | undefined;
+        needsInformation?: number | undefined;
+        openRefundCaseCount?: number | undefined;
+        overdueProof?: number | undefined;
+        overdueProofAmount?: number | undefined;
+        partialProof?: number | undefined;
+        partialReceiptMismatchCount?: number | undefined;
+        paymentConfirmationPendingApplications?: number | undefined;
+        pendingBeneficiaryConfirmation?: number | undefined;
+        pendingBeneficiaryConfirmationCount?: number | undefined;
+        pendingIncomingAllocation?: number | undefined;
+        proofDue?: number | undefined;
+        refundConfirmedAmount?: number | undefined;
+        refundReconciliationPendingCount?: number | undefined;
+        refundRequestedAmount?: number | undefined;
+        refundResponsePendingCount?: number | undefined;
+        rejectedApplications?: number | undefined;
         requestedAmount?: number | undefined;
+        returnedAmount?: number | undefined;
+        routingPendingApplications?: number | undefined;
+        submittedApplications?: number | undefined;
+        submittedOrUnderReview?: number | undefined;
+        totalAllocationRecorded?: number | undefined;
         totalApplications?: number | undefined;
+        totalCompletedAfterProofVerification?: number | undefined;
+        underReviewApplications?: number | undefined;
+        wrongDisbursementAmount?: number | undefined;
+        wrongDisbursementApplications?: number | undefined;
+        byAllocationStatus?:
+          | Array<
+              | { __typename?: 'ScholarshipStatusCount'; count?: number | undefined; key?: string | undefined }
+              | undefined
+            >
+          | undefined;
+        byProofStatus?:
+          | Array<
+              | { __typename?: 'ScholarshipStatusCount'; count?: number | undefined; key?: string | undefined }
+              | undefined
+            >
+          | undefined;
+        byRefundStatus?:
+          | Array<
+              | { __typename?: 'ScholarshipStatusCount'; count?: number | undefined; key?: string | undefined }
+              | undefined
+            >
+          | undefined;
         byStatus?:
+          | Array<
+              | { __typename?: 'ScholarshipStatusCount'; count?: number | undefined; key?: string | undefined }
+              | undefined
+            >
+          | undefined;
+        byTransactionStatus?:
           | Array<
               | { __typename?: 'ScholarshipStatusCount'; count?: number | undefined; key?: string | undefined }
               | undefined
@@ -9172,6 +16669,31 @@ export type GetBatchCoordinatorsByBatchQuery = {
           }
         | undefined
       >
+    | undefined;
+};
+
+export type GetBillingDashboardQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetBillingDashboardQuery = {
+  __typename?: 'Query';
+  getBillingDashboard?:
+    | {
+        __typename?: 'BillingDashboard';
+        adjustmentsAndRefunds?: number | undefined;
+        availableFunds?: number | undefined;
+        currency?: string | undefined;
+        disputedMentorReleaseAmount?: number | undefined;
+        donationsReceived?: number | undefined;
+        eventReceived?: number | undefined;
+        membershipReceived?: number | undefined;
+        otherActivitySpending?: number | undefined;
+        pendingDebits?: number | undefined;
+        pendingMentorReleaseAmount?: number | undefined;
+        scholarshipPaidToBeneficiaries?: number | undefined;
+        scholarshipReleasedToMentors?: number | undefined;
+        totalCredits?: number | undefined;
+        totalDebits?: number | undefined;
+      }
     | undefined;
 };
 
@@ -9575,12 +17097,17 @@ export type GetCompletedScholarshipTransactionsQuery = {
         | {
             __typename?: 'Transaction';
             amount?: any | undefined;
+            billingCategory?: BillingCategory | undefined;
             createdAt?: any | undefined;
             currency?: Currency | undefined;
             description?: string | undefined;
             id?: string | undefined;
+            immutableAt?: any | undefined;
             isDonation?: boolean | undefined;
+            linkedTransactionId?: string | undefined;
+            metadata?: any | undefined;
             method?: string | undefined;
+            recordedByUserId?: string | undefined;
             referenceId?: string | undefined;
             scholarshipApplicationId?: string | undefined;
             scholarshipApprovedAt?: any | undefined;
@@ -9601,13 +17128,562 @@ export type GetCompletedScholarshipTransactionsQuery = {
             scholarshipPurposeSnapshot?: string | undefined;
             scholarshipReceivedAt?: any | undefined;
             scholarshipStatus?: string | undefined;
-            sourceType?: string | undefined;
+            sourceType?: TransactionSourceType | undefined;
             status?: TransactionStatus | undefined;
             title?: string | undefined;
             transactionDate?: any | undefined;
             type?: TransactionType | undefined;
             updatedAt?: any | undefined;
             userId?: string | undefined;
+            walletImpact?: boolean | undefined;
+            attachments?:
+              | Array<
+                  | {
+                      __typename?: 'TransactionAttachment';
+                      createdAt?: any | undefined;
+                      id?: string | undefined;
+                      mimeType?: string | undefined;
+                      originalFilename?: string | undefined;
+                      sizeBytes?: number | undefined;
+                      status?: string | undefined;
+                      transactionId?: string | undefined;
+                      uploadedAt?: any | undefined;
+                      uploadedByUserId?: string | undefined;
+                    }
+                  | undefined
+                >
+              | undefined;
+            linkedTransaction?:
+              | {
+                  __typename?: 'Transaction';
+                  amount?: any | undefined;
+                  billingCategory?: BillingCategory | undefined;
+                  createdAt?: any | undefined;
+                  currency?: Currency | undefined;
+                  description?: string | undefined;
+                  id?: string | undefined;
+                  immutableAt?: any | undefined;
+                  isDonation?: boolean | undefined;
+                  linkedTransactionId?: string | undefined;
+                  metadata?: any | undefined;
+                  method?: string | undefined;
+                  recordedByUserId?: string | undefined;
+                  referenceId?: string | undefined;
+                  scholarshipApplicationId?: string | undefined;
+                  scholarshipApprovedAt?: any | undefined;
+                  scholarshipBatchSnapshot?: number | undefined;
+                  scholarshipBeneficiaryUserId?: string | undefined;
+                  scholarshipCompletedAt?: any | undefined;
+                  scholarshipConfirmedAmount?: any | undefined;
+                  scholarshipConfirmedAt?: any | undefined;
+                  scholarshipImmutableAt?: any | undefined;
+                  scholarshipInstallmentSequence?: number | undefined;
+                  scholarshipMaskedPayoutDestination?: string | undefined;
+                  scholarshipMentorUserId?: string | undefined;
+                  scholarshipOriginalTransactionId?: string | undefined;
+                  scholarshipPayoutMethod?: string | undefined;
+                  scholarshipProofDueAt?: any | undefined;
+                  scholarshipProofDueDays?: number | undefined;
+                  scholarshipProofStatus?: string | undefined;
+                  scholarshipPurposeSnapshot?: string | undefined;
+                  scholarshipReceivedAt?: any | undefined;
+                  scholarshipStatus?: string | undefined;
+                  sourceType?: TransactionSourceType | undefined;
+                  status?: TransactionStatus | undefined;
+                  title?: string | undefined;
+                  transactionDate?: any | undefined;
+                  type?: TransactionType | undefined;
+                  updatedAt?: any | undefined;
+                  userId?: string | undefined;
+                  walletImpact?: boolean | undefined;
+                  attachments?:
+                    | Array<
+                        | {
+                            __typename?: 'TransactionAttachment';
+                            createdAt?: any | undefined;
+                            id?: string | undefined;
+                            mimeType?: string | undefined;
+                            originalFilename?: string | undefined;
+                            sizeBytes?: number | undefined;
+                            status?: string | undefined;
+                            transactionId?: string | undefined;
+                            uploadedAt?: any | undefined;
+                            uploadedByUserId?: string | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  linkedTransaction?:
+                    | {
+                        __typename?: 'Transaction';
+                        amount?: any | undefined;
+                        billingCategory?: BillingCategory | undefined;
+                        createdAt?: any | undefined;
+                        currency?: Currency | undefined;
+                        description?: string | undefined;
+                        id?: string | undefined;
+                        immutableAt?: any | undefined;
+                        isDonation?: boolean | undefined;
+                        linkedTransactionId?: string | undefined;
+                        metadata?: any | undefined;
+                        method?: string | undefined;
+                        recordedByUserId?: string | undefined;
+                        referenceId?: string | undefined;
+                        scholarshipApplicationId?: string | undefined;
+                        scholarshipApprovedAt?: any | undefined;
+                        scholarshipBatchSnapshot?: number | undefined;
+                        scholarshipBeneficiaryUserId?: string | undefined;
+                        scholarshipCompletedAt?: any | undefined;
+                        scholarshipConfirmedAmount?: any | undefined;
+                        scholarshipConfirmedAt?: any | undefined;
+                        scholarshipImmutableAt?: any | undefined;
+                        scholarshipInstallmentSequence?: number | undefined;
+                        scholarshipMaskedPayoutDestination?: string | undefined;
+                        scholarshipMentorUserId?: string | undefined;
+                        scholarshipOriginalTransactionId?: string | undefined;
+                        scholarshipPayoutMethod?: string | undefined;
+                        scholarshipProofDueAt?: any | undefined;
+                        scholarshipProofDueDays?: number | undefined;
+                        scholarshipProofStatus?: string | undefined;
+                        scholarshipPurposeSnapshot?: string | undefined;
+                        scholarshipReceivedAt?: any | undefined;
+                        scholarshipStatus?: string | undefined;
+                        sourceType?: TransactionSourceType | undefined;
+                        status?: TransactionStatus | undefined;
+                        title?: string | undefined;
+                        transactionDate?: any | undefined;
+                        type?: TransactionType | undefined;
+                        updatedAt?: any | undefined;
+                        userId?: string | undefined;
+                        walletImpact?: boolean | undefined;
+                        recordedBy?:
+                          | {
+                              __typename?: 'User';
+                              aboutMe?: string | undefined;
+                              batch?: number | undefined;
+                              createdAt: any;
+                              disabled?: boolean | undefined;
+                              displayName?: string | undefined;
+                              dob?: any | undefined;
+                              email?: string | undefined;
+                              emergencyMobile?: string | undefined;
+                              extraEmail?: string | undefined;
+                              extraMobile?: string | undefined;
+                              firstName?: string | undefined;
+                              gender?: string | undefined;
+                              google_auth_id?: string | undefined;
+                              hasBusiness?: boolean | undefined;
+                              id?: string | undefined;
+                              isConfidential?: boolean | undefined;
+                              isFaculty?: boolean | undefined;
+                              isVerified?: boolean | undefined;
+                              lastName?: string | undefined;
+                              membershipYear?: number | undefined;
+                              metadata?: any | undefined;
+                              mobile?: string | undefined;
+                              nickName?: string | undefined;
+                              profileImage?: string | undefined;
+                              socialMedia?: any | undefined;
+                              updatedAt: any;
+                              whatsAppMobile?: string | undefined;
+                              companyInfo?:
+                                | Array<
+                                    | {
+                                        __typename?: 'CompanyInfoBasic';
+                                        companyName: string;
+                                        id: string;
+                                        position?: string | undefined;
+                                        userId: string;
+                                      }
+                                    | undefined
+                                  >
+                                | undefined;
+                              positions?:
+                                | Array<
+                                    | {
+                                        __typename?: 'EffectivePosition';
+                                        assignmentId?: string | undefined;
+                                        code?: string | undefined;
+                                        name?: string | undefined;
+                                        termId?: string | undefined;
+                                        termName?: string | undefined;
+                                        validFrom?: any | undefined;
+                                        validUntil?: any | undefined;
+                                      }
+                                    | undefined
+                                  >
+                                | undefined;
+                              role?:
+                                | {
+                                    __typename?: 'Role';
+                                    code?: string | undefined;
+                                    id?: string | undefined;
+                                    name?: string | undefined;
+                                  }
+                                | undefined;
+                              roles?:
+                                | Array<
+                                    | {
+                                        __typename?: 'EffectiveRole';
+                                        assignmentId?: string | undefined;
+                                        code?: string | undefined;
+                                        name?: string | undefined;
+                                        scopeBatch?: number | undefined;
+                                        scopeType?: string | undefined;
+                                        validFrom?: any | undefined;
+                                        validUntil?: any | undefined;
+                                      }
+                                    | undefined
+                                  >
+                                | undefined;
+                            }
+                          | undefined;
+                        scholarshipBeneficiary?:
+                          | {
+                              __typename?: 'User';
+                              aboutMe?: string | undefined;
+                              batch?: number | undefined;
+                              createdAt: any;
+                              disabled?: boolean | undefined;
+                              displayName?: string | undefined;
+                              dob?: any | undefined;
+                              email?: string | undefined;
+                              emergencyMobile?: string | undefined;
+                              extraEmail?: string | undefined;
+                              extraMobile?: string | undefined;
+                              firstName?: string | undefined;
+                              gender?: string | undefined;
+                              google_auth_id?: string | undefined;
+                              hasBusiness?: boolean | undefined;
+                              id?: string | undefined;
+                              isConfidential?: boolean | undefined;
+                              isFaculty?: boolean | undefined;
+                              isVerified?: boolean | undefined;
+                              lastName?: string | undefined;
+                              membershipYear?: number | undefined;
+                              metadata?: any | undefined;
+                              mobile?: string | undefined;
+                              nickName?: string | undefined;
+                              profileImage?: string | undefined;
+                              socialMedia?: any | undefined;
+                              updatedAt: any;
+                              whatsAppMobile?: string | undefined;
+                              companyInfo?:
+                                | Array<
+                                    | {
+                                        __typename?: 'CompanyInfoBasic';
+                                        companyName: string;
+                                        id: string;
+                                        position?: string | undefined;
+                                        userId: string;
+                                      }
+                                    | undefined
+                                  >
+                                | undefined;
+                              positions?:
+                                | Array<
+                                    | {
+                                        __typename?: 'EffectivePosition';
+                                        assignmentId?: string | undefined;
+                                        code?: string | undefined;
+                                        name?: string | undefined;
+                                        termId?: string | undefined;
+                                        termName?: string | undefined;
+                                        validFrom?: any | undefined;
+                                        validUntil?: any | undefined;
+                                      }
+                                    | undefined
+                                  >
+                                | undefined;
+                              role?:
+                                | {
+                                    __typename?: 'Role';
+                                    code?: string | undefined;
+                                    id?: string | undefined;
+                                    name?: string | undefined;
+                                  }
+                                | undefined;
+                              roles?:
+                                | Array<
+                                    | {
+                                        __typename?: 'EffectiveRole';
+                                        assignmentId?: string | undefined;
+                                        code?: string | undefined;
+                                        name?: string | undefined;
+                                        scopeBatch?: number | undefined;
+                                        scopeType?: string | undefined;
+                                        validFrom?: any | undefined;
+                                        validUntil?: any | undefined;
+                                      }
+                                    | undefined
+                                  >
+                                | undefined;
+                            }
+                          | undefined;
+                        scholarshipMentor?:
+                          | {
+                              __typename?: 'User';
+                              aboutMe?: string | undefined;
+                              batch?: number | undefined;
+                              createdAt: any;
+                              disabled?: boolean | undefined;
+                              displayName?: string | undefined;
+                              dob?: any | undefined;
+                              email?: string | undefined;
+                              emergencyMobile?: string | undefined;
+                              extraEmail?: string | undefined;
+                              extraMobile?: string | undefined;
+                              firstName?: string | undefined;
+                              gender?: string | undefined;
+                              google_auth_id?: string | undefined;
+                              hasBusiness?: boolean | undefined;
+                              id?: string | undefined;
+                              isConfidential?: boolean | undefined;
+                              isFaculty?: boolean | undefined;
+                              isVerified?: boolean | undefined;
+                              lastName?: string | undefined;
+                              membershipYear?: number | undefined;
+                              metadata?: any | undefined;
+                              mobile?: string | undefined;
+                              nickName?: string | undefined;
+                              profileImage?: string | undefined;
+                              socialMedia?: any | undefined;
+                              updatedAt: any;
+                              whatsAppMobile?: string | undefined;
+                              companyInfo?:
+                                | Array<
+                                    | {
+                                        __typename?: 'CompanyInfoBasic';
+                                        companyName: string;
+                                        id: string;
+                                        position?: string | undefined;
+                                        userId: string;
+                                      }
+                                    | undefined
+                                  >
+                                | undefined;
+                              positions?:
+                                | Array<
+                                    | {
+                                        __typename?: 'EffectivePosition';
+                                        assignmentId?: string | undefined;
+                                        code?: string | undefined;
+                                        name?: string | undefined;
+                                        termId?: string | undefined;
+                                        termName?: string | undefined;
+                                        validFrom?: any | undefined;
+                                        validUntil?: any | undefined;
+                                      }
+                                    | undefined
+                                  >
+                                | undefined;
+                              role?:
+                                | {
+                                    __typename?: 'Role';
+                                    code?: string | undefined;
+                                    id?: string | undefined;
+                                    name?: string | undefined;
+                                  }
+                                | undefined;
+                              roles?:
+                                | Array<
+                                    | {
+                                        __typename?: 'EffectiveRole';
+                                        assignmentId?: string | undefined;
+                                        code?: string | undefined;
+                                        name?: string | undefined;
+                                        scopeBatch?: number | undefined;
+                                        scopeType?: string | undefined;
+                                        validFrom?: any | undefined;
+                                        validUntil?: any | undefined;
+                                      }
+                                    | undefined
+                                  >
+                                | undefined;
+                            }
+                          | undefined;
+                        user?:
+                          | {
+                              __typename?: 'User';
+                              aboutMe?: string | undefined;
+                              batch?: number | undefined;
+                              createdAt: any;
+                              disabled?: boolean | undefined;
+                              displayName?: string | undefined;
+                              dob?: any | undefined;
+                              email?: string | undefined;
+                              emergencyMobile?: string | undefined;
+                              extraEmail?: string | undefined;
+                              extraMobile?: string | undefined;
+                              firstName?: string | undefined;
+                              gender?: string | undefined;
+                              google_auth_id?: string | undefined;
+                              hasBusiness?: boolean | undefined;
+                              id?: string | undefined;
+                              isConfidential?: boolean | undefined;
+                              isFaculty?: boolean | undefined;
+                              isVerified?: boolean | undefined;
+                              lastName?: string | undefined;
+                              membershipYear?: number | undefined;
+                              metadata?: any | undefined;
+                              mobile?: string | undefined;
+                              nickName?: string | undefined;
+                              profileImage?: string | undefined;
+                              socialMedia?: any | undefined;
+                              updatedAt: any;
+                              whatsAppMobile?: string | undefined;
+                              companyInfo?:
+                                | Array<
+                                    | {
+                                        __typename?: 'CompanyInfoBasic';
+                                        companyName: string;
+                                        id: string;
+                                        position?: string | undefined;
+                                        userId: string;
+                                      }
+                                    | undefined
+                                  >
+                                | undefined;
+                              positions?:
+                                | Array<
+                                    | {
+                                        __typename?: 'EffectivePosition';
+                                        assignmentId?: string | undefined;
+                                        code?: string | undefined;
+                                        name?: string | undefined;
+                                        termId?: string | undefined;
+                                        termName?: string | undefined;
+                                        validFrom?: any | undefined;
+                                        validUntil?: any | undefined;
+                                      }
+                                    | undefined
+                                  >
+                                | undefined;
+                              role?:
+                                | {
+                                    __typename?: 'Role';
+                                    code?: string | undefined;
+                                    id?: string | undefined;
+                                    name?: string | undefined;
+                                  }
+                                | undefined;
+                              roles?:
+                                | Array<
+                                    | {
+                                        __typename?: 'EffectiveRole';
+                                        assignmentId?: string | undefined;
+                                        code?: string | undefined;
+                                        name?: string | undefined;
+                                        scopeBatch?: number | undefined;
+                                        scopeType?: string | undefined;
+                                        validFrom?: any | undefined;
+                                        validUntil?: any | undefined;
+                                      }
+                                    | undefined
+                                  >
+                                | undefined;
+                            }
+                          | undefined;
+                      }
+                    | undefined;
+                }
+              | undefined;
+            recordedBy?:
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: any | undefined;
+                  email?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  hasBusiness?: boolean | undefined;
+                  id?: string | undefined;
+                  isConfidential?: boolean | undefined;
+                  isFaculty?: boolean | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  metadata?: any | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
+                  updatedAt: any;
+                  whatsAppMobile?: string | undefined;
+                }
+              | undefined;
+            scholarshipBeneficiary?:
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: any | undefined;
+                  email?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  hasBusiness?: boolean | undefined;
+                  id?: string | undefined;
+                  isConfidential?: boolean | undefined;
+                  isFaculty?: boolean | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  metadata?: any | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
+                  updatedAt: any;
+                  whatsAppMobile?: string | undefined;
+                }
+              | undefined;
+            scholarshipMentor?:
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: any | undefined;
+                  email?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  hasBusiness?: boolean | undefined;
+                  id?: string | undefined;
+                  isConfidential?: boolean | undefined;
+                  isFaculty?: boolean | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  metadata?: any | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
+                  updatedAt: any;
+                  whatsAppMobile?: string | undefined;
+                }
+              | undefined;
             user?:
               | {
                   __typename?: 'User';
@@ -9638,57 +17714,36 @@ export type GetCompletedScholarshipTransactionsQuery = {
                   socialMedia?: any | undefined;
                   updatedAt: any;
                   whatsAppMobile?: string | undefined;
-                  companyInfo?:
-                    | Array<
-                        | {
-                            __typename?: 'CompanyInfoBasic';
-                            companyName: string;
-                            id: string;
-                            position?: string | undefined;
-                            userId: string;
-                          }
-                        | undefined
-                      >
-                    | undefined;
-                  positions?:
-                    | Array<
-                        | {
-                            __typename?: 'EffectivePosition';
-                            assignmentId?: string | undefined;
-                            code?: string | undefined;
-                            name?: string | undefined;
-                            termId?: string | undefined;
-                            termName?: string | undefined;
-                            validFrom?: any | undefined;
-                            validUntil?: any | undefined;
-                          }
-                        | undefined
-                      >
-                    | undefined;
-                  role?:
-                    | {
-                        __typename?: 'Role';
-                        code?: string | undefined;
-                        id?: string | undefined;
-                        name?: string | undefined;
-                      }
-                    | undefined;
-                  roles?:
-                    | Array<
-                        | {
-                            __typename?: 'EffectiveRole';
-                            assignmentId?: string | undefined;
-                            code?: string | undefined;
-                            name?: string | undefined;
-                            scopeBatch?: number | undefined;
-                            scopeType?: string | undefined;
-                            validFrom?: any | undefined;
-                            validUntil?: any | undefined;
-                          }
-                        | undefined
-                      >
-                    | undefined;
                 }
+              | undefined;
+          }
+        | undefined
+      >
+    | undefined;
+};
+
+export type GetEligibleScholarshipMentorsQueryVariables = Exact<{
+  batch: Scalars['Int']['input'];
+}>;
+
+export type GetEligibleScholarshipMentorsQuery = {
+  __typename?: 'Query';
+  getEligibleScholarshipMentors?:
+    | Array<
+        | {
+            __typename?: 'UserBasic';
+            batch?: number | undefined;
+            disabled?: boolean | undefined;
+            dob?: any | undefined;
+            firstName?: string | undefined;
+            id?: string | undefined;
+            isConfidential?: boolean | undefined;
+            isFaculty?: boolean | undefined;
+            isVerified?: boolean | undefined;
+            lastName?: string | undefined;
+            profileImage?: string | undefined;
+            role?:
+              | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
               | undefined;
           }
         | undefined
@@ -9835,6 +17890,7 @@ export type GetMentorFundAllocationsQuery = {
         | {
             __typename?: 'MentorFundAllocation';
             amount?: any | undefined;
+            associationTransactionId?: string | undefined;
             batch?: number | undefined;
             confirmedAmount?: any | undefined;
             createdAt?: any | undefined;
@@ -9848,6 +17904,631 @@ export type GetMentorFundAllocationsQuery = {
             reference?: string | undefined;
             status?: string | undefined;
             transferDate?: any | undefined;
+            associationTransaction?:
+              | {
+                  __typename?: 'Transaction';
+                  amount?: any | undefined;
+                  billingCategory?: BillingCategory | undefined;
+                  createdAt?: any | undefined;
+                  currency?: Currency | undefined;
+                  description?: string | undefined;
+                  id?: string | undefined;
+                  immutableAt?: any | undefined;
+                  isDonation?: boolean | undefined;
+                  linkedTransactionId?: string | undefined;
+                  metadata?: any | undefined;
+                  method?: string | undefined;
+                  recordedByUserId?: string | undefined;
+                  referenceId?: string | undefined;
+                  scholarshipApplicationId?: string | undefined;
+                  scholarshipApprovedAt?: any | undefined;
+                  scholarshipBatchSnapshot?: number | undefined;
+                  scholarshipBeneficiaryUserId?: string | undefined;
+                  scholarshipCompletedAt?: any | undefined;
+                  scholarshipConfirmedAmount?: any | undefined;
+                  scholarshipConfirmedAt?: any | undefined;
+                  scholarshipImmutableAt?: any | undefined;
+                  scholarshipInstallmentSequence?: number | undefined;
+                  scholarshipMaskedPayoutDestination?: string | undefined;
+                  scholarshipMentorUserId?: string | undefined;
+                  scholarshipOriginalTransactionId?: string | undefined;
+                  scholarshipPayoutMethod?: string | undefined;
+                  scholarshipProofDueAt?: any | undefined;
+                  scholarshipProofDueDays?: number | undefined;
+                  scholarshipProofStatus?: string | undefined;
+                  scholarshipPurposeSnapshot?: string | undefined;
+                  scholarshipReceivedAt?: any | undefined;
+                  scholarshipStatus?: string | undefined;
+                  sourceType?: TransactionSourceType | undefined;
+                  status?: TransactionStatus | undefined;
+                  title?: string | undefined;
+                  transactionDate?: any | undefined;
+                  type?: TransactionType | undefined;
+                  updatedAt?: any | undefined;
+                  userId?: string | undefined;
+                  walletImpact?: boolean | undefined;
+                  attachments?:
+                    | Array<
+                        | {
+                            __typename?: 'TransactionAttachment';
+                            createdAt?: any | undefined;
+                            id?: string | undefined;
+                            mimeType?: string | undefined;
+                            originalFilename?: string | undefined;
+                            sizeBytes?: number | undefined;
+                            status?: string | undefined;
+                            transactionId?: string | undefined;
+                            uploadedAt?: any | undefined;
+                            uploadedByUserId?: string | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  linkedTransaction?:
+                    | {
+                        __typename?: 'Transaction';
+                        amount?: any | undefined;
+                        billingCategory?: BillingCategory | undefined;
+                        createdAt?: any | undefined;
+                        currency?: Currency | undefined;
+                        description?: string | undefined;
+                        id?: string | undefined;
+                        immutableAt?: any | undefined;
+                        isDonation?: boolean | undefined;
+                        linkedTransactionId?: string | undefined;
+                        metadata?: any | undefined;
+                        method?: string | undefined;
+                        recordedByUserId?: string | undefined;
+                        referenceId?: string | undefined;
+                        scholarshipApplicationId?: string | undefined;
+                        scholarshipApprovedAt?: any | undefined;
+                        scholarshipBatchSnapshot?: number | undefined;
+                        scholarshipBeneficiaryUserId?: string | undefined;
+                        scholarshipCompletedAt?: any | undefined;
+                        scholarshipConfirmedAmount?: any | undefined;
+                        scholarshipConfirmedAt?: any | undefined;
+                        scholarshipImmutableAt?: any | undefined;
+                        scholarshipInstallmentSequence?: number | undefined;
+                        scholarshipMaskedPayoutDestination?: string | undefined;
+                        scholarshipMentorUserId?: string | undefined;
+                        scholarshipOriginalTransactionId?: string | undefined;
+                        scholarshipPayoutMethod?: string | undefined;
+                        scholarshipProofDueAt?: any | undefined;
+                        scholarshipProofDueDays?: number | undefined;
+                        scholarshipProofStatus?: string | undefined;
+                        scholarshipPurposeSnapshot?: string | undefined;
+                        scholarshipReceivedAt?: any | undefined;
+                        scholarshipStatus?: string | undefined;
+                        sourceType?: TransactionSourceType | undefined;
+                        status?: TransactionStatus | undefined;
+                        title?: string | undefined;
+                        transactionDate?: any | undefined;
+                        type?: TransactionType | undefined;
+                        updatedAt?: any | undefined;
+                        userId?: string | undefined;
+                        walletImpact?: boolean | undefined;
+                        attachments?:
+                          | Array<
+                              | {
+                                  __typename?: 'TransactionAttachment';
+                                  createdAt?: any | undefined;
+                                  id?: string | undefined;
+                                  mimeType?: string | undefined;
+                                  originalFilename?: string | undefined;
+                                  sizeBytes?: number | undefined;
+                                  status?: string | undefined;
+                                  transactionId?: string | undefined;
+                                  uploadedAt?: any | undefined;
+                                  uploadedByUserId?: string | undefined;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                        linkedTransaction?:
+                          | {
+                              __typename?: 'Transaction';
+                              amount?: any | undefined;
+                              billingCategory?: BillingCategory | undefined;
+                              createdAt?: any | undefined;
+                              currency?: Currency | undefined;
+                              description?: string | undefined;
+                              id?: string | undefined;
+                              immutableAt?: any | undefined;
+                              isDonation?: boolean | undefined;
+                              linkedTransactionId?: string | undefined;
+                              metadata?: any | undefined;
+                              method?: string | undefined;
+                              recordedByUserId?: string | undefined;
+                              referenceId?: string | undefined;
+                              scholarshipApplicationId?: string | undefined;
+                              scholarshipApprovedAt?: any | undefined;
+                              scholarshipBatchSnapshot?: number | undefined;
+                              scholarshipBeneficiaryUserId?: string | undefined;
+                              scholarshipCompletedAt?: any | undefined;
+                              scholarshipConfirmedAmount?: any | undefined;
+                              scholarshipConfirmedAt?: any | undefined;
+                              scholarshipImmutableAt?: any | undefined;
+                              scholarshipInstallmentSequence?: number | undefined;
+                              scholarshipMaskedPayoutDestination?: string | undefined;
+                              scholarshipMentorUserId?: string | undefined;
+                              scholarshipOriginalTransactionId?: string | undefined;
+                              scholarshipPayoutMethod?: string | undefined;
+                              scholarshipProofDueAt?: any | undefined;
+                              scholarshipProofDueDays?: number | undefined;
+                              scholarshipProofStatus?: string | undefined;
+                              scholarshipPurposeSnapshot?: string | undefined;
+                              scholarshipReceivedAt?: any | undefined;
+                              scholarshipStatus?: string | undefined;
+                              sourceType?: TransactionSourceType | undefined;
+                              status?: TransactionStatus | undefined;
+                              title?: string | undefined;
+                              transactionDate?: any | undefined;
+                              type?: TransactionType | undefined;
+                              updatedAt?: any | undefined;
+                              userId?: string | undefined;
+                              walletImpact?: boolean | undefined;
+                              recordedBy?:
+                                | {
+                                    __typename?: 'User';
+                                    aboutMe?: string | undefined;
+                                    batch?: number | undefined;
+                                    createdAt: any;
+                                    disabled?: boolean | undefined;
+                                    displayName?: string | undefined;
+                                    dob?: any | undefined;
+                                    email?: string | undefined;
+                                    emergencyMobile?: string | undefined;
+                                    extraEmail?: string | undefined;
+                                    extraMobile?: string | undefined;
+                                    firstName?: string | undefined;
+                                    gender?: string | undefined;
+                                    google_auth_id?: string | undefined;
+                                    hasBusiness?: boolean | undefined;
+                                    id?: string | undefined;
+                                    isConfidential?: boolean | undefined;
+                                    isFaculty?: boolean | undefined;
+                                    isVerified?: boolean | undefined;
+                                    lastName?: string | undefined;
+                                    membershipYear?: number | undefined;
+                                    metadata?: any | undefined;
+                                    mobile?: string | undefined;
+                                    nickName?: string | undefined;
+                                    profileImage?: string | undefined;
+                                    socialMedia?: any | undefined;
+                                    updatedAt: any;
+                                    whatsAppMobile?: string | undefined;
+                                  }
+                                | undefined;
+                              scholarshipBeneficiary?:
+                                | {
+                                    __typename?: 'User';
+                                    aboutMe?: string | undefined;
+                                    batch?: number | undefined;
+                                    createdAt: any;
+                                    disabled?: boolean | undefined;
+                                    displayName?: string | undefined;
+                                    dob?: any | undefined;
+                                    email?: string | undefined;
+                                    emergencyMobile?: string | undefined;
+                                    extraEmail?: string | undefined;
+                                    extraMobile?: string | undefined;
+                                    firstName?: string | undefined;
+                                    gender?: string | undefined;
+                                    google_auth_id?: string | undefined;
+                                    hasBusiness?: boolean | undefined;
+                                    id?: string | undefined;
+                                    isConfidential?: boolean | undefined;
+                                    isFaculty?: boolean | undefined;
+                                    isVerified?: boolean | undefined;
+                                    lastName?: string | undefined;
+                                    membershipYear?: number | undefined;
+                                    metadata?: any | undefined;
+                                    mobile?: string | undefined;
+                                    nickName?: string | undefined;
+                                    profileImage?: string | undefined;
+                                    socialMedia?: any | undefined;
+                                    updatedAt: any;
+                                    whatsAppMobile?: string | undefined;
+                                  }
+                                | undefined;
+                              scholarshipMentor?:
+                                | {
+                                    __typename?: 'User';
+                                    aboutMe?: string | undefined;
+                                    batch?: number | undefined;
+                                    createdAt: any;
+                                    disabled?: boolean | undefined;
+                                    displayName?: string | undefined;
+                                    dob?: any | undefined;
+                                    email?: string | undefined;
+                                    emergencyMobile?: string | undefined;
+                                    extraEmail?: string | undefined;
+                                    extraMobile?: string | undefined;
+                                    firstName?: string | undefined;
+                                    gender?: string | undefined;
+                                    google_auth_id?: string | undefined;
+                                    hasBusiness?: boolean | undefined;
+                                    id?: string | undefined;
+                                    isConfidential?: boolean | undefined;
+                                    isFaculty?: boolean | undefined;
+                                    isVerified?: boolean | undefined;
+                                    lastName?: string | undefined;
+                                    membershipYear?: number | undefined;
+                                    metadata?: any | undefined;
+                                    mobile?: string | undefined;
+                                    nickName?: string | undefined;
+                                    profileImage?: string | undefined;
+                                    socialMedia?: any | undefined;
+                                    updatedAt: any;
+                                    whatsAppMobile?: string | undefined;
+                                  }
+                                | undefined;
+                              user?:
+                                | {
+                                    __typename?: 'User';
+                                    aboutMe?: string | undefined;
+                                    batch?: number | undefined;
+                                    createdAt: any;
+                                    disabled?: boolean | undefined;
+                                    displayName?: string | undefined;
+                                    dob?: any | undefined;
+                                    email?: string | undefined;
+                                    emergencyMobile?: string | undefined;
+                                    extraEmail?: string | undefined;
+                                    extraMobile?: string | undefined;
+                                    firstName?: string | undefined;
+                                    gender?: string | undefined;
+                                    google_auth_id?: string | undefined;
+                                    hasBusiness?: boolean | undefined;
+                                    id?: string | undefined;
+                                    isConfidential?: boolean | undefined;
+                                    isFaculty?: boolean | undefined;
+                                    isVerified?: boolean | undefined;
+                                    lastName?: string | undefined;
+                                    membershipYear?: number | undefined;
+                                    metadata?: any | undefined;
+                                    mobile?: string | undefined;
+                                    nickName?: string | undefined;
+                                    profileImage?: string | undefined;
+                                    socialMedia?: any | undefined;
+                                    updatedAt: any;
+                                    whatsAppMobile?: string | undefined;
+                                  }
+                                | undefined;
+                            }
+                          | undefined;
+                      }
+                    | undefined;
+                  recordedBy?:
+                    | {
+                        __typename?: 'User';
+                        aboutMe?: string | undefined;
+                        batch?: number | undefined;
+                        createdAt: any;
+                        disabled?: boolean | undefined;
+                        displayName?: string | undefined;
+                        dob?: any | undefined;
+                        email?: string | undefined;
+                        emergencyMobile?: string | undefined;
+                        extraEmail?: string | undefined;
+                        extraMobile?: string | undefined;
+                        firstName?: string | undefined;
+                        gender?: string | undefined;
+                        google_auth_id?: string | undefined;
+                        hasBusiness?: boolean | undefined;
+                        id?: string | undefined;
+                        isConfidential?: boolean | undefined;
+                        isFaculty?: boolean | undefined;
+                        isVerified?: boolean | undefined;
+                        lastName?: string | undefined;
+                        membershipYear?: number | undefined;
+                        metadata?: any | undefined;
+                        mobile?: string | undefined;
+                        nickName?: string | undefined;
+                        profileImage?: string | undefined;
+                        socialMedia?: any | undefined;
+                        updatedAt: any;
+                        whatsAppMobile?: string | undefined;
+                        companyInfo?:
+                          | Array<
+                              | {
+                                  __typename?: 'CompanyInfoBasic';
+                                  companyName: string;
+                                  id: string;
+                                  position?: string | undefined;
+                                  userId: string;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                        positions?:
+                          | Array<
+                              | {
+                                  __typename?: 'EffectivePosition';
+                                  assignmentId?: string | undefined;
+                                  code?: string | undefined;
+                                  name?: string | undefined;
+                                  termId?: string | undefined;
+                                  termName?: string | undefined;
+                                  validFrom?: any | undefined;
+                                  validUntil?: any | undefined;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                        role?:
+                          | {
+                              __typename?: 'Role';
+                              code?: string | undefined;
+                              id?: string | undefined;
+                              name?: string | undefined;
+                            }
+                          | undefined;
+                        roles?:
+                          | Array<
+                              | {
+                                  __typename?: 'EffectiveRole';
+                                  assignmentId?: string | undefined;
+                                  code?: string | undefined;
+                                  name?: string | undefined;
+                                  scopeBatch?: number | undefined;
+                                  scopeType?: string | undefined;
+                                  validFrom?: any | undefined;
+                                  validUntil?: any | undefined;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                      }
+                    | undefined;
+                  scholarshipBeneficiary?:
+                    | {
+                        __typename?: 'User';
+                        aboutMe?: string | undefined;
+                        batch?: number | undefined;
+                        createdAt: any;
+                        disabled?: boolean | undefined;
+                        displayName?: string | undefined;
+                        dob?: any | undefined;
+                        email?: string | undefined;
+                        emergencyMobile?: string | undefined;
+                        extraEmail?: string | undefined;
+                        extraMobile?: string | undefined;
+                        firstName?: string | undefined;
+                        gender?: string | undefined;
+                        google_auth_id?: string | undefined;
+                        hasBusiness?: boolean | undefined;
+                        id?: string | undefined;
+                        isConfidential?: boolean | undefined;
+                        isFaculty?: boolean | undefined;
+                        isVerified?: boolean | undefined;
+                        lastName?: string | undefined;
+                        membershipYear?: number | undefined;
+                        metadata?: any | undefined;
+                        mobile?: string | undefined;
+                        nickName?: string | undefined;
+                        profileImage?: string | undefined;
+                        socialMedia?: any | undefined;
+                        updatedAt: any;
+                        whatsAppMobile?: string | undefined;
+                        companyInfo?:
+                          | Array<
+                              | {
+                                  __typename?: 'CompanyInfoBasic';
+                                  companyName: string;
+                                  id: string;
+                                  position?: string | undefined;
+                                  userId: string;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                        positions?:
+                          | Array<
+                              | {
+                                  __typename?: 'EffectivePosition';
+                                  assignmentId?: string | undefined;
+                                  code?: string | undefined;
+                                  name?: string | undefined;
+                                  termId?: string | undefined;
+                                  termName?: string | undefined;
+                                  validFrom?: any | undefined;
+                                  validUntil?: any | undefined;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                        role?:
+                          | {
+                              __typename?: 'Role';
+                              code?: string | undefined;
+                              id?: string | undefined;
+                              name?: string | undefined;
+                            }
+                          | undefined;
+                        roles?:
+                          | Array<
+                              | {
+                                  __typename?: 'EffectiveRole';
+                                  assignmentId?: string | undefined;
+                                  code?: string | undefined;
+                                  name?: string | undefined;
+                                  scopeBatch?: number | undefined;
+                                  scopeType?: string | undefined;
+                                  validFrom?: any | undefined;
+                                  validUntil?: any | undefined;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                      }
+                    | undefined;
+                  scholarshipMentor?:
+                    | {
+                        __typename?: 'User';
+                        aboutMe?: string | undefined;
+                        batch?: number | undefined;
+                        createdAt: any;
+                        disabled?: boolean | undefined;
+                        displayName?: string | undefined;
+                        dob?: any | undefined;
+                        email?: string | undefined;
+                        emergencyMobile?: string | undefined;
+                        extraEmail?: string | undefined;
+                        extraMobile?: string | undefined;
+                        firstName?: string | undefined;
+                        gender?: string | undefined;
+                        google_auth_id?: string | undefined;
+                        hasBusiness?: boolean | undefined;
+                        id?: string | undefined;
+                        isConfidential?: boolean | undefined;
+                        isFaculty?: boolean | undefined;
+                        isVerified?: boolean | undefined;
+                        lastName?: string | undefined;
+                        membershipYear?: number | undefined;
+                        metadata?: any | undefined;
+                        mobile?: string | undefined;
+                        nickName?: string | undefined;
+                        profileImage?: string | undefined;
+                        socialMedia?: any | undefined;
+                        updatedAt: any;
+                        whatsAppMobile?: string | undefined;
+                        companyInfo?:
+                          | Array<
+                              | {
+                                  __typename?: 'CompanyInfoBasic';
+                                  companyName: string;
+                                  id: string;
+                                  position?: string | undefined;
+                                  userId: string;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                        positions?:
+                          | Array<
+                              | {
+                                  __typename?: 'EffectivePosition';
+                                  assignmentId?: string | undefined;
+                                  code?: string | undefined;
+                                  name?: string | undefined;
+                                  termId?: string | undefined;
+                                  termName?: string | undefined;
+                                  validFrom?: any | undefined;
+                                  validUntil?: any | undefined;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                        role?:
+                          | {
+                              __typename?: 'Role';
+                              code?: string | undefined;
+                              id?: string | undefined;
+                              name?: string | undefined;
+                            }
+                          | undefined;
+                        roles?:
+                          | Array<
+                              | {
+                                  __typename?: 'EffectiveRole';
+                                  assignmentId?: string | undefined;
+                                  code?: string | undefined;
+                                  name?: string | undefined;
+                                  scopeBatch?: number | undefined;
+                                  scopeType?: string | undefined;
+                                  validFrom?: any | undefined;
+                                  validUntil?: any | undefined;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                      }
+                    | undefined;
+                  user?:
+                    | {
+                        __typename?: 'User';
+                        aboutMe?: string | undefined;
+                        batch?: number | undefined;
+                        createdAt: any;
+                        disabled?: boolean | undefined;
+                        displayName?: string | undefined;
+                        dob?: any | undefined;
+                        email?: string | undefined;
+                        emergencyMobile?: string | undefined;
+                        extraEmail?: string | undefined;
+                        extraMobile?: string | undefined;
+                        firstName?: string | undefined;
+                        gender?: string | undefined;
+                        google_auth_id?: string | undefined;
+                        hasBusiness?: boolean | undefined;
+                        id?: string | undefined;
+                        isConfidential?: boolean | undefined;
+                        isFaculty?: boolean | undefined;
+                        isVerified?: boolean | undefined;
+                        lastName?: string | undefined;
+                        membershipYear?: number | undefined;
+                        metadata?: any | undefined;
+                        mobile?: string | undefined;
+                        nickName?: string | undefined;
+                        profileImage?: string | undefined;
+                        socialMedia?: any | undefined;
+                        updatedAt: any;
+                        whatsAppMobile?: string | undefined;
+                        companyInfo?:
+                          | Array<
+                              | {
+                                  __typename?: 'CompanyInfoBasic';
+                                  companyName: string;
+                                  id: string;
+                                  position?: string | undefined;
+                                  userId: string;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                        positions?:
+                          | Array<
+                              | {
+                                  __typename?: 'EffectivePosition';
+                                  assignmentId?: string | undefined;
+                                  code?: string | undefined;
+                                  name?: string | undefined;
+                                  termId?: string | undefined;
+                                  termName?: string | undefined;
+                                  validFrom?: any | undefined;
+                                  validUntil?: any | undefined;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                        role?:
+                          | {
+                              __typename?: 'Role';
+                              code?: string | undefined;
+                              id?: string | undefined;
+                              name?: string | undefined;
+                            }
+                          | undefined;
+                        roles?:
+                          | Array<
+                              | {
+                                  __typename?: 'EffectiveRole';
+                                  assignmentId?: string | undefined;
+                                  code?: string | undefined;
+                                  name?: string | undefined;
+                                  scopeBatch?: number | undefined;
+                                  scopeType?: string | undefined;
+                                  validFrom?: any | undefined;
+                                  validUntil?: any | undefined;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                      }
+                    | undefined;
+                }
+              | undefined;
           }
         | undefined
       >
@@ -10075,11 +18756,79 @@ export type GetMentorScholarshipDashboardQuery = {
   getMentorScholarshipDashboard?:
     | {
         __typename?: 'ScholarshipDashboard';
+        activeBeneficiaryCount?: number | undefined;
+        activeMentorCount?: number | undefined;
+        allocationDisputeCount?: number | undefined;
+        applicationsAwaitingReview?: number | undefined;
+        approvalCapacity?: number | undefined;
+        approvedAdjustments?: number | undefined;
+        awaitingPaymentConfirmation?: number | undefined;
+        beneficiaryNonReceiptCount?: number | undefined;
+        completedApplications?: number | undefined;
+        completedTransactionCount?: number | undefined;
+        confirmedAllocation?: number | undefined;
+        confirmedBeneficiaryDisbursement?: number | undefined;
         disbursedAmount?: number | undefined;
+        disputedIncomingAllocation?: number | undefined;
+        disputedMentorAllocations?: number | undefined;
+        draftRequests?: number | undefined;
         exceptionCount?: number | undefined;
+        failedNotificationCount?: number | undefined;
+        fullProofsAwaitingVerification?: number | undefined;
+        mentorCustodyBalance?: number | undefined;
+        missingMentorRoutingCount?: number | undefined;
+        needsInformation?: number | undefined;
+        openRefundCaseCount?: number | undefined;
+        overdueProof?: number | undefined;
+        overdueProofAmount?: number | undefined;
+        partialProof?: number | undefined;
+        partialReceiptMismatchCount?: number | undefined;
+        paymentConfirmationPendingApplications?: number | undefined;
+        pendingBeneficiaryConfirmation?: number | undefined;
+        pendingBeneficiaryConfirmationCount?: number | undefined;
+        pendingIncomingAllocation?: number | undefined;
+        proofDue?: number | undefined;
+        refundConfirmedAmount?: number | undefined;
+        refundReconciliationPendingCount?: number | undefined;
+        refundRequestedAmount?: number | undefined;
+        refundResponsePendingCount?: number | undefined;
+        rejectedApplications?: number | undefined;
         requestedAmount?: number | undefined;
+        returnedAmount?: number | undefined;
+        routingPendingApplications?: number | undefined;
+        submittedApplications?: number | undefined;
+        submittedOrUnderReview?: number | undefined;
+        totalAllocationRecorded?: number | undefined;
         totalApplications?: number | undefined;
+        totalCompletedAfterProofVerification?: number | undefined;
+        underReviewApplications?: number | undefined;
+        wrongDisbursementAmount?: number | undefined;
+        wrongDisbursementApplications?: number | undefined;
+        byAllocationStatus?:
+          | Array<
+              | { __typename?: 'ScholarshipStatusCount'; count?: number | undefined; key?: string | undefined }
+              | undefined
+            >
+          | undefined;
+        byProofStatus?:
+          | Array<
+              | { __typename?: 'ScholarshipStatusCount'; count?: number | undefined; key?: string | undefined }
+              | undefined
+            >
+          | undefined;
+        byRefundStatus?:
+          | Array<
+              | { __typename?: 'ScholarshipStatusCount'; count?: number | undefined; key?: string | undefined }
+              | undefined
+            >
+          | undefined;
         byStatus?:
+          | Array<
+              | { __typename?: 'ScholarshipStatusCount'; count?: number | undefined; key?: string | undefined }
+              | undefined
+            >
+          | undefined;
+        byTransactionStatus?:
           | Array<
               | { __typename?: 'ScholarshipStatusCount'; count?: number | undefined; key?: string | undefined }
               | undefined
@@ -10514,11 +19263,79 @@ export type GetMyScholarshipDashboardQuery = {
   getMyScholarshipDashboard?:
     | {
         __typename?: 'ScholarshipDashboard';
+        activeBeneficiaryCount?: number | undefined;
+        activeMentorCount?: number | undefined;
+        allocationDisputeCount?: number | undefined;
+        applicationsAwaitingReview?: number | undefined;
+        approvalCapacity?: number | undefined;
+        approvedAdjustments?: number | undefined;
+        awaitingPaymentConfirmation?: number | undefined;
+        beneficiaryNonReceiptCount?: number | undefined;
+        completedApplications?: number | undefined;
+        completedTransactionCount?: number | undefined;
+        confirmedAllocation?: number | undefined;
+        confirmedBeneficiaryDisbursement?: number | undefined;
         disbursedAmount?: number | undefined;
+        disputedIncomingAllocation?: number | undefined;
+        disputedMentorAllocations?: number | undefined;
+        draftRequests?: number | undefined;
         exceptionCount?: number | undefined;
+        failedNotificationCount?: number | undefined;
+        fullProofsAwaitingVerification?: number | undefined;
+        mentorCustodyBalance?: number | undefined;
+        missingMentorRoutingCount?: number | undefined;
+        needsInformation?: number | undefined;
+        openRefundCaseCount?: number | undefined;
+        overdueProof?: number | undefined;
+        overdueProofAmount?: number | undefined;
+        partialProof?: number | undefined;
+        partialReceiptMismatchCount?: number | undefined;
+        paymentConfirmationPendingApplications?: number | undefined;
+        pendingBeneficiaryConfirmation?: number | undefined;
+        pendingBeneficiaryConfirmationCount?: number | undefined;
+        pendingIncomingAllocation?: number | undefined;
+        proofDue?: number | undefined;
+        refundConfirmedAmount?: number | undefined;
+        refundReconciliationPendingCount?: number | undefined;
+        refundRequestedAmount?: number | undefined;
+        refundResponsePendingCount?: number | undefined;
+        rejectedApplications?: number | undefined;
         requestedAmount?: number | undefined;
+        returnedAmount?: number | undefined;
+        routingPendingApplications?: number | undefined;
+        submittedApplications?: number | undefined;
+        submittedOrUnderReview?: number | undefined;
+        totalAllocationRecorded?: number | undefined;
         totalApplications?: number | undefined;
+        totalCompletedAfterProofVerification?: number | undefined;
+        underReviewApplications?: number | undefined;
+        wrongDisbursementAmount?: number | undefined;
+        wrongDisbursementApplications?: number | undefined;
+        byAllocationStatus?:
+          | Array<
+              | { __typename?: 'ScholarshipStatusCount'; count?: number | undefined; key?: string | undefined }
+              | undefined
+            >
+          | undefined;
+        byProofStatus?:
+          | Array<
+              | { __typename?: 'ScholarshipStatusCount'; count?: number | undefined; key?: string | undefined }
+              | undefined
+            >
+          | undefined;
+        byRefundStatus?:
+          | Array<
+              | { __typename?: 'ScholarshipStatusCount'; count?: number | undefined; key?: string | undefined }
+              | undefined
+            >
+          | undefined;
         byStatus?:
+          | Array<
+              | { __typename?: 'ScholarshipStatusCount'; count?: number | undefined; key?: string | undefined }
+              | undefined
+            >
+          | undefined;
+        byTransactionStatus?:
           | Array<
               | { __typename?: 'ScholarshipStatusCount'; count?: number | undefined; key?: string | undefined }
               | undefined
@@ -10558,6 +19375,170 @@ export type GetScholarshipActivityQuery = {
             id?: string | undefined;
             isHighRisk?: boolean | undefined;
             reason?: string | undefined;
+            actor?:
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: any | undefined;
+                  email?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  hasBusiness?: boolean | undefined;
+                  id?: string | undefined;
+                  isConfidential?: boolean | undefined;
+                  isFaculty?: boolean | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  metadata?: any | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
+                  updatedAt: any;
+                  whatsAppMobile?: string | undefined;
+                  companyInfo?:
+                    | Array<
+                        | {
+                            __typename?: 'CompanyInfoBasic';
+                            companyName: string;
+                            id: string;
+                            position?: string | undefined;
+                            userId: string;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  positions?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectivePosition';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            termId?: string | undefined;
+                            termName?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  role?:
+                    | {
+                        __typename?: 'Role';
+                        code?: string | undefined;
+                        id?: string | undefined;
+                        name?: string | undefined;
+                      }
+                    | undefined;
+                  roles?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectiveRole';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            scopeBatch?: number | undefined;
+                            scopeType?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                }
+              | undefined;
+            assignedMentor?:
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: any | undefined;
+                  email?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  hasBusiness?: boolean | undefined;
+                  id?: string | undefined;
+                  isConfidential?: boolean | undefined;
+                  isFaculty?: boolean | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  metadata?: any | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
+                  updatedAt: any;
+                  whatsAppMobile?: string | undefined;
+                  companyInfo?:
+                    | Array<
+                        | {
+                            __typename?: 'CompanyInfoBasic';
+                            companyName: string;
+                            id: string;
+                            position?: string | undefined;
+                            userId: string;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  positions?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectivePosition';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            termId?: string | undefined;
+                            termName?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  role?:
+                    | {
+                        __typename?: 'Role';
+                        code?: string | undefined;
+                        id?: string | undefined;
+                        name?: string | undefined;
+                      }
+                    | undefined;
+                  roles?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectiveRole';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            scopeBatch?: number | undefined;
+                            scopeType?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                }
+              | undefined;
           }
         | undefined
       >
@@ -10764,51 +19745,27 @@ export type GetScholarshipApplicationQuery = {
     | undefined;
 };
 
-export type GetScholarshipApplicationTransactionsQueryVariables = Exact<{
+export type GetScholarshipApplicationActivityQueryVariables = Exact<{
   applicationId: Scalars['String']['input'];
 }>;
 
-export type GetScholarshipApplicationTransactionsQuery = {
+export type GetScholarshipApplicationActivityQuery = {
   __typename?: 'Query';
-  getScholarshipApplicationTransactions?:
+  getScholarshipApplicationActivity?:
     | Array<
         | {
-            __typename?: 'Transaction';
-            amount?: any | undefined;
+            __typename?: 'ScholarshipActivityLog';
+            action?: string | undefined;
+            actorUserId?: string | undefined;
+            after?: any | undefined;
+            before?: any | undefined;
             createdAt?: any | undefined;
-            currency?: Currency | undefined;
-            description?: string | undefined;
+            entityId?: string | undefined;
+            entityType?: string | undefined;
             id?: string | undefined;
-            isDonation?: boolean | undefined;
-            method?: string | undefined;
-            referenceId?: string | undefined;
-            scholarshipApplicationId?: string | undefined;
-            scholarshipApprovedAt?: any | undefined;
-            scholarshipBatchSnapshot?: number | undefined;
-            scholarshipBeneficiaryUserId?: string | undefined;
-            scholarshipCompletedAt?: any | undefined;
-            scholarshipConfirmedAmount?: any | undefined;
-            scholarshipConfirmedAt?: any | undefined;
-            scholarshipImmutableAt?: any | undefined;
-            scholarshipInstallmentSequence?: number | undefined;
-            scholarshipMaskedPayoutDestination?: string | undefined;
-            scholarshipMentorUserId?: string | undefined;
-            scholarshipOriginalTransactionId?: string | undefined;
-            scholarshipPayoutMethod?: string | undefined;
-            scholarshipProofDueAt?: any | undefined;
-            scholarshipProofDueDays?: number | undefined;
-            scholarshipProofStatus?: string | undefined;
-            scholarshipPurposeSnapshot?: string | undefined;
-            scholarshipReceivedAt?: any | undefined;
-            scholarshipStatus?: string | undefined;
-            sourceType?: string | undefined;
-            status?: TransactionStatus | undefined;
-            title?: string | undefined;
-            transactionDate?: any | undefined;
-            type?: TransactionType | undefined;
-            updatedAt?: any | undefined;
-            userId?: string | undefined;
-            user?:
+            isHighRisk?: boolean | undefined;
+            reason?: string | undefined;
+            actor?:
               | {
                   __typename?: 'User';
                   aboutMe?: string | undefined;
@@ -10888,6 +19845,724 @@ export type GetScholarshipApplicationTransactionsQuery = {
                         | undefined
                       >
                     | undefined;
+                }
+              | undefined;
+            assignedMentor?:
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: any | undefined;
+                  email?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  hasBusiness?: boolean | undefined;
+                  id?: string | undefined;
+                  isConfidential?: boolean | undefined;
+                  isFaculty?: boolean | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  metadata?: any | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
+                  updatedAt: any;
+                  whatsAppMobile?: string | undefined;
+                  companyInfo?:
+                    | Array<
+                        | {
+                            __typename?: 'CompanyInfoBasic';
+                            companyName: string;
+                            id: string;
+                            position?: string | undefined;
+                            userId: string;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  positions?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectivePosition';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            termId?: string | undefined;
+                            termName?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  role?:
+                    | {
+                        __typename?: 'Role';
+                        code?: string | undefined;
+                        id?: string | undefined;
+                        name?: string | undefined;
+                      }
+                    | undefined;
+                  roles?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectiveRole';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            scopeBatch?: number | undefined;
+                            scopeType?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                }
+              | undefined;
+          }
+        | undefined
+      >
+    | undefined;
+};
+
+export type GetScholarshipApplicationTransactionsQueryVariables = Exact<{
+  applicationId: Scalars['String']['input'];
+}>;
+
+export type GetScholarshipApplicationTransactionsQuery = {
+  __typename?: 'Query';
+  getScholarshipApplicationTransactions?:
+    | Array<
+        | {
+            __typename?: 'Transaction';
+            amount?: any | undefined;
+            billingCategory?: BillingCategory | undefined;
+            createdAt?: any | undefined;
+            currency?: Currency | undefined;
+            description?: string | undefined;
+            id?: string | undefined;
+            immutableAt?: any | undefined;
+            isDonation?: boolean | undefined;
+            linkedTransactionId?: string | undefined;
+            metadata?: any | undefined;
+            method?: string | undefined;
+            recordedByUserId?: string | undefined;
+            referenceId?: string | undefined;
+            scholarshipApplicationId?: string | undefined;
+            scholarshipApprovedAt?: any | undefined;
+            scholarshipBatchSnapshot?: number | undefined;
+            scholarshipBeneficiaryUserId?: string | undefined;
+            scholarshipCompletedAt?: any | undefined;
+            scholarshipConfirmedAmount?: any | undefined;
+            scholarshipConfirmedAt?: any | undefined;
+            scholarshipImmutableAt?: any | undefined;
+            scholarshipInstallmentSequence?: number | undefined;
+            scholarshipMaskedPayoutDestination?: string | undefined;
+            scholarshipMentorUserId?: string | undefined;
+            scholarshipOriginalTransactionId?: string | undefined;
+            scholarshipPayoutMethod?: string | undefined;
+            scholarshipProofDueAt?: any | undefined;
+            scholarshipProofDueDays?: number | undefined;
+            scholarshipProofStatus?: string | undefined;
+            scholarshipPurposeSnapshot?: string | undefined;
+            scholarshipReceivedAt?: any | undefined;
+            scholarshipStatus?: string | undefined;
+            sourceType?: TransactionSourceType | undefined;
+            status?: TransactionStatus | undefined;
+            title?: string | undefined;
+            transactionDate?: any | undefined;
+            type?: TransactionType | undefined;
+            updatedAt?: any | undefined;
+            userId?: string | undefined;
+            walletImpact?: boolean | undefined;
+            attachments?:
+              | Array<
+                  | {
+                      __typename?: 'TransactionAttachment';
+                      createdAt?: any | undefined;
+                      id?: string | undefined;
+                      mimeType?: string | undefined;
+                      originalFilename?: string | undefined;
+                      sizeBytes?: number | undefined;
+                      status?: string | undefined;
+                      transactionId?: string | undefined;
+                      uploadedAt?: any | undefined;
+                      uploadedByUserId?: string | undefined;
+                    }
+                  | undefined
+                >
+              | undefined;
+            linkedTransaction?:
+              | {
+                  __typename?: 'Transaction';
+                  amount?: any | undefined;
+                  billingCategory?: BillingCategory | undefined;
+                  createdAt?: any | undefined;
+                  currency?: Currency | undefined;
+                  description?: string | undefined;
+                  id?: string | undefined;
+                  immutableAt?: any | undefined;
+                  isDonation?: boolean | undefined;
+                  linkedTransactionId?: string | undefined;
+                  metadata?: any | undefined;
+                  method?: string | undefined;
+                  recordedByUserId?: string | undefined;
+                  referenceId?: string | undefined;
+                  scholarshipApplicationId?: string | undefined;
+                  scholarshipApprovedAt?: any | undefined;
+                  scholarshipBatchSnapshot?: number | undefined;
+                  scholarshipBeneficiaryUserId?: string | undefined;
+                  scholarshipCompletedAt?: any | undefined;
+                  scholarshipConfirmedAmount?: any | undefined;
+                  scholarshipConfirmedAt?: any | undefined;
+                  scholarshipImmutableAt?: any | undefined;
+                  scholarshipInstallmentSequence?: number | undefined;
+                  scholarshipMaskedPayoutDestination?: string | undefined;
+                  scholarshipMentorUserId?: string | undefined;
+                  scholarshipOriginalTransactionId?: string | undefined;
+                  scholarshipPayoutMethod?: string | undefined;
+                  scholarshipProofDueAt?: any | undefined;
+                  scholarshipProofDueDays?: number | undefined;
+                  scholarshipProofStatus?: string | undefined;
+                  scholarshipPurposeSnapshot?: string | undefined;
+                  scholarshipReceivedAt?: any | undefined;
+                  scholarshipStatus?: string | undefined;
+                  sourceType?: TransactionSourceType | undefined;
+                  status?: TransactionStatus | undefined;
+                  title?: string | undefined;
+                  transactionDate?: any | undefined;
+                  type?: TransactionType | undefined;
+                  updatedAt?: any | undefined;
+                  userId?: string | undefined;
+                  walletImpact?: boolean | undefined;
+                  attachments?:
+                    | Array<
+                        | {
+                            __typename?: 'TransactionAttachment';
+                            createdAt?: any | undefined;
+                            id?: string | undefined;
+                            mimeType?: string | undefined;
+                            originalFilename?: string | undefined;
+                            sizeBytes?: number | undefined;
+                            status?: string | undefined;
+                            transactionId?: string | undefined;
+                            uploadedAt?: any | undefined;
+                            uploadedByUserId?: string | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  linkedTransaction?:
+                    | {
+                        __typename?: 'Transaction';
+                        amount?: any | undefined;
+                        billingCategory?: BillingCategory | undefined;
+                        createdAt?: any | undefined;
+                        currency?: Currency | undefined;
+                        description?: string | undefined;
+                        id?: string | undefined;
+                        immutableAt?: any | undefined;
+                        isDonation?: boolean | undefined;
+                        linkedTransactionId?: string | undefined;
+                        metadata?: any | undefined;
+                        method?: string | undefined;
+                        recordedByUserId?: string | undefined;
+                        referenceId?: string | undefined;
+                        scholarshipApplicationId?: string | undefined;
+                        scholarshipApprovedAt?: any | undefined;
+                        scholarshipBatchSnapshot?: number | undefined;
+                        scholarshipBeneficiaryUserId?: string | undefined;
+                        scholarshipCompletedAt?: any | undefined;
+                        scholarshipConfirmedAmount?: any | undefined;
+                        scholarshipConfirmedAt?: any | undefined;
+                        scholarshipImmutableAt?: any | undefined;
+                        scholarshipInstallmentSequence?: number | undefined;
+                        scholarshipMaskedPayoutDestination?: string | undefined;
+                        scholarshipMentorUserId?: string | undefined;
+                        scholarshipOriginalTransactionId?: string | undefined;
+                        scholarshipPayoutMethod?: string | undefined;
+                        scholarshipProofDueAt?: any | undefined;
+                        scholarshipProofDueDays?: number | undefined;
+                        scholarshipProofStatus?: string | undefined;
+                        scholarshipPurposeSnapshot?: string | undefined;
+                        scholarshipReceivedAt?: any | undefined;
+                        scholarshipStatus?: string | undefined;
+                        sourceType?: TransactionSourceType | undefined;
+                        status?: TransactionStatus | undefined;
+                        title?: string | undefined;
+                        transactionDate?: any | undefined;
+                        type?: TransactionType | undefined;
+                        updatedAt?: any | undefined;
+                        userId?: string | undefined;
+                        walletImpact?: boolean | undefined;
+                        recordedBy?:
+                          | {
+                              __typename?: 'User';
+                              aboutMe?: string | undefined;
+                              batch?: number | undefined;
+                              createdAt: any;
+                              disabled?: boolean | undefined;
+                              displayName?: string | undefined;
+                              dob?: any | undefined;
+                              email?: string | undefined;
+                              emergencyMobile?: string | undefined;
+                              extraEmail?: string | undefined;
+                              extraMobile?: string | undefined;
+                              firstName?: string | undefined;
+                              gender?: string | undefined;
+                              google_auth_id?: string | undefined;
+                              hasBusiness?: boolean | undefined;
+                              id?: string | undefined;
+                              isConfidential?: boolean | undefined;
+                              isFaculty?: boolean | undefined;
+                              isVerified?: boolean | undefined;
+                              lastName?: string | undefined;
+                              membershipYear?: number | undefined;
+                              metadata?: any | undefined;
+                              mobile?: string | undefined;
+                              nickName?: string | undefined;
+                              profileImage?: string | undefined;
+                              socialMedia?: any | undefined;
+                              updatedAt: any;
+                              whatsAppMobile?: string | undefined;
+                              companyInfo?:
+                                | Array<
+                                    | {
+                                        __typename?: 'CompanyInfoBasic';
+                                        companyName: string;
+                                        id: string;
+                                        position?: string | undefined;
+                                        userId: string;
+                                      }
+                                    | undefined
+                                  >
+                                | undefined;
+                              positions?:
+                                | Array<
+                                    | {
+                                        __typename?: 'EffectivePosition';
+                                        assignmentId?: string | undefined;
+                                        code?: string | undefined;
+                                        name?: string | undefined;
+                                        termId?: string | undefined;
+                                        termName?: string | undefined;
+                                        validFrom?: any | undefined;
+                                        validUntil?: any | undefined;
+                                      }
+                                    | undefined
+                                  >
+                                | undefined;
+                              role?:
+                                | {
+                                    __typename?: 'Role';
+                                    code?: string | undefined;
+                                    id?: string | undefined;
+                                    name?: string | undefined;
+                                  }
+                                | undefined;
+                              roles?:
+                                | Array<
+                                    | {
+                                        __typename?: 'EffectiveRole';
+                                        assignmentId?: string | undefined;
+                                        code?: string | undefined;
+                                        name?: string | undefined;
+                                        scopeBatch?: number | undefined;
+                                        scopeType?: string | undefined;
+                                        validFrom?: any | undefined;
+                                        validUntil?: any | undefined;
+                                      }
+                                    | undefined
+                                  >
+                                | undefined;
+                            }
+                          | undefined;
+                        scholarshipBeneficiary?:
+                          | {
+                              __typename?: 'User';
+                              aboutMe?: string | undefined;
+                              batch?: number | undefined;
+                              createdAt: any;
+                              disabled?: boolean | undefined;
+                              displayName?: string | undefined;
+                              dob?: any | undefined;
+                              email?: string | undefined;
+                              emergencyMobile?: string | undefined;
+                              extraEmail?: string | undefined;
+                              extraMobile?: string | undefined;
+                              firstName?: string | undefined;
+                              gender?: string | undefined;
+                              google_auth_id?: string | undefined;
+                              hasBusiness?: boolean | undefined;
+                              id?: string | undefined;
+                              isConfidential?: boolean | undefined;
+                              isFaculty?: boolean | undefined;
+                              isVerified?: boolean | undefined;
+                              lastName?: string | undefined;
+                              membershipYear?: number | undefined;
+                              metadata?: any | undefined;
+                              mobile?: string | undefined;
+                              nickName?: string | undefined;
+                              profileImage?: string | undefined;
+                              socialMedia?: any | undefined;
+                              updatedAt: any;
+                              whatsAppMobile?: string | undefined;
+                              companyInfo?:
+                                | Array<
+                                    | {
+                                        __typename?: 'CompanyInfoBasic';
+                                        companyName: string;
+                                        id: string;
+                                        position?: string | undefined;
+                                        userId: string;
+                                      }
+                                    | undefined
+                                  >
+                                | undefined;
+                              positions?:
+                                | Array<
+                                    | {
+                                        __typename?: 'EffectivePosition';
+                                        assignmentId?: string | undefined;
+                                        code?: string | undefined;
+                                        name?: string | undefined;
+                                        termId?: string | undefined;
+                                        termName?: string | undefined;
+                                        validFrom?: any | undefined;
+                                        validUntil?: any | undefined;
+                                      }
+                                    | undefined
+                                  >
+                                | undefined;
+                              role?:
+                                | {
+                                    __typename?: 'Role';
+                                    code?: string | undefined;
+                                    id?: string | undefined;
+                                    name?: string | undefined;
+                                  }
+                                | undefined;
+                              roles?:
+                                | Array<
+                                    | {
+                                        __typename?: 'EffectiveRole';
+                                        assignmentId?: string | undefined;
+                                        code?: string | undefined;
+                                        name?: string | undefined;
+                                        scopeBatch?: number | undefined;
+                                        scopeType?: string | undefined;
+                                        validFrom?: any | undefined;
+                                        validUntil?: any | undefined;
+                                      }
+                                    | undefined
+                                  >
+                                | undefined;
+                            }
+                          | undefined;
+                        scholarshipMentor?:
+                          | {
+                              __typename?: 'User';
+                              aboutMe?: string | undefined;
+                              batch?: number | undefined;
+                              createdAt: any;
+                              disabled?: boolean | undefined;
+                              displayName?: string | undefined;
+                              dob?: any | undefined;
+                              email?: string | undefined;
+                              emergencyMobile?: string | undefined;
+                              extraEmail?: string | undefined;
+                              extraMobile?: string | undefined;
+                              firstName?: string | undefined;
+                              gender?: string | undefined;
+                              google_auth_id?: string | undefined;
+                              hasBusiness?: boolean | undefined;
+                              id?: string | undefined;
+                              isConfidential?: boolean | undefined;
+                              isFaculty?: boolean | undefined;
+                              isVerified?: boolean | undefined;
+                              lastName?: string | undefined;
+                              membershipYear?: number | undefined;
+                              metadata?: any | undefined;
+                              mobile?: string | undefined;
+                              nickName?: string | undefined;
+                              profileImage?: string | undefined;
+                              socialMedia?: any | undefined;
+                              updatedAt: any;
+                              whatsAppMobile?: string | undefined;
+                              companyInfo?:
+                                | Array<
+                                    | {
+                                        __typename?: 'CompanyInfoBasic';
+                                        companyName: string;
+                                        id: string;
+                                        position?: string | undefined;
+                                        userId: string;
+                                      }
+                                    | undefined
+                                  >
+                                | undefined;
+                              positions?:
+                                | Array<
+                                    | {
+                                        __typename?: 'EffectivePosition';
+                                        assignmentId?: string | undefined;
+                                        code?: string | undefined;
+                                        name?: string | undefined;
+                                        termId?: string | undefined;
+                                        termName?: string | undefined;
+                                        validFrom?: any | undefined;
+                                        validUntil?: any | undefined;
+                                      }
+                                    | undefined
+                                  >
+                                | undefined;
+                              role?:
+                                | {
+                                    __typename?: 'Role';
+                                    code?: string | undefined;
+                                    id?: string | undefined;
+                                    name?: string | undefined;
+                                  }
+                                | undefined;
+                              roles?:
+                                | Array<
+                                    | {
+                                        __typename?: 'EffectiveRole';
+                                        assignmentId?: string | undefined;
+                                        code?: string | undefined;
+                                        name?: string | undefined;
+                                        scopeBatch?: number | undefined;
+                                        scopeType?: string | undefined;
+                                        validFrom?: any | undefined;
+                                        validUntil?: any | undefined;
+                                      }
+                                    | undefined
+                                  >
+                                | undefined;
+                            }
+                          | undefined;
+                        user?:
+                          | {
+                              __typename?: 'User';
+                              aboutMe?: string | undefined;
+                              batch?: number | undefined;
+                              createdAt: any;
+                              disabled?: boolean | undefined;
+                              displayName?: string | undefined;
+                              dob?: any | undefined;
+                              email?: string | undefined;
+                              emergencyMobile?: string | undefined;
+                              extraEmail?: string | undefined;
+                              extraMobile?: string | undefined;
+                              firstName?: string | undefined;
+                              gender?: string | undefined;
+                              google_auth_id?: string | undefined;
+                              hasBusiness?: boolean | undefined;
+                              id?: string | undefined;
+                              isConfidential?: boolean | undefined;
+                              isFaculty?: boolean | undefined;
+                              isVerified?: boolean | undefined;
+                              lastName?: string | undefined;
+                              membershipYear?: number | undefined;
+                              metadata?: any | undefined;
+                              mobile?: string | undefined;
+                              nickName?: string | undefined;
+                              profileImage?: string | undefined;
+                              socialMedia?: any | undefined;
+                              updatedAt: any;
+                              whatsAppMobile?: string | undefined;
+                              companyInfo?:
+                                | Array<
+                                    | {
+                                        __typename?: 'CompanyInfoBasic';
+                                        companyName: string;
+                                        id: string;
+                                        position?: string | undefined;
+                                        userId: string;
+                                      }
+                                    | undefined
+                                  >
+                                | undefined;
+                              positions?:
+                                | Array<
+                                    | {
+                                        __typename?: 'EffectivePosition';
+                                        assignmentId?: string | undefined;
+                                        code?: string | undefined;
+                                        name?: string | undefined;
+                                        termId?: string | undefined;
+                                        termName?: string | undefined;
+                                        validFrom?: any | undefined;
+                                        validUntil?: any | undefined;
+                                      }
+                                    | undefined
+                                  >
+                                | undefined;
+                              role?:
+                                | {
+                                    __typename?: 'Role';
+                                    code?: string | undefined;
+                                    id?: string | undefined;
+                                    name?: string | undefined;
+                                  }
+                                | undefined;
+                              roles?:
+                                | Array<
+                                    | {
+                                        __typename?: 'EffectiveRole';
+                                        assignmentId?: string | undefined;
+                                        code?: string | undefined;
+                                        name?: string | undefined;
+                                        scopeBatch?: number | undefined;
+                                        scopeType?: string | undefined;
+                                        validFrom?: any | undefined;
+                                        validUntil?: any | undefined;
+                                      }
+                                    | undefined
+                                  >
+                                | undefined;
+                            }
+                          | undefined;
+                      }
+                    | undefined;
+                }
+              | undefined;
+            recordedBy?:
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: any | undefined;
+                  email?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  hasBusiness?: boolean | undefined;
+                  id?: string | undefined;
+                  isConfidential?: boolean | undefined;
+                  isFaculty?: boolean | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  metadata?: any | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
+                  updatedAt: any;
+                  whatsAppMobile?: string | undefined;
+                }
+              | undefined;
+            scholarshipBeneficiary?:
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: any | undefined;
+                  email?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  hasBusiness?: boolean | undefined;
+                  id?: string | undefined;
+                  isConfidential?: boolean | undefined;
+                  isFaculty?: boolean | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  metadata?: any | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
+                  updatedAt: any;
+                  whatsAppMobile?: string | undefined;
+                }
+              | undefined;
+            scholarshipMentor?:
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: any | undefined;
+                  email?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  hasBusiness?: boolean | undefined;
+                  id?: string | undefined;
+                  isConfidential?: boolean | undefined;
+                  isFaculty?: boolean | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  metadata?: any | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
+                  updatedAt: any;
+                  whatsAppMobile?: string | undefined;
+                }
+              | undefined;
+            user?:
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: any | undefined;
+                  email?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  hasBusiness?: boolean | undefined;
+                  id?: string | undefined;
+                  isConfidential?: boolean | undefined;
+                  isFaculty?: boolean | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  metadata?: any | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
+                  updatedAt: any;
+                  whatsAppMobile?: string | undefined;
                 }
               | undefined;
           }
@@ -11544,6 +21219,216 @@ export type GetScholarshipExceptionQueueQuery = {
     | undefined;
 };
 
+export type GetScholarshipMentorSummariesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetScholarshipMentorSummariesQuery = {
+  __typename?: 'Query';
+  getScholarshipMentorSummaries?:
+    | Array<
+        | {
+            __typename?: 'ScholarshipMentorSummaryRow';
+            assignedBatches?: Array<number | undefined> | undefined;
+            mentorUserId?: string | undefined;
+            mentor?:
+              | {
+                  __typename?: 'User';
+                  aboutMe?: string | undefined;
+                  batch?: number | undefined;
+                  createdAt: any;
+                  disabled?: boolean | undefined;
+                  displayName?: string | undefined;
+                  dob?: any | undefined;
+                  email?: string | undefined;
+                  emergencyMobile?: string | undefined;
+                  extraEmail?: string | undefined;
+                  extraMobile?: string | undefined;
+                  firstName?: string | undefined;
+                  gender?: string | undefined;
+                  google_auth_id?: string | undefined;
+                  hasBusiness?: boolean | undefined;
+                  id?: string | undefined;
+                  isConfidential?: boolean | undefined;
+                  isFaculty?: boolean | undefined;
+                  isVerified?: boolean | undefined;
+                  lastName?: string | undefined;
+                  membershipYear?: number | undefined;
+                  metadata?: any | undefined;
+                  mobile?: string | undefined;
+                  nickName?: string | undefined;
+                  profileImage?: string | undefined;
+                  socialMedia?: any | undefined;
+                  updatedAt: any;
+                  whatsAppMobile?: string | undefined;
+                  companyInfo?:
+                    | Array<
+                        | {
+                            __typename?: 'CompanyInfoBasic';
+                            companyName: string;
+                            id: string;
+                            position?: string | undefined;
+                            userId: string;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  positions?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectivePosition';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            termId?: string | undefined;
+                            termName?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  role?:
+                    | {
+                        __typename?: 'Role';
+                        code?: string | undefined;
+                        id?: string | undefined;
+                        name?: string | undefined;
+                      }
+                    | undefined;
+                  roles?:
+                    | Array<
+                        | {
+                            __typename?: 'EffectiveRole';
+                            assignmentId?: string | undefined;
+                            code?: string | undefined;
+                            name?: string | undefined;
+                            scopeBatch?: number | undefined;
+                            scopeType?: string | undefined;
+                            validFrom?: any | undefined;
+                            validUntil?: any | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                }
+              | undefined;
+            summary?:
+              | {
+                  __typename?: 'ScholarshipDashboard';
+                  activeBeneficiaryCount?: number | undefined;
+                  activeMentorCount?: number | undefined;
+                  allocationDisputeCount?: number | undefined;
+                  applicationsAwaitingReview?: number | undefined;
+                  approvalCapacity?: number | undefined;
+                  approvedAdjustments?: number | undefined;
+                  awaitingPaymentConfirmation?: number | undefined;
+                  beneficiaryNonReceiptCount?: number | undefined;
+                  completedApplications?: number | undefined;
+                  completedTransactionCount?: number | undefined;
+                  confirmedAllocation?: number | undefined;
+                  confirmedBeneficiaryDisbursement?: number | undefined;
+                  disbursedAmount?: number | undefined;
+                  disputedIncomingAllocation?: number | undefined;
+                  disputedMentorAllocations?: number | undefined;
+                  draftRequests?: number | undefined;
+                  exceptionCount?: number | undefined;
+                  failedNotificationCount?: number | undefined;
+                  fullProofsAwaitingVerification?: number | undefined;
+                  mentorCustodyBalance?: number | undefined;
+                  missingMentorRoutingCount?: number | undefined;
+                  needsInformation?: number | undefined;
+                  openRefundCaseCount?: number | undefined;
+                  overdueProof?: number | undefined;
+                  overdueProofAmount?: number | undefined;
+                  partialProof?: number | undefined;
+                  partialReceiptMismatchCount?: number | undefined;
+                  paymentConfirmationPendingApplications?: number | undefined;
+                  pendingBeneficiaryConfirmation?: number | undefined;
+                  pendingBeneficiaryConfirmationCount?: number | undefined;
+                  pendingIncomingAllocation?: number | undefined;
+                  proofDue?: number | undefined;
+                  refundConfirmedAmount?: number | undefined;
+                  refundReconciliationPendingCount?: number | undefined;
+                  refundRequestedAmount?: number | undefined;
+                  refundResponsePendingCount?: number | undefined;
+                  rejectedApplications?: number | undefined;
+                  requestedAmount?: number | undefined;
+                  returnedAmount?: number | undefined;
+                  routingPendingApplications?: number | undefined;
+                  submittedApplications?: number | undefined;
+                  submittedOrUnderReview?: number | undefined;
+                  totalAllocationRecorded?: number | undefined;
+                  totalApplications?: number | undefined;
+                  totalCompletedAfterProofVerification?: number | undefined;
+                  underReviewApplications?: number | undefined;
+                  wrongDisbursementAmount?: number | undefined;
+                  wrongDisbursementApplications?: number | undefined;
+                  byAllocationStatus?:
+                    | Array<
+                        | {
+                            __typename?: 'ScholarshipStatusCount';
+                            count?: number | undefined;
+                            key?: string | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  byProofStatus?:
+                    | Array<
+                        | {
+                            __typename?: 'ScholarshipStatusCount';
+                            count?: number | undefined;
+                            key?: string | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  byRefundStatus?:
+                    | Array<
+                        | {
+                            __typename?: 'ScholarshipStatusCount';
+                            count?: number | undefined;
+                            key?: string | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  byStatus?:
+                    | Array<
+                        | {
+                            __typename?: 'ScholarshipStatusCount';
+                            count?: number | undefined;
+                            key?: string | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  byTransactionStatus?:
+                    | Array<
+                        | {
+                            __typename?: 'ScholarshipStatusCount';
+                            count?: number | undefined;
+                            key?: string | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  capacity?:
+                    | {
+                        __typename?: 'ScholarshipMentorCapacity';
+                        allocated?: number | undefined;
+                        available?: number | undefined;
+                        committed?: number | undefined;
+                        returned?: number | undefined;
+                      }
+                    | undefined;
+                }
+              | undefined;
+          }
+        | undefined
+      >
+    | undefined;
+};
+
 export type GetScholarshipMentorSummaryQueryVariables = Exact<{
   mentorUserId?: InputMaybe<Scalars['String']['input']>;
 }>;
@@ -11553,11 +21438,79 @@ export type GetScholarshipMentorSummaryQuery = {
   getScholarshipMentorSummary?:
     | {
         __typename?: 'ScholarshipDashboard';
+        activeBeneficiaryCount?: number | undefined;
+        activeMentorCount?: number | undefined;
+        allocationDisputeCount?: number | undefined;
+        applicationsAwaitingReview?: number | undefined;
+        approvalCapacity?: number | undefined;
+        approvedAdjustments?: number | undefined;
+        awaitingPaymentConfirmation?: number | undefined;
+        beneficiaryNonReceiptCount?: number | undefined;
+        completedApplications?: number | undefined;
+        completedTransactionCount?: number | undefined;
+        confirmedAllocation?: number | undefined;
+        confirmedBeneficiaryDisbursement?: number | undefined;
         disbursedAmount?: number | undefined;
+        disputedIncomingAllocation?: number | undefined;
+        disputedMentorAllocations?: number | undefined;
+        draftRequests?: number | undefined;
         exceptionCount?: number | undefined;
+        failedNotificationCount?: number | undefined;
+        fullProofsAwaitingVerification?: number | undefined;
+        mentorCustodyBalance?: number | undefined;
+        missingMentorRoutingCount?: number | undefined;
+        needsInformation?: number | undefined;
+        openRefundCaseCount?: number | undefined;
+        overdueProof?: number | undefined;
+        overdueProofAmount?: number | undefined;
+        partialProof?: number | undefined;
+        partialReceiptMismatchCount?: number | undefined;
+        paymentConfirmationPendingApplications?: number | undefined;
+        pendingBeneficiaryConfirmation?: number | undefined;
+        pendingBeneficiaryConfirmationCount?: number | undefined;
+        pendingIncomingAllocation?: number | undefined;
+        proofDue?: number | undefined;
+        refundConfirmedAmount?: number | undefined;
+        refundReconciliationPendingCount?: number | undefined;
+        refundRequestedAmount?: number | undefined;
+        refundResponsePendingCount?: number | undefined;
+        rejectedApplications?: number | undefined;
         requestedAmount?: number | undefined;
+        returnedAmount?: number | undefined;
+        routingPendingApplications?: number | undefined;
+        submittedApplications?: number | undefined;
+        submittedOrUnderReview?: number | undefined;
+        totalAllocationRecorded?: number | undefined;
         totalApplications?: number | undefined;
+        totalCompletedAfterProofVerification?: number | undefined;
+        underReviewApplications?: number | undefined;
+        wrongDisbursementAmount?: number | undefined;
+        wrongDisbursementApplications?: number | undefined;
+        byAllocationStatus?:
+          | Array<
+              | { __typename?: 'ScholarshipStatusCount'; count?: number | undefined; key?: string | undefined }
+              | undefined
+            >
+          | undefined;
+        byProofStatus?:
+          | Array<
+              | { __typename?: 'ScholarshipStatusCount'; count?: number | undefined; key?: string | undefined }
+              | undefined
+            >
+          | undefined;
+        byRefundStatus?:
+          | Array<
+              | { __typename?: 'ScholarshipStatusCount'; count?: number | undefined; key?: string | undefined }
+              | undefined
+            >
+          | undefined;
         byStatus?:
+          | Array<
+              | { __typename?: 'ScholarshipStatusCount'; count?: number | undefined; key?: string | undefined }
+              | undefined
+            >
+          | undefined;
+        byTransactionStatus?:
           | Array<
               | { __typename?: 'ScholarshipStatusCount'; count?: number | undefined; key?: string | undefined }
               | undefined
@@ -11583,11 +21536,79 @@ export type GetScholarshipOrganizationDashboardQuery = {
   getScholarshipOrganizationDashboard?:
     | {
         __typename?: 'ScholarshipDashboard';
+        activeBeneficiaryCount?: number | undefined;
+        activeMentorCount?: number | undefined;
+        allocationDisputeCount?: number | undefined;
+        applicationsAwaitingReview?: number | undefined;
+        approvalCapacity?: number | undefined;
+        approvedAdjustments?: number | undefined;
+        awaitingPaymentConfirmation?: number | undefined;
+        beneficiaryNonReceiptCount?: number | undefined;
+        completedApplications?: number | undefined;
+        completedTransactionCount?: number | undefined;
+        confirmedAllocation?: number | undefined;
+        confirmedBeneficiaryDisbursement?: number | undefined;
         disbursedAmount?: number | undefined;
+        disputedIncomingAllocation?: number | undefined;
+        disputedMentorAllocations?: number | undefined;
+        draftRequests?: number | undefined;
         exceptionCount?: number | undefined;
+        failedNotificationCount?: number | undefined;
+        fullProofsAwaitingVerification?: number | undefined;
+        mentorCustodyBalance?: number | undefined;
+        missingMentorRoutingCount?: number | undefined;
+        needsInformation?: number | undefined;
+        openRefundCaseCount?: number | undefined;
+        overdueProof?: number | undefined;
+        overdueProofAmount?: number | undefined;
+        partialProof?: number | undefined;
+        partialReceiptMismatchCount?: number | undefined;
+        paymentConfirmationPendingApplications?: number | undefined;
+        pendingBeneficiaryConfirmation?: number | undefined;
+        pendingBeneficiaryConfirmationCount?: number | undefined;
+        pendingIncomingAllocation?: number | undefined;
+        proofDue?: number | undefined;
+        refundConfirmedAmount?: number | undefined;
+        refundReconciliationPendingCount?: number | undefined;
+        refundRequestedAmount?: number | undefined;
+        refundResponsePendingCount?: number | undefined;
+        rejectedApplications?: number | undefined;
         requestedAmount?: number | undefined;
+        returnedAmount?: number | undefined;
+        routingPendingApplications?: number | undefined;
+        submittedApplications?: number | undefined;
+        submittedOrUnderReview?: number | undefined;
+        totalAllocationRecorded?: number | undefined;
         totalApplications?: number | undefined;
+        totalCompletedAfterProofVerification?: number | undefined;
+        underReviewApplications?: number | undefined;
+        wrongDisbursementAmount?: number | undefined;
+        wrongDisbursementApplications?: number | undefined;
+        byAllocationStatus?:
+          | Array<
+              | { __typename?: 'ScholarshipStatusCount'; count?: number | undefined; key?: string | undefined }
+              | undefined
+            >
+          | undefined;
+        byProofStatus?:
+          | Array<
+              | { __typename?: 'ScholarshipStatusCount'; count?: number | undefined; key?: string | undefined }
+              | undefined
+            >
+          | undefined;
+        byRefundStatus?:
+          | Array<
+              | { __typename?: 'ScholarshipStatusCount'; count?: number | undefined; key?: string | undefined }
+              | undefined
+            >
+          | undefined;
         byStatus?:
+          | Array<
+              | { __typename?: 'ScholarshipStatusCount'; count?: number | undefined; key?: string | undefined }
+              | undefined
+            >
+          | undefined;
+        byTransactionStatus?:
           | Array<
               | { __typename?: 'ScholarshipStatusCount'; count?: number | undefined; key?: string | undefined }
               | undefined
@@ -11666,12 +21687,17 @@ export type GetTransactionQuery = {
     | {
         __typename?: 'Transaction';
         amount?: any | undefined;
+        billingCategory?: BillingCategory | undefined;
         createdAt?: any | undefined;
         currency?: Currency | undefined;
         description?: string | undefined;
         id?: string | undefined;
+        immutableAt?: any | undefined;
         isDonation?: boolean | undefined;
+        linkedTransactionId?: string | undefined;
+        metadata?: any | undefined;
         method?: string | undefined;
+        recordedByUserId?: string | undefined;
         referenceId?: string | undefined;
         scholarshipApplicationId?: string | undefined;
         scholarshipApprovedAt?: any | undefined;
@@ -11692,13 +21718,562 @@ export type GetTransactionQuery = {
         scholarshipPurposeSnapshot?: string | undefined;
         scholarshipReceivedAt?: any | undefined;
         scholarshipStatus?: string | undefined;
-        sourceType?: string | undefined;
+        sourceType?: TransactionSourceType | undefined;
         status?: TransactionStatus | undefined;
         title?: string | undefined;
         transactionDate?: any | undefined;
         type?: TransactionType | undefined;
         updatedAt?: any | undefined;
         userId?: string | undefined;
+        walletImpact?: boolean | undefined;
+        attachments?:
+          | Array<
+              | {
+                  __typename?: 'TransactionAttachment';
+                  createdAt?: any | undefined;
+                  id?: string | undefined;
+                  mimeType?: string | undefined;
+                  originalFilename?: string | undefined;
+                  sizeBytes?: number | undefined;
+                  status?: string | undefined;
+                  transactionId?: string | undefined;
+                  uploadedAt?: any | undefined;
+                  uploadedByUserId?: string | undefined;
+                }
+              | undefined
+            >
+          | undefined;
+        linkedTransaction?:
+          | {
+              __typename?: 'Transaction';
+              amount?: any | undefined;
+              billingCategory?: BillingCategory | undefined;
+              createdAt?: any | undefined;
+              currency?: Currency | undefined;
+              description?: string | undefined;
+              id?: string | undefined;
+              immutableAt?: any | undefined;
+              isDonation?: boolean | undefined;
+              linkedTransactionId?: string | undefined;
+              metadata?: any | undefined;
+              method?: string | undefined;
+              recordedByUserId?: string | undefined;
+              referenceId?: string | undefined;
+              scholarshipApplicationId?: string | undefined;
+              scholarshipApprovedAt?: any | undefined;
+              scholarshipBatchSnapshot?: number | undefined;
+              scholarshipBeneficiaryUserId?: string | undefined;
+              scholarshipCompletedAt?: any | undefined;
+              scholarshipConfirmedAmount?: any | undefined;
+              scholarshipConfirmedAt?: any | undefined;
+              scholarshipImmutableAt?: any | undefined;
+              scholarshipInstallmentSequence?: number | undefined;
+              scholarshipMaskedPayoutDestination?: string | undefined;
+              scholarshipMentorUserId?: string | undefined;
+              scholarshipOriginalTransactionId?: string | undefined;
+              scholarshipPayoutMethod?: string | undefined;
+              scholarshipProofDueAt?: any | undefined;
+              scholarshipProofDueDays?: number | undefined;
+              scholarshipProofStatus?: string | undefined;
+              scholarshipPurposeSnapshot?: string | undefined;
+              scholarshipReceivedAt?: any | undefined;
+              scholarshipStatus?: string | undefined;
+              sourceType?: TransactionSourceType | undefined;
+              status?: TransactionStatus | undefined;
+              title?: string | undefined;
+              transactionDate?: any | undefined;
+              type?: TransactionType | undefined;
+              updatedAt?: any | undefined;
+              userId?: string | undefined;
+              walletImpact?: boolean | undefined;
+              attachments?:
+                | Array<
+                    | {
+                        __typename?: 'TransactionAttachment';
+                        createdAt?: any | undefined;
+                        id?: string | undefined;
+                        mimeType?: string | undefined;
+                        originalFilename?: string | undefined;
+                        sizeBytes?: number | undefined;
+                        status?: string | undefined;
+                        transactionId?: string | undefined;
+                        uploadedAt?: any | undefined;
+                        uploadedByUserId?: string | undefined;
+                      }
+                    | undefined
+                  >
+                | undefined;
+              linkedTransaction?:
+                | {
+                    __typename?: 'Transaction';
+                    amount?: any | undefined;
+                    billingCategory?: BillingCategory | undefined;
+                    createdAt?: any | undefined;
+                    currency?: Currency | undefined;
+                    description?: string | undefined;
+                    id?: string | undefined;
+                    immutableAt?: any | undefined;
+                    isDonation?: boolean | undefined;
+                    linkedTransactionId?: string | undefined;
+                    metadata?: any | undefined;
+                    method?: string | undefined;
+                    recordedByUserId?: string | undefined;
+                    referenceId?: string | undefined;
+                    scholarshipApplicationId?: string | undefined;
+                    scholarshipApprovedAt?: any | undefined;
+                    scholarshipBatchSnapshot?: number | undefined;
+                    scholarshipBeneficiaryUserId?: string | undefined;
+                    scholarshipCompletedAt?: any | undefined;
+                    scholarshipConfirmedAmount?: any | undefined;
+                    scholarshipConfirmedAt?: any | undefined;
+                    scholarshipImmutableAt?: any | undefined;
+                    scholarshipInstallmentSequence?: number | undefined;
+                    scholarshipMaskedPayoutDestination?: string | undefined;
+                    scholarshipMentorUserId?: string | undefined;
+                    scholarshipOriginalTransactionId?: string | undefined;
+                    scholarshipPayoutMethod?: string | undefined;
+                    scholarshipProofDueAt?: any | undefined;
+                    scholarshipProofDueDays?: number | undefined;
+                    scholarshipProofStatus?: string | undefined;
+                    scholarshipPurposeSnapshot?: string | undefined;
+                    scholarshipReceivedAt?: any | undefined;
+                    scholarshipStatus?: string | undefined;
+                    sourceType?: TransactionSourceType | undefined;
+                    status?: TransactionStatus | undefined;
+                    title?: string | undefined;
+                    transactionDate?: any | undefined;
+                    type?: TransactionType | undefined;
+                    updatedAt?: any | undefined;
+                    userId?: string | undefined;
+                    walletImpact?: boolean | undefined;
+                    recordedBy?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                    scholarshipBeneficiary?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                    scholarshipMentor?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                    user?:
+                      | {
+                          __typename?: 'User';
+                          aboutMe?: string | undefined;
+                          batch?: number | undefined;
+                          createdAt: any;
+                          disabled?: boolean | undefined;
+                          displayName?: string | undefined;
+                          dob?: any | undefined;
+                          email?: string | undefined;
+                          emergencyMobile?: string | undefined;
+                          extraEmail?: string | undefined;
+                          extraMobile?: string | undefined;
+                          firstName?: string | undefined;
+                          gender?: string | undefined;
+                          google_auth_id?: string | undefined;
+                          hasBusiness?: boolean | undefined;
+                          id?: string | undefined;
+                          isConfidential?: boolean | undefined;
+                          isFaculty?: boolean | undefined;
+                          isVerified?: boolean | undefined;
+                          lastName?: string | undefined;
+                          membershipYear?: number | undefined;
+                          metadata?: any | undefined;
+                          mobile?: string | undefined;
+                          nickName?: string | undefined;
+                          profileImage?: string | undefined;
+                          socialMedia?: any | undefined;
+                          updatedAt: any;
+                          whatsAppMobile?: string | undefined;
+                          companyInfo?:
+                            | Array<
+                                | {
+                                    __typename?: 'CompanyInfoBasic';
+                                    companyName: string;
+                                    id: string;
+                                    position?: string | undefined;
+                                    userId: string;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          positions?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectivePosition';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    termId?: string | undefined;
+                                    termName?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                          role?:
+                            | {
+                                __typename?: 'Role';
+                                code?: string | undefined;
+                                id?: string | undefined;
+                                name?: string | undefined;
+                              }
+                            | undefined;
+                          roles?:
+                            | Array<
+                                | {
+                                    __typename?: 'EffectiveRole';
+                                    assignmentId?: string | undefined;
+                                    code?: string | undefined;
+                                    name?: string | undefined;
+                                    scopeBatch?: number | undefined;
+                                    scopeType?: string | undefined;
+                                    validFrom?: any | undefined;
+                                    validUntil?: any | undefined;
+                                  }
+                                | undefined
+                              >
+                            | undefined;
+                        }
+                      | undefined;
+                  }
+                | undefined;
+            }
+          | undefined;
+        recordedBy?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
+          | undefined;
+        scholarshipBeneficiary?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
+          | undefined;
+        scholarshipMentor?:
+          | {
+              __typename?: 'User';
+              aboutMe?: string | undefined;
+              batch?: number | undefined;
+              createdAt: any;
+              disabled?: boolean | undefined;
+              displayName?: string | undefined;
+              dob?: any | undefined;
+              email?: string | undefined;
+              emergencyMobile?: string | undefined;
+              extraEmail?: string | undefined;
+              extraMobile?: string | undefined;
+              firstName?: string | undefined;
+              gender?: string | undefined;
+              google_auth_id?: string | undefined;
+              hasBusiness?: boolean | undefined;
+              id?: string | undefined;
+              isConfidential?: boolean | undefined;
+              isFaculty?: boolean | undefined;
+              isVerified?: boolean | undefined;
+              lastName?: string | undefined;
+              membershipYear?: number | undefined;
+              metadata?: any | undefined;
+              mobile?: string | undefined;
+              nickName?: string | undefined;
+              profileImage?: string | undefined;
+              socialMedia?: any | undefined;
+              updatedAt: any;
+              whatsAppMobile?: string | undefined;
+            }
+          | undefined;
         user?:
           | {
               __typename?: 'User';
@@ -11729,58 +22304,23 @@ export type GetTransactionQuery = {
               socialMedia?: any | undefined;
               updatedAt: any;
               whatsAppMobile?: string | undefined;
-              companyInfo?:
-                | Array<
-                    | {
-                        __typename?: 'CompanyInfoBasic';
-                        companyName: string;
-                        id: string;
-                        position?: string | undefined;
-                        userId: string;
-                      }
-                    | undefined
-                  >
-                | undefined;
-              positions?:
-                | Array<
-                    | {
-                        __typename?: 'EffectivePosition';
-                        assignmentId?: string | undefined;
-                        code?: string | undefined;
-                        name?: string | undefined;
-                        termId?: string | undefined;
-                        termName?: string | undefined;
-                        validFrom?: any | undefined;
-                        validUntil?: any | undefined;
-                      }
-                    | undefined
-                  >
-                | undefined;
-              role?:
-                | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
-                | undefined;
-              roles?:
-                | Array<
-                    | {
-                        __typename?: 'EffectiveRole';
-                        assignmentId?: string | undefined;
-                        code?: string | undefined;
-                        name?: string | undefined;
-                        scopeBatch?: number | undefined;
-                        scopeType?: string | undefined;
-                        validFrom?: any | undefined;
-                        validUntil?: any | undefined;
-                      }
-                    | undefined
-                  >
-                | undefined;
             }
           | undefined;
       }
     | undefined;
 };
 
+export type GetTransactionAttachmentReadUrlQueryVariables = Exact<{
+  attachmentId: Scalars['String']['input'];
+}>;
+
+export type GetTransactionAttachmentReadUrlQuery = {
+  __typename?: 'Query';
+  getTransactionAttachmentReadUrl?: string | undefined;
+};
+
 export type GetTransactionsQueryVariables = Exact<{
+  filter?: InputMaybe<AssociationTransactionFilter>;
   options?: InputMaybe<ListInput>;
 }>;
 
@@ -11795,12 +22335,17 @@ export type GetTransactionsQuery = {
               | {
                   __typename?: 'Transaction';
                   amount?: any | undefined;
+                  billingCategory?: BillingCategory | undefined;
                   createdAt?: any | undefined;
                   currency?: Currency | undefined;
                   description?: string | undefined;
                   id?: string | undefined;
+                  immutableAt?: any | undefined;
                   isDonation?: boolean | undefined;
+                  linkedTransactionId?: string | undefined;
+                  metadata?: any | undefined;
                   method?: string | undefined;
+                  recordedByUserId?: string | undefined;
                   referenceId?: string | undefined;
                   scholarshipApplicationId?: string | undefined;
                   scholarshipApprovedAt?: any | undefined;
@@ -11821,13 +22366,512 @@ export type GetTransactionsQuery = {
                   scholarshipPurposeSnapshot?: string | undefined;
                   scholarshipReceivedAt?: any | undefined;
                   scholarshipStatus?: string | undefined;
-                  sourceType?: string | undefined;
+                  sourceType?: TransactionSourceType | undefined;
                   status?: TransactionStatus | undefined;
                   title?: string | undefined;
                   transactionDate?: any | undefined;
                   type?: TransactionType | undefined;
                   updatedAt?: any | undefined;
                   userId?: string | undefined;
+                  walletImpact?: boolean | undefined;
+                  attachments?:
+                    | Array<
+                        | {
+                            __typename?: 'TransactionAttachment';
+                            createdAt?: any | undefined;
+                            id?: string | undefined;
+                            mimeType?: string | undefined;
+                            originalFilename?: string | undefined;
+                            sizeBytes?: number | undefined;
+                            status?: string | undefined;
+                            transactionId?: string | undefined;
+                            uploadedAt?: any | undefined;
+                            uploadedByUserId?: string | undefined;
+                          }
+                        | undefined
+                      >
+                    | undefined;
+                  linkedTransaction?:
+                    | {
+                        __typename?: 'Transaction';
+                        amount?: any | undefined;
+                        billingCategory?: BillingCategory | undefined;
+                        createdAt?: any | undefined;
+                        currency?: Currency | undefined;
+                        description?: string | undefined;
+                        id?: string | undefined;
+                        immutableAt?: any | undefined;
+                        isDonation?: boolean | undefined;
+                        linkedTransactionId?: string | undefined;
+                        metadata?: any | undefined;
+                        method?: string | undefined;
+                        recordedByUserId?: string | undefined;
+                        referenceId?: string | undefined;
+                        scholarshipApplicationId?: string | undefined;
+                        scholarshipApprovedAt?: any | undefined;
+                        scholarshipBatchSnapshot?: number | undefined;
+                        scholarshipBeneficiaryUserId?: string | undefined;
+                        scholarshipCompletedAt?: any | undefined;
+                        scholarshipConfirmedAmount?: any | undefined;
+                        scholarshipConfirmedAt?: any | undefined;
+                        scholarshipImmutableAt?: any | undefined;
+                        scholarshipInstallmentSequence?: number | undefined;
+                        scholarshipMaskedPayoutDestination?: string | undefined;
+                        scholarshipMentorUserId?: string | undefined;
+                        scholarshipOriginalTransactionId?: string | undefined;
+                        scholarshipPayoutMethod?: string | undefined;
+                        scholarshipProofDueAt?: any | undefined;
+                        scholarshipProofDueDays?: number | undefined;
+                        scholarshipProofStatus?: string | undefined;
+                        scholarshipPurposeSnapshot?: string | undefined;
+                        scholarshipReceivedAt?: any | undefined;
+                        scholarshipStatus?: string | undefined;
+                        sourceType?: TransactionSourceType | undefined;
+                        status?: TransactionStatus | undefined;
+                        title?: string | undefined;
+                        transactionDate?: any | undefined;
+                        type?: TransactionType | undefined;
+                        updatedAt?: any | undefined;
+                        userId?: string | undefined;
+                        walletImpact?: boolean | undefined;
+                        attachments?:
+                          | Array<
+                              | {
+                                  __typename?: 'TransactionAttachment';
+                                  createdAt?: any | undefined;
+                                  id?: string | undefined;
+                                  mimeType?: string | undefined;
+                                  originalFilename?: string | undefined;
+                                  sizeBytes?: number | undefined;
+                                  status?: string | undefined;
+                                  transactionId?: string | undefined;
+                                  uploadedAt?: any | undefined;
+                                  uploadedByUserId?: string | undefined;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                        linkedTransaction?:
+                          | {
+                              __typename?: 'Transaction';
+                              amount?: any | undefined;
+                              billingCategory?: BillingCategory | undefined;
+                              createdAt?: any | undefined;
+                              currency?: Currency | undefined;
+                              description?: string | undefined;
+                              id?: string | undefined;
+                              immutableAt?: any | undefined;
+                              isDonation?: boolean | undefined;
+                              linkedTransactionId?: string | undefined;
+                              metadata?: any | undefined;
+                              method?: string | undefined;
+                              recordedByUserId?: string | undefined;
+                              referenceId?: string | undefined;
+                              scholarshipApplicationId?: string | undefined;
+                              scholarshipApprovedAt?: any | undefined;
+                              scholarshipBatchSnapshot?: number | undefined;
+                              scholarshipBeneficiaryUserId?: string | undefined;
+                              scholarshipCompletedAt?: any | undefined;
+                              scholarshipConfirmedAmount?: any | undefined;
+                              scholarshipConfirmedAt?: any | undefined;
+                              scholarshipImmutableAt?: any | undefined;
+                              scholarshipInstallmentSequence?: number | undefined;
+                              scholarshipMaskedPayoutDestination?: string | undefined;
+                              scholarshipMentorUserId?: string | undefined;
+                              scholarshipOriginalTransactionId?: string | undefined;
+                              scholarshipPayoutMethod?: string | undefined;
+                              scholarshipProofDueAt?: any | undefined;
+                              scholarshipProofDueDays?: number | undefined;
+                              scholarshipProofStatus?: string | undefined;
+                              scholarshipPurposeSnapshot?: string | undefined;
+                              scholarshipReceivedAt?: any | undefined;
+                              scholarshipStatus?: string | undefined;
+                              sourceType?: TransactionSourceType | undefined;
+                              status?: TransactionStatus | undefined;
+                              title?: string | undefined;
+                              transactionDate?: any | undefined;
+                              type?: TransactionType | undefined;
+                              updatedAt?: any | undefined;
+                              userId?: string | undefined;
+                              walletImpact?: boolean | undefined;
+                              recordedBy?:
+                                | {
+                                    __typename?: 'User';
+                                    aboutMe?: string | undefined;
+                                    batch?: number | undefined;
+                                    createdAt: any;
+                                    disabled?: boolean | undefined;
+                                    displayName?: string | undefined;
+                                    dob?: any | undefined;
+                                    email?: string | undefined;
+                                    emergencyMobile?: string | undefined;
+                                    extraEmail?: string | undefined;
+                                    extraMobile?: string | undefined;
+                                    firstName?: string | undefined;
+                                    gender?: string | undefined;
+                                    google_auth_id?: string | undefined;
+                                    hasBusiness?: boolean | undefined;
+                                    id?: string | undefined;
+                                    isConfidential?: boolean | undefined;
+                                    isFaculty?: boolean | undefined;
+                                    isVerified?: boolean | undefined;
+                                    lastName?: string | undefined;
+                                    membershipYear?: number | undefined;
+                                    metadata?: any | undefined;
+                                    mobile?: string | undefined;
+                                    nickName?: string | undefined;
+                                    profileImage?: string | undefined;
+                                    socialMedia?: any | undefined;
+                                    updatedAt: any;
+                                    whatsAppMobile?: string | undefined;
+                                  }
+                                | undefined;
+                              scholarshipBeneficiary?:
+                                | {
+                                    __typename?: 'User';
+                                    aboutMe?: string | undefined;
+                                    batch?: number | undefined;
+                                    createdAt: any;
+                                    disabled?: boolean | undefined;
+                                    displayName?: string | undefined;
+                                    dob?: any | undefined;
+                                    email?: string | undefined;
+                                    emergencyMobile?: string | undefined;
+                                    extraEmail?: string | undefined;
+                                    extraMobile?: string | undefined;
+                                    firstName?: string | undefined;
+                                    gender?: string | undefined;
+                                    google_auth_id?: string | undefined;
+                                    hasBusiness?: boolean | undefined;
+                                    id?: string | undefined;
+                                    isConfidential?: boolean | undefined;
+                                    isFaculty?: boolean | undefined;
+                                    isVerified?: boolean | undefined;
+                                    lastName?: string | undefined;
+                                    membershipYear?: number | undefined;
+                                    metadata?: any | undefined;
+                                    mobile?: string | undefined;
+                                    nickName?: string | undefined;
+                                    profileImage?: string | undefined;
+                                    socialMedia?: any | undefined;
+                                    updatedAt: any;
+                                    whatsAppMobile?: string | undefined;
+                                  }
+                                | undefined;
+                              scholarshipMentor?:
+                                | {
+                                    __typename?: 'User';
+                                    aboutMe?: string | undefined;
+                                    batch?: number | undefined;
+                                    createdAt: any;
+                                    disabled?: boolean | undefined;
+                                    displayName?: string | undefined;
+                                    dob?: any | undefined;
+                                    email?: string | undefined;
+                                    emergencyMobile?: string | undefined;
+                                    extraEmail?: string | undefined;
+                                    extraMobile?: string | undefined;
+                                    firstName?: string | undefined;
+                                    gender?: string | undefined;
+                                    google_auth_id?: string | undefined;
+                                    hasBusiness?: boolean | undefined;
+                                    id?: string | undefined;
+                                    isConfidential?: boolean | undefined;
+                                    isFaculty?: boolean | undefined;
+                                    isVerified?: boolean | undefined;
+                                    lastName?: string | undefined;
+                                    membershipYear?: number | undefined;
+                                    metadata?: any | undefined;
+                                    mobile?: string | undefined;
+                                    nickName?: string | undefined;
+                                    profileImage?: string | undefined;
+                                    socialMedia?: any | undefined;
+                                    updatedAt: any;
+                                    whatsAppMobile?: string | undefined;
+                                  }
+                                | undefined;
+                              user?:
+                                | {
+                                    __typename?: 'User';
+                                    aboutMe?: string | undefined;
+                                    batch?: number | undefined;
+                                    createdAt: any;
+                                    disabled?: boolean | undefined;
+                                    displayName?: string | undefined;
+                                    dob?: any | undefined;
+                                    email?: string | undefined;
+                                    emergencyMobile?: string | undefined;
+                                    extraEmail?: string | undefined;
+                                    extraMobile?: string | undefined;
+                                    firstName?: string | undefined;
+                                    gender?: string | undefined;
+                                    google_auth_id?: string | undefined;
+                                    hasBusiness?: boolean | undefined;
+                                    id?: string | undefined;
+                                    isConfidential?: boolean | undefined;
+                                    isFaculty?: boolean | undefined;
+                                    isVerified?: boolean | undefined;
+                                    lastName?: string | undefined;
+                                    membershipYear?: number | undefined;
+                                    metadata?: any | undefined;
+                                    mobile?: string | undefined;
+                                    nickName?: string | undefined;
+                                    profileImage?: string | undefined;
+                                    socialMedia?: any | undefined;
+                                    updatedAt: any;
+                                    whatsAppMobile?: string | undefined;
+                                  }
+                                | undefined;
+                            }
+                          | undefined;
+                      }
+                    | undefined;
+                  recordedBy?:
+                    | {
+                        __typename?: 'User';
+                        aboutMe?: string | undefined;
+                        batch?: number | undefined;
+                        createdAt: any;
+                        disabled?: boolean | undefined;
+                        displayName?: string | undefined;
+                        dob?: any | undefined;
+                        email?: string | undefined;
+                        emergencyMobile?: string | undefined;
+                        extraEmail?: string | undefined;
+                        extraMobile?: string | undefined;
+                        firstName?: string | undefined;
+                        gender?: string | undefined;
+                        google_auth_id?: string | undefined;
+                        hasBusiness?: boolean | undefined;
+                        id?: string | undefined;
+                        isConfidential?: boolean | undefined;
+                        isFaculty?: boolean | undefined;
+                        isVerified?: boolean | undefined;
+                        lastName?: string | undefined;
+                        membershipYear?: number | undefined;
+                        metadata?: any | undefined;
+                        mobile?: string | undefined;
+                        nickName?: string | undefined;
+                        profileImage?: string | undefined;
+                        socialMedia?: any | undefined;
+                        updatedAt: any;
+                        whatsAppMobile?: string | undefined;
+                        companyInfo?:
+                          | Array<
+                              | {
+                                  __typename?: 'CompanyInfoBasic';
+                                  companyName: string;
+                                  id: string;
+                                  position?: string | undefined;
+                                  userId: string;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                        positions?:
+                          | Array<
+                              | {
+                                  __typename?: 'EffectivePosition';
+                                  assignmentId?: string | undefined;
+                                  code?: string | undefined;
+                                  name?: string | undefined;
+                                  termId?: string | undefined;
+                                  termName?: string | undefined;
+                                  validFrom?: any | undefined;
+                                  validUntil?: any | undefined;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                        role?:
+                          | {
+                              __typename?: 'Role';
+                              code?: string | undefined;
+                              id?: string | undefined;
+                              name?: string | undefined;
+                            }
+                          | undefined;
+                        roles?:
+                          | Array<
+                              | {
+                                  __typename?: 'EffectiveRole';
+                                  assignmentId?: string | undefined;
+                                  code?: string | undefined;
+                                  name?: string | undefined;
+                                  scopeBatch?: number | undefined;
+                                  scopeType?: string | undefined;
+                                  validFrom?: any | undefined;
+                                  validUntil?: any | undefined;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                      }
+                    | undefined;
+                  scholarshipBeneficiary?:
+                    | {
+                        __typename?: 'User';
+                        aboutMe?: string | undefined;
+                        batch?: number | undefined;
+                        createdAt: any;
+                        disabled?: boolean | undefined;
+                        displayName?: string | undefined;
+                        dob?: any | undefined;
+                        email?: string | undefined;
+                        emergencyMobile?: string | undefined;
+                        extraEmail?: string | undefined;
+                        extraMobile?: string | undefined;
+                        firstName?: string | undefined;
+                        gender?: string | undefined;
+                        google_auth_id?: string | undefined;
+                        hasBusiness?: boolean | undefined;
+                        id?: string | undefined;
+                        isConfidential?: boolean | undefined;
+                        isFaculty?: boolean | undefined;
+                        isVerified?: boolean | undefined;
+                        lastName?: string | undefined;
+                        membershipYear?: number | undefined;
+                        metadata?: any | undefined;
+                        mobile?: string | undefined;
+                        nickName?: string | undefined;
+                        profileImage?: string | undefined;
+                        socialMedia?: any | undefined;
+                        updatedAt: any;
+                        whatsAppMobile?: string | undefined;
+                        companyInfo?:
+                          | Array<
+                              | {
+                                  __typename?: 'CompanyInfoBasic';
+                                  companyName: string;
+                                  id: string;
+                                  position?: string | undefined;
+                                  userId: string;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                        positions?:
+                          | Array<
+                              | {
+                                  __typename?: 'EffectivePosition';
+                                  assignmentId?: string | undefined;
+                                  code?: string | undefined;
+                                  name?: string | undefined;
+                                  termId?: string | undefined;
+                                  termName?: string | undefined;
+                                  validFrom?: any | undefined;
+                                  validUntil?: any | undefined;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                        role?:
+                          | {
+                              __typename?: 'Role';
+                              code?: string | undefined;
+                              id?: string | undefined;
+                              name?: string | undefined;
+                            }
+                          | undefined;
+                        roles?:
+                          | Array<
+                              | {
+                                  __typename?: 'EffectiveRole';
+                                  assignmentId?: string | undefined;
+                                  code?: string | undefined;
+                                  name?: string | undefined;
+                                  scopeBatch?: number | undefined;
+                                  scopeType?: string | undefined;
+                                  validFrom?: any | undefined;
+                                  validUntil?: any | undefined;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                      }
+                    | undefined;
+                  scholarshipMentor?:
+                    | {
+                        __typename?: 'User';
+                        aboutMe?: string | undefined;
+                        batch?: number | undefined;
+                        createdAt: any;
+                        disabled?: boolean | undefined;
+                        displayName?: string | undefined;
+                        dob?: any | undefined;
+                        email?: string | undefined;
+                        emergencyMobile?: string | undefined;
+                        extraEmail?: string | undefined;
+                        extraMobile?: string | undefined;
+                        firstName?: string | undefined;
+                        gender?: string | undefined;
+                        google_auth_id?: string | undefined;
+                        hasBusiness?: boolean | undefined;
+                        id?: string | undefined;
+                        isConfidential?: boolean | undefined;
+                        isFaculty?: boolean | undefined;
+                        isVerified?: boolean | undefined;
+                        lastName?: string | undefined;
+                        membershipYear?: number | undefined;
+                        metadata?: any | undefined;
+                        mobile?: string | undefined;
+                        nickName?: string | undefined;
+                        profileImage?: string | undefined;
+                        socialMedia?: any | undefined;
+                        updatedAt: any;
+                        whatsAppMobile?: string | undefined;
+                        companyInfo?:
+                          | Array<
+                              | {
+                                  __typename?: 'CompanyInfoBasic';
+                                  companyName: string;
+                                  id: string;
+                                  position?: string | undefined;
+                                  userId: string;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                        positions?:
+                          | Array<
+                              | {
+                                  __typename?: 'EffectivePosition';
+                                  assignmentId?: string | undefined;
+                                  code?: string | undefined;
+                                  name?: string | undefined;
+                                  termId?: string | undefined;
+                                  termName?: string | undefined;
+                                  validFrom?: any | undefined;
+                                  validUntil?: any | undefined;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                        role?:
+                          | {
+                              __typename?: 'Role';
+                              code?: string | undefined;
+                              id?: string | undefined;
+                              name?: string | undefined;
+                            }
+                          | undefined;
+                        roles?:
+                          | Array<
+                              | {
+                                  __typename?: 'EffectiveRole';
+                                  assignmentId?: string | undefined;
+                                  code?: string | undefined;
+                                  name?: string | undefined;
+                                  scopeBatch?: number | undefined;
+                                  scopeType?: string | undefined;
+                                  validFrom?: any | undefined;
+                                  validUntil?: any | undefined;
+                                }
+                              | undefined
+                            >
+                          | undefined;
+                      }
+                    | undefined;
                   user?:
                     | {
                         __typename?: 'User';
@@ -14149,6 +25193,503 @@ export const ConfirmMentorFundAllocationDocument = gql`
   mutation confirmMentorFundAllocation($allocationId: String!, $confirmedAmount: Float) {
     confirmMentorFundAllocation(allocationId: $allocationId, confirmedAmount: $confirmedAmount) {
       amount
+      associationTransaction {
+        amount
+        attachments {
+          createdAt
+          id
+          mimeType
+          originalFilename
+          sizeBytes
+          status
+          transactionId
+          uploadedAt
+          uploadedByUserId
+        }
+        billingCategory
+        createdAt
+        currency
+        description
+        id
+        immutableAt
+        isDonation
+        linkedTransaction {
+          amount
+          attachments {
+            createdAt
+            id
+            mimeType
+            originalFilename
+            sizeBytes
+            status
+            transactionId
+            uploadedAt
+            uploadedByUserId
+          }
+          billingCategory
+          createdAt
+          currency
+          description
+          id
+          immutableAt
+          isDonation
+          linkedTransaction {
+            amount
+            billingCategory
+            createdAt
+            currency
+            description
+            id
+            immutableAt
+            isDonation
+            linkedTransactionId
+            metadata
+            method
+            recordedBy {
+              aboutMe
+              batch
+              createdAt
+              disabled
+              displayName
+              dob
+              email
+              emergencyMobile
+              extraEmail
+              extraMobile
+              firstName
+              gender
+              google_auth_id
+              hasBusiness
+              id
+              isConfidential
+              isFaculty
+              isVerified
+              lastName
+              membershipYear
+              metadata
+              mobile
+              nickName
+              profileImage
+              socialMedia
+              updatedAt
+              whatsAppMobile
+            }
+            recordedByUserId
+            referenceId
+            scholarshipApplicationId
+            scholarshipApprovedAt
+            scholarshipBatchSnapshot
+            scholarshipBeneficiary {
+              aboutMe
+              batch
+              createdAt
+              disabled
+              displayName
+              dob
+              email
+              emergencyMobile
+              extraEmail
+              extraMobile
+              firstName
+              gender
+              google_auth_id
+              hasBusiness
+              id
+              isConfidential
+              isFaculty
+              isVerified
+              lastName
+              membershipYear
+              metadata
+              mobile
+              nickName
+              profileImage
+              socialMedia
+              updatedAt
+              whatsAppMobile
+            }
+            scholarshipBeneficiaryUserId
+            scholarshipCompletedAt
+            scholarshipConfirmedAmount
+            scholarshipConfirmedAt
+            scholarshipImmutableAt
+            scholarshipInstallmentSequence
+            scholarshipMaskedPayoutDestination
+            scholarshipMentor {
+              aboutMe
+              batch
+              createdAt
+              disabled
+              displayName
+              dob
+              email
+              emergencyMobile
+              extraEmail
+              extraMobile
+              firstName
+              gender
+              google_auth_id
+              hasBusiness
+              id
+              isConfidential
+              isFaculty
+              isVerified
+              lastName
+              membershipYear
+              metadata
+              mobile
+              nickName
+              profileImage
+              socialMedia
+              updatedAt
+              whatsAppMobile
+            }
+            scholarshipMentorUserId
+            scholarshipOriginalTransactionId
+            scholarshipPayoutMethod
+            scholarshipProofDueAt
+            scholarshipProofDueDays
+            scholarshipProofStatus
+            scholarshipPurposeSnapshot
+            scholarshipReceivedAt
+            scholarshipStatus
+            sourceType
+            status
+            title
+            transactionDate
+            type
+            updatedAt
+            user {
+              aboutMe
+              batch
+              createdAt
+              disabled
+              displayName
+              dob
+              email
+              emergencyMobile
+              extraEmail
+              extraMobile
+              firstName
+              gender
+              google_auth_id
+              hasBusiness
+              id
+              isConfidential
+              isFaculty
+              isVerified
+              lastName
+              membershipYear
+              metadata
+              mobile
+              nickName
+              profileImage
+              socialMedia
+              updatedAt
+              whatsAppMobile
+            }
+            userId
+            walletImpact
+          }
+          linkedTransactionId
+          metadata
+          method
+          recordedByUserId
+          referenceId
+          scholarshipApplicationId
+          scholarshipApprovedAt
+          scholarshipBatchSnapshot
+          scholarshipBeneficiaryUserId
+          scholarshipCompletedAt
+          scholarshipConfirmedAmount
+          scholarshipConfirmedAt
+          scholarshipImmutableAt
+          scholarshipInstallmentSequence
+          scholarshipMaskedPayoutDestination
+          scholarshipMentorUserId
+          scholarshipOriginalTransactionId
+          scholarshipPayoutMethod
+          scholarshipProofDueAt
+          scholarshipProofDueDays
+          scholarshipProofStatus
+          scholarshipPurposeSnapshot
+          scholarshipReceivedAt
+          scholarshipStatus
+          sourceType
+          status
+          title
+          transactionDate
+          type
+          updatedAt
+          userId
+          walletImpact
+        }
+        linkedTransactionId
+        metadata
+        method
+        recordedBy {
+          aboutMe
+          batch
+          companyInfo {
+            companyName
+            id
+            position
+            userId
+          }
+          createdAt
+          disabled
+          displayName
+          dob
+          email
+          emergencyMobile
+          extraEmail
+          extraMobile
+          firstName
+          gender
+          google_auth_id
+          hasBusiness
+          id
+          isConfidential
+          isFaculty
+          isVerified
+          lastName
+          membershipYear
+          metadata
+          mobile
+          nickName
+          positions {
+            assignmentId
+            code
+            name
+            termId
+            termName
+            validFrom
+            validUntil
+          }
+          profileImage
+          role {
+            code
+            id
+            name
+          }
+          roles {
+            assignmentId
+            code
+            name
+            scopeBatch
+            scopeType
+            validFrom
+            validUntil
+          }
+          socialMedia
+          updatedAt
+          whatsAppMobile
+        }
+        recordedByUserId
+        referenceId
+        scholarshipApplicationId
+        scholarshipApprovedAt
+        scholarshipBatchSnapshot
+        scholarshipBeneficiary {
+          aboutMe
+          batch
+          companyInfo {
+            companyName
+            id
+            position
+            userId
+          }
+          createdAt
+          disabled
+          displayName
+          dob
+          email
+          emergencyMobile
+          extraEmail
+          extraMobile
+          firstName
+          gender
+          google_auth_id
+          hasBusiness
+          id
+          isConfidential
+          isFaculty
+          isVerified
+          lastName
+          membershipYear
+          metadata
+          mobile
+          nickName
+          positions {
+            assignmentId
+            code
+            name
+            termId
+            termName
+            validFrom
+            validUntil
+          }
+          profileImage
+          role {
+            code
+            id
+            name
+          }
+          roles {
+            assignmentId
+            code
+            name
+            scopeBatch
+            scopeType
+            validFrom
+            validUntil
+          }
+          socialMedia
+          updatedAt
+          whatsAppMobile
+        }
+        scholarshipBeneficiaryUserId
+        scholarshipCompletedAt
+        scholarshipConfirmedAmount
+        scholarshipConfirmedAt
+        scholarshipImmutableAt
+        scholarshipInstallmentSequence
+        scholarshipMaskedPayoutDestination
+        scholarshipMentor {
+          aboutMe
+          batch
+          companyInfo {
+            companyName
+            id
+            position
+            userId
+          }
+          createdAt
+          disabled
+          displayName
+          dob
+          email
+          emergencyMobile
+          extraEmail
+          extraMobile
+          firstName
+          gender
+          google_auth_id
+          hasBusiness
+          id
+          isConfidential
+          isFaculty
+          isVerified
+          lastName
+          membershipYear
+          metadata
+          mobile
+          nickName
+          positions {
+            assignmentId
+            code
+            name
+            termId
+            termName
+            validFrom
+            validUntil
+          }
+          profileImage
+          role {
+            code
+            id
+            name
+          }
+          roles {
+            assignmentId
+            code
+            name
+            scopeBatch
+            scopeType
+            validFrom
+            validUntil
+          }
+          socialMedia
+          updatedAt
+          whatsAppMobile
+        }
+        scholarshipMentorUserId
+        scholarshipOriginalTransactionId
+        scholarshipPayoutMethod
+        scholarshipProofDueAt
+        scholarshipProofDueDays
+        scholarshipProofStatus
+        scholarshipPurposeSnapshot
+        scholarshipReceivedAt
+        scholarshipStatus
+        sourceType
+        status
+        title
+        transactionDate
+        type
+        updatedAt
+        user {
+          aboutMe
+          batch
+          companyInfo {
+            companyName
+            id
+            position
+            userId
+          }
+          createdAt
+          disabled
+          displayName
+          dob
+          email
+          emergencyMobile
+          extraEmail
+          extraMobile
+          firstName
+          gender
+          google_auth_id
+          hasBusiness
+          id
+          isConfidential
+          isFaculty
+          isVerified
+          lastName
+          membershipYear
+          metadata
+          mobile
+          nickName
+          positions {
+            assignmentId
+            code
+            name
+            termId
+            termName
+            validFrom
+            validUntil
+          }
+          profileImage
+          role {
+            code
+            id
+            name
+          }
+          roles {
+            assignmentId
+            code
+            name
+            scopeBatch
+            scopeType
+            validFrom
+            validUntil
+          }
+          socialMedia
+          updatedAt
+          whatsAppMobile
+        }
+        userId
+        walletImpact
+      }
+      associationTransactionId
       batch
       confirmedAmount
       createdAt
@@ -14279,54 +25820,370 @@ export type ConfirmScholarshipRefundReceivedMutationOptions = Apollo.BaseMutatio
   ConfirmScholarshipRefundReceivedMutationVariables
 >;
 export const ConfirmScholarshipTransactionReceiptDocument = gql`
-  mutation confirmScholarshipTransactionReceipt($confirmedAmount: Float!, $note: String, $transactionId: String!) {
+  mutation confirmScholarshipTransactionReceipt(
+    $confirmedAmount: Float!
+    $creditProofDocumentId: String
+    $note: String
+    $transactionId: String!
+  ) {
     confirmScholarshipTransactionReceipt(
       confirmedAmount: $confirmedAmount
+      creditProofDocumentId: $creditProofDocumentId
       note: $note
       transactionId: $transactionId
     ) {
       amount
+      attachments {
+        createdAt
+        id
+        mimeType
+        originalFilename
+        sizeBytes
+        status
+        transactionId
+        uploadedAt
+        uploadedByUserId
+      }
+      billingCategory
       createdAt
       currency
       description
       id
+      immutableAt
       isDonation
+      linkedTransaction {
+        amount
+        attachments {
+          createdAt
+          id
+          mimeType
+          originalFilename
+          sizeBytes
+          status
+          transactionId
+          uploadedAt
+          uploadedByUserId
+        }
+        billingCategory
+        createdAt
+        currency
+        description
+        id
+        immutableAt
+        isDonation
+        linkedTransaction {
+          amount
+          billingCategory
+          createdAt
+          currency
+          description
+          id
+          immutableAt
+          isDonation
+          linkedTransactionId
+          metadata
+          method
+          recordedBy {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          recordedByUserId
+          referenceId
+          scholarshipApplicationId
+          scholarshipApprovedAt
+          scholarshipBatchSnapshot
+          scholarshipBeneficiary {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          scholarshipBeneficiaryUserId
+          scholarshipCompletedAt
+          scholarshipConfirmedAmount
+          scholarshipConfirmedAt
+          scholarshipImmutableAt
+          scholarshipInstallmentSequence
+          scholarshipMaskedPayoutDestination
+          scholarshipMentor {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          scholarshipMentorUserId
+          scholarshipOriginalTransactionId
+          scholarshipPayoutMethod
+          scholarshipProofDueAt
+          scholarshipProofDueDays
+          scholarshipProofStatus
+          scholarshipPurposeSnapshot
+          scholarshipReceivedAt
+          scholarshipStatus
+          sourceType
+          status
+          title
+          transactionDate
+          type
+          updatedAt
+          user {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          userId
+          walletImpact
+        }
+        linkedTransactionId
+        metadata
+        method
+        recordedByUserId
+        referenceId
+        scholarshipApplicationId
+        scholarshipApprovedAt
+        scholarshipBatchSnapshot
+        scholarshipBeneficiaryUserId
+        scholarshipCompletedAt
+        scholarshipConfirmedAmount
+        scholarshipConfirmedAt
+        scholarshipImmutableAt
+        scholarshipInstallmentSequence
+        scholarshipMaskedPayoutDestination
+        scholarshipMentorUserId
+        scholarshipOriginalTransactionId
+        scholarshipPayoutMethod
+        scholarshipProofDueAt
+        scholarshipProofDueDays
+        scholarshipProofStatus
+        scholarshipPurposeSnapshot
+        scholarshipReceivedAt
+        scholarshipStatus
+        sourceType
+        status
+        title
+        transactionDate
+        type
+        updatedAt
+        userId
+        walletImpact
+      }
+      linkedTransactionId
+      metadata
       method
-      referenceId
-      scholarshipApplicationId
-      scholarshipApprovedAt
-      scholarshipBatchSnapshot
-      scholarshipBeneficiaryUserId
-      scholarshipCompletedAt
-      scholarshipConfirmedAmount
-      scholarshipConfirmedAt
-      scholarshipImmutableAt
-      scholarshipInstallmentSequence
-      scholarshipMaskedPayoutDestination
-      scholarshipMentorUserId
-      scholarshipOriginalTransactionId
-      scholarshipPayoutMethod
-      scholarshipProofDueAt
-      scholarshipProofDueDays
-      scholarshipProofStatus
-      scholarshipPurposeSnapshot
-      scholarshipReceivedAt
-      scholarshipStatus
-      sourceType
-      status
-      title
-      transactionDate
-      type
-      updatedAt
-      user {
+      recordedBy {
         aboutMe
         batch
-        companyInfo {
-          companyName
-          id
-          position
-          userId
-        }
         createdAt
         disabled
         displayName
@@ -14348,35 +26205,127 @@ export const ConfirmScholarshipTransactionReceiptDocument = gql`
         metadata
         mobile
         nickName
-        positions {
-          assignmentId
-          code
-          name
-          termId
-          termName
-          validFrom
-          validUntil
-        }
         profileImage
-        role {
-          code
-          id
-          name
-        }
-        roles {
-          assignmentId
-          code
-          name
-          scopeBatch
-          scopeType
-          validFrom
-          validUntil
-        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      recordedByUserId
+      referenceId
+      scholarshipApplicationId
+      scholarshipApprovedAt
+      scholarshipBatchSnapshot
+      scholarshipBeneficiary {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      scholarshipBeneficiaryUserId
+      scholarshipCompletedAt
+      scholarshipConfirmedAmount
+      scholarshipConfirmedAt
+      scholarshipImmutableAt
+      scholarshipInstallmentSequence
+      scholarshipMaskedPayoutDestination
+      scholarshipMentor {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      scholarshipMentorUserId
+      scholarshipOriginalTransactionId
+      scholarshipPayoutMethod
+      scholarshipProofDueAt
+      scholarshipProofDueDays
+      scholarshipProofStatus
+      scholarshipPurposeSnapshot
+      scholarshipReceivedAt
+      scholarshipStatus
+      sourceType
+      status
+      title
+      transactionDate
+      type
+      updatedAt
+      user {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
         socialMedia
         updatedAt
         whatsAppMobile
       }
       userId
+      walletImpact
     }
   }
 `;
@@ -14399,6 +26348,7 @@ export type ConfirmScholarshipTransactionReceiptMutationFn = Apollo.MutationFunc
  * const [confirmScholarshipTransactionReceiptMutation, { data, loading, error }] = useConfirmScholarshipTransactionReceiptMutation({
  *   variables: {
  *      confirmedAmount: // value for 'confirmedAmount'
+ *      creditProofDocumentId: // value for 'creditProofDocumentId'
  *      note: // value for 'note'
  *      transactionId: // value for 'transactionId'
  *   },
@@ -14713,6 +26663,1686 @@ export function useCreateAlbumMutation(
 export type CreateAlbumMutationHookResult = ReturnType<typeof useCreateAlbumMutation>;
 export type CreateAlbumMutationResult = Apollo.MutationResult<CreateAlbumMutation>;
 export type CreateAlbumMutationOptions = Apollo.BaseMutationOptions<CreateAlbumMutation, CreateAlbumMutationVariables>;
+export const CreateAssociationAdjustmentDocument = gql`
+  mutation createAssociationAdjustment(
+    $amount: Float!
+    $description: String!
+    $method: String
+    $referenceId: String
+    $title: String!
+    $transactionDate: String
+    $type: TransactionType!
+  ) {
+    createAssociationAdjustment(
+      amount: $amount
+      description: $description
+      method: $method
+      referenceId: $referenceId
+      title: $title
+      transactionDate: $transactionDate
+      type: $type
+    ) {
+      amount
+      attachments {
+        createdAt
+        id
+        mimeType
+        originalFilename
+        sizeBytes
+        status
+        transactionId
+        uploadedAt
+        uploadedByUserId
+      }
+      billingCategory
+      createdAt
+      currency
+      description
+      id
+      immutableAt
+      isDonation
+      linkedTransaction {
+        amount
+        attachments {
+          createdAt
+          id
+          mimeType
+          originalFilename
+          sizeBytes
+          status
+          transactionId
+          uploadedAt
+          uploadedByUserId
+        }
+        billingCategory
+        createdAt
+        currency
+        description
+        id
+        immutableAt
+        isDonation
+        linkedTransaction {
+          amount
+          billingCategory
+          createdAt
+          currency
+          description
+          id
+          immutableAt
+          isDonation
+          linkedTransactionId
+          metadata
+          method
+          recordedBy {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          recordedByUserId
+          referenceId
+          scholarshipApplicationId
+          scholarshipApprovedAt
+          scholarshipBatchSnapshot
+          scholarshipBeneficiary {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          scholarshipBeneficiaryUserId
+          scholarshipCompletedAt
+          scholarshipConfirmedAmount
+          scholarshipConfirmedAt
+          scholarshipImmutableAt
+          scholarshipInstallmentSequence
+          scholarshipMaskedPayoutDestination
+          scholarshipMentor {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          scholarshipMentorUserId
+          scholarshipOriginalTransactionId
+          scholarshipPayoutMethod
+          scholarshipProofDueAt
+          scholarshipProofDueDays
+          scholarshipProofStatus
+          scholarshipPurposeSnapshot
+          scholarshipReceivedAt
+          scholarshipStatus
+          sourceType
+          status
+          title
+          transactionDate
+          type
+          updatedAt
+          user {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          userId
+          walletImpact
+        }
+        linkedTransactionId
+        metadata
+        method
+        recordedByUserId
+        referenceId
+        scholarshipApplicationId
+        scholarshipApprovedAt
+        scholarshipBatchSnapshot
+        scholarshipBeneficiaryUserId
+        scholarshipCompletedAt
+        scholarshipConfirmedAmount
+        scholarshipConfirmedAt
+        scholarshipImmutableAt
+        scholarshipInstallmentSequence
+        scholarshipMaskedPayoutDestination
+        scholarshipMentorUserId
+        scholarshipOriginalTransactionId
+        scholarshipPayoutMethod
+        scholarshipProofDueAt
+        scholarshipProofDueDays
+        scholarshipProofStatus
+        scholarshipPurposeSnapshot
+        scholarshipReceivedAt
+        scholarshipStatus
+        sourceType
+        status
+        title
+        transactionDate
+        type
+        updatedAt
+        userId
+        walletImpact
+      }
+      linkedTransactionId
+      metadata
+      method
+      recordedBy {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      recordedByUserId
+      referenceId
+      scholarshipApplicationId
+      scholarshipApprovedAt
+      scholarshipBatchSnapshot
+      scholarshipBeneficiary {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      scholarshipBeneficiaryUserId
+      scholarshipCompletedAt
+      scholarshipConfirmedAmount
+      scholarshipConfirmedAt
+      scholarshipImmutableAt
+      scholarshipInstallmentSequence
+      scholarshipMaskedPayoutDestination
+      scholarshipMentor {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      scholarshipMentorUserId
+      scholarshipOriginalTransactionId
+      scholarshipPayoutMethod
+      scholarshipProofDueAt
+      scholarshipProofDueDays
+      scholarshipProofStatus
+      scholarshipPurposeSnapshot
+      scholarshipReceivedAt
+      scholarshipStatus
+      sourceType
+      status
+      title
+      transactionDate
+      type
+      updatedAt
+      user {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      userId
+      walletImpact
+    }
+  }
+`;
+export type CreateAssociationAdjustmentMutationFn = Apollo.MutationFunction<
+  CreateAssociationAdjustmentMutation,
+  CreateAssociationAdjustmentMutationVariables
+>;
+
+/**
+ * __useCreateAssociationAdjustmentMutation__
+ *
+ * To run a mutation, you first call `useCreateAssociationAdjustmentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAssociationAdjustmentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createAssociationAdjustmentMutation, { data, loading, error }] = useCreateAssociationAdjustmentMutation({
+ *   variables: {
+ *      amount: // value for 'amount'
+ *      description: // value for 'description'
+ *      method: // value for 'method'
+ *      referenceId: // value for 'referenceId'
+ *      title: // value for 'title'
+ *      transactionDate: // value for 'transactionDate'
+ *      type: // value for 'type'
+ *   },
+ * });
+ */
+export function useCreateAssociationAdjustmentMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateAssociationAdjustmentMutation,
+    CreateAssociationAdjustmentMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<CreateAssociationAdjustmentMutation, CreateAssociationAdjustmentMutationVariables>(
+    CreateAssociationAdjustmentDocument,
+    options
+  );
+}
+export type CreateAssociationAdjustmentMutationHookResult = ReturnType<typeof useCreateAssociationAdjustmentMutation>;
+export type CreateAssociationAdjustmentMutationResult = Apollo.MutationResult<CreateAssociationAdjustmentMutation>;
+export type CreateAssociationAdjustmentMutationOptions = Apollo.BaseMutationOptions<
+  CreateAssociationAdjustmentMutation,
+  CreateAssociationAdjustmentMutationVariables
+>;
+export const CreateAssociationCreditDocument = gql`
+  mutation createAssociationCredit(
+    $amount: Float!
+    $billingCategory: BillingCategory
+    $description: String
+    $method: String
+    $referenceId: String
+    $title: String!
+    $transactionDate: String
+  ) {
+    createAssociationCredit(
+      amount: $amount
+      billingCategory: $billingCategory
+      description: $description
+      method: $method
+      referenceId: $referenceId
+      title: $title
+      transactionDate: $transactionDate
+    ) {
+      amount
+      attachments {
+        createdAt
+        id
+        mimeType
+        originalFilename
+        sizeBytes
+        status
+        transactionId
+        uploadedAt
+        uploadedByUserId
+      }
+      billingCategory
+      createdAt
+      currency
+      description
+      id
+      immutableAt
+      isDonation
+      linkedTransaction {
+        amount
+        attachments {
+          createdAt
+          id
+          mimeType
+          originalFilename
+          sizeBytes
+          status
+          transactionId
+          uploadedAt
+          uploadedByUserId
+        }
+        billingCategory
+        createdAt
+        currency
+        description
+        id
+        immutableAt
+        isDonation
+        linkedTransaction {
+          amount
+          billingCategory
+          createdAt
+          currency
+          description
+          id
+          immutableAt
+          isDonation
+          linkedTransactionId
+          metadata
+          method
+          recordedBy {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          recordedByUserId
+          referenceId
+          scholarshipApplicationId
+          scholarshipApprovedAt
+          scholarshipBatchSnapshot
+          scholarshipBeneficiary {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          scholarshipBeneficiaryUserId
+          scholarshipCompletedAt
+          scholarshipConfirmedAmount
+          scholarshipConfirmedAt
+          scholarshipImmutableAt
+          scholarshipInstallmentSequence
+          scholarshipMaskedPayoutDestination
+          scholarshipMentor {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          scholarshipMentorUserId
+          scholarshipOriginalTransactionId
+          scholarshipPayoutMethod
+          scholarshipProofDueAt
+          scholarshipProofDueDays
+          scholarshipProofStatus
+          scholarshipPurposeSnapshot
+          scholarshipReceivedAt
+          scholarshipStatus
+          sourceType
+          status
+          title
+          transactionDate
+          type
+          updatedAt
+          user {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          userId
+          walletImpact
+        }
+        linkedTransactionId
+        metadata
+        method
+        recordedByUserId
+        referenceId
+        scholarshipApplicationId
+        scholarshipApprovedAt
+        scholarshipBatchSnapshot
+        scholarshipBeneficiaryUserId
+        scholarshipCompletedAt
+        scholarshipConfirmedAmount
+        scholarshipConfirmedAt
+        scholarshipImmutableAt
+        scholarshipInstallmentSequence
+        scholarshipMaskedPayoutDestination
+        scholarshipMentorUserId
+        scholarshipOriginalTransactionId
+        scholarshipPayoutMethod
+        scholarshipProofDueAt
+        scholarshipProofDueDays
+        scholarshipProofStatus
+        scholarshipPurposeSnapshot
+        scholarshipReceivedAt
+        scholarshipStatus
+        sourceType
+        status
+        title
+        transactionDate
+        type
+        updatedAt
+        userId
+        walletImpact
+      }
+      linkedTransactionId
+      metadata
+      method
+      recordedBy {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      recordedByUserId
+      referenceId
+      scholarshipApplicationId
+      scholarshipApprovedAt
+      scholarshipBatchSnapshot
+      scholarshipBeneficiary {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      scholarshipBeneficiaryUserId
+      scholarshipCompletedAt
+      scholarshipConfirmedAmount
+      scholarshipConfirmedAt
+      scholarshipImmutableAt
+      scholarshipInstallmentSequence
+      scholarshipMaskedPayoutDestination
+      scholarshipMentor {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      scholarshipMentorUserId
+      scholarshipOriginalTransactionId
+      scholarshipPayoutMethod
+      scholarshipProofDueAt
+      scholarshipProofDueDays
+      scholarshipProofStatus
+      scholarshipPurposeSnapshot
+      scholarshipReceivedAt
+      scholarshipStatus
+      sourceType
+      status
+      title
+      transactionDate
+      type
+      updatedAt
+      user {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      userId
+      walletImpact
+    }
+  }
+`;
+export type CreateAssociationCreditMutationFn = Apollo.MutationFunction<
+  CreateAssociationCreditMutation,
+  CreateAssociationCreditMutationVariables
+>;
+
+/**
+ * __useCreateAssociationCreditMutation__
+ *
+ * To run a mutation, you first call `useCreateAssociationCreditMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAssociationCreditMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createAssociationCreditMutation, { data, loading, error }] = useCreateAssociationCreditMutation({
+ *   variables: {
+ *      amount: // value for 'amount'
+ *      billingCategory: // value for 'billingCategory'
+ *      description: // value for 'description'
+ *      method: // value for 'method'
+ *      referenceId: // value for 'referenceId'
+ *      title: // value for 'title'
+ *      transactionDate: // value for 'transactionDate'
+ *   },
+ * });
+ */
+export function useCreateAssociationCreditMutation(
+  baseOptions?: Apollo.MutationHookOptions<CreateAssociationCreditMutation, CreateAssociationCreditMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<CreateAssociationCreditMutation, CreateAssociationCreditMutationVariables>(
+    CreateAssociationCreditDocument,
+    options
+  );
+}
+export type CreateAssociationCreditMutationHookResult = ReturnType<typeof useCreateAssociationCreditMutation>;
+export type CreateAssociationCreditMutationResult = Apollo.MutationResult<CreateAssociationCreditMutation>;
+export type CreateAssociationCreditMutationOptions = Apollo.BaseMutationOptions<
+  CreateAssociationCreditMutation,
+  CreateAssociationCreditMutationVariables
+>;
+export const CreateAssociationDebitDocument = gql`
+  mutation createAssociationDebit(
+    $amount: Float!
+    $billingCategory: BillingCategory
+    $description: String
+    $method: String
+    $referenceId: String
+    $title: String!
+    $transactionDate: String
+  ) {
+    createAssociationDebit(
+      amount: $amount
+      billingCategory: $billingCategory
+      description: $description
+      method: $method
+      referenceId: $referenceId
+      title: $title
+      transactionDate: $transactionDate
+    ) {
+      amount
+      attachments {
+        createdAt
+        id
+        mimeType
+        originalFilename
+        sizeBytes
+        status
+        transactionId
+        uploadedAt
+        uploadedByUserId
+      }
+      billingCategory
+      createdAt
+      currency
+      description
+      id
+      immutableAt
+      isDonation
+      linkedTransaction {
+        amount
+        attachments {
+          createdAt
+          id
+          mimeType
+          originalFilename
+          sizeBytes
+          status
+          transactionId
+          uploadedAt
+          uploadedByUserId
+        }
+        billingCategory
+        createdAt
+        currency
+        description
+        id
+        immutableAt
+        isDonation
+        linkedTransaction {
+          amount
+          billingCategory
+          createdAt
+          currency
+          description
+          id
+          immutableAt
+          isDonation
+          linkedTransactionId
+          metadata
+          method
+          recordedBy {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          recordedByUserId
+          referenceId
+          scholarshipApplicationId
+          scholarshipApprovedAt
+          scholarshipBatchSnapshot
+          scholarshipBeneficiary {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          scholarshipBeneficiaryUserId
+          scholarshipCompletedAt
+          scholarshipConfirmedAmount
+          scholarshipConfirmedAt
+          scholarshipImmutableAt
+          scholarshipInstallmentSequence
+          scholarshipMaskedPayoutDestination
+          scholarshipMentor {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          scholarshipMentorUserId
+          scholarshipOriginalTransactionId
+          scholarshipPayoutMethod
+          scholarshipProofDueAt
+          scholarshipProofDueDays
+          scholarshipProofStatus
+          scholarshipPurposeSnapshot
+          scholarshipReceivedAt
+          scholarshipStatus
+          sourceType
+          status
+          title
+          transactionDate
+          type
+          updatedAt
+          user {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          userId
+          walletImpact
+        }
+        linkedTransactionId
+        metadata
+        method
+        recordedByUserId
+        referenceId
+        scholarshipApplicationId
+        scholarshipApprovedAt
+        scholarshipBatchSnapshot
+        scholarshipBeneficiaryUserId
+        scholarshipCompletedAt
+        scholarshipConfirmedAmount
+        scholarshipConfirmedAt
+        scholarshipImmutableAt
+        scholarshipInstallmentSequence
+        scholarshipMaskedPayoutDestination
+        scholarshipMentorUserId
+        scholarshipOriginalTransactionId
+        scholarshipPayoutMethod
+        scholarshipProofDueAt
+        scholarshipProofDueDays
+        scholarshipProofStatus
+        scholarshipPurposeSnapshot
+        scholarshipReceivedAt
+        scholarshipStatus
+        sourceType
+        status
+        title
+        transactionDate
+        type
+        updatedAt
+        userId
+        walletImpact
+      }
+      linkedTransactionId
+      metadata
+      method
+      recordedBy {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      recordedByUserId
+      referenceId
+      scholarshipApplicationId
+      scholarshipApprovedAt
+      scholarshipBatchSnapshot
+      scholarshipBeneficiary {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      scholarshipBeneficiaryUserId
+      scholarshipCompletedAt
+      scholarshipConfirmedAmount
+      scholarshipConfirmedAt
+      scholarshipImmutableAt
+      scholarshipInstallmentSequence
+      scholarshipMaskedPayoutDestination
+      scholarshipMentor {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      scholarshipMentorUserId
+      scholarshipOriginalTransactionId
+      scholarshipPayoutMethod
+      scholarshipProofDueAt
+      scholarshipProofDueDays
+      scholarshipProofStatus
+      scholarshipPurposeSnapshot
+      scholarshipReceivedAt
+      scholarshipStatus
+      sourceType
+      status
+      title
+      transactionDate
+      type
+      updatedAt
+      user {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      userId
+      walletImpact
+    }
+  }
+`;
+export type CreateAssociationDebitMutationFn = Apollo.MutationFunction<
+  CreateAssociationDebitMutation,
+  CreateAssociationDebitMutationVariables
+>;
+
+/**
+ * __useCreateAssociationDebitMutation__
+ *
+ * To run a mutation, you first call `useCreateAssociationDebitMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAssociationDebitMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createAssociationDebitMutation, { data, loading, error }] = useCreateAssociationDebitMutation({
+ *   variables: {
+ *      amount: // value for 'amount'
+ *      billingCategory: // value for 'billingCategory'
+ *      description: // value for 'description'
+ *      method: // value for 'method'
+ *      referenceId: // value for 'referenceId'
+ *      title: // value for 'title'
+ *      transactionDate: // value for 'transactionDate'
+ *   },
+ * });
+ */
+export function useCreateAssociationDebitMutation(
+  baseOptions?: Apollo.MutationHookOptions<CreateAssociationDebitMutation, CreateAssociationDebitMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<CreateAssociationDebitMutation, CreateAssociationDebitMutationVariables>(
+    CreateAssociationDebitDocument,
+    options
+  );
+}
+export type CreateAssociationDebitMutationHookResult = ReturnType<typeof useCreateAssociationDebitMutation>;
+export type CreateAssociationDebitMutationResult = Apollo.MutationResult<CreateAssociationDebitMutation>;
+export type CreateAssociationDebitMutationOptions = Apollo.BaseMutationOptions<
+  CreateAssociationDebitMutation,
+  CreateAssociationDebitMutationVariables
+>;
 export const CreateBlogDocument = gql`
   mutation createBlog(
     $authorId: String!
@@ -15626,6 +29256,7 @@ export type CreateScholarshipDocumentUploadMutationOptions = Apollo.BaseMutation
 export const CreateTransactionDocument = gql`
   mutation createTransaction(
     $amount: Float!
+    $billingCategory: BillingCategory
     $currency: Currency!
     $description: String
     $isDonation: Boolean
@@ -15639,6 +29270,7 @@ export const CreateTransactionDocument = gql`
   ) {
     createTransaction(
       amount: $amount
+      billingCategory: $billingCategory
       currency: $currency
       description: $description
       isDonation: $isDonation
@@ -15651,47 +29283,357 @@ export const CreateTransactionDocument = gql`
       userId: $userId
     ) {
       amount
+      attachments {
+        createdAt
+        id
+        mimeType
+        originalFilename
+        sizeBytes
+        status
+        transactionId
+        uploadedAt
+        uploadedByUserId
+      }
+      billingCategory
       createdAt
       currency
       description
       id
+      immutableAt
       isDonation
+      linkedTransaction {
+        amount
+        attachments {
+          createdAt
+          id
+          mimeType
+          originalFilename
+          sizeBytes
+          status
+          transactionId
+          uploadedAt
+          uploadedByUserId
+        }
+        billingCategory
+        createdAt
+        currency
+        description
+        id
+        immutableAt
+        isDonation
+        linkedTransaction {
+          amount
+          billingCategory
+          createdAt
+          currency
+          description
+          id
+          immutableAt
+          isDonation
+          linkedTransactionId
+          metadata
+          method
+          recordedBy {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          recordedByUserId
+          referenceId
+          scholarshipApplicationId
+          scholarshipApprovedAt
+          scholarshipBatchSnapshot
+          scholarshipBeneficiary {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          scholarshipBeneficiaryUserId
+          scholarshipCompletedAt
+          scholarshipConfirmedAmount
+          scholarshipConfirmedAt
+          scholarshipImmutableAt
+          scholarshipInstallmentSequence
+          scholarshipMaskedPayoutDestination
+          scholarshipMentor {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          scholarshipMentorUserId
+          scholarshipOriginalTransactionId
+          scholarshipPayoutMethod
+          scholarshipProofDueAt
+          scholarshipProofDueDays
+          scholarshipProofStatus
+          scholarshipPurposeSnapshot
+          scholarshipReceivedAt
+          scholarshipStatus
+          sourceType
+          status
+          title
+          transactionDate
+          type
+          updatedAt
+          user {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          userId
+          walletImpact
+        }
+        linkedTransactionId
+        metadata
+        method
+        recordedByUserId
+        referenceId
+        scholarshipApplicationId
+        scholarshipApprovedAt
+        scholarshipBatchSnapshot
+        scholarshipBeneficiaryUserId
+        scholarshipCompletedAt
+        scholarshipConfirmedAmount
+        scholarshipConfirmedAt
+        scholarshipImmutableAt
+        scholarshipInstallmentSequence
+        scholarshipMaskedPayoutDestination
+        scholarshipMentorUserId
+        scholarshipOriginalTransactionId
+        scholarshipPayoutMethod
+        scholarshipProofDueAt
+        scholarshipProofDueDays
+        scholarshipProofStatus
+        scholarshipPurposeSnapshot
+        scholarshipReceivedAt
+        scholarshipStatus
+        sourceType
+        status
+        title
+        transactionDate
+        type
+        updatedAt
+        userId
+        walletImpact
+      }
+      linkedTransactionId
+      metadata
       method
-      referenceId
-      scholarshipApplicationId
-      scholarshipApprovedAt
-      scholarshipBatchSnapshot
-      scholarshipBeneficiaryUserId
-      scholarshipCompletedAt
-      scholarshipConfirmedAmount
-      scholarshipConfirmedAt
-      scholarshipImmutableAt
-      scholarshipInstallmentSequence
-      scholarshipMaskedPayoutDestination
-      scholarshipMentorUserId
-      scholarshipOriginalTransactionId
-      scholarshipPayoutMethod
-      scholarshipProofDueAt
-      scholarshipProofDueDays
-      scholarshipProofStatus
-      scholarshipPurposeSnapshot
-      scholarshipReceivedAt
-      scholarshipStatus
-      sourceType
-      status
-      title
-      transactionDate
-      type
-      updatedAt
-      user {
+      recordedBy {
         aboutMe
         batch
-        companyInfo {
-          companyName
-          id
-          position
-          userId
-        }
         createdAt
         disabled
         displayName
@@ -15713,35 +29655,127 @@ export const CreateTransactionDocument = gql`
         metadata
         mobile
         nickName
-        positions {
-          assignmentId
-          code
-          name
-          termId
-          termName
-          validFrom
-          validUntil
-        }
         profileImage
-        role {
-          code
-          id
-          name
-        }
-        roles {
-          assignmentId
-          code
-          name
-          scopeBatch
-          scopeType
-          validFrom
-          validUntil
-        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      recordedByUserId
+      referenceId
+      scholarshipApplicationId
+      scholarshipApprovedAt
+      scholarshipBatchSnapshot
+      scholarshipBeneficiary {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      scholarshipBeneficiaryUserId
+      scholarshipCompletedAt
+      scholarshipConfirmedAmount
+      scholarshipConfirmedAt
+      scholarshipImmutableAt
+      scholarshipInstallmentSequence
+      scholarshipMaskedPayoutDestination
+      scholarshipMentor {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      scholarshipMentorUserId
+      scholarshipOriginalTransactionId
+      scholarshipPayoutMethod
+      scholarshipProofDueAt
+      scholarshipProofDueDays
+      scholarshipProofStatus
+      scholarshipPurposeSnapshot
+      scholarshipReceivedAt
+      scholarshipStatus
+      sourceType
+      status
+      title
+      transactionDate
+      type
+      updatedAt
+      user {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
         socialMedia
         updatedAt
         whatsAppMobile
       }
       userId
+      walletImpact
     }
   }
 `;
@@ -15764,6 +29798,7 @@ export type CreateTransactionMutationFn = Apollo.MutationFunction<
  * const [createTransactionMutation, { data, loading, error }] = useCreateTransactionMutation({
  *   variables: {
  *      amount: // value for 'amount'
+ *      billingCategory: // value for 'billingCategory'
  *      currency: // value for 'currency'
  *      description: // value for 'description'
  *      isDonation: // value for 'isDonation'
@@ -15791,6 +29826,80 @@ export type CreateTransactionMutationResult = Apollo.MutationResult<CreateTransa
 export type CreateTransactionMutationOptions = Apollo.BaseMutationOptions<
   CreateTransactionMutation,
   CreateTransactionMutationVariables
+>;
+export const CreateTransactionAttachmentUploadDocument = gql`
+  mutation createTransactionAttachmentUpload(
+    $filename: String!
+    $mimeType: String!
+    $sizeBytes: Int!
+    $transactionId: String!
+  ) {
+    createTransactionAttachmentUpload(
+      filename: $filename
+      mimeType: $mimeType
+      sizeBytes: $sizeBytes
+      transactionId: $transactionId
+    ) {
+      attachment {
+        createdAt
+        id
+        mimeType
+        originalFilename
+        sizeBytes
+        status
+        transactionId
+        uploadedAt
+        uploadedByUserId
+      }
+      uploadUrl
+    }
+  }
+`;
+export type CreateTransactionAttachmentUploadMutationFn = Apollo.MutationFunction<
+  CreateTransactionAttachmentUploadMutation,
+  CreateTransactionAttachmentUploadMutationVariables
+>;
+
+/**
+ * __useCreateTransactionAttachmentUploadMutation__
+ *
+ * To run a mutation, you first call `useCreateTransactionAttachmentUploadMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateTransactionAttachmentUploadMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createTransactionAttachmentUploadMutation, { data, loading, error }] = useCreateTransactionAttachmentUploadMutation({
+ *   variables: {
+ *      filename: // value for 'filename'
+ *      mimeType: // value for 'mimeType'
+ *      sizeBytes: // value for 'sizeBytes'
+ *      transactionId: // value for 'transactionId'
+ *   },
+ * });
+ */
+export function useCreateTransactionAttachmentUploadMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateTransactionAttachmentUploadMutation,
+    CreateTransactionAttachmentUploadMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateTransactionAttachmentUploadMutation,
+    CreateTransactionAttachmentUploadMutationVariables
+  >(CreateTransactionAttachmentUploadDocument, options);
+}
+export type CreateTransactionAttachmentUploadMutationHookResult = ReturnType<
+  typeof useCreateTransactionAttachmentUploadMutation
+>;
+export type CreateTransactionAttachmentUploadMutationResult =
+  Apollo.MutationResult<CreateTransactionAttachmentUploadMutation>;
+export type CreateTransactionAttachmentUploadMutationOptions = Apollo.BaseMutationOptions<
+  CreateTransactionAttachmentUploadMutation,
+  CreateTransactionAttachmentUploadMutationVariables
 >;
 export const DeleteAddressDocument = gql`
   mutation deleteAddress($id: String!) {
@@ -16034,47 +30143,357 @@ export const DeleteTransactionDocument = gql`
   mutation deleteTransaction($id: String!) {
     deleteTransaction(id: $id) {
       amount
+      attachments {
+        createdAt
+        id
+        mimeType
+        originalFilename
+        sizeBytes
+        status
+        transactionId
+        uploadedAt
+        uploadedByUserId
+      }
+      billingCategory
       createdAt
       currency
       description
       id
+      immutableAt
       isDonation
+      linkedTransaction {
+        amount
+        attachments {
+          createdAt
+          id
+          mimeType
+          originalFilename
+          sizeBytes
+          status
+          transactionId
+          uploadedAt
+          uploadedByUserId
+        }
+        billingCategory
+        createdAt
+        currency
+        description
+        id
+        immutableAt
+        isDonation
+        linkedTransaction {
+          amount
+          billingCategory
+          createdAt
+          currency
+          description
+          id
+          immutableAt
+          isDonation
+          linkedTransactionId
+          metadata
+          method
+          recordedBy {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          recordedByUserId
+          referenceId
+          scholarshipApplicationId
+          scholarshipApprovedAt
+          scholarshipBatchSnapshot
+          scholarshipBeneficiary {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          scholarshipBeneficiaryUserId
+          scholarshipCompletedAt
+          scholarshipConfirmedAmount
+          scholarshipConfirmedAt
+          scholarshipImmutableAt
+          scholarshipInstallmentSequence
+          scholarshipMaskedPayoutDestination
+          scholarshipMentor {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          scholarshipMentorUserId
+          scholarshipOriginalTransactionId
+          scholarshipPayoutMethod
+          scholarshipProofDueAt
+          scholarshipProofDueDays
+          scholarshipProofStatus
+          scholarshipPurposeSnapshot
+          scholarshipReceivedAt
+          scholarshipStatus
+          sourceType
+          status
+          title
+          transactionDate
+          type
+          updatedAt
+          user {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          userId
+          walletImpact
+        }
+        linkedTransactionId
+        metadata
+        method
+        recordedByUserId
+        referenceId
+        scholarshipApplicationId
+        scholarshipApprovedAt
+        scholarshipBatchSnapshot
+        scholarshipBeneficiaryUserId
+        scholarshipCompletedAt
+        scholarshipConfirmedAmount
+        scholarshipConfirmedAt
+        scholarshipImmutableAt
+        scholarshipInstallmentSequence
+        scholarshipMaskedPayoutDestination
+        scholarshipMentorUserId
+        scholarshipOriginalTransactionId
+        scholarshipPayoutMethod
+        scholarshipProofDueAt
+        scholarshipProofDueDays
+        scholarshipProofStatus
+        scholarshipPurposeSnapshot
+        scholarshipReceivedAt
+        scholarshipStatus
+        sourceType
+        status
+        title
+        transactionDate
+        type
+        updatedAt
+        userId
+        walletImpact
+      }
+      linkedTransactionId
+      metadata
       method
-      referenceId
-      scholarshipApplicationId
-      scholarshipApprovedAt
-      scholarshipBatchSnapshot
-      scholarshipBeneficiaryUserId
-      scholarshipCompletedAt
-      scholarshipConfirmedAmount
-      scholarshipConfirmedAt
-      scholarshipImmutableAt
-      scholarshipInstallmentSequence
-      scholarshipMaskedPayoutDestination
-      scholarshipMentorUserId
-      scholarshipOriginalTransactionId
-      scholarshipPayoutMethod
-      scholarshipProofDueAt
-      scholarshipProofDueDays
-      scholarshipProofStatus
-      scholarshipPurposeSnapshot
-      scholarshipReceivedAt
-      scholarshipStatus
-      sourceType
-      status
-      title
-      transactionDate
-      type
-      updatedAt
-      user {
+      recordedBy {
         aboutMe
         batch
-        companyInfo {
-          companyName
-          id
-          position
-          userId
-        }
         createdAt
         disabled
         displayName
@@ -16096,35 +30515,127 @@ export const DeleteTransactionDocument = gql`
         metadata
         mobile
         nickName
-        positions {
-          assignmentId
-          code
-          name
-          termId
-          termName
-          validFrom
-          validUntil
-        }
         profileImage
-        role {
-          code
-          id
-          name
-        }
-        roles {
-          assignmentId
-          code
-          name
-          scopeBatch
-          scopeType
-          validFrom
-          validUntil
-        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      recordedByUserId
+      referenceId
+      scholarshipApplicationId
+      scholarshipApprovedAt
+      scholarshipBatchSnapshot
+      scholarshipBeneficiary {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      scholarshipBeneficiaryUserId
+      scholarshipCompletedAt
+      scholarshipConfirmedAmount
+      scholarshipConfirmedAt
+      scholarshipImmutableAt
+      scholarshipInstallmentSequence
+      scholarshipMaskedPayoutDestination
+      scholarshipMentor {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      scholarshipMentorUserId
+      scholarshipOriginalTransactionId
+      scholarshipPayoutMethod
+      scholarshipProofDueAt
+      scholarshipProofDueDays
+      scholarshipProofStatus
+      scholarshipPurposeSnapshot
+      scholarshipReceivedAt
+      scholarshipStatus
+      sourceType
+      status
+      title
+      transactionDate
+      type
+      updatedAt
+      user {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
         socialMedia
         updatedAt
         whatsAppMobile
       }
       userId
+      walletImpact
     }
   }
 `;
@@ -16377,6 +30888,64 @@ export type FinalizeScholarshipDocumentUploadMutationResult =
 export type FinalizeScholarshipDocumentUploadMutationOptions = Apollo.BaseMutationOptions<
   FinalizeScholarshipDocumentUploadMutation,
   FinalizeScholarshipDocumentUploadMutationVariables
+>;
+export const FinalizeTransactionAttachmentUploadDocument = gql`
+  mutation finalizeTransactionAttachmentUpload($attachmentId: String!) {
+    finalizeTransactionAttachmentUpload(attachmentId: $attachmentId) {
+      createdAt
+      id
+      mimeType
+      originalFilename
+      sizeBytes
+      status
+      transactionId
+      uploadedAt
+      uploadedByUserId
+    }
+  }
+`;
+export type FinalizeTransactionAttachmentUploadMutationFn = Apollo.MutationFunction<
+  FinalizeTransactionAttachmentUploadMutation,
+  FinalizeTransactionAttachmentUploadMutationVariables
+>;
+
+/**
+ * __useFinalizeTransactionAttachmentUploadMutation__
+ *
+ * To run a mutation, you first call `useFinalizeTransactionAttachmentUploadMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useFinalizeTransactionAttachmentUploadMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [finalizeTransactionAttachmentUploadMutation, { data, loading, error }] = useFinalizeTransactionAttachmentUploadMutation({
+ *   variables: {
+ *      attachmentId: // value for 'attachmentId'
+ *   },
+ * });
+ */
+export function useFinalizeTransactionAttachmentUploadMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    FinalizeTransactionAttachmentUploadMutation,
+    FinalizeTransactionAttachmentUploadMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    FinalizeTransactionAttachmentUploadMutation,
+    FinalizeTransactionAttachmentUploadMutationVariables
+  >(FinalizeTransactionAttachmentUploadDocument, options);
+}
+export type FinalizeTransactionAttachmentUploadMutationHookResult = ReturnType<
+  typeof useFinalizeTransactionAttachmentUploadMutation
+>;
+export type FinalizeTransactionAttachmentUploadMutationResult =
+  Apollo.MutationResult<FinalizeTransactionAttachmentUploadMutation>;
+export type FinalizeTransactionAttachmentUploadMutationOptions = Apollo.BaseMutationOptions<
+  FinalizeTransactionAttachmentUploadMutation,
+  FinalizeTransactionAttachmentUploadMutationVariables
 >;
 export const ForgotPasswordDocument = gql`
   mutation forgotPassword($email: String!) {
@@ -16868,6 +31437,503 @@ export const RecordMentorFundAllocationDocument = gql`
   mutation recordMentorFundAllocation($input: RecordMentorFundAllocationInput!) {
     recordMentorFundAllocation(input: $input) {
       amount
+      associationTransaction {
+        amount
+        attachments {
+          createdAt
+          id
+          mimeType
+          originalFilename
+          sizeBytes
+          status
+          transactionId
+          uploadedAt
+          uploadedByUserId
+        }
+        billingCategory
+        createdAt
+        currency
+        description
+        id
+        immutableAt
+        isDonation
+        linkedTransaction {
+          amount
+          attachments {
+            createdAt
+            id
+            mimeType
+            originalFilename
+            sizeBytes
+            status
+            transactionId
+            uploadedAt
+            uploadedByUserId
+          }
+          billingCategory
+          createdAt
+          currency
+          description
+          id
+          immutableAt
+          isDonation
+          linkedTransaction {
+            amount
+            billingCategory
+            createdAt
+            currency
+            description
+            id
+            immutableAt
+            isDonation
+            linkedTransactionId
+            metadata
+            method
+            recordedBy {
+              aboutMe
+              batch
+              createdAt
+              disabled
+              displayName
+              dob
+              email
+              emergencyMobile
+              extraEmail
+              extraMobile
+              firstName
+              gender
+              google_auth_id
+              hasBusiness
+              id
+              isConfidential
+              isFaculty
+              isVerified
+              lastName
+              membershipYear
+              metadata
+              mobile
+              nickName
+              profileImage
+              socialMedia
+              updatedAt
+              whatsAppMobile
+            }
+            recordedByUserId
+            referenceId
+            scholarshipApplicationId
+            scholarshipApprovedAt
+            scholarshipBatchSnapshot
+            scholarshipBeneficiary {
+              aboutMe
+              batch
+              createdAt
+              disabled
+              displayName
+              dob
+              email
+              emergencyMobile
+              extraEmail
+              extraMobile
+              firstName
+              gender
+              google_auth_id
+              hasBusiness
+              id
+              isConfidential
+              isFaculty
+              isVerified
+              lastName
+              membershipYear
+              metadata
+              mobile
+              nickName
+              profileImage
+              socialMedia
+              updatedAt
+              whatsAppMobile
+            }
+            scholarshipBeneficiaryUserId
+            scholarshipCompletedAt
+            scholarshipConfirmedAmount
+            scholarshipConfirmedAt
+            scholarshipImmutableAt
+            scholarshipInstallmentSequence
+            scholarshipMaskedPayoutDestination
+            scholarshipMentor {
+              aboutMe
+              batch
+              createdAt
+              disabled
+              displayName
+              dob
+              email
+              emergencyMobile
+              extraEmail
+              extraMobile
+              firstName
+              gender
+              google_auth_id
+              hasBusiness
+              id
+              isConfidential
+              isFaculty
+              isVerified
+              lastName
+              membershipYear
+              metadata
+              mobile
+              nickName
+              profileImage
+              socialMedia
+              updatedAt
+              whatsAppMobile
+            }
+            scholarshipMentorUserId
+            scholarshipOriginalTransactionId
+            scholarshipPayoutMethod
+            scholarshipProofDueAt
+            scholarshipProofDueDays
+            scholarshipProofStatus
+            scholarshipPurposeSnapshot
+            scholarshipReceivedAt
+            scholarshipStatus
+            sourceType
+            status
+            title
+            transactionDate
+            type
+            updatedAt
+            user {
+              aboutMe
+              batch
+              createdAt
+              disabled
+              displayName
+              dob
+              email
+              emergencyMobile
+              extraEmail
+              extraMobile
+              firstName
+              gender
+              google_auth_id
+              hasBusiness
+              id
+              isConfidential
+              isFaculty
+              isVerified
+              lastName
+              membershipYear
+              metadata
+              mobile
+              nickName
+              profileImage
+              socialMedia
+              updatedAt
+              whatsAppMobile
+            }
+            userId
+            walletImpact
+          }
+          linkedTransactionId
+          metadata
+          method
+          recordedByUserId
+          referenceId
+          scholarshipApplicationId
+          scholarshipApprovedAt
+          scholarshipBatchSnapshot
+          scholarshipBeneficiaryUserId
+          scholarshipCompletedAt
+          scholarshipConfirmedAmount
+          scholarshipConfirmedAt
+          scholarshipImmutableAt
+          scholarshipInstallmentSequence
+          scholarshipMaskedPayoutDestination
+          scholarshipMentorUserId
+          scholarshipOriginalTransactionId
+          scholarshipPayoutMethod
+          scholarshipProofDueAt
+          scholarshipProofDueDays
+          scholarshipProofStatus
+          scholarshipPurposeSnapshot
+          scholarshipReceivedAt
+          scholarshipStatus
+          sourceType
+          status
+          title
+          transactionDate
+          type
+          updatedAt
+          userId
+          walletImpact
+        }
+        linkedTransactionId
+        metadata
+        method
+        recordedBy {
+          aboutMe
+          batch
+          companyInfo {
+            companyName
+            id
+            position
+            userId
+          }
+          createdAt
+          disabled
+          displayName
+          dob
+          email
+          emergencyMobile
+          extraEmail
+          extraMobile
+          firstName
+          gender
+          google_auth_id
+          hasBusiness
+          id
+          isConfidential
+          isFaculty
+          isVerified
+          lastName
+          membershipYear
+          metadata
+          mobile
+          nickName
+          positions {
+            assignmentId
+            code
+            name
+            termId
+            termName
+            validFrom
+            validUntil
+          }
+          profileImage
+          role {
+            code
+            id
+            name
+          }
+          roles {
+            assignmentId
+            code
+            name
+            scopeBatch
+            scopeType
+            validFrom
+            validUntil
+          }
+          socialMedia
+          updatedAt
+          whatsAppMobile
+        }
+        recordedByUserId
+        referenceId
+        scholarshipApplicationId
+        scholarshipApprovedAt
+        scholarshipBatchSnapshot
+        scholarshipBeneficiary {
+          aboutMe
+          batch
+          companyInfo {
+            companyName
+            id
+            position
+            userId
+          }
+          createdAt
+          disabled
+          displayName
+          dob
+          email
+          emergencyMobile
+          extraEmail
+          extraMobile
+          firstName
+          gender
+          google_auth_id
+          hasBusiness
+          id
+          isConfidential
+          isFaculty
+          isVerified
+          lastName
+          membershipYear
+          metadata
+          mobile
+          nickName
+          positions {
+            assignmentId
+            code
+            name
+            termId
+            termName
+            validFrom
+            validUntil
+          }
+          profileImage
+          role {
+            code
+            id
+            name
+          }
+          roles {
+            assignmentId
+            code
+            name
+            scopeBatch
+            scopeType
+            validFrom
+            validUntil
+          }
+          socialMedia
+          updatedAt
+          whatsAppMobile
+        }
+        scholarshipBeneficiaryUserId
+        scholarshipCompletedAt
+        scholarshipConfirmedAmount
+        scholarshipConfirmedAt
+        scholarshipImmutableAt
+        scholarshipInstallmentSequence
+        scholarshipMaskedPayoutDestination
+        scholarshipMentor {
+          aboutMe
+          batch
+          companyInfo {
+            companyName
+            id
+            position
+            userId
+          }
+          createdAt
+          disabled
+          displayName
+          dob
+          email
+          emergencyMobile
+          extraEmail
+          extraMobile
+          firstName
+          gender
+          google_auth_id
+          hasBusiness
+          id
+          isConfidential
+          isFaculty
+          isVerified
+          lastName
+          membershipYear
+          metadata
+          mobile
+          nickName
+          positions {
+            assignmentId
+            code
+            name
+            termId
+            termName
+            validFrom
+            validUntil
+          }
+          profileImage
+          role {
+            code
+            id
+            name
+          }
+          roles {
+            assignmentId
+            code
+            name
+            scopeBatch
+            scopeType
+            validFrom
+            validUntil
+          }
+          socialMedia
+          updatedAt
+          whatsAppMobile
+        }
+        scholarshipMentorUserId
+        scholarshipOriginalTransactionId
+        scholarshipPayoutMethod
+        scholarshipProofDueAt
+        scholarshipProofDueDays
+        scholarshipProofStatus
+        scholarshipPurposeSnapshot
+        scholarshipReceivedAt
+        scholarshipStatus
+        sourceType
+        status
+        title
+        transactionDate
+        type
+        updatedAt
+        user {
+          aboutMe
+          batch
+          companyInfo {
+            companyName
+            id
+            position
+            userId
+          }
+          createdAt
+          disabled
+          displayName
+          dob
+          email
+          emergencyMobile
+          extraEmail
+          extraMobile
+          firstName
+          gender
+          google_auth_id
+          hasBusiness
+          id
+          isConfidential
+          isFaculty
+          isVerified
+          lastName
+          membershipYear
+          metadata
+          mobile
+          nickName
+          positions {
+            assignmentId
+            code
+            name
+            termId
+            termName
+            validFrom
+            validUntil
+          }
+          profileImage
+          role {
+            code
+            id
+            name
+          }
+          roles {
+            assignmentId
+            code
+            name
+            scopeBatch
+            scopeType
+            validFrom
+            validUntil
+          }
+          socialMedia
+          updatedAt
+          whatsAppMobile
+        }
+        userId
+        walletImpact
+      }
+      associationTransactionId
       batch
       confirmedAmount
       createdAt
@@ -18001,6 +33067,561 @@ export type ResubmitScholarshipApplicationMutationOptions = Apollo.BaseMutationO
   ResubmitScholarshipApplicationMutation,
   ResubmitScholarshipApplicationMutationVariables
 >;
+export const ReverseAssociationTransactionDocument = gql`
+  mutation reverseAssociationTransaction(
+    $reason: String!
+    $referenceId: String
+    $transactionDate: String
+    $transactionId: String!
+  ) {
+    reverseAssociationTransaction(
+      reason: $reason
+      referenceId: $referenceId
+      transactionDate: $transactionDate
+      transactionId: $transactionId
+    ) {
+      amount
+      attachments {
+        createdAt
+        id
+        mimeType
+        originalFilename
+        sizeBytes
+        status
+        transactionId
+        uploadedAt
+        uploadedByUserId
+      }
+      billingCategory
+      createdAt
+      currency
+      description
+      id
+      immutableAt
+      isDonation
+      linkedTransaction {
+        amount
+        attachments {
+          createdAt
+          id
+          mimeType
+          originalFilename
+          sizeBytes
+          status
+          transactionId
+          uploadedAt
+          uploadedByUserId
+        }
+        billingCategory
+        createdAt
+        currency
+        description
+        id
+        immutableAt
+        isDonation
+        linkedTransaction {
+          amount
+          billingCategory
+          createdAt
+          currency
+          description
+          id
+          immutableAt
+          isDonation
+          linkedTransactionId
+          metadata
+          method
+          recordedBy {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          recordedByUserId
+          referenceId
+          scholarshipApplicationId
+          scholarshipApprovedAt
+          scholarshipBatchSnapshot
+          scholarshipBeneficiary {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          scholarshipBeneficiaryUserId
+          scholarshipCompletedAt
+          scholarshipConfirmedAmount
+          scholarshipConfirmedAt
+          scholarshipImmutableAt
+          scholarshipInstallmentSequence
+          scholarshipMaskedPayoutDestination
+          scholarshipMentor {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          scholarshipMentorUserId
+          scholarshipOriginalTransactionId
+          scholarshipPayoutMethod
+          scholarshipProofDueAt
+          scholarshipProofDueDays
+          scholarshipProofStatus
+          scholarshipPurposeSnapshot
+          scholarshipReceivedAt
+          scholarshipStatus
+          sourceType
+          status
+          title
+          transactionDate
+          type
+          updatedAt
+          user {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          userId
+          walletImpact
+        }
+        linkedTransactionId
+        metadata
+        method
+        recordedByUserId
+        referenceId
+        scholarshipApplicationId
+        scholarshipApprovedAt
+        scholarshipBatchSnapshot
+        scholarshipBeneficiaryUserId
+        scholarshipCompletedAt
+        scholarshipConfirmedAmount
+        scholarshipConfirmedAt
+        scholarshipImmutableAt
+        scholarshipInstallmentSequence
+        scholarshipMaskedPayoutDestination
+        scholarshipMentorUserId
+        scholarshipOriginalTransactionId
+        scholarshipPayoutMethod
+        scholarshipProofDueAt
+        scholarshipProofDueDays
+        scholarshipProofStatus
+        scholarshipPurposeSnapshot
+        scholarshipReceivedAt
+        scholarshipStatus
+        sourceType
+        status
+        title
+        transactionDate
+        type
+        updatedAt
+        userId
+        walletImpact
+      }
+      linkedTransactionId
+      metadata
+      method
+      recordedBy {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      recordedByUserId
+      referenceId
+      scholarshipApplicationId
+      scholarshipApprovedAt
+      scholarshipBatchSnapshot
+      scholarshipBeneficiary {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      scholarshipBeneficiaryUserId
+      scholarshipCompletedAt
+      scholarshipConfirmedAmount
+      scholarshipConfirmedAt
+      scholarshipImmutableAt
+      scholarshipInstallmentSequence
+      scholarshipMaskedPayoutDestination
+      scholarshipMentor {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      scholarshipMentorUserId
+      scholarshipOriginalTransactionId
+      scholarshipPayoutMethod
+      scholarshipProofDueAt
+      scholarshipProofDueDays
+      scholarshipProofStatus
+      scholarshipPurposeSnapshot
+      scholarshipReceivedAt
+      scholarshipStatus
+      sourceType
+      status
+      title
+      transactionDate
+      type
+      updatedAt
+      user {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      userId
+      walletImpact
+    }
+  }
+`;
+export type ReverseAssociationTransactionMutationFn = Apollo.MutationFunction<
+  ReverseAssociationTransactionMutation,
+  ReverseAssociationTransactionMutationVariables
+>;
+
+/**
+ * __useReverseAssociationTransactionMutation__
+ *
+ * To run a mutation, you first call `useReverseAssociationTransactionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useReverseAssociationTransactionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [reverseAssociationTransactionMutation, { data, loading, error }] = useReverseAssociationTransactionMutation({
+ *   variables: {
+ *      reason: // value for 'reason'
+ *      referenceId: // value for 'referenceId'
+ *      transactionDate: // value for 'transactionDate'
+ *      transactionId: // value for 'transactionId'
+ *   },
+ * });
+ */
+export function useReverseAssociationTransactionMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    ReverseAssociationTransactionMutation,
+    ReverseAssociationTransactionMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<ReverseAssociationTransactionMutation, ReverseAssociationTransactionMutationVariables>(
+    ReverseAssociationTransactionDocument,
+    options
+  );
+}
+export type ReverseAssociationTransactionMutationHookResult = ReturnType<
+  typeof useReverseAssociationTransactionMutation
+>;
+export type ReverseAssociationTransactionMutationResult = Apollo.MutationResult<ReverseAssociationTransactionMutation>;
+export type ReverseAssociationTransactionMutationOptions = Apollo.BaseMutationOptions<
+  ReverseAssociationTransactionMutation,
+  ReverseAssociationTransactionMutationVariables
+>;
 export const ReviewScholarshipUsageProofDocument = gql`
   mutation reviewScholarshipUsageProof($action: ScholarshipProofReviewAction!, $note: String, $submissionId: String!) {
     reviewScholarshipUsageProof(action: $action, note: $note, submissionId: $submissionId) {
@@ -18347,6 +33968,562 @@ export type SendMassEmailMutationResult = Apollo.MutationResult<SendMassEmailMut
 export type SendMassEmailMutationOptions = Apollo.BaseMutationOptions<
   SendMassEmailMutation,
   SendMassEmailMutationVariables
+>;
+export const SetAssociationOpeningBalanceDocument = gql`
+  mutation setAssociationOpeningBalance(
+    $amount: Float!
+    $description: String
+    $method: String
+    $referenceId: String
+    $transactionDate: String
+  ) {
+    setAssociationOpeningBalance(
+      amount: $amount
+      description: $description
+      method: $method
+      referenceId: $referenceId
+      transactionDate: $transactionDate
+    ) {
+      amount
+      attachments {
+        createdAt
+        id
+        mimeType
+        originalFilename
+        sizeBytes
+        status
+        transactionId
+        uploadedAt
+        uploadedByUserId
+      }
+      billingCategory
+      createdAt
+      currency
+      description
+      id
+      immutableAt
+      isDonation
+      linkedTransaction {
+        amount
+        attachments {
+          createdAt
+          id
+          mimeType
+          originalFilename
+          sizeBytes
+          status
+          transactionId
+          uploadedAt
+          uploadedByUserId
+        }
+        billingCategory
+        createdAt
+        currency
+        description
+        id
+        immutableAt
+        isDonation
+        linkedTransaction {
+          amount
+          billingCategory
+          createdAt
+          currency
+          description
+          id
+          immutableAt
+          isDonation
+          linkedTransactionId
+          metadata
+          method
+          recordedBy {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          recordedByUserId
+          referenceId
+          scholarshipApplicationId
+          scholarshipApprovedAt
+          scholarshipBatchSnapshot
+          scholarshipBeneficiary {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          scholarshipBeneficiaryUserId
+          scholarshipCompletedAt
+          scholarshipConfirmedAmount
+          scholarshipConfirmedAt
+          scholarshipImmutableAt
+          scholarshipInstallmentSequence
+          scholarshipMaskedPayoutDestination
+          scholarshipMentor {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          scholarshipMentorUserId
+          scholarshipOriginalTransactionId
+          scholarshipPayoutMethod
+          scholarshipProofDueAt
+          scholarshipProofDueDays
+          scholarshipProofStatus
+          scholarshipPurposeSnapshot
+          scholarshipReceivedAt
+          scholarshipStatus
+          sourceType
+          status
+          title
+          transactionDate
+          type
+          updatedAt
+          user {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          userId
+          walletImpact
+        }
+        linkedTransactionId
+        metadata
+        method
+        recordedByUserId
+        referenceId
+        scholarshipApplicationId
+        scholarshipApprovedAt
+        scholarshipBatchSnapshot
+        scholarshipBeneficiaryUserId
+        scholarshipCompletedAt
+        scholarshipConfirmedAmount
+        scholarshipConfirmedAt
+        scholarshipImmutableAt
+        scholarshipInstallmentSequence
+        scholarshipMaskedPayoutDestination
+        scholarshipMentorUserId
+        scholarshipOriginalTransactionId
+        scholarshipPayoutMethod
+        scholarshipProofDueAt
+        scholarshipProofDueDays
+        scholarshipProofStatus
+        scholarshipPurposeSnapshot
+        scholarshipReceivedAt
+        scholarshipStatus
+        sourceType
+        status
+        title
+        transactionDate
+        type
+        updatedAt
+        userId
+        walletImpact
+      }
+      linkedTransactionId
+      metadata
+      method
+      recordedBy {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      recordedByUserId
+      referenceId
+      scholarshipApplicationId
+      scholarshipApprovedAt
+      scholarshipBatchSnapshot
+      scholarshipBeneficiary {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      scholarshipBeneficiaryUserId
+      scholarshipCompletedAt
+      scholarshipConfirmedAmount
+      scholarshipConfirmedAt
+      scholarshipImmutableAt
+      scholarshipInstallmentSequence
+      scholarshipMaskedPayoutDestination
+      scholarshipMentor {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      scholarshipMentorUserId
+      scholarshipOriginalTransactionId
+      scholarshipPayoutMethod
+      scholarshipProofDueAt
+      scholarshipProofDueDays
+      scholarshipProofStatus
+      scholarshipPurposeSnapshot
+      scholarshipReceivedAt
+      scholarshipStatus
+      sourceType
+      status
+      title
+      transactionDate
+      type
+      updatedAt
+      user {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      userId
+      walletImpact
+    }
+  }
+`;
+export type SetAssociationOpeningBalanceMutationFn = Apollo.MutationFunction<
+  SetAssociationOpeningBalanceMutation,
+  SetAssociationOpeningBalanceMutationVariables
+>;
+
+/**
+ * __useSetAssociationOpeningBalanceMutation__
+ *
+ * To run a mutation, you first call `useSetAssociationOpeningBalanceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetAssociationOpeningBalanceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setAssociationOpeningBalanceMutation, { data, loading, error }] = useSetAssociationOpeningBalanceMutation({
+ *   variables: {
+ *      amount: // value for 'amount'
+ *      description: // value for 'description'
+ *      method: // value for 'method'
+ *      referenceId: // value for 'referenceId'
+ *      transactionDate: // value for 'transactionDate'
+ *   },
+ * });
+ */
+export function useSetAssociationOpeningBalanceMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SetAssociationOpeningBalanceMutation,
+    SetAssociationOpeningBalanceMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<SetAssociationOpeningBalanceMutation, SetAssociationOpeningBalanceMutationVariables>(
+    SetAssociationOpeningBalanceDocument,
+    options
+  );
+}
+export type SetAssociationOpeningBalanceMutationHookResult = ReturnType<typeof useSetAssociationOpeningBalanceMutation>;
+export type SetAssociationOpeningBalanceMutationResult = Apollo.MutationResult<SetAssociationOpeningBalanceMutation>;
+export type SetAssociationOpeningBalanceMutationOptions = Apollo.BaseMutationOptions<
+  SetAssociationOpeningBalanceMutation,
+  SetAssociationOpeningBalanceMutationVariables
 >;
 export const SetScholarshipPrimaryMentorDocument = gql`
   mutation setScholarshipPrimaryMentor(
@@ -20218,47 +36395,357 @@ export const UpdateTransactionDocument = gql`
   mutation updateTransaction($id: String!, $status: TransactionStatus!) {
     updateTransaction(id: $id, status: $status) {
       amount
+      attachments {
+        createdAt
+        id
+        mimeType
+        originalFilename
+        sizeBytes
+        status
+        transactionId
+        uploadedAt
+        uploadedByUserId
+      }
+      billingCategory
       createdAt
       currency
       description
       id
+      immutableAt
       isDonation
+      linkedTransaction {
+        amount
+        attachments {
+          createdAt
+          id
+          mimeType
+          originalFilename
+          sizeBytes
+          status
+          transactionId
+          uploadedAt
+          uploadedByUserId
+        }
+        billingCategory
+        createdAt
+        currency
+        description
+        id
+        immutableAt
+        isDonation
+        linkedTransaction {
+          amount
+          billingCategory
+          createdAt
+          currency
+          description
+          id
+          immutableAt
+          isDonation
+          linkedTransactionId
+          metadata
+          method
+          recordedBy {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          recordedByUserId
+          referenceId
+          scholarshipApplicationId
+          scholarshipApprovedAt
+          scholarshipBatchSnapshot
+          scholarshipBeneficiary {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          scholarshipBeneficiaryUserId
+          scholarshipCompletedAt
+          scholarshipConfirmedAmount
+          scholarshipConfirmedAt
+          scholarshipImmutableAt
+          scholarshipInstallmentSequence
+          scholarshipMaskedPayoutDestination
+          scholarshipMentor {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          scholarshipMentorUserId
+          scholarshipOriginalTransactionId
+          scholarshipPayoutMethod
+          scholarshipProofDueAt
+          scholarshipProofDueDays
+          scholarshipProofStatus
+          scholarshipPurposeSnapshot
+          scholarshipReceivedAt
+          scholarshipStatus
+          sourceType
+          status
+          title
+          transactionDate
+          type
+          updatedAt
+          user {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          userId
+          walletImpact
+        }
+        linkedTransactionId
+        metadata
+        method
+        recordedByUserId
+        referenceId
+        scholarshipApplicationId
+        scholarshipApprovedAt
+        scholarshipBatchSnapshot
+        scholarshipBeneficiaryUserId
+        scholarshipCompletedAt
+        scholarshipConfirmedAmount
+        scholarshipConfirmedAt
+        scholarshipImmutableAt
+        scholarshipInstallmentSequence
+        scholarshipMaskedPayoutDestination
+        scholarshipMentorUserId
+        scholarshipOriginalTransactionId
+        scholarshipPayoutMethod
+        scholarshipProofDueAt
+        scholarshipProofDueDays
+        scholarshipProofStatus
+        scholarshipPurposeSnapshot
+        scholarshipReceivedAt
+        scholarshipStatus
+        sourceType
+        status
+        title
+        transactionDate
+        type
+        updatedAt
+        userId
+        walletImpact
+      }
+      linkedTransactionId
+      metadata
       method
-      referenceId
-      scholarshipApplicationId
-      scholarshipApprovedAt
-      scholarshipBatchSnapshot
-      scholarshipBeneficiaryUserId
-      scholarshipCompletedAt
-      scholarshipConfirmedAmount
-      scholarshipConfirmedAt
-      scholarshipImmutableAt
-      scholarshipInstallmentSequence
-      scholarshipMaskedPayoutDestination
-      scholarshipMentorUserId
-      scholarshipOriginalTransactionId
-      scholarshipPayoutMethod
-      scholarshipProofDueAt
-      scholarshipProofDueDays
-      scholarshipProofStatus
-      scholarshipPurposeSnapshot
-      scholarshipReceivedAt
-      scholarshipStatus
-      sourceType
-      status
-      title
-      transactionDate
-      type
-      updatedAt
-      user {
+      recordedBy {
         aboutMe
         batch
-        companyInfo {
-          companyName
-          id
-          position
-          userId
-        }
         createdAt
         disabled
         displayName
@@ -20280,35 +36767,127 @@ export const UpdateTransactionDocument = gql`
         metadata
         mobile
         nickName
-        positions {
-          assignmentId
-          code
-          name
-          termId
-          termName
-          validFrom
-          validUntil
-        }
         profileImage
-        role {
-          code
-          id
-          name
-        }
-        roles {
-          assignmentId
-          code
-          name
-          scopeBatch
-          scopeType
-          validFrom
-          validUntil
-        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      recordedByUserId
+      referenceId
+      scholarshipApplicationId
+      scholarshipApprovedAt
+      scholarshipBatchSnapshot
+      scholarshipBeneficiary {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      scholarshipBeneficiaryUserId
+      scholarshipCompletedAt
+      scholarshipConfirmedAmount
+      scholarshipConfirmedAt
+      scholarshipImmutableAt
+      scholarshipInstallmentSequence
+      scholarshipMaskedPayoutDestination
+      scholarshipMentor {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      scholarshipMentorUserId
+      scholarshipOriginalTransactionId
+      scholarshipPayoutMethod
+      scholarshipProofDueAt
+      scholarshipProofDueDays
+      scholarshipProofStatus
+      scholarshipPurposeSnapshot
+      scholarshipReceivedAt
+      scholarshipStatus
+      sourceType
+      status
+      title
+      transactionDate
+      type
+      updatedAt
+      user {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
         socialMedia
         updatedAt
         whatsAppMobile
       }
       userId
+      walletImpact
     }
   }
 `;
@@ -21643,6 +38222,657 @@ export type GetAllBatchCoordinatorsQueryResult = Apollo.QueryResult<
   GetAllBatchCoordinatorsQuery,
   GetAllBatchCoordinatorsQueryVariables
 >;
+export const GetAssociationTransactionsDocument = gql`
+  query getAssociationTransactions($filter: AssociationTransactionFilter, $options: ListInput) {
+    getAssociationTransactions(filter: $filter, options: $options) {
+      data {
+        amount
+        attachments {
+          createdAt
+          id
+          mimeType
+          originalFilename
+          sizeBytes
+          status
+          transactionId
+          uploadedAt
+          uploadedByUserId
+        }
+        billingCategory
+        createdAt
+        currency
+        description
+        id
+        immutableAt
+        isDonation
+        linkedTransaction {
+          amount
+          attachments {
+            createdAt
+            id
+            mimeType
+            originalFilename
+            sizeBytes
+            status
+            transactionId
+            uploadedAt
+            uploadedByUserId
+          }
+          billingCategory
+          createdAt
+          currency
+          description
+          id
+          immutableAt
+          isDonation
+          linkedTransaction {
+            amount
+            billingCategory
+            createdAt
+            currency
+            description
+            id
+            immutableAt
+            isDonation
+            linkedTransactionId
+            metadata
+            method
+            recordedBy {
+              aboutMe
+              batch
+              createdAt
+              disabled
+              displayName
+              dob
+              email
+              emergencyMobile
+              extraEmail
+              extraMobile
+              firstName
+              gender
+              google_auth_id
+              hasBusiness
+              id
+              isConfidential
+              isFaculty
+              isVerified
+              lastName
+              membershipYear
+              metadata
+              mobile
+              nickName
+              profileImage
+              socialMedia
+              updatedAt
+              whatsAppMobile
+            }
+            recordedByUserId
+            referenceId
+            scholarshipApplicationId
+            scholarshipApprovedAt
+            scholarshipBatchSnapshot
+            scholarshipBeneficiary {
+              aboutMe
+              batch
+              createdAt
+              disabled
+              displayName
+              dob
+              email
+              emergencyMobile
+              extraEmail
+              extraMobile
+              firstName
+              gender
+              google_auth_id
+              hasBusiness
+              id
+              isConfidential
+              isFaculty
+              isVerified
+              lastName
+              membershipYear
+              metadata
+              mobile
+              nickName
+              profileImage
+              socialMedia
+              updatedAt
+              whatsAppMobile
+            }
+            scholarshipBeneficiaryUserId
+            scholarshipCompletedAt
+            scholarshipConfirmedAmount
+            scholarshipConfirmedAt
+            scholarshipImmutableAt
+            scholarshipInstallmentSequence
+            scholarshipMaskedPayoutDestination
+            scholarshipMentor {
+              aboutMe
+              batch
+              createdAt
+              disabled
+              displayName
+              dob
+              email
+              emergencyMobile
+              extraEmail
+              extraMobile
+              firstName
+              gender
+              google_auth_id
+              hasBusiness
+              id
+              isConfidential
+              isFaculty
+              isVerified
+              lastName
+              membershipYear
+              metadata
+              mobile
+              nickName
+              profileImage
+              socialMedia
+              updatedAt
+              whatsAppMobile
+            }
+            scholarshipMentorUserId
+            scholarshipOriginalTransactionId
+            scholarshipPayoutMethod
+            scholarshipProofDueAt
+            scholarshipProofDueDays
+            scholarshipProofStatus
+            scholarshipPurposeSnapshot
+            scholarshipReceivedAt
+            scholarshipStatus
+            sourceType
+            status
+            title
+            transactionDate
+            type
+            updatedAt
+            user {
+              aboutMe
+              batch
+              createdAt
+              disabled
+              displayName
+              dob
+              email
+              emergencyMobile
+              extraEmail
+              extraMobile
+              firstName
+              gender
+              google_auth_id
+              hasBusiness
+              id
+              isConfidential
+              isFaculty
+              isVerified
+              lastName
+              membershipYear
+              metadata
+              mobile
+              nickName
+              profileImage
+              socialMedia
+              updatedAt
+              whatsAppMobile
+            }
+            userId
+            walletImpact
+          }
+          linkedTransactionId
+          metadata
+          method
+          recordedByUserId
+          referenceId
+          scholarshipApplicationId
+          scholarshipApprovedAt
+          scholarshipBatchSnapshot
+          scholarshipBeneficiaryUserId
+          scholarshipCompletedAt
+          scholarshipConfirmedAmount
+          scholarshipConfirmedAt
+          scholarshipImmutableAt
+          scholarshipInstallmentSequence
+          scholarshipMaskedPayoutDestination
+          scholarshipMentorUserId
+          scholarshipOriginalTransactionId
+          scholarshipPayoutMethod
+          scholarshipProofDueAt
+          scholarshipProofDueDays
+          scholarshipProofStatus
+          scholarshipPurposeSnapshot
+          scholarshipReceivedAt
+          scholarshipStatus
+          sourceType
+          status
+          title
+          transactionDate
+          type
+          updatedAt
+          userId
+          walletImpact
+        }
+        linkedTransactionId
+        metadata
+        method
+        recordedBy {
+          aboutMe
+          batch
+          companyInfo {
+            companyName
+            id
+            position
+            userId
+          }
+          createdAt
+          disabled
+          displayName
+          dob
+          email
+          emergencyMobile
+          extraEmail
+          extraMobile
+          firstName
+          gender
+          google_auth_id
+          hasBusiness
+          id
+          isConfidential
+          isFaculty
+          isVerified
+          lastName
+          membershipYear
+          metadata
+          mobile
+          nickName
+          positions {
+            assignmentId
+            code
+            name
+            termId
+            termName
+            validFrom
+            validUntil
+          }
+          profileImage
+          role {
+            code
+            id
+            name
+          }
+          roles {
+            assignmentId
+            code
+            name
+            scopeBatch
+            scopeType
+            validFrom
+            validUntil
+          }
+          socialMedia
+          updatedAt
+          whatsAppMobile
+        }
+        recordedByUserId
+        referenceId
+        scholarshipApplicationId
+        scholarshipApprovedAt
+        scholarshipBatchSnapshot
+        scholarshipBeneficiary {
+          aboutMe
+          batch
+          companyInfo {
+            companyName
+            id
+            position
+            userId
+          }
+          createdAt
+          disabled
+          displayName
+          dob
+          email
+          emergencyMobile
+          extraEmail
+          extraMobile
+          firstName
+          gender
+          google_auth_id
+          hasBusiness
+          id
+          isConfidential
+          isFaculty
+          isVerified
+          lastName
+          membershipYear
+          metadata
+          mobile
+          nickName
+          positions {
+            assignmentId
+            code
+            name
+            termId
+            termName
+            validFrom
+            validUntil
+          }
+          profileImage
+          role {
+            code
+            id
+            name
+          }
+          roles {
+            assignmentId
+            code
+            name
+            scopeBatch
+            scopeType
+            validFrom
+            validUntil
+          }
+          socialMedia
+          updatedAt
+          whatsAppMobile
+        }
+        scholarshipBeneficiaryUserId
+        scholarshipCompletedAt
+        scholarshipConfirmedAmount
+        scholarshipConfirmedAt
+        scholarshipImmutableAt
+        scholarshipInstallmentSequence
+        scholarshipMaskedPayoutDestination
+        scholarshipMentor {
+          aboutMe
+          batch
+          companyInfo {
+            companyName
+            id
+            position
+            userId
+          }
+          createdAt
+          disabled
+          displayName
+          dob
+          email
+          emergencyMobile
+          extraEmail
+          extraMobile
+          firstName
+          gender
+          google_auth_id
+          hasBusiness
+          id
+          isConfidential
+          isFaculty
+          isVerified
+          lastName
+          membershipYear
+          metadata
+          mobile
+          nickName
+          positions {
+            assignmentId
+            code
+            name
+            termId
+            termName
+            validFrom
+            validUntil
+          }
+          profileImage
+          role {
+            code
+            id
+            name
+          }
+          roles {
+            assignmentId
+            code
+            name
+            scopeBatch
+            scopeType
+            validFrom
+            validUntil
+          }
+          socialMedia
+          updatedAt
+          whatsAppMobile
+        }
+        scholarshipMentorUserId
+        scholarshipOriginalTransactionId
+        scholarshipPayoutMethod
+        scholarshipProofDueAt
+        scholarshipProofDueDays
+        scholarshipProofStatus
+        scholarshipPurposeSnapshot
+        scholarshipReceivedAt
+        scholarshipStatus
+        sourceType
+        status
+        title
+        transactionDate
+        type
+        updatedAt
+        user {
+          aboutMe
+          batch
+          companyInfo {
+            companyName
+            id
+            position
+            userId
+          }
+          createdAt
+          disabled
+          displayName
+          dob
+          email
+          emergencyMobile
+          extraEmail
+          extraMobile
+          firstName
+          gender
+          google_auth_id
+          hasBusiness
+          id
+          isConfidential
+          isFaculty
+          isVerified
+          lastName
+          membershipYear
+          metadata
+          mobile
+          nickName
+          positions {
+            assignmentId
+            code
+            name
+            termId
+            termName
+            validFrom
+            validUntil
+          }
+          profileImage
+          role {
+            code
+            id
+            name
+          }
+          roles {
+            assignmentId
+            code
+            name
+            scopeBatch
+            scopeType
+            validFrom
+            validUntil
+          }
+          socialMedia
+          updatedAt
+          whatsAppMobile
+        }
+        userId
+        walletImpact
+      }
+      total
+    }
+  }
+`;
+
+/**
+ * __useGetAssociationTransactionsQuery__
+ *
+ * To run a query within a React component, call `useGetAssociationTransactionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAssociationTransactionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAssociationTransactionsQuery({
+ *   variables: {
+ *      filter: // value for 'filter'
+ *      options: // value for 'options'
+ *   },
+ * });
+ */
+export function useGetAssociationTransactionsQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetAssociationTransactionsQuery, GetAssociationTransactionsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetAssociationTransactionsQuery, GetAssociationTransactionsQueryVariables>(
+    GetAssociationTransactionsDocument,
+    options
+  );
+}
+export function useGetAssociationTransactionsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetAssociationTransactionsQuery, GetAssociationTransactionsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetAssociationTransactionsQuery, GetAssociationTransactionsQueryVariables>(
+    GetAssociationTransactionsDocument,
+    options
+  );
+}
+// @ts-ignore
+export function useGetAssociationTransactionsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetAssociationTransactionsQuery,
+    GetAssociationTransactionsQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<GetAssociationTransactionsQuery, GetAssociationTransactionsQueryVariables>;
+export function useGetAssociationTransactionsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetAssociationTransactionsQuery, GetAssociationTransactionsQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetAssociationTransactionsQuery | undefined, GetAssociationTransactionsQueryVariables>;
+export function useGetAssociationTransactionsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetAssociationTransactionsQuery, GetAssociationTransactionsQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetAssociationTransactionsQuery, GetAssociationTransactionsQueryVariables>(
+    GetAssociationTransactionsDocument,
+    options
+  );
+}
+export type GetAssociationTransactionsQueryHookResult = ReturnType<typeof useGetAssociationTransactionsQuery>;
+export type GetAssociationTransactionsLazyQueryHookResult = ReturnType<typeof useGetAssociationTransactionsLazyQuery>;
+export type GetAssociationTransactionsSuspenseQueryHookResult = ReturnType<
+  typeof useGetAssociationTransactionsSuspenseQuery
+>;
+export type GetAssociationTransactionsQueryResult = Apollo.QueryResult<
+  GetAssociationTransactionsQuery,
+  GetAssociationTransactionsQueryVariables
+>;
+export const GetAssociationWalletSummaryDocument = gql`
+  query getAssociationWalletSummary {
+    getAssociationWalletSummary {
+      availableFunds
+      currency
+      pendingDebits
+      totalCredits
+      totalDebits
+    }
+  }
+`;
+
+/**
+ * __useGetAssociationWalletSummaryQuery__
+ *
+ * To run a query within a React component, call `useGetAssociationWalletSummaryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAssociationWalletSummaryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAssociationWalletSummaryQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAssociationWalletSummaryQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetAssociationWalletSummaryQuery, GetAssociationWalletSummaryQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetAssociationWalletSummaryQuery, GetAssociationWalletSummaryQueryVariables>(
+    GetAssociationWalletSummaryDocument,
+    options
+  );
+}
+export function useGetAssociationWalletSummaryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetAssociationWalletSummaryQuery, GetAssociationWalletSummaryQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetAssociationWalletSummaryQuery, GetAssociationWalletSummaryQueryVariables>(
+    GetAssociationWalletSummaryDocument,
+    options
+  );
+}
+// @ts-ignore
+export function useGetAssociationWalletSummarySuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetAssociationWalletSummaryQuery,
+    GetAssociationWalletSummaryQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<GetAssociationWalletSummaryQuery, GetAssociationWalletSummaryQueryVariables>;
+export function useGetAssociationWalletSummarySuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetAssociationWalletSummaryQuery, GetAssociationWalletSummaryQueryVariables>
+): Apollo.UseSuspenseQueryResult<
+  GetAssociationWalletSummaryQuery | undefined,
+  GetAssociationWalletSummaryQueryVariables
+>;
+export function useGetAssociationWalletSummarySuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetAssociationWalletSummaryQuery, GetAssociationWalletSummaryQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetAssociationWalletSummaryQuery, GetAssociationWalletSummaryQueryVariables>(
+    GetAssociationWalletSummaryDocument,
+    options
+  );
+}
+export type GetAssociationWalletSummaryQueryHookResult = ReturnType<typeof useGetAssociationWalletSummaryQuery>;
+export type GetAssociationWalletSummaryLazyQueryHookResult = ReturnType<typeof useGetAssociationWalletSummaryLazyQuery>;
+export type GetAssociationWalletSummarySuspenseQueryHookResult = ReturnType<
+  typeof useGetAssociationWalletSummarySuspenseQuery
+>;
+export type GetAssociationWalletSummaryQueryResult = Apollo.QueryResult<
+  GetAssociationWalletSummaryQuery,
+  GetAssociationWalletSummaryQueryVariables
+>;
 export const GetBatchCoordinatorByUserIdDocument = gql`
   query getBatchCoordinatorByUserId($userId: String!) {
     getBatchCoordinatorByUserId(userId: $userId) {
@@ -21785,7 +39015,31 @@ export type GetBatchCoordinatorByUserIdQueryResult = Apollo.QueryResult<
 export const GetBatchCoordinatorScholarshipDashboardDocument = gql`
   query getBatchCoordinatorScholarshipDashboard($batch: Int!) {
     getBatchCoordinatorScholarshipDashboard(batch: $batch) {
+      activeBeneficiaryCount
+      activeMentorCount
+      allocationDisputeCount
+      applicationsAwaitingReview
+      approvalCapacity
+      approvedAdjustments
+      awaitingPaymentConfirmation
+      beneficiaryNonReceiptCount
+      byAllocationStatus {
+        count
+        key
+      }
+      byProofStatus {
+        count
+        key
+      }
+      byRefundStatus {
+        count
+        key
+      }
       byStatus {
+        count
+        key
+      }
+      byTransactionStatus {
         count
         key
       }
@@ -21795,10 +39049,46 @@ export const GetBatchCoordinatorScholarshipDashboardDocument = gql`
         committed
         returned
       }
+      completedApplications
+      completedTransactionCount
+      confirmedAllocation
+      confirmedBeneficiaryDisbursement
       disbursedAmount
+      disputedIncomingAllocation
+      disputedMentorAllocations
+      draftRequests
       exceptionCount
+      failedNotificationCount
+      fullProofsAwaitingVerification
+      mentorCustodyBalance
+      missingMentorRoutingCount
+      needsInformation
+      openRefundCaseCount
+      overdueProof
+      overdueProofAmount
+      partialProof
+      partialReceiptMismatchCount
+      paymentConfirmationPendingApplications
+      pendingBeneficiaryConfirmation
+      pendingBeneficiaryConfirmationCount
+      pendingIncomingAllocation
+      proofDue
+      refundConfirmedAmount
+      refundReconciliationPendingCount
+      refundRequestedAmount
+      refundResponsePendingCount
+      rejectedApplications
       requestedAmount
+      returnedAmount
+      routingPendingApplications
+      submittedApplications
+      submittedOrUnderReview
+      totalAllocationRecorded
       totalApplications
+      totalCompletedAfterProofVerification
+      underReviewApplications
+      wrongDisbursementAmount
+      wrongDisbursementApplications
     }
   }
 `;
@@ -22030,6 +39320,85 @@ export type GetBatchCoordinatorsByBatchSuspenseQueryHookResult = ReturnType<
 export type GetBatchCoordinatorsByBatchQueryResult = Apollo.QueryResult<
   GetBatchCoordinatorsByBatchQuery,
   GetBatchCoordinatorsByBatchQueryVariables
+>;
+export const GetBillingDashboardDocument = gql`
+  query getBillingDashboard {
+    getBillingDashboard {
+      adjustmentsAndRefunds
+      availableFunds
+      currency
+      disputedMentorReleaseAmount
+      donationsReceived
+      eventReceived
+      membershipReceived
+      otherActivitySpending
+      pendingDebits
+      pendingMentorReleaseAmount
+      scholarshipPaidToBeneficiaries
+      scholarshipReleasedToMentors
+      totalCredits
+      totalDebits
+    }
+  }
+`;
+
+/**
+ * __useGetBillingDashboardQuery__
+ *
+ * To run a query within a React component, call `useGetBillingDashboardQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBillingDashboardQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBillingDashboardQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetBillingDashboardQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetBillingDashboardQuery, GetBillingDashboardQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetBillingDashboardQuery, GetBillingDashboardQueryVariables>(
+    GetBillingDashboardDocument,
+    options
+  );
+}
+export function useGetBillingDashboardLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetBillingDashboardQuery, GetBillingDashboardQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetBillingDashboardQuery, GetBillingDashboardQueryVariables>(
+    GetBillingDashboardDocument,
+    options
+  );
+}
+// @ts-ignore
+export function useGetBillingDashboardSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<GetBillingDashboardQuery, GetBillingDashboardQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetBillingDashboardQuery, GetBillingDashboardQueryVariables>;
+export function useGetBillingDashboardSuspenseQuery(
+  baseOptions?:
+    Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetBillingDashboardQuery, GetBillingDashboardQueryVariables>
+): Apollo.UseSuspenseQueryResult<GetBillingDashboardQuery | undefined, GetBillingDashboardQueryVariables>;
+export function useGetBillingDashboardSuspenseQuery(
+  baseOptions?:
+    Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetBillingDashboardQuery, GetBillingDashboardQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetBillingDashboardQuery, GetBillingDashboardQueryVariables>(
+    GetBillingDashboardDocument,
+    options
+  );
+}
+export type GetBillingDashboardQueryHookResult = ReturnType<typeof useGetBillingDashboardQuery>;
+export type GetBillingDashboardLazyQueryHookResult = ReturnType<typeof useGetBillingDashboardLazyQuery>;
+export type GetBillingDashboardSuspenseQueryHookResult = ReturnType<typeof useGetBillingDashboardSuspenseQuery>;
+export type GetBillingDashboardQueryResult = Apollo.QueryResult<
+  GetBillingDashboardQuery,
+  GetBillingDashboardQueryVariables
 >;
 export const GetBlogDocument = gql`
   query getBlog($id: String, $slug: String) {
@@ -22711,47 +40080,357 @@ export const GetCompletedScholarshipTransactionsDocument = gql`
   query getCompletedScholarshipTransactions($options: ListInput) {
     getCompletedScholarshipTransactions(options: $options) {
       amount
+      attachments {
+        createdAt
+        id
+        mimeType
+        originalFilename
+        sizeBytes
+        status
+        transactionId
+        uploadedAt
+        uploadedByUserId
+      }
+      billingCategory
       createdAt
       currency
       description
       id
+      immutableAt
       isDonation
+      linkedTransaction {
+        amount
+        attachments {
+          createdAt
+          id
+          mimeType
+          originalFilename
+          sizeBytes
+          status
+          transactionId
+          uploadedAt
+          uploadedByUserId
+        }
+        billingCategory
+        createdAt
+        currency
+        description
+        id
+        immutableAt
+        isDonation
+        linkedTransaction {
+          amount
+          billingCategory
+          createdAt
+          currency
+          description
+          id
+          immutableAt
+          isDonation
+          linkedTransactionId
+          metadata
+          method
+          recordedBy {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          recordedByUserId
+          referenceId
+          scholarshipApplicationId
+          scholarshipApprovedAt
+          scholarshipBatchSnapshot
+          scholarshipBeneficiary {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          scholarshipBeneficiaryUserId
+          scholarshipCompletedAt
+          scholarshipConfirmedAmount
+          scholarshipConfirmedAt
+          scholarshipImmutableAt
+          scholarshipInstallmentSequence
+          scholarshipMaskedPayoutDestination
+          scholarshipMentor {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          scholarshipMentorUserId
+          scholarshipOriginalTransactionId
+          scholarshipPayoutMethod
+          scholarshipProofDueAt
+          scholarshipProofDueDays
+          scholarshipProofStatus
+          scholarshipPurposeSnapshot
+          scholarshipReceivedAt
+          scholarshipStatus
+          sourceType
+          status
+          title
+          transactionDate
+          type
+          updatedAt
+          user {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          userId
+          walletImpact
+        }
+        linkedTransactionId
+        metadata
+        method
+        recordedByUserId
+        referenceId
+        scholarshipApplicationId
+        scholarshipApprovedAt
+        scholarshipBatchSnapshot
+        scholarshipBeneficiaryUserId
+        scholarshipCompletedAt
+        scholarshipConfirmedAmount
+        scholarshipConfirmedAt
+        scholarshipImmutableAt
+        scholarshipInstallmentSequence
+        scholarshipMaskedPayoutDestination
+        scholarshipMentorUserId
+        scholarshipOriginalTransactionId
+        scholarshipPayoutMethod
+        scholarshipProofDueAt
+        scholarshipProofDueDays
+        scholarshipProofStatus
+        scholarshipPurposeSnapshot
+        scholarshipReceivedAt
+        scholarshipStatus
+        sourceType
+        status
+        title
+        transactionDate
+        type
+        updatedAt
+        userId
+        walletImpact
+      }
+      linkedTransactionId
+      metadata
       method
-      referenceId
-      scholarshipApplicationId
-      scholarshipApprovedAt
-      scholarshipBatchSnapshot
-      scholarshipBeneficiaryUserId
-      scholarshipCompletedAt
-      scholarshipConfirmedAmount
-      scholarshipConfirmedAt
-      scholarshipImmutableAt
-      scholarshipInstallmentSequence
-      scholarshipMaskedPayoutDestination
-      scholarshipMentorUserId
-      scholarshipOriginalTransactionId
-      scholarshipPayoutMethod
-      scholarshipProofDueAt
-      scholarshipProofDueDays
-      scholarshipProofStatus
-      scholarshipPurposeSnapshot
-      scholarshipReceivedAt
-      scholarshipStatus
-      sourceType
-      status
-      title
-      transactionDate
-      type
-      updatedAt
-      user {
+      recordedBy {
         aboutMe
         batch
-        companyInfo {
-          companyName
-          id
-          position
-          userId
-        }
         createdAt
         disabled
         displayName
@@ -22773,35 +40452,127 @@ export const GetCompletedScholarshipTransactionsDocument = gql`
         metadata
         mobile
         nickName
-        positions {
-          assignmentId
-          code
-          name
-          termId
-          termName
-          validFrom
-          validUntil
-        }
         profileImage
-        role {
-          code
-          id
-          name
-        }
-        roles {
-          assignmentId
-          code
-          name
-          scopeBatch
-          scopeType
-          validFrom
-          validUntil
-        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      recordedByUserId
+      referenceId
+      scholarshipApplicationId
+      scholarshipApprovedAt
+      scholarshipBatchSnapshot
+      scholarshipBeneficiary {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      scholarshipBeneficiaryUserId
+      scholarshipCompletedAt
+      scholarshipConfirmedAmount
+      scholarshipConfirmedAt
+      scholarshipImmutableAt
+      scholarshipInstallmentSequence
+      scholarshipMaskedPayoutDestination
+      scholarshipMentor {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      scholarshipMentorUserId
+      scholarshipOriginalTransactionId
+      scholarshipPayoutMethod
+      scholarshipProofDueAt
+      scholarshipProofDueDays
+      scholarshipProofStatus
+      scholarshipPurposeSnapshot
+      scholarshipReceivedAt
+      scholarshipStatus
+      sourceType
+      status
+      title
+      transactionDate
+      type
+      updatedAt
+      user {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
         socialMedia
         updatedAt
         whatsAppMobile
       }
       userId
+      walletImpact
     }
   }
 `;
@@ -22893,6 +40664,106 @@ export type GetCompletedScholarshipTransactionsSuspenseQueryHookResult = ReturnT
 export type GetCompletedScholarshipTransactionsQueryResult = Apollo.QueryResult<
   GetCompletedScholarshipTransactionsQuery,
   GetCompletedScholarshipTransactionsQueryVariables
+>;
+export const GetEligibleScholarshipMentorsDocument = gql`
+  query getEligibleScholarshipMentors($batch: Int!) {
+    getEligibleScholarshipMentors(batch: $batch) {
+      batch
+      disabled
+      dob
+      firstName
+      id
+      isConfidential
+      isFaculty
+      isVerified
+      lastName
+      profileImage
+      role {
+        code
+        id
+        name
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetEligibleScholarshipMentorsQuery__
+ *
+ * To run a query within a React component, call `useGetEligibleScholarshipMentorsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEligibleScholarshipMentorsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEligibleScholarshipMentorsQuery({
+ *   variables: {
+ *      batch: // value for 'batch'
+ *   },
+ * });
+ */
+export function useGetEligibleScholarshipMentorsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEligibleScholarshipMentorsQuery,
+    GetEligibleScholarshipMentorsQueryVariables
+  > &
+    ({ variables: GetEligibleScholarshipMentorsQueryVariables; skip?: boolean } | { skip: boolean })
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetEligibleScholarshipMentorsQuery, GetEligibleScholarshipMentorsQueryVariables>(
+    GetEligibleScholarshipMentorsDocument,
+    options
+  );
+}
+export function useGetEligibleScholarshipMentorsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEligibleScholarshipMentorsQuery,
+    GetEligibleScholarshipMentorsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetEligibleScholarshipMentorsQuery, GetEligibleScholarshipMentorsQueryVariables>(
+    GetEligibleScholarshipMentorsDocument,
+    options
+  );
+}
+// @ts-ignore
+export function useGetEligibleScholarshipMentorsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetEligibleScholarshipMentorsQuery,
+    GetEligibleScholarshipMentorsQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<GetEligibleScholarshipMentorsQuery, GetEligibleScholarshipMentorsQueryVariables>;
+export function useGetEligibleScholarshipMentorsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetEligibleScholarshipMentorsQuery, GetEligibleScholarshipMentorsQueryVariables>
+): Apollo.UseSuspenseQueryResult<
+  GetEligibleScholarshipMentorsQuery | undefined,
+  GetEligibleScholarshipMentorsQueryVariables
+>;
+export function useGetEligibleScholarshipMentorsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetEligibleScholarshipMentorsQuery, GetEligibleScholarshipMentorsQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetEligibleScholarshipMentorsQuery, GetEligibleScholarshipMentorsQueryVariables>(
+    GetEligibleScholarshipMentorsDocument,
+    options
+  );
+}
+export type GetEligibleScholarshipMentorsQueryHookResult = ReturnType<typeof useGetEligibleScholarshipMentorsQuery>;
+export type GetEligibleScholarshipMentorsLazyQueryHookResult = ReturnType<
+  typeof useGetEligibleScholarshipMentorsLazyQuery
+>;
+export type GetEligibleScholarshipMentorsSuspenseQueryHookResult = ReturnType<
+  typeof useGetEligibleScholarshipMentorsSuspenseQuery
+>;
+export type GetEligibleScholarshipMentorsQueryResult = Apollo.QueryResult<
+  GetEligibleScholarshipMentorsQuery,
+  GetEligibleScholarshipMentorsQueryVariables
 >;
 export const GetEventDetailsDocument = gql`
   query getEventDetails($id: Int!) {
@@ -23079,6 +40950,503 @@ export const GetMentorFundAllocationsDocument = gql`
   query getMentorFundAllocations($batch: Int, $mentorUserId: String, $options: ListInput) {
     getMentorFundAllocations(batch: $batch, mentorUserId: $mentorUserId, options: $options) {
       amount
+      associationTransaction {
+        amount
+        attachments {
+          createdAt
+          id
+          mimeType
+          originalFilename
+          sizeBytes
+          status
+          transactionId
+          uploadedAt
+          uploadedByUserId
+        }
+        billingCategory
+        createdAt
+        currency
+        description
+        id
+        immutableAt
+        isDonation
+        linkedTransaction {
+          amount
+          attachments {
+            createdAt
+            id
+            mimeType
+            originalFilename
+            sizeBytes
+            status
+            transactionId
+            uploadedAt
+            uploadedByUserId
+          }
+          billingCategory
+          createdAt
+          currency
+          description
+          id
+          immutableAt
+          isDonation
+          linkedTransaction {
+            amount
+            billingCategory
+            createdAt
+            currency
+            description
+            id
+            immutableAt
+            isDonation
+            linkedTransactionId
+            metadata
+            method
+            recordedBy {
+              aboutMe
+              batch
+              createdAt
+              disabled
+              displayName
+              dob
+              email
+              emergencyMobile
+              extraEmail
+              extraMobile
+              firstName
+              gender
+              google_auth_id
+              hasBusiness
+              id
+              isConfidential
+              isFaculty
+              isVerified
+              lastName
+              membershipYear
+              metadata
+              mobile
+              nickName
+              profileImage
+              socialMedia
+              updatedAt
+              whatsAppMobile
+            }
+            recordedByUserId
+            referenceId
+            scholarshipApplicationId
+            scholarshipApprovedAt
+            scholarshipBatchSnapshot
+            scholarshipBeneficiary {
+              aboutMe
+              batch
+              createdAt
+              disabled
+              displayName
+              dob
+              email
+              emergencyMobile
+              extraEmail
+              extraMobile
+              firstName
+              gender
+              google_auth_id
+              hasBusiness
+              id
+              isConfidential
+              isFaculty
+              isVerified
+              lastName
+              membershipYear
+              metadata
+              mobile
+              nickName
+              profileImage
+              socialMedia
+              updatedAt
+              whatsAppMobile
+            }
+            scholarshipBeneficiaryUserId
+            scholarshipCompletedAt
+            scholarshipConfirmedAmount
+            scholarshipConfirmedAt
+            scholarshipImmutableAt
+            scholarshipInstallmentSequence
+            scholarshipMaskedPayoutDestination
+            scholarshipMentor {
+              aboutMe
+              batch
+              createdAt
+              disabled
+              displayName
+              dob
+              email
+              emergencyMobile
+              extraEmail
+              extraMobile
+              firstName
+              gender
+              google_auth_id
+              hasBusiness
+              id
+              isConfidential
+              isFaculty
+              isVerified
+              lastName
+              membershipYear
+              metadata
+              mobile
+              nickName
+              profileImage
+              socialMedia
+              updatedAt
+              whatsAppMobile
+            }
+            scholarshipMentorUserId
+            scholarshipOriginalTransactionId
+            scholarshipPayoutMethod
+            scholarshipProofDueAt
+            scholarshipProofDueDays
+            scholarshipProofStatus
+            scholarshipPurposeSnapshot
+            scholarshipReceivedAt
+            scholarshipStatus
+            sourceType
+            status
+            title
+            transactionDate
+            type
+            updatedAt
+            user {
+              aboutMe
+              batch
+              createdAt
+              disabled
+              displayName
+              dob
+              email
+              emergencyMobile
+              extraEmail
+              extraMobile
+              firstName
+              gender
+              google_auth_id
+              hasBusiness
+              id
+              isConfidential
+              isFaculty
+              isVerified
+              lastName
+              membershipYear
+              metadata
+              mobile
+              nickName
+              profileImage
+              socialMedia
+              updatedAt
+              whatsAppMobile
+            }
+            userId
+            walletImpact
+          }
+          linkedTransactionId
+          metadata
+          method
+          recordedByUserId
+          referenceId
+          scholarshipApplicationId
+          scholarshipApprovedAt
+          scholarshipBatchSnapshot
+          scholarshipBeneficiaryUserId
+          scholarshipCompletedAt
+          scholarshipConfirmedAmount
+          scholarshipConfirmedAt
+          scholarshipImmutableAt
+          scholarshipInstallmentSequence
+          scholarshipMaskedPayoutDestination
+          scholarshipMentorUserId
+          scholarshipOriginalTransactionId
+          scholarshipPayoutMethod
+          scholarshipProofDueAt
+          scholarshipProofDueDays
+          scholarshipProofStatus
+          scholarshipPurposeSnapshot
+          scholarshipReceivedAt
+          scholarshipStatus
+          sourceType
+          status
+          title
+          transactionDate
+          type
+          updatedAt
+          userId
+          walletImpact
+        }
+        linkedTransactionId
+        metadata
+        method
+        recordedBy {
+          aboutMe
+          batch
+          companyInfo {
+            companyName
+            id
+            position
+            userId
+          }
+          createdAt
+          disabled
+          displayName
+          dob
+          email
+          emergencyMobile
+          extraEmail
+          extraMobile
+          firstName
+          gender
+          google_auth_id
+          hasBusiness
+          id
+          isConfidential
+          isFaculty
+          isVerified
+          lastName
+          membershipYear
+          metadata
+          mobile
+          nickName
+          positions {
+            assignmentId
+            code
+            name
+            termId
+            termName
+            validFrom
+            validUntil
+          }
+          profileImage
+          role {
+            code
+            id
+            name
+          }
+          roles {
+            assignmentId
+            code
+            name
+            scopeBatch
+            scopeType
+            validFrom
+            validUntil
+          }
+          socialMedia
+          updatedAt
+          whatsAppMobile
+        }
+        recordedByUserId
+        referenceId
+        scholarshipApplicationId
+        scholarshipApprovedAt
+        scholarshipBatchSnapshot
+        scholarshipBeneficiary {
+          aboutMe
+          batch
+          companyInfo {
+            companyName
+            id
+            position
+            userId
+          }
+          createdAt
+          disabled
+          displayName
+          dob
+          email
+          emergencyMobile
+          extraEmail
+          extraMobile
+          firstName
+          gender
+          google_auth_id
+          hasBusiness
+          id
+          isConfidential
+          isFaculty
+          isVerified
+          lastName
+          membershipYear
+          metadata
+          mobile
+          nickName
+          positions {
+            assignmentId
+            code
+            name
+            termId
+            termName
+            validFrom
+            validUntil
+          }
+          profileImage
+          role {
+            code
+            id
+            name
+          }
+          roles {
+            assignmentId
+            code
+            name
+            scopeBatch
+            scopeType
+            validFrom
+            validUntil
+          }
+          socialMedia
+          updatedAt
+          whatsAppMobile
+        }
+        scholarshipBeneficiaryUserId
+        scholarshipCompletedAt
+        scholarshipConfirmedAmount
+        scholarshipConfirmedAt
+        scholarshipImmutableAt
+        scholarshipInstallmentSequence
+        scholarshipMaskedPayoutDestination
+        scholarshipMentor {
+          aboutMe
+          batch
+          companyInfo {
+            companyName
+            id
+            position
+            userId
+          }
+          createdAt
+          disabled
+          displayName
+          dob
+          email
+          emergencyMobile
+          extraEmail
+          extraMobile
+          firstName
+          gender
+          google_auth_id
+          hasBusiness
+          id
+          isConfidential
+          isFaculty
+          isVerified
+          lastName
+          membershipYear
+          metadata
+          mobile
+          nickName
+          positions {
+            assignmentId
+            code
+            name
+            termId
+            termName
+            validFrom
+            validUntil
+          }
+          profileImage
+          role {
+            code
+            id
+            name
+          }
+          roles {
+            assignmentId
+            code
+            name
+            scopeBatch
+            scopeType
+            validFrom
+            validUntil
+          }
+          socialMedia
+          updatedAt
+          whatsAppMobile
+        }
+        scholarshipMentorUserId
+        scholarshipOriginalTransactionId
+        scholarshipPayoutMethod
+        scholarshipProofDueAt
+        scholarshipProofDueDays
+        scholarshipProofStatus
+        scholarshipPurposeSnapshot
+        scholarshipReceivedAt
+        scholarshipStatus
+        sourceType
+        status
+        title
+        transactionDate
+        type
+        updatedAt
+        user {
+          aboutMe
+          batch
+          companyInfo {
+            companyName
+            id
+            position
+            userId
+          }
+          createdAt
+          disabled
+          displayName
+          dob
+          email
+          emergencyMobile
+          extraEmail
+          extraMobile
+          firstName
+          gender
+          google_auth_id
+          hasBusiness
+          id
+          isConfidential
+          isFaculty
+          isVerified
+          lastName
+          membershipYear
+          metadata
+          mobile
+          nickName
+          positions {
+            assignmentId
+            code
+            name
+            termId
+            termName
+            validFrom
+            validUntil
+          }
+          profileImage
+          role {
+            code
+            id
+            name
+          }
+          roles {
+            assignmentId
+            code
+            name
+            scopeBatch
+            scopeType
+            validFrom
+            validUntil
+          }
+          socialMedia
+          updatedAt
+          whatsAppMobile
+        }
+        userId
+        walletImpact
+      }
+      associationTransactionId
       batch
       confirmedAmount
       createdAt
@@ -23406,7 +41774,31 @@ export type GetMentorScholarshipApplicationsQueryResult = Apollo.QueryResult<
 export const GetMentorScholarshipDashboardDocument = gql`
   query getMentorScholarshipDashboard {
     getMentorScholarshipDashboard {
+      activeBeneficiaryCount
+      activeMentorCount
+      allocationDisputeCount
+      applicationsAwaitingReview
+      approvalCapacity
+      approvedAdjustments
+      awaitingPaymentConfirmation
+      beneficiaryNonReceiptCount
+      byAllocationStatus {
+        count
+        key
+      }
+      byProofStatus {
+        count
+        key
+      }
+      byRefundStatus {
+        count
+        key
+      }
       byStatus {
+        count
+        key
+      }
+      byTransactionStatus {
         count
         key
       }
@@ -23416,10 +41808,46 @@ export const GetMentorScholarshipDashboardDocument = gql`
         committed
         returned
       }
+      completedApplications
+      completedTransactionCount
+      confirmedAllocation
+      confirmedBeneficiaryDisbursement
       disbursedAmount
+      disputedIncomingAllocation
+      disputedMentorAllocations
+      draftRequests
       exceptionCount
+      failedNotificationCount
+      fullProofsAwaitingVerification
+      mentorCustodyBalance
+      missingMentorRoutingCount
+      needsInformation
+      openRefundCaseCount
+      overdueProof
+      overdueProofAmount
+      partialProof
+      partialReceiptMismatchCount
+      paymentConfirmationPendingApplications
+      pendingBeneficiaryConfirmation
+      pendingBeneficiaryConfirmationCount
+      pendingIncomingAllocation
+      proofDue
+      refundConfirmedAmount
+      refundReconciliationPendingCount
+      refundRequestedAmount
+      refundResponsePendingCount
+      rejectedApplications
       requestedAmount
+      returnedAmount
+      routingPendingApplications
+      submittedApplications
+      submittedOrUnderReview
+      totalAllocationRecorded
       totalApplications
+      totalCompletedAfterProofVerification
+      underReviewApplications
+      wrongDisbursementAmount
+      wrongDisbursementApplications
     }
   }
 `;
@@ -23915,7 +42343,31 @@ export type GetMyScholarshipApplicationsQueryResult = Apollo.QueryResult<
 export const GetMyScholarshipDashboardDocument = gql`
   query getMyScholarshipDashboard {
     getMyScholarshipDashboard {
+      activeBeneficiaryCount
+      activeMentorCount
+      allocationDisputeCount
+      applicationsAwaitingReview
+      approvalCapacity
+      approvedAdjustments
+      awaitingPaymentConfirmation
+      beneficiaryNonReceiptCount
+      byAllocationStatus {
+        count
+        key
+      }
+      byProofStatus {
+        count
+        key
+      }
+      byRefundStatus {
+        count
+        key
+      }
       byStatus {
+        count
+        key
+      }
+      byTransactionStatus {
         count
         key
       }
@@ -23925,10 +42377,46 @@ export const GetMyScholarshipDashboardDocument = gql`
         committed
         returned
       }
+      completedApplications
+      completedTransactionCount
+      confirmedAllocation
+      confirmedBeneficiaryDisbursement
       disbursedAmount
+      disputedIncomingAllocation
+      disputedMentorAllocations
+      draftRequests
       exceptionCount
+      failedNotificationCount
+      fullProofsAwaitingVerification
+      mentorCustodyBalance
+      missingMentorRoutingCount
+      needsInformation
+      openRefundCaseCount
+      overdueProof
+      overdueProofAmount
+      partialProof
+      partialReceiptMismatchCount
+      paymentConfirmationPendingApplications
+      pendingBeneficiaryConfirmation
+      pendingBeneficiaryConfirmationCount
+      pendingIncomingAllocation
+      proofDue
+      refundConfirmedAmount
+      refundReconciliationPendingCount
+      refundRequestedAmount
+      refundResponsePendingCount
+      rejectedApplications
       requestedAmount
+      returnedAmount
+      routingPendingApplications
+      submittedApplications
+      submittedOrUnderReview
+      totalAllocationRecorded
       totalApplications
+      totalCompletedAfterProofVerification
+      underReviewApplications
+      wrongDisbursementAmount
+      wrongDisbursementApplications
     }
   }
 `;
@@ -23999,8 +42487,124 @@ export const GetScholarshipActivityDocument = gql`
   query getScholarshipActivity($entityId: String, $entityType: String) {
     getScholarshipActivity(entityId: $entityId, entityType: $entityType) {
       action
+      actor {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
       actorUserId
       after
+      assignedMentor {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
       before
       createdAt
       entityId
@@ -24294,43 +42898,11 @@ export type GetScholarshipApplicationQueryResult = Apollo.QueryResult<
   GetScholarshipApplicationQuery,
   GetScholarshipApplicationQueryVariables
 >;
-export const GetScholarshipApplicationTransactionsDocument = gql`
-  query getScholarshipApplicationTransactions($applicationId: String!) {
-    getScholarshipApplicationTransactions(applicationId: $applicationId) {
-      amount
-      createdAt
-      currency
-      description
-      id
-      isDonation
-      method
-      referenceId
-      scholarshipApplicationId
-      scholarshipApprovedAt
-      scholarshipBatchSnapshot
-      scholarshipBeneficiaryUserId
-      scholarshipCompletedAt
-      scholarshipConfirmedAmount
-      scholarshipConfirmedAt
-      scholarshipImmutableAt
-      scholarshipInstallmentSequence
-      scholarshipMaskedPayoutDestination
-      scholarshipMentorUserId
-      scholarshipOriginalTransactionId
-      scholarshipPayoutMethod
-      scholarshipProofDueAt
-      scholarshipProofDueDays
-      scholarshipProofStatus
-      scholarshipPurposeSnapshot
-      scholarshipReceivedAt
-      scholarshipStatus
-      sourceType
-      status
-      title
-      transactionDate
-      type
-      updatedAt
-      user {
+export const GetScholarshipApplicationActivityDocument = gql`
+  query getScholarshipApplicationActivity($applicationId: String!) {
+    getScholarshipApplicationActivity(applicationId: $applicationId) {
+      action
+      actor {
         aboutMe
         batch
         companyInfo {
@@ -24388,7 +42960,663 @@ export const GetScholarshipApplicationTransactionsDocument = gql`
         updatedAt
         whatsAppMobile
       }
+      actorUserId
+      after
+      assignedMentor {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      before
+      createdAt
+      entityId
+      entityType
+      id
+      isHighRisk
+      reason
+    }
+  }
+`;
+
+/**
+ * __useGetScholarshipApplicationActivityQuery__
+ *
+ * To run a query within a React component, call `useGetScholarshipApplicationActivityQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetScholarshipApplicationActivityQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetScholarshipApplicationActivityQuery({
+ *   variables: {
+ *      applicationId: // value for 'applicationId'
+ *   },
+ * });
+ */
+export function useGetScholarshipApplicationActivityQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetScholarshipApplicationActivityQuery,
+    GetScholarshipApplicationActivityQueryVariables
+  > &
+    ({ variables: GetScholarshipApplicationActivityQueryVariables; skip?: boolean } | { skip: boolean })
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetScholarshipApplicationActivityQuery, GetScholarshipApplicationActivityQueryVariables>(
+    GetScholarshipApplicationActivityDocument,
+    options
+  );
+}
+export function useGetScholarshipApplicationActivityLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetScholarshipApplicationActivityQuery,
+    GetScholarshipApplicationActivityQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetScholarshipApplicationActivityQuery, GetScholarshipApplicationActivityQueryVariables>(
+    GetScholarshipApplicationActivityDocument,
+    options
+  );
+}
+// @ts-ignore
+export function useGetScholarshipApplicationActivitySuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetScholarshipApplicationActivityQuery,
+    GetScholarshipApplicationActivityQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<
+  GetScholarshipApplicationActivityQuery,
+  GetScholarshipApplicationActivityQueryVariables
+>;
+export function useGetScholarshipApplicationActivitySuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetScholarshipApplicationActivityQuery,
+        GetScholarshipApplicationActivityQueryVariables
+      >
+): Apollo.UseSuspenseQueryResult<
+  GetScholarshipApplicationActivityQuery | undefined,
+  GetScholarshipApplicationActivityQueryVariables
+>;
+export function useGetScholarshipApplicationActivitySuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetScholarshipApplicationActivityQuery,
+        GetScholarshipApplicationActivityQueryVariables
+      >
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetScholarshipApplicationActivityQuery,
+    GetScholarshipApplicationActivityQueryVariables
+  >(GetScholarshipApplicationActivityDocument, options);
+}
+export type GetScholarshipApplicationActivityQueryHookResult = ReturnType<
+  typeof useGetScholarshipApplicationActivityQuery
+>;
+export type GetScholarshipApplicationActivityLazyQueryHookResult = ReturnType<
+  typeof useGetScholarshipApplicationActivityLazyQuery
+>;
+export type GetScholarshipApplicationActivitySuspenseQueryHookResult = ReturnType<
+  typeof useGetScholarshipApplicationActivitySuspenseQuery
+>;
+export type GetScholarshipApplicationActivityQueryResult = Apollo.QueryResult<
+  GetScholarshipApplicationActivityQuery,
+  GetScholarshipApplicationActivityQueryVariables
+>;
+export const GetScholarshipApplicationTransactionsDocument = gql`
+  query getScholarshipApplicationTransactions($applicationId: String!) {
+    getScholarshipApplicationTransactions(applicationId: $applicationId) {
+      amount
+      attachments {
+        createdAt
+        id
+        mimeType
+        originalFilename
+        sizeBytes
+        status
+        transactionId
+        uploadedAt
+        uploadedByUserId
+      }
+      billingCategory
+      createdAt
+      currency
+      description
+      id
+      immutableAt
+      isDonation
+      linkedTransaction {
+        amount
+        attachments {
+          createdAt
+          id
+          mimeType
+          originalFilename
+          sizeBytes
+          status
+          transactionId
+          uploadedAt
+          uploadedByUserId
+        }
+        billingCategory
+        createdAt
+        currency
+        description
+        id
+        immutableAt
+        isDonation
+        linkedTransaction {
+          amount
+          billingCategory
+          createdAt
+          currency
+          description
+          id
+          immutableAt
+          isDonation
+          linkedTransactionId
+          metadata
+          method
+          recordedBy {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          recordedByUserId
+          referenceId
+          scholarshipApplicationId
+          scholarshipApprovedAt
+          scholarshipBatchSnapshot
+          scholarshipBeneficiary {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          scholarshipBeneficiaryUserId
+          scholarshipCompletedAt
+          scholarshipConfirmedAmount
+          scholarshipConfirmedAt
+          scholarshipImmutableAt
+          scholarshipInstallmentSequence
+          scholarshipMaskedPayoutDestination
+          scholarshipMentor {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          scholarshipMentorUserId
+          scholarshipOriginalTransactionId
+          scholarshipPayoutMethod
+          scholarshipProofDueAt
+          scholarshipProofDueDays
+          scholarshipProofStatus
+          scholarshipPurposeSnapshot
+          scholarshipReceivedAt
+          scholarshipStatus
+          sourceType
+          status
+          title
+          transactionDate
+          type
+          updatedAt
+          user {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          userId
+          walletImpact
+        }
+        linkedTransactionId
+        metadata
+        method
+        recordedByUserId
+        referenceId
+        scholarshipApplicationId
+        scholarshipApprovedAt
+        scholarshipBatchSnapshot
+        scholarshipBeneficiaryUserId
+        scholarshipCompletedAt
+        scholarshipConfirmedAmount
+        scholarshipConfirmedAt
+        scholarshipImmutableAt
+        scholarshipInstallmentSequence
+        scholarshipMaskedPayoutDestination
+        scholarshipMentorUserId
+        scholarshipOriginalTransactionId
+        scholarshipPayoutMethod
+        scholarshipProofDueAt
+        scholarshipProofDueDays
+        scholarshipProofStatus
+        scholarshipPurposeSnapshot
+        scholarshipReceivedAt
+        scholarshipStatus
+        sourceType
+        status
+        title
+        transactionDate
+        type
+        updatedAt
+        userId
+        walletImpact
+      }
+      linkedTransactionId
+      metadata
+      method
+      recordedBy {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      recordedByUserId
+      referenceId
+      scholarshipApplicationId
+      scholarshipApprovedAt
+      scholarshipBatchSnapshot
+      scholarshipBeneficiary {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      scholarshipBeneficiaryUserId
+      scholarshipCompletedAt
+      scholarshipConfirmedAmount
+      scholarshipConfirmedAt
+      scholarshipImmutableAt
+      scholarshipInstallmentSequence
+      scholarshipMaskedPayoutDestination
+      scholarshipMentor {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      scholarshipMentorUserId
+      scholarshipOriginalTransactionId
+      scholarshipPayoutMethod
+      scholarshipProofDueAt
+      scholarshipProofDueDays
+      scholarshipProofStatus
+      scholarshipPurposeSnapshot
+      scholarshipReceivedAt
+      scholarshipStatus
+      sourceType
+      status
+      title
+      transactionDate
+      type
+      updatedAt
+      user {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
       userId
+      walletImpact
     }
   }
 `;
@@ -25249,10 +44477,250 @@ export type GetScholarshipExceptionQueueQueryResult = Apollo.QueryResult<
   GetScholarshipExceptionQueueQuery,
   GetScholarshipExceptionQueueQueryVariables
 >;
+export const GetScholarshipMentorSummariesDocument = gql`
+  query getScholarshipMentorSummaries {
+    getScholarshipMentorSummaries {
+      assignedBatches
+      mentor {
+        aboutMe
+        batch
+        companyInfo {
+          companyName
+          id
+          position
+          userId
+        }
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        positions {
+          assignmentId
+          code
+          name
+          termId
+          termName
+          validFrom
+          validUntil
+        }
+        profileImage
+        role {
+          code
+          id
+          name
+        }
+        roles {
+          assignmentId
+          code
+          name
+          scopeBatch
+          scopeType
+          validFrom
+          validUntil
+        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      mentorUserId
+      summary {
+        activeBeneficiaryCount
+        activeMentorCount
+        allocationDisputeCount
+        applicationsAwaitingReview
+        approvalCapacity
+        approvedAdjustments
+        awaitingPaymentConfirmation
+        beneficiaryNonReceiptCount
+        byAllocationStatus {
+          count
+          key
+        }
+        byProofStatus {
+          count
+          key
+        }
+        byRefundStatus {
+          count
+          key
+        }
+        byStatus {
+          count
+          key
+        }
+        byTransactionStatus {
+          count
+          key
+        }
+        capacity {
+          allocated
+          available
+          committed
+          returned
+        }
+        completedApplications
+        completedTransactionCount
+        confirmedAllocation
+        confirmedBeneficiaryDisbursement
+        disbursedAmount
+        disputedIncomingAllocation
+        disputedMentorAllocations
+        draftRequests
+        exceptionCount
+        failedNotificationCount
+        fullProofsAwaitingVerification
+        mentorCustodyBalance
+        missingMentorRoutingCount
+        needsInformation
+        openRefundCaseCount
+        overdueProof
+        overdueProofAmount
+        partialProof
+        partialReceiptMismatchCount
+        paymentConfirmationPendingApplications
+        pendingBeneficiaryConfirmation
+        pendingBeneficiaryConfirmationCount
+        pendingIncomingAllocation
+        proofDue
+        refundConfirmedAmount
+        refundReconciliationPendingCount
+        refundRequestedAmount
+        refundResponsePendingCount
+        rejectedApplications
+        requestedAmount
+        returnedAmount
+        routingPendingApplications
+        submittedApplications
+        submittedOrUnderReview
+        totalAllocationRecorded
+        totalApplications
+        totalCompletedAfterProofVerification
+        underReviewApplications
+        wrongDisbursementAmount
+        wrongDisbursementApplications
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetScholarshipMentorSummariesQuery__
+ *
+ * To run a query within a React component, call `useGetScholarshipMentorSummariesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetScholarshipMentorSummariesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetScholarshipMentorSummariesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetScholarshipMentorSummariesQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetScholarshipMentorSummariesQuery, GetScholarshipMentorSummariesQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetScholarshipMentorSummariesQuery, GetScholarshipMentorSummariesQueryVariables>(
+    GetScholarshipMentorSummariesDocument,
+    options
+  );
+}
+export function useGetScholarshipMentorSummariesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetScholarshipMentorSummariesQuery,
+    GetScholarshipMentorSummariesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetScholarshipMentorSummariesQuery, GetScholarshipMentorSummariesQueryVariables>(
+    GetScholarshipMentorSummariesDocument,
+    options
+  );
+}
+// @ts-ignore
+export function useGetScholarshipMentorSummariesSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetScholarshipMentorSummariesQuery,
+    GetScholarshipMentorSummariesQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<GetScholarshipMentorSummariesQuery, GetScholarshipMentorSummariesQueryVariables>;
+export function useGetScholarshipMentorSummariesSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetScholarshipMentorSummariesQuery, GetScholarshipMentorSummariesQueryVariables>
+): Apollo.UseSuspenseQueryResult<
+  GetScholarshipMentorSummariesQuery | undefined,
+  GetScholarshipMentorSummariesQueryVariables
+>;
+export function useGetScholarshipMentorSummariesSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetScholarshipMentorSummariesQuery, GetScholarshipMentorSummariesQueryVariables>
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetScholarshipMentorSummariesQuery, GetScholarshipMentorSummariesQueryVariables>(
+    GetScholarshipMentorSummariesDocument,
+    options
+  );
+}
+export type GetScholarshipMentorSummariesQueryHookResult = ReturnType<typeof useGetScholarshipMentorSummariesQuery>;
+export type GetScholarshipMentorSummariesLazyQueryHookResult = ReturnType<
+  typeof useGetScholarshipMentorSummariesLazyQuery
+>;
+export type GetScholarshipMentorSummariesSuspenseQueryHookResult = ReturnType<
+  typeof useGetScholarshipMentorSummariesSuspenseQuery
+>;
+export type GetScholarshipMentorSummariesQueryResult = Apollo.QueryResult<
+  GetScholarshipMentorSummariesQuery,
+  GetScholarshipMentorSummariesQueryVariables
+>;
 export const GetScholarshipMentorSummaryDocument = gql`
   query getScholarshipMentorSummary($mentorUserId: String) {
     getScholarshipMentorSummary(mentorUserId: $mentorUserId) {
+      activeBeneficiaryCount
+      activeMentorCount
+      allocationDisputeCount
+      applicationsAwaitingReview
+      approvalCapacity
+      approvedAdjustments
+      awaitingPaymentConfirmation
+      beneficiaryNonReceiptCount
+      byAllocationStatus {
+        count
+        key
+      }
+      byProofStatus {
+        count
+        key
+      }
+      byRefundStatus {
+        count
+        key
+      }
       byStatus {
+        count
+        key
+      }
+      byTransactionStatus {
         count
         key
       }
@@ -25262,10 +44730,46 @@ export const GetScholarshipMentorSummaryDocument = gql`
         committed
         returned
       }
+      completedApplications
+      completedTransactionCount
+      confirmedAllocation
+      confirmedBeneficiaryDisbursement
       disbursedAmount
+      disputedIncomingAllocation
+      disputedMentorAllocations
+      draftRequests
       exceptionCount
+      failedNotificationCount
+      fullProofsAwaitingVerification
+      mentorCustodyBalance
+      missingMentorRoutingCount
+      needsInformation
+      openRefundCaseCount
+      overdueProof
+      overdueProofAmount
+      partialProof
+      partialReceiptMismatchCount
+      paymentConfirmationPendingApplications
+      pendingBeneficiaryConfirmation
+      pendingBeneficiaryConfirmationCount
+      pendingIncomingAllocation
+      proofDue
+      refundConfirmedAmount
+      refundReconciliationPendingCount
+      refundRequestedAmount
+      refundResponsePendingCount
+      rejectedApplications
       requestedAmount
+      returnedAmount
+      routingPendingApplications
+      submittedApplications
+      submittedOrUnderReview
+      totalAllocationRecorded
       totalApplications
+      totalCompletedAfterProofVerification
+      underReviewApplications
+      wrongDisbursementAmount
+      wrongDisbursementApplications
     }
   }
 `;
@@ -25342,7 +44846,31 @@ export type GetScholarshipMentorSummaryQueryResult = Apollo.QueryResult<
 export const GetScholarshipOrganizationDashboardDocument = gql`
   query getScholarshipOrganizationDashboard {
     getScholarshipOrganizationDashboard {
+      activeBeneficiaryCount
+      activeMentorCount
+      allocationDisputeCount
+      applicationsAwaitingReview
+      approvalCapacity
+      approvedAdjustments
+      awaitingPaymentConfirmation
+      beneficiaryNonReceiptCount
+      byAllocationStatus {
+        count
+        key
+      }
+      byProofStatus {
+        count
+        key
+      }
+      byRefundStatus {
+        count
+        key
+      }
       byStatus {
+        count
+        key
+      }
+      byTransactionStatus {
         count
         key
       }
@@ -25352,10 +44880,46 @@ export const GetScholarshipOrganizationDashboardDocument = gql`
         committed
         returned
       }
+      completedApplications
+      completedTransactionCount
+      confirmedAllocation
+      confirmedBeneficiaryDisbursement
       disbursedAmount
+      disputedIncomingAllocation
+      disputedMentorAllocations
+      draftRequests
       exceptionCount
+      failedNotificationCount
+      fullProofsAwaitingVerification
+      mentorCustodyBalance
+      missingMentorRoutingCount
+      needsInformation
+      openRefundCaseCount
+      overdueProof
+      overdueProofAmount
+      partialProof
+      partialReceiptMismatchCount
+      paymentConfirmationPendingApplications
+      pendingBeneficiaryConfirmation
+      pendingBeneficiaryConfirmationCount
+      pendingIncomingAllocation
+      proofDue
+      refundConfirmedAmount
+      refundReconciliationPendingCount
+      refundRequestedAmount
+      refundResponsePendingCount
+      rejectedApplications
       requestedAmount
+      returnedAmount
+      routingPendingApplications
+      submittedApplications
+      submittedOrUnderReview
+      totalAllocationRecorded
       totalApplications
+      totalCompletedAfterProofVerification
+      underReviewApplications
+      wrongDisbursementAmount
+      wrongDisbursementApplications
     }
   }
 `;
@@ -25636,47 +45200,357 @@ export const GetTransactionDocument = gql`
   query getTransaction($id: String!) {
     getTransaction(id: $id) {
       amount
+      attachments {
+        createdAt
+        id
+        mimeType
+        originalFilename
+        sizeBytes
+        status
+        transactionId
+        uploadedAt
+        uploadedByUserId
+      }
+      billingCategory
       createdAt
       currency
       description
       id
+      immutableAt
       isDonation
+      linkedTransaction {
+        amount
+        attachments {
+          createdAt
+          id
+          mimeType
+          originalFilename
+          sizeBytes
+          status
+          transactionId
+          uploadedAt
+          uploadedByUserId
+        }
+        billingCategory
+        createdAt
+        currency
+        description
+        id
+        immutableAt
+        isDonation
+        linkedTransaction {
+          amount
+          billingCategory
+          createdAt
+          currency
+          description
+          id
+          immutableAt
+          isDonation
+          linkedTransactionId
+          metadata
+          method
+          recordedBy {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          recordedByUserId
+          referenceId
+          scholarshipApplicationId
+          scholarshipApprovedAt
+          scholarshipBatchSnapshot
+          scholarshipBeneficiary {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          scholarshipBeneficiaryUserId
+          scholarshipCompletedAt
+          scholarshipConfirmedAmount
+          scholarshipConfirmedAt
+          scholarshipImmutableAt
+          scholarshipInstallmentSequence
+          scholarshipMaskedPayoutDestination
+          scholarshipMentor {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          scholarshipMentorUserId
+          scholarshipOriginalTransactionId
+          scholarshipPayoutMethod
+          scholarshipProofDueAt
+          scholarshipProofDueDays
+          scholarshipProofStatus
+          scholarshipPurposeSnapshot
+          scholarshipReceivedAt
+          scholarshipStatus
+          sourceType
+          status
+          title
+          transactionDate
+          type
+          updatedAt
+          user {
+            aboutMe
+            batch
+            companyInfo {
+              companyName
+              id
+              position
+              userId
+            }
+            createdAt
+            disabled
+            displayName
+            dob
+            email
+            emergencyMobile
+            extraEmail
+            extraMobile
+            firstName
+            gender
+            google_auth_id
+            hasBusiness
+            id
+            isConfidential
+            isFaculty
+            isVerified
+            lastName
+            membershipYear
+            metadata
+            mobile
+            nickName
+            positions {
+              assignmentId
+              code
+              name
+              termId
+              termName
+              validFrom
+              validUntil
+            }
+            profileImage
+            role {
+              code
+              id
+              name
+            }
+            roles {
+              assignmentId
+              code
+              name
+              scopeBatch
+              scopeType
+              validFrom
+              validUntil
+            }
+            socialMedia
+            updatedAt
+            whatsAppMobile
+          }
+          userId
+          walletImpact
+        }
+        linkedTransactionId
+        metadata
+        method
+        recordedByUserId
+        referenceId
+        scholarshipApplicationId
+        scholarshipApprovedAt
+        scholarshipBatchSnapshot
+        scholarshipBeneficiaryUserId
+        scholarshipCompletedAt
+        scholarshipConfirmedAmount
+        scholarshipConfirmedAt
+        scholarshipImmutableAt
+        scholarshipInstallmentSequence
+        scholarshipMaskedPayoutDestination
+        scholarshipMentorUserId
+        scholarshipOriginalTransactionId
+        scholarshipPayoutMethod
+        scholarshipProofDueAt
+        scholarshipProofDueDays
+        scholarshipProofStatus
+        scholarshipPurposeSnapshot
+        scholarshipReceivedAt
+        scholarshipStatus
+        sourceType
+        status
+        title
+        transactionDate
+        type
+        updatedAt
+        userId
+        walletImpact
+      }
+      linkedTransactionId
+      metadata
       method
-      referenceId
-      scholarshipApplicationId
-      scholarshipApprovedAt
-      scholarshipBatchSnapshot
-      scholarshipBeneficiaryUserId
-      scholarshipCompletedAt
-      scholarshipConfirmedAmount
-      scholarshipConfirmedAt
-      scholarshipImmutableAt
-      scholarshipInstallmentSequence
-      scholarshipMaskedPayoutDestination
-      scholarshipMentorUserId
-      scholarshipOriginalTransactionId
-      scholarshipPayoutMethod
-      scholarshipProofDueAt
-      scholarshipProofDueDays
-      scholarshipProofStatus
-      scholarshipPurposeSnapshot
-      scholarshipReceivedAt
-      scholarshipStatus
-      sourceType
-      status
-      title
-      transactionDate
-      type
-      updatedAt
-      user {
+      recordedBy {
         aboutMe
         batch
-        companyInfo {
-          companyName
-          id
-          position
-          userId
-        }
         createdAt
         disabled
         displayName
@@ -25698,35 +45572,127 @@ export const GetTransactionDocument = gql`
         metadata
         mobile
         nickName
-        positions {
-          assignmentId
-          code
-          name
-          termId
-          termName
-          validFrom
-          validUntil
-        }
         profileImage
-        role {
-          code
-          id
-          name
-        }
-        roles {
-          assignmentId
-          code
-          name
-          scopeBatch
-          scopeType
-          validFrom
-          validUntil
-        }
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      recordedByUserId
+      referenceId
+      scholarshipApplicationId
+      scholarshipApprovedAt
+      scholarshipBatchSnapshot
+      scholarshipBeneficiary {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      scholarshipBeneficiaryUserId
+      scholarshipCompletedAt
+      scholarshipConfirmedAmount
+      scholarshipConfirmedAt
+      scholarshipImmutableAt
+      scholarshipInstallmentSequence
+      scholarshipMaskedPayoutDestination
+      scholarshipMentor {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
+        socialMedia
+        updatedAt
+        whatsAppMobile
+      }
+      scholarshipMentorUserId
+      scholarshipOriginalTransactionId
+      scholarshipPayoutMethod
+      scholarshipProofDueAt
+      scholarshipProofDueDays
+      scholarshipProofStatus
+      scholarshipPurposeSnapshot
+      scholarshipReceivedAt
+      scholarshipStatus
+      sourceType
+      status
+      title
+      transactionDate
+      type
+      updatedAt
+      user {
+        aboutMe
+        batch
+        createdAt
+        disabled
+        displayName
+        dob
+        email
+        emergencyMobile
+        extraEmail
+        extraMobile
+        firstName
+        gender
+        google_auth_id
+        hasBusiness
+        id
+        isConfidential
+        isFaculty
+        isVerified
+        lastName
+        membershipYear
+        metadata
+        mobile
+        nickName
+        profileImage
         socialMedia
         updatedAt
         whatsAppMobile
       }
       userId
+      walletImpact
     }
   }
 `;
@@ -25777,21 +45743,454 @@ export type GetTransactionQueryHookResult = ReturnType<typeof useGetTransactionQ
 export type GetTransactionLazyQueryHookResult = ReturnType<typeof useGetTransactionLazyQuery>;
 export type GetTransactionSuspenseQueryHookResult = ReturnType<typeof useGetTransactionSuspenseQuery>;
 export type GetTransactionQueryResult = Apollo.QueryResult<GetTransactionQuery, GetTransactionQueryVariables>;
+export const GetTransactionAttachmentReadUrlDocument = gql`
+  query getTransactionAttachmentReadUrl($attachmentId: String!) {
+    getTransactionAttachmentReadUrl(attachmentId: $attachmentId)
+  }
+`;
+
+/**
+ * __useGetTransactionAttachmentReadUrlQuery__
+ *
+ * To run a query within a React component, call `useGetTransactionAttachmentReadUrlQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTransactionAttachmentReadUrlQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTransactionAttachmentReadUrlQuery({
+ *   variables: {
+ *      attachmentId: // value for 'attachmentId'
+ *   },
+ * });
+ */
+export function useGetTransactionAttachmentReadUrlQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetTransactionAttachmentReadUrlQuery,
+    GetTransactionAttachmentReadUrlQueryVariables
+  > &
+    ({ variables: GetTransactionAttachmentReadUrlQueryVariables; skip?: boolean } | { skip: boolean })
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetTransactionAttachmentReadUrlQuery, GetTransactionAttachmentReadUrlQueryVariables>(
+    GetTransactionAttachmentReadUrlDocument,
+    options
+  );
+}
+export function useGetTransactionAttachmentReadUrlLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetTransactionAttachmentReadUrlQuery,
+    GetTransactionAttachmentReadUrlQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetTransactionAttachmentReadUrlQuery, GetTransactionAttachmentReadUrlQueryVariables>(
+    GetTransactionAttachmentReadUrlDocument,
+    options
+  );
+}
+// @ts-ignore
+export function useGetTransactionAttachmentReadUrlSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetTransactionAttachmentReadUrlQuery,
+    GetTransactionAttachmentReadUrlQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<GetTransactionAttachmentReadUrlQuery, GetTransactionAttachmentReadUrlQueryVariables>;
+export function useGetTransactionAttachmentReadUrlSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetTransactionAttachmentReadUrlQuery,
+        GetTransactionAttachmentReadUrlQueryVariables
+      >
+): Apollo.UseSuspenseQueryResult<
+  GetTransactionAttachmentReadUrlQuery | undefined,
+  GetTransactionAttachmentReadUrlQueryVariables
+>;
+export function useGetTransactionAttachmentReadUrlSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetTransactionAttachmentReadUrlQuery,
+        GetTransactionAttachmentReadUrlQueryVariables
+      >
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetTransactionAttachmentReadUrlQuery, GetTransactionAttachmentReadUrlQueryVariables>(
+    GetTransactionAttachmentReadUrlDocument,
+    options
+  );
+}
+export type GetTransactionAttachmentReadUrlQueryHookResult = ReturnType<typeof useGetTransactionAttachmentReadUrlQuery>;
+export type GetTransactionAttachmentReadUrlLazyQueryHookResult = ReturnType<
+  typeof useGetTransactionAttachmentReadUrlLazyQuery
+>;
+export type GetTransactionAttachmentReadUrlSuspenseQueryHookResult = ReturnType<
+  typeof useGetTransactionAttachmentReadUrlSuspenseQuery
+>;
+export type GetTransactionAttachmentReadUrlQueryResult = Apollo.QueryResult<
+  GetTransactionAttachmentReadUrlQuery,
+  GetTransactionAttachmentReadUrlQueryVariables
+>;
 export const GetTransactionsDocument = gql`
-  query getTransactions($options: ListInput) {
-    getTransactions(options: $options) {
+  query getTransactions($filter: AssociationTransactionFilter, $options: ListInput) {
+    getTransactions(filter: $filter, options: $options) {
       data {
         amount
+        attachments {
+          createdAt
+          id
+          mimeType
+          originalFilename
+          sizeBytes
+          status
+          transactionId
+          uploadedAt
+          uploadedByUserId
+        }
+        billingCategory
         createdAt
         currency
         description
         id
+        immutableAt
         isDonation
+        linkedTransaction {
+          amount
+          attachments {
+            createdAt
+            id
+            mimeType
+            originalFilename
+            sizeBytes
+            status
+            transactionId
+            uploadedAt
+            uploadedByUserId
+          }
+          billingCategory
+          createdAt
+          currency
+          description
+          id
+          immutableAt
+          isDonation
+          linkedTransaction {
+            amount
+            billingCategory
+            createdAt
+            currency
+            description
+            id
+            immutableAt
+            isDonation
+            linkedTransactionId
+            metadata
+            method
+            recordedBy {
+              aboutMe
+              batch
+              createdAt
+              disabled
+              displayName
+              dob
+              email
+              emergencyMobile
+              extraEmail
+              extraMobile
+              firstName
+              gender
+              google_auth_id
+              hasBusiness
+              id
+              isConfidential
+              isFaculty
+              isVerified
+              lastName
+              membershipYear
+              metadata
+              mobile
+              nickName
+              profileImage
+              socialMedia
+              updatedAt
+              whatsAppMobile
+            }
+            recordedByUserId
+            referenceId
+            scholarshipApplicationId
+            scholarshipApprovedAt
+            scholarshipBatchSnapshot
+            scholarshipBeneficiary {
+              aboutMe
+              batch
+              createdAt
+              disabled
+              displayName
+              dob
+              email
+              emergencyMobile
+              extraEmail
+              extraMobile
+              firstName
+              gender
+              google_auth_id
+              hasBusiness
+              id
+              isConfidential
+              isFaculty
+              isVerified
+              lastName
+              membershipYear
+              metadata
+              mobile
+              nickName
+              profileImage
+              socialMedia
+              updatedAt
+              whatsAppMobile
+            }
+            scholarshipBeneficiaryUserId
+            scholarshipCompletedAt
+            scholarshipConfirmedAmount
+            scholarshipConfirmedAt
+            scholarshipImmutableAt
+            scholarshipInstallmentSequence
+            scholarshipMaskedPayoutDestination
+            scholarshipMentor {
+              aboutMe
+              batch
+              createdAt
+              disabled
+              displayName
+              dob
+              email
+              emergencyMobile
+              extraEmail
+              extraMobile
+              firstName
+              gender
+              google_auth_id
+              hasBusiness
+              id
+              isConfidential
+              isFaculty
+              isVerified
+              lastName
+              membershipYear
+              metadata
+              mobile
+              nickName
+              profileImage
+              socialMedia
+              updatedAt
+              whatsAppMobile
+            }
+            scholarshipMentorUserId
+            scholarshipOriginalTransactionId
+            scholarshipPayoutMethod
+            scholarshipProofDueAt
+            scholarshipProofDueDays
+            scholarshipProofStatus
+            scholarshipPurposeSnapshot
+            scholarshipReceivedAt
+            scholarshipStatus
+            sourceType
+            status
+            title
+            transactionDate
+            type
+            updatedAt
+            user {
+              aboutMe
+              batch
+              createdAt
+              disabled
+              displayName
+              dob
+              email
+              emergencyMobile
+              extraEmail
+              extraMobile
+              firstName
+              gender
+              google_auth_id
+              hasBusiness
+              id
+              isConfidential
+              isFaculty
+              isVerified
+              lastName
+              membershipYear
+              metadata
+              mobile
+              nickName
+              profileImage
+              socialMedia
+              updatedAt
+              whatsAppMobile
+            }
+            userId
+            walletImpact
+          }
+          linkedTransactionId
+          metadata
+          method
+          recordedByUserId
+          referenceId
+          scholarshipApplicationId
+          scholarshipApprovedAt
+          scholarshipBatchSnapshot
+          scholarshipBeneficiaryUserId
+          scholarshipCompletedAt
+          scholarshipConfirmedAmount
+          scholarshipConfirmedAt
+          scholarshipImmutableAt
+          scholarshipInstallmentSequence
+          scholarshipMaskedPayoutDestination
+          scholarshipMentorUserId
+          scholarshipOriginalTransactionId
+          scholarshipPayoutMethod
+          scholarshipProofDueAt
+          scholarshipProofDueDays
+          scholarshipProofStatus
+          scholarshipPurposeSnapshot
+          scholarshipReceivedAt
+          scholarshipStatus
+          sourceType
+          status
+          title
+          transactionDate
+          type
+          updatedAt
+          userId
+          walletImpact
+        }
+        linkedTransactionId
+        metadata
         method
+        recordedBy {
+          aboutMe
+          batch
+          companyInfo {
+            companyName
+            id
+            position
+            userId
+          }
+          createdAt
+          disabled
+          displayName
+          dob
+          email
+          emergencyMobile
+          extraEmail
+          extraMobile
+          firstName
+          gender
+          google_auth_id
+          hasBusiness
+          id
+          isConfidential
+          isFaculty
+          isVerified
+          lastName
+          membershipYear
+          metadata
+          mobile
+          nickName
+          positions {
+            assignmentId
+            code
+            name
+            termId
+            termName
+            validFrom
+            validUntil
+          }
+          profileImage
+          role {
+            code
+            id
+            name
+          }
+          roles {
+            assignmentId
+            code
+            name
+            scopeBatch
+            scopeType
+            validFrom
+            validUntil
+          }
+          socialMedia
+          updatedAt
+          whatsAppMobile
+        }
+        recordedByUserId
         referenceId
         scholarshipApplicationId
         scholarshipApprovedAt
         scholarshipBatchSnapshot
+        scholarshipBeneficiary {
+          aboutMe
+          batch
+          companyInfo {
+            companyName
+            id
+            position
+            userId
+          }
+          createdAt
+          disabled
+          displayName
+          dob
+          email
+          emergencyMobile
+          extraEmail
+          extraMobile
+          firstName
+          gender
+          google_auth_id
+          hasBusiness
+          id
+          isConfidential
+          isFaculty
+          isVerified
+          lastName
+          membershipYear
+          metadata
+          mobile
+          nickName
+          positions {
+            assignmentId
+            code
+            name
+            termId
+            termName
+            validFrom
+            validUntil
+          }
+          profileImage
+          role {
+            code
+            id
+            name
+          }
+          roles {
+            assignmentId
+            code
+            name
+            scopeBatch
+            scopeType
+            validFrom
+            validUntil
+          }
+          socialMedia
+          updatedAt
+          whatsAppMobile
+        }
         scholarshipBeneficiaryUserId
         scholarshipCompletedAt
         scholarshipConfirmedAmount
@@ -25799,6 +46198,64 @@ export const GetTransactionsDocument = gql`
         scholarshipImmutableAt
         scholarshipInstallmentSequence
         scholarshipMaskedPayoutDestination
+        scholarshipMentor {
+          aboutMe
+          batch
+          companyInfo {
+            companyName
+            id
+            position
+            userId
+          }
+          createdAt
+          disabled
+          displayName
+          dob
+          email
+          emergencyMobile
+          extraEmail
+          extraMobile
+          firstName
+          gender
+          google_auth_id
+          hasBusiness
+          id
+          isConfidential
+          isFaculty
+          isVerified
+          lastName
+          membershipYear
+          metadata
+          mobile
+          nickName
+          positions {
+            assignmentId
+            code
+            name
+            termId
+            termName
+            validFrom
+            validUntil
+          }
+          profileImage
+          role {
+            code
+            id
+            name
+          }
+          roles {
+            assignmentId
+            code
+            name
+            scopeBatch
+            scopeType
+            validFrom
+            validUntil
+          }
+          socialMedia
+          updatedAt
+          whatsAppMobile
+        }
         scholarshipMentorUserId
         scholarshipOriginalTransactionId
         scholarshipPayoutMethod
@@ -25873,6 +46330,7 @@ export const GetTransactionsDocument = gql`
           whatsAppMobile
         }
         userId
+        walletImpact
       }
       total
     }
@@ -25891,6 +46349,7 @@ export const GetTransactionsDocument = gql`
  * @example
  * const { data, loading, error } = useGetTransactionsQuery({
  *   variables: {
+ *      filter: // value for 'filter'
  *      options: // value for 'options'
  *   },
  * });

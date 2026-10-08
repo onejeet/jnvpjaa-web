@@ -1,25 +1,11 @@
+import { constructMetadata } from '@/config/seo.config';
 import Members from '@/containers/Members';
 import { Metadata } from 'next';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = constructMetadata({
   title: 'Members Directory • JNVPJAA',
-  description:
-    "Connect with alumni and faculty members of JNVPJAA. Whether you're catching up with old friends or expanding your network, this directory keeps our community connected!",
-  openGraph: {
-    url: 'https://jnvpjaa.org/members',
-    title: 'Members Directory • JNVPJAA',
-    description:
-      "Connect with alumni and faculty members of JNVPJAA. Whether you're catching up with old friends or expanding your network, this directory keeps our community connected!",
-    images: [
-      {
-        url: 'https://assets.jnvpjaa.org/images/cover-2.webp',
-        width: 1280,
-        height: 720,
-        alt: 'Members Directory • JNVPJAA',
-      },
-    ],
-  },
-};
+  description: 'Connect with alumni and faculty members of JNVPJAA. Whether you',
+});
 
 export default function MembersPage() {
   return <Members />;

@@ -1,3 +1,4 @@
+import { constructMetadata } from '@/config/seo.config';
 import BatchCoordinators from '@/containers/Organisation/BatchCoordinators';
 import { initializeApollo } from '@/utils/apollo';
 import { Metadata } from 'next';
@@ -6,23 +7,10 @@ import { headers } from 'next/headers';
 import { BATCH_COORDINATOR_ROLE_ASSIGNMENTS_QUERY } from '@/apollo/accessOperations';
 import { BatchCoordinatorRoleAssignment } from '@/types/access';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = constructMetadata({
   title: 'Batch Coordinators • Alumni Network of JNV Paota, Jaipur',
   description: 'The Official Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur',
-  openGraph: {
-    url: 'https://jnvpjaa.org/batch-coordinators',
-    title: 'Batch Coordinators • Alumni Network of JNV Paota, Jaipur',
-    description: 'The Official Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur',
-    images: [
-      {
-        url: 'https://assets.jnvpjaa.org/images/cover-2.webp',
-        width: 1280,
-        height: 720,
-        alt: 'JNVPJAA',
-      },
-    ],
-  },
-};
+});
 
 // This is a Server Component that fetches data
 async function getBatchCoordinators() {

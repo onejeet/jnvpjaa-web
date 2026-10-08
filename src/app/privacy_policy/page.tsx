@@ -1,26 +1,14 @@
+import { constructMetadata } from '@/config/seo.config';
 import { Box, Typography } from '@mui/material';
 import { Metadata, NextPage } from 'next';
 import Link from 'next/link';
 
 import LayoutModule from '@/layouts/Layout';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = constructMetadata({
   title: 'Privacy Policy • Alumni Network of JNV Paota, Jaipur',
   description: 'The Official Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur',
-  openGraph: {
-    url: 'https://jnvpjaa.org/principal-message',
-    title: "Principal's Message • Alumni Network of JNV Paota, Jaipur",
-    description: 'The Official Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur',
-    images: [
-      {
-        url: 'https://assets.jnvpjaa.org/images/cover-2.webp',
-        width: 1280,
-        height: 720,
-        alt: 'JNVPJAA',
-      },
-    ],
-  },
-};
+});
 
 const PrivacyPage: NextPage = () => (
   <LayoutModule disableCover title="JNVPJAA Privacy Policy • Alumni Network of JNV Paota, Jaipur" containerProps={{}}>

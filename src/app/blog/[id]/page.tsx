@@ -1,6 +1,6 @@
 import { GetBlogDocument, GetBlogQuery } from '@/apollo/hooks';
 import SingleBlog from '@/containers/SingleBlog';
-import { PageProps } from '@/types/global';
+import { SEO_CONFIG, generateSchema } from '@/config/seo.config';
 import { initializeApollo } from '@/utils/apollo';
 import { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -10,7 +10,6 @@ export async function generateMetadata(
   { params }: { params: { id: string } },
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  // Fetch blog data
   const apolloClient = initializeApollo();
   const { id } = params;
   const slug = decodeURIComponent(id);
@@ -21,38 +20,35 @@ export async function generateMetadata(
       variables: { slug },
     });
 
-    const blog = data?.getBlog || {
-      title: 'Blog Preview',
-      slug,
-      summary: 'Blog Preview',
-      cover: {},
-      author: {
-        firstName: '',
-        lastName: '',
-      },
-      createdAt: '',
-      updatedAt: '',
-    };
-    // if (!blog) return notFound();
+    const blog = data?.getBlog;
+    if (!blog) return { title: 'Blog Post Not Found' };
+
+    const title = `${blog.title} • JNVPJAA Blog`;
+    const description = blog.summary || SEO_CONFIG.description;
+    const url = `${SEO_CONFIG.url}/blog/${blog.slug}`;
+    const image = blog.cover?.url || SEO_CONFIG.defaultImage;
 
     return {
-      title: `${blog.title} • JNVPJAA Blog`,
-      description: blog.summary || '',
+      title,
+      description,
+      alternates: { canonical: url },
       openGraph: {
-        url: `https://jnvpjaa.org/blog/${blog.slug}`,
-        title: `${blog.title} • JNVPJAA Blog`,
-        description: blog.summary || '',
-        images: [
-          {
-            url: blog.cover?.url || 'https://assets.jnvpjaa.org/images/cover-2.webp',
-            width: 1280,
-            height: 720,
-            alt: blog.title || 'JNVPJAA',
-          },
-        ],
-        authors: [`${blog.author?.firstName || ''} ${blog.author?.lastName || ''}` || 'JNVPJAA'],
+        type: 'article',
+        url,
+        title,
+        description,
+        images: [{ url: image, width: 1280, height: 720, alt: blog.title }],
+        authors: [`${blog.author?.firstName || ''} ${blog.author?.lastName || ''}`.trim() || SEO_CONFIG.siteName],
         publishedTime: blog.createdAt,
         modifiedTime: blog.updatedAt,
+      },
+      twitter: {
+        card: 'summary_large_image',
+        site: SEO_CONFIG.twitterHandle,
+        creator: SEO_CONFIG.twitterHandle,
+        title,
+        description,
+        images: [image],
       },
     };
   } catch (error) {
@@ -73,14 +69,9 @@ async function getBlogDetails(slug: string) {
       query: GetBlogDocument,
       variables: { slug },
     });
-
-    const blog = data?.getBlog;
-    // if (!blog) return notFound();
-
-    return blog;
+    return data?.getBlog;
   } catch (error) {
     console.error('GraphQL Error (event):', error);
-    // return notFound();
     return undefined;
   }
 }
@@ -89,8 +80,17 @@ async function getBlogDetails(slug: string) {
 export default async function BlogPostPage({ params }: { params: { id: string } }) {
   const { id } = params;
   const slug = decodeURIComponent(id);
-
   const blog = await getBlogDetails(slug);
 
-  return <SingleBlog blog={blog} />;
+  return (
+    <>
+      {blog && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(generateSchema.blogPosting(blog)) }}
+        />
+      )}
+      <SingleBlog blog={blog} />
+    </>
+  );
 }
