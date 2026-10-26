@@ -1,0 +1,19 @@
+{
+  "$schema": "https://schema.railpack.com",
+  "packages": {
+    "node": "22"
+  },
+  "steps": {
+    "build": {
+      "variables": {
+        "NODE_OPTIONS": "--max-old-space-size=1024 --dns-result-order=ipv4first"
+      }
+    }
+  },
+  "deploy": {
+    "variables": {
+      "NODE_OPTIONS": "--max-old-space-size=1024 --dns-result-order=ipv4first"
+    },
+    "startCommand": "npm run start"
+  }
+}
