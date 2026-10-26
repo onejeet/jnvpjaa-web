@@ -1,3 +1,4 @@
+import { constructMetadata } from '@/config/seo.config';
 export const dynamic = 'force-dynamic';
 
 import {
@@ -12,23 +13,10 @@ import Businesses from '@/containers/Businesses';
 import { initializeApollo } from '@/utils/apollo';
 import { Metadata } from 'next';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = constructMetadata({
   title: 'Businesses by Alumni • JNVPJAA',
   description: 'Businesses started or owned by our alumni members of JNV Paota Jaipur.',
-  openGraph: {
-    url: 'https://jnvpjaa.org/businesses',
-    title: 'Businesses by Alumni • JNVPJAA',
-    description: 'Businesses started or owned by our alumni members of JNV Paota Jaipur.',
-    images: [
-      {
-        url: 'https://assets.jnvpjaa.org/business/business-cover.jpeg',
-        width: 1280,
-        height: 720,
-        alt: 'Businesses by Alumni of JNV Paota Jaipur',
-      },
-    ],
-  },
-};
+});
 
 // This is a Server Component that fetches data
 async function getBusiness() {

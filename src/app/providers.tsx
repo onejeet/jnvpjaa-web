@@ -2,8 +2,7 @@
 
 import React from 'react';
 import { LayoutProvider } from '@/context/LayoutContext';
-import createEmotionCache from '@/utils/theme/createEmotionCache';
-import { CacheProvider } from '@emotion/react';
+import EmotionRegistry from '@/utils/theme/EmotionRegistry';
 
 import { AlertProvider } from '@/context/AlertContext';
 import { AuthProvider } from '@/context/AuthContext';
@@ -13,11 +12,9 @@ import OfflineDialog from '@/components/common/OfflineDialog';
 import { ApolloWrapper } from '@/apollo/ApolloWrapper';
 import ScrollToTop from '@/components/common/ScrollToTop';
 
-const clientSideEmotionCache = createEmotionCache();
-
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <CacheProvider value={clientSideEmotionCache}>
+    <EmotionRegistry>
       <ApolloWrapper>
         <AuthProvider>
           <LayoutProvider>
@@ -31,6 +28,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
           </LayoutProvider>
         </AuthProvider>
       </ApolloWrapper>
-    </CacheProvider>
+    </EmotionRegistry>
   );
 }

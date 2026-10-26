@@ -10,14 +10,14 @@ import ProfilePicture from '@/components/common/ProfilePicture';
 import { Skeleton, Typography } from '@mui/material';
 import VerifiedBadge from '@/components/common/VerifiedBadge';
 import { useAuth } from '@/context/AuthContext';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { BatchCoordinatorRoleAssignment } from '@/types/access';
 
 const useBatchCoordinators = (coordinators?: BatchCoordinatorRoleAssignment[]) => {
   const { user } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [columns, setColumns] = React.useState<any[]>([]);
-  const [searchQuery, setSearchQuery] = React.useState<string>('');
   const loading = false;
   React.useEffect(() => {
     const columns: any[] = [
@@ -223,9 +223,8 @@ const useBatchCoordinators = (coordinators?: BatchCoordinatorRoleAssignment[]) =
     setColumns(columns);
   }, [router, user]);
 
-  const onSearch = React.useCallback((q: string) => {
-    setSearchQuery(q);
-  }, []);
+  const searchQuery = searchParams.get('q')?.trim().toLowerCase() || '';
+  const batchParam = searchParams.get('batch');
 
   const rows = React.useMemo(() => {
     if (loading) {
@@ -237,8 +236,20 @@ const useBatchCoordinators = (coordinators?: BatchCoordinatorRoleAssignment[]) =
         };
       });
     }
-    return coordinators || [];
-  }, [loading, coordinators]);
+    const selectedBatch = batchParam === null ? null : Number(batchParam);
+
+    return (coordinators || []).filter((coordinator) => {
+      const coordinatorName = `${coordinator.user?.firstName || ''} ${coordinator.user?.lastName || ''}`
+        .trim()
+        .toLowerCase();
+      const coordinatorBatch = coordinator.batch ?? coordinator.user?.batch;
+      const matchesSearch = !searchQuery || coordinatorName.includes(searchQuery);
+      const matchesBatch =
+        selectedBatch === null || (Number.isInteger(selectedBatch) && coordinatorBatch === selectedBatch);
+
+      return matchesSearch && matchesBatch;
+    });
+  }, [batchParam, loading, coordinators, searchQuery]);
 
   return {
     rows,
@@ -247,7 +258,6 @@ const useBatchCoordinators = (coordinators?: BatchCoordinatorRoleAssignment[]) =
     // rows: usersListData,
     columns,
     // rowCount: total,
-    onSearch,
     // state,
     // users,
     // loadingUsers,

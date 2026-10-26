@@ -1,6 +1,7 @@
 import { PageProps } from '@/types/global';
 import { Event, GetEventDetailsDocument, GetEventDetailsQuery } from '@/apollo/hooks';
 import EventDetails from '@/containers/EventDetails';
+import { SEO_CONFIG, generateSchema } from '@/config/seo.config';
 import { initializeApollo } from '@/utils/apollo';
 import { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -19,27 +20,33 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
       variables: { id: parseInt(id, 10) },
     });
 
-    console.log('ZZ: event metadata ', id, parseInt(id, 10), data);
-
     const event = data?.getEventDetails;
 
-    if (!event) return notFound();
+    if (!event) return { title: 'Event Not Found' };
+
+    const title = `${event.title} • JNVPJAA Events`;
+    const description = event.summary || SEO_CONFIG.description;
+    const url = `${SEO_CONFIG.url}/events/${event.id}`;
+    const image = event.cover?.url || SEO_CONFIG.defaultImage;
 
     return {
-      title: `${event.title} • JNVPJAA Events`,
-      description: event.summary || '',
+      title,
+      description,
+      alternates: { canonical: url },
       openGraph: {
-        url: `https://jnvpjaa.org/events/${event.id}`,
-        title: `${event.title} • JNVPJAA Events`,
-        description: event.summary || '',
-        images: [
-          {
-            url: event.cover?.url || 'https://assets.jnvpjaa.org/images/cover-2.webp',
-            width: 1280,
-            height: 720,
-            alt: event.title || 'JNVPJAA',
-          },
-        ],
+        type: 'website',
+        url,
+        title,
+        description,
+        images: [{ url: image, width: 1280, height: 720, alt: event.title }],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        site: SEO_CONFIG.twitterHandle,
+        creator: SEO_CONFIG.twitterHandle,
+        title,
+        description,
+        images: [image],
       },
     };
   } catch (error) {
@@ -61,8 +68,6 @@ async function getEventDetails(id: string) {
       variables: { id: parseInt(id, 10) },
     });
 
-    console.log('ZZ: event', id, parseInt(id, 10), data);
-
     if (!data?.getEventDetails) {
       return notFound();
     }
@@ -78,7 +83,15 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
   const { id } = params;
   const event = await getEventDetails(id);
 
-  console.log('ZZ: event', id, event);
-
-  return <EventDetails event={event as Event} />;
+  return (
+    <>
+      {event && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(generateSchema.event(event)) }}
+        />
+      )}
+      <EventDetails event={event as Event} />
+    </>
+  );
 }

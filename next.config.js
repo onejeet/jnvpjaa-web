@@ -164,9 +164,6 @@ const nextConfig = {
       },
     ],
   },
-  experimental: {
-    missingSuspenseWithCSRBailout: false,
-  },
   transpilePackages: ['mui-tel-input'],
   webpack: (config, { isServer }) => {
     // config.resolve.alias.canvas = false;
