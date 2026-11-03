@@ -39,6 +39,7 @@ const Hero = () => {
         >
           <Typography
             variant="h1"
+            component="p"
             fontSize={{
               xs: 24,
               sm: 30,
@@ -59,7 +60,7 @@ const Hero = () => {
             color="grey.300"
             // sx={{ fontFamily: 'Playwrite CU' }}
           >
-            JNV Paota Almuni Network
+            JNV Paota Alumni Network
           </Typography> */}
         </Box>
         <Box
@@ -89,7 +90,7 @@ const Hero = () => {
             textAlign="center"
             color="background.paper"
           >
-            JNV Paota Almuni Network
+            JNV Paota Alumni Network
           </Typography>
         </Box>
       </Box>

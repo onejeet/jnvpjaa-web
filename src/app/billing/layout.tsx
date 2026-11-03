@@ -2,6 +2,8 @@ import { constructMetadata } from '@/config/seo.config';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = constructMetadata({
+  url: '/billing/',
+  noIndex: true,
   title: 'Billing • JNVPJAA',
   description: 'View association billing and transaction records with JNVPJAA',
 });

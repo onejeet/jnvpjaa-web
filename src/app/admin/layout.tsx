@@ -3,6 +3,8 @@ import { Metadata } from 'next';
 import { constructMetadata } from '@/config/seo.config';
 
 export const metadata: Metadata = constructMetadata({
+  url: '/admin/',
+  noIndex: true,
   title: 'Admin Panel • Alumni Network of JNV Paota, Jaipur',
   description: 'Admin panel for managing JNVPJAA alumni network content and members.',
 });

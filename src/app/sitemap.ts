@@ -24,7 +24,6 @@ const routes = [
   { path: '/past-presidents/', priority: 0.8 },
   { path: '/gallery/', priority: 0.8 },
   { path: '/businesses/', priority: 0.8 },
-  { path: '/transactions/', priority: 0.8 },
 ] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {

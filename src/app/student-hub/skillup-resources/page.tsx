@@ -4,6 +4,7 @@ import LayoutModule from '@/layouts/Layout';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = constructMetadata({
+  url: '/student-hub/skillup-resources/',
   title: 'SkillUp Resources • Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur',
   description: 'The Official Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur',
 });

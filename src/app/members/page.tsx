@@ -3,6 +3,7 @@ import Members from '@/containers/Members';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = constructMetadata({
+  url: '/members/',
   title: 'Members Directory • JNVPJAA',
   description: 'Connect with alumni and faculty members of JNVPJAA. Whether you',
 });

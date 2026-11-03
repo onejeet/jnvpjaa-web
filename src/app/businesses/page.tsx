@@ -14,6 +14,7 @@ import { initializeApollo } from '@/utils/apollo';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = constructMetadata({
+  url: '/businesses/',
   title: 'Businesses by Alumni • JNVPJAA',
   description: 'Businesses started or owned by our alumni members of JNV Paota Jaipur.',
 });

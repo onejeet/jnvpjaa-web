@@ -8,6 +8,7 @@ import { BATCH_COORDINATOR_ROLE_ASSIGNMENTS_QUERY } from '@/apollo/accessOperati
 import { BatchCoordinatorRoleAssignment } from '@/types/access';
 
 export const metadata: Metadata = constructMetadata({
+  url: '/batch-coordinators/',
   title: 'Batch Coordinators • Alumni Network of JNV Paota, Jaipur',
   description: 'The Official Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur',
 });

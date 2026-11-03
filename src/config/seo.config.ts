@@ -4,10 +4,10 @@ const siteUrl = 'https://jnvpjaa.org';
 
 export const SEO_CONFIG = {
   siteName: 'JNVPJAA',
-  title: 'JNVPJAA • Alumni Network of JNV Paota, Jaipur',
+  title: 'JNVPJAA | JNV Paota Jaipur Alumni Association',
   titleTemplate: '%s | JNVPJAA',
   description:
-    'The Official Alumni Network of Jawahar Navodaya Vidyalaya Paota, Jaipur. JNVs are a testament to innovative state-sponsored education in India. Connect with fellow alumni, share experiences, and stay updated on events that honor our shared journey and the values of our beloved school.',
+    'Connect with alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur. Explore JNVPJAA events, alumni stories, photo galleries and community initiatives.',
   url: siteUrl,
   defaultImage: 'https://assets.jnvpjaa.org/images/cover-2.webp',
   twitterHandle: '@jnvpjaa', // Update with actual handle if available
@@ -22,9 +22,6 @@ export const defaultMetadata: Metadata = {
     default: SEO_CONFIG.title,
   },
   description: SEO_CONFIG.description,
-  alternates: {
-    canonical: SEO_CONFIG.url,
-  },
   openGraph: {
     type: 'website',
     locale: SEO_CONFIG.locale,
@@ -73,22 +70,22 @@ export function constructMetadata({
   title?: string;
   description?: string;
   image?: string;
-  url?: string;
+  url: string;
   noIndex?: boolean;
-} = {}): Metadata {
+}): Metadata {
   const customTitle = title ? title : SEO_CONFIG.title; // If template is used, next.js will append the template. But we're just providing the string.
 
   return {
-    title: customTitle,
+    title: { absolute: customTitle.includes('JNVPJAA') ? customTitle : `${customTitle} | JNVPJAA` },
     description: description || SEO_CONFIG.description,
     alternates: {
-      canonical: url || SEO_CONFIG.url,
+      canonical: new URL(url, SEO_CONFIG.url).href,
     },
     openGraph: {
       ...defaultMetadata.openGraph,
       title: customTitle,
       description: description || SEO_CONFIG.description,
-      url: url || SEO_CONFIG.url,
+      url: new URL(url, SEO_CONFIG.url).href,
       images: [
         {
           url: image || SEO_CONFIG.defaultImage,

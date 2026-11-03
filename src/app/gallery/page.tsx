@@ -3,6 +3,7 @@ import Gallery from '@/containers/Gallery';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = constructMetadata({
+  url: '/gallery/',
   title: 'Photos Gallery • JNVPJAA',
   description: 'A glimpse into the memories we',
 });

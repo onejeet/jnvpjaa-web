@@ -5,6 +5,7 @@ import { initializeApollo } from '@/utils/apollo';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = constructMetadata({
+  url: '/blog/',
   title: 'Blog • Alumni Network of JNV Paota, Jaipur',
   description:
     'Inspiring stories, memorable experiences, poetries, opinions and valuable insights from our alumni community of Jawahar Navodaya Vidyalaya, Paota, Jaipur',

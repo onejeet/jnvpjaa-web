@@ -22,6 +22,7 @@ export async function generateMetadata({ params }: PageProps, parent: ResolvingM
 
     return {
       title: `${album.title} • JNVPJAA Gallery`,
+      alternates: { canonical: `https://jnvpjaa.org/gallery/${album.id}/` },
       description: album.description || 'View photo album from JNVPJAA events and activities',
       openGraph: {
         url: `https://jnvpjaa.org/gallery/${album.id}`,

@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
+  robots: { index: false, follow: false },
   title: 'Transactions • JNVPJAA',
   description: 'View your transaction history with JNVPJAA',
   openGraph: {
