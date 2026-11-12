@@ -6,6 +6,7 @@ import { Alert, Box, Button, CircularProgress, MenuItem, Paper, Stack, TextField
 import { ACTIVITY_FEED } from '@/apollo/activityOperations';
 import { useAuth } from '@/context/AuthContext';
 import { ROLE_CODES } from '@/constants/access';
+import { getBatchOptions } from '@/utils/helpers';
 
 const actionLabels: Record<string, string> = {
   MEMBER_REGISTRATION_APPROVED: 'Approved member registration',
@@ -13,8 +14,8 @@ const actionLabels: Record<string, string> = {
   MEMBER_DISABLED: 'Disabled member',
   MEMBER_ENABLED: 'Enabled member',
   MEMBER_REMOVED: 'Removed member',
-  ROLE_ASSIGNED: 'Assigned role',
-  ROLE_REVOKED: 'Revoked role',
+  ROLE_ASSIGNED: 'Granted member access',
+  ROLE_REVOKED: 'Removed member access',
   BLOG_APPROVED: 'Approved blog',
   BLOG_CREATED: 'Created blog',
   BLOG_SUBMITTED: 'Submitted blog for approval',
@@ -40,9 +41,22 @@ const actionLabels: Record<string, string> = {
   EXECUTIVE_TERM_CLOSED: 'Closed executive term',
   EXECUTIVE_POSITION_ASSIGNED: 'Assigned executive position',
   EXECUTIVE_POSITION_REVOKED: 'Revoked executive position',
+  ACCESS_BACKFILLED: 'Set up member access',
+  EXECUTIVE_TERM_BACKFILLED: 'Set up executive term',
 };
 
 const pageSize = 25;
+const areaLabels: Record<string, string> = {
+  User: 'Members',
+  UserRoleAssignment: 'Member access',
+  ExecutivePositionAssignment: 'Executive committee',
+  ExecutiveTerm: 'Executive terms',
+  Blog: 'Blogs',
+  Event: 'Events',
+  Business: 'Businesses',
+  Transaction: 'Payments and donations',
+};
+const batchLabel = (batch: number) => (batch === 0 ? 'Faculty' : `Batch ${batch}`);
 
 const ActivityCenter = () => {
   const { user, access, hasRole } = useAuth();
@@ -55,6 +69,7 @@ const ActivityCenter = () => {
   const [action, setAction] = React.useState('');
   const [entityType, setEntityType] = React.useState('');
   const [person, setPerson] = React.useState('');
+  const [batch, setBatch] = React.useState('');
   const { data, loading, error, refetch } = useQuery(ACTIVITY_FEED, {
     skip: !user?.id || !allowed,
     variables: {
@@ -63,6 +78,7 @@ const ActivityCenter = () => {
       action: action || null,
       entityType: entityType || null,
       person: person || null,
+      batch: batch === '' ? null : Number(batch),
     },
     fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true,
@@ -79,17 +95,19 @@ const ActivityCenter = () => {
       <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
         <Box>
           <Typography variant="h2">Activity Center</Typography>
-          <Typography color="text.secondary">Decisions and access changes across the association.</Typography>
+          <Typography color="text.secondary">
+            See who approved, changed, or removed what across the association.
+          </Typography>
         </Box>
         <Button onClick={() => refetch()} disabled={loading}>
           Refresh
         </Button>
       </Stack>
-      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} mb={2}>
+      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} mb={2} flexWrap="wrap" useFlexGap>
         <TextField
           size="small"
-          label="Actor or member"
-          placeholder="Search name"
+          label="Person"
+          placeholder="Search names"
           value={person}
           onChange={(event) => {
             setPerson(event.target.value);
@@ -97,6 +115,24 @@ const ActivityCenter = () => {
           }}
           sx={{ minWidth: 210 }}
         />
+        <TextField
+          select
+          size="small"
+          label="Batch"
+          value={batch}
+          onChange={(event) => {
+            setBatch(event.target.value);
+            setPage(0);
+          }}
+          sx={{ minWidth: 150 }}
+        >
+          <MenuItem value="">All batches</MenuItem>
+          {getBatchOptions().map((option) => (
+            <MenuItem key={option.value} value={String(option.value)}>
+              {option.label}
+            </MenuItem>
+          ))}
+        </TextField>
         <TextField
           select
           size="small"
@@ -109,31 +145,30 @@ const ActivityCenter = () => {
           sx={{ minWidth: 180 }}
         >
           <MenuItem value="">All areas</MenuItem>
-          {[
-            'User',
-            'UserRoleAssignment',
-            'ExecutivePositionAssignment',
-            'ExecutiveTerm',
-            'Blog',
-            'Event',
-            'Business',
-          ].map((value) => (
+          {Object.entries(areaLabels).map(([value, label]) => (
             <MenuItem key={value} value={value}>
-              {value}
+              {label}
             </MenuItem>
           ))}
         </TextField>
         <TextField
+          select
           size="small"
-          label="Action code"
-          placeholder="e.g. MEMBER_REGISTRATION_APPROVED"
+          label="What happened"
           value={action}
           onChange={(event) => {
-            setAction(event.target.value.toUpperCase().trim());
+            setAction(event.target.value);
             setPage(0);
           }}
-          sx={{ minWidth: 280 }}
-        />
+          sx={{ minWidth: 220 }}
+        >
+          <MenuItem value="">All changes</MenuItem>
+          {Object.entries(actionLabels).map(([value, label]) => (
+            <MenuItem key={value} value={value}>
+              {label}
+            </MenuItem>
+          ))}
+        </TextField>
       </Stack>
       {error && (
         <Alert severity="error" sx={{ mb: 2 }}>
@@ -147,13 +182,16 @@ const ActivityCenter = () => {
             <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" gap={1}>
               <Box>
                 <Typography fontWeight={600}>
-                  {item.actorName || 'System'} ·{' '}
-                  {actionLabels[item.action] || item.action.replaceAll('_', ' ').toLowerCase()}
+                  {item.actorName || 'System'}
+                  {item.actorBatch !== null && item.actorBatch !== undefined
+                    ? ` (${batchLabel(item.actorBatch)})`
+                    : ''}{' '}
+                  · {actionLabels[item.action] || item.action.replaceAll('_', ' ').toLowerCase()}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   {item.targetName ? `Member: ${item.targetName} · ` : ''}
-                  {item.entityType}
-                  {item.entityId ? ` #${item.entityId}` : ''}
+                  {item.batch !== null && item.batch !== undefined ? `${batchLabel(item.batch)} · ` : ''}
+                  {areaLabels[item.entityType] || item.entityType.replaceAll('_', ' ')}
                 </Typography>
                 {item.reason && (
                   <Typography variant="body2" sx={{ mt: 0.5 }}>

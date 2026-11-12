@@ -9,6 +9,7 @@ export const ACTIVITY_FEED = gql`
     $actorUserId: String
     $targetUserId: String
     $person: String
+    $batch: Int
   ) {
     activityFeed(
       limit: $limit
@@ -18,6 +19,7 @@ export const ACTIVITY_FEED = gql`
       actorUserId: $actorUserId
       targetUserId: $targetUserId
       person: $person
+      batch: $batch
     ) {
       total
       items {
@@ -27,8 +29,10 @@ export const ACTIVITY_FEED = gql`
         entityId
         actorUserId
         actorName
+        actorBatch
         targetUserId
         targetName
+        batch
         reason
         createdAt
       }
