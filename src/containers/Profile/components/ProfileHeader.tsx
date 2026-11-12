@@ -1,7 +1,7 @@
 'use client';
 
 import Title from '@/components/common/Title';
-import { Box, Typography, Skeleton, IconButton, Tooltip } from '@mui/material';
+import { Box, Typography, Skeleton, IconButton, Tooltip, Button, Chip } from '@mui/material';
 import { ProfileHeaderProps } from '../Profile.types';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import VerifiedBadge from '@/components/common/VerifiedBadge';
@@ -11,7 +11,7 @@ import FacultyBadge from '@/components/common/FacultyBadge';
 import Menu from '@/components/core/Menu';
 import React from 'react';
 import { useAlert } from '@/context/AlertContext';
-import { useApolloClient } from '@apollo/client';
+import { useApolloClient, useMutation } from '@apollo/client';
 import { paths } from '@/config/paths';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
@@ -21,6 +21,7 @@ import Image from 'next/image';
 import { ROLE_CODES, ROLE_LABELS } from '@/constants/access';
 import ProfilePictureUpload from '@/modules/ProfileSetup/ProfilePictureUpload';
 import { getProfileCover } from '@/utils/profileCover';
+import { SET_MEMBER_DISABLED } from '@/apollo/memberOperations';
 
 const profilePositionRoleCodes = new Set([ROLE_CODES.BATCH_COORDINATOR, ROLE_CODES.FINANCE_MANAGER]);
 
@@ -29,9 +30,61 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
   const [openPictureEdit, setOpenPictureEdit] = React.useState<boolean>(false);
   const { user, loading, isProfileEditable, editingProfile, saveProfile, setEditingProfile } = useProfile();
   const { showAlert } = useAlert();
-  const { user: authUser, isAdmin, positions: authPositions, roles: authRoles, setUser } = useAuth();
+  const { user: authUser, isAdmin, positions: authPositions, roles: authRoles, hasRole, setUser } = useAuth();
   const router = useRouter();
   const client = useApolloClient();
+  const [setMemberDisabled, { loading: changingMemberStatus }] = useMutation(SET_MEMBER_DISABLED);
+  const canManageMember = Boolean(
+    hasRole(ROLE_CODES.SUPER_ADMIN) &&
+    user?.id &&
+    user.id !== authUser?.id &&
+    user.isVerified &&
+    (user.role?.code === ROLE_CODES.MEMBER || user.role?.name?.toLowerCase() === 'member')
+  );
+
+  const changeMemberStatus = React.useCallback(() => {
+    if (!user?.id || !canManageMember) return;
+    const disabled = !user.disabled;
+    showAlert(
+      {
+        visible: true,
+        type: 'custom',
+        action: 'update',
+        title: `${disabled ? 'Disable' : 'Enable'} ${user.firstName || 'member'}?`,
+        message: disabled
+          ? 'This immediately revokes their access. You can enable the account later.'
+          : 'This member will be able to sign in again.',
+        okayButtonProps: { title: disabled ? 'Disable' : 'Enable' },
+        onOkay: async () => {
+          showAlert({ visible: true, type: 'loading', action: 'loading', message: 'Updating member...' }, true);
+          try {
+            await setMemberDisabled({ variables: { id: user.id, disabled } });
+            await client.refetchQueries({ include: [GetUserDetailsDocument] });
+            showAlert(
+              {
+                visible: true,
+                type: 'success',
+                action: 'success',
+                message: `${user.firstName || 'Member'} was ${disabled ? 'disabled' : 'enabled'}.`,
+              },
+              true
+            );
+          } catch (error: any) {
+            showAlert(
+              {
+                visible: true,
+                type: 'error',
+                action: 'error',
+                message: error?.message || 'Could not update this member.',
+              },
+              true
+            );
+          }
+        },
+      },
+      true
+    );
+  }, [canManageMember, client, setMemberDisabled, showAlert, user]);
 
   const profileSummary = React.useMemo(() => {
     const summaryParts = [];
@@ -298,12 +351,27 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
                 />
               )}
               {user?.batch === 0 && <FacultyBadge size={26} />}
+              {user?.isVerified && user?.disabled && (
+                <Chip label="Disabled" color="warning" size="small" sx={{ ml: 1, fontWeight: 600 }} />
+              )}
             </Box>
           }
           titleProps={{ fontWeight: 600, fontSize: '30px' }}
           summary={profileSummary}
           summaryProps={{ color: 'grey.600', fontSize: '14px', mt: { xs: 0, md: 1 } }}
         />
+        {canManageMember && !editingProfile && (
+          <Button
+            color={user?.disabled ? 'success' : 'warning'}
+            variant="outlined"
+            size="small"
+            disabled={changingMemberStatus}
+            onClick={changeMemberStatus}
+            sx={{ alignSelf: 'center', mr: 1 }}
+          >
+            {user?.disabled ? 'Enable member' : 'Disable member'}
+          </Button>
+        )}
         {isProfileEditable && !editingProfile && (
           <Menu
             //  onChange={(val) => editor?.commands.toggleHeading({ level: val as Level })}

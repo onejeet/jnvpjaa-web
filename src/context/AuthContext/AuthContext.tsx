@@ -52,6 +52,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     return (
       pathname.startsWith('/profile') ||
       pathname.startsWith('/admin') ||
+      pathname.startsWith('/activity') ||
       pathname.startsWith('/transactions') ||
       pathname.startsWith('/change-password') ||
       pathname.includes('/new') ||

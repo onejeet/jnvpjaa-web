@@ -66,7 +66,7 @@ const useMembersTable = () => {
           query: searchParams.get('q') || '',
           batch: searchParams?.get('batch') ? parseInt(searchParams.get('batch') || '', 10) : undefined,
         },
-        offset: paginationModel?.page || 0,
+        offset: (paginationModel?.page || 0) * (paginationModel?.pageSize || 50),
         limit: paginationModel?.pageSize || 10,
       },
     },
@@ -265,7 +265,16 @@ const useMembersTable = () => {
         width: 120,
         ...commonTableColumnProps,
         renderCell: ({ row }: GridRowParams) =>
-          row.loading ? <Skeleton width={90} /> : <Chip label={row.disabled ? 'Disabled' : 'Active'} size="small" />,
+          row.loading ? (
+            <Skeleton width={90} />
+          ) : (
+            <Chip
+              label={!row.isVerified ? 'Pending' : row.disabled ? 'Disabled' : 'Active'}
+              color={!row.isVerified ? 'default' : row.disabled ? 'warning' : 'success'}
+              size="small"
+              sx={{ fontWeight: 600 }}
+            />
+          ),
       });
       columns.push({
         field: 'memberManagement',
@@ -404,31 +413,37 @@ const useMembersTable = () => {
                           {
                             visible: true,
                             type: 'error',
-                            message: '',
+                            title: `Reject ${row.firstName || 'member'}?`,
+                            message: 'This permanently deletes the pending registration.',
                             open: true,
                             action: 'reject',
-                            onOkay: () => {
+                            onOkay: async () => {
                               showAlert({
                                 visible: true,
                                 type: 'loading',
                                 message: 'Rejection is in progress...',
                               });
-                              handleUserVerification({
-                                variables: {
-                                  user_id: row.id,
-                                  verified: false,
-                                },
-                                onCompleted: () => {
-                                  showAlert({
+                              try {
+                                await handleUserVerification({ variables: { user_id: row.id, verified: false } });
+                                await refetch();
+                                showAlert(
+                                  {
                                     visible: true,
                                     type: 'success',
-                                    message: `${row?.firstName || ''} ${row?.lastName || ''} is rejected. `,
-                                  });
-
-                                  client.cache.evict({ fieldName: 'getUserList' });
-                                  client.cache.gc();
-                                },
-                              });
+                                    message: `${row?.firstName || ''} ${row?.lastName || ''} was rejected and deleted.`,
+                                  },
+                                  true
+                                );
+                              } catch (error: any) {
+                                showAlert(
+                                  {
+                                    visible: true,
+                                    type: 'error',
+                                    message: error?.message || 'Could not reject this registration.',
+                                  },
+                                  true
+                                );
+                              }
                             },
                           },
                           true
@@ -451,6 +466,7 @@ const useMembersTable = () => {
     manageMember,
     user,
     handleUserVerification,
+    refetch,
     pathname,
     showAlert,
     router,
