@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { UNSPLASH_HOME } from '@/utils/unsplash';
 import dayjs from 'dayjs';
 import DOMPurify from 'dompurify';
 import {
@@ -199,7 +200,14 @@ const SingleEventView: React.FC<SingleEventViewProps> = ({
               >
                 {cover?.credits?.name || ''}
               </a>{' '}
-              on {cover?.credits?.source}
+              on{' '}
+              {cover?.credits?.source === 'Unsplash' ? (
+                <a href={UNSPLASH_HOME} target="_blank" rel="noopener noreferrer">
+                  Unsplash
+                </a>
+              ) : (
+                cover?.credits?.source
+              )}
             </Typography>
           )}
         </Box>

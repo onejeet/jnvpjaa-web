@@ -22,6 +22,7 @@ import ClapButton from '../ClapButton';
 import SocialShareModal from '../SocialShareModal';
 import Image from 'next/image';
 import { dmSans, notoSerif } from '@/utils/theme/fonts';
+import { UNSPLASH_HOME } from '@/utils/unsplash';
 
 export function useDebouncedClap(callback: (claps: number) => void, delay = 800) {
   const callbackRef = React.useRef(callback);
@@ -229,7 +230,14 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, claps: initialCl
                     >
                       {cover?.credits?.name || ''}
                     </a>{' '}
-                    on {cover?.credits?.source}
+                    on{' '}
+                    {cover?.credits?.source === 'Unsplash' ? (
+                      <a href={UNSPLASH_HOME} target="_blank" rel="noopener noreferrer">
+                        Unsplash
+                      </a>
+                    ) : (
+                      cover?.credits?.source
+                    )}
                   </Typography>
                 )}
               </Box>

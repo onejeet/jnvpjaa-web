@@ -20,12 +20,20 @@ import Dialog from '@/components/core/Dialog';
 import Image from 'next/image';
 import { ROLE_CODES, ROLE_LABELS } from '@/constants/access';
 import ProfilePictureUpload from '@/modules/ProfileSetup/ProfilePictureUpload';
-import { getProfileCover } from '@/utils/profileCover';
+import { GET_OR_CREATE_PROFILE_COVER } from '@/apollo/profileCoverOperations';
+import { UNSPLASH_HOME, withUnsplashReferral } from '@/utils/unsplash';
 import { SET_MEMBER_DISABLED } from '@/apollo/memberOperations';
 
 const profilePositionRoleCodes = new Set([ROLE_CODES.BATCH_COORDINATOR, ROLE_CODES.FINANCE_MANAGER]);
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
+  const [cover, setCover] = React.useState<{
+    url: string;
+    alt: string;
+    caption: string;
+    photographerName: string;
+    photographerUrl: string;
+  } | null>(null);
   const [openPictureView, setOpenPictureView] = React.useState<boolean>(false);
   const [openPictureEdit, setOpenPictureEdit] = React.useState<boolean>(false);
   const { user, loading, isProfileEditable, editingProfile, saveProfile, setEditingProfile } = useProfile();
@@ -34,6 +42,23 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
   const router = useRouter();
   const client = useApolloClient();
   const [setMemberDisabled, { loading: changingMemberStatus }] = useMutation(SET_MEMBER_DISABLED);
+  const [getOrCreateProfileCover] = useMutation(GET_OR_CREATE_PROFILE_COVER);
+
+  React.useEffect(() => {
+    if (!user?.id) return;
+    let active = true;
+    setCover(null);
+    getOrCreateProfileCover({ variables: { userId: user.id } })
+      .then(({ data }) => {
+        if (active) setCover(data?.getOrCreateProfileCover || null);
+      })
+      .catch(() => {
+        if (active) setCover(null);
+      });
+    return () => {
+      active = false;
+    };
+  }, [getOrCreateProfileCover, user?.id]);
   const canManageMember = Boolean(
     hasRole(ROLE_CODES.SUPER_ADMIN) &&
     user?.id &&
@@ -236,10 +261,9 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
         </Box>
       ) : (
         <Box
-          component="img"
-          src={getProfileCover(user?.id)}
-          alt="JNV Paota campus"
           sx={{
+            position: 'relative',
+            overflow: 'hidden',
             width: '100%',
             minWidth: '100%',
             height: {
@@ -250,12 +274,67 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
               xs: 180,
               md: 250,
             },
-            objectFit: 'cover',
             borderRadius: 2,
             border: '1px dashed',
             borderColor: 'grey.400',
+            background: 'linear-gradient(120deg, #274d43, #60926d)',
           }}
-        />
+        >
+          {cover?.url && (
+            <Box
+              component="img"
+              src={cover.url}
+              alt={cover.alt}
+              onError={() => setCover(null)}
+              sx={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+          )}
+          {cover?.url && (
+            <Typography
+              component="span"
+              variant="caption"
+              sx={{
+                position: 'absolute',
+                right: 8,
+                bottom: 8,
+                maxWidth: { xs: 'calc(100% - 16px)', md: '60%' },
+                textAlign: 'right',
+                px: 1,
+                py: 0.25,
+                borderRadius: 1,
+                bgcolor: 'rgba(0,0,0,0.68)',
+                color: 'white',
+                fontSize: 11,
+                lineHeight: 1.5,
+              }}
+            >
+              {cover.caption && (
+                <>
+                  {cover.caption}
+                  <br />
+                </>
+              )}
+              Photo by{' '}
+              <a
+                href={withUnsplashReferral(cover.photographerUrl)}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: 'inherit', textDecoration: 'underline' }}
+              >
+                {cover.photographerName}
+              </a>{' '}
+              on{' '}
+              <a
+                href={UNSPLASH_HOME}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: 'inherit', textDecoration: 'underline' }}
+              >
+                Unsplash
+              </a>
+            </Typography>
+          )}
+        </Box>
       )}
 
       <ProfilePicture
