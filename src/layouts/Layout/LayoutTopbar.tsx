@@ -41,13 +41,14 @@ import {
   IconLogout as SignOut,
   IconUser as User,
   IconShieldCheck,
+  IconActivity,
 } from '@tabler/icons-react';
 import { paths } from '@/config/paths';
 import Lottie from '@/components/common/DynamicLottie';
 import giftsLottieIcon from '@/utils/lottie/gifts_art.json';
 import { isBirthdayToday } from '@/utils/helpers';
 import GlobalBgShade from '@/components/common/GlobalBgShade';
-import { PERMISSION_CODES } from '@/constants/access';
+import { PERMISSION_CODES, ROLE_CODES } from '@/constants/access';
 
 export interface IMenuItemProps {
   item: IHeaderMenuItem;
@@ -82,7 +83,7 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
   const theme = useTheme();
   const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const { user, logoutUser, redirectToSignin, can } = useAuth();
+  const { user, logoutUser, redirectToSignin, can, hasRole, access } = useAuth();
 
   const HEADER_MENU = React.useMemo(() => {
     return getHeaderMenu(Boolean(user?.id));
@@ -104,6 +105,11 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
       can(PERMISSION_CODES.SCHOLARSHIP_APPLICATION_REASSIGN),
     [can]
   );
+  const canViewActivity =
+    hasRole(ROLE_CODES.EXECUTIVE_MEMBER) ||
+    hasRole(ROLE_CODES.PLATFORM_ADMIN) ||
+    hasRole(ROLE_CODES.SUPER_ADMIN) ||
+    Boolean(access?.positions?.length);
 
   const ACCOUNT_MENU_LIST = React.useMemo(
     () =>
@@ -122,6 +128,14 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
               onClick: () => router.push('/admin'),
             }
           : null,
+        canViewActivity
+          ? {
+              label: 'Activity Center',
+              value: '/activity',
+              icon: <IconActivity size={16} />,
+              onClick: () => router.push('/activity'),
+            }
+          : null,
         {
           label: 'Change Password',
           value: '/change-password',
@@ -138,7 +152,7 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
           onClick: logoutUser,
         },
       ].filter(Boolean) as AccountMenuItem[],
-    [canAccessAdminCenter, logoutUser, router, redirectToSignin]
+    [canAccessAdminCenter, canViewActivity, logoutUser, router, redirectToSignin]
   );
 
   const ACCOUNT_COMP = React.useMemo(() => {

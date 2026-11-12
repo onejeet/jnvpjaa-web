@@ -8,10 +8,16 @@ import { useAlert } from '@/context/AlertContext';
 import Button from '@/components/core/Button';
 import { useRouter } from 'next/navigation';
 import { Info } from '@mui/icons-material';
-import { useResetPasswordMutation } from '@/apollo/hooks';
+import { useMutation } from '@apollo/client';
+import { CHANGE_PASSWORD_MUTATION } from '@/apollo/authOperations';
 import { useAuth } from '@/context/AuthContext';
-import { IForgotPasswordFormInput } from '../ForgotPassword/ForgotPassword.types';
 import { IconCircleCheck as CheckCircle } from '@tabler/icons-react';
+
+type ChangePasswordFormInput = {
+  currentPassword: string;
+  password: string;
+  'confirm-password': string;
+};
 
 interface ChangePasswordFormProps {
   onNext?: () => void;
@@ -26,14 +32,15 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ onNext, contain
     handleSubmit,
     getValues,
     formState: { errors },
-  } = useForm<IForgotPasswordFormInput>();
+  } = useForm<ChangePasswordFormInput>();
 
   const watchPassword = useWatch({ control, name: 'password' });
-  const [handlePasswordReset, { loading: resetPasswordLoading }] = useResetPasswordMutation();
+  const [handlePasswordReset, { loading: resetPasswordLoading }] = useMutation(CHANGE_PASSWORD_MUTATION);
   const onSubmit = React.useCallback(
-    (data: IForgotPasswordFormInput) => {
+    (data: ChangePasswordFormInput) => {
       handlePasswordReset({
         variables: {
+          currentPassword: data.currentPassword,
           newPassword: data?.password,
         },
         onCompleted: () => {
@@ -77,10 +84,22 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ onNext, contain
     >
       <FormTextField
         fullWidth
+        label="Current Password"
+        type="password"
+        id="current-password"
+        autoComplete="current-password"
+        control={control}
+        name="currentPassword"
+        size="small"
+        rules={{ required: 'Required' }}
+      />
+
+      <FormTextField
+        fullWidth
         label="New Password"
         type="password"
         id="password"
-        autoComplete="current-password"
+        autoComplete="new-password"
         control={control}
         name="password"
         size="small"
@@ -98,7 +117,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ onNext, contain
         label="Confirm New Password"
         type="password"
         id="confirm-password"
-        autoComplete="current-password"
+        autoComplete="new-password"
         control={control}
         name="confirm-password"
         size="small"

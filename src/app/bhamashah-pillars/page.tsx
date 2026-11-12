@@ -4,8 +4,9 @@ import { Metadata } from 'next';
 import LayoutModule from '@/layouts/Layout';
 
 export const metadata: Metadata = constructMetadata({
+  url: '/bhamashah-pillars/',
   title: 'JNVPJAA Bhamashah Pillars • Alumni Network of JNV Paota, Jaipur',
-  description: 'The Official Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur',
+  description: 'Recognize the supporters and contributors behind JNVPJAA educational and alumni community initiatives.',
 });
 
 export default function BhamashahPillarsPage() {

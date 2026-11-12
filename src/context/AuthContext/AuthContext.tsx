@@ -53,6 +53,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       pathname.startsWith('/profile') ||
       pathname.startsWith('/admin') ||
       pathname.startsWith('/billing') ||
+      pathname.startsWith('/activity') ||
       pathname.startsWith('/transactions') ||
       pathname.startsWith('/change-password') ||
       pathname.includes('/new') ||
@@ -170,6 +171,12 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
+      const isPasswordResetLink =
+        pathname.startsWith('/forgot-password') && new URLSearchParams(window.location.search).has('c');
+      if (isPasswordResetLink) {
+        setLoadingData({ loading: false });
+        return;
+      }
       // Access localStorage here
       const isLoggedIn = localStorage.getItem('logged_in');
       if (isLoggedIn === 'true') {

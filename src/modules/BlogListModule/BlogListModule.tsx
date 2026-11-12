@@ -51,6 +51,7 @@ const BlogListModule: React.FC<BlogFilterModuleProps> = ({
 
   const { data: blogs, loading } = useGetBlogListQuery({
     skip,
+    fetchPolicy: 'network-only',
     variables: {
       options: {
         filter,

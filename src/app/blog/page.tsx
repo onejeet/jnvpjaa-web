@@ -1,13 +1,17 @@
-import { constructMetadata } from '@/config/seo.config';
+import { constructMetadata, generateSchema } from '@/config/seo.config';
+import { JsonLd } from '@/components/JsonLd';
 import { BlogListResponse, GetBlogListDocument, GetBlogListQuery } from '@/apollo/hooks';
 import Blog from '@/containers/Blog';
 import { initializeApollo } from '@/utils/apollo';
 import { Metadata } from 'next';
 
+// Published posts must be visible without waiting for a new deployment or cache purge.
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = constructMetadata({
+  url: '/blog/',
   title: 'Blog • Alumni Network of JNV Paota, Jaipur',
-  description:
-    'Inspiring stories, memorable experiences, poetries, opinions and valuable insights from our alumni community of Jawahar Navodaya Vidyalaya, Paota, Jaipur',
+  description: 'Read stories, memories and insights from the JNV Paota, Jaipur alumni community on the JNVPJAA blog.',
 });
 
 // This is a Server Component that fetches data
@@ -36,5 +40,10 @@ async function getBlog() {
 
 export default async function BlogPage() {
   const blogData = await getBlog();
-  return <Blog data={blogData as BlogListResponse} />;
+  return (
+    <>
+      <JsonLd data={generateSchema.collectionPage('JNVPJAA Blog', '/blog/', metadata.description as string)} />
+      <Blog data={blogData as BlogListResponse} />
+    </>
+  );
 }

@@ -4,8 +4,10 @@ import { Metadata } from 'next';
 import LayoutModule from '@/layouts/Layout';
 
 export const metadata: Metadata = constructMetadata({
+  url: '/terms_condition/',
+  noIndex: true,
   title: 'Terms • Alumni Network of JNV Paota, Jaipur',
-  description: 'The Official Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur',
+  description: 'Information about the JNVPJAA alumni association.',
 });
 
 export default function TermsConditionPage() {

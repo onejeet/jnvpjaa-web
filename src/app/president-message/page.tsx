@@ -4,8 +4,9 @@ import { Metadata } from 'next';
 import LayoutModule from '@/layouts/Layout';
 
 export const metadata: Metadata = constructMetadata({
-  title: 'President',
-  description: 'The Official Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur',
+  url: '/president-message/',
+  title: "President's Message • JNVPJAA",
+  description: 'Read the JNVPJAA president’s message to alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur.',
 });
 
 export default function PresidentMessagePage() {

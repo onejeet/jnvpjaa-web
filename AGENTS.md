@@ -9,7 +9,7 @@ frontend flows depend on the backend GraphQL/auth contract.
 
 Primary stack:
 
-- Node.js 20.x enforced via `engines`, `.nvmrc`, `.node-version`, and `.npmrc`
+- Node.js 22.x enforced via `engines`, `.nvmrc`, `.node-version`, and `.npmrc`
 - Next.js App Router under `src/app`
 - React 18 client components for most interactive screens
 - MUI v6 with custom theme utilities under `src/utils/theme`
@@ -28,7 +28,7 @@ Important scripts in `package.json`:
 
 ## Runtime And Server Model
 
-The frontend server is the Next.js runtime on Node 20.x. It does not define custom API routes. Route-level coarse auth
+The frontend server is the Next.js runtime on Node 22.x. It does not define custom API routes. Route-level coarse auth
 redirects live in `src/middleware.ts`, while backend resolver authorization remains the real security boundary. Client
 auth/session state still lives in `AuthContext`, while server components mostly render pages and generate metadata.
 
@@ -40,8 +40,8 @@ The backend server in `../jnvpjaa-backend` is an Express app:
 - The schema is assembled with Nexus in `src/graphql/schema.ts`.
 - The backend starts on `PORT` or `4000`.
 
-Frontend deployment is Vercel-oriented through `vercel.json` and `@vercel/next`. Backend deployment appears Fly-oriented
-(`fly.toml` in backend).
+Frontend deployment is Vercel-oriented through `vercel.json` and `@vercel/next`. Backend deployment uses Coolify on a
+VPS.
 
 ## App Router And Flow Map
 

@@ -168,6 +168,7 @@ const ReactSelect: React.FC<ReactSelectProps> = ({
   return (
     <>
       <Select
+        aria-label={label || placeholder}
         options={options}
         isMulti={isMulti}
         value={value}

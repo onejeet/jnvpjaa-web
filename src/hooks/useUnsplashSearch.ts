@@ -2,6 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Photo } from '@/apollo/hooks';
+import { withUnsplashReferral } from '@/utils/unsplash';
 
 export interface UnsplashImage extends Photo {
   id: string;
@@ -64,7 +65,9 @@ export const useUnsplashSearch = (defaultKeyword?: string): UseUnsplashSearch =>
     if (!id) return;
     try {
       const image: any = images?.find((image) => image?.id === id);
-      await axios.get(`${image.links.download_location}?client_id=${ACCESS_KEY}`);
+      await axios.get(image.links.download_location, {
+        headers: { Authorization: `Client-ID ${ACCESS_KEY}` },
+      });
     } catch (err) {
       console.warn('Failed to track Unsplash download', err);
     }
@@ -83,7 +86,7 @@ export const useUnsplashSearch = (defaultKeyword?: string): UseUnsplashSearch =>
         urls: i?.urls,
         credits: {
           name: i?.user?.name,
-          url: i?.links?.html,
+          url: i?.user?.links?.html ? withUnsplashReferral(i.user.links.html) : '',
           source: 'Unsplash',
         },
       })) || []

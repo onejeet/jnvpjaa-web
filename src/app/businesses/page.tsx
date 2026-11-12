@@ -1,4 +1,5 @@
-import { constructMetadata } from '@/config/seo.config';
+import { constructMetadata, generateSchema } from '@/config/seo.config';
+import { JsonLd } from '@/components/JsonLd';
 export const dynamic = 'force-dynamic';
 
 import {
@@ -14,8 +15,9 @@ import { initializeApollo } from '@/utils/apollo';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = constructMetadata({
+  url: '/businesses/',
   title: 'Businesses by Alumni • JNVPJAA',
-  description: 'Businesses started or owned by our alumni members of JNV Paota Jaipur.',
+  description: 'Discover businesses founded or owned by alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur.',
 });
 
 // This is a Server Component that fetches data
@@ -41,5 +43,12 @@ async function getBusiness() {
 
 export default async function BusinessesPage() {
   const data = await getBusiness();
-  return <Businesses data={data as BusinessListResponse} />;
+  return (
+    <>
+      <JsonLd
+        data={generateSchema.collectionPage('Alumni Businesses', '/businesses/', metadata.description as string)}
+      />
+      <Businesses data={data as BusinessListResponse} />
+    </>
+  );
 }
