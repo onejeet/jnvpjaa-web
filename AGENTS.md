@@ -40,7 +40,8 @@ The backend server in `../jnvpjaa-backend` is an Express app:
 - The schema is assembled with Nexus in `src/graphql/schema.ts`.
 - The backend starts on `PORT` or `4000`.
 
-Frontend deployment is Vercel-oriented through `vercel.json` and `@vercel/next`. Backend deployment uses Coolify on a VPS.
+Frontend deployment is Vercel-oriented through `vercel.json` and `@vercel/next`. Backend deployment uses Coolify on a
+VPS.
 
 ## App Router And Flow Map
 

@@ -20,6 +20,7 @@ import Dialog from '@/components/core/Dialog';
 import Image from 'next/image';
 import { ROLE_CODES, ROLE_LABELS } from '@/constants/access';
 import ProfilePictureUpload from '@/modules/ProfileSetup/ProfilePictureUpload';
+import { getProfileCover } from '@/utils/profileCover';
 
 const profilePositionRoleCodes = new Set([ROLE_CODES.BATCH_COORDINATOR, ROLE_CODES.FINANCE_MANAGER]);
 
@@ -183,8 +184,8 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
       ) : (
         <Box
           component="img"
-          src={user?.id ? `https://picsum.photos/seed/${user?.id}/1200/250` : undefined}
-          alt="Cover"
+          src={getProfileCover(user?.id)}
+          alt="JNV Paota campus"
           sx={{
             width: '100%',
             minWidth: '100%',
