@@ -1,7 +1,7 @@
 'use client';
 
 import Title from '@/components/common/Title';
-import { Box, Typography, Skeleton, IconButton, Tooltip, Button, Chip } from '@mui/material';
+import { Box, Typography, Skeleton, IconButton, Tooltip, Chip } from '@mui/material';
 import { ProfileHeaderProps } from '../Profile.types';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import VerifiedBadge from '@/components/common/VerifiedBadge';
@@ -11,7 +11,7 @@ import FacultyBadge from '@/components/common/FacultyBadge';
 import Menu from '@/components/core/Menu';
 import React from 'react';
 import { useAlert } from '@/context/AlertContext';
-import { useApolloClient, useMutation } from '@apollo/client';
+import { useApolloClient, useMutation, useQuery } from '@apollo/client';
 import { paths } from '@/config/paths';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
@@ -22,7 +22,7 @@ import { ROLE_CODES, ROLE_LABELS } from '@/constants/access';
 import ProfilePictureUpload from '@/modules/ProfileSetup/ProfilePictureUpload';
 import { GET_OR_CREATE_PROFILE_COVER } from '@/apollo/profileCoverOperations';
 import { UNSPLASH_HOME, withUnsplashReferral } from '@/utils/unsplash';
-import { SET_MEMBER_DISABLED } from '@/apollo/memberOperations';
+import { MEMBER_MANAGEMENT_ELIGIBILITY, SET_MEMBER_DISABLED } from '@/apollo/memberOperations';
 
 const profilePositionRoleCodes = new Set([ROLE_CODES.BATCH_COORDINATOR, ROLE_CODES.FINANCE_MANAGER]);
 
@@ -36,13 +36,18 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
   } | null>(null);
   const [openPictureView, setOpenPictureView] = React.useState<boolean>(false);
   const [openPictureEdit, setOpenPictureEdit] = React.useState<boolean>(false);
-  const { user, loading, isProfileEditable, editingProfile, saveProfile, setEditingProfile } = useProfile();
+  const { user, loading, isProfileEditable, editingProfile, saveProfile } = useProfile();
   const { showAlert } = useAlert();
   const { user: authUser, isAdmin, positions: authPositions, roles: authRoles, hasRole, setUser } = useAuth();
   const router = useRouter();
   const client = useApolloClient();
   const [setMemberDisabled, { loading: changingMemberStatus }] = useMutation(SET_MEMBER_DISABLED);
   const [getOrCreateProfileCover] = useMutation(GET_OR_CREATE_PROFILE_COVER);
+  const superAdminViewingMember = hasRole(ROLE_CODES.SUPER_ADMIN) && Boolean(user?.id && user.id !== authUser?.id);
+  const { data: memberAccess } = useQuery(MEMBER_MANAGEMENT_ELIGIBILITY, {
+    variables: { id: user?.id || '' },
+    skip: !superAdminViewingMember || !user?.isVerified,
+  });
 
   React.useEffect(() => {
     if (!user?.id) return;
@@ -60,11 +65,13 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
     };
   }, [getOrCreateProfileCover, user?.id]);
   const canManageMember = Boolean(
-    hasRole(ROLE_CODES.SUPER_ADMIN) &&
+    superAdminViewingMember &&
     user?.id &&
-    user.id !== authUser?.id &&
     user.isVerified &&
-    (user.role?.code === ROLE_CODES.MEMBER || user.role?.name?.toLowerCase() === 'member')
+    (user.role?.code === ROLE_CODES.MEMBER || user.role?.name?.toLowerCase() === 'member') &&
+    memberAccess?.getUserDetails?.id === user.id &&
+    memberAccess.getUserDetails.roles?.every((role: any) => role?.code === ROLE_CODES.MEMBER) &&
+    !memberAccess.getUserDetails.positions?.length
   );
 
   const changeMemberStatus = React.useCallback(() => {
@@ -213,36 +220,51 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
 
   const menuItems = React.useMemo(() => {
     const isConfidential = user?.isConfidential;
-    return isProfileEditable
-      ? [
-          {
-            label: 'Edit',
-            value: 'edit',
-            // onClick: () => setEditingProfile(true),
-            onClick: () => {
-              if (user?.id === authUser?.id) {
-                router.push(paths.profile.setup);
-              } else {
-                setEditingProfile(true);
-              }
+    return [
+      ...(isProfileEditable
+        ? [
+            {
+              label: 'Edit',
+              value: 'edit',
+              onClick: () => router.push(paths.profile.setup),
+              icon: <IconPencil size={16} />,
             },
-            icon: <IconPencil size={16} />,
-          },
-          {
-            label: isConfidential ? 'Make Contact Info Visible' : 'Keep Contact Info Private',
-            value: 'delete',
-            onClick: () => handleDataPrivacyUpdate(),
-            icon: <IconLock size={18} />,
-            sx: {
-              color: 'error.main',
-              svg: {
+            {
+              label: isConfidential ? 'Make Contact Info Visible' : 'Keep Contact Info Private',
+              value: 'privacy',
+              onClick: () => handleDataPrivacyUpdate(),
+              icon: <IconLock size={18} />,
+              sx: {
                 color: 'error.main',
+                svg: {
+                  color: 'error.main',
+                },
               },
             },
-          },
-        ]
-      : [];
-  }, [isProfileEditable, user, handleDataPrivacyUpdate, router, authUser, setEditingProfile]);
+          ]
+        : []),
+      ...(canManageMember
+        ? [
+            {
+              label: user?.disabled ? 'Enable member' : 'Disable member',
+              value: 'member-status',
+              onClick: changeMemberStatus,
+              disabled: changingMemberStatus,
+              sx: { color: user?.disabled ? 'success.main' : 'warning.dark' },
+            },
+          ]
+        : []),
+    ];
+  }, [
+    isProfileEditable,
+    canManageMember,
+    changingMemberStatus,
+    user,
+    handleDataPrivacyUpdate,
+    changeMemberStatus,
+    router,
+    authUser,
+  ]);
 
   return (
     <Box sx={{ position: 'relative', mb: 4 }}>
@@ -308,12 +330,6 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
                 lineHeight: 1.5,
               }}
             >
-              {cover.caption && (
-                <>
-                  {cover.caption}
-                  <br />
-                </>
-              )}
               Photo by{' '}
               <a
                 href={withUnsplashReferral(cover.photographerUrl)}
@@ -439,22 +455,8 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
           summary={profileSummary}
           summaryProps={{ color: 'grey.600', fontSize: '14px', mt: { xs: 0, md: 1 } }}
         />
-        {canManageMember && !editingProfile && (
-          <Button
-            color={user?.disabled ? 'success' : 'warning'}
-            variant="outlined"
-            size="small"
-            disabled={changingMemberStatus}
-            onClick={changeMemberStatus}
-            sx={{ alignSelf: 'center', mr: 1 }}
-          >
-            {user?.disabled ? 'Enable member' : 'Disable member'}
-          </Button>
-        )}
-        {isProfileEditable && !editingProfile && (
+        {menuItems.length > 0 && !editingProfile && (
           <Menu
-            //  onChange={(val) => editor?.commands.toggleHeading({ level: val as Level })}
-            // value={editor?.getAttributes('heading')?.level}
             items={menuItems}
             slotProps={{
               paper: {
@@ -496,22 +498,12 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
             }}
             render={
               <Tooltip arrow placement="top" title="Profile Menu">
-                <IconButton>
+                <IconButton aria-label="Profile actions">
                   <IconDotsCircleHorizontal size={28} />
                 </IconButton>
               </Tooltip>
             }
           />
-          // <Button
-          //   disabled={loading}
-          //   title="Edit Profile"
-          //   size="small"
-          //   onClick={() => setEditingProfile(true)}
-          //   startIcon={<IconPencilSimple size={16} />}
-          //   sx={{
-          //     whiteSpace: 'nowrap',
-          //   }}
-          // />
         )}
       </Box>
       {openPictureView && (
