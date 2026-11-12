@@ -7,7 +7,15 @@ import { getMainDefinition } from '@apollo/client/utilities';
 import { refreshAccessToken } from './refresh';
 
 // Define operations that don’t require auth
-const publicOperations = ['signin', 'getEventList', 'getBlogList', 'getBlog', 'getUserList', 'signup'];
+const publicOperations = [
+  'signin',
+  'getEventList',
+  'getBlogList',
+  'getBlog',
+  'getUserList',
+  'signup',
+  'SignupWithHoneypot',
+];
 
 // Error handling link
 const errorLink = new ApolloLink((operation, forward) => {

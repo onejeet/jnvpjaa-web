@@ -8,4 +8,5 @@ export interface ISignupFormInput {
   mobile: string;
   batch: number;
   isFaculty?: boolean;
+  website?: string;
 }

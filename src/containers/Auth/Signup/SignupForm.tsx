@@ -4,16 +4,16 @@ import React, { Suspense } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { Box, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { useSignupMutation } from 'src/apollo/hooks';
+import type { SignupMutationVariables } from 'src/apollo/hooks';
+import { SIGNUP_WITH_HONEYPOT } from '@/apollo/signupOperation';
+import { useMutation } from '@apollo/client';
 import { ISignupFormInput } from './Signup.types';
 import FormTextField from '@/components/form/FormTextField';
 import { useAlert } from '@/context/AlertContext';
 import Button from '@/components/core/Button';
 import FormSelectField from '@/components/form/FormSelectField';
-import { getBatchOptions, phoneNumberStringConverter, removeSpaces, startCase } from '@/utils/helpers';
+import { getBatchOptions, phoneNumberStringConverter, startCase } from '@/utils/helpers';
 import { Info } from '@mui/icons-material';
-import { paths } from '@/config/paths';
-import { useRouter } from 'next/navigation';
 import FormPhoneField from '@/components/form/FormPhoneField';
 import Lottie from '@/components/common/DynamicLottie';
 import successLottieIcon from '@/utils/lottie/success3_icon.json';
@@ -23,22 +23,16 @@ const batchList = getBatchOptions();
 
 const SignupForm = () => {
   const [signupSuccess, setSignupSuccess] = React.useState<boolean>(false);
-  const router = useRouter();
   const { showAlert } = useAlert();
-  const {
-    control,
-    handleSubmit,
-    setValue,
-    getValues,
-    formState: { errors },
-  } = useForm<ISignupFormInput>({});
+  const { control, handleSubmit, register, setValue } = useForm<ISignupFormInput>({ defaultValues: { website: '' } });
 
   const watchPassword = useWatch({ control, name: 'password' });
   const watchIsFaculty = useWatch({ control, name: 'isFaculty' });
 
-  console.log('ZZ: getValues', getValues());
-
-  const [signup, { loading }] = useSignupMutation();
+  const [signup, { loading }] = useMutation<
+    { signup: { id: string } },
+    SignupMutationVariables & { website?: string | null }
+  >(SIGNUP_WITH_HONEYPOT);
 
   const onSubmit = React.useCallback(
     (data: ISignupFormInput) => {
@@ -52,10 +46,9 @@ const SignupForm = () => {
           mobile: data?.mobile ? phoneNumberStringConverter(data?.mobile) : data?.mobile,
           batch: data?.isFaculty ? 0 : data?.batch,
           isFaculty: data?.isFaculty,
+          website: data.website || '',
         },
-        onCompleted: (res) => {
-          console.log('COmpleted', res);
-          // router.push(paths.signin);
+        onCompleted: () => {
           setSignupSuccess(true);
         },
         onError: (err: Error) => {
@@ -63,11 +56,10 @@ const SignupForm = () => {
             type: 'error',
             message: err?.message || 'Something went wrong',
           });
-          console.log('Error: ', err?.message);
         },
       });
     },
-    [signup, showAlert, router]
+    [signup, showAlert]
   );
 
   if (signupSuccess) {
@@ -114,6 +106,13 @@ const SignupForm = () => {
         alignItems: 'center',
       }}
     >
+      <Box
+        aria-hidden="true"
+        sx={{ position: 'absolute', left: '-10000px', width: '1px', height: '1px', overflow: 'hidden' }}
+      >
+        <label htmlFor="signup-website">Website</label>
+        <input id="signup-website" type="text" autoComplete="off" tabIndex={-1} {...register('website')} />
+      </Box>
       <Grid container spacing={3}>
         <Grid size={{ xs: 12 }}>
           <FormCheckbox

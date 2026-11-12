@@ -6,7 +6,8 @@ import { Metadata } from 'next';
 export const metadata: Metadata = constructMetadata({
   url: '/student-hub/career-counselling/',
   title: 'Career Counselling • Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur',
-  description: 'The Official Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur',
+  description:
+    'Explore career counselling and guidance for students of Jawahar Navodaya Vidyalaya Paota, Jaipur from the alumni community.',
 });
 
 export default function CareerCounsellingPage() {

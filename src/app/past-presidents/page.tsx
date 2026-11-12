@@ -6,7 +6,8 @@ import LayoutModule from '@/layouts/Layout';
 export const metadata: Metadata = constructMetadata({
   url: '/past-presidents/',
   title: 'JNVPJAA Past Presidents • Alumni Network of JNV Paota, Jaipur',
-  description: 'The Official Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur',
+  description:
+    'Explore the past presidents who have served the JNVPJAA alumni association and helped strengthen its community.',
 });
 
 export default function PastPresidentsPage() {

@@ -7,6 +7,7 @@ import { Metadata, Viewport } from 'next';
 import { GoogleTagManager } from '@next/third-parties/google';
 import { Providers } from '../app/providers';
 import { Analytics } from '@vercel/analytics/react';
+import { JsonLd } from '@/components/JsonLd';
 
 const appleStartupImages = [
   {
@@ -224,14 +225,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <head>
         <link href="https://fonts.googleapis.com/css2?family=Playwrite+CU:wght@400&display=swap" rel="stylesheet" />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(generateSchema.organization()) }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(generateSchema.website()) }}
-        />
+        <JsonLd data={generateSchema.organization()} />
+        <JsonLd data={generateSchema.website()} />
       </head>
       <body className={dmSans.className}>
         <Providers>
