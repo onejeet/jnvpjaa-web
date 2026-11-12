@@ -223,36 +223,36 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
     return [
       ...(isProfileEditable
         ? [
-            {
-              label: 'Edit',
-              value: 'edit',
-              onClick: () => router.push(paths.profile.setup),
-              icon: <IconPencil size={16} />,
-            },
-            {
-              label: isConfidential ? 'Make Contact Info Visible' : 'Keep Contact Info Private',
-              value: 'privacy',
-              onClick: () => handleDataPrivacyUpdate(),
-              icon: <IconLock size={18} />,
-              sx: {
+          {
+            label: 'Edit',
+            value: 'edit',
+            onClick: () => router.push(paths.profile.setup),
+            icon: <IconPencil size={16} />,
+          },
+          {
+            label: isConfidential ? 'Make Contact Info Visible' : 'Keep Contact Info Private',
+            value: 'privacy',
+            onClick: () => handleDataPrivacyUpdate(),
+            icon: <IconLock size={18} />,
+            sx: {
+              color: 'error.main',
+              svg: {
                 color: 'error.main',
-                svg: {
-                  color: 'error.main',
-                },
               },
             },
-          ]
+          },
+        ]
         : []),
       ...(canManageMember
         ? [
-            {
-              label: user?.disabled ? 'Enable member' : 'Disable member',
-              value: 'member-status',
-              onClick: changeMemberStatus,
-              disabled: changingMemberStatus,
-              sx: { color: user?.disabled ? 'success.main' : 'warning.dark' },
-            },
-          ]
+          {
+            label: user?.disabled ? 'Enable member' : 'Disable member',
+            value: 'member-status',
+            onClick: changeMemberStatus,
+            disabled: changingMemberStatus,
+            sx: { color: user?.disabled ? 'success.main' : 'warning.dark' },
+          },
+        ]
         : []),
     ];
   }, [
