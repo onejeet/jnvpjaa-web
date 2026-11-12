@@ -169,6 +169,12 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
+      const isPasswordResetLink =
+        pathname.startsWith('/forgot-password') && new URLSearchParams(window.location.search).has('c');
+      if (isPasswordResetLink) {
+        setLoadingData({ loading: false });
+        return;
+      }
       // Access localStorage here
       const isLoggedIn = localStorage.getItem('logged_in');
       if (isLoggedIn === 'true') {

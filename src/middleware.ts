@@ -25,6 +25,7 @@ const encodeRedirectPath = (path: string) => {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const isLoggedIn = hasSessionCookie(request);
+  const isPasswordResetLink = pathname.startsWith('/forgot-password') && request.nextUrl.searchParams.has('c');
 
   if (isProtectedRoute(pathname) && !isLoggedIn) {
     const signinUrl = request.nextUrl.clone();
@@ -34,7 +35,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(signinUrl);
   }
 
-  if (isAuthRoute(pathname) && isLoggedIn) {
+  if (isAuthRoute(pathname) && isLoggedIn && !isPasswordResetLink) {
     const profileUrl = request.nextUrl.clone();
     profileUrl.pathname = '/profile';
     profileUrl.search = '';
