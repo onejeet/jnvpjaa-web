@@ -7,6 +7,9 @@ import { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
 import { headers } from 'next/headers';
 
+// Event status and metadata change after publication and approval.
+export const dynamic = 'force-dynamic';
+
 // Generate dynamic metadata for the event page
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const { id } = params;

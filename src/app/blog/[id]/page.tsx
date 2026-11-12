@@ -5,6 +5,9 @@ import { initializeApollo } from '@/utils/apollo';
 import { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
 
+// New and updated posts need fresh page data and social metadata.
+export const dynamic = 'force-dynamic';
+
 // Generate metadata for the page dynamically
 export async function generateMetadata(
   { params }: { params: { id: string } },

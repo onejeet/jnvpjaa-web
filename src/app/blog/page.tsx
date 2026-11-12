@@ -4,6 +4,9 @@ import Blog from '@/containers/Blog';
 import { initializeApollo } from '@/utils/apollo';
 import { Metadata } from 'next';
 
+// Published posts must be visible without waiting for a new deployment or cache purge.
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = constructMetadata({
   url: '/blog/',
   title: 'Blog • Alumni Network of JNV Paota, Jaipur',

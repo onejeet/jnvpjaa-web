@@ -34,6 +34,7 @@ const EventListModule: React.FC<EventListModuleProps> = ({
   const { markImGoing, verifyEvent, onEditEvent, onPublishEvent, onDelete } = useEvents({ user });
   const { data: eventData, loading } = useGetEventListQuery({
     skip,
+    fetchPolicy: 'network-only',
     variables: {
       options: {
         filter,
