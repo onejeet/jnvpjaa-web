@@ -6,19 +6,3 @@ export const GOOGLE_LOGIN_AVAILABILITY = gql`
     }
   }
 `;
-export const PLATFORM_GOOGLE_SETTINGS = gql`
-  query PlatformGoogleSettings {
-    platformSettings {
-      googleLoginEnabled
-      googleConfigured
-    }
-  }
-`;
-export const SET_GOOGLE_LOGIN_ENABLED = gql`
-  mutation SetGoogleLoginEnabled($enabled: Boolean!) {
-    setGoogleLoginEnabled(enabled: $enabled) {
-      googleLoginEnabled
-      googleConfigured
-    }
-  }
-`;

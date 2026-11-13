@@ -119,6 +119,10 @@ const nextConfig = {
   async headers() {
     return [
       {
+        source: '/images/auth/alumni-pencil-doodle-v1.png',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
+      },
+      {
         source: '/:path*',
         headers: [
           {

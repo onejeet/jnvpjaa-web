@@ -1,5 +1,4 @@
 'use client';
-import GoogleLoginSetting from './GoogleLoginSetting';
 
 import React from 'react';
 import { useApolloClient, useMutation, useQuery } from '@apollo/client';
@@ -1632,8 +1631,6 @@ const AdminPanel = () => {
           role="tabpanel"
           aria-label="Platform settings"
         >
-          <GoogleLoginSetting />
-          <Divider sx={{ my: 3 }} />
           <Typography variant="h3" mb={1}>
             Welcome email
           </Typography>

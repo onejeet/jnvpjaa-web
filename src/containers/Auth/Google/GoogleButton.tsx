@@ -1,6 +1,4 @@
 'use client';
-import { useQuery } from '@apollo/client';
-import { GOOGLE_LOGIN_AVAILABILITY } from '@/apollo/googleAuthOperations';
 import { Button, Divider, Stack } from '@mui/material';
 
 export const googleStartUrl = () => {
@@ -33,14 +31,19 @@ const GoogleIcon = () => (
   </svg>
 );
 export default function GoogleButton() {
-  const { data } = useQuery(GOOGLE_LOGIN_AVAILABILITY, { fetchPolicy: 'network-only', pollInterval: 60000 });
-  if (!data?.googleLoginAvailability?.enabled) return null;
   return (
     <Stack spacing={2} sx={{ width: '100%', my: 1, position: 'relative' }}>
       <Button
         startIcon={<GoogleIcon />}
         variant="outlined"
-        sx={{ minHeight: 54, py: 1.5 }}
+        sx={{
+          minHeight: 54,
+          py: 1.5,
+          fontSize: 16,
+          fontWeight: 600,
+          lineHeight: 1.5,
+          '& .MuiButton-startIcon': { mr: 1.5 },
+        }}
         fullWidth
         onClick={() => window.location.assign(googleStartUrl())}
       >

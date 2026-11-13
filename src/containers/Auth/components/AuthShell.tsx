@@ -3,6 +3,7 @@ import React from 'react';
 import { Box, Paper, Stack, Typography } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import Link from 'next/link';
+import AlumniArtwork from './AlumniArtwork';
 
 type Props = {
   title: string;
@@ -60,56 +61,42 @@ export default function AuthShell({
         }}
       >
         <Box
+          component="aside"
           sx={{
-            bgcolor: (theme) => alpha(theme.palette.primary.main, 0.06),
+            bgcolor: (theme) => alpha(theme.palette.primary.main, 0.04),
             color: 'text.primary',
             p: { xs: 2.5, md: 4 },
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            gap: 3,
           }}
         >
-          <Box>
-            <Typography variant="overline" sx={{ letterSpacing: '0.18em', color: 'primary.main' }}>
-              JNVPJAA · ALUMNI COMMUNITY
-            </Typography>
-            <Typography
-              variant="h1"
-              component="p"
-              sx={{ mt: { xs: 1, md: 2 }, fontSize: { xs: 22, md: 32 }, lineHeight: 1.3 }}
-            >
-              <Box component="span" sx={{ display: { xs: 'inline', md: 'block' } }}>
-                Our school.
-              </Box>{' '}
-              <Box component="span" sx={{ display: { xs: 'inline', md: 'block' }, mt: { md: 0.5 } }}>
-                Our people.
-              </Box>{' '}
-              <Box component="span" sx={{ display: { xs: 'none', md: 'block' }, mt: 0.5 }}>
-                Our shared journey.
-              </Box>
-            </Typography>
+          <Typography variant="overline" sx={{ fontSize: 11, letterSpacing: '0.12em', color: 'primary.main' }}>
+            JNVPJAA · PAOTA, JAIPUR
+          </Typography>
+          <Typography
+            component="p"
+            sx={{
+              mt: { xs: 0.75, md: 2 },
+              fontFamily: 'h1.fontFamily',
+              fontSize: { xs: 23, md: 32 },
+              lineHeight: 1.25,
+            }}
+          >
+            A familiar place.
+            <br />A lifelong connection.
+          </Typography>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ mt: 1.5, maxWidth: 270, lineHeight: 1.65, display: { xs: 'none', md: 'block' } }}
+          >
+            {registration
+              ? 'Your next chapter with the JNV Paota community starts here.'
+              : 'Back to the people who made school feel like home.'}
+          </Typography>
+          <Box sx={{ mt: 4, color: 'primary.main', display: { xs: 'none', md: 'block' } }}>
+            <AlumniArtwork />
           </Box>
-          <Box sx={{ display: { xs: 'none', md: 'block' } }}>
-            <Typography sx={{ color: 'text.secondary', fontSize: 14, lineHeight: 1.7, mb: 2.5 }}>
-              A place for the alumni and faculty of JNV Paota to reconnect, contribute, and stay close to the community.
-            </Typography>
-            <Stack spacing={2}>
-              {(registration
-                ? ['Share your member details', 'Your registration is reviewed', 'Connect with your community']
-                : ['Reconnect with your batch', 'Discover events and stories', 'Support the next generation']
-              ).map((text, i) => (
-                <Stack direction="row" spacing={2} alignItems="center" key={text}>
-                  <Typography sx={{ fontSize: 12, color: 'primary.main', fontWeight: 600 }}>0{i + 1}</Typography>
-                  <Typography variant="body2" sx={{ color: 'text.primary' }}>
-                    {text}
-                  </Typography>
-                </Stack>
-              ))}
-            </Stack>
-          </Box>
-          <Typography variant="caption" sx={{ display: { xs: 'none', md: 'block' }, color: 'text.secondary' }}>
-            Jawahar Navodaya Vidyalaya · Paota, Jaipur
+          <Typography variant="caption" color="text.secondary" sx={{ mt: 2, display: { xs: 'none', md: 'block' } }}>
+            Jawahar Navodaya Vidyalaya · Paota
           </Typography>
         </Box>
         <Box sx={{ p: { xs: 2.5, sm: 3, md: 4 }, minWidth: 0, alignSelf: 'center' }}>{content}</Box>
