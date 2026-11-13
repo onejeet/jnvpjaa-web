@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import LoadingIndicator from '@/components/common/LoadingIndicator';
 import { useQuery } from '@apollo/client';
 import { GOOGLE_LOGIN_AVAILABILITY } from '@/apollo/googleAuthOperations';
 import {
@@ -8,7 +9,6 @@ import {
   Button,
   Card,
   Checkbox,
-  CircularProgress,
   FormControlLabel,
   MenuItem,
   Stack,
@@ -39,27 +39,33 @@ export default function GoogleCompletion() {
   const [flow, setFlow] = React.useState<Flow | null>(null);
   const [error, setError] = React.useState('');
   const [loading, setLoading] = React.useState(true);
+  const [redirecting, setRedirecting] = React.useState(false);
   const [saving, setSaving] = React.useState(false);
   const [faculty, setFaculty] = React.useState(false);
   const accept = React.useCallback((next: Flow) => {
     if (next.status === 'SIGNED_IN') {
+      setRedirecting(true);
       localStorage.setItem('logged_in', 'true');
       const path = next.returnPath || '/profile';
       window.location.replace(
         path.startsWith('/') && !path.startsWith('//') && !path.includes('\\') ? path : '/profile'
       );
-    } else setFlow(next);
+    } else if (next.status === 'REGISTER' || next.status === 'LINK') {
+      setFlow(next);
+    } else {
+      setRedirecting(true);
+      localStorage.removeItem('logged_in');
+      window.location.replace(
+        `/signin?google=${next.status === 'PENDING' ? 'pending' : next.status === 'BLOCKED' ? 'blocked' : 'failed'}`
+      );
+    }
   }, []);
   React.useEffect(() => {
     let active = true;
     const failure = new URLSearchParams(window.location.search).get('error');
     if (failure) {
-      setError(
-        failure === 'cancelled'
-          ? 'Google sign-in was cancelled. You can try again whenever you are ready.'
-          : 'Google sign-in could not be completed. Please start again.'
-      );
-      setLoading(false);
+      setRedirecting(true);
+      window.location.replace(`/signin?google=${failure === 'cancelled' ? 'cancelled' : 'failed'}`);
       return;
     }
     request(`query GoogleAuthFlow { googleAuthFlow { ${fields} } }`)
@@ -67,7 +73,10 @@ export default function GoogleCompletion() {
         if (active) accept(data.googleAuthFlow);
       })
       .catch((err) => {
-        if (active) setError(err.message);
+        if (active) {
+          setRedirecting(true);
+          window.location.replace('/signin?google=expired');
+        }
       })
       .finally(() => {
         if (active) setLoading(false);
@@ -110,6 +119,8 @@ export default function GoogleCompletion() {
       setSaving(false);
     }
   };
+  if (loading || redirecting || !flow) return <LoadingIndicator />;
+
   return (
     <Card variant="outlined" sx={{ maxWidth: 640, mx: 'auto', my: 4, p: { xs: 2, md: 4 } }}>
       <Stack spacing={3}>
@@ -120,16 +131,7 @@ export default function GoogleCompletion() {
               ? 'Confirm your existing account'
               : 'Google sign-in'}
         </Typography>
-        {loading && <CircularProgress aria-label="Checking Google sign-in" />}
         {error && <Alert severity="error">{error}</Alert>}
-        {flow?.status === 'PENDING' && (
-          <Alert severity="info">
-            Your registration is awaiting approval. You can sign in with Google after your registration is approved.
-          </Alert>
-        )}
-        {flow?.status === 'BLOCKED' && (
-          <Alert severity="warning">This account cannot sign in. Please contact the association for help.</Alert>
-        )}
         {(flow?.status === 'REGISTER' || flow?.status === 'LINK') && (
           <Box component="form" onSubmit={submit}>
             <Stack spacing={2}>

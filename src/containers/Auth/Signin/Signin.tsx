@@ -1,5 +1,6 @@
 'use client';
 
+import GoogleSigninNotice from './GoogleSigninNotice';
 import GoogleButton from '../Google/GoogleButton';
 
 import { alpha, Box, Card, Divider, Theme, Typography } from '@mui/material';
@@ -62,6 +63,7 @@ const Signin = () => {
         />
         <Divider sx={{ width: '100%', mt: 2, color: 'grey.500' }}>OR</Divider> */}
 
+        <GoogleSigninNotice />
         <GoogleButton />
         <SigninForm />
         <Box display="flex" flexDirection="column" alignItems="center" gap={1.5}>
