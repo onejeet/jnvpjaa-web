@@ -22,7 +22,7 @@ export default function AuthShell({
 }: Props) {
   const content = (
     <Stack
-      spacing={3}
+      spacing={2.5}
       sx={{
         width: '100%',
         minWidth: 0,
@@ -48,7 +48,7 @@ export default function AuthShell({
   );
   if (embedded) return content;
   return (
-    <Box sx={{ width: '100%', maxWidth: 1080, mx: 'auto', py: { xs: 2, md: 5 }, px: { xs: 1, sm: 2 } }}>
+    <Box sx={{ width: '100%', maxWidth: 1000, mx: 'auto', py: { xs: 2, md: 3 }, px: { xs: 1, sm: 2 } }}>
       <Paper
         variant="outlined"
         sx={{
@@ -63,11 +63,11 @@ export default function AuthShell({
           sx={{
             bgcolor: (theme) => alpha(theme.palette.primary.main, 0.06),
             color: 'text.primary',
-            p: { xs: 3, md: 5 },
+            p: { xs: 2.5, md: 4 },
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
-            gap: 5,
+            gap: 3,
           }}
         >
           <Box>
@@ -77,19 +77,24 @@ export default function AuthShell({
             <Typography
               variant="h1"
               component="p"
-              sx={{ mt: { xs: 1, md: 3 }, fontSize: { xs: 24, md: 42 }, lineHeight: 1.2 }}
+              sx={{ mt: { xs: 1, md: 2 }, fontSize: { xs: 22, md: 32 }, lineHeight: 1.3 }}
             >
-              Our school. Our people.
-              <Box component="span" sx={{ display: { xs: 'none', md: 'block' } }}>
+              <Box component="span" sx={{ display: { xs: 'inline', md: 'block' } }}>
+                Our school.
+              </Box>{' '}
+              <Box component="span" sx={{ display: { xs: 'inline', md: 'block' }, mt: { md: 0.5 } }}>
+                Our people.
+              </Box>{' '}
+              <Box component="span" sx={{ display: { xs: 'none', md: 'block' }, mt: 0.5 }}>
                 Our shared journey.
               </Box>
             </Typography>
           </Box>
           <Box sx={{ display: { xs: 'none', md: 'block' } }}>
-            <Typography sx={{ color: 'text.secondary', fontSize: 15, lineHeight: 1.8, mb: 4 }}>
+            <Typography sx={{ color: 'text.secondary', fontSize: 14, lineHeight: 1.7, mb: 2.5 }}>
               A place for the alumni and faculty of JNV Paota to reconnect, contribute, and stay close to the community.
             </Typography>
-            <Stack spacing={2.5}>
+            <Stack spacing={2}>
               {(registration
                 ? ['Share your member details', 'Your registration is reviewed', 'Connect with your community']
                 : ['Reconnect with your batch', 'Discover events and stories', 'Support the next generation']
@@ -107,9 +112,9 @@ export default function AuthShell({
             Jawahar Navodaya Vidyalaya · Paota, Jaipur
           </Typography>
         </Box>
-        <Box sx={{ p: { xs: 3, sm: 4, md: 5 }, minWidth: 0, alignSelf: 'center' }}>{content}</Box>
+        <Box sx={{ p: { xs: 2.5, sm: 3, md: 4 }, minWidth: 0, alignSelf: 'center' }}>{content}</Box>
       </Paper>
-      <Stack direction="row" justifyContent="center" spacing={3} sx={{ mt: 3, fontSize: 12, color: 'text.secondary' }}>
+      <Stack direction="row" justifyContent="center" spacing={3} sx={{ mt: 2, fontSize: 12, color: 'text.secondary' }}>
         <Link href="/privacy_policy">Privacy policy</Link>
         <Link href="/contact-us">Need help?</Link>
       </Stack>
