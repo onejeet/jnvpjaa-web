@@ -1,73 +1,22 @@
 'use client';
-
-import GoogleButton from '../Google/GoogleButton';
-
-import { Box, Card, Divider, Typography } from '@mui/material';
-import SigninForm from './SignupForm';
-import GlobalBgShade from '@/components/common/GlobalBgShade';
 import Link from 'next/link';
-
-const Signup = () => {
+import AuthShell from '../components/AuthShell';
+import GoogleButton from '../Google/GoogleButton';
+import SignupForm from './SignupForm';
+export default function Signup() {
   return (
-    <Box
-      sx={{
-        py: 2,
-        display: 'flex',
-        alignItems: 'center',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        position: 'relative',
-        //  background: 'linear-gradient(45deg, rgba(236,239,241,0.4) 0%, rgba(207,216,220,0.4) 100%)',
-      }}
+    <AuthShell
+      registration
+      title="Join your community"
+      description="For JNV Paota alumni and faculty. Your registration will be reviewed before member access is enabled."
+      footer={
+        <>
+          Already registered? <Link href="/signin">Sign in</Link>
+        </>
+      }
     >
-      {' '}
-      <Card
-        elevation={3}
-        sx={{
-          maxWidth: 700,
-          bgcolor: 'grey.100',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          p: 3,
-          position: 'relative',
-        }}
-      >
-        {/* <Image src={'https://assets.jnvpjaa.org/svg/profile-website-icon.svg'} width={200} height={100} alt="login" /> */}
-        <GlobalBgShade />
-        <Typography variant="h2" textAlign="center">
-          JNV Paota Alumni Registration
-        </Typography>
-        <Typography color="grey.500" variant="body2" textAlign="center" mb={2}>
-          The registration will be reviewed and verified by the Alumni Association and batch coordinators,
-          <br /> and will be approved accordingly.
-        </Typography>
-        {/* <Image
-          onClick={() => {}}
-          src="https://assets.jnvpjaa.org/svg/google-signin.svg"
-          width={300}
-          height={38}
-          alt="Sign in with Google"
-          style={{ cursor: 'pointer' }}
-        />
-        <Divider sx={{ width: '100%', mt: 2, color: 'grey.500' }}>OR</Divider> */}
-
-        <GoogleButton />
-        <SigninForm />
-        <Box display="flex" alignItems="center">
-          <Typography variant="body2" mr={1}>
-            Already have an account?{' '}
-          </Typography>
-          <Link href="/signin" as="/signin" style={{ textDecoration: 'none' }}>
-            <Typography variant="body2" component="span" color="primary.main" sx={{ textDecoration: 'underline' }}>
-              Signin
-            </Typography>
-          </Link>
-        </Box>
-      </Card>
-    </Box>
+      <GoogleButton />
+      <SignupForm />
+    </AuthShell>
   );
-};
-
-export default Signup;
+}

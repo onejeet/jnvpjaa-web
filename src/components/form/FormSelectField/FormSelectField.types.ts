@@ -6,6 +6,7 @@ export interface FormSelectProps<
   TName extends Path<TFieldValues> = Path<TFieldValues>,
 > {
   name: TName;
+  label?: string;
   control: Control<TFieldValues>;
   rules?: RegisterOptions<TFieldValues, TName>; // Validation rules for react-hook-form
   defaultValue?: FieldPathValue<TFieldValues, TName>;

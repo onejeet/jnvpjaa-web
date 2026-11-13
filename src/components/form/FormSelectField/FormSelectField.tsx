@@ -18,6 +18,7 @@ const FormSelect = <
   options = [],
   error = false,
   selectProps,
+  label,
   ...rest
 }: FormSelectProps<TFieldValues, TName>) => {
   return (
@@ -31,7 +32,7 @@ const FormSelect = <
           <Skeleton width="100%" height={41} />
         ) : (
           <FormControl fullWidth error={error || !!fieldError} variant="outlined">
-            {/* <InputLabel id={`${name}-label`}>Select Option</InputLabel> */}
+            {label && <InputLabel id={`${name}-label`}>{label}</InputLabel>}
             {/* @ts-expect-error het */}
             <Select
               {...field} // Spread the react-hook-form field
@@ -39,8 +40,9 @@ const FormSelect = <
               {...rest} // Allow any other extra props (e.g., helperText, error)
               labelId={`${name}-label`}
               variant="outlined" // Ensure the Select has the outlined variant
-              displayEmpty
-              disabled={disabled}
+              label={label}
+              displayEmpty={!label}
+              disabled={disabled ?? selectProps?.disabled}
               // renderValue={(selected: unknown) => {
               //   return selected ? String(selected) : name;
               // }}

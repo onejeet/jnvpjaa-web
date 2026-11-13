@@ -2,11 +2,10 @@
 
 import React from 'react';
 import { useForm, useWatch } from 'react-hook-form';
-import { Box, BoxProps, Typography } from '@mui/material';
+import { Alert, Box, BoxProps, Typography } from '@mui/material';
 import FormTextField from '@/components/form/FormTextField';
 import { useAlert } from '@/context/AlertContext';
 import Button from '@/components/core/Button';
-import { useRouter } from 'next/navigation';
 import { Info } from '@mui/icons-material';
 import { useMutation } from '@apollo/client';
 import { CHANGE_PASSWORD_MUTATION } from '@/apollo/authOperations';
@@ -25,19 +24,16 @@ interface ChangePasswordFormProps {
 }
 
 const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ onNext, containerProps = {} }) => {
-  const { user, redirectOnSignin } = useAuth();
+  const { redirectOnSignin } = useAuth();
   const { showAlert } = useAlert();
-  const {
-    control,
-    handleSubmit,
-    getValues,
-    formState: { errors },
-  } = useForm<ChangePasswordFormInput>();
+  const [error, setError] = React.useState('');
+  const { control, handleSubmit } = useForm<ChangePasswordFormInput>();
 
   const watchPassword = useWatch({ control, name: 'password' });
   const [handlePasswordReset, { loading: resetPasswordLoading }] = useMutation(CHANGE_PASSWORD_MUTATION);
   const onSubmit = React.useCallback(
     (data: ChangePasswordFormInput) => {
+      setError('');
       handlePasswordReset({
         variables: {
           currentPassword: data.currentPassword,
@@ -57,11 +53,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ onNext, contain
           redirectOnSignin(true);
         },
         onError: (err: Error) => {
-          showAlert({
-            type: 'error',
-            message: err?.message || 'Something went wrong',
-          });
-          console.log('Error: ', err?.message);
+          setError(err?.message || 'Could not change your password. Please try again.');
         },
       });
     },
@@ -71,10 +63,11 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ onNext, contain
   return (
     <Box
       component="form"
+      noValidate
       onSubmit={handleSubmit(onSubmit)}
       sx={{
-        width: 400,
-        p: 3,
+        width: '100%',
+        p: 0,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -82,8 +75,14 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ onNext, contain
       gap={2.5}
       {...containerProps}
     >
+      {error && (
+        <Alert severity="error" sx={{ width: '100%' }}>
+          {error}
+        </Alert>
+      )}
       <FormTextField
         fullWidth
+        disabled={resetPasswordLoading}
         label="Current Password"
         type="password"
         id="current-password"
@@ -96,6 +95,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ onNext, contain
 
       <FormTextField
         fullWidth
+        disabled={resetPasswordLoading}
         label="New Password"
         type="password"
         id="password"
@@ -107,13 +107,14 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ onNext, contain
           required: 'Required',
           pattern: {
             value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d@_\-$]{8,}$/,
-            message: 'Invalid password.',
+            message: 'Use 8+ characters with uppercase, lowercase and a number.',
           },
         }}
       />
 
       <FormTextField
         fullWidth
+        disabled={resetPasswordLoading}
         label="Confirm New Password"
         type="password"
         id="confirm-password"
@@ -129,15 +130,15 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ onNext, contain
 
       <Typography variant="body2" color="grey.600">
         <Info sx={{ fontSize: '14px' }} />
-        The password must be a minimum of 8 characters in length and include at least one uppercase letter, one
-        lowercase letter, and one numeric digit.
+        Use at least 8 characters, including uppercase, lowercase and a number. Allowed symbols: @ _ - $.
       </Typography>
       <Box width="100%" display="flex" ml={onNext ? 'auto' : 'none'}>
         <Button
           startIcon={<CheckCircle size={16} />}
-          title={onNext ? 'Change Password & Next' : 'Change Password'}
+          title={onNext ? 'Save password and continue' : 'Change Password'}
           type="submit"
           fullWidth
+          disabled={resetPasswordLoading}
           loading={resetPasswordLoading}
         />
       </Box>

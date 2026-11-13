@@ -1,41 +1,16 @@
 'use client';
 import React from 'react';
+import PasswordField from '@/components/core/TextField';
+import AuthShell from '../components/AuthShell';
 import LoadingIndicator from '@/components/common/LoadingIndicator';
-import { useQuery } from '@apollo/client';
-import { GOOGLE_LOGIN_AVAILABILITY } from '@/apollo/googleAuthOperations';
-import {
-  Alert,
-  Box,
-  Button,
-  Card,
-  Checkbox,
-  FormControlLabel,
-  MenuItem,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Alert, Box, Button, Checkbox, FormControlLabel, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import Link from 'next/link';
 import { getBatchOptions } from '@/utils/helpers';
-import { googleStartUrl } from './GoogleButton';
+import { requestGoogleAuth as request } from './requestGoogleAuth';
 
 type Flow = { status: string; email?: string; firstName?: string; lastName?: string; returnPath?: string };
-async function request(query: string, variables: Record<string, unknown> = {}) {
-  const response = await fetch(process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || 'http://localhost:4000/client', {
-    method: 'POST',
-    credentials: 'include',
-    cache: 'no-store',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ query, variables }),
-  });
-  const result = await response.json();
-  if (!response.ok || result.errors?.length)
-    throw new Error(result.errors?.[0]?.message || 'Could not complete Google sign-in. Please try again.');
-  return result.data;
-}
 const fields = 'status email firstName lastName returnPath';
 export default function GoogleCompletion() {
-  const { data: availability } = useQuery(GOOGLE_LOGIN_AVAILABILITY, { fetchPolicy: 'network-only' });
   const [flow, setFlow] = React.useState<Flow | null>(null);
   const [error, setError] = React.useState('');
   const [loading, setLoading] = React.useState(true);
@@ -45,7 +20,11 @@ export default function GoogleCompletion() {
   const accept = React.useCallback((next: Flow) => {
     if (next.status === 'SIGNED_IN') {
       setRedirecting(true);
-      localStorage.setItem('logged_in', 'true');
+      try {
+        localStorage.setItem('logged_in', 'true');
+      } catch {
+        /* Cookies remain the source of session identity. */
+      }
       const path = next.returnPath || '/profile';
       window.location.replace(
         path.startsWith('/') && !path.startsWith('//') && !path.includes('\\') ? path : '/profile'
@@ -54,7 +33,11 @@ export default function GoogleCompletion() {
       setFlow(next);
     } else {
       setRedirecting(true);
-      localStorage.removeItem('logged_in');
+      try {
+        localStorage.removeItem('logged_in');
+      } catch {
+        /* Storage can be disabled by browser settings. */
+      }
       window.location.replace(
         `/signin?google=${next.status === 'PENDING' ? 'pending' : next.status === 'BLOCKED' ? 'blocked' : 'failed'}`
       );
@@ -75,7 +58,7 @@ export default function GoogleCompletion() {
       .catch((err) => {
         if (active) {
           setRedirecting(true);
-          window.location.replace('/signin?google=expired');
+          window.location.replace(`/signin?google=${err.code === 'GOOGLE_AUTH_FAILED' ? 'expired' : 'failed'}`);
         }
       })
       .finally(() => {
@@ -122,15 +105,16 @@ export default function GoogleCompletion() {
   if (loading || redirecting || !flow) return <LoadingIndicator />;
 
   return (
-    <Card variant="outlined" sx={{ maxWidth: 640, mx: 'auto', my: 4, p: { xs: 2, md: 4 } }}>
+    <AuthShell
+      registration={flow.status === 'REGISTER'}
+      title={flow.status === 'REGISTER' ? 'Complete your registration' : 'Connect your Google account'}
+      description={
+        flow.status === 'REGISTER'
+          ? 'A few details to help us verify your connection to JNV Paota.'
+          : 'Confirm your current password to securely connect Google to your existing account.'
+      }
+    >
       <Stack spacing={3}>
-        <Typography variant="h1">
-          {flow?.status === 'REGISTER'
-            ? 'Complete your registration'
-            : flow?.status === 'LINK'
-              ? 'Confirm your existing account'
-              : 'Google sign-in'}
-        </Typography>
         {error && <Alert severity="error">{error}</Alert>}
         {(flow?.status === 'REGISTER' || flow?.status === 'LINK') && (
           <Box component="form" onSubmit={submit}>
@@ -147,7 +131,7 @@ export default function GoogleCompletion() {
                     This email already has an account. Enter its password to connect Google. Your existing approval
                     status still applies.
                   </Typography>
-                  <TextField
+                  <PasswordField
                     name="password"
                     label="Current password"
                     type="password"
@@ -233,15 +217,12 @@ export default function GoogleCompletion() {
         )}
         {!loading && (
           <Stack direction="row" spacing={2}>
-            {availability?.googleLoginAvailability?.enabled && (
-              <Button onClick={() => window.location.assign(googleStartUrl())}>Restart Google sign-in</Button>
-            )}
             <Button component={Link} href="/signin">
               Back to sign in
             </Button>
           </Stack>
         )}
       </Stack>
-    </Card>
+    </AuthShell>
   );
 }

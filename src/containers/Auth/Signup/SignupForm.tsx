@@ -1,29 +1,26 @@
 'use client';
 
-import React, { Suspense } from 'react';
+import React from 'react';
 import { useForm, useWatch } from 'react-hook-form';
-import { Box, Typography } from '@mui/material';
+import { Alert, Box, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import { Info } from '@mui/icons-material';
 import type { SignupMutationVariables } from 'src/apollo/hooks';
 import { SIGNUP_WITH_HONEYPOT } from '@/apollo/signupOperation';
 import { useMutation } from '@apollo/client';
 import { ISignupFormInput } from './Signup.types';
 import FormTextField from '@/components/form/FormTextField';
-import { useAlert } from '@/context/AlertContext';
 import Button from '@/components/core/Button';
 import FormSelectField from '@/components/form/FormSelectField';
 import { getBatchOptions, phoneNumberStringConverter, startCase } from '@/utils/helpers';
-import { Info } from '@mui/icons-material';
 import FormPhoneField from '@/components/form/FormPhoneField';
-import Lottie from '@/components/common/DynamicLottie';
-import successLottieIcon from '@/utils/lottie/success3_icon.json';
 import FormCheckbox from '@/components/form/FormCheckboxField/FormCheckboxField';
 
-const batchList = getBatchOptions();
+const batchList = getBatchOptions().filter((batch) => batch.value > 0);
 
 const SignupForm = () => {
   const [signupSuccess, setSignupSuccess] = React.useState<boolean>(false);
-  const { showAlert } = useAlert();
+  const [error, setError] = React.useState('');
   const { control, handleSubmit, register, setValue } = useForm<ISignupFormInput>({ defaultValues: { website: '' } });
 
   const watchPassword = useWatch({ control, name: 'password' });
@@ -36,6 +33,7 @@ const SignupForm = () => {
 
   const onSubmit = React.useCallback(
     (data: ISignupFormInput) => {
+      setError('');
       signup({
         variables: {
           firstName: startCase(data?.first_name?.trim()),
@@ -52,56 +50,34 @@ const SignupForm = () => {
           setSignupSuccess(true);
         },
         onError: (err: Error) => {
-          showAlert({
-            type: 'error',
-            message: err?.message || 'Something went wrong',
-          });
+          setError(err?.message || 'Could not submit your registration. Please try again.');
         },
       });
     },
-    [signup, showAlert]
+    [signup]
   );
 
   if (signupSuccess) {
     return (
-      <Box
-        sx={{
-          width: '100%',
-          my: 2,
-          p: {
-            xs: 1.5,
-            md: 3,
-          },
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <Suspense fallback={null}>
-          <Lottie animationData={successLottieIcon} loop={true} style={{ width: '100px', height: '100px' }} />
-        </Suspense>
-        <Typography variant="h2">Signup Successful!</Typography>
-        <Typography variant="body1" mt={1} textAlign="center" width={{ xs: '100%', md: '60%' }}>
-          Your registration is awaiting approval. You will be able to sign in after the association or your batch
-          coordinator approves it.{' '}
+      <Alert severity="success" sx={{ width: '100%' }}>
+        <Typography variant="h3" component="h2" mb={1}>
+          Registration submitted
         </Typography>
-      </Box>
+        Your registration is awaiting approval. You can sign in after the association or your batch coordinator approves
+        it.
+      </Alert>
     );
   }
 
   return (
     <Box
       component="form"
+      noValidate
       onSubmit={handleSubmit(onSubmit)}
       sx={{
         width: '100%',
-        mt: 1,
-        p: {
-          xs: 2,
-          md: 3,
-        },
-        pt: 3,
+        mt: 0,
+        p: 0,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -114,13 +90,22 @@ const SignupForm = () => {
         <label htmlFor="signup-website">Website</label>
         <input id="signup-website" type="text" autoComplete="off" tabIndex={-1} {...register('website')} />
       </Box>
-      <Grid container spacing={3}>
+      <Grid container spacing={2.5} sx={{ width: '100%' }}>
+        {error && (
+          <Grid size={12}>
+            <Alert severity="error">{error}</Alert>
+          </Grid>
+        )}
+        <Grid size={12}>
+          <Typography variant="h3" component="h2">
+            About you
+          </Typography>
+        </Grid>
         <Grid size={{ xs: 12 }}>
           <FormCheckbox
             fullWidth
             id="isFaculty"
-            label="Are you registering as a faculty in JNV Paota?"
-            autoFocus
+            label="I am a faculty member"
             control={control}
             disabled={loading}
             name="isFaculty"
@@ -132,8 +117,8 @@ const SignupForm = () => {
           <FormTextField
             fullWidth
             id="first_name"
-            label="First Name"
-            autoFocus
+            label="First name"
+            autoComplete="given-name"
             control={control}
             disabled={loading}
             name="first_name"
@@ -147,8 +132,8 @@ const SignupForm = () => {
           <FormTextField
             fullWidth
             id="last_name"
-            label="Last Name"
-            autoFocus
+            label="Last name"
+            autoComplete="family-name"
             control={control}
             disabled={loading}
             name="last_name"
@@ -163,6 +148,7 @@ const SignupForm = () => {
           <FormSelectField
             control={control}
             name="gender"
+            label="Gender"
             selectProps={{
               size: 'small',
               id: 'gender',
@@ -189,6 +175,7 @@ const SignupForm = () => {
             <FormSelectField
               control={control}
               name="batch"
+              label="Alumni batch"
               selectProps={{
                 size: 'small',
                 id: 'batch',
@@ -203,9 +190,15 @@ const SignupForm = () => {
           </Grid>
         )}
 
+        <Grid size={12}>
+          <Typography variant="h3" component="h2" mt={1}>
+            Contact details
+          </Typography>
+        </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
           <FormTextField
             fullWidth
+            type="email"
             id="email"
             label="Email Address"
             autoComplete="email"
@@ -238,9 +231,17 @@ const SignupForm = () => {
               }
             }}
             rules={{
-              required: 'Required',
+              required: 'Enter your mobile number.',
+              validate: (value) =>
+                (String(value).replace(/\D/g, '').length >= 7 && String(value).replace(/\D/g, '').length <= 15) ||
+                'Enter a valid mobile number.',
             }}
           />
+        </Grid>
+        <Grid size={12}>
+          <Typography variant="h3" component="h2" mt={1}>
+            Secure your account
+          </Typography>
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
           <FormTextField
@@ -248,7 +249,7 @@ const SignupForm = () => {
             label="Password"
             type="password"
             id="password"
-            autoComplete="current-password"
+            autoComplete="new-password"
             control={control}
             disabled={loading}
             name="password"
@@ -256,8 +257,8 @@ const SignupForm = () => {
             rules={{
               required: 'Required',
               pattern: {
-                value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/,
-                message: 'Invalid password.',
+                value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d@_\-$]{8,}$/,
+                message: 'Use 8+ characters with uppercase, lowercase and a number.',
               },
             }}
           />
@@ -268,7 +269,7 @@ const SignupForm = () => {
             label="Confirm Password"
             type="password"
             id="confirm-password"
-            autoComplete="current-password"
+            autoComplete="new-password"
             control={control}
             disabled={loading}
             name="confirm-password"
@@ -282,12 +283,13 @@ const SignupForm = () => {
         <Grid size={{ xs: 12 }} mt={-1}>
           <Typography variant="body2" color="grey.600">
             <Info sx={{ fontSize: '14px' }} />
-            The password must be a minimum of 8 characters in length and include at least one uppercase letter, one
-            lowercase letter, and one numeric digit.
+            Use at least 8 characters, including uppercase, lowercase and a number. Allowed symbols: @ _ - $.
           </Typography>
         </Grid>
 
-        <Button title="Register" type="submit" fullWidth loading={loading} />
+        <Grid size={12}>
+          <Button title="Submit for approval" type="submit" fullWidth loading={loading} />
+        </Grid>
       </Grid>
     </Box>
   );
