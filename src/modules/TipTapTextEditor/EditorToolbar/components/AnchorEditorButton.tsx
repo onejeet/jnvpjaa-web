@@ -9,59 +9,28 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { useCurrentEditor } from '@tiptap/react';
 import Button from '@/components/core/Button';
-import { EDITOR_ICONS } from '../../constants';
 import ToolIcon from './ToolIcon';
-import { isURL } from '@/utils/helpers';
-import { isBrowser } from '@/utils/isBrowser';
 import { Tooltip } from '@mui/material';
+import { isSafeWebUrl } from '../../editorUrl';
 
-const AnchorEditorButton: React.FC = (props) => {
+const AnchorEditorButton: React.FC<{ disabled?: boolean }> = ({ disabled }) => {
   const { editor } = useCurrentEditor();
 
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
-  const [url, setUrl] = React.useState<string | null>(null);
+  const [url, setUrl] = React.useState('');
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
-    setUrl(null);
+    setUrl(editor?.getAttributes('link')?.href || '');
   };
 
   const handleClose = () => {
     setAnchorEl(null);
-    setUrl(null);
+    setUrl('');
   };
 
   const open = Boolean(anchorEl);
   const id = open ? 'anchor-url-popover' : undefined;
-
-  // @ts-expect-error type-error
-  const editorSelection = React.useRef(editor?.selection);
-
-  React.useEffect(() => {
-    if (open) {
-      // @ts-expect-error type-error
-      editorSelection.current = editor?.selection;
-    }
-  }, [open]);
-
-  const setLink = (href: string) => {
-    const url = href;
-
-    // cancelled
-    if (url === null) {
-      return;
-    }
-
-    // empty
-    if (url === '') {
-      editor?.chain().focus().extendMarkRange('link').unsetLink().run();
-
-      return;
-    }
-
-    // update link
-    editor?.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
-  };
 
   if (!editor) {
     return null;
@@ -72,7 +41,9 @@ const AnchorEditorButton: React.FC = (props) => {
       <Tooltip title="Add Link" arrow>
         <IconButton
           id="anchor_tool_button"
+          aria-label="Insert or edit link"
           aria-describedby={id}
+          disabled={disabled}
           onClick={handleClick}
           sx={{
             color: editor?.isActive('link') ? 'primary.main' : 'text.primary',
@@ -85,7 +56,7 @@ const AnchorEditorButton: React.FC = (props) => {
       <Popover
         id={id}
         open={open}
-        anchorEl={anchorEl || (isBrowser() ? document.getElementById('typography_editor_anchor_button') : null)}
+        anchorEl={anchorEl}
         onClose={handleClose}
         anchorOrigin={{
           vertical: 'bottom',
@@ -97,19 +68,21 @@ const AnchorEditorButton: React.FC = (props) => {
         }}
         transitionDuration={0}
       >
-        <Box display="flex" width={340} p={2} flexDirection="column">
+        <Box display="flex" width="min(340px, calc(100vw - 32px))" p={2} flexDirection="column">
           <Box display="flex" flexDirection="column" width="100%" gap="16px">
             <Box display="flex" flexDirection="column" flex={1}>
               <Typography variant="subtitle2" color="text.primary" mb={1}>
                 URL
               </Typography>
               <OutlinedInput
-                onChange={(e: any) => {
+                onChange={(e) => {
                   setUrl(e.target.value);
                 }}
+                aria-label="Link URL"
+                type="url"
                 placeholder="https://mywebsite.com"
                 size="small"
-                value={url || editor?.getAttributes('link')?.href}
+                value={url}
               />
             </Box>
             <Box display="flex" gap="10px" justifyContent="flex-end">
@@ -119,7 +92,7 @@ const AnchorEditorButton: React.FC = (props) => {
                     ? () => {
                         editor.chain().focus().unsetLink().run();
                         setAnchorEl(null);
-                        setUrl(null);
+                        setUrl('');
                       }
                     : handleClose
                 }
@@ -138,14 +111,14 @@ const AnchorEditorButton: React.FC = (props) => {
               <Button
                 startIcon={<TaskAltIcon sx={{ fontSize: '18px' }} />}
                 onClick={() => {
-                  if (url) {
-                    setLink(url);
+                  if (isSafeWebUrl(url)) {
+                    editor.chain().focus().extendMarkRange('link').setLink({ href: url.trim() }).run();
                     setAnchorEl(null);
                   }
                 }}
                 title="Save"
                 size="small"
-                disabled={!isURL(url)}
+                disabled={!isSafeWebUrl(url)}
               />
             </Box>
           </Box>

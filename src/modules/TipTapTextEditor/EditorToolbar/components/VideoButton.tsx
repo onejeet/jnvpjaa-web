@@ -8,59 +8,30 @@ import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import { useCurrentEditor } from '@tiptap/react';
 import ToolIcon from './ToolIcon';
-import { isURL } from '@/utils/helpers';
 import Button from '@/components/core/Button';
 import { Tooltip } from '@mui/material';
-import { isBrowser } from '@/utils/isBrowser';
+import { isYouTubeUrl } from '../../editorUrl';
 
-const VideoButton: React.FC = (props) => {
+const VideoButton: React.FC<{ disabled?: boolean }> = ({ disabled }) => {
   const { editor } = useCurrentEditor();
 
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
-  const [url, setUrl] = React.useState<string | null>(null);
+  const [url, setUrl] = React.useState('');
   const [width, setWidth] = React.useState<number>(640);
   const [height, setHeight] = React.useState<number>(480);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
-    setUrl(null);
+    setUrl('');
   };
 
   const handleClose = () => {
     setAnchorEl(null);
-    setUrl(null);
+    setUrl('');
   };
 
   const open = Boolean(anchorEl);
   const id = open ? 'video-url-popover' : undefined;
-
-  // @ts-expect-error type-error
-  const editorSelection = React.useRef(editor?.selection);
-
-  React.useEffect(() => {
-    if (open) {
-      // @ts-expect-error type-error
-      editorSelection.current = editor?.selection;
-    }
-  }, [open]);
-
-  const setLink = React.useCallback(
-    (href: string) => {
-      const url = href;
-
-      // cancelled
-      if (url === null || url === '') {
-        return;
-      }
-
-      editor?.commands?.setYoutubeVideo({
-        src: href,
-        width: Math.max(320, parseInt(width?.toString(), 10)) || 640,
-        height: Math.max(180, parseInt(height?.toString(), 10)) || 480,
-      });
-    },
-    [width, height]
-  );
 
   if (!editor) {
     return null;
@@ -71,10 +42,12 @@ const VideoButton: React.FC = (props) => {
       <Tooltip title="Video" arrow>
         <IconButton
           id="video_tool_button"
+          aria-label="Insert YouTube video"
           aria-describedby={id}
+          disabled={disabled}
           onClick={handleClick}
           sx={{
-            color: editor?.isActive('link') ? 'primary.main' : 'text.primary',
+            color: editor?.isActive('youtube') ? 'primary.main' : 'text.primary',
           }}
           size="small"
         >
@@ -84,7 +57,7 @@ const VideoButton: React.FC = (props) => {
       <Popover
         id={id}
         open={open}
-        anchorEl={anchorEl || (isBrowser() ? document.getElementById('typography_editor_anchor_button') : null)}
+        anchorEl={anchorEl}
         onClose={handleClose}
         anchorOrigin={{
           vertical: 'bottom',
@@ -96,19 +69,21 @@ const VideoButton: React.FC = (props) => {
         }}
         transitionDuration={0}
       >
-        <Box display="flex" width={340} p={2} flexDirection="column">
+        <Box display="flex" width="min(340px, calc(100vw - 32px))" p={2} flexDirection="column">
           <Box display="flex" flexDirection="column" width="100%" gap="16px">
             <Box display="flex" flexDirection="column" flex={1}>
               <Typography variant="subtitle2" color="text.primary" mb={1}>
                 URL
               </Typography>
               <OutlinedInput
-                onChange={(e: any) => {
+                onChange={(e) => {
                   setUrl(e.target.value);
                 }}
+                aria-label="YouTube URL"
+                type="url"
                 placeholder="https://www.youtube.com/watch?v=videoid"
                 size="small"
-                value={url || editor?.getAttributes('youtube')?.src}
+                value={url}
               />
             </Box>
             <Box display="flex" width="100%" gap={1.5}>
@@ -117,9 +92,10 @@ const VideoButton: React.FC = (props) => {
                   Width
                 </Typography>
                 <OutlinedInput
-                  onChange={(e: any) => {
+                  onChange={(e) => {
                     setWidth(Number(e.target.value));
                   }}
+                  inputProps={{ min: 320, max: 1920 }}
                   type="number"
                   placeholder="640"
                   size="small"
@@ -131,9 +107,10 @@ const VideoButton: React.FC = (props) => {
                   Height
                 </Typography>
                 <OutlinedInput
-                  onChange={(e: any) => {
+                  onChange={(e) => {
                     setHeight(Number(e.target.value));
                   }}
+                  inputProps={{ min: 180, max: 1080 }}
                   type="number"
                   placeholder="640"
                   size="small"
@@ -152,14 +129,22 @@ const VideoButton: React.FC = (props) => {
               />
               <Button
                 onClick={() => {
-                  if (url) {
-                    setLink(url);
+                  if (isYouTubeUrl(url)) {
+                    editor
+                      .chain()
+                      .focus()
+                      .setYoutubeVideo({
+                        src: url.trim(),
+                        width: Math.min(1920, Math.max(320, width || 640)),
+                        height: Math.min(1080, Math.max(180, height || 480)),
+                      })
+                      .run();
                     setAnchorEl(null);
                   }
                 }}
                 action="save"
                 size="small"
-                disabled={!isURL(url)}
+                disabled={!isYouTubeUrl(url)}
                 title="Add"
               />
             </Box>

@@ -1,167 +1,162 @@
 'use client';
 
 import React from 'react';
-/* LIB */
-import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import Popover from '@mui/material/Popover';
-import Stack from '@mui/material/Stack';
-/* TIPTAP */
+import { Box, IconButton, Popover, Tooltip } from '@mui/material';
+import { IconArrowBackUp, IconArrowForwardUp, IconMoodSmile } from '@tabler/icons-react';
 import { useCurrentEditor } from '@tiptap/react';
-
-/* CONSTANTS */
-import { EDITOR_ICONS } from '../constants';
-/* TYPES */
+import EmojiPicker, { SkinTones } from 'emoji-picker-react';
 import type { EditorToolbarProps } from '../TipTapTextEditor.types';
 import type { TAlign } from './components/AlignButton';
 import AlignButton from './components/AlignButton';
 import AnchorEditorButton from './components/AnchorEditorButton';
+import BlockquoteButton from './components/BlockquoteButton';
 import ColorPicker from './components/ColorPicker';
-import FontFamilySelect from './components/FontFamilySelect';
-import FontSizeSelect from './components/FontSizeSelect';
 import HeadingDropdown from './components/HeadingDropdown';
-// import ImageButton from './components/ImageButton';
-/* LOCAL */
 import MarkButton from './components/MarkButton';
 import ToolIcon from './components/ToolIcon';
 import VideoButton from './components/VideoButton';
-import IndentationButtons from './components/IndentationButtons';
-import BlockquoteButton from './components/BlockquoteButton';
-import { IconMoodSmile } from '@tabler/icons-react';
-import EmojiPicker, { SkinTones } from 'emoji-picker-react';
 
-const EditorToolbar: React.FC<EditorToolbarProps> = ({ toolsHidden = [], defaultColors, ...restProps }) => {
+const groupSx = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '2px',
+  p: '3px',
+  border: '1px solid',
+  borderColor: 'divider',
+  borderRadius: 1.5,
+  bgcolor: 'background.paper',
+  '& .MuiIconButton-root': { width: 38, height: 38, borderRadius: 1 },
+};
+
+const EditorToolbar: React.FC<EditorToolbarProps> = ({ toolsHidden = [], defaultColors, disabled, ...boxProps }) => {
   const { editor } = useCurrentEditor();
-  const [emojiAnchorEl, setEmojiAnchorEl] = React.useState<HTMLButtonElement | null>(null);
-  const openEmojiPopover = Boolean(emojiAnchorEl);
-  const emojiPopoverId = openEmojiPopover ? 'emoji-popover' : undefined;
-  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const openPopover = Boolean(anchorEl);
-  const id = openPopover ? 'simple-popover' : undefined;
-  const currentTextAlign = ['left', 'center', 'right', 'justify'].find((alignment) =>
+  const [alignAnchor, setAlignAnchor] = React.useState<HTMLButtonElement | null>(null);
+  const [emojiAnchor, setEmojiAnchor] = React.useState<HTMLButtonElement | null>(null);
+  const hidden = (tool: string) => toolsHidden.includes(tool);
+  const unavailable = disabled || !editor;
+  const currentAlign = (['left', 'center', 'right', 'justify'].find((alignment) =>
     editor?.isActive({ textAlign: alignment })
-  ) as TAlign;
-
-  const AlignIcon = EDITOR_ICONS[`text_align_${currentTextAlign || 'left'}`];
-  const VideoIcon = EDITOR_ICONS['video'];
-  const ImageIcon = EDITOR_ICONS['image'];
+  ) || 'left') as TAlign;
 
   return (
     <>
       <Box
-        bgcolor="grey.200"
-        py={1.2}
-        px={1.5}
-        display="flex"
-        width="100%"
-        borderBottom="1px solid"
-        borderColor="grey.400"
-        {...restProps}
-      >
-        <Stack
-          direction="row"
-          spacing={{
-            xs: 1,
-            md: 2.5,
-          }}
-          alignItems="center"
-        >
-          {/* <FontFamilySelect /> */}
-
-          <MarkButton format="bold" />
-          <MarkButton format="underline" />
-          <MarkButton format="italic" />
-          <HeadingDropdown />
-          <BlockquoteButton />
-          {/* <FontSizeSelect /> */}
-          <Divider orientation="vertical" />
-          <IconButton
-            aria-describedby={id}
-            id="align"
-            onClick={handleClick}
-            size="small"
-            sx={{
-              color: currentTextAlign !== 'left' ? 'primary.main' : 'text.primary',
-            }}
-          >
-            <ToolIcon icon={`text_align_${currentTextAlign || 'left'}`} />
-          </IconButton>
-          <MarkButton format="orderedList" />
-          <MarkButton format="bulletList" />
-          <Divider orientation="vertical" />
-          <AnchorEditorButton />
-          <Divider orientation="vertical" />
-          <ColorPicker />
-          <IconButton aria-describedby={emojiPopoverId} onClick={(e) => setEmojiAnchorEl(e.currentTarget)} size="small">
-            <IconMoodSmile size={28} />
-          </IconButton>
-          <Divider orientation="vertical" />
-          <VideoButton />
-
-          <Divider orientation="vertical" />
-          {/* <ImageButton /> */}
-        </Stack>
-      </Box>
-
-      <Popover
-        id={id}
-        open={Boolean(openPopover)}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
+        {...boxProps}
+        role="toolbar"
+        aria-label="Text editor tools"
+        sx={{
+          px: { xs: 1, sm: 1.5 },
+          py: 1,
+          bgcolor: 'grey.100',
+          borderBottom: '1px solid',
+          borderColor: 'divider',
+          display: 'flex',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+          gap: 0.75,
+          ...boxProps.sx,
         }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-        transitionDuration={0}
       >
-        {anchorEl?.id === 'align' && (
-          <Box gap="5px" id="alignment_editor_popover" display="flex" p={1} flexDirection="row">
-            <AlignButton format="left" />
-            <AlignButton format="center" />
-            <AlignButton format="right" />
-            <AlignButton format="justify" />
+        <Box role="group" aria-label="Text style" sx={groupSx}>
+          <HeadingDropdown disabled={unavailable} />
+          <MarkButton format="bold" disabled={unavailable} />
+          <MarkButton format="italic" disabled={unavailable} />
+          <MarkButton format="underline" disabled={unavailable} />
+          {!hidden('color') && <ColorPicker defaultColors={defaultColors} disabled={unavailable} />}
+        </Box>
+        <Box role="group" aria-label="Paragraph" sx={groupSx}>
+          <MarkButton format="bulletList" disabled={unavailable} />
+          <MarkButton format="orderedList" disabled={unavailable} />
+          <BlockquoteButton disabled={unavailable} />
+          <Tooltip title="Alignment" arrow>
+            <span>
+              <IconButton
+                aria-label="Alignment"
+                aria-expanded={Boolean(alignAnchor)}
+                disabled={unavailable}
+                onClick={(event) => setAlignAnchor(event.currentTarget)}
+                size="small"
+              >
+                <ToolIcon icon={`text_align_${currentAlign}`} />
+              </IconButton>
+            </span>
+          </Tooltip>
+        </Box>
+        {(!hidden('link') || !hidden('emoji') || !hidden('video')) && (
+          <Box role="group" aria-label="Insert" sx={groupSx}>
+            {!hidden('link') && <AnchorEditorButton disabled={unavailable} />}
+            {!hidden('emoji') && (
+              <Tooltip title="Insert emoji" arrow>
+                <span>
+                  <IconButton
+                    aria-label="Insert emoji"
+                    disabled={unavailable}
+                    onClick={(event) => setEmojiAnchor(event.currentTarget)}
+                    size="small"
+                  >
+                    <IconMoodSmile size={20} />
+                  </IconButton>
+                </span>
+              </Tooltip>
+            )}
+            {!hidden('video') && <VideoButton disabled={unavailable} />}
           </Box>
         )}
+        <Box role="group" aria-label="History" sx={{ ...groupSx, ml: { sm: 'auto' } }}>
+          <Tooltip title="Undo" arrow>
+            <span>
+              <IconButton
+                aria-label="Undo"
+                disabled={unavailable || !editor?.can().undo()}
+                onClick={() => editor?.chain().focus().undo().run()}
+                size="small"
+              >
+                <IconArrowBackUp size={20} />
+              </IconButton>
+            </span>
+          </Tooltip>
+          <Tooltip title="Redo" arrow>
+            <span>
+              <IconButton
+                aria-label="Redo"
+                disabled={unavailable || !editor?.can().redo()}
+                onClick={() => editor?.chain().focus().redo().run()}
+                size="small"
+              >
+                <IconArrowForwardUp size={20} />
+              </IconButton>
+            </span>
+          </Tooltip>
+        </Box>
+      </Box>
+      <Popover
+        open={Boolean(alignAnchor)}
+        anchorEl={alignAnchor}
+        onClose={() => setAlignAnchor(null)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+      >
+        <Box role="group" aria-label="Choose alignment" sx={{ display: 'flex', p: 0.5 }}>
+          {(['left', 'center', 'right', 'justify'] as TAlign[]).map((format) => (
+            <AlignButton key={format} format={format} />
+          ))}
+        </Box>
       </Popover>
       <Popover
-        id={emojiPopoverId}
-        open={openEmojiPopover}
-        anchorEl={emojiAnchorEl}
-        onClose={() => setEmojiAnchorEl(null)}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-        transitionDuration={0}
+        open={Boolean(emojiAnchor)}
+        anchorEl={emojiAnchor}
+        onClose={() => setEmojiAnchor(null)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        PaperProps={{ sx: { maxWidth: 'calc(100vw - 24px)' } }}
       >
         <EmojiPicker
+          width="min(350px, calc(100vw - 32px))"
           lazyLoadEmojis
-          onEmojiClick={(obj) => {
-            editor?.commands.insertContent(obj?.emoji);
-            setEmojiAnchorEl(null);
+          onEmojiClick={({ emoji }) => {
+            editor?.chain().focus().insertContent(emoji).run();
+            setEmojiAnchor(null);
           }}
-          previewConfig={{
-            showPreview: false,
-          }}
-          defaultSkinTone={SkinTones['MEDIUM_LIGHT']}
+          previewConfig={{ showPreview: false }}
+          defaultSkinTone={SkinTones.MEDIUM_LIGHT}
         />
       </Popover>
     </>

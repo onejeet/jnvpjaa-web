@@ -4,18 +4,21 @@ import { useCurrentEditor } from '@tiptap/react';
 import ToolIcon from './ToolIcon';
 import { Tooltip } from '@mui/material';
 
-const BlockquoteButton: React.FC = () => {
+const BlockquoteButton: React.FC<{ disabled?: boolean }> = ({ disabled }) => {
   const { editor } = useCurrentEditor();
 
   return (
     <Tooltip title="Blockquote" arrow>
       <IconButton
+        aria-label="Blockquote"
+        aria-pressed={Boolean(editor?.isActive('blockquote'))}
+        disabled={disabled}
         sx={{
           color: editor?.isActive('blockquote') ? 'primary.main' : 'text.primary',
           borderRadius: '2px',
         }}
         size="small"
-        onMouseDown={(event) => {
+        onClick={(event) => {
           event.preventDefault();
           if (!editor) return;
           editor.chain().toggleBlockquote().focus().run();

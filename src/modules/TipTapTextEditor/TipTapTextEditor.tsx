@@ -2,20 +2,14 @@
 
 import React from 'react';
 import Box from '@mui/material/Box';
-import BulletList from '@tiptap/extension-bullet-list';
 import { Color } from '@tiptap/extension-color';
 import FontFamily from '@tiptap/extension-font-family';
-import Heading from '@tiptap/extension-heading';
 import Link from '@tiptap/extension-link';
-import ListItem from '@tiptap/extension-list-item';
-import OrderedList from '@tiptap/extension-ordered-list';
-import Paragraph from '@tiptap/extension-paragraph';
 import TextAlign from '@tiptap/extension-text-align';
 import TextStyle from '@tiptap/extension-text-style';
 import Underline from '@tiptap/extension-underline';
 import Youtube from '@tiptap/extension-youtube';
 import Placeholder from '@tiptap/extension-placeholder';
-import Blockquote from '@tiptap/extension-blockquote';
 import { EditorProvider } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 
@@ -39,56 +33,6 @@ const TipTapTextEditor = ({
   id,
   toolbarProps = {},
 }: TipTapTextEditorProps) => {
-  // paragraph extension
-  const CustomParagraph = Paragraph.extend({
-    addAttributes() {
-      return {
-        class: {
-          default: '',
-          // Take the attribute values
-          renderHTML: (attributes) => {
-            let newClass = '';
-            if (attributes.class.includes('smallText')) {
-              newClass = 'MuiTypography-smallText';
-            } else if (attributes.class.includes('body1')) {
-              newClass = 'MuiTypography-body1';
-            } else if (attributes.class.includes('body2')) {
-              newClass = 'MuiTypography-body2';
-            } else if (attributes.class.includes('body3')) {
-              newClass = 'MuiTypography-body3';
-            } else if (attributes.class.includes('subtitle1')) {
-              newClass = 'MuiTypography-subtitle1';
-            } else if (attributes.class.includes('subtitle2')) {
-              newClass = 'MuiTypography-subtitle2';
-            }
-            // … and return an object with HTML attributes.
-            return {
-              class: `MuiTypography-root ${newClass}`,
-            };
-          },
-        },
-      };
-    },
-  });
-
-  // heading extension
-  const CustomHeading = Heading.extend({
-    addAttributes() {
-      return {
-        class: {
-          default: '',
-          // Take the attribute values
-          renderHTML: (attributes) => {
-            // … and return an object with HTML attributes.
-            return {
-              class: `MuiTypography-root MuiTypography-h${attributes?.level} ${attributes?.class}`,
-            };
-          },
-        },
-      };
-    },
-  });
-
   // extract color
   const { color: sxColor, ...restSx } = sx || {};
 
@@ -98,18 +42,36 @@ const TipTapTextEditor = ({
         '& .tiptap': {
           outline: 'none',
           minHeight: height || 200,
-          p: 3,
+          px: { xs: 1.5, sm: 3 },
+          py: 2,
+          overflowWrap: 'anywhere',
+          '&:focus-visible': { outline: '2px solid', outlineColor: 'primary.main', outlineOffset: -2 },
+          '& img, & iframe': { maxWidth: '100%' },
+          '& p, & h1, & h2, & h3, & h4, & h5, & h6': { marginBlockStart: 0, marginBlockEnd: 0 },
+          '& p + p, & p + ul, & p + ol, & p + blockquote': { mt: 1.5 },
+          '& h1, & h2, & h3': { lineHeight: 1.25, mt: 2, mb: 1 },
+          '& ul, & ol': { pl: 3, my: 1.5 },
+          '& blockquote': {
+            borderLeft: '3px solid',
+            borderColor: 'primary.main',
+            pl: 2,
+            my: 2,
+            color: 'text.secondary',
+          },
+          '& p.is-empty:first-of-type::before': {
+            color: 'text.disabled',
+            content: 'attr(data-placeholder)',
+            float: 'left',
+            height: 0,
+            pointerEvents: 'none',
+          },
         },
         border: '1px solid',
         borderColor: 'grey.400',
         borderRadius: 2,
         minHeight: '20px !important',
-        overflow: 'visible',
+        overflow: 'hidden',
         maxWidth: '100%',
-        '& p,h1,h2,h3,h4,h5,h6': {
-          marginBlockStart: 0,
-          marginBlockEnd: 0,
-        },
         ...restSx,
       }}
     >
@@ -122,14 +84,7 @@ const TipTapTextEditor = ({
           }}
           extensions={[
             StarterKit,
-            Blockquote,
-            OrderedList,
-            BulletList,
-
-            ListItem,
             Indentation,
-            // CustomParagraph,
-            // CustomHeading,
             Underline,
             TextAlign.configure({
               alignments: ['left', 'right', 'center', 'justify'],
@@ -159,7 +114,9 @@ const TipTapTextEditor = ({
               modestBranding: true,
             }),
           ]}
-          slotAfter={<EditorToolbarVertical toolsHidden={['chatbot', 'transcribe']} {...toolbarProps} />}
+          slotBefore={
+            <EditorToolbarVertical toolsHidden={['chatbot', 'transcribe']} {...toolbarProps} disabled={disabled} />
+          }
         >
           <TipTapTextEditorWrapper disabled={disabled} value={value}>
             {null}

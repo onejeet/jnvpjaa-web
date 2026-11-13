@@ -3,12 +3,14 @@ import { rgbToHex } from '@mui/system';
 import { useCurrentEditor } from '@tiptap/react';
 import ColorPickerInput from '@/components/common/ColorPickerInput';
 
-const ColorPicker: React.FC<any> = ({ defaultColors }) => {
+const ColorPicker: React.FC<{ defaultColors?: string[]; disabled?: boolean }> = ({ defaultColors, disabled }) => {
   const { editor } = useCurrentEditor();
   return (
     <ColorPickerInput
       onChange={(value: string) => editor?.chain().focus().setColor(value).run()}
       defaultColors={defaultColors || []}
+      disabled={disabled}
+      pickerIconButtonProps={{ 'aria-label': 'Text color' }}
       // value={match.find((matchItem) => matchItem.color)?.color}
       value={
         editor?.getAttributes('textStyle')?.color?.startsWith('rgb')

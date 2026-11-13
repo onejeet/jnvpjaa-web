@@ -17,6 +17,7 @@ export interface EditorToolbarProps extends BoxProps {
   toolsHidden?: string[];
   defaultColors?: string[];
   editor?: Editor | null;
+  disabled?: boolean;
 }
 export interface TipTapTextEditorWrapperProps {
   children: React.ReactNode;

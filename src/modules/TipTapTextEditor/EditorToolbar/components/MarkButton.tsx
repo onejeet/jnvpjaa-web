@@ -11,17 +11,20 @@ import ToolIcon from './ToolIcon';
 import { startCase } from '@/utils/helpers';
 import { Tooltip } from '@mui/material';
 
-const MarkButton: React.FC<any> = ({ format, icon }) => {
+const MarkButton: React.FC<{
+  format: 'bold' | 'underline' | 'italic' | 'orderedList' | 'bulletList';
+  disabled?: boolean;
+}> = ({ format, disabled }) => {
   const { editor } = useCurrentEditor();
 
   const handleMark = (action: 'bold' | 'underline' | 'italic' | 'orderedList' | 'bulletList') => {
     if (!editor) return;
     switch (action) {
       case 'bold':
-        editor.chain().toggleBold().focus().run();
+        editor.chain().focus().toggleBold().run();
         break;
       case 'underline':
-        editor.commands.toggleUnderline();
+        editor.chain().focus().toggleUnderline().run();
         break;
       case 'italic':
         editor.chain().toggleItalic().focus().run();
@@ -38,6 +41,9 @@ const MarkButton: React.FC<any> = ({ format, icon }) => {
   return (
     <Tooltip title={startCase(format)} arrow>
       <IconButton
+        aria-label={startCase(format)}
+        aria-pressed={Boolean(editor?.isActive(format))}
+        disabled={disabled}
         sx={{
           color: editor?.isActive(format) ? 'primary.main' : 'text.primary',
         }}

@@ -14,13 +14,15 @@ const AlignButton: React.FC<AlignButtonProps> = ({ format }) => {
 
   const handleAlign = (action: TAlign) => {
     if (!editor) return;
-    editor.commands.setTextAlign(action);
+    editor.chain().focus().setTextAlign(action).run();
   };
 
   const AlignIcon = EDITOR_ICONS[`text_align_${format}`];
 
   return (
     <IconButton
+      aria-label={`Align ${format}`}
+      aria-pressed={Boolean(editor?.isActive({ textAlign: format }))}
       sx={{
         color: editor?.isActive({ textAlign: format }) ? 'primary.main' : 'text.primary',
         borderRadius: '2px',
@@ -30,7 +32,7 @@ const AlignButton: React.FC<AlignButtonProps> = ({ format }) => {
         event.preventDefault();
         if (!editor) return;
         if (editor.isActive({ textAlign: format })) {
-          editor.commands.unsetTextAlign();
+          editor.chain().focus().unsetTextAlign().run();
         } else {
           handleAlign(format);
         }

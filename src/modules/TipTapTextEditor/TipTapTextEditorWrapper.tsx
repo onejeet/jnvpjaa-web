@@ -9,20 +9,16 @@ import type { TipTapTextEditorWrapperProps } from './TipTapTextEditor.types';
 const TipTapTextEditorWrapper = ({ children, value, disabled }: TipTapTextEditorWrapperProps) => {
   const { editor } = useCurrentEditor();
 
-  // update content the react way
   React.useEffect(() => {
     if (!editor) return;
-    const { from, to } = editor.state.selection;
-    editor.commands.setContent(value, false, {
-      preserveWhitespace: 'full',
-    });
-    editor.commands.setTextSelection({ from, to });
-    if (disabled) {
-      editor.setOptions({ editable: false });
-    } else {
-      editor.setOptions({ editable: true });
+    if (editor.getHTML() !== value && !(editor.isEmpty && !value)) {
+      editor.commands.setContent(value || '', false, { preserveWhitespace: 'full' });
     }
-  }, [editor, value, disabled]);
+  }, [editor, value]);
+
+  React.useEffect(() => {
+    editor?.setEditable(!disabled);
+  }, [editor, disabled]);
 
   return <Box>{children}</Box>;
 };

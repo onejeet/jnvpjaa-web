@@ -25,6 +25,11 @@ const ColorPickerInput: React.FC<ColorPickerInputProps> = ({
   alwaysShowPickerIcon = false,
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  const [hexInput, setHexInput] = React.useState(value.replace('#', ''));
+
+  React.useEffect(() => {
+    setHexInput(value.replace('#', ''));
+  }, [value]);
   // const [value, onChange] = React.useState<string | null>('');
 
   const { sx: iconButtonSx, ...restIconButtonProps } = pickerIconButtonProps || {};
@@ -75,6 +80,7 @@ const ColorPickerInput: React.FC<ColorPickerInputProps> = ({
           );
         })}
         <IconButton
+          aria-label="Choose color"
           size="small"
           disableRipple
           sx={{
@@ -99,10 +105,8 @@ const ColorPickerInput: React.FC<ColorPickerInputProps> = ({
               }}
             />
           ) : (
-            <Tooltip title="Text Color" arrow>
-              <IconButton size="small">
-                <Palette color="inherit" size={20} />
-              </IconButton>
+            <Tooltip title="Text color" arrow>
+              <Palette color="inherit" size={20} />
             </Tooltip>
           )}
         </IconButton>
@@ -141,13 +145,12 @@ const ColorPickerInput: React.FC<ColorPickerInputProps> = ({
               #
             </Typography>
             <OutlinedInput
-              inputProps={{
-                maxlength: 7,
-                minLength: 3,
-              }}
-              value={value ? value.replace('#', '') : '081D13'}
+              inputProps={{ maxLength: 6 }}
+              value={hexInput}
               onChange={(e) => {
-                onChange?.(e.target.value);
+                const hex = e.target.value.replace(/[^0-9a-f]/gi, '').slice(0, 6);
+                setHexInput(hex);
+                if (/^([0-9a-f]{3}|[0-9a-f]{6})$/i.test(hex)) onChange?.(`#${hex}`);
               }}
               size="small"
               sx={{
