@@ -16,6 +16,7 @@ import StarterKit from '@tiptap/starter-kit';
 /* LOCAL */
 import ClientSideOnly from './ClientSideOnly';
 import EditorToolbarVertical from './EditorToolbar/EditorToolbarVertical';
+import SelectionToolbar from './EditorToolbar/SelectionToolbar';
 /* TYPES */
 import type { TipTapTextEditorProps } from './TipTapTextEditor.types';
 import TipTapTextEditorWrapper from './TipTapTextEditorWrapper';
@@ -42,8 +43,8 @@ const TipTapTextEditor = ({
         '& .tiptap': {
           outline: 'none',
           minHeight: height ?? 160,
-          px: 1.5,
-          py: 1.25,
+          px: { xs: 2, sm: 3 },
+          py: 2,
           overflowWrap: 'anywhere',
           '&:focus-visible': { outline: '2px solid', outlineColor: 'primary.main', outlineOffset: -2 },
           '& img, & iframe': { maxWidth: '100%' },
@@ -118,7 +119,7 @@ const TipTapTextEditor = ({
           }
         >
           <TipTapTextEditorWrapper disabled={disabled} value={value}>
-            {null}
+            <SelectionToolbar disabled={disabled} toolsHidden={toolbarProps.toolsHidden} />
           </TipTapTextEditorWrapper>
         </EditorProvider>
       </ClientSideOnly>

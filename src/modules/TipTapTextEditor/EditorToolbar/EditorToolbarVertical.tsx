@@ -23,6 +23,8 @@ const groupSx = {
   gap: 0,
   px: 0.5,
   '& .MuiIconButton-root': { width: 36, height: 36, borderRadius: 1 },
+  '& .MuiIconButton-root, & .MuiButton-root': { color: 'grey.700' },
+  '& .MuiIconButton-root[aria-pressed="true"]': { color: 'grey.900', bgcolor: 'grey.100' },
 };
 
 const EditorToolbar: React.FC<EditorToolbarProps> = ({ toolsHidden = [], defaultColors, disabled, ...boxProps }) => {

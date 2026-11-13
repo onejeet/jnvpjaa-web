@@ -16,7 +16,8 @@ const TipTapEditorFallback = ({ sx = {}, height }: TipTapTextEditorProps) => (
       borderColor: 'grey.400',
       borderRadius: 2,
       minHeight: height ?? 160,
-      p: 1.5,
+      px: { xs: 2, sm: 3 },
+      py: 2,
       ...sx,
     }}
   >
