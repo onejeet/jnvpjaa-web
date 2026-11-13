@@ -12,12 +12,12 @@ import { startCase } from '@/utils/helpers';
 import { Tooltip } from '@mui/material';
 
 const MarkButton: React.FC<{
-  format: 'bold' | 'underline' | 'italic' | 'orderedList' | 'bulletList';
+  format: 'bold' | 'underline' | 'italic' | 'strike' | 'code' | 'orderedList' | 'bulletList';
   disabled?: boolean;
 }> = ({ format, disabled }) => {
   const { editor } = useCurrentEditor();
 
-  const handleMark = (action: 'bold' | 'underline' | 'italic' | 'orderedList' | 'bulletList') => {
+  const handleMark = (action: 'bold' | 'underline' | 'italic' | 'strike' | 'code' | 'orderedList' | 'bulletList') => {
     if (!editor) return;
     switch (action) {
       case 'bold':
@@ -28,6 +28,12 @@ const MarkButton: React.FC<{
         break;
       case 'italic':
         editor.chain().toggleItalic().focus().run();
+        break;
+      case 'strike':
+        editor.chain().focus().toggleStrike().run();
+        break;
+      case 'code':
+        editor.chain().focus().toggleCode().run();
         break;
       case 'orderedList':
         editor?.chain().focus().toggleOrderedList().run();

@@ -2,34 +2,25 @@
 
 import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import DOMPurify from 'dompurify';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import type { TipTapTextEditorProps } from './TipTapTextEditor.types';
 
 // Create a simple fallback component that just displays the HTML content
-const EditorFallback: React.FC<TipTapTextEditorProps> = ({ value, sx = {}, height }) => {
-  const sanitizedValue = React.useMemo(() => DOMPurify.sanitize(value || ''), [value]);
-
-  return (
-    <Box
-      sx={{
-        border: '1px solid',
-        borderColor: 'grey.400',
-        borderRadius: 2,
-        minHeight: height || 200,
-        p: 3,
-        ...sx,
-      }}
-    >
-      {sanitizedValue ? (
-        <div dangerouslySetInnerHTML={{ __html: sanitizedValue }} />
-      ) : (
-        <Typography color="text.secondary">Editor loading...</Typography>
-      )}
-    </Box>
-  );
-};
+const EditorFallback: React.FC<TipTapTextEditorProps> = ({ sx = {}, height }) => (
+  <Box
+    sx={{
+      border: '1px solid',
+      borderColor: 'grey.400',
+      borderRadius: 2,
+      minHeight: height || 200,
+      p: 3,
+      ...sx,
+    }}
+  >
+    <Typography color="text.secondary">Editor loading...</Typography>
+  </Box>
+);
 
 // Dynamically import the TipTap editor with SSR disabled
 // This ensures it only loads on the client side

@@ -19,12 +19,9 @@ import VideoButton from './components/VideoButton';
 const groupSx = {
   display: 'flex',
   alignItems: 'center',
-  gap: '2px',
-  p: '3px',
-  border: '1px solid',
-  borderColor: 'divider',
-  borderRadius: 1.5,
-  bgcolor: 'background.paper',
+  flexShrink: 0,
+  gap: 0.25,
+  px: { xs: 0.5, sm: 1 },
   '& .MuiIconButton-root': { width: 38, height: 38, borderRadius: 1 },
 };
 
@@ -45,15 +42,22 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ toolsHidden = [], default
         role="toolbar"
         aria-label="Text editor tools"
         sx={{
-          px: { xs: 1, sm: 1.5 },
-          py: 1,
-          bgcolor: 'grey.100',
+          px: { xs: 0.5, sm: 1 },
+          py: 0.75,
+          bgcolor: 'background.paper',
           borderBottom: '1px solid',
           borderColor: 'divider',
           display: 'flex',
-          flexWrap: 'wrap',
+          flexWrap: 'nowrap',
           alignItems: 'center',
-          gap: 0.75,
+          overflowX: 'auto',
+          overflowY: 'hidden',
+          scrollbarWidth: 'thin',
+          WebkitOverflowScrolling: 'touch',
+          '& > [role="group"]:not(:last-child)': {
+            borderRight: '1px solid',
+            borderColor: 'divider',
+          },
           ...boxProps.sx,
         }}
       >
@@ -63,6 +67,8 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ toolsHidden = [], default
           <MarkButton format="italic" disabled={unavailable} />
           <MarkButton format="underline" disabled={unavailable} />
           {!hidden('color') && <ColorPicker defaultColors={defaultColors} disabled={unavailable} />}
+          <MarkButton format="strike" disabled={unavailable} />
+          <MarkButton format="code" disabled={unavailable} />
         </Box>
         <Box role="group" aria-label="Paragraph" sx={groupSx}>
           <MarkButton format="bulletList" disabled={unavailable} />
@@ -102,7 +108,7 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ toolsHidden = [], default
             {!hidden('video') && <VideoButton disabled={unavailable} />}
           </Box>
         )}
-        <Box role="group" aria-label="History" sx={{ ...groupSx, ml: { sm: 'auto' } }}>
+        <Box role="group" aria-label="History" sx={{ ...groupSx, ml: { md: 'auto' } }}>
           <Tooltip title="Undo" arrow>
             <span>
               <IconButton

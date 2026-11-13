@@ -10,7 +10,8 @@ const ColorPicker: React.FC<{ defaultColors?: string[]; disabled?: boolean }> = 
       onChange={(value: string) => editor?.chain().focus().setColor(value).run()}
       defaultColors={defaultColors || []}
       disabled={disabled}
-      pickerIconButtonProps={{ 'aria-label': 'Text color' }}
+      alwaysShowPickerIcon
+      pickerIconButtonProps={{ 'aria-label': 'Text color', title: 'Text color' }}
       // value={match.find((matchItem) => matchItem.color)?.color}
       value={
         editor?.getAttributes('textStyle')?.color?.startsWith('rgb')
