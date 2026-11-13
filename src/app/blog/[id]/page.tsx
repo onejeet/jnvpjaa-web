@@ -1,3 +1,4 @@
+import { isRouterNavigation } from '@/utils/isRouterNavigation';
 import { BlogStatus, GetBlogDocument, GetBlogQuery } from '@/apollo/hooks';
 import { JsonLd } from '@/components/JsonLd';
 import SingleBlog from '@/containers/SingleBlog';
@@ -23,6 +24,7 @@ const getBlog = cache(async (slug: string) => {
 });
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+  if (isRouterNavigation()) return { title: 'Blog | JNVPJAA' };
   const blog = await getBlog(decodeURIComponent(params.id));
   if (!blog) return { title: 'Blog post not found', robots: { index: false, follow: false } };
 
@@ -51,6 +53,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 }
 
 export default async function BlogPostPage({ params }: { params: { id: string } }) {
+  if (isRouterNavigation()) return <SingleBlog />;
   const blog = await getBlog(decodeURIComponent(params.id));
   if (!blog) notFound();
 

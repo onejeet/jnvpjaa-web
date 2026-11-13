@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation';
 import React from 'react';
 
 interface BlogProps {
-  data: BlogListResponse;
+  data?: BlogListResponse;
 }
 
 const Blog: React.FC<BlogProps> = ({ data }) => {

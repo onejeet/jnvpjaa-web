@@ -1,3 +1,4 @@
+import { isRouterNavigation } from '@/utils/isRouterNavigation';
 import { EventStatus, GetEventDetailsDocument, GetEventDetailsQuery } from '@/apollo/hooks';
 import { JsonLd } from '@/components/JsonLd';
 import EventDetails from '@/containers/EventDetails';
@@ -26,6 +27,7 @@ const getPublicEvent = cache(async (id: string) => {
 });
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+  if (isRouterNavigation()) return { title: 'Event | JNVPJAA' };
   const event = await getPublicEvent(params.id);
   if (!event) return { title: 'Event not found', robots: { index: false, follow: false } };
 
@@ -52,6 +54,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 }
 
 export default async function EventDetailsPage({ params }: { params: { id: string } }) {
+  if (isRouterNavigation()) return <EventDetails />;
   const event = await getPublicEvent(params.id);
   if (!event) notFound();
 

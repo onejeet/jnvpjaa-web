@@ -227,7 +227,7 @@ const SingleEventView: React.FC<SingleEventViewProps> = ({
               component="div"
               fontWeight="bold"
               onClick={() => {
-                if (showDescription) return;
+                if (showDescription || !id) return;
 
                 router.push(paths.events.getEventDetailUrl(id));
               }}
@@ -487,7 +487,7 @@ const SingleEventView: React.FC<SingleEventViewProps> = ({
                 title="Edit"
                 startIcon={<NotePencil size={16} />}
                 sx={{ ml: 'auto', mt: 2 }}
-                onClick={() => onEdit?.(id)}
+                onClick={() => id && onEdit?.(id)}
               />
               {(createdBy === user?.id || isAdmin) && (
                 <Button
@@ -497,7 +497,7 @@ const SingleEventView: React.FC<SingleEventViewProps> = ({
                   title="Publish"
                   startIcon={<CheckCircle size={16} />}
                   sx={{ ml: 'auto', mt: 2 }}
-                  onClick={() => onPublish?.(id)}
+                  onClick={() => id && onPublish?.(id)}
                 />
               )}
             </Box>
@@ -511,7 +511,7 @@ const SingleEventView: React.FC<SingleEventViewProps> = ({
                     fullWidth
                     title="Edit"
                     startIcon={<NotePencil size={16} />}
-                    onClick={() => onEdit?.(id)}
+                    onClick={() => id && onEdit?.(id)}
                   />
                   {status === EventStatus.Published ||
                     (status === EventStatus.PendingApproval && (
@@ -521,7 +521,7 @@ const SingleEventView: React.FC<SingleEventViewProps> = ({
                         fullWidth
                         title="Move to Draft"
                         startIcon={<XCircle size={16} />}
-                        onClick={() => onPublish?.(id)}
+                        onClick={() => id && onPublish?.(id)}
                         sx={{ whiteSpace: 'nowrap', minWidth: '140px' }}
                       />
                     ))}
@@ -535,7 +535,7 @@ const SingleEventView: React.FC<SingleEventViewProps> = ({
                   title="Approve"
                   startIcon={<CheckCircle size={16} />}
                   sx={{ whiteSpace: 'nowrap' }}
-                  onClick={() => verifyEvent?.(id)}
+                  onClick={() => id && verifyEvent?.(id)}
                 />
               ) : (
                 markImGoing &&
@@ -548,7 +548,7 @@ const SingleEventView: React.FC<SingleEventViewProps> = ({
                     disabled={loading}
                     // endIcon={<ArrowRightAltIcon />}
                     startIcon={<Heart size={20} />}
-                    onClick={() => markImGoing(id)}
+                    onClick={() => id && markImGoing(id)}
                     sx={{ whiteSpace: 'nowrap', minWidth: '130px' }}
                   />
                 )

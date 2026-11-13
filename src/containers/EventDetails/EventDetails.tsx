@@ -8,26 +8,27 @@ import { useAuth } from '@/context/AuthContext';
 import useEvents from '@/hooks/useEvents';
 import LayoutModule from '@/layouts/Layout';
 import { Box } from '@mui/material';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import React from 'react';
 
 interface EventDetailsProps {
-  event: Event;
+  event?: Event;
 }
 
 const EventDetails: React.FC<EventDetailsProps> = ({ event: initialData }) => {
-  // const searchParams = useSearchParams();
+  const params = useParams();
+  const eventId = initialData?.id || Number(params.id);
   const { user, isAdmin } = useAuth();
   // const id = searchParams.get('id');
   const methods = useEvents({ user });
   const { data, loading } = useGetEventDetailsQuery({
-    skip: !initialData?.id,
+    skip: !Number.isSafeInteger(eventId) || eventId <= 0,
     variables: {
-      id: initialData?.id,
+      id: eventId,
     },
   });
 
-  const event: Event = React.useMemo(() => data?.getEventDetails || initialData, [data, initialData]);
+  const event = React.useMemo(() => data?.getEventDetails || initialData, [data, initialData]);
   const contentLoading = loading && !event?.id;
 
   const breadcrumbsList = React.useMemo(

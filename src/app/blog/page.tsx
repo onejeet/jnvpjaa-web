@@ -1,3 +1,4 @@
+import { isRouterNavigation } from '@/utils/isRouterNavigation';
 import { constructMetadata, generateSchema } from '@/config/seo.config';
 import { JsonLd } from '@/components/JsonLd';
 import { BlogListResponse, GetBlogListDocument, GetBlogListQuery } from '@/apollo/hooks';
@@ -27,7 +28,7 @@ async function getBlog() {
 }
 
 export default async function BlogPage() {
-  const blogData = await getBlog();
+  const blogData = isRouterNavigation() ? undefined : await getBlog();
   return (
     <>
       <JsonLd data={generateSchema.collectionPage('JNVPJAA Blog', '/blog/', metadata.description as string)} />

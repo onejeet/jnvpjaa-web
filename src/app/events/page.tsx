@@ -1,3 +1,4 @@
+import { isRouterNavigation } from '@/utils/isRouterNavigation';
 import { constructMetadata, generateSchema } from '@/config/seo.config';
 import { JsonLd } from '@/components/JsonLd';
 import Events from '@/containers/Events';
@@ -15,6 +16,7 @@ export const metadata: Metadata = constructMetadata({
 });
 
 export default async function EventsPage() {
+  if (isRouterNavigation()) return <Events />;
   const { data } = await initializeApollo().query<GetEventListQuery>({
     query: GetEventListDocument,
     variables: { options: { limit: 50 } },
