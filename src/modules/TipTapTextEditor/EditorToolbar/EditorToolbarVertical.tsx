@@ -20,9 +20,9 @@ const groupSx = {
   display: 'flex',
   alignItems: 'center',
   flexShrink: 0,
-  gap: 0.25,
-  px: { xs: 0.5, sm: 1 },
-  '& .MuiIconButton-root': { width: 38, height: 38, borderRadius: 1 },
+  gap: 0,
+  px: 0.5,
+  '& .MuiIconButton-root': { width: 36, height: 36, borderRadius: 1 },
 };
 
 const EditorToolbar: React.FC<EditorToolbarProps> = ({ toolsHidden = [], defaultColors, disabled, ...boxProps }) => {
@@ -42,8 +42,8 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ toolsHidden = [], default
         role="toolbar"
         aria-label="Text editor tools"
         sx={{
-          px: { xs: 0.5, sm: 1 },
-          py: 0.75,
+          px: 0.5,
+          py: 0.25,
           bgcolor: 'background.paper',
           borderBottom: '1px solid',
           borderColor: 'divider',

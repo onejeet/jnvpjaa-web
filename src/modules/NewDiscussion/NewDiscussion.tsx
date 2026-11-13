@@ -48,9 +48,7 @@ export default function NewDiscussion({ onCreated, autoNavigate = true }: NewDis
         <TipTapTextEditor
           value={content}
           onChange={setContent}
-          height={220}
           toolbarProps={{ toolsHidden: ['image', 'video', 'link'] }}
-          sx={{ borderRadius: 2 }}
         />
         <Box display="flex" gap={1}>
           <Button title="Create Thread" onClick={onCreate} disabled={submitting} />

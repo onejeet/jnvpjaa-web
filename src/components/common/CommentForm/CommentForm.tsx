@@ -22,12 +22,7 @@ export default function CommentForm({ onSubmit, autoFocus }: Props) {
 
   return (
     <Stack spacing={2}>
-      <TipTapTextEditor
-        value={content}
-        onChange={setContent}
-        height={160}
-        toolbarProps={{ toolsHidden: ['image', 'video'] }}
-      />
+      <TipTapTextEditor value={content} onChange={setContent} toolbarProps={{ toolsHidden: ['image', 'video'] }} />
       <Button variant="contained" onClick={handleSubmit}>
         Post
       </Button>

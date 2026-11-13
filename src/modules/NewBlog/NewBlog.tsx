@@ -5,7 +5,7 @@ import React from 'react';
 import { useAlert } from '@/context/AlertContext';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm, useWatch } from 'react-hook-form';
-import { Box, CircularProgress, Divider, Grid2 as Grid, Typography } from '@mui/material';
+import { Box, CircularProgress, Grid2 as Grid, Typography } from '@mui/material';
 import FormTextField from '@/components/form/FormTextField';
 import FormSelectField from '@/components/form/FormSelectField';
 import { INewBlogFormInput } from './NewBlog.types';
@@ -286,23 +286,8 @@ const NewBlog = () => {
           />
         </Grid>
         <Grid size={{ xs: 12 }}>
-          <Divider />
-        </Grid>
-        <Grid size={{ xs: 12 }}>
           <Box display="flex" flexDirection="column">
-            <TipTapTextEditor
-              value={getValues('content')}
-              onChange={(data) => setValue('content', data)}
-              sx={{
-                border: 'none',
-                '& .tiptap': {
-                  px: 2,
-                  outline: 'none',
-                  minHeight: 300,
-                },
-              }}
-              toolbarProps={{ sx: { borderRadius: '40px' } }}
-            />
+            <TipTapTextEditor value={getValues('content')} onChange={(data) => setValue('content', data)} />
           </Box>
         </Grid>
       </Grid>

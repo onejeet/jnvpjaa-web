@@ -13,8 +13,8 @@ const EditorFallback: React.FC<TipTapTextEditorProps> = ({ sx = {}, height }) =>
       border: '1px solid',
       borderColor: 'grey.400',
       borderRadius: 2,
-      minHeight: height || 200,
-      p: 3,
+      minHeight: height ?? 160,
+      p: 1.5,
       ...sx,
     }}
   >

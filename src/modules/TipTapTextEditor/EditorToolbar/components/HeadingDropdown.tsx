@@ -38,8 +38,11 @@ const HeadingDropdown: React.FC<{ disabled?: boolean }> = ({ disabled }) => {
           disabled={disabled}
           variant="text"
           sx={{
-            minWidth: 92,
-            px: 1,
+            minWidth: 84,
+            minHeight: 36,
+            height: 36,
+            px: 0.75,
+            fontSize: 13,
             color: 'text.primary',
             fontWeight: 600,
           }}
