@@ -48,7 +48,8 @@ export function useDebouncedClap(callback: (claps: number) => void, delay = 800)
 
 const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, claps: initialClaps, loading, updateClap }) => {
   const { id, title, author, content, cover, shortUrl, status, updatedAt } = blog || {};
-  const [sanitizedContent, setSanitizedContent] = React.useState('');
+  // The API sanitizes rich text on read, so it can be included in the server HTML.
+  const [sanitizedContent, setSanitizedContent] = React.useState(content || '');
   const [newClaps, setNewClaps] = React.useState(0);
 
   console.log('ZZ: cover', cover);

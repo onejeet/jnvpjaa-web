@@ -58,7 +58,8 @@ const SingleEventView: React.FC<SingleEventViewProps> = ({
   showDescription,
   isReadOnly,
 }) => {
-  const [sanitizedContent, setSanitizedContent] = React.useState('');
+  // The API sanitizes rich text on read, so it can be included in the server HTML.
+  const [sanitizedContent, setSanitizedContent] = React.useState(event?.description || '');
   const [openAttendiesDialog, setOpenAttendiesDialog] = React.useState<boolean>(false);
   const theme = useTheme();
   const router = useRouter();
