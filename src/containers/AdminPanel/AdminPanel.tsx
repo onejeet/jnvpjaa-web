@@ -228,7 +228,8 @@ const AdminPanel = () => {
   const canAssignAnyRole = assignableRoleCodes.some((roleCode) => can(getRoleManagementPermission(roleCode)));
   const isSuperAdmin = hasRole(ROLE_CODES.SUPER_ADMIN);
   const canSendWelcomeEmail = isSuperAdmin;
-  const canUseAdminCenter = canReadAccess || canReadCatalog || canManageBatchRoles || canManageExecutivePositions;
+  const canUseAdminCenter =
+    canReadAccess || canReadCatalog || canManageBatchRoles || canManageExecutivePositions || isSuperAdmin;
   const [adminTab, setAdminTab] = React.useState('access');
   const [assignmentTab, setAssignmentTab] = React.useState('mentors');
   const [showRoleDetails, setShowRoleDetails] = React.useState(false);
@@ -238,6 +239,7 @@ const AdminPanel = () => {
     ...(canManageExecutivePositions ? [{ value: 'executive', label: 'Executive committee' }] : []),
     ...(canManageBatchRoles ? [{ value: 'coordinators', label: 'Batch coordinators' }] : []),
     ...(canReadAccess ? [{ value: 'assignments', label: 'Current assignments' }] : []),
+    ...(isSuperAdmin ? [{ value: 'settings', label: 'Platform settings' }] : []),
   ];
   const selectedTab = adminTabs.some((tab) => tab.value === adminTab) ? adminTab : adminTabs[0]?.value;
   const activeAssignmentsExpanded = selectedTab === 'assignments';
@@ -1010,15 +1012,8 @@ const AdminPanel = () => {
               {selectedTab === 'executive' && 'Assign members to the executive committee.'}
               {selectedTab === 'coordinators' && 'View and update batch coordinators.'}
               {selectedTab === 'assignments' && 'Review who currently holds each responsibility.'}
+              {selectedTab === 'settings' && 'Manage settings that affect the whole platform.'}
             </Typography>
-            {selectedTab === 'access' && canSendWelcomeEmail && (
-              <Button
-                title="Send Welcome Email"
-                size="small"
-                onClick={onSendWelcomeEmail}
-                startIcon={<PaperPlaneTilt size={18} />}
-              />
-            )}
           </Stack>
         </Paper>
       ) : (
@@ -1626,6 +1621,23 @@ const AdminPanel = () => {
           <Stack spacing={1} divider={<Divider flexItem />}>
             {renderAssignmentTabContent()}
           </Stack>
+        </Paper>
+      )}
+
+      {selectedTab === 'settings' && canSendWelcomeEmail && (
+        <Paper
+          variant="outlined"
+          sx={{ p: { xs: 2, md: 3 }, borderRadius: 2, maxWidth: 760 }}
+          role="tabpanel"
+          aria-label="Platform settings"
+        >
+          <Typography variant="h3" mb={1}>
+            Welcome email
+          </Typography>
+          <Typography variant="body2" color="text.secondary" mb={3}>
+            Send the portal welcome email to members. You will be asked to confirm before it is sent.
+          </Typography>
+          <Button title="Send welcome email" onClick={onSendWelcomeEmail} startIcon={<PaperPlaneTilt size={18} />} />
         </Paper>
       )}
 
