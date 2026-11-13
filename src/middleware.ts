@@ -52,7 +52,10 @@ export function middleware(request: NextRequest) {
 
   if (/^\/(blog|events)(?:\/|$)/.test(pathname)) {
     const requestHeaders = new Headers(request.headers);
-    if (request.headers.get('rsc') === '1') {
+    // Next 14 strips Flight headers before middleware runs. Browser fetches
+    // (including router navigation and prefetch) use destination "empty";
+    // direct page loads use "document". Requests without Fetch Metadata keep SSR.
+    if (request.headers.get('sec-fetch-dest') === 'empty') {
       requestHeaders.set('x-jnvpjaa-router-navigation', '1');
     } else {
       requestHeaders.delete('x-jnvpjaa-router-navigation');
