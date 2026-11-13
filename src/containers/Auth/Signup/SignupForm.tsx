@@ -83,7 +83,8 @@ const SignupForm = () => {
         </Suspense>
         <Typography variant="h2">Signup Successful!</Typography>
         <Typography variant="body1" mt={1} textAlign="center" width={{ xs: '100%', md: '60%' }}>
-          The request email has been sent to the admins and upon approval you should be able to login.{' '}
+          Your registration is awaiting approval. You will be able to sign in after the association or your batch
+          coordinator approves it.{' '}
         </Typography>
       </Box>
     );

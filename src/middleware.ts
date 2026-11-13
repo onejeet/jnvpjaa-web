@@ -24,6 +24,13 @@ const encodeRedirectPath = (path: string) => {
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  if (pathname.startsWith('/auth/google')) {
+    const response = NextResponse.next();
+    response.headers.set('Cache-Control', 'private, no-store, max-age=0');
+    response.headers.set('Referrer-Policy', 'no-referrer');
+    response.headers.set('X-Robots-Tag', 'noindex, nofollow');
+    return response;
+  }
   const isLoggedIn = hasSessionCookie(request);
   const isPasswordResetLink = pathname.startsWith('/forgot-password') && request.nextUrl.searchParams.has('c');
 

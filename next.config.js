@@ -10,6 +10,7 @@ const withPWA = require('next-pwa')({
   customWorkerDir: 'public', // Add this line
   buildExcludes: [/middleware-manifest\.json$/, /app-build-manifest\.json$/],
   runtimeCaching: [
+    { urlPattern: ({ url }) => url.pathname.startsWith('/auth/google'), handler: 'NetworkOnly' },
     {
       urlPattern: /^\/_next\/image\?url=/,
       handler: 'CacheFirst',

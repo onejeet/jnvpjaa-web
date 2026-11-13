@@ -172,7 +172,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (typeof window !== 'undefined') {
       const isPasswordResetLink =
         pathname.startsWith('/forgot-password') && new URLSearchParams(window.location.search).has('c');
-      if (isPasswordResetLink) {
+      if (isPasswordResetLink || pathname.startsWith('/auth/google')) {
         setLoadingData({ loading: false });
         return;
       }

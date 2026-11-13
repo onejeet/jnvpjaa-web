@@ -1,5 +1,7 @@
 'use client';
 
+import GoogleButton from '../Google/GoogleButton';
+
 import { Box, Card, Divider, Typography } from '@mui/material';
 import SigninForm from './SignupForm';
 import GlobalBgShade from '@/components/common/GlobalBgShade';
@@ -51,6 +53,7 @@ const Signup = () => {
         />
         <Divider sx={{ width: '100%', mt: 2, color: 'grey.500' }}>OR</Divider> */}
 
+        <GoogleButton />
         <SigninForm />
         <Box display="flex" alignItems="center">
           <Typography variant="body2" mr={1}>

@@ -1,5 +1,7 @@
 'use client';
 
+import GoogleButton from '../Google/GoogleButton';
+
 import { alpha, Box, Card, Divider, Theme, Typography } from '@mui/material';
 import SigninForm from './SigninForm';
 import Image from 'next/image';
@@ -60,6 +62,7 @@ const Signin = () => {
         />
         <Divider sx={{ width: '100%', mt: 2, color: 'grey.500' }}>OR</Divider> */}
 
+        <GoogleButton />
         <SigninForm />
         <Box display="flex" flexDirection="column" alignItems="center" gap={1.5}>
           <Link href="/forgot-password" as="/forgot-password" style={{ textDecoration: 'none' }}>
