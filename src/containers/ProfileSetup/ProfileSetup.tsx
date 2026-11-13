@@ -1,115 +1,149 @@
 'use client';
 
 import React from 'react';
-import { Box, Step, StepIconProps, StepLabel, Stepper, useMediaQuery, useTheme } from '@mui/material';
-import PersonalInfo from '@/modules/ProfileSetup/PersonalInfo';
+import { Alert, Box, Button, LinearProgress, Paper, Stack, Tab, Tabs, Typography } from '@mui/material';
+import { gql, useMutation } from '@apollo/client';
+import { useRouter } from 'next/navigation';
 import LayoutModule from '@/layouts/Layout';
-import { getFormattedLabel } from '@/utils/helpers';
-import ProfilePictureUpload from '@/modules/ProfileSetup/ProfilePictureUpload';
 import { useAuth } from '@/context/AuthContext';
+import PersonalInfo from '@/modules/ProfileSetup/PersonalInfo';
+import ProfessionInfo from '@/modules/ProfileSetup/ProfessionInfo';
+import ProfilePictureUpload from '@/modules/ProfileSetup/ProfilePictureUpload';
 import Addresses from '@/modules/ProfileSetup/Addresses';
 import DataPrivacy from '@/modules/ProfileSetup/DataPrivacy';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { IconCircleCheck as CheckCircle, IconCircleCheckFilled } from '@tabler/icons-react';
-import Welcome from '@/components/common/Welcome/Welcome';
-import ChangePassword from '../Auth/ChangePassword/ChangePassword';
-import ChangePasswordFirst from './ChangePasswordFirst';
-import ProfessionInfo from '@/modules/ProfileSetup/ProfessionInfo';
-import dayjs from 'dayjs';
 
-const CustomStepIcon = (props: StepIconProps) => {
-  const { active, completed, className } = props;
+const COMPLETE_PROFILE_SETUP = gql`
+  mutation CompleteProfileSetup {
+    completeProfileSetup {
+      id
+      metadata
+    }
+  }
+`;
+const onboardingSteps = [
+  { id: 'personal', title: 'About you', description: 'Help classmates recognise you.' },
+  { id: 'work', title: 'Your work', description: 'Let alumni know what you do today. This part is optional.' },
+  { id: 'privacy', title: 'Privacy', description: 'Choose who can see your contact details.' },
+];
+const editSections = [
+  { id: 'personal', title: 'About you', description: 'Update the details classmates use to recognise you.' },
+  { id: 'photo', title: 'Photo', description: 'Choose a profile picture.' },
+  { id: 'work', title: 'Your work', description: 'Keep your current organisation and role up to date.' },
+  { id: 'addresses', title: 'Addresses', description: 'Update your home and work addresses.' },
+  { id: 'privacy', title: 'Privacy', description: 'Choose who can see your contact details.' },
+];
 
-  return completed ? <IconCircleCheckFilled size={32} /> : <div className={className} />;
-};
-
-const ProfileSetup = () => {
-  const [activeStepIndex, setActiveStepIndex] = React.useState<number>(0);
-  const theme = useTheme();
+export default function ProfileSetup() {
+  const { user, setUser } = useAuth();
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const { user } = useAuth();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const [step, setStep] = React.useState(0);
+  const isEditing = user?.metadata?.isFirstLogin === false;
+  const steps = isEditing ? editSections : onboardingSteps;
+  const [error, setError] = React.useState('');
+  const [complete, { loading: finishing }] = useMutation(COMPLETE_PROFILE_SETUP);
+  const storageKey = user?.id && !isEditing ? `profile-setup:${user.id}` : null;
 
-  const isWelcomeSetup = React.useMemo(() => {
-    return searchParams.get('welcome') === '1';
-  }, [searchParams]);
+  React.useEffect(() => {
+    if (!storageKey) {
+      setStep(0);
+      return;
+    }
+    const saved = Number(sessionStorage.getItem(storageKey));
+    if (Number.isInteger(saved) && saved >= 0 && saved < steps.length) setStep(saved);
+  }, [storageKey, steps.length]);
 
-  const isSignedUp = React.useMemo(() => {
-    // TODO :Check if user is created new and not imported.
-    return dayjs(user?.createdAt).isAfter('28/04/2025');
-  }, [user]);
-
-  const steps = React.useMemo(
-    () =>
-      isWelcomeSetup
-        ? isSignedUp
-          ? ['welcome', 'personal_info', 'profile_picture', 'profession', 'addresses', 'privacy']
-          : ['welcome', 'change_password', 'personal_info', 'profile_picture', 'profession', 'addresses', 'privacy']
-        : ['personal_info', 'profile_picture', 'profession', 'addresses', 'privacy'],
-    [isWelcomeSetup, isSignedUp]
+  const moveTo = React.useCallback(
+    (next: number) => {
+      setError('');
+      setStep(next);
+      if (storageKey) sessionStorage.setItem(storageKey, String(next));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+    [storageKey]
   );
 
-  const handleNext = React.useCallback(async () => {
-    if (steps[activeStepIndex] === 'privacy') {
-      router.push('/profile');
-    } else {
-      setActiveStepIndex((prevStep) => prevStep + 1);
+  const finish = React.useCallback(async () => {
+    if (finishing) return;
+    setError('');
+    if (isEditing) {
+      router.replace('/profile');
+      return;
     }
-  }, [activeStepIndex, router, steps]);
-
-  const handleBack = React.useCallback(() => {
-    setActiveStepIndex((prevStep) => prevStep - 1);
-  }, []);
-
-  const mainComponent = React.useMemo(() => {
-    const step = steps[activeStepIndex];
-    switch (step) {
-      case 'welcome':
-        return <Welcome onNext={handleNext} />;
-      case 'change_password':
-        return <ChangePasswordFirst onNext={handleNext} />;
-      case 'personal_info':
-        return <PersonalInfo onBack={handleBack} onNext={handleNext} user={user} />;
-      case 'profile_picture':
-        return <ProfilePictureUpload onBack={handleBack} onNext={handleNext} user={user} />;
-      case 'addresses':
-        return <Addresses onBack={handleBack} onNext={handleNext} user={user} />;
-      case 'profession':
-        return <ProfessionInfo onBack={handleBack} onNext={handleNext} user={user} />;
-      case 'privacy':
-        return <DataPrivacy isLastStep onBack={handleBack} onNext={handleNext} user={user} />;
+    try {
+      const result = await complete();
+      if (!result.data?.completeProfileSetup) throw new Error('Could not finish profile setup. Please try again.');
+      if (storageKey) sessionStorage.removeItem(storageKey);
+      setUser((current: any) =>
+        current ? { ...current, metadata: { ...current.metadata, isFirstLogin: false } } : current
+      );
+      router.replace('/profile');
+    } catch (err: any) {
+      setError(err.message || 'Could not finish profile setup. Please try again.');
     }
-  }, [activeStepIndex, user, handleNext, handleBack, steps]);
+  }, [complete, finishing, isEditing, router, setUser, storageKey]);
+
+  const next = () => (step === steps.length - 1 ? void finish() : moveTo(step + 1));
+  const back = () => moveTo(Math.max(0, step - 1));
 
   return (
-    <LayoutModule disableCover title={`${'Profile Setup'} • Alumni Network of JNV Paota, Jaipur`}>
-      <Box sx={{ width: '100%', p: 2 }}>
-        <Stepper activeStep={activeStepIndex} orientation={'horizontal'}>
-          {isMobile ? (
-            <Step>
-              <StepLabel>{getFormattedLabel(steps?.[activeStepIndex])}</StepLabel>
-            </Step>
+    <LayoutModule disableCover title="Profile Setup • Alumni Network of JNV Paota, Jaipur">
+      <Box sx={{ maxWidth: 760, mx: 'auto', py: { xs: 2, md: 4 }, px: { xs: 1, md: 0 } }}>
+        <Stack spacing={1} mb={3}>
+          <Typography variant="overline" color="primary.main">
+            {isEditing ? 'Edit profile' : 'Profile setup'}
+          </Typography>
+          <Typography variant="h2" component="h1">
+            {steps[step].title}
+          </Typography>
+          <Typography color="text.secondary">{steps[step].description}</Typography>
+          {isEditing ? (
+            <Tabs
+              value={step}
+              onChange={(_, value) => moveTo(value)}
+              variant="scrollable"
+              scrollButtons="auto"
+              aria-label="Edit profile sections"
+            >
+              {steps.map((section) => (
+                <Tab key={section.id} label={section.title} />
+              ))}
+            </Tabs>
           ) : (
-            steps.map((label, index) => (
-              <Step
-                key={index}
-                onClick={() => (isWelcomeSetup && index > activeStepIndex ? null : setActiveStepIndex(index))}
-                // onClick={() => setActiveStepIndex(index)}
-              >
-                <StepLabel>{getFormattedLabel(label)}</StepLabel>
-              </Step>
-            ))
+            <>
+              <Typography variant="caption" color="text.secondary">
+                Step {step + 1} of {steps.length}
+              </Typography>
+              <LinearProgress
+                variant="determinate"
+                value={((step + 1) / steps.length) * 100}
+                sx={{ height: 4, borderRadius: 2 }}
+              />
+            </>
           )}
-        </Stepper>
-
-        <Box p={{ xs: 0, md: 2 }} sx={{ my: 4, border: '1px solid #ccc', borderRadius: 2 }}>
-          {/* Render step-specific content here, replace with your common component */}
-          <Box>{mainComponent}</Box>
-        </Box>
+        </Stack>
+        {error && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+        )}
+        <Paper variant="outlined" sx={{ p: { xs: 1, md: 2 }, borderRadius: 2, minHeight: 380 }}>
+          {steps[step].id === 'personal' && <PersonalInfo user={user} onNext={next} onBack={step ? back : undefined} />}
+          {steps[step].id === 'photo' && <ProfilePictureUpload user={user} onBack={back} onNext={next} />}
+          {steps[step].id === 'work' && <ProfessionInfo user={user} onBack={back} onNext={next} />}
+          {steps[step].id === 'addresses' && <Addresses user={user} onBack={back} onNext={next} />}
+          {steps[step].id === 'privacy' && <DataPrivacy user={user} onBack={back} onNext={next} isLastStep />}
+        </Paper>
+        {step === 0 && !isEditing && (
+          <Button onClick={next} sx={{ mt: 2 }}>
+            Do this later
+          </Button>
+        )}
+        {finishing && (
+          <Typography role="status" variant="body2" sx={{ mt: 2 }}>
+            Finishing your profile…
+          </Typography>
+        )}
       </Box>
     </LayoutModule>
   );
-};
-
-export default ProfileSetup;
+}

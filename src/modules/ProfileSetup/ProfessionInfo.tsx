@@ -77,7 +77,7 @@ const ProfessionInfo: React.FC<ProfessionInfoProps> = ({ user, onNext, onBack, o
         startedWorking: companyInfo?.startedWorking,
       });
     }
-  }, [data]);
+  }, [data, reset]);
 
   const onSubmit = React.useCallback(
     (payload: IProfessionInfoFormInput) => {
@@ -125,7 +125,7 @@ const ProfessionInfo: React.FC<ProfessionInfoProps> = ({ user, onNext, onBack, o
     <Box
       component="form"
       onSubmit={handleSubmit(onSubmit)}
-      p={{ xs: 2, md: 3 }}
+      p={{ xs: 1, md: 2 }}
       sx={{
         width: '100%',
         display: 'flex',
@@ -133,19 +133,20 @@ const ProfessionInfo: React.FC<ProfessionInfoProps> = ({ user, onNext, onBack, o
         // alignItems: 'center',
       }}
     >
-      <Box display="flex" alignItems="center" mb={3}>
-        <IconBriefcase size={32} />
-        <Typography sx={{ ml: 1 }} fontWeight={600}>
-          Profession Info
-        </Typography>
-      </Box>
-      <Grid container spacing={3} maxWidth="100%" size={{ xs: 12 }}>
+      {!onNext && (
+        <Box display="flex" alignItems="center" mb={3}>
+          <IconBriefcase size={32} />
+          <Typography sx={{ ml: 1 }} fontWeight={600}>
+            Profession Info
+          </Typography>
+        </Box>
+      )}
+      <Grid container spacing={2.5} maxWidth="100%" size={{ xs: 12 }}>
         <Grid size={{ xs: 12, sm: 6 }}>
           <FormTextField
             fullWidth
             id="companyName"
             label="Company/Department Name"
-            autoFocus
             control={control}
             disabled={loading}
             loading={dataLoading}
@@ -161,7 +162,6 @@ const ProfessionInfo: React.FC<ProfessionInfoProps> = ({ user, onNext, onBack, o
             fullWidth
             id="position"
             label="Position"
-            autoFocus
             control={control}
             disabled={loading}
             loading={dataLoading}
@@ -201,7 +201,6 @@ const ProfessionInfo: React.FC<ProfessionInfoProps> = ({ user, onNext, onBack, o
             fullWidth
             id="city"
             label="City"
-            autoFocus
             control={control}
             disabled={loading}
             loading={dataLoading}

@@ -84,14 +84,14 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({ user, onNext, onBack, onSuc
         },
       });
     },
-    [updateUser, showAlert, onSuccess, user?.id, client]
+    [updateUser, showAlert, onSuccess, onNext, user?.id, client]
   );
 
   return (
     <Box
       component="form"
       onSubmit={handleSubmit(onSubmit)}
-      p={{ xs: 2, md: 3 }}
+      p={{ xs: 1, md: 2 }}
       sx={{
         width: '100%',
         display: 'flex',
@@ -99,19 +99,20 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({ user, onNext, onBack, onSuc
         // alignItems: 'center',
       }}
     >
-      <Box display="flex" alignItems="center" mb={3}>
-        <IconUser size={32} />
-        <Typography sx={{ ml: 1 }} fontWeight={600}>
-          Personal Info
-        </Typography>
-      </Box>
-      <Grid container spacing={3} maxWidth="100%" size={{ xs: 12 }}>
+      {!onNext && (
+        <Box display="flex" alignItems="center" mb={3}>
+          <IconUser size={32} />
+          <Typography sx={{ ml: 1 }} fontWeight={600}>
+            Personal Info
+          </Typography>
+        </Box>
+      )}
+      <Grid container spacing={2.5} maxWidth="100%" size={{ xs: 12 }}>
         <Grid size={{ xs: 12, sm: 6 }}>
           <FormTextField
             fullWidth
             id="firstName"
             label="First Name"
-            autoFocus
             control={control}
             disabled={loading}
             name="firstName"
@@ -126,7 +127,6 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({ user, onNext, onBack, onSuc
             fullWidth
             id="lastName"
             label="Last Name"
-            autoFocus
             control={control}
             disabled={loading}
             name="lastName"

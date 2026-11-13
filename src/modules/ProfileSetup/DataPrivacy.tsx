@@ -90,15 +90,10 @@ const DataPrivacy: React.FC<DataPrivacyProps> = ({ user, isLastStep, onNext, onB
   const [updateUser, { loading }] = useUpdateUserMutation();
 
   const onSubmit = React.useCallback(() => {
-    const vars: any = {
+    const vars = {
       id: user?.id,
-      isConfidential: !isConfidential,
+      isConfidential,
     };
-    if (user?.metadata?.isFirstLogin && isLastStep) {
-      vars.metadata = {
-        isFirstLogin: false,
-      };
-    }
     updateUser({
       variables: {
         ...vars,
@@ -121,7 +116,7 @@ const DataPrivacy: React.FC<DataPrivacyProps> = ({ user, isLastStep, onNext, onB
         console.log('Error: ', err?.message);
       },
     });
-  }, [updateUser, showAlert, isConfidential, onSuccess, onNext, user, client, isLastStep]);
+  }, [updateUser, showAlert, isConfidential, onSuccess, onNext, user, client]);
 
   return (
     <Box
@@ -138,15 +133,8 @@ const DataPrivacy: React.FC<DataPrivacyProps> = ({ user, isLastStep, onNext, onB
           Data Privacy
         </Typography>
       </Box>
-      <Typography>
-        You can control the privacy of your contact information and decide who can see it. Use the options below to make
-        your details protected or private as per your preference.
-      </Typography>
-      <Typography width="100%" my={1.5}>
-        <b>Private: </b>Your email, mobile number, and address will be hidden from both alumni members and the public,
-        even when they log in. <br />
-        <b>Protected:</b> Your email, mobile number, and address will be visible only to verified alumni members but
-        will remain hidden from the public.
+      <Typography color="text.secondary" mb={2}>
+        Choose whether approved alumni can see your email and phone number. Your emergency contact stays private.
       </Typography>
 
       <Box mb={2}>
@@ -154,14 +142,13 @@ const DataPrivacy: React.FC<DataPrivacyProps> = ({ user, isLastStep, onNext, onB
           onChange={(e: any, checked: boolean) => setIsConfidential(checked)}
           control={<IOSSwitch disabled={loading} checked={isConfidential} sx={{ m: 1 }} />}
           value={isConfidential}
-          label="Keep my Data Protected (Visible only to alumni)"
+          label="Keep my contact details private"
         />
-        {!isConfidential && (
-          <Typography variant="body2" mt={1} color="grey.600">
-            Your email, mobile number, and address will be hidden from both alumni members and the public, even when
-            they log in. Turn the button on if you want other alumni to have access to your email and phone number.
-          </Typography>
-        )}
+        <Typography variant="body2" mt={1} color="text.secondary">
+          {isConfidential
+            ? 'Other alumni will see masked contact details. You can still see your own information.'
+            : 'Verified alumni can see your email and phone number. Public visitors cannot.'}
+        </Typography>
       </Box>
 
       <Box display="flex" width="100%" alignItems="center" gap={2}>

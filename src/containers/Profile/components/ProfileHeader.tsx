@@ -1,7 +1,7 @@
 'use client';
 
 import Title from '@/components/common/Title';
-import { Box, Typography, Skeleton, IconButton, Tooltip, Chip } from '@mui/material';
+import { Box, Typography, Skeleton, IconButton, Tooltip, Chip, Button } from '@mui/material';
 import { ProfileHeaderProps } from '../Profile.types';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import VerifiedBadge from '@/components/common/VerifiedBadge';
@@ -142,9 +142,11 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
     }
 
     summaryParts.push(...uniquePositions);
+    if (user?.companyInfo?.[0]?.position && user?.companyInfo?.[0]?.companyName)
+      summaryParts.push(`${user.companyInfo[0].position} at ${user.companyInfo[0].companyName}`);
 
     return summaryParts.join(' • ');
-  }, [authPositions, authRoles, authUser?.id, user?.batch, user?.id, user?.positions, user?.roles]);
+  }, [authPositions, authRoles, authUser?.id, user?.batch, user?.id, user?.positions, user?.roles, user?.companyInfo]);
 
   const handleDataPrivacyUpdate = React.useCallback(() => {
     showAlert(
@@ -263,7 +265,6 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
     handleDataPrivacyUpdate,
     changeMemberStatus,
     router,
-    authUser,
   ]);
 
   return (
@@ -455,56 +456,63 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
           summary={profileSummary}
           summaryProps={{ color: 'grey.600', fontSize: '14px', mt: { xs: 0, md: 1 } }}
         />
-        {menuItems.length > 0 && !editingProfile && (
-          <Menu
-            items={menuItems}
-            slotProps={{
-              paper: {
-                elevation: 0,
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          {!isProfileEditable && !user?.isConfidential && user?.email && !loading && (
+            <Button component="a" href={`mailto:${user.email}`} variant="outlined" size="small">
+              Contact
+            </Button>
+          )}
+          {menuItems.length > 0 && !editingProfile && (
+            <Menu
+              items={menuItems}
+              slotProps={{
+                paper: {
+                  elevation: 0,
 
-                sx: {
-                  minWidth: 150,
-                  overflow: 'visible',
-                  filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                  mt: 1.5,
-                  '& .MuiAvatar-root': {
-                    width: 32,
-                    height: 32,
-                    ml: -0.5,
-                    mr: 1,
-                  },
-                  '&::before': {
-                    content: '""',
-                    display: 'block',
-                    position: 'absolute',
-                    top: 0,
-                    right: 14,
-                    width: 10,
-                    height: 10,
-                    bgcolor: 'background.paper',
-                    transform: 'translateY(-50%) rotate(45deg)',
-                    zIndex: 0,
+                  sx: {
+                    minWidth: 150,
+                    overflow: 'visible',
+                    filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                    mt: 1.5,
+                    '& .MuiAvatar-root': {
+                      width: 32,
+                      height: 32,
+                      ml: -0.5,
+                      mr: 1,
+                    },
+                    '&::before': {
+                      content: '""',
+                      display: 'block',
+                      position: 'absolute',
+                      top: 0,
+                      right: 14,
+                      width: 10,
+                      height: 10,
+                      bgcolor: 'background.paper',
+                      transform: 'translateY(-50%) rotate(45deg)',
+                      zIndex: 0,
+                    },
                   },
                 },
-              },
-            }}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'right',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            render={
-              <Tooltip arrow placement="top" title="Profile Menu">
-                <IconButton aria-label="Profile actions">
-                  <IconDotsCircleHorizontal size={28} />
-                </IconButton>
-              </Tooltip>
-            }
-          />
-        )}
+              }}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              render={
+                <Tooltip arrow placement="top" title="Profile Menu">
+                  <IconButton aria-label="Profile actions">
+                    <IconDotsCircleHorizontal size={28} />
+                  </IconButton>
+                </Tooltip>
+              }
+            />
+          )}
+        </Box>
       </Box>
       {openPictureView && (
         <Dialog
