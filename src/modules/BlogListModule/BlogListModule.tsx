@@ -66,7 +66,7 @@ const BlogListModule: React.FC<BlogFilterModuleProps> = ({
   const [handleVerifyBlog] = useApproveBlogMutation();
 
   const listData = React.useMemo(() => {
-    if (loading || propLoading) {
+    if ((loading && !ssrData && !blogs) || propLoading) {
       return new Array(6).fill({ id: '', loading: true, title: '', summary: '', content: '', author: {} });
     }
     return blogs?.getBlogList?.data || ssrData?.data || [];
@@ -317,7 +317,7 @@ const BlogListModule: React.FC<BlogFilterModuleProps> = ({
             <Grid size={{ xs: 12 }} key={`events-${blog.id}-${index}`}>
               <BlogCard
                 blog={blog}
-                loading={loading}
+                loading={Boolean(propLoading || (loading && !ssrData && !blogs))}
                 onEdit={onEditBlog}
                 onPublish={publishBlogPost}
                 onVerify={approveBlogPost}

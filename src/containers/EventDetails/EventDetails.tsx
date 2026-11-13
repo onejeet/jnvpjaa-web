@@ -20,7 +20,6 @@ const EventDetails: React.FC<EventDetailsProps> = ({ event: initialData }) => {
   const { user, isAdmin } = useAuth();
   // const id = searchParams.get('id');
   const methods = useEvents({ user });
-  // const loading = false;
   const { data, loading } = useGetEventDetailsQuery({
     skip: !initialData?.id,
     variables: {
@@ -29,6 +28,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({ event: initialData }) => {
   });
 
   const event: Event = React.useMemo(() => data?.getEventDetails || initialData, [data, initialData]);
+  const contentLoading = loading && !event?.id;
 
   const breadcrumbsList = React.useMemo(
     () => [
@@ -46,7 +46,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({ event: initialData }) => {
   return (
     <LayoutModule disableCover title={`${event?.title || 'Event'} • Alumni Network of JNV Paota, Jaipur`}>
       <Box mb={1} display="flex" justifyContent="start" alignItems="center">
-        <Breadcrumbs items={breadcrumbsList} loading={loading} />
+        <Breadcrumbs items={breadcrumbsList} loading={contentLoading} />
         {/* {buttonProps && (
           <Box display="flex" alignItems="center" gap={1.5} ml="auto">
             {buttonProps.map((btProps: ButtonProps, index: number) => (
@@ -55,8 +55,15 @@ const EventDetails: React.FC<EventDetailsProps> = ({ event: initialData }) => {
           </Box>
         )} */}
       </Box>
-      {loading || event?.id ? (
-        <SingleEventView event={event} user={user} isAdmin={isAdmin} showDescription loading={loading} {...methods} />
+      {contentLoading || event?.id ? (
+        <SingleEventView
+          event={event}
+          user={user}
+          isAdmin={isAdmin}
+          showDescription
+          loading={contentLoading}
+          {...methods}
+        />
       ) : (
         <EmptyView message="No event found!" />
       )}

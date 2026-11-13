@@ -11,8 +11,9 @@ import { useRouter } from 'next/navigation';
 import { IconPlus, IconTicket } from '@tabler/icons-react';
 import Button from '@/components/core/Button';
 import EventListModule from '@/modules/EventListModule';
+import { GetEventListQuery } from '@/apollo/hooks';
 
-export default function Events() {
+export default function Events({ initialEvents }: { initialEvents?: GetEventListQuery['getEventList'] }) {
   const [isPendingApporvalOnly, setIsPendingApporvalOnly] = React.useState<boolean>(false);
   const { user, isAdmin } = useAuth();
   const router = useRouter();
@@ -69,7 +70,7 @@ export default function Events() {
         </Box>
       )}
 
-      <EventListModule filter={filter} />
+      <EventListModule filter={filter} initialEvents={initialEvents} />
     </LayoutModule>
   );
 }

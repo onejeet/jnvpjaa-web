@@ -18,24 +18,12 @@ export const metadata: Metadata = constructMetadata({
 async function getBlog() {
   const apolloClient = initializeApollo();
 
-  try {
-    const { data } = await apolloClient.query<GetBlogListQuery>({
-      query: GetBlogListDocument,
-      variables: {
-        options: {
-          filter: {
-            verified: undefined,
-          },
-          limit: 50,
-        },
-      },
-    });
+  const { data } = await apolloClient.query<GetBlogListQuery>({
+    query: GetBlogListDocument,
+    variables: { options: { limit: 50 } },
+  });
 
-    return data.getBlogList;
-  } catch (error) {
-    console.error('GraphQL Error (Batch Coordinators):', error);
-    return [];
-  }
+  return data.getBlogList;
 }
 
 export default async function BlogPage() {

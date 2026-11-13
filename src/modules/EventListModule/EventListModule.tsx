@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ListInput, useGetEventListQuery } from '@/apollo/hooks';
+import { GetEventListQuery, ListInput, useGetEventListQuery } from '@/apollo/hooks';
 import { Box, Grid2 as Grid, Typography } from '@mui/material';
 import EventCard from '@/components/common/EventCard/EventCard';
 import { IconPlus, IconTicket } from '@tabler/icons-react';
@@ -18,6 +18,7 @@ interface EventListModuleProps {
   loading?: boolean;
   isCreateAllowed?: boolean;
   isReadOnly?: boolean;
+  initialEvents?: GetEventListQuery['getEventList'];
 }
 
 const EventListModule: React.FC<EventListModuleProps> = ({
@@ -27,6 +28,7 @@ const EventListModule: React.FC<EventListModuleProps> = ({
   loading: propLoading,
   isCreateAllowed = true,
   isReadOnly,
+  initialEvents,
 }) => {
   const { user, isAdmin } = useAuth();
   const router = useRouter();
@@ -45,11 +47,11 @@ const EventListModule: React.FC<EventListModuleProps> = ({
   });
 
   const listData = React.useMemo(() => {
-    if (loading || propLoading) {
+    if ((loading && !initialEvents && !eventData) || propLoading) {
       return new Array(6).fill({ id: '', title: '', description: '', startDate: '', medium: 'Online', online: false });
     }
-    return eventData?.getEventList?.data || [];
-  }, [loading, eventData, propLoading]);
+    return eventData?.getEventList?.data || initialEvents?.data || [];
+  }, [loading, eventData, propLoading, initialEvents]);
 
   console.log('ZZ: listData', listData);
 
