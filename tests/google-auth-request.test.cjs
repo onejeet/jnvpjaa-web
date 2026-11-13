@@ -11,9 +11,18 @@ function setup(fetch) {
   let cleared = false;
   const exports = {};
   vm.runInNewContext(source, {
-    exports, fetch, AbortController, process: { env: { NEXT_PUBLIC_GRAPHQL_ENDPOINT: 'https://api.example.test/client' } },
-    setTimeout: (fn, ms) => { assert.equal(ms, 15000); expire = fn; return 1; },
-    clearTimeout: () => { cleared = true; },
+    exports,
+    fetch,
+    AbortController,
+    process: { env: { NEXT_PUBLIC_GRAPHQL_ENDPOINT: 'https://api.example.test/client' } },
+    setTimeout: (fn, ms) => {
+      assert.equal(ms, 15000);
+      expire = fn;
+      return 1;
+    },
+    clearTimeout: () => {
+      cleared = true;
+    },
   });
   return { request: exports.requestGoogleAuth, expire: () => expire(), cleared: () => cleared };
 }
@@ -29,16 +38,22 @@ test('reads the flow using cookies without caching', async () => {
   assert.equal(app.cleared(), true);
 });
 test('aborts a stalled request instead of leaving the callback loading forever', async () => {
-  const app = setup((_url, options) => new Promise((_resolve, reject) => {
-    options.signal.addEventListener('abort', () => reject(new Error('aborted')));
-  }));
+  const app = setup(
+    (_url, options) =>
+      new Promise((_resolve, reject) => {
+        options.signal.addEventListener('abort', () => reject(new Error('aborted')));
+      })
+  );
   const pending = app.request('query');
   app.expire();
   await assert.rejects(pending, /took too long/);
   assert.equal(app.cleared(), true);
 });
 test('preserves expired-flow errors for the sign-in notice', async () => {
-  const app = setup(async () => ({ ok: true, json: async () => ({ errors: [{ message: 'Expired', extensions: { code: 'GOOGLE_AUTH_FAILED' } }] }) }));
+  const app = setup(async () => ({
+    ok: true,
+    json: async () => ({ errors: [{ message: 'Expired', extensions: { code: 'GOOGLE_AUTH_FAILED' } }] }),
+  }));
   await assert.rejects(app.request('query'), { message: 'Expired', code: 'GOOGLE_AUTH_FAILED' });
   assert.equal(app.cleared(), true);
 });
