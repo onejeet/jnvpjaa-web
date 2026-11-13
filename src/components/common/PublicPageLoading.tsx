@@ -6,9 +6,9 @@ type PublicPageLoadingProps = {
   kind: 'blog-list' | 'event-list' | 'detail';
 };
 
-/** Next router requests carry RSC; full document requests should wait for their server-rendered content. */
+/** Middleware preserves the router request signal because Next hides the RSC header from Server Components. */
 export default function PublicPageLoading({ kind }: PublicPageLoadingProps) {
-  if (headers().get('rsc') !== '1') return null;
+  if (headers().get('x-jnvpjaa-router-navigation') !== '1') return null;
 
   return (
     <LayoutModule disableCover>

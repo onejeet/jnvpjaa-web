@@ -50,6 +50,16 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(profileUrl);
   }
 
+  if (/^\/(blog|events)(?:\/|$)/.test(pathname)) {
+    const requestHeaders = new Headers(request.headers);
+    if (request.headers.get('rsc') === '1') {
+      requestHeaders.set('x-jnvpjaa-router-navigation', '1');
+    } else {
+      requestHeaders.delete('x-jnvpjaa-router-navigation');
+    }
+    return NextResponse.next({ request: { headers: requestHeaders } });
+  }
+
   return NextResponse.next();
 }
 
