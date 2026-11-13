@@ -17,8 +17,6 @@ import {
   Toolbar,
   Tooltip,
   Typography,
-  useMediaQuery,
-  useTheme,
 } from '@mui/material';
 import NextLink from 'next/link';
 import React, { Suspense } from 'react';
@@ -80,9 +78,21 @@ type AccountMenuItem = {
 const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
   const [expanded, setExpanded] = React.useState<string>('');
   const [openMenu, setOpenMenu] = React.useState<boolean>(false);
-  const theme = useTheme();
   const router = useRouter();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isBottomDock = position === 'bottom';
+  const dockItemSx = {
+    width: '100%',
+    minWidth: 0,
+    height: 56,
+    p: 0,
+    borderRadius: 2,
+    display: { xs: 'flex', md: 'none' },
+    flexDirection: 'column' as const,
+    gap: '3px',
+    color: 'text.secondary',
+    '& svg': { color: 'primary.main', width: 22, height: 22 },
+  };
+  const dockLabelSx = { fontSize: 10, lineHeight: '12px', fontWeight: 600, color: 'text.secondary' };
   const { user, logoutUser, redirectToSignin, can, hasRole, access } = useAuth();
 
   const HEADER_MENU = React.useMemo(() => {
@@ -281,14 +291,12 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
     );
   }, [ACCOUNT_MENU_LIST, user, isBirthday, position]);
 
-  if ((isMobile && position === 'top') || (!isMobile && position === 'bottom')) {
-    return null;
-  }
   return (
     <AppBar
       position={position === 'bottom' ? 'fixed' : 'sticky'}
       elevation={position === 'bottom' ? 1 : 0}
       sx={{
+        display: isBottomDock ? { xs: 'flex', md: 'none' } : { xs: 'none', md: 'flex' },
         top: position === 'bottom' ? 'auto' : 0,
         bottom: position === 'bottom' ? 0 : undefined,
         backgroundColor: 'background.paper',
@@ -296,15 +304,15 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
         borderTop: position === 'bottom' ? '0.5px solid' : undefined,
         borderColor: (theme: Theme) => alpha(theme.palette.primary.main, 0.4),
         p: 0,
-        py: 1,
-        pb: position === 'bottom' ? 2 : 0,
+        py: isBottomDock ? '6px' : 1,
+        pb: isBottomDock ? 'calc(6px + env(safe-area-inset-bottom, 0px))' : 0,
       }}
     >
       <Container
         sx={{
-          maxWidth: { xs: '98%', sm: '95%', md: '90%', xl: '1500px' },
+          maxWidth: isBottomDock ? '100%' : { xs: '98%', sm: '95%', md: '90%', xl: '1500px' },
           margin: 'auto',
-          p: '0 !important',
+          p: isBottomDock ? '0 8px !important' : '0 !important',
           '&::before':
             position === 'bottom'
               ? {
@@ -325,127 +333,104 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
         <Toolbar
           sx={{
             width: '100%',
-            py: '4px',
+            py: isBottomDock ? 0 : '4px',
             display: 'flex',
             justifyContent: 'start',
-            alignIttems: 'center',
+            alignItems: 'center',
             px: '0 !important',
-            maxHeight: 60,
-            minHeight: '60px !important',
-            height: 60,
+            minHeight: isBottomDock ? '56px !important' : '60px !important',
+            height: isBottomDock ? 56 : 60,
           }}
         >
           <Box
             position="relative"
-            display="flex"
+            display={isBottomDock ? 'grid' : 'flex'}
             flex={1}
-            justifyContent={{ xs: 'space-evenly', md: 'start' }}
+            sx={isBottomDock ? { gridTemplateColumns: 'repeat(6, minmax(0, 1fr))', gap: '2px' } : undefined}
+            justifyContent="start"
             alignItems="center"
             // gap={1}
           >
-            <NextLink href="/">
+            <Box
+              component={NextLink}
+              href="/"
+              aria-label="Home"
+              sx={
+                isBottomDock
+                  ? { ...dockItemSx, textDecoration: 'none', justifyContent: 'center', alignItems: 'center' }
+                  : undefined
+              }
+            >
               <Logo
-                type={isMobile ? 'icon' : 'regular'}
-                width={isMobile ? 40 : 300}
-                height={isMobile ? 40 : 45}
+                type={isBottomDock ? 'icon' : 'regular'}
+                width={isBottomDock ? 26 : 300}
+                height={isBottomDock ? 26 : 45}
                 priority
               />
-            </NextLink>
+              {isBottomDock && <Typography sx={dockLabelSx}>Home</Typography>}
+            </Box>
 
             <IconButton
               onClick={() => router.push(paths.events.root)}
               // display={{ xs: 'flex', lg: 'none' }}
-              sx={{
-                width: 59,
-                height: 59,
-                display: { xs: 'flex', lg: 'none' },
-                ml: isMobile ? undefined : 'auto',
-                flexDirection: 'column',
-                svg: { color: 'primary.main' },
-              }}
+              aria-label="Events"
+              sx={dockItemSx}
             >
               <IconCalendarEvent />
-              <Typography fontSize="10px" variant="body2">
-                Events
-              </Typography>
+              <Typography sx={dockLabelSx}>Events</Typography>
             </IconButton>
             {!user?.id && (
-              <IconButton
-                onClick={() => router.push(paths.gallery.root)}
-                sx={{
-                  width: 59,
-                  height: 59,
-                  display: { xs: 'flex', lg: 'none' },
-                  flexDirection: 'column',
-                  svg: { color: 'primary.main' },
-                }}
-              >
+              <IconButton onClick={() => router.push(paths.gallery.root)} aria-label="Gallery" sx={dockItemSx}>
                 <IconPhotoBolt size={22} />
-                <Typography fontSize="10px" variant="body2">
-                  Gallery
-                </Typography>
+                <Typography sx={dockLabelSx}>Gallery</Typography>
               </IconButton>
             )}
 
             <IconButton
               // size="large"
-              aria-label="account of current user"
+              aria-label="Open menu"
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={() => setOpenMenu(true)}
-              sx={{
-                width: 59,
-                height: 59,
-                display: { xs: 'flex', lg: 'none' },
-                flexDirection: 'column',
-                // ml: 'auto',
-                svg: {
-                  color: 'primary.main',
-                },
-              }}
+              sx={dockItemSx}
             >
               <IconCategory2 />
-              <Typography fontSize="10px" variant="body2">
-                Menu
-              </Typography>
+              <Typography sx={dockLabelSx}>Menu</Typography>
             </IconButton>
 
-            <IconButton
-              onClick={() => router.push(paths.blog.root)}
-              sx={{
-                width: 59,
-                height: 59,
-                display: { xs: 'flex', lg: 'none' },
-                flexDirection: 'column',
-                svg: { color: 'primary.main' },
-              }}
-            >
+            <IconButton onClick={() => router.push(paths.blog.root)} aria-label="Blog" sx={dockItemSx}>
               <IconWritingSign />
-              <Typography fontSize="10px" variant="body2">
-                Blog
-              </Typography>
+              <Typography sx={dockLabelSx}>Blog</Typography>
             </IconButton>
 
-            {user?.id && isMobile ? (
-              <Box display="flex" gap={2} alignItems="center">
+            {user?.id && isBottomDock ? (
+              <Box
+                display="grid"
+                gridTemplateColumns="repeat(2, minmax(0, 1fr))"
+                alignItems="center"
+                sx={{ gridColumn: 'span 2', minWidth: 0 }}
+              >
                 <HeaderAddButton isMobile />
-                {ACCOUNT_COMP}
+                <Box
+                  sx={{
+                    minWidth: 0,
+                    height: 56,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '3px',
+                    '& > *': { cursor: 'pointer' },
+                  }}
+                >
+                  {ACCOUNT_COMP}
+                  <Typography sx={dockLabelSx}>Profile</Typography>
+                </Box>
               </Box>
             ) : (
-              <IconButton
-                onClick={() => router.push(paths.auth.signin)}
-                sx={{
-                  width: 59,
-                  height: 59,
-                  display: { xs: 'flex', lg: 'none' },
-                  flexDirection: 'column',
-                  svg: { color: 'primary.main' },
-                }}
-              >
+              <IconButton onClick={() => router.push(paths.auth.signin)} aria-label="Login" sx={dockItemSx}>
                 <IconUserCircle size={22} />
-                <Typography fontSize="10px" variant="body2">
-                  Login
-                </Typography>
+                <Typography sx={dockLabelSx}>Login</Typography>
                 {/* <IconPhotoBolt size={22} />
                 <Typography fontSize="10px" variant="body2">
                   Gallery
@@ -454,7 +439,7 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
             )}
           </Box>
 
-          <Box display={{ xs: 'none', lg: 'flex' }} alignItems="center" ml="auto" gap={0}>
+          <Box display={{ xs: 'none', md: 'flex' }} alignItems="center" ml="auto" gap={0}>
             {HEADER_MENU.map((item: IHeaderMenuItem) => (
               <HeaderMenuItem key={item.label} item={item} />
             ))}

@@ -1,10 +1,10 @@
 'use client';
 
-import React, { Suspense } from 'react';
+import React from 'react';
 import Button from '@/components/core/Button';
 import { ButtonProps } from '@/components/core/Button/Button.types';
 import { Box, Typography } from '@mui/material';
-import doggieLottieIcon from '@/utils/lottie/doggie_art.json';
+import { useEmptyViewAnimation } from './useEmptyViewAnimation';
 import Lottie from '@/components/common/DynamicLottie';
 
 interface IProps {
@@ -14,6 +14,7 @@ interface IProps {
 }
 
 const EmptyView: React.FC<IProps> = ({ type, message, buttonProps }) => {
+  const animation = useEmptyViewAnimation();
   return (
     <Box
       mt={-10}
@@ -26,7 +27,13 @@ const EmptyView: React.FC<IProps> = ({ type, message, buttonProps }) => {
       alignItems="center"
       overflow="hidden"
     >
-      <Lottie animationData={doggieLottieIcon} loop={true} style={{ width: '400px', height: '400px' }} />
+      <Box
+        sx={{ width: { xs: 280, sm: 400 }, height: { xs: 280, sm: 400 } }}
+        aria-label="No results illustration"
+        role="img"
+      >
+        {animation && <Lottie animationData={animation} loop style={{ width: '100%', height: '100%' }} />}
+      </Box>
 
       {/* <Image src="https://assets.jnvpjaa.org/svg/doggie.svg" alt="empty" width={500} height={300} /> */}
       <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" mt={-10}>

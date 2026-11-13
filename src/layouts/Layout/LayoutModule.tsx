@@ -14,6 +14,7 @@ const LayoutModule: React.FC<Props> = (props) => {
   return (
     <>
       <Box
+        sx={{ pb: disableFooter ? { xs: 'calc(76px + env(safe-area-inset-bottom, 0px))', md: 0 } : 0 }}
         // minHeight="100vh"
         width="100%"
         // overflow="auto"

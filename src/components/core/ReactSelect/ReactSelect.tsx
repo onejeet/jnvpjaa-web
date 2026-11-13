@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Select, { MultiValue, SingleValue, components } from 'react-select';
 import { CircularProgress, Box, useTheme } from '@mui/material';
 import ProfilePicture from '@/components/common/ProfilePicture';
+import { CONTROL_HEIGHT } from '@/utils/theme/controlSizes';
 
 interface Option {
   value: string;
@@ -227,10 +228,11 @@ const ReactSelect: React.FC<ReactSelectProps> = ({
           valueContainer: (provided) => ({
             ...provided,
             width: '100%',
-            minHeight: size === 'small' ? 36 : 42.88,
+            minHeight: CONTROL_HEIGHT[size === 'small' ? 'small' : 'medium'] - 2,
           }),
           control: (provided) => ({
             ...provided,
+            minHeight: CONTROL_HEIGHT[size === 'small' ? 'small' : 'medium'],
             borderRadius: 4,
             borderColor: '#ccc',
             boxShadow: 'none',

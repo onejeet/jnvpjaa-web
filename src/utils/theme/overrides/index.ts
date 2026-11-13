@@ -11,14 +11,12 @@ import MuiCssBaseline from './css-baseline';
 import MuiDataGrid from './datagrid';
 import MuiDialog from './dialog';
 import MuiIconButton from './icon-button';
-import MuiInputBase from './input-base';
-import MuiFormLabel from './form-label';
+import MuiInputLabel from './input-label';
 import MuiMenu from './menu';
 import MuiMenuItem from './menu-item';
 import MuiOutlinedInput from './outlined-input';
 import MuiPaper from './paper';
 import MuiPopover from './popover';
-import MuiSelect from './select';
 import MuiSlider from './slider';
 import MuiSwitch from './switch';
 import MuiTablePagination from './tablePagination';
@@ -35,13 +33,11 @@ const Overrides = (mode: PaletteMode) => {
   const chip = MuiChip();
   const cssBaseline = MuiCssBaseline(mode);
   const iconButton = MuiIconButton();
-  const inputBase = MuiInputBase();
-  const formLabel = MuiFormLabel();
+  const inputLabel = MuiInputLabel();
   const menuItem = MuiMenuItem();
   const menu = MuiMenu(mode);
   const outlinedInput = MuiOutlinedInput();
   const paper = MuiPaper();
-  const select = MuiSelect();
   const slider = MuiSlider();
   const tooltip = MuiTooltip();
   const tablePagination = MuiTablePagination();
@@ -61,13 +57,11 @@ const Overrides = (mode: PaletteMode) => {
     chip,
     cssBaseline,
     iconButton,
-    inputBase,
-    formLabel,
+    inputLabel,
     menuItem,
     menu,
     outlinedInput,
     paper,
-    select,
     slider,
     tooltip,
     tablePagination,

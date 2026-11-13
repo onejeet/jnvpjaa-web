@@ -1,5 +1,6 @@
 // ** Type Import
 import { OwnerStateThemeType } from '.';
+import { CONTROL_HEIGHT } from '../controlSizes';
 
 const Button = () => {
   return {
@@ -10,21 +11,21 @@ const Button = () => {
           textTransform: 'none',
           fontSize: '14px',
           lineHeight: '18px',
-          height: '36px',
+          minHeight: CONTROL_HEIGHT.medium,
         },
         sizeSmall: {
-          height: '30px',
+          minHeight: CONTROL_HEIGHT.small,
           lineHeight: '16px',
           paddingRight: '14px',
           paddingLeft: '14px',
         },
         sizeMedium: {
-          height: '36px',
+          minHeight: CONTROL_HEIGHT.medium,
           paddingRight: '18px',
           paddingLeft: '18px',
         },
         sizeLarge: {
-          height: '40px',
+          minHeight: CONTROL_HEIGHT.large,
           paddingRight: '18px',
           paddingLeft: '18px',
         },

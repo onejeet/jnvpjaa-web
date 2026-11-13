@@ -1,40 +1,21 @@
 import { OwnerStateThemeType } from '.';
+import { CONTROL_HEIGHT } from '../controlSizes';
 
-const OutlinedInput = () => {
-  return {
-    MuiOutlinedInput: {
-      defaultProps: {
-        disableInjectingGlobalStyles: true,
-      },
-      styleOverrides: {
-        root: ({ theme }: OwnerStateThemeType) => ({
-          width: '100%',
-          padding: '0px 10px',
+const OutlinedInput = () => ({
+  MuiOutlinedInput: {
+    styleOverrides: {
+      root: ({ theme, ownerState }: OwnerStateThemeType) => ({
+        borderRadius: theme.shape.borderRadius,
+        minHeight: ownerState.size === 'small' ? CONTROL_HEIGHT.small : CONTROL_HEIGHT.medium,
+        ...(!ownerState.multiline && {
           '& .MuiOutlinedInput-input': {
-            paddingLeft: 0,
-            paddingRight: 0,
-          },
-          '&.Mui-disabled:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: theme.palette.grey[500],
-          },
-          '&:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: theme.palette.grey[700],
-          },
-          '&:focus .MuiOutlinedInput-notchedOutline': {
-            borderColor: `${theme.palette.primary.main} !important`,
-          },
-          '&:active .MuiOutlinedInput-notchedOutline': {
-            borderColor: `${theme.palette.primary.main} !important`,
+            paddingTop: ownerState.size === 'small' ? 8 : 10,
+            paddingBottom: ownerState.size === 'small' ? 8 : 10,
           },
         }),
-        notchedOutline: ({ theme }: OwnerStateThemeType) => ({
-          padding: '0px 10px !important',
-          borderColor: theme.palette.grey[400],
-          borderRadius: '6px',
-        }),
-      },
+      }),
     },
-  };
-};
+  },
+});
 
 export default OutlinedInput;

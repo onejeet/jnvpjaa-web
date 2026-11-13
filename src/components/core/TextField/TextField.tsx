@@ -65,22 +65,8 @@ function TextField(
       }}
       type={type === 'password' && showPassword ? 'text' : type}
       sx={{
-        position: 'relative',
-        '& .MuiInputBase-root': {
-          minHeight: height,
-          // mt: '2px',
-        },
-        '& .MuiOutlinedInput-root': { p: restProps?.multiline ? 2 : undefined },
-        '& .MuiFormHelperText-root': {
-          position: 'absolute',
-          left: 0,
-          bottom: {
-            xs: '-32px',
-            md: '-16px',
-          },
-          fontSize: '0.65rem',
-          ml: 0,
-        },
+        ...(height ? { '& .MuiInputBase-root': { minHeight: height } } : {}),
+        '& .MuiFormHelperText-root': { position: 'static', marginLeft: 0, marginTop: 4 / 8 },
         ...sx,
       }}
       {...restProps}

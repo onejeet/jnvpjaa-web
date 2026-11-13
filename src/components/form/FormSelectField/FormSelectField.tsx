@@ -1,7 +1,7 @@
 import React from 'react';
 import { Controller, FieldValues, Path } from 'react-hook-form';
+import { Select, MenuItem, FormControl, InputLabel, FormHelperText, Skeleton } from '@mui/material';
 import { FormSelectProps } from './FormSelectField.types';
-import { Select, MenuItem, FormControl, InputLabel, FormHelperText, Typography, Skeleton } from '@mui/material';
 import { startCase } from '@/utils/helpers';
 
 const FormSelect = <
@@ -14,13 +14,15 @@ const FormSelect = <
   disabled,
   loading,
   defaultValue,
-  helperText = '',
+  helperText,
   options = [],
   error = false,
   selectProps,
   label,
-  ...rest
+  onChange,
 }: FormSelectProps<TFieldValues, TName>) => {
+  const fieldLabel = label || startCase(name);
+  const labelId = `${name}-label`;
   return (
     <Controller
       name={name}
@@ -29,29 +31,30 @@ const FormSelect = <
       defaultValue={defaultValue}
       render={({ field, fieldState: { error: fieldError } }) =>
         loading ? (
-          <Skeleton width="100%" height={41} />
+          <Skeleton width="100%" height={40} />
         ) : (
-          <FormControl fullWidth error={error || !!fieldError} variant="outlined">
-            {label && <InputLabel id={`${name}-label`}>{label}</InputLabel>}
-            {/* @ts-expect-error het */}
+          <FormControl
+            fullWidth
+            error={error || !!fieldError}
+            variant="outlined"
+            disabled={disabled ?? selectProps?.disabled}
+          >
+            <InputLabel id={labelId}>{fieldLabel}</InputLabel>
             <Select
-              {...field} // Spread the react-hook-form field
-              {...selectProps} // Spread any additional MUI Select props
-              {...rest} // Allow any other extra props (e.g., helperText, error)
-              labelId={`${name}-label`}
-              variant="outlined" // Ensure the Select has the outlined variant
-              label={label}
-              displayEmpty={!label}
+              {...field}
+              {...selectProps}
+              value={field.value ?? ''}
+              onChange={(event, child) => {
+                field.onChange(event);
+                selectProps?.onChange?.(event, child);
+                onChange?.(event as React.ChangeEvent<{ value: unknown }>);
+              }}
+              labelId={labelId}
+              label={fieldLabel}
               disabled={disabled ?? selectProps?.disabled}
-              // renderValue={(selected: unknown) => {
-              //   return selected ? String(selected) : name;
-              // }}
             >
               <MenuItem value="" disabled>
-                <Typography sx={{ color: error || !!fieldError ? 'error.main' : 'grey.700' }}>
-                  {' '}
-                  {`Select ${name ? startCase(name) : ''}`}
-                </Typography>
+                Select {fieldLabel}
               </MenuItem>
               {options.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
@@ -59,20 +62,8 @@ const FormSelect = <
                 </MenuItem>
               ))}
             </Select>
-            {(error || fieldError) && (
-              <FormHelperText
-                sx={{
-                  // '& .MuiFormHelperText-root': {
-                  position: 'absolute',
-                  left: 0,
-                  bottom: '-16px',
-                  fontSize: '0.65rem',
-                  ml: 0,
-                  //},
-                }}
-              >
-                {fieldError ? fieldError.message : helperText}
-              </FormHelperText>
+            {(fieldError || helperText) && (
+              <FormHelperText sx={{ ml: 0 }}>{fieldError?.message || helperText}</FormHelperText>
             )}
           </FormControl>
         )

@@ -61,15 +61,7 @@ const FormPhoneField = <
             onChange={handleChange} // Properly hook up the onChange handler
             value={field.value || defaultValue || ''} // Ensuring the value is set correctly
             defaultCountry={defaultCountry}
-            sx={{
-              '& .MuiFormHelperText-root': {
-                position: 'absolute',
-                left: 0,
-                bottom: '-16px',
-                fontSize: '0.65rem',
-                ml: 0,
-              },
-            }}
+            sx={{ '& .MuiFormHelperText-root': { position: 'static', marginLeft: 0 } }}
           />
         );
       }}

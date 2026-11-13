@@ -10,6 +10,15 @@ const withPWA = require('next-pwa')({
   customWorkerDir: 'public', // Add this line
   buildExcludes: [/middleware-manifest\.json$/, /app-build-manifest\.json$/],
   runtimeCaching: [
+    {
+      urlPattern: ({ url }) => url.pathname === '/animations/doggie-art-v1.json',
+      handler: 'CacheFirst',
+      options: {
+        cacheName: 'empty-view-animation-v1',
+        cacheableResponse: { statuses: [200] },
+        expiration: { maxEntries: 1, maxAgeSeconds: 60 * 60 * 24 * 365 },
+      },
+    },
     { urlPattern: ({ url }) => url.pathname.startsWith('/auth/google'), handler: 'NetworkOnly' },
     {
       urlPattern: /^\/_next\/image\?url=/,
@@ -118,6 +127,10 @@ const nextConfig = {
   trailingSlash: true,
   async headers() {
     return [
+      {
+        source: '/animations/doggie-art-v1.json',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
+      },
       {
         source: '/images/auth/alumni-pencil-doodle-v1.png',
         headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],

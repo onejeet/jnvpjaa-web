@@ -46,19 +46,25 @@ const HeaderAddButton: React.FC<HeaderAddButtonProps> = ({ isMobile }) => {
         id="header-add-btn"
         render={
           <IconButton
+            aria-label="Add content"
             sx={{
-              width: isMobile ? 59 : 42,
-              height: isMobile ? 59 : 42,
+              width: isMobile ? '100%' : 42,
+              minWidth: 0,
+              height: isMobile ? 56 : 42,
+              p: 0,
               display: 'flex',
               flexDirection: 'column',
+              gap: isMobile ? '3px' : 0,
               svg: {
                 color: 'primary.main',
+                width: isMobile ? 22 : undefined,
+                height: isMobile ? 22 : undefined,
               },
             }}
           >
             <IconCirclePlus />
             {isMobile && (
-              <Typography fontSize="10px" variant="body2">
+              <Typography sx={{ fontSize: 10, lineHeight: '12px', fontWeight: 600, color: 'text.secondary' }}>
                 Add
               </Typography>
             )}

@@ -2,7 +2,7 @@
 
 import { JNVPJAA_SOCIAL_MEDIA } from '@/constants/General.contants';
 import { getSocialMediaIcon } from '@/utils/helpers';
-import { IconButton, Stack, useMediaQuery, useTheme } from '@mui/material';
+import { IconButton, Stack } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -21,14 +21,12 @@ import HelpBanner from '@/components/common/HelpBanner/HelpBanner';
 import { dmSans } from '@/utils/theme/fonts';
 
 const LayoutFooter: React.FC = () => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   return (
     <Box
       sx={{
         flexGrow: 1,
         bgcolor: 'grey.100',
-        pb: isMobile ? '90px' : 0,
+        pb: { xs: 'calc(76px + env(safe-area-inset-bottom, 0px))', md: 0 },
       }}
     >
       <Container

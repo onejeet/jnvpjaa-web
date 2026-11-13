@@ -27,8 +27,8 @@ const Logo: React.FC<Props> = ({ width, height, icon, type = 'regular', priority
         return (
           <Image
             src="https://assets.jnvpjaa.org/branding/logo-square-white_transparent.webp"
-            width={40}
-            height={40}
+            width={width || 40}
+            height={height || 40}
             alt="JNVPJAA logo"
             priority={priority}
           />
