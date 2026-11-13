@@ -3,7 +3,6 @@
 import LayoutModule from '@/layouts/Layout';
 import { Box, Card } from '@mui/material';
 import NewEvent from 'src/modules/NewEvent';
-import { Metadata } from 'next';
 import Breadcrumbs from '@/components/common/Breadcrumbs';
 
 // Note: This is a Client Component because it requires authentication
@@ -23,19 +22,15 @@ export default function NewEventPage() {
   return (
     <LayoutModule disableCover title="Create New Event • JNVPJAA" containerProps={{}}>
       <Breadcrumbs items={breadcrumbsList} />
-      <Box display="flex" justifyContent="center">
+      <Box display="flex" justifyContent="center" sx={{ py: { xs: 1, md: 2 } }}>
         <Card
-          elevation={3}
+          elevation={0}
           sx={{
-            maxWidth: '1000px',
-            bgcolor: 'grey.100',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            px: 3,
-            pt: 2,
-            pb: 4,
-            position: 'relative',
+            width: '100%',
+            maxWidth: 1040,
+            border: '1px solid',
+            borderColor: 'divider',
+            borderRadius: 2.5,
           }}
         >
           <NewEvent />

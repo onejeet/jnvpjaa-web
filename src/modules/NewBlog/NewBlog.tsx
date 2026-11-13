@@ -23,7 +23,7 @@ import {
 } from '@/apollo/hooks';
 import { paths } from '@/config/paths';
 import TipTapTextEditor from '@/modules/TipTapTextEditor';
-import { IconEye, IconDeviceFloppy } from '@tabler/icons-react';
+import { IconEye, IconDeviceFloppy, IconPhoto } from '@tabler/icons-react';
 import { useApolloClient } from '@apollo/client';
 import dayjs from 'dayjs';
 import { BLOG_CATEGORIES } from '@/constants/Blog.constants';
@@ -71,6 +71,8 @@ const NewBlog = () => {
     getValues,
     formState: { errors },
   } = useForm<INewBlogFormInput>();
+  const content = useWatch({ control, name: 'content' }) || '';
+  const cover = useWatch({ control, name: 'cover' });
 
   React.useEffect(() => {
     if (blogData?.getBlog?.id) {
@@ -82,8 +84,6 @@ const NewBlog = () => {
       });
     }
   }, [blogData, reset]);
-
-  console.log('ZZ: getValues', getValues());
 
   const onSubmit = React.useCallback(
     (data: INewBlogFormInput) => {
@@ -155,7 +155,7 @@ const NewBlog = () => {
         },
       });
     },
-    [isPublishAllowed, createBlog, router, client, blogId, user, updateBlog]
+    [isPublishAllowed, createBlog, router, client, blogId, user, updateBlog, showAlert]
   );
 
   const saving = React.useMemo(() => {
@@ -172,52 +172,29 @@ const NewBlog = () => {
   }
 
   return (
-    <Box
-      component="form"
-      onSubmit={handleSubmit(onSubmit)}
-      sx={{
-        width: '100%',
-        p: 3,
-        // p: 3,
-        // display: 'flex',
-        // flexDirection: 'column',
-        // alignItems: 'center',
-      }}
-    >
-      <Grid container spacing={3}>
-        <Grid size={{ xs: 12, md: 3 }}>
-          <FormSelectField
-            control={control}
-            name="category"
-            selectProps={{
-              //label: 'Category',
-              size: 'small',
-              id: 'medium',
-              disabled: saving,
-            }}
-            options={BLOG_CATEGORIES}
-            rules={{
-              required: 'Required',
-            }}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 3 }} sx={{ display: 'flex', alignItems: 'center' }} gap={1}>
-          {getValues('cover') && (
-            <Image
-              src={getValues('cover')?.thumbUrl}
-              width={100}
-              height={50}
-              alt="cover"
-              style={{ borderRadius: '6px' }}
-            />
-          )}
-          <Button
-            title={getValues('cover') ? 'Change Cover Image' : 'Select Cover Image'}
-            variant="text"
-            onClick={() => setSelectCoverImage(true)}
-          />
-        </Grid>
-        <Box component={Grid} size={{ xs: 12, md: 6 }} display="flex" gap={2} alignItems="center" justifyContent="end">
+    <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ width: '100%', p: { xs: 2, sm: 3, md: 4 } }}>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'flex-start',
+          flexWrap: 'wrap',
+          gap: 2,
+          mb: 4,
+        }}
+      >
+        <Box>
+          <Typography variant="overline" sx={{ color: 'text.secondary', letterSpacing: '0.1em' }}>
+            Alumni stories
+          </Typography>
+          <Typography component="h1" variant="h2" sx={{ mt: 0.25 }}>
+            {slug ? 'Edit your story' : 'Write a story'}
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.75 }}>
+            Write for the JNV Paota alumni community.
+          </Typography>
+        </Box>
+        <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center' }}>
           {blogData?.getBlog?.slug && (
             <Button
               title="Preview"
@@ -232,7 +209,6 @@ const NewBlog = () => {
           )}
 
           <Button
-            // size="small"
             title={blogData?.getBlog?.status === BlogStatus.Published ? 'Unpublish' : 'Save'}
             onClick={() => {
               saveTypeRef.current = 'draft';
@@ -246,7 +222,6 @@ const NewBlog = () => {
             loading={saveTypeRef.current === 'draft' && saving}
           />
           <Button
-            // size="small"
             title={isPublishAllowed ? 'Save & Publish' : 'Update'}
             onClick={() => {
               saveTypeRef.current = 'publish';
@@ -259,11 +234,15 @@ const NewBlog = () => {
             loading={saveTypeRef.current === 'publish' && saving}
           />
         </Box>
+      </Box>
+      <Grid container spacing={{ xs: 2.5, md: 3 }}>
         <Grid size={{ xs: 12 }}>
+          <Typography variant="subtitle2" sx={{ mb: 0.75, fontWeight: 600 }}>
+            Title
+          </Typography>
           <FormTextField
             fullWidth
             id="title"
-            // label="Title"
             autoFocus
             multiline
             minRows={1}
@@ -271,24 +250,90 @@ const NewBlog = () => {
             disabled={saving}
             name="title"
             size="small"
-            placeholder="Title"
+            placeholder="Give your story a title"
             variant="standard"
+            inputProps={{ 'aria-label': 'Story title' }}
             InputProps={{
               disableUnderline: true,
-              sx: { fontSize: '2rem', fontWeight: 500, fontFamily: 'Playfair Display', padding: 0, px: 2 }, // Custom styling
+              sx: {
+                fontSize: { xs: '1.75rem', md: '2.15rem' },
+                lineHeight: 1.2,
+                fontWeight: 500,
+                fontFamily: 'Playfair Display',
+                p: 0,
+              },
             }}
-            sx={{
-              backgroundColor: 'transparent', // Ensure it blends in
-            }}
+            sx={{ pb: 1, borderBottom: '1px solid', borderColor: 'divider' }}
             rules={{
               required: 'Required',
             }}
           />
         </Grid>
-        <Grid size={{ xs: 12 }}>
-          <Box display="flex" flexDirection="column">
-            <TipTapTextEditor value={getValues('content')} onChange={(data) => setValue('content', data)} />
+        <Grid size={{ xs: 12, md: 5 }}>
+          <Typography variant="subtitle2" sx={{ mb: 0.75, fontWeight: 600 }}>
+            Category
+          </Typography>
+          <FormSelectField
+            control={control}
+            name="category"
+            label="Category"
+            selectProps={{ size: 'small', disabled: saving }}
+            options={BLOG_CATEGORIES}
+            rules={{ required: 'Required' }}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 7 }}>
+          <Typography variant="subtitle2" sx={{ mb: 0.75, fontWeight: 600 }}>
+            Cover image
+          </Typography>
+          <Box
+            sx={{
+              minHeight: 64,
+              border: '1px solid',
+              borderColor: 'divider',
+              borderRadius: 1.5,
+              px: 1.5,
+              py: 1,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1.5,
+            }}
+          >
+            {cover?.thumbUrl && (
+              <Image
+                src={cover.thumbUrl}
+                width={76}
+                height={48}
+                alt="Selected story cover"
+                style={{ borderRadius: 6, objectFit: 'cover' }}
+              />
+            )}
+            <Typography variant="body2" color="text.secondary" sx={{ flex: 1 }}>
+              {cover ? 'Cover selected' : 'Optional'}
+            </Typography>
+            <Button
+              title={cover ? 'Change image' : 'Choose image'}
+              startIcon={<IconPhoto size={18} />}
+              variant="outlined"
+              size="small"
+              onClick={() => setSelectCoverImage(true)}
+            />
           </Box>
+        </Grid>
+        <Grid size={{ xs: 12 }}>
+          <Typography variant="subtitle2" sx={{ mb: 0.5, fontWeight: 600 }}>
+            Your story
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>
+            Use headings, lists, and links to make your story easy to read.
+          </Typography>
+          <TipTapTextEditor
+            value={content}
+            onChange={(data) => setValue('content', data, { shouldDirty: true })}
+            disabled={saving}
+            height="clamp(380px, 56vh, 540px)"
+            placeholder="Begin your story..."
+          />
         </Grid>
       </Grid>
       {selectCoverImage && (
@@ -296,7 +341,7 @@ const NewBlog = () => {
           open={selectCoverImage}
           onClose={() => setSelectCoverImage(false)}
           defaultKeyword={getValues('title')}
-          onSelect={(image: Photo) => setValue('cover', image)}
+          onSelect={(image: Photo) => setValue('cover', image, { shouldDirty: true })}
         />
       )}
     </Box>

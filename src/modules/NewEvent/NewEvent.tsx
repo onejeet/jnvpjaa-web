@@ -5,7 +5,7 @@ import React from 'react';
 import { useAlert } from '@/context/AlertContext';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm, useWatch } from 'react-hook-form';
-import { Box, CircularProgress, Grid2 as Grid, IconButton, Typography } from '@mui/material';
+import { Box, CircularProgress, Grid2 as Grid, Typography } from '@mui/material';
 import FormTextField from '@/components/form/FormTextField';
 import FormSelectField from '@/components/form/FormSelectField';
 import { INewEventFormInput } from './NewEvent.types';
@@ -17,19 +17,11 @@ import {
   Photo,
   useCreateEventMutation,
   useGetEventDetailsQuery,
-  usePublishEventMutation,
   useUpdateEventMutation,
 } from '@/apollo/hooks';
 import { paths } from '@/config/paths';
 import TipTapTextEditor from '@/modules/TipTapTextEditor';
-import {
-  IconCurrencyRupee,
-  IconDeviceFloppy,
-  IconWorld,
-  IconMapPin,
-  IconPencil,
-  IconUpload,
-} from '@tabler/icons-react';
+import { IconCurrencyRupee, IconDeviceFloppy, IconWorld, IconMapPin, IconPhoto } from '@tabler/icons-react';
 // import { useApolloClient } from '@apollo/client';
 import { EVENT_CATEGORIES, eventHostingmedium } from '@/constants/Events.constants';
 import dayjs from 'dayjs';
@@ -48,7 +40,6 @@ const NewEvent = () => {
   const [selectCoverImage, setSelectCoverImage] = React.useState<boolean>(false);
   const [crateEvent, { loading }] = useCreateEventMutation();
   const [updateEvent, { loading: updateEventLoading }] = useUpdateEventMutation();
-  const [publishEvent, { loading: publishEventLoading }] = usePublishEventMutation();
   const { data: eventData, loading: eventDetailsLoading } = useGetEventDetailsQuery({
     skip: !eventId,
     variables: {
@@ -96,9 +87,9 @@ const NewEvent = () => {
     );
   }, [eventData]);
 
-  console.log('ZZ: getValues', getValues());
-
   const watchMedium = useWatch({ control, name: 'medium' });
+  const description = useWatch({ control, name: 'description' }) || '';
+  const cover = useWatch({ control, name: 'cover' });
 
   React.useEffect(() => {
     if (eventData && watchMedium === eventData?.getEventDetails?.medium) {
@@ -106,18 +97,11 @@ const NewEvent = () => {
     } else {
       setValue('location', watchMedium === 'online' ? 'http://' : '');
     }
-  }, [watchMedium, eventData]);
+  }, [watchMedium, eventData, setValue]);
 
   const onSubmit = React.useCallback(
     (data: INewEventFormInput) => {
       if (eventId) {
-        if (!data?.cover) {
-          showAlert({
-            visible: true,
-            type: 'error',
-            message: 'Please select cover image',
-          });
-        }
         const variables: any = {
           eventId: parseInt(eventId as string, 0),
           ...data,
@@ -175,12 +159,12 @@ const NewEvent = () => {
         },
       });
     },
-    [isPublishAllowed, crateEvent, router, client, eventId, publishEvent, updateEvent]
+    [isPublishAllowed, crateEvent, router, client, eventId, updateEvent, showAlert]
   );
 
   const saving = React.useMemo(() => {
-    return updateEventLoading || loading || publishEventLoading;
-  }, [loading, updateEventLoading, publishEventLoading]);
+    return updateEventLoading || loading;
+  }, [loading, updateEventLoading]);
 
   if (eventDetailsLoading) {
     return (
@@ -191,28 +175,31 @@ const NewEvent = () => {
     );
   }
 
-  console.log("ZZ: setValue('cover'", getValues('cover'));
-
   return (
-    <Box
-      component="form"
-      onSubmit={handleSubmit(onSubmit)}
-      sx={{
-        width: '100%',
-        py: 1,
-        // p: 3,
-        // display: 'flex',
-        // flexDirection: 'column',
-        // alignItems: 'center',
-      }}
-    >
-      <Box display="flex" width="100%" mb={3} justifyContent="space-between" alignItems="center">
-        <Typography variant="h2" display={{ xs: 'none', md: 'flex' }}>
-          {eventId ? 'Edit Event' : 'Create New Event'}
-        </Typography>
-        <Box display="flex" gap={2} alignItems="center">
+    <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ width: '100%', p: { xs: 2, sm: 3, md: 4 } }}>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'flex-start',
+          flexWrap: 'wrap',
+          gap: 2,
+          mb: 4,
+        }}
+      >
+        <Box>
+          <Typography variant="overline" sx={{ color: 'text.secondary', letterSpacing: '0.1em' }}>
+            Community events
+          </Typography>
+          <Typography component="h1" variant="h2" sx={{ mt: 0.25 }}>
+            {eventId ? 'Edit event' : 'Create an event'}
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.75 }}>
+            Share the details members need to join.
+          </Typography>
+        </Box>
+        <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center' }}>
           <Button
-            // size="small"
             title={eventData?.getEventDetails?.status === EventStatus.Published ? 'Unpublish' : 'Save'}
             onClick={() => {
               saveTypeRef.current = 'draft';
@@ -226,7 +213,6 @@ const NewEvent = () => {
             loading={saveTypeRef.current === 'draft' && saving}
           />
           <Button
-            // size="small"
             title={isPublishAllowed ? 'Save & Publish' : 'Update'}
             onClick={() => {
               saveTypeRef.current = 'publish';
@@ -240,17 +226,24 @@ const NewEvent = () => {
           />
         </Box>
       </Box>
-      <Grid container spacing={3}>
+      <Grid container spacing={{ xs: 2.5, md: 3 }}>
+        <Grid size={{ xs: 12 }}>
+          <Typography variant="h4" sx={{ fontWeight: 600 }}>
+            The essentials
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+            These details appear in the event listing.
+          </Typography>
+        </Grid>
         <Grid size={{ xs: 12 }}>
           <FormTextField
             fullWidth
             id="title"
-            label="Title"
+            label="Event title"
             autoFocus
             control={control}
             disabled={saving}
             name="title"
-            size="small"
             rules={{
               required: 'Required',
             }}
@@ -259,56 +252,45 @@ const NewEvent = () => {
         <Grid
           size={{ xs: 12, md: 3 }}
           sx={{
-            position: 'relative',
             display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            border: '1px dotted',
-            borderColor: 'grey.500',
-            borderRadius: '8px',
-            // p: 2,
-            cursor: 'pointer',
-            maxHeight: 110,
-            maxWidth: {
-              xs: 200,
-              md: '100%',
-            },
-            '&:hover img': {
-              opacity: 0.4,
-            },
+            flexDirection: 'column',
+            gap: 0.75,
           }}
-          onClick={() => setSelectCoverImage(true)}
-          gap={1}
         >
-          {getValues('cover') ? (
-            <>
+          <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+            Cover image
+          </Typography>
+          <Box
+            sx={{
+              border: '1px solid',
+              borderColor: 'divider',
+              borderRadius: 1.5,
+              minHeight: 110,
+              p: 1.25,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 1,
+              flexWrap: 'wrap',
+            }}
+          >
+            {cover?.thumbUrl && (
               <Image
-                src={getValues('cover')?.thumbUrl}
-                width={200}
-                height={100}
-                layout="responsive"
-                alt="cover"
-                style={{ borderRadius: '6px', maxHeight: '100%' }}
+                src={cover.thumbUrl}
+                width={90}
+                height={64}
+                alt="Selected event cover"
+                style={{ borderRadius: 6, objectFit: 'cover' }}
               />
-              <IconButton
-                onClick={() => setSelectCoverImage(true)}
-                size="small"
-                sx={{
-                  zIndex: 1,
-                  position: 'absolute',
-                  right: '4px',
-                  top: '4px',
-                  bgcolor: 'grey.200',
-                  // border: '1px solid',
-                  svg: { color: 'grey.900' },
-                }}
-              >
-                <IconPencil size={18} />
-              </IconButton>
-            </>
-          ) : (
-            <Button title={getValues('cover') ? 'Change Cover Image' : 'Select Cover Image'} variant="text" />
-          )}
+            )}
+            <Button
+              title={cover ? 'Change image' : 'Choose image'}
+              startIcon={<IconPhoto size={18} />}
+              variant="outlined"
+              size="small"
+              onClick={() => setSelectCoverImage(true)}
+            />
+          </Box>
         </Grid>
         <Grid size={{ xs: 12, md: 9 }}>
           <FormTextField
@@ -324,18 +306,35 @@ const NewEvent = () => {
             rules={{
               required: 'Required',
             }}
-            helperText="Write about the event in minimal words possible."
+            helperText="A short introduction for the event listing."
           />
         </Grid>
         <Grid size={{ xs: 12 }}>
-          <Box display="flex" flexDirection="column">
-            <Typography color="grey.600" variant="body1" fontSize={14}>
-              Description (optional)
+          <Typography variant="subtitle2" sx={{ mb: 0.5, fontWeight: 600 }}>
+            Full description{' '}
+            <Box component="span" sx={{ color: 'text.secondary', fontWeight: 400 }}>
+              (optional)
+            </Box>
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>
+            Add the agenda, audience, and anything participants should prepare.
+          </Typography>
+          <TipTapTextEditor
+            value={description}
+            onChange={(data) => setValue('description', data, { shouldDirty: true })}
+            disabled={saving}
+            height="clamp(340px, 48vh, 480px)"
+            placeholder="Describe the event..."
+          />
+        </Grid>
+        <Grid size={{ xs: 12 }}>
+          <Box sx={{ borderTop: '1px solid', borderColor: 'divider', pt: 3, mt: 0.5 }}>
+            <Typography variant="h4" sx={{ fontWeight: 600 }}>
+              When and where
             </Typography>
-            <TipTapTextEditor
-              value={getValues('description') || ''}
-              onChange={(data) => setValue('description', data)}
-            />
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+              Set the date and how members can join.
+            </Typography>
           </Box>
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
@@ -436,7 +435,7 @@ const NewEvent = () => {
           open={selectCoverImage}
           onClose={() => setSelectCoverImage(false)}
           defaultKeyword={getValues('title')}
-          onSelect={(image: Photo) => setValue('cover', image)}
+          onSelect={(image: Photo) => setValue('cover', image, { shouldDirty: true })}
         />
       )}
     </Box>

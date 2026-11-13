@@ -10,19 +10,15 @@ import NewEvent from 'src/modules/NewEvent';
 export default function EditEventPage() {
   return (
     <LayoutModule disableCover title="Edit Event • Alumni Network of JNV Paota, Jaipur" containerProps={{}}>
-      <Box display="flex" justifyContent="center">
+      <Box display="flex" justifyContent="center" sx={{ py: { xs: 1, md: 2 } }}>
         <Card
-          elevation={3}
+          elevation={0}
           sx={{
-            maxWidth: '1000px',
-            bgcolor: 'grey.100',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            px: 3,
-            pt: 2,
-            pb: 4,
-            position: 'relative',
+            width: '100%',
+            maxWidth: 1040,
+            border: '1px solid',
+            borderColor: 'divider',
+            borderRadius: 2.5,
           }}
         >
           <NewEvent />

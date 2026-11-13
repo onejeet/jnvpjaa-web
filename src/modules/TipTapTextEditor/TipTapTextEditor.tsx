@@ -31,6 +31,7 @@ const TipTapTextEditor = ({
   sx = {},
   disabled,
   height,
+  placeholder = 'Start writing here...',
   id,
   toolbarProps = {},
 }: TipTapTextEditorProps) => {
@@ -45,6 +46,8 @@ const TipTapTextEditor = ({
           minHeight: height ?? 160,
           px: { xs: 2, sm: 3 },
           py: 2,
+          fontSize: 16,
+          lineHeight: 1.7,
           overflowWrap: 'anywhere',
           '&:focus-visible': { outline: '2px solid', outlineColor: 'primary.main', outlineOffset: -2 },
           '& img, & iframe': { maxWidth: '100%' },
@@ -72,6 +75,8 @@ const TipTapTextEditor = ({
         borderRadius: 2,
         overflow: 'hidden',
         maxWidth: '100%',
+        transition: 'border-color 150ms ease',
+        '&:focus-within': { borderColor: 'grey.600' },
         ...restSx,
       }}
     >
@@ -91,7 +96,7 @@ const TipTapTextEditor = ({
               types: ['heading', 'paragraph'],
             }),
             Placeholder.configure({
-              placeholder: 'Start writing here...',
+              placeholder,
               showOnlyCurrent: false,
               emptyEditorClass: 'is-empty',
             }),

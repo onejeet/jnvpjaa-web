@@ -10,6 +10,7 @@ export interface TipTapTextEditorProps {
   disabled?: boolean;
   onChange: (val: string) => void;
   height?: string | number;
+  placeholder?: string;
   toolbarProps?: Partial<EditorToolbarProps>;
 }
 
