@@ -10,6 +10,17 @@ import {
   IconTicket as Ticket,
 } from '@tabler/icons-react';
 
+// What's happening in the community, grouped so the top bar stays short.
+const COMMUNITY_MENU: IHeaderMenuItem = {
+  label: 'Community',
+  path: '/newsroom',
+  menu: [
+    { label: 'Newsroom', path: '/newsroom' },
+    { label: 'Events', path: '/events' },
+    { label: 'Blog', path: '/blog' },
+  ],
+};
+
 export const HEADER_MENU: IHeaderMenuItem[] = [
   {
     label: 'About Us',
@@ -104,18 +115,7 @@ export const HEADER_MENU: IHeaderMenuItem[] = [
     ],
   },
 
-  {
-    label: 'Events',
-    path: '/events',
-  },
-  {
-    label: 'Blog',
-    path: '/blog',
-  },
-  {
-    label: 'Newsroom',
-    path: '/newsroom',
-  },
+  COMMUNITY_MENU,
 ];
 
 export const MEMBER_HEADER_MENU: IHeaderMenuItem[] = [
@@ -205,18 +205,7 @@ export const MEMBER_HEADER_MENU: IHeaderMenuItem[] = [
       // },
     ],
   },
-  {
-    label: 'Events',
-    path: '/events',
-  },
-  {
-    label: 'Blog',
-    path: '/blog',
-  },
-  {
-    label: 'Newsroom',
-    path: '/newsroom',
-  },
+  COMMUNITY_MENU,
 ];
 
 export const getHeaderMenu = (isLoggedIn?: boolean) => {
