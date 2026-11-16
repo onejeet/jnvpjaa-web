@@ -58,3 +58,11 @@ test('latestNews requests 3', async () => {
     ['a', 'b']
   );
 });
+
+test('manage status: draft, scheduled when publishedAt is in the future, else published', () => {
+  const now = new Date('2026-11-16T12:00:00Z');
+  assert.equal(utils.newsStatusLabel('DRAFT', '2026-11-20T00:00:00Z', now), 'Draft');
+  assert.equal(utils.newsStatusLabel('PUBLISHED', '2026-11-17T00:00:00Z', now), 'Scheduled');
+  assert.equal(utils.newsStatusLabel('PUBLISHED', '2026-11-16T11:00:00Z', now), 'Published');
+  assert.equal(utils.newsStatusLabel('PUBLISHED', null, now), 'Published');
+});

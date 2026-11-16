@@ -79,6 +79,10 @@ const LayoutFooter: React.FC = () => {
                     path: '/vision',
                   },
                   {
+                    label: 'Newsroom',
+                    path: '/newsroom',
+                  },
+                  {
                     label: 'Contact Us',
                     path: '/contact-us',
                   },

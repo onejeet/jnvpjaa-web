@@ -111,6 +111,10 @@ export const HEADER_MENU: IHeaderMenuItem[] = [
     label: 'Blog',
     path: '/blog',
   },
+  {
+    label: 'Newsroom',
+    path: '/newsroom',
+  },
 ];
 
 export const MEMBER_HEADER_MENU: IHeaderMenuItem[] = [
@@ -207,6 +211,10 @@ export const MEMBER_HEADER_MENU: IHeaderMenuItem[] = [
   {
     label: 'Blog',
     path: '/blog',
+  },
+  {
+    label: 'Newsroom',
+    path: '/newsroom',
   },
 ];
 

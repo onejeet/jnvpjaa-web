@@ -39,6 +39,7 @@ import {
   IconUser as User,
   IconShieldCheck,
   IconActivity,
+  IconNews,
 } from '@tabler/icons-react';
 import { paths } from '@/config/paths';
 import Lottie from '@/components/common/DynamicLottie';
@@ -125,6 +126,7 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
       can(PERMISSION_CODES.IAM_EXECUTIVE_POSITION_MANAGE),
     [can]
   );
+  const canManageNews = can(PERMISSION_CODES.NEWSROOM_POST_MANAGE);
   const canViewActivity =
     hasRole(ROLE_CODES.EXECUTIVE_MEMBER) ||
     hasRole(ROLE_CODES.PLATFORM_ADMIN) ||
@@ -146,6 +148,14 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
               value: '/admin',
               icon: <IconShieldCheck size={16} />,
               onClick: () => router.push('/admin'),
+            }
+          : null,
+        canManageNews
+          ? {
+              label: 'Manage newsroom',
+              value: paths.newsroom.manage,
+              icon: <IconNews size={16} />,
+              onClick: () => router.push(paths.newsroom.manage),
             }
           : null,
         canViewActivity
@@ -172,7 +182,7 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
           onClick: logoutUser,
         },
       ].filter(Boolean) as AccountMenuItem[],
-    [canAccessAdminCenter, canViewActivity, logoutUser, router]
+    [canAccessAdminCenter, canManageNews, canViewActivity, logoutUser, router]
   );
 
   const ACCOUNT_COMP = React.useMemo(() => {

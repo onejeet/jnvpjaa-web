@@ -26,6 +26,7 @@ import {
   IconUsers,
   IconUsersGroup,
   IconWritingSign,
+  IconNews,
   IconX,
 } from '@tabler/icons-react';
 import type { Icon } from '@tabler/icons-react';
@@ -54,6 +55,7 @@ const PATH_ICONS: Record<string, Icon> = {
   '/donations': IconHeartHandshake,
   '/events': IconCalendarEvent,
   '/blog': IconWritingSign,
+  '/newsroom': IconNews,
 };
 
 export type MobileMenuAccountItem = {
