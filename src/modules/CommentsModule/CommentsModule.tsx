@@ -17,7 +17,7 @@ import Button from '@/components/core/Button';
 import { useAuth } from '@/context/AuthContext';
 import { useAlert } from '@/context/AlertContext';
 import CommentComposer from './CommentComposer';
-import CommentItem, { authorName } from './CommentItem';
+import CommentItem, { authorName, COMMENT_AVATAR, COMMENT_GAP } from './CommentItem';
 import { buildCommentThreads, toggleReaction } from './commentThreads';
 
 interface CommentsModuleProps {
@@ -26,6 +26,7 @@ interface CommentsModuleProps {
 }
 
 const COLLAPSED_REPLIES = 2;
+const INITIAL_THREADS = 5;
 
 const CommentsModule: React.FC<CommentsModuleProps> = ({ targetType, targetId }) => {
   const { user, isAdmin, redirectToSignin } = useAuth();
@@ -33,6 +34,7 @@ const CommentsModule: React.FC<CommentsModuleProps> = ({ targetType, targetId })
   const variables = { targetId, targetType };
   const [replyTo, setReplyTo] = React.useState<{ threadId: string; prefill: string } | null>(null);
   const [expanded, setExpanded] = React.useState<Record<string, boolean>>({});
+  const [showAll, setShowAll] = React.useState(false);
 
   const { data, loading, refetch } = useQuery<{ getComments: ThreadComment[] }>(COMMENT_THREAD, {
     variables,
@@ -181,17 +183,37 @@ const CommentsModule: React.FC<CommentsModuleProps> = ({ targetType, targetId })
     onReact: handleReact,
   };
 
+  const visibleThreads = showAll ? threads : threads.slice(0, INITIAL_THREADS);
+  const hiddenCount = threads
+    .slice(visibleThreads.length)
+    .reduce((n, t) => n + (t.comment.isDeleted ? 0 : 1) + t.replies.filter((r) => !r.isDeleted).length, 0);
+
   return (
-    <Box component="section" aria-labelledby="comments-heading" mt={{ xs: 3, md: 5 }}>
-      <Box display="flex" alignItems="center" gap={1.25} mb={2.5}>
-        <IconMessages size={24} />
-        <Typography id="comments-heading" variant="h3" fontWeight={700}>
-          Conversation
+    <Box component="section" aria-labelledby="comments-heading" mt={{ xs: 4, md: 6 }}>
+      <Box display="flex" alignItems="center" gap={1} mb={3}>
+        <Typography id="comments-heading" component="h2" variant="h3" fontWeight={700}>
+          Comments
         </Typography>
         {count > 0 && (
-          <Typography component="span" variant="body2" color="text.secondary" fontWeight={600}>
+          <Box
+            component="span"
+            sx={{
+              px: 1,
+              minWidth: 24,
+              height: 24,
+              borderRadius: 3,
+              bgcolor: 'action.hover',
+              color: 'text.secondary',
+              fontSize: 13,
+              fontWeight: 600,
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontVariantNumeric: 'tabular-nums',
+            }}
+          >
             {count}
-          </Typography>
+          </Box>
         )}
       </Box>
 
@@ -212,51 +234,68 @@ const CommentsModule: React.FC<CommentsModuleProps> = ({ targetType, targetId })
         </Card>
       )}
 
-      <Box mt={4} display="flex" flexDirection="column" gap={3.5}>
+      <Box
+        component="ul"
+        sx={{ listStyle: 'none', p: 0, m: 0, mt: 5, display: 'flex', flexDirection: 'column', gap: 4.5 }}
+      >
         {loading && !data ? (
-          [0, 1].map((i) => (
-            <Box key={i} display="flex" gap={1.5}>
-              <Skeleton variant="circular" width={40} height={40} />
+          [0, 1, 2].map((i) => (
+            <Box component="li" key={i} display="flex" gap={`${COMMENT_GAP}px`}>
+              <Skeleton variant="circular" width={COMMENT_AVATAR} height={COMMENT_AVATAR} sx={{ flexShrink: 0 }} />
               <Box flex={1}>
-                <Skeleton width="30%" />
-                <Skeleton width="90%" />
-                <Skeleton width="60%" />
+                <Skeleton width={180} height={24} />
+                <Skeleton width="85%" />
+                <Skeleton width={140} height={30} />
               </Box>
             </Box>
           ))
         ) : threads.length === 0 ? (
-          <Typography color="text.secondary" textAlign="center" py={3}>
-            No comments yet. Start the conversation 👋
-          </Typography>
+          <Box component="li" textAlign="center" py={4} color="text.secondary">
+            <IconMessages size={32} stroke={1.5} style={{ opacity: 0.5 }} />
+            <Typography mt={1} color="text.secondary">
+              No comments yet. Be the first to share your thoughts 👋
+            </Typography>
+          </Box>
         ) : (
-          threads.map(({ comment, replies }) => {
+          visibleThreads.map(({ comment, replies }) => {
             const isOpen = expanded[comment.id] || replies.length <= COLLAPSED_REPLIES;
             const visible = isOpen ? replies : replies.slice(-COLLAPSED_REPLIES);
             const hidden = replies.length - visible.length;
             const replying = replyTo?.threadId === comment.id;
             const hasThread = replies.length > 0 || replying;
             return (
-              <Box key={comment.id} position="relative">
+              <Box component="li" key={comment.id} position="relative">
                 {hasThread && (
-                  // Thread rail from the parent avatar down through the replies.
+                  // Thread rail: from under the parent avatar, centred on it, down to the last reply.
                   <Box
                     aria-hidden
                     position="absolute"
-                    left={19}
-                    top={48}
-                    bottom={16}
+                    left={COMMENT_AVATAR / 2 - 1}
+                    top={COMMENT_AVATAR + 8}
+                    bottom={8}
                     width="2px"
                     borderRadius={1}
                     bgcolor="divider"
                   />
                 )}
-                <CommentItem comment={comment} {...itemProps} />
+                <CommentItem comment={comment} replyCount={replies.length} {...itemProps} />
                 {hasThread && (
-                  <Box pl={{ xs: 4, sm: 6.5 }} mt={2} display="flex" flexDirection="column" gap={2}>
+                  // Replies start where the parent's text starts, like the reference layout.
+                  <Box pl={`${COMMENT_AVATAR + COMMENT_GAP}px`} mt={3} display="flex" flexDirection="column" gap={3}>
                     {hidden > 0 && (
                       <ButtonBase
                         onClick={() => setExpanded((e) => ({ ...e, [comment.id]: true }))}
-                        sx={{ alignSelf: 'flex-start', fontSize: 13, fontWeight: 700, color: 'primary.main', py: 0.5 }}
+                        sx={{
+                          alignSelf: 'flex-start',
+                          fontSize: 13,
+                          fontWeight: 600,
+                          color: 'primary.main',
+                          borderRadius: 2,
+                          px: 0.75,
+                          ml: -0.75,
+                          height: 28,
+                          '&:hover': { bgcolor: 'action.hover' },
+                        }}
                       >
                         View {hidden} earlier {hidden === 1 ? 'reply' : 'replies'}
                       </ButtonBase>
@@ -287,6 +326,25 @@ const CommentsModule: React.FC<CommentsModuleProps> = ({ targetType, targetId })
           })
         )}
       </Box>
+
+      {hiddenCount > 0 && (
+        <Box textAlign="center" mt={5}>
+          <ButtonBase
+            onClick={() => setShowAll(true)}
+            sx={{
+              px: 2,
+              height: 36,
+              borderRadius: 5,
+              fontSize: 15,
+              fontWeight: 500,
+              color: 'primary.main',
+              '&:hover': { bgcolor: 'action.hover' },
+            }}
+          >
+            View all comments (+{hiddenCount})
+          </ButtonBase>
+        </Box>
+      )}
     </Box>
   );
 };

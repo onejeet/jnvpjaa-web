@@ -15,47 +15,71 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import { IconDots, IconMessageCircle, IconMoodPlus, IconPencil, IconTrash } from '@tabler/icons-react';
+import { IconArrowBackUp, IconDots, IconMoodPlus, IconPencil, IconTrash } from '@tabler/icons-react';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import { paths } from '@/config/paths';
-import { COMMENT_REACTIONS, ThreadComment } from '@/apollo/commentOperations';
+import dynamic from 'next/dynamic';
+import { EmojiClickData, EmojiStyle, SkinTones } from 'emoji-picker-react';
+import { COMMENT_REACTION_CODES, ThreadComment } from '@/apollo/commentOperations';
 import CommentComposer from './CommentComposer';
 import { splitLinks } from './commentThreads';
 
 dayjs.extend(relativeTime);
+
+// Loaded only when someone opens the reaction bar.
+const EmojiPicker = dynamic(() => import('emoji-picker-react'), { ssr: false });
 
 export interface CommentItemProps {
   comment: ThreadComment;
   viewer?: { id?: string; profileImage?: string | null };
   isAdmin?: boolean;
   isReply?: boolean;
+  replyCount?: number;
   onReply: (comment: ThreadComment) => void;
   onEdit: (comment: ThreadComment, content: string) => Promise<unknown>;
   onDelete: (comment: ThreadComment) => void;
   onReact: (comment: ThreadComment, emoji: string) => void;
 }
 
+export const COMMENT_AVATAR = 40;
+export const REPLY_AVATAR = 36;
+export const COMMENT_GAP = 16; // px between avatar and body
+
 export const authorName = (author: ThreadComment['author']) =>
   [author?.firstName, author?.lastName].filter(Boolean).join(' ') || 'Member';
 
+// Shared look for every control in the action row: quiet grey, one height, same hit area.
 const actionSx = {
   display: 'inline-flex',
   alignItems: 'center',
   gap: 0.5,
-  px: 1,
-  py: 0.5,
-  borderRadius: 5,
+  height: 30,
+  px: 0.75,
+  borderRadius: 2,
   fontSize: 13,
-  fontWeight: 600,
+  fontWeight: 500,
   color: 'text.secondary',
+  fontVariantNumeric: 'tabular-nums',
+  transition: 'background-color .15s, color .15s, transform .12s',
   '&:hover': { bgcolor: 'action.hover', color: 'text.primary' },
+  '&:active': { transform: 'scale(0.94)' },
 } as const;
+
+const Dot = () => (
+  <Box component="span" aria-hidden width={4} height={4} borderRadius="50%" bgcolor="divider" flexShrink={0} />
+);
+
+const formatTime = (date: string) => {
+  const d = dayjs(date);
+  return dayjs().diff(d, 'day') < 7 ? d.fromNow() : d.format(d.year() === dayjs().year() ? 'D MMM' : 'D MMM YYYY');
+};
 
 const CommentItem: React.FC<CommentItemProps> = ({
   comment,
   viewer,
   isAdmin,
   isReply,
+  replyCount = 0,
   onReply,
   onEdit,
   onDelete,
@@ -68,13 +92,18 @@ const CommentItem: React.FC<CommentItemProps> = ({
   const isOwn = !!viewer?.id && viewer.id === comment.authorId;
   const canDelete = isOwn || !!isAdmin;
   const pending = comment.id.startsWith('temp-');
-  const avatarSize = isReply ? 32 : 40;
+  const avatarSize = isReply ? REPLY_AVATAR : COMMENT_AVATAR;
+
+  const pickReaction = ({ emoji }: EmojiClickData) => {
+    setReactAnchor(null);
+    onReact(comment, emoji);
+  };
 
   if (comment.isDeleted) {
     return (
-      <Box display="flex" gap={1.5} alignItems="center" py={0.5}>
+      <Box display="flex" gap={`${COMMENT_GAP}px`} alignItems="center">
         <Box width={avatarSize} height={avatarSize} borderRadius="50%" bgcolor="action.hover" flexShrink={0} />
-        <Typography variant="body2" color="text.secondary" fontStyle="italic">
+        <Typography fontSize={14} color="text.secondary" fontStyle="italic">
           This comment was deleted.
         </Typography>
       </Box>
@@ -85,13 +114,14 @@ const CommentItem: React.FC<CommentItemProps> = ({
     <Box
       id={`comment-${comment.id}`}
       display="flex"
-      gap={1.5}
+      gap={`${COMMENT_GAP}px`}
       sx={{
-        opacity: pending ? 0.6 : 1,
+        opacity: pending ? 0.55 : 1,
         transition: 'opacity .2s',
         animation: 'commentIn .28s ease-out',
         '@keyframes commentIn': { from: { opacity: 0, transform: 'translateY(6px)' }, to: { opacity: 1 } },
         '@media (prefers-reduced-motion: reduce)': { animation: 'none' },
+        '&:hover .comment-options, &:focus-within .comment-options': { opacity: 1 },
       }}
     >
       <ProfilePicture
@@ -101,34 +131,47 @@ const CommentItem: React.FC<CommentItemProps> = ({
         containerProps={{ sx: { width: avatarSize, flexShrink: 0 } }}
       />
       <Box flex={1} minWidth={0}>
-        <Box display="flex" alignItems="baseline" flexWrap="wrap" columnGap={1}>
+        {/* Header: name · batch · time, vertically centred on the avatar's top half */}
+        <Box display="flex" alignItems="center" gap={1} minHeight={isReply ? 22 : 24} flexWrap="wrap">
           <MuiLink
             component={Link}
             href={author?.id ? paths.profile.getProfileUrl(author.id) : '#'}
             underline="hover"
             color="text.primary"
-            fontWeight={700}
+            fontWeight={600}
             fontSize={15}
+            lineHeight={1.4}
           >
             {authorName(author)}
           </MuiLink>
           {(author?.batch || author?.isFaculty) && (
-            <Typography component="span" variant="caption" color="text.secondary" fontWeight={600}>
-              {author?.isFaculty ? 'Faculty' : `Batch ${author?.batch}`}
-            </Typography>
+            <>
+              <Dot />
+              <Typography component="span" fontSize={13} color="text.secondary">
+                {author?.isFaculty ? 'Faculty' : `Batch ${author?.batch}`}
+              </Typography>
+            </>
           )}
+          <Dot />
           <Tooltip title={dayjs(comment.createdAt).format('D MMM YYYY, h:mm A')}>
-            <Typography component="time" dateTime={comment.createdAt} variant="caption" color="text.secondary">
-              · {pending ? 'Posting…' : dayjs(comment.createdAt).fromNow()}
-              {comment.editedAt && ' · edited'}
+            <Typography component="time" dateTime={comment.createdAt} fontSize={13} color="text.secondary">
+              {pending ? 'Posting…' : formatTime(comment.createdAt)}
+              {comment.editedAt && ' (edited)'}
             </Typography>
           </Tooltip>
-          {!pending && (isOwn || canDelete) && !editing && (
+          {!pending && canDelete && !editing && (
             <IconButton
+              className="comment-options"
               size="small"
               aria-label="Comment options"
               onClick={(e) => setMenuAnchor(e.currentTarget)}
-              sx={{ ml: 'auto', alignSelf: 'center', color: 'text.secondary' }}
+              sx={{
+                ml: 'auto',
+                my: -0.5,
+                color: 'text.secondary',
+                opacity: { xs: 1, md: menuAnchor ? 1 : 0 },
+                transition: 'opacity .15s',
+              }}
             >
               <IconDots size={18} />
             </IconButton>
@@ -151,7 +194,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
           </Box>
         ) : (
           <Typography
-            mt={0.5}
+            mt={0.75}
             fontSize={15}
             lineHeight={1.6}
             color="text.primary"
@@ -170,36 +213,39 @@ const CommentItem: React.FC<CommentItemProps> = ({
         )}
 
         {!editing && !pending && (
-          <Box display="flex" alignItems="center" flexWrap="wrap" gap={0.75} mt={0.75} ml={-1}>
+          // ml offsets the buttons' inner padding so the first icon lines up with the text above.
+          <Box display="flex" alignItems="center" flexWrap="wrap" gap={0.5} mt={1} ml={-0.75}>
             {comment.reactions.map((r) => (
               <ButtonBase
                 key={r.emoji}
                 aria-pressed={r.reacted}
-                aria-label={`${r.emoji} ${r.count}`}
+                aria-label={`${r.emoji} ${r.count}${r.reacted ? ', you reacted' : ''}`}
                 onClick={() => onReact(comment, r.emoji)}
                 sx={{
                   ...actionSx,
-                  px: 1,
-                  border: '1px solid',
-                  borderColor: r.reacted ? 'primary.main' : 'divider',
-                  bgcolor: r.reacted ? (t) => `${t.palette.primary.main}14` : 'transparent',
                   color: r.reacted ? 'primary.main' : 'text.secondary',
-                  transition: 'transform .12s',
-                  '&:active': { transform: 'scale(0.92)' },
+                  bgcolor: r.reacted ? (t) => `${t.palette.primary.main}14` : 'transparent',
+                  fontWeight: r.reacted ? 600 : 500,
                 }}
               >
-                <span style={{ fontSize: 15, lineHeight: 1 }}>{r.emoji}</span>
+                <Box component="span" fontSize={16} lineHeight={1}>
+                  {r.emoji}
+                </Box>
                 {r.count}
               </ButtonBase>
             ))}
-            <Tooltip title="React">
-              <ButtonBase aria-label="Add reaction" sx={actionSx} onClick={(e) => setReactAnchor(e.currentTarget)}>
-                <IconMoodPlus size={17} />
+            <Tooltip title="Add reaction">
+              <ButtonBase
+                aria-label="Add reaction"
+                sx={{ ...actionSx, ...(reactAnchor ? { bgcolor: 'action.hover', color: 'text.primary' } : {}) }}
+                onClick={(e) => setReactAnchor(e.currentTarget)}
+              >
+                <IconMoodPlus size={18} stroke={1.75} />
               </ButtonBase>
             </Tooltip>
             <ButtonBase sx={actionSx} onClick={() => onReply(comment)}>
-              <IconMessageCircle size={17} />
-              Reply
+              <IconArrowBackUp size={18} stroke={1.75} />
+              Reply{replyCount > 0 && ` (${replyCount})`}
             </ButtonBase>
           </Box>
         )}
@@ -211,27 +257,22 @@ const CommentItem: React.FC<CommentItemProps> = ({
         onClose={() => setReactAnchor(null)}
         anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
         transformOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-        slotProps={{ paper: { sx: { borderRadius: 6, p: 0.5, display: 'flex', gap: 0.25 } } }}
+        // The picker draws its own rounded bar/panel, so the popover paper stays invisible.
+        slotProps={{ paper: { sx: { mb: 0.75, bgcolor: 'transparent', boxShadow: 'none', overflow: 'visible' } } }}
       >
-        {COMMENT_REACTIONS.map((emoji) => (
-          <IconButton
-            key={emoji}
-            aria-label={`React ${emoji}`}
-            onClick={() => {
-              onReact(comment, emoji);
-              setReactAnchor(null);
-            }}
-            sx={{
-              fontSize: 22,
-              width: 40,
-              height: 40,
-              transition: 'transform .12s',
-              '&:hover': { transform: 'scale(1.25)' },
-            }}
-          >
-            {emoji}
-          </IconButton>
-        ))}
+        <EmojiPicker
+          reactionsDefaultOpen
+          allowExpandReactions
+          reactions={COMMENT_REACTION_CODES}
+          emojiStyle={EmojiStyle.NATIVE}
+          width="min(350px, calc(100vw - 32px))"
+          lazyLoadEmojis
+          previewConfig={{ showPreview: false }}
+          defaultSkinTone={SkinTones.MEDIUM_LIGHT}
+          onReactionClick={pickReaction}
+          onEmojiClick={pickReaction}
+          style={{ boxShadow: '0 8px 24px rgba(0,0,0,0.12)' }}
+        />
       </Popover>
 
       <Menu anchorEl={menuAnchor} open={!!menuAnchor} onClose={() => setMenuAnchor(null)}>

@@ -44,7 +44,8 @@ const CommentComposer: React.FC<CommentComposerProps> = ({
   const trimmed = value.trim();
   const remaining = COMMENT_MAX_LENGTH - value.length;
   const canSubmit = !!trimmed && remaining >= 0 && !submitting;
-  const expanded = focused || !!value || !!onCancel;
+  // Stay open while the emoji picker is up, otherwise an empty composer collapses under the click.
+  const expanded = focused || !!value || !!onCancel || !!emojiAnchor;
 
   React.useEffect(() => {
     if (!autoFocus) return;
@@ -79,7 +80,7 @@ const CommentComposer: React.FC<CommentComposerProps> = ({
   };
 
   return (
-    <Box display="flex" gap={1.5} alignItems="flex-start">
+    <Box display="flex" gap={2} alignItems="flex-start">
       {!compact && (
         <ProfilePicture
           id={user?.id}
@@ -126,8 +127,14 @@ const CommentComposer: React.FC<CommentComposerProps> = ({
         {expanded && (
           <Box display="flex" alignItems="center" gap={1} px={1} pb={1}>
             <Tooltip title="Emoji">
-              <IconButton size="small" aria-label="Insert emoji" onClick={(e) => setEmojiAnchor(e.currentTarget)}>
-                <IconMoodSmile size={20} />
+              <IconButton
+                aria-label="Insert emoji"
+                // Keep focus in the textarea so the toolbar isn't unmounted by the blur before the click lands.
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={(e) => setEmojiAnchor(e.currentTarget)}
+                sx={{ width: 40, height: 40, color: emojiAnchor ? 'primary.main' : 'text.secondary' }}
+              >
+                <IconMoodSmile size={26} stroke={1.75} />
               </IconButton>
             </Tooltip>
             <Typography

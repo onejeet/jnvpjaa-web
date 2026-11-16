@@ -3,8 +3,9 @@ import { gql } from '@apollo/client';
 export type CommentTarget = 'BLOG' | 'EVENT';
 
 export const COMMENT_MAX_LENGTH = 2000;
-// Mirrors the backend allowlist in jnvpjaa-backend/src/utils/comments.ts.
-export const COMMENT_REACTIONS = ['👍', '❤️', '😂', '🎉', '😮', '🙏'];
+// Quick reactions shown in emoji-picker-react's reaction bar (unified codes: 👍 ❤️ 😂 🎉 😮 🙏).
+// "+" expands to the full picker; the backend accepts any single emoji.
+export const COMMENT_REACTION_CODES = ['1f44d', '2764-fe0f', '1f602', '1f389', '1f62e', '1f64f'];
 
 export interface CommentReactionSummary {
   __typename?: 'CommentReactionSummary';
