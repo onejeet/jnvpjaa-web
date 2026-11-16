@@ -186,7 +186,8 @@ export default function ProfilePictureUpload({ user, onNext, onBack, onSuccess, 
 
     const profileImage = await blobToFile(croppedImage);
 
-    const fileName = `${user?.firstName?.replace(/ +/g, '')?.toLowerCase()}-${user?.lastName?.replace(/ +/g, '')?.toLowerCase() || 'jnv'}-${user?.batch !== null ? user?.batch : 'batch'}.jpeg`;
+    // The API only signs uploads named after the uploader's own id (see assertUploadTarget).
+    const fileName = `${user?.id}.jpeg`;
     const response = await getPresignedUrl({
       variables: {
         fileName,
