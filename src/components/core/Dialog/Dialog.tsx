@@ -52,10 +52,57 @@ const Dialog: React.FC<DialogProps> = (props) => {
   } = props;
 
   // Phones get a bottom sheet: slides up, grab handle, scrolling body between a fixed header and footer.
-  const sheet = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm')) && !default_props.fullScreen;
+  // noSsr: read the real screen size on the first render; otherwise a sheet mounts one frame as a centred
+  // desktop dialog and then jumps to the bottom. Dialogs never render open on the server, so this is safe.
+  const sheet =
+    useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'), { noSsr: true }) && !default_props.fullScreen;
   const theme = useTheme();
   const canSwipeClose = sheet && !!onClose && !disableBackdropClick;
   const drag = React.useRef<{ startY: number; dy: number } | null>(null);
+  // State, not a ref: the portal mounts the root a render later, and the effect must re-run when it appears.
+  const [root, setRoot] = React.useState<HTMLDivElement | null>(null);
+  const deferredFocus = React.useRef<HTMLElement | null>(null);
+  const { TransitionProps: transitionProps = {}, ...dialogProps } = default_props;
+
+  // Keyboard open: fit the sheet into the visible area so it sits on top of the keyboard instead of under it.
+  React.useEffect(() => {
+    const vv = typeof window !== 'undefined' ? window.visualViewport : null;
+    if (!sheet || !dialogProps.open || !vv || !root) return;
+    const fit = () => {
+      root.style.top = `${vv.offsetTop}px`;
+      root.style.height = `${vv.height}px`;
+      root.style.bottom = 'auto';
+    };
+    fit();
+    vv.addEventListener('resize', fit);
+    vv.addEventListener('scroll', fit);
+    return () => {
+      vv.removeEventListener('resize', fit);
+      vv.removeEventListener('scroll', fit);
+      root.style.top = root.style.height = root.style.bottom = '';
+    };
+  }, [sheet, dialogProps.open, root]);
+
+  // An autoFocus field would grab focus while the sheet is still sliding in, so the phone scrolls and
+  // raises the keyboard mid-animation. Hold the focus until the sheet has landed.
+  const sheetTransitionProps = sheet
+    ? {
+        ...transitionProps,
+        onEnter: (node: HTMLElement, isAppearing: boolean) => {
+          const active = document.activeElement as HTMLElement | null;
+          if (active && node.contains(active) && active.matches('input, textarea, [contenteditable="true"]')) {
+            deferredFocus.current = active;
+            active.blur();
+          }
+          transitionProps.onEnter?.(node, isAppearing);
+        },
+        onEntered: (node: HTMLElement, isAppearing: boolean) => {
+          deferredFocus.current?.focus({ preventScroll: true });
+          deferredFocus.current = null;
+          transitionProps.onEntered?.(node, isAppearing);
+        },
+      }
+    : transitionProps;
 
   const paperOf = (el: HTMLElement) => el.closest('.MuiDialog-paper') as HTMLElement | null;
   const onHandleTouchStart = (e: React.TouchEvent<HTMLElement>) => {
@@ -87,8 +134,10 @@ const Dialog: React.FC<DialogProps> = (props) => {
   return (
     <MuiDialog
       maxWidth={maxWidth as false | Breakpoint | undefined}
+      ref={setRoot}
       TransitionComponent={sheet ? SheetTransition : undefined}
-      transitionDuration={!default_props?.open && transitionDirection ? 0 : undefined}
+      TransitionProps={sheetTransitionProps}
+      transitionDuration={!dialogProps?.open && transitionDirection ? 0 : undefined}
       onClose={(event: any, reason: any) => {
         if (disableBackdropClick && reason && reason === 'backdropClick') {
           return;
@@ -127,7 +176,7 @@ const Dialog: React.FC<DialogProps> = (props) => {
         }),
         ...sx,
       }}
-      {...default_props}
+      {...dialogProps}
     >
       {sheet && (
         <Box
