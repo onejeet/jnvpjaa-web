@@ -10,12 +10,12 @@ const source = ts.transpileModule(readFileSync('src/utils/routeAccess.ts', 'utf8
 const mod = {};
 vm.runInNewContext(source, { exports: mod });
 
-test('newsroom pages are public, its manage area is not', () => {
+test('newsroom pages are public, its editor is not', () => {
   for (const path of ['/newsroom', '/newsroom/', '/newsroom/feed.xml', '/newsroom/annual-meet-2026/']) {
     assert.equal(mod.isProtectedRoute(path), false, path);
   }
-  assert.equal(mod.isProtectedRoute('/newsroom/manage'), true);
-  assert.equal(mod.isProtectedRoute('/newsroom/manage/new/'), true);
+  assert.equal(mod.isProtectedRoute('/newsroom/new'), true);
+  assert.equal(mod.isProtectedRoute('/newsroom/new/'), true);
 });
 
 test('create and edit screens stay protected, look-alike slugs do not', () => {

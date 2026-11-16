@@ -1,4 +1,5 @@
 import { IHeaderMenuItem } from 'src/layouts/Layout/LayoutTopbar';
+import { PERMISSION_CODES } from '@/constants/access';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import ExtensionIcon from '@mui/icons-material/Extension';
 import {
@@ -236,6 +237,12 @@ export const ADD_ENTITIES: IHeaderMenuItem[] = [
     label: 'New Event',
     path: '/events/new',
     icon: <CalendarDots />,
+  },
+  {
+    label: 'New Article',
+    path: '/newsroom/new',
+    icon: <ArticleNyTimes />,
+    permission: PERMISSION_CODES.NEWSROOM_POST_MANAGE,
   },
   // {
   //   label: 'New Album',

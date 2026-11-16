@@ -23,6 +23,7 @@ import HoverPopover from '../../components/common/HoverPopover';
 import type { IHeaderMenuItem, IMenuItemProps } from './LayoutTopbar';
 import { ADD_ENTITIES } from '@/constants/Header.constants';
 import { IconCirclePlus } from '@tabler/icons-react';
+import { useAuth } from '@/context/AuthContext';
 
 interface HeaderAddButtonProps {
   isMobile?: boolean;
@@ -32,6 +33,7 @@ const HeaderAddButton: React.FC<HeaderAddButtonProps> = ({ isMobile }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const router = useRouter();
+  const { can } = useAuth();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -111,7 +113,7 @@ const HeaderAddButton: React.FC<HeaderAddButtonProps> = ({ isMobile }) => {
             Have something to share?
           </Typography>
         </MenuItem>
-        {ADD_ENTITIES?.map((mItem: IHeaderMenuItem) => (
+        {ADD_ENTITIES.filter((item) => !item.permission || can(item.permission)).map((mItem: IHeaderMenuItem) => (
           <NextLink
             key={`menu-${mItem?.path}`}
             href={mItem?.path || '/'}

@@ -25,9 +25,9 @@ export const paths = {
   newsroom: {
     root: '/newsroom',
     feed: '/newsroom/feed.xml',
-    manage: '/newsroom/manage',
+    new: '/newsroom/new',
     getPostUrl: (slug: string) => `/newsroom/${encodeURIComponent(slug)}`,
-    getEditUrl: (id: string) => `/newsroom/manage/${id}`,
+    getEditUrl: (id: string) => `/newsroom/new?id=${encodeURIComponent(id)}`,
   },
   blog: {
     root: '/blog',

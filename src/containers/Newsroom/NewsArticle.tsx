@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import { Alert, Box, Button, Divider, Stack, Typography } from '@mui/material';
 import { IconExternalLink } from '@tabler/icons-react';
 import type { NewsPost } from '@/apollo/newsroomOperations';
@@ -8,7 +9,10 @@ import Breadcrumbs from '@/components/common/Breadcrumbs';
 import CopyContentButton from '@/components/common/CopyContentButton';
 import { paths } from '@/config/paths';
 import { canonicalUrl } from '@/config/seo.config';
+import { PERMISSION_CODES } from '@/constants/access';
+import { useAuth } from '@/context/AuthContext';
 import LayoutModule from '@/layouts/Layout';
+import NewsPostActions from '@/modules/NewsEditor/NewsPostActions';
 import { NEWS_BYLINE, formatDateline, formatNewsDate } from '@/modules/Newsroom/newsroom.utils';
 import { notoSerif } from '@/utils/theme/fonts';
 import { Kicker } from './NewsCard';
@@ -16,9 +20,24 @@ import PressContact from './PressContact';
 
 const NewsArticle: React.FC<{ post: NewsPost }> = ({ post }) => {
   const url = canonicalUrl(paths.newsroom.getPostUrl(post.slug));
+  const router = useRouter();
+  const { can } = useAuth();
+  const canManage = can(PERMISSION_CODES.NEWSROOM_POST_MANAGE);
   return (
     <LayoutModule disableCover title={`${post.title} • JNVPJAA Newsroom`}>
       <Breadcrumbs items={[{ label: 'Newsroom', path: paths.newsroom.root }, { label: post.title }]} />
+      {canManage && (
+        <Stack direction="row" justifyContent="flex-end" sx={{ maxWidth: 760, mx: 'auto' }}>
+          <NewsPostActions
+            post={post}
+            variant="buttons"
+            afterDelete={() => {
+              router.push(paths.newsroom.root);
+              router.refresh();
+            }}
+          />
+        </Stack>
+      )}
       <Box component="article" sx={{ maxWidth: 760, mx: 'auto', pt: { xs: 1, md: 2 }, pb: { xs: 4, md: 6 } }}>
         <Stack spacing={1.5}>
           <Kicker category={post.category} />

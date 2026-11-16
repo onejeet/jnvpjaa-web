@@ -3,10 +3,14 @@
 import React from 'react';
 import NextLink from 'next/link';
 import { Box, Chip, Grid2 as Grid, Stack, Typography } from '@mui/material';
-import { IconNews } from '@tabler/icons-react';
+import { IconNews, IconPlus } from '@tabler/icons-react';
 import type { NewsCategory, NewsPost } from '@/apollo/newsroomOperations';
+import Button from '@/components/core/Button';
 import { paths } from '@/config/paths';
+import { PERMISSION_CODES } from '@/constants/access';
+import { useAuth } from '@/context/AuthContext';
 import LayoutModule from '@/layouts/Layout';
+import NewsDrafts from '@/modules/NewsEditor/NewsDrafts';
 import { NEWS_CATEGORY_LABELS } from '@/modules/Newsroom/newsroom.utils';
 import NewsCard from './NewsCard';
 import PressContact from './PressContact';
@@ -17,6 +21,8 @@ interface NewsroomProps {
 }
 
 const Newsroom: React.FC<NewsroomProps> = ({ posts, category }) => {
+  const { can } = useAuth();
+  const canManage = can(PERMISSION_CODES.NEWSROOM_POST_MANAGE);
   const [lead, ...rest] = posts;
   const filters: { label: string; href: string; active: boolean }[] = [
     { label: 'All news', href: paths.newsroom.root, active: !category },
@@ -30,14 +36,27 @@ const Newsroom: React.FC<NewsroomProps> = ({ posts, category }) => {
   return (
     <LayoutModule disableCover title="Newsroom • Alumni Network of JNV Paota, Jaipur">
       <Stack spacing={{ xs: 3, md: 4 }} pb={{ xs: 4, md: 6 }}>
-        <Box>
-          <Typography variant="h1" mb={1}>
-            Newsroom
-          </Typography>
-          <Typography color="grey.800" maxWidth={720}>
-            Official news, announcements and press releases from the JNV Paota Jaipur Alumni Association.
-          </Typography>
+        <Box display="flex" alignItems="flex-start" justifyContent="space-between" gap={2}>
+          <Box>
+            <Typography variant="h1" mb={1}>
+              Newsroom
+            </Typography>
+            <Typography color="grey.800" maxWidth={720}>
+              Official news, announcements and press releases from the JNV Paota Jaipur Alumni Association.
+            </Typography>
+          </Box>
+          {canManage && (
+            <Button
+              title="New article"
+              startIcon={<IconPlus size={16} />}
+              LinkComponent={NextLink}
+              href={paths.newsroom.new}
+              sx={{ flexShrink: 0, display: { xs: 'none', md: 'flex' } }}
+            />
+          )}
         </Box>
+
+        <NewsDrafts />
 
         <Stack
           direction="row"

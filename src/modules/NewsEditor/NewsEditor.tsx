@@ -124,7 +124,7 @@ const NewsForm: React.FC<{ id?: string; post?: NewsPost | null }> = ({ id, post 
       updateNote: isPublished ? values.updateNote.trim() || null : null,
     };
     try {
-      await saveNews({ variables: { input } });
+      const { data } = await saveNews({ variables: { input } });
       showAlert({
         visible: true,
         type: 'success',
@@ -139,7 +139,11 @@ const NewsForm: React.FC<{ id?: string; post?: NewsPost | null }> = ({ id, post 
                 ? 'Article scheduled.'
                 : 'Article published.',
       });
-      router.push(paths.newsroom.manage);
+      const saved = data?.saveNewsPost;
+      const live = saved?.status === 'PUBLISHED' && !dayjs(saved.publishedAt).isAfter(dayjs());
+      // Live articles open on their page; drafts and scheduled ones wait in the editors' queue on /newsroom.
+      router.push(live && saved ? paths.newsroom.getPostUrl(saved.slug) : paths.newsroom.root);
+      router.refresh();
     } catch (err: any) {
       showAlert({ visible: true, type: 'error', message: err?.message || 'Could not save the article.' });
     }
