@@ -37,3 +37,24 @@ test('every category has a label and the byline is the association', () => {
   });
   assert.equal(utils.NEWS_BYLINE, 'JNVPJAA Communications');
 });
+
+const { latestNews } = load('src/modules/Newsroom/latestNews.ts');
+
+test('latestNews returns [] on error', async () => {
+  const posts = await latestNews(() => Promise.reject(new Error('API down')), {});
+  assert.equal(JSON.stringify(posts), '[]');
+});
+
+test('latestNews requests 3', async () => {
+  let seen;
+  const posts = await latestNews(async (opts) => {
+    seen = opts;
+    return { data: { newsPosts: { data: [{ slug: 'a' }, { slug: 'b' }] } } };
+  }, 'DOC');
+  assert.equal(seen.variables.limit, 3);
+  assert.equal(seen.query, 'DOC');
+  assert.deepEqual(
+    posts.map((p) => p.slug),
+    ['a', 'b']
+  );
+});
