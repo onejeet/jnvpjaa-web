@@ -53,7 +53,7 @@ const actionSx = {
   display: 'inline-flex',
   alignItems: 'center',
   gap: 0.5,
-  height: 30,
+  height: 28,
   px: 0.75,
   borderRadius: 2,
   fontSize: 13,
@@ -114,6 +114,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
     <Box
       id={`comment-${comment.id}`}
       display="flex"
+      alignItems="flex-start"
       gap={`${COMMENT_GAP}px`}
       sx={{
         opacity: pending ? 0.55 : 1,
@@ -128,11 +129,12 @@ const CommentItem: React.FC<CommentItemProps> = ({
         id={author?.id}
         src={author?.profileImage || undefined}
         size={avatarSize}
-        containerProps={{ sx: { width: avatarSize, flexShrink: 0 } }}
+        // ProfilePicture's wrapper centres its avatar; pin it to the avatar's size so it can't drift down.
+        containerProps={{ sx: { width: avatarSize, height: avatarSize, flexShrink: 0, alignSelf: 'flex-start' } }}
       />
       <Box flex={1} minWidth={0}>
         {/* Header: name · batch · time, vertically centred on the avatar's top half */}
-        <Box display="flex" alignItems="center" gap={1} minHeight={isReply ? 22 : 24} flexWrap="wrap">
+        <Box display="flex" alignItems="center" columnGap={1} minHeight={22} pt="2px" flexWrap="wrap">
           <MuiLink
             component={Link}
             href={author?.id ? paths.profile.getProfileUrl(author.id) : '#'}
@@ -140,7 +142,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
             color="text.primary"
             fontWeight={600}
             fontSize={15}
-            lineHeight={1.4}
+            lineHeight="22px"
           >
             {authorName(author)}
           </MuiLink>
@@ -194,9 +196,9 @@ const CommentItem: React.FC<CommentItemProps> = ({
           </Box>
         ) : (
           <Typography
-            mt={0.75}
+            mt={0.5}
             fontSize={15}
-            lineHeight={1.6}
+            lineHeight={1.55}
             color="text.primary"
             sx={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}
           >
@@ -214,7 +216,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
 
         {!editing && !pending && (
           // ml offsets the buttons' inner padding so the first icon lines up with the text above.
-          <Box display="flex" alignItems="center" flexWrap="wrap" gap={0.5} mt={1} ml={-0.75}>
+          <Box display="flex" alignItems="center" flexWrap="wrap" gap={0.25} mt={0.5} ml={-0.75}>
             {comment.reactions.map((r) => (
               <ButtonBase
                 key={r.emoji}
@@ -223,12 +225,12 @@ const CommentItem: React.FC<CommentItemProps> = ({
                 onClick={() => onReact(comment, r.emoji)}
                 sx={{
                   ...actionSx,
+                  // Active = coloured count, like the filled thumb in the reference; no block that breaks alignment.
                   color: r.reacted ? 'primary.main' : 'text.secondary',
-                  bgcolor: r.reacted ? (t) => `${t.palette.primary.main}14` : 'transparent',
-                  fontWeight: r.reacted ? 600 : 500,
+                  fontWeight: r.reacted ? 700 : 500,
                 }}
               >
-                <Box component="span" fontSize={16} lineHeight={1}>
+                <Box component="span" fontSize={15} lineHeight={1}>
                   {r.emoji}
                 </Box>
                 {r.count}
