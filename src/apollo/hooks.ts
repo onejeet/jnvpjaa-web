@@ -480,6 +480,7 @@ export type FilterInput = {
   blogId?: InputMaybe<Scalars['String']['input']>;
   excludeBatch?: InputMaybe<Scalars['Int']['input']>;
   excludeBatches?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  past?: InputMaybe<Scalars['Boolean']['input']>;
   query?: InputMaybe<Scalars['String']['input']>;
   userId?: InputMaybe<Scalars['String']['input']>;
   verified?: InputMaybe<Scalars['Boolean']['input']>;

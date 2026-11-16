@@ -29,4 +29,5 @@ export interface EventCardProps {
   showDescription?: boolean;
   isReadOnly?: boolean;
   onDelete?: (id: number) => void;
+  isPast?: boolean;
 }

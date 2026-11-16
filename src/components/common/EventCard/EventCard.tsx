@@ -60,6 +60,7 @@ const EventCard: React.FC<EventCardProps> = ({
   markImGoing,
   showDescription,
   isReadOnly,
+  isPast,
 }) => {
   const router = useRouter();
   const {
@@ -95,7 +96,7 @@ const EventCard: React.FC<EventCardProps> = ({
   }, [description]);
 
   const formattedEndDate = React.useMemo(() => {
-    return endDate ? dayjs(endDate)?.format('MMM DD, YYYY HH:MM A') : null;
+    return endDate ? dayjs(endDate)?.format('MMM DD, YYYY hh:mm A') : null;
   }, [endDate]);
 
   const isLive = React.useMemo(() => {
@@ -132,6 +133,10 @@ const EventCard: React.FC<EventCardProps> = ({
             opacity: 1,
           },
         },
+        ...(isPast && {
+          '.MuiCardMedia-root': { filter: 'grayscale(0.7)', opacity: 0.85, transition: 'filter 0.3s, opacity 0.3s' },
+          '&:hover .MuiCardMedia-root': { filter: 'none', opacity: 1 },
+        }),
       }}
     >
       {!loading && status === EventStatus.PendingApproval && (
@@ -167,8 +172,8 @@ const EventCard: React.FC<EventCardProps> = ({
       ) : null}
       {!loading && total_attendies && total_attendies > 0 ? (
         <Chip
-          label={`${total_attendies} Going`}
-          color="success"
+          label={`${total_attendies} ${isPast ? 'Attended' : 'Going'}`}
+          color={isPast ? 'default' : 'success'}
           size="small"
           sx={{ ml: 'auto', position: ' absolute', top: '10px', right: '10px', px: 2, zIndex: 10 }}
         />
@@ -226,6 +231,15 @@ const EventCard: React.FC<EventCardProps> = ({
               {/* {!showDescription && <IconArrowRight size={20} />} */}
             </Typography>
 
+            {isPast && (
+              <Chip
+                label="Completed"
+                size="small"
+                variant="outlined"
+                icon={<IconCircleCheck size={14} />}
+                sx={{ ml: 'auto', color: 'text.secondary', flexShrink: 0 }}
+              />
+            )}
             {isLive && (
               <Box display="flex" alignItems="center" ml="auto">
                 <div className="live-dot"></div>
@@ -235,7 +249,7 @@ const EventCard: React.FC<EventCardProps> = ({
               </Box>
             )}
             {shortUrl && (
-              <Box ml={isLive ? '10px' : 'auto'}>
+              <Box ml={isLive || isPast ? '10px' : 'auto'}>
                 <CopyContentButton
                   buttonType={showDescription ? 'button' : 'icon'}
                   copiedMessageProps={{ hide: true }}
@@ -360,7 +374,7 @@ const EventCard: React.FC<EventCardProps> = ({
         {people && people?.length > 0 && (
           <Box mt={2}>
             <Typography color="grey.600" variant="body2">
-              Going:
+              {isPast ? 'Attended:' : 'Going:'}
             </Typography>
             <Stack direction="row" spacing={1}>
               <AvatarGroup
@@ -455,6 +469,7 @@ const EventCard: React.FC<EventCardProps> = ({
               />
             ) : (
               markImGoing &&
+              !isPast &&
               status === EventStatus.Published &&
               !isRSVPDone && (
                 <Button

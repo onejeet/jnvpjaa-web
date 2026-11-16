@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import { IconPlus, IconTicket } from '@tabler/icons-react';
 import Button from '@/components/core/Button';
 import EventListModule from '@/modules/EventListModule';
+import PastEventListModule from '@/modules/PastEventListModule';
 import { GetEventListQuery } from '@/apollo/hooks';
 
 export default function Events({ initialEvents }: { initialEvents?: GetEventListQuery['getEventList'] }) {
@@ -35,7 +36,7 @@ export default function Events({ initialEvents }: { initialEvents?: GetEventList
           <Typography variant="h1" mb={1}>
             Events
           </Typography>
-          <Typography color="grey.800">List of all the ongoing & upcoming events.</Typography>
+          <Typography color="grey.800">Ongoing & upcoming events, plus a look back at recent ones.</Typography>
         </Box>
         {user?.id && (
           <Button
@@ -71,6 +72,7 @@ export default function Events({ initialEvents }: { initialEvents?: GetEventList
       )}
 
       <EventListModule filter={filter} initialEvents={initialEvents} />
+      <PastEventListModule filter={filter} />
     </LayoutModule>
   );
 }
