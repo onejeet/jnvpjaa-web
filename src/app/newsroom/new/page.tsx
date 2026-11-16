@@ -14,8 +14,8 @@ export function generateMetadata(props: Props): Metadata {
   return constructMetadata({
     url: '/newsroom/new/',
     noIndex: true,
-    title: `${editId(props) ? 'Edit' : 'New'} Article • JNVPJAA Newsroom`,
-    description: 'Write and publish JNVPJAA newsroom articles',
+    title: `${editId(props) ? 'Edit' : 'Add'} News • JNVPJAA Newsroom`,
+    description: 'Write and publish JNVPJAA news',
   });
 }
 
@@ -23,9 +23,9 @@ export function generateMetadata(props: Props): Metadata {
 export default function NewNewsArticlePage(props: Props) {
   const id = editId(props);
   return (
-    <LayoutModule disableCover title={`${id ? 'Edit' : 'New'} Article • JNVPJAA Newsroom`} containerProps={{}}>
+    <LayoutModule disableCover title={`${id ? 'Edit' : 'Add'} News • JNVPJAA Newsroom`} containerProps={{}}>
       <Breadcrumbs
-        items={[{ label: 'Newsroom', path: paths.newsroom.root }, { label: id ? 'Edit article' : 'New article' }]}
+        items={[{ label: 'Newsroom', path: paths.newsroom.root }, { label: id ? 'Edit news' : 'Add news' }]}
       />
       <NewsroomGate>
         <NewsEditor key={id ?? 'new'} id={id} />

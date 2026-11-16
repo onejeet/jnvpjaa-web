@@ -228,7 +228,7 @@ export const ADD_ENTITIES: IHeaderMenuItem[] = [
     icon: <CalendarDots />,
   },
   {
-    label: 'New Article',
+    label: 'Add News',
     path: '/newsroom/new',
     icon: <ArticleNyTimes />,
     permission: PERMISSION_CODES.NEWSROOM_POST_MANAGE,

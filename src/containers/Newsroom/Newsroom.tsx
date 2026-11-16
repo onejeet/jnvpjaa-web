@@ -47,7 +47,7 @@ const Newsroom: React.FC<NewsroomProps> = ({ posts, category }) => {
           </Box>
           {canManage && (
             <Button
-              title="New article"
+              title="Add news"
               startIcon={<IconPlus size={16} />}
               LinkComponent={NextLink}
               href={paths.newsroom.new}
@@ -101,7 +101,7 @@ const Newsroom: React.FC<NewsroomProps> = ({ posts, category }) => {
             </Typography>
             <Typography color="text.secondary" maxWidth={420}>
               {category
-                ? `There are no ${NEWS_CATEGORY_LABELS[category].toLowerCase()} articles yet.`
+                ? `There is no ${NEWS_CATEGORY_LABELS[category].toLowerCase()} news yet.`
                 : 'Official updates from the association will appear here.'}
             </Typography>
           </Stack>

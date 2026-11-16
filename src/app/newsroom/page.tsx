@@ -6,7 +6,7 @@ import Newsroom from '@/containers/Newsroom';
 import { NO_STORE, isNewsCategory } from '@/modules/Newsroom/newsroom.utils';
 import { initializeApollo } from '@/utils/apollo';
 
-// New articles must appear as soon as they are published.
+// New posts must appear as soon as they are published.
 export const dynamic = 'force-dynamic';
 
 const description = 'Official news, announcements and press releases from the JNV Paota Jaipur Alumni Association.';

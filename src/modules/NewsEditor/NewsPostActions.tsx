@@ -13,7 +13,7 @@ import { useAlert } from '@/context/AlertContext';
 
 interface NewsPostActionsProps {
   post: Pick<NewsPost, 'id' | 'title'>;
-  /** Buttons on the article page, icons in list rows. */
+  /** Buttons on the news page, icons in list rows. */
   variant?: 'buttons' | 'icons';
   afterDelete?: () => void;
 }
@@ -28,11 +28,11 @@ const NewsPostActions: React.FC<NewsPostActionsProps> = ({ post, variant = 'icon
   const confirmDelete = async () => {
     try {
       await deleteNews({ variables: { id: post.id } });
-      showAlert({ visible: true, type: 'success', message: 'Article deleted.' });
+      showAlert({ visible: true, type: 'success', message: 'News deleted.' });
       setConfirming(false);
       afterDelete?.();
     } catch (err: any) {
-      showAlert({ visible: true, type: 'error', message: err?.message || 'Could not delete the article.' });
+      showAlert({ visible: true, type: 'error', message: err?.message || 'Could not delete the news.' });
       setConfirming(false);
     }
   };
@@ -75,7 +75,7 @@ const NewsPostActions: React.FC<NewsPostActionsProps> = ({ post, variant = 'icon
       <AlertDialog
         open={confirming}
         action={deleting ? 'deleting' : 'delete'}
-        title="Delete this article?"
+        title="Delete this news?"
         message={`“${post.title}” will be removed from the newsroom. This cannot be undone.`}
         onOkay={confirmDelete}
         onCancel={() => setConfirming(false)}

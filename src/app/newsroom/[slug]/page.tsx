@@ -18,13 +18,13 @@ const getPost = cache(async (slug: string): Promise<NewsPost | null> => {
     fetchPolicy: 'no-cache',
     context: NO_STORE,
   });
-  if (errors?.length) throw new Error('Could not load news article');
+  if (errors?.length) throw new Error('Could not load the news');
   return data?.newsPost || null;
 });
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const post = await getPost(decodeURIComponent(params.slug));
-  if (!post) return { title: 'Article not found', robots: { index: false, follow: false } };
+  if (!post) return { title: 'News not found', robots: { index: false, follow: false } };
 
   const url = canonicalUrl(`/newsroom/${encodeURIComponent(post.slug)}`);
   const image = post.cover?.url || SEO_CONFIG.defaultImage;

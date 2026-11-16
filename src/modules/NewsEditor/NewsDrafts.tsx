@@ -15,7 +15,7 @@ type ManagedPost = Pick<
   'id' | 'title' | 'slug' | 'category' | 'status' | 'publishedAt' | 'isPinned' | 'updatedAt'
 >;
 
-/** Editors' queue on /newsroom: drafts and scheduled articles, which have no public page yet. */
+/** Editors' queue on /newsroom: drafts and scheduled news, which have no public page yet. */
 const NewsDrafts = () => {
   const { can } = useAuth();
   const canManage = can(PERMISSION_CODES.NEWSROOM_POST_MANAGE);
@@ -30,7 +30,7 @@ const NewsDrafts = () => {
   if (!canManage || !queue.length) return null;
 
   return (
-    <Box component="section" aria-label="Drafts and scheduled articles">
+    <Box component="section" aria-label="Drafts and scheduled news">
       <Typography fontWeight={700} mb={0.5}>
         Drafts & scheduled
       </Typography>

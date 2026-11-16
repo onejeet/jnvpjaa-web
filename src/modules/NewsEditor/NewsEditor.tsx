@@ -78,11 +78,11 @@ const NewsEditor: React.FC<{ id?: string }> = ({ id }) => {
   if (id && !post) {
     return (
       <Typography sx={{ p: 4 }} color="text.secondary">
-        This article could not be found.
+        This news could not be found.
       </Typography>
     );
   }
-  // Mounted only once the article is loaded, so every field starts with its value and MUI labels sit correctly.
+  // Mounted only once the news is loaded, so every field starts with its value and MUI labels sit correctly.
   return <NewsForm id={id} post={post} />;
 };
 
@@ -107,7 +107,7 @@ const NewsForm: React.FC<{ id?: string; post?: NewsPost | null }> = ({ id, post 
   const onSubmit = async (values: NewsFormValues) => {
     const status = pendingStatus.current;
     if (status === 'PUBLISHED' && !values.content?.replace(/<[^>]*>/g, '').trim()) {
-      showAlert({ visible: true, type: 'error', message: 'Write the article before publishing it.' });
+      showAlert({ visible: true, type: 'error', message: 'Write the news before publishing it.' });
       return;
     }
     const input: NewsPostInput = {
@@ -131,21 +131,21 @@ const NewsForm: React.FC<{ id?: string; post?: NewsPost | null }> = ({ id, post 
         message:
           status === 'DRAFT'
             ? isPublished
-              ? 'Article unpublished.'
+              ? 'News unpublished.'
               : 'Saved as draft.'
             : isPublished
-              ? 'Article updated.'
+              ? 'News updated.'
               : isFuture
-                ? 'Article scheduled.'
-                : 'Article published.',
+                ? 'News scheduled.'
+                : 'News published.',
       });
       const saved = data?.saveNewsPost;
       const live = saved?.status === 'PUBLISHED' && !dayjs(saved.publishedAt).isAfter(dayjs());
-      // Live articles open on their page; drafts and scheduled ones wait in the editors' queue on /newsroom.
+      // Live news opens on their page; drafts and scheduled ones wait in the editors' queue on /newsroom.
       router.push(live && saved ? paths.newsroom.getPostUrl(saved.slug) : paths.newsroom.root);
       router.refresh();
     } catch (err: any) {
-      showAlert({ visible: true, type: 'error', message: err?.message || 'Could not save the article.' });
+      showAlert({ visible: true, type: 'error', message: err?.message || 'Could not save the news.' });
     }
   };
 
@@ -162,7 +162,7 @@ const NewsForm: React.FC<{ id?: string; post?: NewsPost | null }> = ({ id, post 
             Newsroom
           </Typography>
           <Typography component="h1" variant="h2" sx={{ mt: 0.25 }}>
-            {id ? 'Edit article' : 'New article'}
+            {id ? 'Edit news' : 'Add news'}
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center' }}>
@@ -294,7 +294,7 @@ const NewsForm: React.FC<{ id?: string; post?: NewsPost | null }> = ({ id, post 
           <FormDateTimeField
             control={control}
             name="publishedAt"
-            helperText="Leave empty to publish now. A future date schedules the article."
+            helperText="Leave empty to publish now. A future date schedules it."
             // The picker misbehaves on unmount without a label (MUI v7 section DOM), so it always gets one.
             inputProps={{ label: 'Publish date', size: 'small', fullWidth: true }}
           />
@@ -306,7 +306,7 @@ const NewsForm: React.FC<{ id?: string; post?: NewsPost | null }> = ({ id, post 
             render={({ field }) => (
               <FormControlLabel
                 control={<Switch checked={Boolean(field.value)} onChange={(e) => field.onChange(e.target.checked)} />}
-                label="Pin as the lead article"
+                label="Pin to the top of the newsroom"
               />
             )}
           />
@@ -326,13 +326,13 @@ const NewsForm: React.FC<{ id?: string; post?: NewsPost | null }> = ({ id, post 
           </Grid>
         )}
         <Grid size={12}>
-          {label('Article')}
+          {label('News')}
           {/* Not disabled while saving: toggling TipTap's editable state as the page unmounts throws removeChild. */}
           <TipTapTextEditor
             value={content}
             onChange={(html) => setValue('content', html, { shouldDirty: true })}
             height="clamp(380px, 56vh, 540px)"
-            placeholder="Write the article..."
+            placeholder="Write the news..."
           />
         </Grid>
       </Grid>

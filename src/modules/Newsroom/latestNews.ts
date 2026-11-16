@@ -7,7 +7,7 @@ type LatestNewsQuery = (opts: {
   context: { fetchOptions: { cache: 'no-store' } };
 }) => Promise<{ data?: any }>;
 
-/** The newest published articles for the homepage; [] when there are none or the API fails, so the section hides. */
+/** The newest published news for the homepage; [] when there are none or the API fails, so the section hides. */
 export async function latestNews<T = any>(query: LatestNewsQuery, document: unknown): Promise<T[]> {
   try {
     const { data } = await query({
