@@ -7,6 +7,24 @@ import { ACTIVITY_FEED } from '@/apollo/activityOperations';
 import { useAuth } from '@/context/AuthContext';
 import { ROLE_CODES } from '@/constants/access';
 import { getBatchOptions } from '@/utils/helpers';
+import { alpha } from '@mui/material/styles';
+import {
+  IconBrandGoogle,
+  IconBuildingStore,
+  IconCalendarEvent,
+  IconCash,
+  IconHistory,
+  IconKey,
+  IconShieldCheck,
+  IconShieldX,
+  IconUserCheck,
+  IconUserMinus,
+  IconUserOff,
+  IconUsersGroup,
+  IconUserX,
+  IconWritingSign,
+} from '@tabler/icons-react';
+import type { Icon } from '@tabler/icons-react';
 
 const actionLabels: Record<string, string> = {
   GOOGLE_LOGIN_SETTING_CHANGED: 'Changed Google login setting',
@@ -47,6 +65,31 @@ const actionLabels: Record<string, string> = {
   EXECUTIVE_POSITION_REVOKED: 'Revoked executive position',
   ACCESS_BACKFILLED: 'Set up member access',
   EXECUTIVE_TERM_BACKFILLED: 'Set up executive term',
+};
+
+// Icon by what changed; colour by how it went (approved/added = green, removed/rejected = red).
+const actionIcon = (action: string): Icon => {
+  if (action.startsWith('GOOGLE_')) return IconBrandGoogle;
+  if (action.startsWith('MEMBER_')) {
+    if (action.endsWith('REJECTED')) return IconUserX;
+    if (action.endsWith('DISABLED')) return IconUserOff;
+    if (action.endsWith('REMOVED')) return IconUserMinus;
+    return IconUserCheck;
+  }
+  if (action.startsWith('ROLE_')) return action.endsWith('REVOKED') ? IconShieldX : IconShieldCheck;
+  if (action.startsWith('BLOG_')) return IconWritingSign;
+  if (action.startsWith('EVENT_')) return IconCalendarEvent;
+  if (action.startsWith('BUSINESS_')) return IconBuildingStore;
+  if (action.startsWith('TRANSACTION_')) return IconCash;
+  if (action.startsWith('EXECUTIVE_')) return IconUsersGroup;
+  if (action.startsWith('ACCESS_')) return IconKey;
+  return IconHistory;
+};
+const actionTone = (action: string): 'success' | 'error' | 'warning' | 'primary' => {
+  if (/(REJECTED|DELETED|REMOVED|DISABLED|REVOKED|UNLINKED|CLOSED)$/.test(action)) return 'error';
+  if (/CHANGES_REQUESTED$/.test(action)) return 'warning';
+  if (/(APPROVED|ENABLED|ACTIVATED|ASSIGNED|LINKED|CREATED)$/.test(action)) return 'success';
+  return 'primary';
 };
 
 const pageSize = 25;
@@ -181,34 +224,61 @@ const ActivityCenter = () => {
       )}
       {loading && <CircularProgress size={24} sx={{ mb: 2 }} />}
       <Stack spacing={1}>
-        {items.map((item: any) => (
-          <Paper key={item.id} variant="outlined" sx={{ p: 2 }}>
-            <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" gap={1}>
-              <Box>
-                <Typography fontWeight={600}>
-                  {item.actorName || 'System'}
-                  {item.actorBatch !== null && item.actorBatch !== undefined
-                    ? ` (${batchLabel(item.actorBatch)})`
-                    : ''}{' '}
-                  · {actionLabels[item.action] || item.action.replaceAll('_', ' ').toLowerCase()}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {item.targetName ? `Member: ${item.targetName} · ` : ''}
-                  {item.batch !== null && item.batch !== undefined ? `${batchLabel(item.batch)} · ` : ''}
-                  {areaLabels[item.entityType] || item.entityType.replaceAll('_', ' ')}
-                </Typography>
-                {item.reason && (
-                  <Typography variant="body2" sx={{ mt: 0.5 }}>
-                    Reason: {item.reason}
+        {items.map((item: any) => {
+          const ActionIcon = actionIcon(item.action);
+          const tone = actionTone(item.action);
+          return (
+            <Paper key={item.id} variant="outlined" sx={{ p: 2 }}>
+              <Stack direction="row" spacing={1.5} alignItems="flex-start">
+                <Box
+                  aria-hidden
+                  sx={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: '50%',
+                    flexShrink: 0,
+                    display: 'grid',
+                    placeItems: 'center',
+                    color: `${tone}.main`,
+                    bgcolor: (theme) => alpha(theme.palette[tone].main, 0.1),
+                  }}
+                >
+                  <ActionIcon size={18} stroke={1.75} />
+                </Box>
+                <Stack
+                  direction={{ xs: 'column', sm: 'row' }}
+                  justifyContent="space-between"
+                  gap={1}
+                  flex={1}
+                  minWidth={0}
+                >
+                  <Box minWidth={0}>
+                    <Typography fontWeight={600}>
+                      {item.actorName || 'System'}
+                      {item.actorBatch !== null && item.actorBatch !== undefined
+                        ? ` (${batchLabel(item.actorBatch)})`
+                        : ''}{' '}
+                      · {actionLabels[item.action] || item.action.replaceAll('_', ' ').toLowerCase()}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {item.targetName ? `Member: ${item.targetName} · ` : ''}
+                      {item.batch !== null && item.batch !== undefined ? `${batchLabel(item.batch)} · ` : ''}
+                      {areaLabels[item.entityType] || item.entityType.replaceAll('_', ' ')}
+                    </Typography>
+                    {item.reason && (
+                      <Typography variant="body2" sx={{ mt: 0.5 }}>
+                        Reason: {item.reason}
+                      </Typography>
+                    )}
+                  </Box>
+                  <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: 'nowrap' }}>
+                    {new Date(item.createdAt).toLocaleString()}
                   </Typography>
-                )}
-              </Box>
-              <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: 'nowrap' }}>
-                {new Date(item.createdAt).toLocaleString()}
-              </Typography>
-            </Stack>
-          </Paper>
-        ))}
+                </Stack>
+              </Stack>
+            </Paper>
+          );
+        })}
         {!loading && !items.length && !error && <Alert severity="info">No activity matches these filters.</Alert>}
       </Stack>
       <Stack direction="row" justifyContent="space-between" alignItems="center" mt={2}>

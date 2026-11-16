@@ -22,6 +22,7 @@ import {
   IconDeviceMobile,
   IconDevices,
   IconKey,
+  IconLock,
   IconLogout,
   IconShieldLock,
 } from '@tabler/icons-react';
@@ -46,6 +47,7 @@ import { describeDevice } from './describeDevice';
 
 dayjs.extend(relativeTime);
 
+const CHANGE_PASSWORD_FORM_ID = 'security-change-password';
 const METHOD_LABEL: Record<string, string> = { PASSWORD: 'Password', GOOGLE: 'Google' };
 
 const Section: React.FC<{
@@ -151,6 +153,8 @@ const SecurityCenter = () => {
   const [disconnectOpen, setDisconnectOpen] = React.useState(false);
   const [password, setPassword] = React.useState('');
   const [disconnectError, setDisconnectError] = React.useState('');
+  const [passwordOpen, setPasswordOpen] = React.useState(false);
+  const [savingPassword, setSavingPassword] = React.useState(false);
 
   const overview = data?.securityOverview;
   const googleEnabled = Boolean(googleData?.googleLoginAvailability?.enabled);
@@ -307,9 +311,17 @@ const SecurityCenter = () => {
         }
       >
         {overview.hasPassword ? (
-          <Box maxWidth={440}>
-            <ChangePasswordForm onNext={() => refetch()} containerProps={{ alignItems: 'stretch' }} />
-          </Box>
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems={{ sm: 'center' }}>
+            <Typography variant="body2" color="text.secondary" flex={1}>
+              Use a strong password you don&apos;t use anywhere else.
+            </Typography>
+            <Button
+              title="Change password"
+              variant="outlined"
+              startIcon={<IconLock size={18} />}
+              onClick={() => setPasswordOpen(true)}
+            />
+          </Stack>
         ) : (
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems={{ sm: 'center' }}>
             <Typography variant="body2" color="text.secondary" flex={1}>
@@ -376,6 +388,37 @@ const SecurityCenter = () => {
           Signing out a device takes effect immediately. Sessions end on their own after 7 days without use.
         </Typography>
       </Stack>
+
+      <Dialog
+        open={passwordOpen}
+        title="Change password"
+        maxWidth="xs"
+        onClose={() => !savingPassword && setPasswordOpen(false)}
+        footerProps={{
+          onCancel: () => setPasswordOpen(false),
+          // Submits the form below through its id, so Enter in any field works too.
+          onOkay: () => undefined,
+          cancelButtonProps: { disabled: savingPassword },
+          okayButtonProps: {
+            title: 'Update',
+            type: 'submit',
+            form: CHANGE_PASSWORD_FORM_ID,
+            loading: savingPassword,
+          },
+        }}
+      >
+        <Box p={2.5}>
+          <ChangePasswordForm
+            formId={CHANGE_PASSWORD_FORM_ID}
+            onLoadingChange={setSavingPassword}
+            onNext={() => {
+              setPasswordOpen(false);
+              refetch();
+            }}
+            containerProps={{ alignItems: 'stretch' }}
+          />
+        </Box>
+      </Dialog>
 
       <Dialog
         open={disconnectOpen}

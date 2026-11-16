@@ -35,7 +35,7 @@ import {
   IconPhotoBolt,
   IconUserCircle,
   IconWritingSign,
-  IconPassword as Password,
+  IconLock,
   IconLogout as SignOut,
   IconUser as User,
   IconShieldCheck,
@@ -159,7 +159,7 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
         {
           label: 'Security Center',
           value: paths.security,
-          icon: <Password size={16} />,
+          icon: <IconLock size={16} />,
           onClick: () => router.push(paths.security),
         },
         {
@@ -321,6 +321,19 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
         p: 0,
         py: isBottomDock ? '6px' : 1,
         pb: isBottomDock ? 'calc(6px + env(safe-area-inset-bottom, 0px))' : 0,
+        // iOS Safari can leave a few px under bottom:0 while its toolbar resizes; paint the dock colour past the edge.
+        ...(isBottomDock && {
+          '&::after': {
+            content: '""',
+            position: 'absolute',
+            top: '100%',
+            left: 0,
+            right: 0,
+            height: '50vh',
+            backgroundColor: 'background.paper',
+            pointerEvents: 'none',
+          },
+        }),
       }}
     >
       <Container

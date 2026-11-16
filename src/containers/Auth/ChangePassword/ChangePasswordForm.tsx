@@ -21,9 +21,17 @@ type ChangePasswordFormInput = {
 interface ChangePasswordFormProps {
   onNext?: () => void;
   containerProps?: Partial<BoxProps>;
+  /** Submit from outside (e.g. a dialog footer `<button form={formId}>`); hides the built-in button. */
+  formId?: string;
+  onLoadingChange?: (loading: boolean) => void;
 }
 
-const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ onNext, containerProps = {} }) => {
+const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
+  onNext,
+  containerProps = {},
+  formId,
+  onLoadingChange,
+}) => {
   const { redirectOnSignin } = useAuth();
   const { showAlert } = useAlert();
   const [error, setError] = React.useState('');
@@ -31,6 +39,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ onNext, contain
 
   const watchPassword = useWatch({ control, name: 'password' });
   const [handlePasswordReset, { loading: resetPasswordLoading }] = useMutation(CHANGE_PASSWORD_MUTATION);
+  React.useEffect(() => onLoadingChange?.(resetPasswordLoading), [resetPasswordLoading, onLoadingChange]);
   const onSubmit = React.useCallback(
     (data: ChangePasswordFormInput) => {
       setError('');
@@ -63,6 +72,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ onNext, contain
   return (
     <Box
       component="form"
+      id={formId}
       noValidate
       onSubmit={handleSubmit(onSubmit)}
       sx={{
@@ -132,16 +142,18 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ onNext, contain
         <Info sx={{ fontSize: '14px' }} />
         Use at least 8 characters, including uppercase, lowercase and a number. Allowed symbols: @ _ - $.
       </Typography>
-      <Box width="100%" display="flex" ml={onNext ? 'auto' : 'none'}>
-        <Button
-          startIcon={<CheckCircle size={16} />}
-          title={onNext ? 'Save password and continue' : 'Change Password'}
-          type="submit"
-          fullWidth
-          disabled={resetPasswordLoading}
-          loading={resetPasswordLoading}
-        />
-      </Box>
+      {!formId && (
+        <Box width="100%" display="flex" ml={onNext ? 'auto' : 'none'}>
+          <Button
+            startIcon={<CheckCircle size={16} />}
+            title={onNext ? 'Save password and continue' : 'Change Password'}
+            type="submit"
+            fullWidth
+            disabled={resetPasswordLoading}
+            loading={resetPasswordLoading}
+          />
+        </Box>
+      )}
     </Box>
   );
 };

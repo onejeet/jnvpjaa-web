@@ -18,6 +18,8 @@ const DialogFooter: React.FC<DialogFooterProps> = ({
   children,
   ...restProps
 }) => {
+  const hasLead = Boolean(title || children);
+  const { sx: buttonsStackSx, ...restButtonsStackProps } = buttonsStackProps;
   return (
     <Box
       className="dialog-footer"
@@ -40,7 +42,25 @@ const DialogFooter: React.FC<DialogFooterProps> = ({
         )}
       </Box>
       {onCancel || onOkay ? (
-        <Stack spacing={1.5} direction="row" {...buttonsStackProps}>
+        <Stack
+          spacing={1.5}
+          direction="row"
+          // Phones, buttons only: share the full width like native action sheets.
+          sx={[
+            !hasLead && {
+              flex: { xs: '1 0 100%', sm: 'none' },
+              display: { xs: 'grid', sm: 'flex' },
+              gridAutoFlow: 'column',
+              gridAutoColumns: '1fr',
+              columnGap: 1.5,
+              '& > :empty': { display: { xs: 'none', sm: 'block' } },
+              '& > *': { ml: { xs: '0 !important', sm: undefined } },
+              '& .MuiButton-root': { width: { xs: '100%', sm: 'auto' }, minHeight: { xs: 44, sm: 'auto' } },
+            },
+            ...(Array.isArray(buttonsStackSx) ? buttonsStackSx : [buttonsStackSx]),
+          ]}
+          {...restButtonsStackProps}
+        >
           {onCancel ? (
             <Button
               title="Cancel"
