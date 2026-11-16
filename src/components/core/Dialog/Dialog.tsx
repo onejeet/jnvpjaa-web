@@ -28,6 +28,7 @@ const SheetTransition = React.forwardRef(function SheetTransition(
 export const DIALOG_ALERT_WRAPPER_ID = 'dialog_alert_wrapper';
 
 const SWIPE_CLOSE_PX = 90;
+const KEYBOARD_MIN_PX = 120;
 
 const Dialog: React.FC<DialogProps> = (props) => {
   const {
@@ -65,10 +66,16 @@ const Dialog: React.FC<DialogProps> = (props) => {
   const { TransitionProps: transitionProps = {}, ...dialogProps } = default_props;
 
   // Keyboard open: fit the sheet into the visible area so it sits on top of the keyboard instead of under it.
+  // Only while a keyboard is actually up: on iOS the visible area is often a little shorter than the fixed
+  // layer (floating toolbar), and resizing to it then would lift the sheet off the bottom edge.
   React.useEffect(() => {
     const vv = typeof window !== 'undefined' ? window.visualViewport : null;
     if (!sheet || !dialogProps.open || !vv || !root) return;
+    const reset = () => {
+      root.style.top = root.style.height = root.style.bottom = '';
+    };
     const fit = () => {
+      if (window.innerHeight - vv.height < KEYBOARD_MIN_PX) return reset();
       root.style.top = `${vv.offsetTop}px`;
       root.style.height = `${vv.height}px`;
       root.style.bottom = 'auto';
@@ -79,21 +86,21 @@ const Dialog: React.FC<DialogProps> = (props) => {
     return () => {
       vv.removeEventListener('resize', fit);
       vv.removeEventListener('scroll', fit);
-      root.style.top = root.style.height = root.style.bottom = '';
+      reset();
     };
   }, [sheet, dialogProps.open, root]);
 
-  // An autoFocus field would grab focus while the sheet is still sliding in, so the phone scrolls and
-  // raises the keyboard mid-animation. Hold the focus until the sheet has landed.
+  // Focus must never land on something still sliding in from below the screen: iOS Safari scrolls the page
+  // to reveal it, which reads as the sheet jumping. So on phones MUI's own auto-focus is off (it focuses the
+  // off-screen container), the container takes focus without scrolling, and an autoFocus field gets its
+  // focus back once the sheet has landed (which also keeps the keyboard from rising mid-animation).
   const sheetTransitionProps = sheet
     ? {
         ...transitionProps,
         onEnter: (node: HTMLElement, isAppearing: boolean) => {
           const active = document.activeElement as HTMLElement | null;
-          if (active && node.contains(active) && active.matches('input, textarea, [contenteditable="true"]')) {
-            deferredFocus.current = active;
-            active.blur();
-          }
+          if (active && active !== node && node.contains(active)) deferredFocus.current = active;
+          node.focus({ preventScroll: true });
           transitionProps.onEnter?.(node, isAppearing);
         },
         onEntered: (node: HTMLElement, isAppearing: boolean) => {
@@ -137,6 +144,7 @@ const Dialog: React.FC<DialogProps> = (props) => {
       ref={setRoot}
       TransitionComponent={sheet ? SheetTransition : undefined}
       TransitionProps={sheetTransitionProps}
+      disableAutoFocus={sheet || dialogProps.disableAutoFocus}
       transitionDuration={!dialogProps?.open && transitionDirection ? 0 : undefined}
       onClose={(event: any, reason: any) => {
         if (disableBackdropClick && reason && reason === 'backdropClick') {
