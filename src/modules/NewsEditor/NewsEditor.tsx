@@ -78,11 +78,11 @@ const NewsEditor: React.FC<{ id?: string }> = ({ id }) => {
   if (id && !post) {
     return (
       <Typography sx={{ p: 4 }} color="text.secondary">
-        This story could not be found.
+        This article could not be found.
       </Typography>
     );
   }
-  // Mounted only once the story is loaded, so every field starts with its value and MUI labels sit correctly.
+  // Mounted only once the article is loaded, so every field starts with its value and MUI labels sit correctly.
   return <NewsForm id={id} post={post} />;
 };
 
@@ -107,7 +107,7 @@ const NewsForm: React.FC<{ id?: string; post?: NewsPost | null }> = ({ id, post 
   const onSubmit = async (values: NewsFormValues) => {
     const status = pendingStatus.current;
     if (status === 'PUBLISHED' && !values.content?.replace(/<[^>]*>/g, '').trim()) {
-      showAlert({ visible: true, type: 'error', message: 'Write the story before publishing it.' });
+      showAlert({ visible: true, type: 'error', message: 'Write the article before publishing it.' });
       return;
     }
     const input: NewsPostInput = {
@@ -131,17 +131,17 @@ const NewsForm: React.FC<{ id?: string; post?: NewsPost | null }> = ({ id, post 
         message:
           status === 'DRAFT'
             ? isPublished
-              ? 'Story unpublished.'
+              ? 'Article unpublished.'
               : 'Saved as draft.'
             : isPublished
-              ? 'Story updated.'
+              ? 'Article updated.'
               : isFuture
-                ? 'Story scheduled.'
-                : 'Story published.',
+                ? 'Article scheduled.'
+                : 'Article published.',
       });
       router.push(paths.newsroom.manage);
     } catch (err: any) {
-      showAlert({ visible: true, type: 'error', message: err?.message || 'Could not save the story.' });
+      showAlert({ visible: true, type: 'error', message: err?.message || 'Could not save the article.' });
     }
   };
 
@@ -158,7 +158,7 @@ const NewsForm: React.FC<{ id?: string; post?: NewsPost | null }> = ({ id, post 
             Newsroom
           </Typography>
           <Typography component="h1" variant="h2" sx={{ mt: 0.25 }}>
-            {id ? 'Edit story' : 'New story'}
+            {id ? 'Edit article' : 'New article'}
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center' }}>
@@ -290,7 +290,7 @@ const NewsForm: React.FC<{ id?: string; post?: NewsPost | null }> = ({ id, post 
           <FormDateTimeField
             control={control}
             name="publishedAt"
-            helperText="Leave empty to publish now. A future date schedules the story."
+            helperText="Leave empty to publish now. A future date schedules the article."
             // The picker misbehaves on unmount without a label (MUI v7 section DOM), so it always gets one.
             inputProps={{ label: 'Publish date', size: 'small', fullWidth: true }}
           />
@@ -302,7 +302,7 @@ const NewsForm: React.FC<{ id?: string; post?: NewsPost | null }> = ({ id, post 
             render={({ field }) => (
               <FormControlLabel
                 control={<Switch checked={Boolean(field.value)} onChange={(e) => field.onChange(e.target.checked)} />}
-                label="Pin as the lead story"
+                label="Pin as the lead article"
               />
             )}
           />
@@ -322,13 +322,13 @@ const NewsForm: React.FC<{ id?: string; post?: NewsPost | null }> = ({ id, post 
           </Grid>
         )}
         <Grid size={12}>
-          {label('Story')}
+          {label('Article')}
           {/* Not disabled while saving: toggling TipTap's editable state as the page unmounts throws removeChild. */}
           <TipTapTextEditor
             value={content}
             onChange={(html) => setValue('content', html, { shouldDirty: true })}
             height="clamp(380px, 56vh, 540px)"
-            placeholder="Write the story..."
+            placeholder="Write the article..."
           />
         </Grid>
       </Grid>

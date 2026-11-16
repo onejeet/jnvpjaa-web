@@ -7,7 +7,7 @@ export const metadata: Metadata = constructMetadata({
   url: '/newsroom/manage/',
   noIndex: true,
   title: 'Manage Newsroom • JNVPJAA',
-  description: 'Write and publish JNVPJAA newsroom stories',
+  description: 'Write and publish JNVPJAA newsroom articles',
 });
 
 export default function NewsroomManageLayout({ children }: { children: React.ReactNode }) {

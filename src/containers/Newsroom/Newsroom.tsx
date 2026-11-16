@@ -82,7 +82,7 @@ const Newsroom: React.FC<NewsroomProps> = ({ posts, category }) => {
             </Typography>
             <Typography color="text.secondary" maxWidth={420}>
               {category
-                ? `There are no ${NEWS_CATEGORY_LABELS[category].toLowerCase()} stories yet.`
+                ? `There are no ${NEWS_CATEGORY_LABELS[category].toLowerCase()} articles yet.`
                 : 'Official updates from the association will appear here.'}
             </Typography>
           </Stack>

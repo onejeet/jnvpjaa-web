@@ -32,9 +32,9 @@ const NewsManageList = () => {
     if (!toDelete) return;
     try {
       await deleteNews({ variables: { id: toDelete.id } });
-      showAlert({ visible: true, type: 'success', message: 'Story deleted.' });
+      showAlert({ visible: true, type: 'success', message: 'Article deleted.' });
     } catch (err: any) {
-      showAlert({ visible: true, type: 'error', message: err?.message || 'Could not delete the story.' });
+      showAlert({ visible: true, type: 'error', message: err?.message || 'Could not delete the article.' });
     }
     setToDelete(null);
   };
@@ -47,11 +47,11 @@ const NewsManageList = () => {
             Newsroom
           </Typography>
           <Typography component="h1" variant="h2">
-            Manage stories
+            Manage articles
           </Typography>
         </Box>
         <Button
-          title="New story"
+          title="New article"
           startIcon={<IconPlus size={18} />}
           LinkComponent={NextLink}
           href={paths.newsroom.getEditUrl('new')}
@@ -64,7 +64,7 @@ const NewsManageList = () => {
         </Box>
       ) : !posts.length ? (
         <Typography color="text.secondary" sx={{ my: 6, textAlign: 'center' }}>
-          No stories yet. Start with “New story”.
+          No articles yet. Start with “New article”.
         </Typography>
       ) : (
         <Stack sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2, bgcolor: 'background.paper' }}>
@@ -143,7 +143,7 @@ const NewsManageList = () => {
       <AlertDialog
         open={Boolean(toDelete)}
         action={deleting ? 'deleting' : 'delete'}
-        title="Delete this story?"
+        title="Delete this article?"
         message={`“${toDelete?.title}” will be removed from the newsroom. This cannot be undone.`}
         onOkay={confirmDelete}
         onCancel={() => setToDelete(null)}

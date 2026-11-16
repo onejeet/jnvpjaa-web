@@ -32,7 +32,7 @@ export function isNewsCategory(value: unknown): value is NewsCategory {
 // Next caches server-side POST fetches (GraphQL) even on force-dynamic pages; news must never be served stale.
 export const NO_STORE = { fetchOptions: { cache: 'no-store' as const } };
 
-/** A published story with a future date is scheduled: the public queries hide it until then. */
+/** A published article with a future date is scheduled: the public queries hide it until then. */
 export function newsStatusLabel(
   status: 'DRAFT' | 'PUBLISHED',
   publishedAt?: string | null,

@@ -79,7 +79,7 @@ const NewsArticle: React.FC<{ post: NewsPost }> = ({ post }) => {
         <Divider sx={{ my: { xs: 3, md: 4 } }} />
         <Stack direction="row" alignItems="center" spacing={1.5} mb={{ xs: 3, md: 4 }}>
           <Typography variant="body2" color="text.secondary">
-            Share this story
+            Share this article
           </Typography>
           <CopyContentButton content={url} buttonType="button" />
         </Stack>
