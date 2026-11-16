@@ -1,7 +1,6 @@
 'use client';
 
 import { getHeaderMenu } from '@/constants/Header.constants';
-import CloseIcon from '@mui/icons-material/Close';
 import MenuIcon from '@mui/icons-material/Menu';
 import type { Theme } from '@mui/material';
 import {
@@ -10,7 +9,6 @@ import {
   Box,
   Button,
   Container,
-  Drawer,
   IconButton,
   ListItemIcon,
   MenuItem,
@@ -23,6 +21,7 @@ import React, { Suspense } from 'react';
 import Logo from '@/components/common/Logo';
 
 import HeaderMenuItem from './HeaderMenuItem';
+import MobileMenu from './MobileMenu';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import { useAuth } from '@/context/AuthContext';
 import { usePathname, useRouter } from 'next/navigation';
@@ -78,6 +77,7 @@ type AccountMenuItem = {
 const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
   const [expanded, setExpanded] = React.useState<string>('');
   const [openMenu, setOpenMenu] = React.useState<boolean>(false);
+  const closeMenu = React.useCallback(() => setOpenMenu(false), []);
   const router = useRouter();
   const isBottomDock = position === 'bottom';
   const dockItemSx = {
@@ -504,50 +504,15 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
           </Box>
         </Toolbar>
       </Container>
-      <Drawer
-        anchor="right"
-        open={openMenu}
-        onClose={() => setOpenMenu(false)}
-        PaperProps={{
-          sx: {
-            height: '100%',
-            width: '250px',
-            minWidth: '200px',
-            pt: '20px',
-            pb: 'calc(20px + env(safe-area-inset-bottom, 0px))',
-            pl: '16px',
-            pr: 'max(16px, env(safe-area-inset-right, 0px))',
-            overflowX: 'hidden',
-          },
-        }}
-      >
-        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-          <Logo width={195} height={30} />
-          <IconButton onClick={() => setOpenMenu(false)}>
-            <CloseIcon />{' '}
-          </IconButton>
-        </Box>
-        <Box width="100%" height="100%" display="flex" flexDirection="column" justifyContent="start">
-          <Box mb={4}>
-            {HEADER_MENU.map((item: IHeaderMenuItem) => (
-              <HeaderMenuItem
-                key={item.label}
-                item={item}
-                isMobile
-                expanded={expanded === item.path}
-                setExpanded={setExpanded}
-              />
-            ))}
-          </Box>
-          {!user?.id && (
-            <NextLink href="/signin" passHref style={{ textDecoration: 'none' }}>
-              <Button fullWidth variant="outlined" sx={{ whiteSpace: 'nowrap' }}>
-                Alumni Login
-              </Button>
-            </NextLink>
-          )}
-        </Box>
-      </Drawer>
+      {isBottomDock && (
+        <MobileMenu
+          open={openMenu}
+          onClose={closeMenu}
+          menu={HEADER_MENU}
+          user={user}
+          accountItems={ACCOUNT_MENU_LIST}
+        />
+      )}
     </AppBar>
   );
 };
