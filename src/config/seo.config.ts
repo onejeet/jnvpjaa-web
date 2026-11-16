@@ -193,6 +193,30 @@ export const generateSchema = {
       '@id': canonicalUrl(`/blog/${encodeURIComponent(blog.slug)}`),
     },
   }),
+  newsArticle: (post: any) => ({
+    '@context': 'https://schema.org',
+    '@type': 'NewsArticle',
+    '@id': `${canonicalUrl(`/newsroom/${encodeURIComponent(post.slug)}`)}#article`,
+    headline: post.title,
+    ...(post.cover?.url ? { image: [post.cover.url] } : {}),
+    author: { '@id': `${SEO_CONFIG.url}/#organization` },
+    publisher: {
+      '@type': 'Organization',
+      name: SEO_CONFIG.siteName,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${SEO_CONFIG.url}/icons/icon-512.png`,
+      },
+    },
+    datePublished: post.publishedAt,
+    dateModified: post.updatedAt || post.publishedAt,
+    description: post.summary || undefined,
+    inLanguage: 'en-IN',
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': canonicalUrl(`/newsroom/${encodeURIComponent(post.slug)}`),
+    },
+  }),
   event: (event: any) => ({
     '@context': 'https://schema.org',
     '@type': 'Event',

@@ -22,6 +22,13 @@ export const paths = {
     new: '/business/new',
     getBusinessDetailUrl: (id: string) => `/business/${id}`,
   },
+  newsroom: {
+    root: '/newsroom',
+    feed: '/newsroom/feed.xml',
+    manage: '/newsroom/manage',
+    getPostUrl: (slug: string) => `/newsroom/${encodeURIComponent(slug)}`,
+    getEditUrl: (id: string) => `/newsroom/manage/${id}`,
+  },
   blog: {
     root: '/blog',
     new: '/blog/new',
