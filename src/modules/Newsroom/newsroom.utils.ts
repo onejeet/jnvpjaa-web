@@ -28,3 +28,6 @@ export function formatDateline(publishedAt: string, place: string = NEWS_DATELIN
 export function isNewsCategory(value: unknown): value is NewsCategory {
   return typeof value === 'string' && Object.prototype.hasOwnProperty.call(NEWS_CATEGORY_LABELS, value);
 }
+
+// Next caches server-side POST fetches (GraphQL) even on force-dynamic pages; news must never be served stale.
+export const NO_STORE = { fetchOptions: { cache: 'no-store' as const } };

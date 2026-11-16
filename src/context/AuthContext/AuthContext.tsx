@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { isProtectedRoute } from '@/utils/routeAccess';
 import { usePathname, useRouter } from 'next/navigation';
 import LoadingIndicator from '@/components/common/LoadingIndicator';
 import { AuthProviderProps, LoadingDataProps, TAuthContextData } from './AuthContext.types';
@@ -48,18 +49,8 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const isLoggedInRef = React.useRef(false);
   const isAuthPage = React.useMemo(() => isAuthRoute(pathname), [pathname]);
 
-  const checkAuth = React.useMemo(() => {
-    return (
-      pathname.startsWith('/profile') ||
-      pathname.startsWith('/admin') ||
-      pathname.startsWith('/activity') ||
-      pathname.startsWith('/transactions') ||
-      pathname.startsWith('/change-password') ||
-      pathname.startsWith('/security') ||
-      pathname.includes('/new') ||
-      pathname.includes('/edit')
-    );
-  }, [pathname]);
+  // Same rules as the middleware (whole "/new" and "/edit" segments), plus the client-only activity page.
+  const checkAuth = React.useMemo(() => isProtectedRoute(pathname) || pathname.startsWith('/activity'), [pathname]);
 
   console.log('ZZ: pathnme', isAuthPage, checkAuth);
 

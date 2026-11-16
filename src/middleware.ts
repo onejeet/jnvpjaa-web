@@ -1,16 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { isProtectedRoute } from '@/utils/routeAccess';
 
 const AUTH_ROUTES = ['/signin', '/signup', '/forgot-password'];
-const EXACT_PROTECTED_ROUTES = ['/admin', '/profile', '/transactions', '/change-password', '/security'];
-
-const isProtectedRoute = (pathname: string) => {
-  return (
-    EXACT_PROTECTED_ROUTES.some((route) => pathname === route || pathname.startsWith(`${route}/`)) ||
-    pathname.includes('/new') ||
-    pathname.includes('/edit')
-  );
-};
-
 const isAuthRoute = (pathname: string) =>
   AUTH_ROUTES.some((route) => pathname === route || pathname.startsWith(`${route}/`));
 
