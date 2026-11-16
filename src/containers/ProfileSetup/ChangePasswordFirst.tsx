@@ -29,7 +29,8 @@ const ChangePasswordFirst: React.FC<ChangePasswordFirstProps> = ({ onNext }) => 
           onNext={onNext}
           containerProps={{
             sx: {
-              width: 400,
+              width: '100%',
+              maxWidth: 400,
               p: 0,
               display: 'flex',
               flexDirection: 'column',

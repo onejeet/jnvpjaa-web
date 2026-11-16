@@ -1,21 +1,6 @@
-'use client';
+import { redirect } from 'next/navigation';
 
-import ChangePassword from '@/containers/Auth/ChangePassword/ChangePassword';
-import { Metadata } from 'next';
-import LayoutModule from '@/layouts/Layout';
-
-// Note: This is a Client Component because it requires authentication
-// Metadata is defined in the layout.tsx file
-
+// Old links and bookmarks land in the Security Center, which holds the password form now.
 export default function ChangePasswordPage() {
-  return (
-    <LayoutModule
-      disableCover
-      disableFooter
-      title="Change Password • Alumni Network of JNV Paota, Jaipur"
-      containerProps={{}}
-    >
-      <ChangePassword />
-    </LayoutModule>
-  );
+  redirect('/security');
 }

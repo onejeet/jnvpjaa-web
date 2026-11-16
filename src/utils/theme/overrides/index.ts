@@ -49,13 +49,14 @@ const Overrides = (mode: PaletteMode) => {
   const buttonDarkMode = MuiButtonDarkMode();
 
   // only for dark mode
-  const darkModeOnlyItems = mode === 'dark' ? Object.assign(datagrid, dialog, popover, muiSwitch, buttonDarkMode) : {};
+  const darkModeOnlyItems = mode === 'dark' ? Object.assign(datagrid, popover, muiSwitch, buttonDarkMode) : {};
 
   return Object.assign(
     buttonBase,
     button,
     chip,
     cssBaseline,
+    dialog,
     iconButton,
     inputLabel,
     menuItem,

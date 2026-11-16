@@ -7,10 +7,63 @@
   padding: 0;
   box-sizing: border-box;
 }
+html {
+  /* Stop iOS from inflating text when the phone turns sideways. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
 body {
-  /* overflow-y: auto;
-  overflow-x: hidden; */
   min-height: 100vh;
+  min-height: 100dvh;
+  /* clip (not hidden) so a stray wide element can't make the page wobble sideways, and position: sticky keeps working. */
+  overflow-x: clip;
+  -webkit-tap-highlight-color: transparent;
+  /* Content stays clear of the notch in landscape (viewport-fit=cover). */
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+}
+
+/* No double-tap-zoom delay on tappable things. */
+a,
+button,
+[role='button'],
+input,
+label,
+select,
+textarea {
+  touch-action: manipulation;
+}
+
+/* Scrolling inside sheets, menus and dialogs never drags the page behind them. */
+.MuiDrawer-paper,
+.MuiPopover-paper,
+.MuiDialog-paper,
+.MuiDialog-paper * {
+  overscroll-behavior: contain;
+}
+
+/* iOS zooms the page into any field under 16px and leaves it zoomed. Fields keep their size elsewhere. */
+@supports (-webkit-touch-callout: none) {
+  input,
+  textarea,
+  select,
+  [contenteditable='true'] {
+    font-size: max(16px, 1em) !important;
+  }
+}
+
+/* While typing on a phone, hide the bottom tab bar like native apps do, so it can't float over the keyboard. */
+@media (hover: none) and (pointer: coarse) {
+  body:has(
+      input:not([type='checkbox']):not([type='radio']):not([type='button']):not([type='submit']):not(
+          [type='file']
+        ):focus,
+      textarea:focus,
+      [contenteditable='true']:focus
+    )
+    .app-bottom-dock {
+    display: none;
+  }
 }
 /* p {
   font-size: 18px;
@@ -73,6 +126,14 @@ a {
 .tiptap a:hover,
 a:hover {
   text-decoration: underline;
+}
+/* Touch screens have no hover; without this the underline sticks after a tap. */
+@media (hover: none) {
+  .rich_content a:hover,
+  .tiptap a:hover,
+  a:hover {
+    text-decoration: none;
+  }
 }
 
 /* .rich_content a::after{

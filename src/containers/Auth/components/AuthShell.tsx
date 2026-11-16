@@ -29,6 +29,8 @@ export default function AuthShell({
         minWidth: 0,
         '&& .MuiFormHelperText-root': { position: 'static', bottom: 'auto', mt: 0.75, fontSize: 12 },
         '& .MuiInputBase-root': { minHeight: 48 },
+        // Fields are 48px tall here; center the resting label on the text line so it doesn't hop when you type.
+        '&& .MuiInputLabel-outlined:not(.MuiInputLabel-shrink)': { transform: 'translate(14px, 12px) scale(1)' },
         '& button[type="submit"]': { minHeight: 48 },
         '& a': { textUnderlineOffset: '3px' },
       }}

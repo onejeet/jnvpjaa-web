@@ -83,7 +83,7 @@ const HeaderMenuItem: React.FC<IMenuItemProps> = ({ item, isMobile, expanded, se
                           fontSize: '14px',
                           fontWeight: 300,
                           textAlign: 'center',
-                          minHeight: 20,
+                          minHeight: 44,
                         }}
                       >
                         {item.label}
@@ -101,7 +101,7 @@ const HeaderMenuItem: React.FC<IMenuItemProps> = ({ item, isMobile, expanded, se
                 textAlign: 'left',
                 py: 0,
                 justifyContent: 'space-between',
-                minHeight: '20px !important',
+                minHeight: '48px !important',
               }}
               fullWidth
             >

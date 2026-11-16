@@ -5,6 +5,7 @@ export const paths = {
     signup: '/signup',
     change_password: '/change-password',
   },
+  security: '/security',
   signin: '/signin',
   events: {
     root: '/events',

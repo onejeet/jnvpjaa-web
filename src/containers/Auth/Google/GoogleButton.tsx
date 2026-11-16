@@ -1,11 +1,11 @@
 'use client';
 import { Button, Divider, Stack } from '@mui/material';
 
-export const googleStartUrl = () => {
+export const googleStartUrl = (returnTo?: string) => {
   const url = new URL('/auth/google/start', process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || 'http://localhost:4000/client');
   const encoded = new URLSearchParams(window.location.search).get('r');
   try {
-    const target = encoded ? atob(encoded) : '/profile';
+    const target = returnTo || (encoded ? atob(encoded) : '/profile');
     if (target.startsWith('/') && !target.startsWith('//') && !target.includes('\\'))
       url.searchParams.set('returnTo', target);
   } catch {
@@ -13,7 +13,7 @@ export const googleStartUrl = () => {
   }
   return url.toString();
 };
-const GoogleIcon = () => (
+export const GoogleIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
     <path
       fill="#4285F4"

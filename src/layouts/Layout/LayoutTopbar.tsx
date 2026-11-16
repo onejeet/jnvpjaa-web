@@ -25,7 +25,7 @@ import Logo from '@/components/common/Logo';
 import HeaderMenuItem from './HeaderMenuItem';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import { useAuth } from '@/context/AuthContext';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import HoverPopover from '@/components/common/HoverPopover';
 import HeaderAddButton from './HeaderAddButton';
 import {
@@ -93,7 +93,21 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
     '& svg': { color: 'primary.main', width: 22, height: 22 },
   };
   const dockLabelSx = { fontSize: 10, lineHeight: '12px', fontWeight: 600, color: 'text.secondary' };
-  const { user, logoutUser, redirectToSignin, can, hasRole, access } = useAuth();
+  const pathname = usePathname() || '';
+  // Native tab bars mark where you are.
+  const dockTab = (path: string) => {
+    const active = path === '/' ? pathname === '/' : pathname === path || pathname.startsWith(`${path}/`);
+    return {
+      'aria-current': active ? ('page' as const) : undefined,
+      sx: active ? { ...dockItemSx, bgcolor: (theme: Theme) => alpha(theme.palette.primary.main, 0.08) } : dockItemSx,
+      labelSx: active ? { ...dockLabelSx, color: 'primary.main' } : dockLabelSx,
+    };
+  };
+  const eventsTab = dockTab(paths.events.root);
+  const galleryTab = dockTab(paths.gallery.root);
+  const blogTab = dockTab(paths.blog.root);
+  const homeTab = dockTab('/');
+  const { user, logoutUser, can, hasRole, access } = useAuth();
 
   const HEADER_MENU = React.useMemo(() => {
     return getHeaderMenu(Boolean(user?.id));
@@ -143,10 +157,10 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
             }
           : null,
         {
-          label: 'Change Password',
-          value: '/change-password',
+          label: 'Security Center',
+          value: paths.security,
           icon: <Password size={16} />,
-          onClick: () => redirectToSignin(true, paths.auth.change_password),
+          onClick: () => router.push(paths.security),
         },
         {
           label: 'Log Out',
@@ -158,7 +172,7 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
           onClick: logoutUser,
         },
       ].filter(Boolean) as AccountMenuItem[],
-    [canAccessAdminCenter, canViewActivity, logoutUser, router, redirectToSignin]
+    [canAccessAdminCenter, canViewActivity, logoutUser, router]
   );
 
   const ACCOUNT_COMP = React.useMemo(() => {
@@ -293,6 +307,7 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
 
   return (
     <AppBar
+      className={isBottomDock ? 'app-bottom-dock' : undefined}
       position={position === 'bottom' ? 'fixed' : 'sticky'}
       elevation={position === 'bottom' ? 1 : 0}
       sx={{
@@ -312,7 +327,9 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
         sx={{
           maxWidth: isBottomDock ? '100%' : { xs: '98%', sm: '95%', md: '90%', xl: '1500px' },
           margin: 'auto',
-          p: isBottomDock ? '0 8px !important' : '0 !important',
+          p: isBottomDock
+            ? '0 max(8px, env(safe-area-inset-right, 0px)) 0 max(8px, env(safe-area-inset-left, 0px)) !important'
+            : '0 !important',
           '&::before':
             position === 'bottom'
               ? {
@@ -355,9 +372,10 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
               component={NextLink}
               href="/"
               aria-label="Home"
+              aria-current={isBottomDock ? homeTab['aria-current'] : undefined}
               sx={
                 isBottomDock
-                  ? { ...dockItemSx, textDecoration: 'none', justifyContent: 'center', alignItems: 'center' }
+                  ? { ...homeTab.sx, textDecoration: 'none', justifyContent: 'center', alignItems: 'center' }
                   : undefined
               }
             >
@@ -367,22 +385,28 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
                 height={isBottomDock ? 26 : 45}
                 priority
               />
-              {isBottomDock && <Typography sx={dockLabelSx}>Home</Typography>}
+              {isBottomDock && <Typography sx={homeTab.labelSx}>Home</Typography>}
             </Box>
 
             <IconButton
               onClick={() => router.push(paths.events.root)}
               // display={{ xs: 'flex', lg: 'none' }}
               aria-label="Events"
-              sx={dockItemSx}
+              aria-current={eventsTab['aria-current']}
+              sx={eventsTab.sx}
             >
               <IconCalendarEvent />
-              <Typography sx={dockLabelSx}>Events</Typography>
+              <Typography sx={eventsTab.labelSx}>Events</Typography>
             </IconButton>
             {!user?.id && (
-              <IconButton onClick={() => router.push(paths.gallery.root)} aria-label="Gallery" sx={dockItemSx}>
+              <IconButton
+                onClick={() => router.push(paths.gallery.root)}
+                aria-label="Gallery"
+                aria-current={galleryTab['aria-current']}
+                sx={galleryTab.sx}
+              >
                 <IconPhotoBolt size={22} />
-                <Typography sx={dockLabelSx}>Gallery</Typography>
+                <Typography sx={galleryTab.labelSx}>Gallery</Typography>
               </IconButton>
             )}
 
@@ -398,9 +422,14 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
               <Typography sx={dockLabelSx}>Menu</Typography>
             </IconButton>
 
-            <IconButton onClick={() => router.push(paths.blog.root)} aria-label="Blog" sx={dockItemSx}>
+            <IconButton
+              onClick={() => router.push(paths.blog.root)}
+              aria-label="Blog"
+              aria-current={blogTab['aria-current']}
+              sx={blogTab.sx}
+            >
               <IconWritingSign />
-              <Typography sx={dockLabelSx}>Blog</Typography>
+              <Typography sx={blogTab.labelSx}>Blog</Typography>
             </IconButton>
 
             {user?.id && isBottomDock ? (
@@ -467,7 +496,16 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
         open={openMenu}
         onClose={() => setOpenMenu(false)}
         PaperProps={{
-          sx: { height: '100%', width: '250px', minWidth: '200px', py: '20px', px: '16px', overflowX: 'hidden' },
+          sx: {
+            height: '100%',
+            width: '250px',
+            minWidth: '200px',
+            pt: '20px',
+            pb: 'calc(20px + env(safe-area-inset-bottom, 0px))',
+            pl: '16px',
+            pr: 'max(16px, env(safe-area-inset-right, 0px))',
+            overflowX: 'hidden',
+          },
         }}
       >
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
@@ -490,7 +528,7 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
           </Box>
           {!user?.id && (
             <NextLink href="/signin" passHref style={{ textDecoration: 'none' }}>
-              <Button fullWidth variant="outlined" sx={{ ml: '8px', whiteSpace: 'nowrap' }}>
+              <Button fullWidth variant="outlined" sx={{ whiteSpace: 'nowrap' }}>
                 Alumni Login
               </Button>
             </NextLink>

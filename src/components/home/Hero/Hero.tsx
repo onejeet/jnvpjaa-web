@@ -16,11 +16,9 @@ const Hero = () => {
           backgroundColor: 'grey.800',
           backgroundImage: 'url(https://assets.jnvpjaa.org/images/cover.webp)',
           backgroundRepeat: 'no-repeat',
-          backgroundSize: {
-            xs: '100% 100%',
-            sm: '100% 100%',
-            md: '100% 100%',
-          },
+          // Phones: crop the photo instead of squashing it into a tall box.
+          backgroundSize: { xs: 'cover', md: '100% 100%' },
+          backgroundPosition: 'center',
         }}
         display="flex"
         justifyContent="center"

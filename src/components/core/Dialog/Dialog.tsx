@@ -92,7 +92,8 @@ const Dialog: React.FC<DialogProps> = (props) => {
             <DialogHeader height={60} px={2.5} onClose={onClose} subTitle={subTitle} title={title} {...headerProps} />
           ))}
 
-        <Box maxHeight="80vh" sx={{ overflowY: 'auto' }}>
+        {/* Shrinks before the footer does, so action buttons stay on screen on short phones. */}
+        <Box maxHeight="80vh" sx={{ overflowY: 'auto', flex: '1 1 auto', minHeight: 0 }}>
           {children}
         </Box>
         {!hideFooter && <DialogFooter height={60} px={2.5} {...footerProps} />}

@@ -11,9 +11,13 @@ interface ScrollToTopProps {
 
 const ScrollTopFab = styled(Fab)(({ theme }) => ({
   position: 'fixed',
-  bottom: theme.spacing(14),
-  right: theme.spacing(4),
+  bottom: `calc(${theme.spacing(14)} + env(safe-area-inset-bottom, 0px))`,
+  right: `max(${theme.spacing(4)}, env(safe-area-inset-right, 0px))`,
   zIndex: 1000,
+  [theme.breakpoints.down('sm')]: {
+    bottom: `calc(${theme.spacing(11)} + env(safe-area-inset-bottom, 0px))`,
+    right: `max(${theme.spacing(2)}, env(safe-area-inset-right, 0px))`,
+  },
 }));
 
 const ScrollToTop: React.FC<ScrollToTopProps> = ({ threshold = 300 }) => {
@@ -28,7 +32,7 @@ const ScrollToTop: React.FC<ScrollToTopProps> = ({ threshold = 300 }) => {
   };
 
   useEffect(() => {
-    window.addEventListener('scroll', checkScrollTop);
+    window.addEventListener('scroll', checkScrollTop, { passive: true });
     return () => window.removeEventListener('scroll', checkScrollTop);
   }, [threshold]);
 

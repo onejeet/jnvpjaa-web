@@ -12,6 +12,7 @@ const actionLabels: Record<string, string> = {
   GOOGLE_LOGIN_SETTING_CHANGED: 'Changed Google login setting',
   GOOGLE_REGISTRATION_SUBMITTED: 'Submitted registration with Google',
   GOOGLE_ACCOUNT_LINKED: 'Connected Google account',
+  GOOGLE_ACCOUNT_UNLINKED: 'Disconnected Google account',
   MEMBER_REGISTRATION_APPROVED: 'Approved member registration',
   MEMBER_REGISTRATION_REJECTED: 'Rejected member registration',
   MEMBER_DISABLED: 'Disabled member',

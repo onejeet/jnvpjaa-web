@@ -122,7 +122,7 @@ const CommentComposer: React.FC<CommentComposerProps> = ({
             }
           }}
           inputProps={{ 'aria-label': placeholder, maxLength: COMMENT_MAX_LENGTH + 200 }}
-          sx={{ px: 2, pt: 1.5, pb: expanded ? 0.5 : 1.5, fontSize: 15, lineHeight: 1.6 }}
+          sx={{ px: 2, pt: 1.5, pb: expanded ? 0.5 : 1.5, fontSize: { xs: 16, md: 15 }, lineHeight: 1.6 }}
         />
         {expanded && (
           <Box display="flex" alignItems="center" gap={1} px={1} pb={1}>
