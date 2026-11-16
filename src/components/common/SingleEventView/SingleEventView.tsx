@@ -56,7 +56,7 @@ const SingleEventView: React.FC<SingleEventViewProps> = ({
   loading,
   markImGoing,
   showDescription,
-  isReadOnly,
+  isReadOnly: isReadOnlyProp,
 }) => {
   // The API sanitizes rich text on read, so it can be included in the server HTML.
   const [sanitizedContent, setSanitizedContent] = React.useState(event?.description || '');
@@ -100,6 +100,9 @@ const SingleEventView: React.FC<SingleEventViewProps> = ({
   const formattedEndDate = React.useMemo(() => {
     return endDate ? dayjs(endDate)?.format('MMM DD, YYYY HH:MM A') : null;
   }, [endDate]);
+
+  // Ended events are an archive: no RSVP, edit, draft or approval actions.
+  const isReadOnly = isReadOnlyProp || (!!endDate && dayjs(endDate).isBefore(dayjs()));
 
   const isLive = React.useMemo(() => {
     return (

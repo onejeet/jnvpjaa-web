@@ -15,6 +15,7 @@ import {
 import Breadcrumbs from '@/components/common/Breadcrumbs';
 import EmptyView from '@/components/common/EmptyView';
 import SingleBlogView from '@/components/common/SingleBlogView';
+import CommentsModule from '@/modules/CommentsModule';
 import Button from '@/components/core/Button';
 import { ButtonProps } from '@/components/core/Button/Button.types';
 import { paths } from '@/config/paths';
@@ -327,6 +328,7 @@ const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
       ) : (
         <EmptyView message="No blog found!" />
       )}
+      {blog?.id && blog.status === BlogStatus.Published && <CommentsModule targetType="BLOG" targetId={blog.id} />}
     </LayoutModule>
   );
 };

@@ -59,8 +59,7 @@ const EventCard: React.FC<EventCardProps> = ({
   loading,
   markImGoing,
   showDescription,
-  isReadOnly,
-  isPast,
+  isReadOnly: isReadOnlyProp,
 }) => {
   const router = useRouter();
   const {
@@ -98,6 +97,10 @@ const EventCard: React.FC<EventCardProps> = ({
   const formattedEndDate = React.useMemo(() => {
     return endDate ? dayjs(endDate)?.format('MMM DD, YYYY hh:mm A') : null;
   }, [endDate]);
+
+  // Ended events are an archive: no RSVP, edit, draft or delete actions.
+  const isPast = !!endDate && dayjs(endDate).isBefore(dayjs());
+  const isReadOnly = isReadOnlyProp || isPast;
 
   const isLive = React.useMemo(() => {
     return (
@@ -155,7 +158,7 @@ const EventCard: React.FC<EventCardProps> = ({
         />
       ) : null}
 
-      {!loading && status !== EventStatus.Published && event.createdBy === user?.id && onDelete ? (
+      {!loading && !isReadOnly && status !== EventStatus.Published && event.createdBy === user?.id && onDelete ? (
         <IconButton
           onClick={() => onDelete(event.id)}
           sx={{
@@ -469,7 +472,6 @@ const EventCard: React.FC<EventCardProps> = ({
               />
             ) : (
               markImGoing &&
-              !isPast &&
               status === EventStatus.Published &&
               !isRSVPDone && (
                 <Button

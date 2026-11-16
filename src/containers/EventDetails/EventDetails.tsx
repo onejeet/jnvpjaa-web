@@ -1,9 +1,10 @@
 'use client';
 
-import { Event, useGetEventDetailsQuery } from '@/apollo/hooks';
+import { Event, EventStatus, useGetEventDetailsQuery } from '@/apollo/hooks';
 import Breadcrumbs from '@/components/common/Breadcrumbs';
 import EmptyView from '@/components/common/EmptyView';
 import SingleEventView from '@/components/common/SingleEventView';
+import CommentsModule from '@/modules/CommentsModule';
 import { useAuth } from '@/context/AuthContext';
 import useEvents from '@/hooks/useEvents';
 import LayoutModule from '@/layouts/Layout';
@@ -67,6 +68,9 @@ const EventDetails: React.FC<EventDetailsProps> = ({ event: initialData }) => {
         />
       ) : (
         <EmptyView message="No event found!" />
+      )}
+      {event?.id && event.status === EventStatus.Published && (
+        <CommentsModule targetType="EVENT" targetId={String(event.id)} />
       )}
     </LayoutModule>
   );

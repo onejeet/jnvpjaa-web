@@ -5,7 +5,6 @@ import { Box, Chip, Divider, Grid2 as Grid, Typography } from '@mui/material';
 import { IconHistory } from '@tabler/icons-react';
 import { Event, ListInput, useGetEventListQuery } from '@/apollo/hooks';
 import EventCard from '@/components/common/EventCard/EventCard';
-import useEvents from '@/hooks/useEvents';
 import { useAuth } from '@/context/AuthContext';
 import { groupEventsByYearMonth } from './groupEventsByYearMonth';
 
@@ -18,7 +17,6 @@ interface PastEventListModuleProps {
 
 const PastEventListModule: React.FC<PastEventListModuleProps> = ({ filter, limit = PAST_EVENTS_LIMIT }) => {
   const { user, isAdmin } = useAuth();
-  const { onEditEvent, onPublishEvent, onDelete } = useEvents({ user });
 
   const { data, loading } = useGetEventListQuery({
     fetchPolicy: 'cache-and-network',
@@ -33,16 +31,7 @@ const PastEventListModule: React.FC<PastEventListModuleProps> = ({ filter, limit
 
   const renderCard = (event?: Event, index = 0) => (
     <Grid size={{ xs: 12, sm: 6, md: 4 }} key={event ? `past-event-${event.id}` : `past-event-skeleton-${index}`}>
-      <EventCard
-        event={event || ({} as Event)}
-        loading={!event}
-        isPast
-        user={user}
-        isAdmin={isAdmin}
-        onEdit={onEditEvent}
-        onPublish={onPublishEvent}
-        onDelete={onDelete}
-      />
+      <EventCard event={event || ({} as Event)} loading={!event} isReadOnly user={user} isAdmin={isAdmin} />
     </Grid>
   );
 
