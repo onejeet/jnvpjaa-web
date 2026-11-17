@@ -1,4 +1,4 @@
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { IconChevronRight } from '@tabler/icons-react';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -53,9 +53,7 @@ const MenuList: React.FC<MenuListProps> = ({ title, items, offsetTop }) => (
                       }}
                     >
                       {item.label}
-                      <ChevronRightIcon
-                        sx={{ ml: '0px', color: 'grey.800', fontSize: '12px', transition: 'all 0.2s linear' }}
-                      />
+                      <IconChevronRight size={12} style={{ marginLeft: 0, transition: 'all 0.2s linear' }} />
                     </Typography>
                   }
                   primaryTypographyProps={{

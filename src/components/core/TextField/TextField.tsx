@@ -1,4 +1,5 @@
 /* REACT */
+import { IconEye, IconEyeOff } from '@tabler/icons-react';
 import React from 'react';
 import { Skeleton, Typography } from '@mui/material';
 /* MUI */
@@ -9,7 +10,6 @@ import MuiTextField from '@mui/material/TextField';
 
 /* TYPES */
 import type { TextFieldProps } from './TextField.types';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 function TextField(
   {
@@ -57,7 +57,7 @@ function TextField(
             size="small"
             aria-label={showPassword ? 'Hide Password button' : 'Show Password button'}
           >
-            {showPassword ? <VisibilityOff sx={{ fontSize: '16px' }} /> : <Visibility sx={{ fontSize: '16px' }} />}
+            {showPassword ? <IconEyeOff size={16} /> : <IconEye size={16} />}
           </IconButton>
         ) : undefined,
         className: `${!border ? 'no-border' : ''} ${!outline ? 'no-outline' : ''}`,

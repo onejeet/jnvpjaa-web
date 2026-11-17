@@ -12,18 +12,13 @@ import VerifiedBadge from '@/components/common/VerifiedBadge';
 import { formatPhoneNumber } from '@/utils/helpers';
 import { useSearchParams } from 'next/navigation';
 import Button from '@/components/core/Button';
-import TaskAltIcon from '@mui/icons-material/TaskAlt';
-import CloseIcon from '@mui/icons-material/Close';
 import { useAlert } from '@/context/AlertContext';
 import { useApolloClient, useMutation } from '@apollo/client';
 import { useAuth } from '@/context/AuthContext';
-import { IconCircleCheck, IconStar } from '@tabler/icons-react';
+import { IconCircleCheck, IconStar, IconBan, IconTrash, IconX } from '@tabler/icons-react';
 import FacultyBadge from '@/components/common/FacultyBadge';
 import { PERMISSION_CODES, ROLE_CODES } from '@/constants/access';
 import { REMOVE_MEMBER, SET_MEMBER_DISABLED } from '@/apollo/memberOperations';
-import BlockIcon from '@mui/icons-material/Block';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
 const useMembersTable = () => {
   const client = useApolloClient();
@@ -293,7 +288,7 @@ const useMembersTable = () => {
                 title={row.disabled ? 'Enable' : 'Disable'}
                 size="small"
                 disabled={changingMemberStatus || removingMember}
-                startIcon={row.disabled ? <CheckCircleOutlineIcon fontSize="small" /> : <BlockIcon fontSize="small" />}
+                startIcon={row.disabled ? <IconCircleCheck size={18} /> : <IconBan size={18} />}
                 onClick={() => manageMember(row, row.disabled ? 'enable' : 'disable')}
               />
               <Button
@@ -301,7 +296,7 @@ const useMembersTable = () => {
                 size="small"
                 color="error"
                 disabled={changingMemberStatus || removingMember}
-                startIcon={<DeleteOutlineIcon fontSize="small" />}
+                startIcon={<IconTrash size={18} />}
                 onClick={() => manageMember(row, 'remove')}
               />
             </Box>,
@@ -407,7 +402,7 @@ const useMembersTable = () => {
                     <Button
                       title="Reject"
                       size="small"
-                      startIcon={<CloseIcon />}
+                      startIcon={<IconX size={18} />}
                       onClick={() => {
                         showAlert(
                           {

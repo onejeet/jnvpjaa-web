@@ -1,8 +1,8 @@
+import { IconChevronDown } from '@tabler/icons-react';
 import React from 'react';
 import Button from '../../core/Button';
 import { DropdownMenuProps } from './DropdownMenu.types';
 import { Box, IconButton } from '@mui/material';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Menu from '@/components/core/Menu';
 
 const ButtonDropdown: React.FC<DropdownMenuProps> = ({
@@ -36,7 +36,7 @@ const ButtonDropdown: React.FC<DropdownMenuProps> = ({
           ) : (
             <Button
               title={value ? items.find((item) => item.value === value)?.label : buttonTitle ? buttonTitle : 'Menu'}
-              endIcon={<KeyboardArrowDownIcon sx={{ fontSize: '14px !important' }} />}
+              endIcon={<IconChevronDown size={14} />}
               {...restButtonProps}
               id="dropdown-button"
               aria-controls={open ? 'dropdown-menu' : undefined}

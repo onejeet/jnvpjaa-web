@@ -1,5 +1,6 @@
 'use client';
 
+import { IconPencil } from '@tabler/icons-react';
 import {
   Box,
   Dialog,
@@ -27,7 +28,6 @@ import {
 } from '@/apollo/accessOperations';
 import { PERMISSION_CODES } from '@/constants/access';
 import { useAuth } from '@/context/AuthContext';
-import EditIcon from '@mui/icons-material/Edit';
 import { useGetUserListQuery } from '@/apollo/hooks';
 import Button from '@/components/core/Button';
 import { useRouter } from 'next/navigation';
@@ -164,7 +164,7 @@ const Organizations = () => {
                     }}
                     sx={{ position: 'absolute', top: 8, right: 8, zIndex: 2, bgcolor: 'background.paper' }}
                   >
-                    <EditIcon fontSize="small" />
+                    <IconPencil size={18} />
                   </IconButton>
                 </Tooltip>
               )}

@@ -25,7 +25,6 @@ import {
   RedditShareButton,
 } from 'react-share';
 
-import CheckIcon from '@mui/icons-material/Check';
 import {
   IconCopy as Copy,
   IconMail as EnvelopeSimple,
@@ -37,6 +36,7 @@ import {
   IconBrandTwitter as TwitterLogo,
   IconBrandWhatsapp as WhatsappLogo,
   IconX as XCircle,
+  IconCheck,
 } from '@tabler/icons-react';
 import Button from '@/components/core/Button';
 
@@ -178,7 +178,7 @@ const SocialShareModal: React.FC<SocialShareModalProps> = ({ title, url = '', bt
         onClose={handleSnackbarClose}
         action={
           <IconButton onClick={handleSnackbarClose} color="inherit">
-            <CheckIcon />
+            <IconCheck size={20} />
           </IconButton>
         }
       >

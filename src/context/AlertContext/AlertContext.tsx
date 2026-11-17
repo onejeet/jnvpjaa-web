@@ -1,9 +1,9 @@
 'use client';
 
+import { IconX } from '@tabler/icons-react';
 import React, { createContext, useContext } from 'react';
 import Box from '@mui/material/Box';
 import { WRAPPER_ID } from './AlertContext.constant';
-import CloseIcon from '@mui/icons-material/Close';
 import type { AlertContextProps, AlertProviderProps, ToastProps } from './AlertContext.types';
 import toast, { Toast, ToastBar, Toaster } from 'react-hot-toast';
 import { IconButton, useTheme } from '@mui/material';
@@ -112,7 +112,7 @@ const AlertProvider = ({ children }: AlertProviderProps) => {
                 {/* <Typography color={getTextColor(t.type)}>{message}</Typography> */}
                 {t.type !== 'loading' && (
                   <IconButton onClick={() => toast.dismiss(t.id)} size="small">
-                    <CloseIcon sx={{ fontSize: '16px' }} />
+                    <IconX size={16} />
                   </IconButton>
                 )}
               </>

@@ -1,4 +1,3 @@
-import FmdGoodIcon from '@mui/icons-material/FmdGood';
 import { Paper, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 

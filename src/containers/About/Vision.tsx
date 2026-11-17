@@ -1,4 +1,4 @@
-import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
+import { IconCircleDotFilled } from '@tabler/icons-react';
 import { List, ListItemIcon, ListItemText, Paper, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Image from 'next/image';
@@ -110,7 +110,7 @@ const Vision = () => {
             {VISION_LIST.map((item: string, index: number) => (
               <Box key={`vision-${index}`} display="flex" alignItems="start" mb={1}>
                 <ListItemIcon sx={{ minWidth: 30, mt: '8px' }}>
-                  <RadioButtonCheckedIcon sx={{ fontSize: '16px' }} />
+                  <IconCircleDotFilled size={16} />
                 </ListItemIcon>
                 <ListItemText primary={item} primaryTypographyProps={{ color: 'grey.800' }} />
               </Box>

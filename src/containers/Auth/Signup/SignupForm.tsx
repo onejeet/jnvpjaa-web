@@ -1,10 +1,10 @@
 'use client';
 
+import { IconInfoCircleFilled } from '@tabler/icons-react';
 import React from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { Alert, Box, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { Info } from '@mui/icons-material';
 import type { SignupMutationVariables } from 'src/apollo/hooks';
 import { SIGNUP_WITH_HONEYPOT } from '@/apollo/signupOperation';
 import { useMutation } from '@apollo/client';
@@ -282,7 +282,7 @@ const SignupForm = () => {
         </Grid>
         <Grid size={{ xs: 12 }} mt={-1}>
           <Typography variant="body2" color="grey.600">
-            <Info sx={{ fontSize: '14px' }} />
+            <IconInfoCircleFilled size={14} />
             Use at least 8 characters, including uppercase, lowercase and a number. Allowed symbols: @ _ - $.
           </Typography>
         </Grid>

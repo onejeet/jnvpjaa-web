@@ -6,11 +6,10 @@ import { Alert, Box, BoxProps, Typography } from '@mui/material';
 import FormTextField from '@/components/form/FormTextField';
 import { useAlert } from '@/context/AlertContext';
 import Button from '@/components/core/Button';
-import { Info } from '@mui/icons-material';
 import { useMutation } from '@apollo/client';
 import { CHANGE_PASSWORD_MUTATION } from '@/apollo/authOperations';
 import { useAuth } from '@/context/AuthContext';
-import { IconCircleCheck as CheckCircle } from '@tabler/icons-react';
+import { IconCircleCheck as CheckCircle, IconInfoCircleFilled } from '@tabler/icons-react';
 
 type ChangePasswordFormInput = {
   currentPassword: string;
@@ -139,7 +138,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
       />
 
       <Typography variant="body2" color="grey.600">
-        <Info sx={{ fontSize: '14px' }} />
+        <IconInfoCircleFilled size={14} />
         Use at least 8 characters, including uppercase, lowercase and a number. Allowed symbols: @ _ - $.
       </Typography>
       {!formId && (

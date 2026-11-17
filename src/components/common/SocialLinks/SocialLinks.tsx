@@ -1,22 +1,24 @@
-import FacebookIcon from '@mui/icons-material/Facebook';
-import GitHubIcon from '@mui/icons-material/GitHub';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import XIcon from '@mui/icons-material/X';
-import YouTubeIcon from '@mui/icons-material/YouTube';
-import type { SvgIconComponent } from '@mui/icons-material';
 import { Box, Tooltip } from '@mui/material';
 import type { SxProps, Theme } from '@mui/material';
+import {
+  IconBrandFacebookFilled,
+  IconBrandGithubFilled,
+  IconBrandInstagramFilled,
+  IconBrandLinkedinFilled,
+  IconBrandXFilled,
+  IconBrandYoutubeFilled,
+} from '@tabler/icons-react';
+import type { Icon } from '@tabler/icons-react';
 import React from 'react';
 import { getSocialLinks, type SocialKey } from '@/utils/socialMedia';
 
-export const SOCIAL_BRANDS: Record<SocialKey, { Icon: SvgIconComponent; color: string }> = {
-  linkedin: { Icon: LinkedInIcon, color: '#0A66C2' },
-  x: { Icon: XIcon, color: '#0F1419' },
-  instagram: { Icon: InstagramIcon, color: '#E1306C' },
-  facebook: { Icon: FacebookIcon, color: '#1877F2' },
-  github: { Icon: GitHubIcon, color: '#24292F' },
-  youtube: { Icon: YouTubeIcon, color: '#FF0000' },
+export const SOCIAL_BRANDS: Record<SocialKey, { Icon: Icon; color: string }> = {
+  linkedin: { Icon: IconBrandLinkedinFilled, color: '#0A66C2' },
+  x: { Icon: IconBrandXFilled, color: '#0F1419' },
+  instagram: { Icon: IconBrandInstagramFilled, color: '#E1306C' },
+  facebook: { Icon: IconBrandFacebookFilled, color: '#1877F2' },
+  github: { Icon: IconBrandGithubFilled, color: '#24292F' },
+  youtube: { Icon: IconBrandYoutubeFilled, color: '#FF0000' },
 };
 
 /** A member's social profiles as brand icons; renders nothing when there are none. */
@@ -58,7 +60,7 @@ const SocialLinks: React.FC<{ socialMedia: unknown; sx?: SxProps<Theme> }> = ({ 
                   '&:focus-visible': { outline: '2px solid', outlineColor: color, outlineOffset: 2 },
                 }}
               >
-                <Icon sx={{ fontSize: 21 }} />
+                <Icon size={21} />
               </Box>
             </Tooltip>
           </Box>

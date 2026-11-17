@@ -1,7 +1,4 @@
 import { Box, Typography, Paper, Grid2 as Grid, Divider } from '@mui/material';
-import WorkIcon from '@mui/icons-material/Work';
-import SchoolIcon from '@mui/icons-material/School';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
 import DOMPurify from 'dompurify';
 import { User } from '@/apollo/hooks';
 
@@ -120,19 +117,19 @@ export default function AboutSection() {
 
         {/* <Grid size={{ xs: 12, sm: 4 }}>
           <Box display="flex" alignItems="center">
-            <WorkIcon sx={{ mr: 1 }} />
+            <SuitcaseSimple style={{ marginRight: 8 }} />
             <Typography>Web Developer at TechCorp</Typography>
           </Box>
         </Grid>
         <Grid size={{ xs: 12, sm: 4 }}>
           <Box display="flex" alignItems="center">
-            <SchoolIcon sx={{ mr: 1 }} />
+            <IconSchool style={{ marginRight: 8 }} />
             <Typography>BS in Computer Science</Typography>
           </Box>
         </Grid>
         <Grid size={{ xs: 12, sm: 4 }}>
           <Box display="flex" alignItems="center">
-            <LocationOnIcon sx={{ mr: 1 }} />
+            <IconMapPin style={{ marginRight: 8 }} />
             <Typography>San Francisco, CA</Typography>
           </Box>
         </Grid> */}

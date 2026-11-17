@@ -1,7 +1,6 @@
 'use client';
 
 import { getHeaderMenu } from '@/constants/Header.constants';
-import MenuIcon from '@mui/icons-material/Menu';
 import type { Theme } from '@mui/material';
 import {
   alpha,

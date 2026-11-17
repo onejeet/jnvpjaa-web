@@ -3,9 +3,8 @@ import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Typography from '@mui/material/Typography';
-import HelpIcon from '@mui/icons-material/Help';
 import type { AlertContentProps } from './AlertDialog.types';
-import { IconQuestionMark as SealQuestion, IconLoader as Spinner } from '@tabler/icons-react';
+import { IconQuestionMark as SealQuestion, IconLoader as Spinner, IconHelpCircleFilled } from '@tabler/icons-react';
 import Lottie from '@/components/common/DynamicLottie';
 import successLottieIcon from '@/utils/lottie/success3_icon.json';
 import deleteLottieIcon from '@/utils/lottie/delete_icon.json';
@@ -129,7 +128,7 @@ const AlertContent: React.FC<AlertContentProps> = ({ title, message, action = 'd
       // return <Image width={60} height={60} src="https://assets.jnvpjaa.org/svg/delete_animation.svg" alt="deleting" />;
       // return <DeleteIcon sx={{ color: 'error.main', fontSize: '100px' }} />;
     } else if (action === 'unsaved') {
-      return <HelpIcon sx={{ color: 'grey.700', fontSize: '100px' }} />;
+      return <IconHelpCircleFilled size={100} />;
     } else if (action === 'app') {
       return <Lottie animationData={appLottieIcon} loop={true} style={{ width: '100px', height: '100px' }} />;
     }

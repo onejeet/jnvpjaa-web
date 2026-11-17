@@ -1,8 +1,8 @@
 'use client';
+import { IconMailCheck } from '@tabler/icons-react';
 import React from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { Alert, Box, Button as MuiButton, Stack, Typography } from '@mui/material';
-import { MarkEmailReadOutlined } from '@mui/icons-material';
 import { IForgotPasswordFormInput } from './ForgotPassword.types';
 import FormTextField from '@/components/form/FormTextField';
 import Button from '@/components/core/Button';
@@ -46,7 +46,7 @@ export default function ForgotPasswordForm() {
   if (mailSent)
     return (
       <Stack spacing={2} alignItems="flex-start">
-        <MarkEmailReadOutlined color="primary" sx={{ fontSize: 40 }} />
+        <Box component={IconMailCheck} size={40} stroke={1.5} sx={{ color: 'primary.main' }} />
         <Typography variant="h3" component="h2">
           Check your inbox
         </Typography>

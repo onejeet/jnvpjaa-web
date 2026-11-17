@@ -1,4 +1,4 @@
-import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
+import { IconQuoteFilled } from '@tabler/icons-react';
 import { Paper, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Image from 'next/image';
@@ -43,7 +43,12 @@ const PresidentMessage = () => {
           </Box>
           <Typography color="grey.800" fontWeight={600} display="flex">
             Illuminating Horizons
-            <FormatQuoteIcon sx={{ fontSize: '32px', color: 'grey.500', position: 'relative', top: '-10px' }} />
+            <Box
+              component="span"
+              sx={{ display: 'inline-flex', color: 'grey.500', position: 'relative', top: '-10px', ml: 0.5 }}
+            >
+              <IconQuoteFilled size={28} />
+            </Box>
           </Typography>
           <Typography color="grey.800" mt={2}>
             Amidst the whispers of reminiscence and the echoes of bygone laughter, we, the custodians of legacy, stand

@@ -1,3 +1,4 @@
+import { IconX } from '@tabler/icons-react';
 import React from 'react';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
@@ -5,7 +6,6 @@ import Stack from '@mui/material/Stack';
 import type { Theme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Button from '../Button';
-import ClearIcon from '@mui/icons-material/Clear';
 import type { DialogHeaderProps } from './Dialog.types';
 import type { ButtonProps } from '../Button/Button.types';
 import type { MouseEventHandler } from 'react';
@@ -96,7 +96,7 @@ const DialogHeader: React.FC<DialogHeaderProps> = ({
               },
             }}
           >
-            {closeIcon || <ClearIcon sx={{ fontSize: '22px' }} />}
+            {closeIcon || <IconX size={22} />}
           </IconButton>
         </Box>
       ) : null}

@@ -1,7 +1,5 @@
 import { IHeaderMenuItem } from 'src/layouts/Layout/LayoutTopbar';
 import { PERMISSION_CODES } from '@/constants/access';
-import PostAddIcon from '@mui/icons-material/PostAdd';
-import ExtensionIcon from '@mui/icons-material/Extension';
 import {
   IconArticle as Article,
   IconNews as ArticleNyTimes,

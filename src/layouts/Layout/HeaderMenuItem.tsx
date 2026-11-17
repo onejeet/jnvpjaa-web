@@ -1,9 +1,8 @@
 'use client';
 
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { alpha, Box, Button, Typography } from '@mui/material';
 import type { Theme } from '@mui/material';
-import { IconChevronRight } from '@tabler/icons-react';
+import { IconChevronRight, IconChevronDown } from '@tabler/icons-react';
 import NextLink from 'next/link';
 import { usePathname } from 'next/navigation';
 import React from 'react';
@@ -112,7 +111,12 @@ const HeaderMenuItem: React.FC<IMenuItemProps> = ({ item }) => {
     <HoverPopover
       id={`menu-${item.label}`}
       render={
-        <Button aria-haspopup="true" disableRipple endIcon={<KeyboardArrowDownIcon />} sx={{ '& span': { ml: '2px' } }}>
+        <Button
+          aria-haspopup="true"
+          disableRipple
+          endIcon={<IconChevronDown size={18} />}
+          sx={{ '& span': { ml: '2px' } }}
+        >
           {item.label}
         </Button>
       }

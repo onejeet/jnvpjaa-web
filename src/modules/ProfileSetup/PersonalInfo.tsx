@@ -289,7 +289,7 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({ user, onNext, onBack, onSuc
                 onBlur={(e) => setValue(name, toHandle(platform.key, e.target.value), { shouldValidate: true })}
                 startAdornment={
                   <Box display="flex" alignItems="center" gap={0.75} sx={{ color: 'text.secondary', fontSize: 14 }}>
-                    <Icon sx={{ fontSize: 20, color }} aria-hidden />
+                    <Icon size={20} color={color} aria-hidden />
                     {socialPrefix(platform)}
                   </Box>
                 }

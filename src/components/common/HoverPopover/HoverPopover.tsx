@@ -1,4 +1,4 @@
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { IconChevronDown } from '@tabler/icons-react';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import { usePopupState, bindHover, bindPopover, bindTrigger } from 'material-ui-popup-state/hooks';
@@ -23,7 +23,7 @@ const HoverPopover: React.FC<HoverPopoverProps> = ({ id, render, children, ...re
       <Box id="dropdown-button" display="flex" {...(isMobile ? bindTrigger(popupState) : bindHover(popupState))}>
         {render || (
           <IconButton>
-            <KeyboardArrowDownIcon />
+            <IconChevronDown size={18} />
           </IconButton>
         )}
       </Box>

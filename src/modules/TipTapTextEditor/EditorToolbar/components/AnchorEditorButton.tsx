@@ -1,12 +1,10 @@
+import { IconTrash, IconCircleX, IconCircleCheck } from '@tabler/icons-react';
 import React from 'react';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
-import TaskAltIcon from '@mui/icons-material/TaskAlt';
-import DeleteIcon from '@mui/icons-material/Delete';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { useCurrentEditor } from '@tiptap/react';
 import Button from '@/components/core/Button';
 import ToolIcon from './ToolIcon';
@@ -100,16 +98,10 @@ const AnchorEditorButton: React.FC<{ disabled?: boolean }> = ({ disabled }) => {
                 color={editor.isActive('link') ? 'error' : 'secondary'}
                 title={editor.isActive('link') ? 'Remove' : 'Cancel'}
                 size="small"
-                startIcon={
-                  editor.isActive('link') ? (
-                    <DeleteIcon sx={{ fontSize: '14px' }} />
-                  ) : (
-                    <HighlightOffIcon sx={{ fontSize: '14px' }} />
-                  )
-                }
+                startIcon={editor.isActive('link') ? <IconTrash size={14} /> : <IconCircleX size={14} />}
               />
               <Button
-                startIcon={<TaskAltIcon sx={{ fontSize: '18px' }} />}
+                startIcon={<IconCircleCheck size={18} />}
                 onClick={() => {
                   if (isSafeWebUrl(url)) {
                     editor.chain().focus().extendMarkRange('link').setLink({ href: url.trim() }).run();
