@@ -32,9 +32,9 @@ const readFilters = (params: SearchParams): JobFilters => ({
   page: Math.max(Number(params.page) || 1, 1),
 });
 
-async function getJobs(filters: JobFilters): Promise<{ data: Job[]; total: number }> {
+async function getJobs(filters: JobFilters): Promise<{ data: Job[]; total: number; failed?: boolean }> {
   try {
-    const { data } = await initializeApollo().query<{ jobs: { data: Job[]; total: number } }>({
+    const { data, errors } = await initializeApollo().query<{ jobs: { data: Job[]; total: number } }>({
       query: JOBS,
       variables: {
         type: filters.type,
@@ -48,19 +48,19 @@ async function getJobs(filters: JobFilters): Promise<{ data: Job[]; total: numbe
       fetchPolicy: 'no-cache',
       context: NO_STORE,
     });
-    return data?.jobs || { data: [], total: 0 };
+    return data?.jobs || { data: [], total: 0, failed: Boolean(errors?.length) };
   } catch {
-    return { data: [], total: 0 };
+    return { data: [], total: 0, failed: true };
   }
 }
 
 export default async function JobsPage({ searchParams }: { searchParams: SearchParams }) {
   const filters = readFilters(searchParams || {});
-  const { data, total } = await getJobs(filters);
+  const { data, total, failed } = await getJobs(filters);
   return (
     <>
       <JsonLd data={generateSchema.collectionPage('JNVPJAA Jobs & Internships', '/jobs/', description)} />
-      <JobsBoard jobs={data} total={total} filters={filters} />
+      <JobsBoard jobs={data} total={total} filters={filters} failed={failed} />
     </>
   );
 }

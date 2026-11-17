@@ -72,6 +72,12 @@ const ApplyDialog: React.FC<ApplyDialogProps> = ({ job, open, onClose, onApplied
       showAlert({ visible: true, type: 'success', message: 'Application sent. Good luck!' });
       onApplied();
     } catch (err: any) {
+      // Applied from another tab: nothing to retry, so refresh the page into its "Applied" state.
+      if (/already applied/i.test(err?.message || '')) {
+        showAlert({ visible: true, type: 'success', message: 'You have already applied to this job.' });
+        onApplied();
+        return;
+      }
       setError(err?.message || 'Could not send your application. Please try again.');
     }
   };

@@ -3,17 +3,7 @@
 import React from 'react';
 import NextLink from 'next/link';
 import { useQuery } from '@apollo/client';
-import {
-  Avatar,
-  Box,
-  Card,
-  CircularProgress,
-  Collapse,
-  Link,
-  Button as MuiButton,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Avatar, Box, Card, Collapse, Link, Button as MuiButton, Stack, Typography } from '@mui/material';
 import {
   IconArrowLeft,
   IconBrandGithub,
@@ -33,6 +23,7 @@ import { paths } from '@/config/paths';
 import { useAlert } from '@/context/AlertContext';
 import { useAuth } from '@/context/AuthContext';
 import { Fact } from './JobCard';
+import { ApplicantsSkeleton } from './JobSkeletons';
 
 const formatWhen = (iso: string) =>
   new Intl.DateTimeFormat('en-GB', {
@@ -169,11 +160,17 @@ const JobApplicants: React.FC<{ slug: string }> = ({ slug }) => {
     fetchPolicy: 'network-only',
   });
 
-  if (!user?.id || jobQuery.loading || applicantsQuery.loading) {
+  if (!user?.id || jobQuery.loading || applicantsQuery.loading) return <ApplicantsSkeleton />;
+  if (jobQuery.error || (applicantsQuery.error && !/permission/i.test(applicantsQuery.error.message))) {
     return (
-      <Box display="flex" justifyContent="center" my={8}>
-        <CircularProgress />
-      </Box>
+      <EmptyView
+        message="Could not load the applicants. Check your connection and try again."
+        buttonProps={{
+          title: 'Try again',
+          variant: 'outlined',
+          onClick: () => (jobQuery.error ? jobQuery.refetch() : applicantsQuery.refetch()),
+        }}
+      />
     );
   }
   if (!job) return <EmptyView message="This job could not be found." />;

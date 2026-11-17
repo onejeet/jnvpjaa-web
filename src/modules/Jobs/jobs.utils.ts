@@ -38,6 +38,16 @@ export const formatSalary = (min?: number | null, max?: number | null, period?: 
   return hasMin ? `From ${rupees(min as number)}${per}` : `Up to ${rupees(max as number)}${per}`;
 };
 
+/** Digits typed into an amount box, without leading zeros; 9 digits keeps it inside the API's 32-bit Int. */
+export const amountDigits = (value: string): string =>
+  value
+    .replace(/\D/g, '')
+    .replace(/^0+(?=\d)/, '')
+    .slice(0, 9);
+
+/** "600000" → "6,00,000" for display in the amount box. */
+export const groupAmount = (digits: string): string => (digits ? Number(digits).toLocaleString('en-IN') : '');
+
 const istDate = (iso: string) => new Date(new Date(iso).getTime() - 1);
 
 /** The API stores the instant applications close (start of the next day, IST); show the last day to apply. */

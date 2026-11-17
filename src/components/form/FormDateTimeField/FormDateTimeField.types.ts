@@ -16,6 +16,8 @@ export interface FormDateTimeFieldProps<
   dateTimePickerProps?: DateTimePickerProps<Dayjs, false>;
   inputProps?: Partial<TextFieldProps>;
   isDateOnly?: boolean;
+  /** Passed through to the picker: past days cannot be picked. */
+  disablePast?: boolean;
   loading?: boolean;
   views?: DateView[];
   format?: string;

@@ -41,3 +41,14 @@ test('https check matches the API rule', () => {
   assert.equal(utils.isHttpsUrl('drive.google.com/x'), false);
   assert.equal(utils.isHttpsUrl('https://a b'), false);
 });
+
+test('amount input groups digits the Indian way and keeps only digits', () => {
+  assert.equal(utils.amountDigits('6,00,000'), '600000');
+  assert.equal(utils.amountDigits('₹ 12a3'), '123');
+  assert.equal(utils.amountDigits('007'), '7');
+  assert.equal(utils.amountDigits('1234567890123'), '123456789');
+  assert.equal(utils.amountDigits(''), '');
+  assert.equal(utils.groupAmount('600000'), '6,00,000');
+  assert.equal(utils.groupAmount('15000'), '15,000');
+  assert.equal(utils.groupAmount(''), '');
+});

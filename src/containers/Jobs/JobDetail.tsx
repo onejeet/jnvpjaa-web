@@ -3,13 +3,25 @@
 import React from 'react';
 import NextLink from 'next/link';
 import { useMutation, useQuery } from '@apollo/client';
-import { Alert, Avatar, Box, Card, Chip, Divider, Link, Button as MuiButton, Stack, Typography } from '@mui/material';
+import {
+  Alert,
+  Avatar,
+  Box,
+  Card,
+  Chip,
+  Divider,
+  Link,
+  Button as MuiButton,
+  Skeleton,
+  Stack,
+  Typography,
+} from '@mui/material';
 import {
   IconBriefcase,
   IconBuilding,
   IconCalendarDue,
   IconCircleCheckFilled,
-  IconCurrencyRupee,
+  IconCash,
   IconExternalLink,
   IconMapPin,
   IconSchool,
@@ -73,7 +85,11 @@ const JobDetail: React.FC<{ job: Job }> = ({ job: initial }) => {
     setConfirmWithdraw(false);
   };
 
+  // Until the signed-in viewer's own state arrives, don't offer "Apply now" to someone who already applied.
+  const viewerLoading = Boolean(user?.id) && !data;
+
   const applyArea = () => {
+    if (viewerLoading) return <Skeleton variant="rounded" width={150} height={44} aria-label="Loading" />;
     if (isPoster) return null;
     if (job.viewerHasApplied && job.viewerApplication) {
       return (
@@ -135,7 +151,7 @@ const JobDetail: React.FC<{ job: Job }> = ({ job: initial }) => {
               )}
             </Fact>
             {job.location && <Fact icon={<IconMapPin size={18} />}>{job.location}</Fact>}
-            {salary && <Fact icon={<IconCurrencyRupee size={18} />}>{salary.replace(/^₹/, '')}</Fact>}
+            {salary && <Fact icon={<IconCash size={18} />}>{salary}</Fact>}
             {deadline && <Fact icon={<IconCalendarDue size={18} />}>{deadline}</Fact>}
             <Fact icon={<IconUsers size={18} />}>
               <strong>{job.applicationCount}</strong> {job.applicationCount === 1 ? 'member has' : 'members have'}{' '}

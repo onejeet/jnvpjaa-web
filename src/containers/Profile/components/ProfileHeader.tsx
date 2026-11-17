@@ -269,250 +269,253 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
   ]);
 
   return (
-    <Box sx={{ position: 'relative', mb: 4 }}>
-      {loading ? (
-        <Box>
-          <Skeleton
-            width="100%"
-            height={250}
+    <Box sx={{ mb: 4 }}>
+      {/* Avatar and edit button are pinned to this box's bottom, so nothing may follow inside it. */}
+      <Box sx={{ position: 'relative' }}>
+        {loading ? (
+          <Box>
+            <Skeleton
+              width="100%"
+              height={250}
+              sx={{
+                width: '100%',
+                minWidth: '100%',
+                height: 250,
+                minHeight: 250,
+              }}
+            />
+          </Box>
+        ) : (
+          <Box
             sx={{
+              position: 'relative',
+              overflow: 'hidden',
               width: '100%',
               minWidth: '100%',
-              height: 250,
-              minHeight: 250,
-            }}
-          />
-        </Box>
-      ) : (
-        <Box
-          sx={{
-            position: 'relative',
-            overflow: 'hidden',
-            width: '100%',
-            minWidth: '100%',
-            height: {
-              xs: 180,
-              md: 250,
-            },
-            minHeight: {
-              xs: 180,
-              md: 250,
-            },
-            borderRadius: 2,
-            border: '1px dashed',
-            borderColor: 'grey.400',
-            background: 'linear-gradient(120deg, #274d43, #60926d)',
-          }}
-        >
-          {cover?.url && (
-            <Box
-              component="img"
-              src={cover.url}
-              alt={cover.alt}
-              onError={() => setCover(null)}
-              sx={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover' }}
-            />
-          )}
-          {cover?.url && (
-            <Typography
-              component="span"
-              variant="caption"
-              sx={{
-                position: 'absolute',
-                right: 8,
-                bottom: 8,
-                maxWidth: { xs: 'calc(100% - 16px)', md: '60%' },
-                textAlign: 'right',
-                px: 1,
-                py: 0.25,
-                borderRadius: 1,
-                bgcolor: 'rgba(0,0,0,0.68)',
-                color: 'white',
-                fontSize: 11,
-                lineHeight: 1.5,
-              }}
-            >
-              Photo by{' '}
-              <a
-                href={withUnsplashReferral(cover.photographerUrl)}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: 'inherit', textDecoration: 'underline' }}
-              >
-                {cover.photographerName}
-              </a>{' '}
-              on{' '}
-              <a
-                href={UNSPLASH_HOME}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: 'inherit', textDecoration: 'underline' }}
-              >
-                Unsplash
-              </a>
-            </Typography>
-          )}
-        </Box>
-      )}
-
-      <ProfilePicture
-        alt={`${user?.firstName} ${user?.lastName}`}
-        id={user?.id}
-        src={user?.profileImage}
-        loading={loading}
-        onClick={() => {
-          if (isProfileEditable) {
-            setOpenPictureEdit(true);
-            return;
-          }
-          if (user?.profileImage) setOpenPictureView(true);
-        }}
-        sx={{
-          width: {
-            xs: 100,
-            md: 180,
-          },
-          height: {
-            xs: 100,
-            md: 180,
-          },
-          border: '4px solid #fff',
-          position: 'absolute',
-          bottom: {
-            xs: 0,
-            md: -24,
-          },
-          left: {
-            xs: 2,
-            md: 32,
-          },
-        }}
-        containerProps={{
-          sx: {
-            cursor: isProfileEditable || user?.profileImage ? 'pointer' : 'default',
-          },
-        }}
-      />
-      {isProfileEditable && !loading && (
-        <Tooltip arrow placement="top" title="Update profile picture">
-          <IconButton
-            size="small"
-            onClick={() => setOpenPictureEdit(true)}
-            sx={{
-              position: 'absolute',
-              left: {
-                xs: 72,
-                md: 174,
+              height: {
+                xs: 180,
+                md: 250,
               },
-              bottom: {
-                xs: 0,
-                md: -18,
+              minHeight: {
+                xs: 180,
+                md: 250,
               },
-              bgcolor: 'background.paper',
-              border: '1px solid',
-              borderColor: 'divider',
-              boxShadow: 1,
-              '&:hover': {
-                bgcolor: 'grey.100',
-              },
+              borderRadius: 2,
+              border: '1px dashed',
+              borderColor: 'grey.400',
+              background: 'linear-gradient(120deg, #274d43, #60926d)',
             }}
           >
-            <IconPencil size={16} />
-          </IconButton>
-        </Tooltip>
-      )}
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        sx={{ mt: { xs: 0.5, md: 1 }, ml: { xs: '100px', md: '220px' } }}
-      >
-        <Title
-          loading={loading}
-          title={
-            <Box display="flex" alignItems="center">
+            {cover?.url && (
+              <Box
+                component="img"
+                src={cover.url}
+                alt={cover.alt}
+                onError={() => setCover(null)}
+                sx={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+            )}
+            {cover?.url && (
               <Typography
-                variant="body1"
-                fontSize={{
-                  xs: 16,
-                  md: 28,
+                component="span"
+                variant="caption"
+                sx={{
+                  position: 'absolute',
+                  right: 8,
+                  bottom: 8,
+                  maxWidth: { xs: 'calc(100% - 16px)', md: '60%' },
+                  textAlign: 'right',
+                  px: 1,
+                  py: 0.25,
+                  borderRadius: 1,
+                  bgcolor: 'rgba(0,0,0,0.68)',
+                  color: 'white',
+                  fontSize: 11,
+                  lineHeight: 1.5,
                 }}
-                fontWeight={500}
-                mr={0.5}
-              >{`${user?.firstName} ${user?.lastName || ''}`}</Typography>
-              {user?.isVerified && (
-                <VerifiedBadge
-                  size={26}
-                  isPrivate={user?.isConfidential}
-                  handlePrivateInfo={handleDataPrivacyUpdate}
-                  isPrivateInfoChangeAllowed={user?.id === authUser?.id || isAdmin}
-                />
-              )}
-              {user?.batch === 0 && <FacultyBadge size={26} />}
-              {user?.isVerified && user?.disabled && (
-                <Chip label="Disabled" color="warning" size="small" sx={{ ml: 1, fontWeight: 600 }} />
-              )}
-            </Box>
-          }
-          titleProps={{ fontWeight: 600, fontSize: '30px' }}
-          summary={profileSummary}
-          summaryProps={{ color: 'grey.600', fontSize: '14px', mt: { xs: 0, md: 1 } }}
-        />
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          {!isProfileEditable && !user?.isConfidential && user?.email && !loading && (
-            <Button component="a" href={`mailto:${user.email}`} variant="outlined" size="small">
-              Contact
-            </Button>
-          )}
-          {menuItems.length > 0 && !editingProfile && (
-            <Menu
-              items={menuItems}
-              slotProps={{
-                paper: {
-                  elevation: 0,
+              >
+                Photo by{' '}
+                <a
+                  href={withUnsplashReferral(cover.photographerUrl)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: 'inherit', textDecoration: 'underline' }}
+                >
+                  {cover.photographerName}
+                </a>{' '}
+                on{' '}
+                <a
+                  href={UNSPLASH_HOME}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: 'inherit', textDecoration: 'underline' }}
+                >
+                  Unsplash
+                </a>
+              </Typography>
+            )}
+          </Box>
+        )}
 
-                  sx: {
-                    minWidth: 150,
-                    overflow: 'visible',
-                    filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                    mt: 1.5,
-                    '& .MuiAvatar-root': {
-                      width: 32,
-                      height: 32,
-                      ml: -0.5,
-                      mr: 1,
-                    },
-                    '&::before': {
-                      content: '""',
-                      display: 'block',
-                      position: 'absolute',
-                      top: 0,
-                      right: 14,
-                      width: 10,
-                      height: 10,
-                      bgcolor: 'background.paper',
-                      transform: 'translateY(-50%) rotate(45deg)',
-                      zIndex: 0,
-                    },
-                  },
+        <ProfilePicture
+          alt={`${user?.firstName} ${user?.lastName}`}
+          id={user?.id}
+          src={user?.profileImage}
+          loading={loading}
+          onClick={() => {
+            if (isProfileEditable) {
+              setOpenPictureEdit(true);
+              return;
+            }
+            if (user?.profileImage) setOpenPictureView(true);
+          }}
+          sx={{
+            width: {
+              xs: 100,
+              md: 180,
+            },
+            height: {
+              xs: 100,
+              md: 180,
+            },
+            border: '4px solid #fff',
+            position: 'absolute',
+            bottom: {
+              xs: 0,
+              md: -24,
+            },
+            left: {
+              xs: 2,
+              md: 32,
+            },
+          }}
+          containerProps={{
+            sx: {
+              cursor: isProfileEditable || user?.profileImage ? 'pointer' : 'default',
+            },
+          }}
+        />
+        {isProfileEditable && !loading && (
+          <Tooltip arrow placement="top" title="Update profile picture">
+            <IconButton
+              size="small"
+              onClick={() => setOpenPictureEdit(true)}
+              sx={{
+                position: 'absolute',
+                left: {
+                  xs: 72,
+                  md: 174,
+                },
+                bottom: {
+                  xs: 0,
+                  md: -18,
+                },
+                bgcolor: 'background.paper',
+                border: '1px solid',
+                borderColor: 'divider',
+                boxShadow: 1,
+                '&:hover': {
+                  bgcolor: 'grey.100',
                 },
               }}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
-              }}
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              render={
-                <Tooltip arrow placement="top" title="Profile Menu">
-                  <IconButton aria-label="Profile actions">
-                    <IconDotsCircleHorizontal size={28} />
-                  </IconButton>
-                </Tooltip>
-              }
-            />
-          )}
+            >
+              <IconPencil size={16} />
+            </IconButton>
+          </Tooltip>
+        )}
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          sx={{ mt: { xs: 0.5, md: 1 }, ml: { xs: '100px', md: '220px' } }}
+        >
+          <Title
+            loading={loading}
+            title={
+              <Box display="flex" alignItems="center">
+                <Typography
+                  variant="body1"
+                  fontSize={{
+                    xs: 16,
+                    md: 28,
+                  }}
+                  fontWeight={500}
+                  mr={0.5}
+                >{`${user?.firstName} ${user?.lastName || ''}`}</Typography>
+                {user?.isVerified && (
+                  <VerifiedBadge
+                    size={26}
+                    isPrivate={user?.isConfidential}
+                    handlePrivateInfo={handleDataPrivacyUpdate}
+                    isPrivateInfoChangeAllowed={user?.id === authUser?.id || isAdmin}
+                  />
+                )}
+                {user?.batch === 0 && <FacultyBadge size={26} />}
+                {user?.isVerified && user?.disabled && (
+                  <Chip label="Disabled" color="warning" size="small" sx={{ ml: 1, fontWeight: 600 }} />
+                )}
+              </Box>
+            }
+            titleProps={{ fontWeight: 600, fontSize: '30px' }}
+            summary={profileSummary}
+            summaryProps={{ color: 'grey.600', fontSize: '14px', mt: { xs: 0, md: 1 } }}
+          />
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            {!isProfileEditable && !user?.isConfidential && user?.email && !loading && (
+              <Button component="a" href={`mailto:${user.email}`} variant="outlined" size="small">
+                Contact
+              </Button>
+            )}
+            {menuItems.length > 0 && !editingProfile && (
+              <Menu
+                items={menuItems}
+                slotProps={{
+                  paper: {
+                    elevation: 0,
+
+                    sx: {
+                      minWidth: 150,
+                      overflow: 'visible',
+                      filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                      mt: 1.5,
+                      '& .MuiAvatar-root': {
+                        width: 32,
+                        height: 32,
+                        ml: -0.5,
+                        mr: 1,
+                      },
+                      '&::before': {
+                        content: '""',
+                        display: 'block',
+                        position: 'absolute',
+                        top: 0,
+                        right: 14,
+                        width: 10,
+                        height: 10,
+                        bgcolor: 'background.paper',
+                        transform: 'translateY(-50%) rotate(45deg)',
+                        zIndex: 0,
+                      },
+                    },
+                  },
+                }}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                render={
+                  <Tooltip arrow placement="top" title="Profile Menu">
+                    <IconButton aria-label="Profile actions">
+                      <IconDotsCircleHorizontal size={28} />
+                    </IconButton>
+                  </Tooltip>
+                }
+              />
+            )}
+          </Box>
         </Box>
       </Box>
       {!loading && <SocialLinks socialMedia={user?.socialMedia} sx={{ mt: 2, ml: { xs: 0, md: '220px' } }} />}

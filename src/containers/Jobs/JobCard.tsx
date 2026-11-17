@@ -2,8 +2,8 @@
 
 import React from 'react';
 import NextLink from 'next/link';
-import { Card, CardActionArea, Chip, Stack, Typography } from '@mui/material';
-import { IconBuilding, IconCalendarDue, IconCurrencyRupee, IconMapPin, IconUsers } from '@tabler/icons-react';
+import { Card, CardActionArea, Chip, LinearProgress, Stack, Typography } from '@mui/material';
+import { IconBuilding, IconCalendarDue, IconCash, IconMapPin, IconUsers } from '@tabler/icons-react';
 import type { Job } from '@/apollo/jobsOperations';
 import { paths } from '@/config/paths';
 import { JOB_TYPE_LABEL, WORK_MODE_LABEL, deadlineLabel, formatSalary } from '@/modules/Jobs/jobs.utils';
@@ -24,10 +24,14 @@ export const posterName = (job: Pick<Job, 'postedBy'>) =>
 const JobCard: React.FC<{ job: Job }> = ({ job }) => {
   const salary = formatSalary(job.salaryMin, job.salaryMax, job.salaryPeriod);
   const deadline = deadlineLabel(job.deadline);
+  // The job page renders on the server; show the click landed while it loads.
+  const [opening, setOpening] = React.useState(false);
   return (
     <Card
       variant="outlined"
+      aria-busy={opening || undefined}
       sx={{
+        position: 'relative',
         height: '100%',
         borderRadius: 3,
         opacity: job.isAccepting ? 1 : 0.65,
@@ -38,6 +42,9 @@ const JobCard: React.FC<{ job: Job }> = ({ job }) => {
       <CardActionArea
         component={NextLink}
         href={paths.jobs.getJobUrl(job.slug)}
+        onClick={(e: React.MouseEvent) => {
+          if (!e.metaKey && !e.ctrlKey && !e.shiftKey && e.button === 0) setOpening(true);
+        }}
         sx={{
           height: '100%',
           p: 2.5,
@@ -50,6 +57,7 @@ const JobCard: React.FC<{ job: Job }> = ({ job }) => {
           '&, &:hover': { textDecoration: 'none', color: 'text.primary' },
         }}
       >
+        {opening && <LinearProgress sx={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3 }} />}
         <Stack direction="row" gap={0.75} flexWrap="wrap">
           <Chip size="small" color="primary" variant="outlined" label={JOB_TYPE_LABEL[job.type]} />
           <Chip size="small" variant="outlined" label={WORK_MODE_LABEL[job.workMode]} />
@@ -61,7 +69,7 @@ const JobCard: React.FC<{ job: Job }> = ({ job }) => {
         <Stack gap={0.5}>
           <Fact icon={<IconBuilding size={16} />}>{job.company}</Fact>
           {job.location && <Fact icon={<IconMapPin size={16} />}>{job.location}</Fact>}
-          {salary && <Fact icon={<IconCurrencyRupee size={16} />}>{salary.replace(/^₹/, '')}</Fact>}
+          {salary && <Fact icon={<IconCash size={16} />}>{salary}</Fact>}
           {deadline && <Fact icon={<IconCalendarDue size={16} />}>{deadline}</Fact>}
         </Stack>
         <Stack direction="row" justifyContent="space-between" alignItems="center" mt="auto" pt={1} gap={1}>

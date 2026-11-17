@@ -3,12 +3,12 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { useMutation, useQuery } from '@apollo/client';
-import { Controller, useForm, useWatch } from 'react-hook-form';
+import dayjs, { type Dayjs } from 'dayjs';
+import { Controller, type Control, useForm, useWatch } from 'react-hook-form';
 import {
   Autocomplete,
   Box,
   Chip,
-  CircularProgress,
   FormControlLabel,
   Grid2 as Grid,
   Radio,
@@ -16,6 +16,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import { IconCurrencyRupee } from '@tabler/icons-react';
 import {
   JOB,
   SAVE_JOB,
@@ -29,6 +30,8 @@ import {
 } from '@/apollo/jobsOperations';
 import EmptyView from '@/components/common/EmptyView';
 import Button from '@/components/core/Button';
+import CoreTextField from '@/components/core/TextField';
+import FormDateTimeField from '@/components/form/FormDateTimeField';
 import FormSelectField from '@/components/form/FormSelectField';
 import FormTextField from '@/components/form/FormTextField';
 import { paths } from '@/config/paths';
@@ -38,9 +41,12 @@ import {
   EXPERIENCE_LABEL,
   JOB_TYPE_LABEL,
   WORK_MODE_LABEL,
+  amountDigits,
   deadlineInputValue,
+  groupAmount,
   isHttpsUrl,
 } from '@/modules/Jobs/jobs.utils';
+import { JobFormSkeleton } from '@/containers/Jobs/JobSkeletons';
 import TipTapTextEditor from '@/modules/TipTapTextEditor';
 
 interface JobFormValues {
@@ -58,7 +64,7 @@ interface JobFormValues {
   skills: string[];
   posterRelation: JobPosterRelation;
   applyUrl: string;
-  deadlineDate: string;
+  deadlineDate: Dayjs | null;
 }
 
 const options = (labels: Record<string, string>) => Object.entries(labels).map(([value, label]) => ({ value, label }));
@@ -100,25 +106,59 @@ const toFormValues = (job?: Job | null): JobFormValues => ({
   skills: job?.skills ?? [],
   posterRelation: job?.posterRelation ?? 'HIRING_AT_COMPANY',
   applyUrl: job?.applyUrl ?? '',
-  deadlineDate: deadlineInputValue(job?.deadline),
+  deadlineDate: job?.deadline ? dayjs(deadlineInputValue(job.deadline)) : null,
 });
 
-const rupees = (value: string) => (value.trim() ? Math.round(Number(value)) : null);
+const rupees = (value: string) => (value ? Number(value) : null);
+
+// The form keeps plain digits; the box shows them grouped (6,00,000) as the poster types.
+const AmountField: React.FC<{
+  control: Control<JobFormValues>;
+  name: 'salaryMin' | 'salaryMax';
+  disabled?: boolean;
+  placeholder?: string;
+  validate?: (value: string) => true | string;
+}> = ({ control, name, disabled, placeholder, validate }) => (
+  <Controller
+    control={control}
+    name={name}
+    rules={validate ? { validate } : undefined}
+    render={({ field, fieldState }) => (
+      <CoreTextField
+        fullWidth
+        size="small"
+        name={field.name}
+        inputRef={field.ref}
+        value={groupAmount(field.value)}
+        onChange={(e) => field.onChange(amountDigits(e.target.value))}
+        onBlur={field.onBlur}
+        disabled={disabled}
+        placeholder={placeholder}
+        startAdornment={<IconCurrencyRupee size={16} />}
+        inputProps={{ inputMode: 'numeric', 'aria-label': name === 'salaryMin' ? 'Salary from' : 'Salary up to' }}
+        error={Boolean(fieldState.error)}
+        helperText={fieldState.error?.message}
+      />
+    )}
+  />
+);
 
 const JobEditor: React.FC<{ slug?: string }> = ({ slug }) => {
   const { user } = useAuth();
-  const { data, loading } = useQuery<{ job: Job | null }>(JOB, {
+  const { data, loading, error, refetch } = useQuery<{ job: Job | null }>(JOB, {
     skip: !slug || !user?.id,
     variables: { slug },
     fetchPolicy: 'network-only',
   });
   const job = data?.job;
 
-  if (slug && (loading || !user?.id)) {
+  if (slug && (loading || !user?.id)) return <JobFormSkeleton />;
+  if (slug && error) {
     return (
-      <Box my={6} display="flex" justifyContent="center">
-        <CircularProgress />
-      </Box>
+      <EmptyView
+        message="Could not load this job. Check your connection and try again."
+        buttonProps={{ title: 'Try again', variant: 'outlined', onClick: () => refetch() }}
+      />
     );
   }
   if (slug && !job) return <EmptyView message="This job could not be found." />;
@@ -137,7 +177,6 @@ const JobForm: React.FC<{ job?: Job | null }> = ({ job }) => {
     name: ['type', 'workMode', 'description', 'salaryMin'],
   });
   const isInternship = type === 'INTERNSHIP';
-  const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(new Date());
 
   // Internships usually pay a monthly stipend; full-time roles an annual package.
   React.useEffect(() => {
@@ -167,7 +206,7 @@ const JobForm: React.FC<{ job?: Job | null }> = ({ job }) => {
       skills: values.skills,
       posterRelation: values.posterRelation,
       applyUrl: values.applyUrl.trim() || null,
-      deadlineDate: values.deadlineDate || null,
+      deadlineDate: values.deadlineDate ? dayjs(values.deadlineDate).format('YYYY-MM-DD') : null,
     };
     try {
       const { data } = await saveJob({ variables: { input } });
@@ -331,34 +370,24 @@ const JobForm: React.FC<{ job?: Job | null }> = ({ job }) => {
 
         {section(isInternship ? 'Stipend (optional)' : 'Salary (optional)')}
         <Grid size={{ xs: 6, md: 4 }}>
-          {label('From (₹)')}
-          <FormTextField
-            fullWidth
-            name="salaryMin"
+          {label('From')}
+          <AmountField
             control={control}
+            name="salaryMin"
             disabled={saving}
-            size="small"
-            type="number"
-            inputProps={{ min: 0, step: 1000 }}
-            placeholder={isInternship ? '15000' : '600000'}
-            rules={{ validate: (v: string) => !v || Number(v) >= 0 || 'Cannot be negative' }}
+            placeholder={isInternship ? '15,000' : '6,00,000'}
           />
         </Grid>
         <Grid size={{ xs: 6, md: 4 }}>
-          {label('Up to (₹)')}
-          <FormTextField
-            fullWidth
-            name="salaryMax"
+          {label('Up to')}
+          <AmountField
             control={control}
+            name="salaryMax"
             disabled={saving}
-            size="small"
-            type="number"
-            inputProps={{ min: 0, step: 1000 }}
-            placeholder={isInternship ? '25000' : '900000'}
-            rules={{
-              validate: (v: string) =>
-                !v || !salaryMin || Number(v) >= Number(salaryMin) || 'Must be at least the starting amount',
-            }}
+            placeholder={isInternship ? '25,000' : '9,00,000'}
+            validate={(v) =>
+              !v || !salaryMin || Number(v) >= Number(salaryMin) || 'Must be at least the starting amount'
+            }
           />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
@@ -403,14 +432,15 @@ const JobForm: React.FC<{ job?: Job | null }> = ({ job }) => {
         {section('Applying')}
         <Grid size={{ xs: 12, md: 5 }}>
           {label('Last day to apply', '(optional)')}
-          <FormTextField
-            fullWidth
-            name="deadlineDate"
+          <FormDateTimeField
             control={control}
-            disabled={saving}
-            size="small"
-            type="date"
-            inputProps={{ min: today }}
+            name="deadlineDate"
+            isDateOnly
+            disablePast
+            helperText="Applications close at the end of this day (India time)."
+            rules={{ validate: (v: Dayjs | null) => !v || dayjs(v).isValid() || 'Pick a valid date' }}
+            // The picker misbehaves on unmount without a label (MUI v7 section DOM), so it always gets one.
+            inputProps={{ label: 'Last day', size: 'small', fullWidth: true, disabled: saving }}
           />
         </Grid>
         <Grid size={{ xs: 12, md: 7 }}>
