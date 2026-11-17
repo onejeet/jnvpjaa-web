@@ -13,6 +13,8 @@ import { PATH_ICONS } from '@/constants/menuIcons';
 import type { IHeaderMenuItem, IMenuItemProps } from './LayoutTopbar';
 
 const COLUMN_WIDTH = 296;
+// Drops the panel from the button's bottom to the header's bottom edge.
+const PANEL_GAP = 8;
 
 /** Consecutive items with the same `section`, in menu order. */
 const groupBySection = (items: IHeaderMenuItem[]) =>
@@ -119,7 +121,10 @@ const HeaderMenuItem: React.FC<IMenuItemProps> = ({ item }) => {
       slotProps={{
         paper: {
           sx: {
-            mt: 1,
+            mt: `${PANEL_GAP}px`,
+            overflow: 'visible',
+            // Invisible strip over the gap under the button, so moving the mouse down keeps the menu open.
+            '&::before': { content: '""', position: 'absolute', left: 0, right: 0, top: -PANEL_GAP, height: PANEL_GAP },
             borderRadius: '0 0 16px 16px',
             border: '1px solid',
             borderColor: 'divider',
