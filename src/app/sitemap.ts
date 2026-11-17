@@ -14,6 +14,7 @@ const routes = [
   { path: '/student-hub/skillup-resources/', priority: 0.6 },
   { path: '/student-hub/career-counselling/', priority: 0.6 },
   { path: '/privacy_policy/', priority: 0.8 },
+  { path: '/terms_condition/', priority: 0.5 },
   { path: '/vision/', priority: 0.8 },
   { path: '/president-message/', priority: 0.8 },
   { path: '/secretary-message/', priority: 0.8 },

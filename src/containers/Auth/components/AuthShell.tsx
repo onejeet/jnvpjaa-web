@@ -105,6 +105,7 @@ export default function AuthShell({
       </Paper>
       <Stack direction="row" justifyContent="center" spacing={3} sx={{ mt: 2, fontSize: 12, color: 'text.secondary' }}>
         <Link href="/privacy_policy">Privacy policy</Link>
+        <Link href="/terms_condition">Terms of use</Link>
         <Link href="/contact-us">Need help?</Link>
       </Stack>
     </Box>

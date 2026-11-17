@@ -117,7 +117,7 @@ const LayoutFooter: React.FC = () => {
                     path: '/privacy_policy',
                   },
                   {
-                    label: 'Terms & conditions',
+                    label: 'Terms of use',
                     path: '/terms_condition',
                   },
                   // {
