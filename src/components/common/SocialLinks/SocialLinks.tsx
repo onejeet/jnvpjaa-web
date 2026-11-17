@@ -1,27 +1,27 @@
 import { Box, Tooltip } from '@mui/material';
 import type { SxProps, Theme } from '@mui/material';
 import {
-  IconBrandFacebookFilled,
-  IconBrandGithubFilled,
-  IconBrandInstagramFilled,
-  IconBrandLinkedinFilled,
-  IconBrandXFilled,
-  IconBrandYoutubeFilled,
+  IconBrandFacebook,
+  IconBrandGithub,
+  IconBrandInstagram,
+  IconBrandLinkedin,
+  IconBrandX,
+  IconBrandYoutube,
 } from '@tabler/icons-react';
 import type { Icon } from '@tabler/icons-react';
 import React from 'react';
 import { getSocialLinks, type SocialKey } from '@/utils/socialMedia';
 
 export const SOCIAL_BRANDS: Record<SocialKey, { Icon: Icon; color: string }> = {
-  linkedin: { Icon: IconBrandLinkedinFilled, color: '#0A66C2' },
-  x: { Icon: IconBrandXFilled, color: '#0F1419' },
-  instagram: { Icon: IconBrandInstagramFilled, color: '#E1306C' },
-  facebook: { Icon: IconBrandFacebookFilled, color: '#1877F2' },
-  github: { Icon: IconBrandGithubFilled, color: '#24292F' },
-  youtube: { Icon: IconBrandYoutubeFilled, color: '#FF0000' },
+  linkedin: { Icon: IconBrandLinkedin, color: '#0A66C2' },
+  x: { Icon: IconBrandX, color: '#0F1419' },
+  instagram: { Icon: IconBrandInstagram, color: '#E1306C' },
+  facebook: { Icon: IconBrandFacebook, color: '#1877F2' },
+  github: { Icon: IconBrandGithub, color: '#24292F' },
+  youtube: { Icon: IconBrandYoutube, color: '#FF0000' },
 };
 
-/** A member's social profiles as brand icons; renders nothing when there are none. */
+/** A member's social profiles as light-stroke brand icons; renders nothing when there are none. */
 const SocialLinks: React.FC<{ socialMedia: unknown; sx?: SxProps<Theme> }> = ({ socialMedia, sx }) => {
   const links = getSocialLinks(socialMedia);
   if (!links.length) return null;
@@ -60,7 +60,7 @@ const SocialLinks: React.FC<{ socialMedia: unknown; sx?: SxProps<Theme> }> = ({ 
                   '&:focus-visible': { outline: '2px solid', outlineColor: color, outlineOffset: 2 },
                 }}
               >
-                <Icon size={21} />
+                <Icon size={21} stroke={1.25} />
               </Box>
             </Tooltip>
           </Box>
