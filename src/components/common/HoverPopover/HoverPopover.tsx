@@ -40,7 +40,7 @@ const HoverPopover: React.FC<HoverPopoverProps> = ({ id, render, children, ...re
           }}
           {...restProps}
         >
-          {children}
+          {typeof children === 'function' ? children(handleClose) : children}
         </MuiHoverPopover>
       </ClickAwayListener>
     </>

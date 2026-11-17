@@ -1,201 +1,178 @@
 'use client';
 
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Menu, MenuItem, Paper } from '@mui/material';
-import Link from '@mui/material/Link';
+import { alpha, Box, Button, Typography } from '@mui/material';
+import type { Theme } from '@mui/material';
+import { IconChevronRight } from '@tabler/icons-react';
 import NextLink from 'next/link';
 import { usePathname } from 'next/navigation';
 import React from 'react';
 
 import HoverPopover from '../../components/common/HoverPopover';
+import { PATH_ICONS } from '@/constants/menuIcons';
 import type { IHeaderMenuItem, IMenuItemProps } from './LayoutTopbar';
 
-const HeaderMenuItem: React.FC<IMenuItemProps> = ({ item, isMobile, expanded, setExpanded }) => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const pathname = usePathname();
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+const COLUMN_WIDTH = 296;
 
+/** Consecutive items with the same `section`, in menu order. */
+const groupBySection = (items: IHeaderMenuItem[]) =>
+  items.reduce<{ title?: string; items: IHeaderMenuItem[] }[]>((groups, item) => {
+    const last = groups[groups.length - 1];
+    if (last && last.title === item.section) last.items.push(item);
+    else groups.push({ title: item.section, items: [item] });
+    return groups;
+  }, []);
+
+const MenuLink: React.FC<{ item: IHeaderMenuItem; active: boolean; onClick: () => void }> = ({
+  item,
+  active,
+  onClick,
+}) => {
+  const ItemIcon = PATH_ICONS[item.path] || IconChevronRight;
   return (
-    <Box component="div" gap={0}>
-      {isMobile ? (
-        item?.menu ? (
-          <Accordion
-            elevation={0}
-            sx={{ '& .MuiAccordionSummary-root': { px: 0 } }}
-            expanded={expanded}
-            onChange={() => setExpanded?.(expanded ? '' : item?.path || '')}
-          >
-            <AccordionSummary
-              aria-controls="panel2-content"
-              id="panel2-header"
-              sx={{
-                width: '100%',
-                '& .MuiAccordionSummary-content': {
-                  my: 0,
-                },
-                '& .Mui-expanded': {
-                  my: '4px',
-                },
-              }}
-            >
-              <Button
-                sx={{
-                  width: '100%',
-                  textAlign: 'left',
-                  py: 0,
-                  justifyContent: 'space-between',
-                  minHeight: '20px !important',
-                }}
-                endIcon={item?.menu ? <ArrowDropDownIcon sx={{ color: 'primary.main' }} /> : null}
-              >
-                {item.label}
-              </Button>
-            </AccordionSummary>
-
-            {item?.menu && (
-              <AccordionDetails>
-                {item?.menu?.map((item: IHeaderMenuItem) => (
-                  <NextLink
-                    key={`menu-${item?.path}`}
-                    href={item?.path || '/'}
-                    as={item?.path}
-                    passHref
-                    style={{
-                      textDecoration: 'none',
-                      pointerEvents: pathname.includes(item?.path) ? 'none' : undefined,
-                    }}
-                  >
-                    <Link sx={{ textDecoration: 'none' }}>
-                      <MenuItem
-                        key={item.path}
-                        sx={{
-                          color: pathname.includes(item?.path) ? 'primary.main' : 'grey.800',
-                          px: '10px',
-                          pl: '20px',
-                          fontSize: '14px',
-                          fontWeight: 300,
-                          textAlign: 'center',
-                          minHeight: 44,
-                        }}
-                      >
-                        {item.label}
-                      </MenuItem>
-                    </Link>
-                  </NextLink>
-                ))}
-              </AccordionDetails>
-            )}
-          </Accordion>
-        ) : (
-          <NextLink href={item?.path || '/'} as={item?.path} style={{ textDecoration: 'none', width: '100%' }}>
-            <Button
-              sx={{
-                textAlign: 'left',
-                py: 0,
-                justifyContent: 'space-between',
-                minHeight: '48px !important',
-              }}
-              fullWidth
-            >
-              {item.label}
-            </Button>
-          </NextLink>
-        )
-      ) : (
-        <>
-          {item?.menu ? (
-            <HoverPopover
-              id={`menu-${item.path}`}
-              render={
-                <Button
-                  aria-controls={open ? 'basic-menu' : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={open ? 'true' : undefined}
-                  onClick={handleClick}
-                  disableRipple
-                  endIcon={<KeyboardArrowDownIcon />}
-                  sx={{
-                    // px: '10px',
-                    '& span': {
-                      ml: '2px',
-                    },
-                  }}
-                >
-                  {item.label}
-                </Button>
-              }
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-            >
-              {item?.menu?.map((mItem: IHeaderMenuItem) => (
-                <NextLink
-                  key={`menu-${mItem?.path}`}
-                  href={mItem?.path || '/'}
-                  as={mItem?.path}
-                  style={{ textDecoration: 'none' }}
-                >
-                  <MenuItem
-                    key={mItem.path}
-                    onClick={handleClose}
-                    sx={{
-                      px: '16px',
-                      py: '12px',
-                      fontSize: '14px',
-                      fontWeight: 400,
-                      textAlign: 'center',
-                      color: 'grey.900',
-                      transition: 'all 0.2s linear',
-                      svg: {
-                        mr: '2px',
-                      },
-                      '&:hover': {
-                        color: 'primary.main',
-                        svg: {
-                          ml: '2px',
-                          mr: 0,
-                          color: 'primary.main',
-                        },
-                      },
-                    }}
-                  >
-                    <ChevronRightIcon
-                      sx={{ mr: '4px', color: 'grey.800', fontSize: '16px', transition: 'all 0.2s linear' }}
-                    />
-                    {mItem.label}
-                  </MenuItem>
-                </NextLink>
-              ))}
-            </HoverPopover>
-          ) : (
-            <NextLink href={item?.path || '/'} as={item?.path} style={{ textDecoration: 'none', width: '100%' }}>
-              <Button
-                disableRipple
-                sx={{
-                  px: '2px',
-                }}
-                fullWidth
-              >
-                {item.label}
-              </Button>
-            </NextLink>
-          )}
-        </>
-      )}
+    <Box
+      component={NextLink}
+      href={item.path || '/'}
+      onClick={onClick}
+      aria-current={active ? 'page' : undefined}
+      sx={{
+        display: 'flex',
+        alignItems: 'flex-start',
+        gap: 1.5,
+        p: 1.25,
+        borderRadius: 2,
+        textDecoration: 'none',
+        color: 'text.primary',
+        bgcolor: active ? (theme: Theme) => alpha(theme.palette.primary.main, 0.06) : undefined,
+        transition: 'background-color 0.15s ease',
+        '&:hover, &:focus-visible': {
+          bgcolor: 'action.hover',
+          '& .menu-link-label': { color: 'primary.main' },
+          '& .menu-link-icon': { bgcolor: (theme: Theme) => alpha(theme.palette.primary.main, 0.14) },
+        },
+        '&:focus-visible': { outline: '2px solid', outlineColor: 'primary.main', outlineOffset: -2 },
+      }}
+    >
+      <Box
+        className="menu-link-icon"
+        sx={{
+          width: 36,
+          height: 36,
+          flexShrink: 0,
+          borderRadius: '10px',
+          display: 'grid',
+          placeItems: 'center',
+          color: 'primary.main',
+          bgcolor: (theme: Theme) => alpha(theme.palette.primary.main, 0.08),
+          transition: 'background-color 0.15s ease',
+        }}
+      >
+        <ItemIcon size={19} />
+      </Box>
+      <Box minWidth={0}>
+        <Typography
+          className="menu-link-label"
+          fontSize={14}
+          fontWeight={600}
+          lineHeight={1.35}
+          color={active ? 'primary.main' : 'text.primary'}
+        >
+          {item.label}
+        </Typography>
+        {item.description && (
+          <Typography fontSize={13} lineHeight={1.4} color="text.secondary" mt={0.25}>
+            {item.description}
+          </Typography>
+        )}
+      </Box>
     </Box>
   );
 };
+
+const HeaderMenuItem: React.FC<IMenuItemProps> = ({ item }) => {
+  const pathname = usePathname() || '';
+  const isActive = (path: string) => path !== '/' && (pathname === path || pathname.startsWith(`${path}/`));
+
+  if (!item.menu?.length) {
+    return (
+      <NextLink href={item.path || '/'} style={{ textDecoration: 'none', width: '100%' }}>
+        <Button disableRipple sx={{ px: '2px' }} fullWidth>
+          {item.label}
+        </Button>
+      </NextLink>
+    );
+  }
+
+  const sections = groupBySection(item.menu);
+  const columns = Math.min(sections.length, 2);
+
+  return (
+    <HoverPopover
+      id={`menu-${item.label}`}
+      render={
+        <Button aria-haspopup="true" disableRipple endIcon={<KeyboardArrowDownIcon />} sx={{ '& span': { ml: '2px' } }}>
+          {item.label}
+        </Button>
+      }
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+      transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+      slotProps={{
+        paper: {
+          sx: {
+            mt: 1,
+            borderRadius: '0 0 16px 16px',
+            border: '1px solid',
+            borderColor: 'divider',
+            boxShadow: '0 18px 40px -12px rgba(15, 23, 42, 0.18)',
+          },
+        },
+      }}
+    >
+      {(close) => (
+        <Box
+          component="nav"
+          aria-label={item.label}
+          sx={{ display: 'grid', gridTemplateColumns: `repeat(${columns}, ${COLUMN_WIDTH}px)`, p: 1 }}
+        >
+          {sections.map((section, index) => (
+            <Box
+              key={section.title || index}
+              sx={{
+                p: 0.5,
+                // Dividers between columns and between rows of sections.
+                borderLeft: index % columns ? '1px solid' : 'none',
+                borderTop: index >= columns ? '1px solid' : 'none',
+                borderColor: 'divider',
+                pl: index % columns ? 1 : 0.5,
+                pt: index >= columns ? 1 : 0.5,
+              }}
+            >
+              {section.title && (
+                <Typography
+                  component="h3"
+                  sx={{
+                    px: 1.25,
+                    pt: 0.75,
+                    pb: 0.5,
+                    fontSize: 11,
+                    fontWeight: 700,
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                    color: 'text.secondary',
+                  }}
+                >
+                  {section.title}
+                </Typography>
+              )}
+              {section.items.map((link) => (
+                <MenuLink key={link.path} item={link} active={isActive(link.path)} onClick={close} />
+              ))}
+            </Box>
+          ))}
+        </Box>
+      )}
+    </HoverPopover>
+  );
+};
+
 export default HeaderMenuItem;

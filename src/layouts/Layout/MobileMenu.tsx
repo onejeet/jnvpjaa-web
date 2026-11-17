@@ -5,58 +5,12 @@ import NextLink from 'next/link';
 import { usePathname } from 'next/navigation';
 import { alpha, Box, Button, Drawer, IconButton, ListItemButton, Paper, Stack, Typography } from '@mui/material';
 import type { Theme } from '@mui/material';
-import {
-  IconAddressBook,
-  IconAward,
-  IconBook,
-  IconBuildingStore,
-  IconCalendarEvent,
-  IconChevronRight,
-  IconCompass,
-  IconHeartHandshake,
-  IconHistory,
-  IconInfoCircle,
-  IconMail,
-  IconMessage2,
-  IconMessages,
-  IconPhoto,
-  IconReceipt,
-  IconSchool,
-  IconTarget,
-  IconUsers,
-  IconUsersGroup,
-  IconWritingSign,
-  IconNews,
-  IconX,
-} from '@tabler/icons-react';
-import type { Icon } from '@tabler/icons-react';
+import { IconChevronRight, IconX } from '@tabler/icons-react';
 import Logo from '@/components/common/Logo';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import { paths } from '@/config/paths';
+import { PATH_ICONS } from '@/constants/menuIcons';
 import type { IHeaderMenuItem } from './LayoutTopbar';
-
-const PATH_ICONS: Record<string, Icon> = {
-  '/about': IconInfoCircle,
-  '/vision': IconTarget,
-  '/president-message': IconMessage2,
-  '/secretary-message': IconMessages,
-  '/principal-message': IconSchool,
-  '/contact-us': IconMail,
-  '/executive-committee': IconUsersGroup,
-  '/batch-coordinators': IconUsers,
-  '/bhamashah-pillars': IconAward,
-  '/past-presidents': IconHistory,
-  '/student-hub/career-counselling': IconCompass,
-  '/student-hub/skillup-resources': IconBook,
-  '/members': IconAddressBook,
-  '/gallery': IconPhoto,
-  '/businesses': IconBuildingStore,
-  '/transactions': IconReceipt,
-  '/donations': IconHeartHandshake,
-  '/events': IconCalendarEvent,
-  '/blog': IconWritingSign,
-  '/newsroom': IconNews,
-};
 
 export type MobileMenuAccountItem = {
   label: string;

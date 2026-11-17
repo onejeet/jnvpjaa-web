@@ -58,6 +58,10 @@ export interface IHeaderMenuItem {
   label: string;
   path: string;
   menu?: IHeaderMenuItem[];
+  /** One line under the label in the desktop dropdown. */
+  description?: string;
+  /** Items sharing a section get their own titled column in the desktop dropdown. */
+  section?: string;
   icon?: React.ReactNode;
   disabled?: boolean;
   /** Shown only to people with this permission code. */

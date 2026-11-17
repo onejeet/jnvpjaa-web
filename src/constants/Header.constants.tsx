@@ -10,15 +10,57 @@ import {
   IconTicket as Ticket,
 } from '@tabler/icons-react';
 
+// Each page once, with the one-liner the desktop dropdown shows under its name.
+const PAGE = {
+  about: { label: 'About JNVPJAA', path: '/about', description: 'Our school, story and association' },
+  vision: { label: 'Vision and Mission', path: '/vision', description: 'What the association works towards' },
+  contact: { label: 'Contact Us', path: '/contact-us', description: 'Reach the association team' },
+  president: { label: 'Message from President', path: '/president-message', description: 'A note to all alumni' },
+  secretary: {
+    label: 'Message from Secretary',
+    path: '/secretary-message',
+    description: 'On alumni connections and activities',
+  },
+  principal: { label: 'Message from Principal', path: '/principal-message', description: 'From JNV Paota, Jaipur' },
+  committee: { label: 'Executive Committee', path: '/executive-committee', description: 'Current office bearers' },
+  coordinators: {
+    label: 'Batch Coordinators',
+    path: '/batch-coordinators',
+    description: 'Your point of contact in each batch',
+  },
+  pillars: { label: 'Bhamashah Pillars', path: '/bhamashah-pillars', description: 'Supporters behind our initiatives' },
+  pastPresidents: {
+    label: 'Past Presidents',
+    path: '/past-presidents',
+    description: 'Leaders who built the association',
+  },
+  career: {
+    label: 'Career Counselling',
+    path: '/student-hub/career-counselling',
+    description: 'Guidance from alumni mentors',
+  },
+  skillup: {
+    label: 'SkillUp Resources',
+    path: '/student-hub/skillup-resources',
+    description: 'Courses and learning material',
+  },
+  members: { label: 'Member Directory', path: '/members', description: 'Find and connect with alumni' },
+  gallery: { label: 'Photo Gallery', path: '/gallery', description: 'Albums from meets and campus' },
+  businesses: { label: 'Business Directory', path: '/businesses', description: 'Businesses run by alumni' },
+  transactions: { label: 'Billing & Transactions', path: '/transactions', description: 'Your payments and receipts' },
+  donate: { label: 'Donate Now', path: '/donations', description: 'Support students and the school' },
+  newsroom: { label: 'Newsroom', path: '/newsroom', description: 'Official news and announcements' },
+  events: { label: 'Events', path: '/events', description: 'Meets, reunions and webinars' },
+  blog: { label: 'Blog', path: '/blog', description: 'Stories and memories from alumni' },
+} satisfies Record<string, IHeaderMenuItem>;
+
+const inSection = (section: string, items: IHeaderMenuItem[]) => items.map((item) => ({ ...item, section }));
+
 // What's happening in the community, grouped so the top bar stays short.
 const COMMUNITY_MENU: IHeaderMenuItem = {
   label: 'Community',
   path: '/newsroom',
-  menu: [
-    { label: 'Newsroom', path: '/newsroom' },
-    { label: 'Events', path: '/events' },
-    { label: 'Blog', path: '/blog' },
-  ],
+  menu: [PAGE.newsroom, PAGE.events, PAGE.blog],
 };
 
 export const HEADER_MENU: IHeaderMenuItem[] = [
@@ -26,95 +68,20 @@ export const HEADER_MENU: IHeaderMenuItem[] = [
     label: 'About Us',
     path: '/about',
     menu: [
-      {
-        label: 'About JNVPJAA',
-        path: '/about',
-      },
-      {
-        label: 'Vision and Mission',
-        path: '/vision',
-      },
-      {
-        label: 'Message from President',
-        path: '/president-message',
-      },
-      {
-        label: 'Message from Secretary',
-        path: '/secretary-message',
-      },
-      {
-        label: 'Message from Principal',
-        path: '/principal-message',
-      },
-      {
-        label: 'Contact Us',
-        path: '/contact-us',
-      },
+      ...inSection('Who we are', [PAGE.about, PAGE.vision, PAGE.contact]),
+      ...inSection('Messages', [PAGE.president, PAGE.secretary, PAGE.principal]),
     ],
   },
   {
     label: 'Organisation',
     path: '/',
-    menu: [
-      {
-        label: 'Executive Committee',
-        path: '/executive-committee',
-      },
-      {
-        label: 'Batch Coordinators',
-        path: '/batch-coordinators',
-      },
-      {
-        label: 'Bhamashah Pillars',
-        path: '/bhamashah-pillars',
-      },
-      {
-        label: 'Past Presidents',
-        path: '/past-presidents',
-      },
-    ],
+    menu: [PAGE.committee, PAGE.coordinators, PAGE.pillars, PAGE.pastPresidents],
   },
-  // {
-  //   label: 'Student Hub',
-  //   path: '/student-hub',
-  //   menu: [
-  //     {
-  //       label: 'Career Counselling',
-  //       path: '/student-hub/career-counselling',
-  //     },
-  //     {
-  //       label: 'SkillUp Resources',
-  //       path: '/student-hub/skillup-resources',
-  //     },
-  //   ],
-  // },
   {
     label: 'Alumni Center',
     path: '/donations',
-    menu: [
-      {
-        label: 'Member Directory',
-        path: '/members',
-      },
-      {
-        label: 'Photo Gallery',
-        path: '/gallery',
-      },
-      {
-        label: 'Business Directory',
-        path: '/businesses',
-      },
-      {
-        label: 'Donate Now',
-        path: '/donations',
-      },
-      // {
-      //   label: 'Alumni Connect',
-      //   path: '#',
-      // },
-    ],
+    menu: [PAGE.members, PAGE.gallery, PAGE.businesses, PAGE.donate],
   },
-
   COMMUNITY_MENU,
 ];
 
@@ -123,87 +90,16 @@ export const MEMBER_HEADER_MENU: IHeaderMenuItem[] = [
     label: 'Organisation',
     path: '/',
     menu: [
-      {
-        label: 'About JNVPJAA',
-        path: '/about',
-      },
-      {
-        label: 'Vision and Mission',
-        path: '/vision',
-      },
-      {
-        label: 'Message from President',
-        path: '/president-message',
-      },
-      {
-        label: 'Message from Secretary',
-        path: '/secretary-message',
-      },
-      {
-        label: 'Message from Principal',
-        path: '/principal-message',
-      },
-
-      {
-        label: 'Executive Committee',
-        path: '/executive-committee',
-      },
-      {
-        label: 'Batch Coordinators',
-        path: '/batch-coordinators',
-      },
-      {
-        label: 'Bhamashah Pillars',
-        path: '/bhamashah-pillars',
-      },
-      {
-        label: 'Past Presidents',
-        path: '/past-presidents',
-      },
-      {
-        label: 'Career Counselling',
-        path: '/student-hub/career-counselling',
-      },
-      {
-        label: 'SkillUp Resources',
-        path: '/student-hub/skillup-resources',
-      },
-      {
-        label: 'Contact Us',
-        path: '/contact-us',
-      },
+      ...inSection('Who we are', [PAGE.about, PAGE.vision, PAGE.contact]),
+      ...inSection('People', [PAGE.committee, PAGE.coordinators, PAGE.pillars, PAGE.pastPresidents]),
+      ...inSection('Messages', [PAGE.president, PAGE.secretary, PAGE.principal]),
+      ...inSection('Student Hub', [PAGE.career, PAGE.skillup]),
     ],
   },
-
   {
     label: 'Alumni Center',
     path: '/donations',
-    menu: [
-      {
-        label: 'Members Directory',
-        path: '/members',
-      },
-      {
-        label: 'Photo Gallery',
-        path: '/gallery',
-      },
-      {
-        label: 'Business Directory',
-        path: '/businesses',
-      },
-      {
-        label: 'Billing & Transactions',
-        path: '/transactions',
-      },
-      {
-        label: 'Donate Now',
-        path: '/donations',
-      },
-      // {
-      //   label: 'Alumni Connect',
-      //   path: '#',
-      // },
-    ],
+    menu: [PAGE.members, PAGE.gallery, PAGE.businesses, PAGE.transactions, PAGE.donate],
   },
   COMMUNITY_MENU,
 ];
