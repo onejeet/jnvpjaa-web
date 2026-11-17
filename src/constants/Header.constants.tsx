@@ -2,6 +2,7 @@ import { IHeaderMenuItem } from 'src/layouts/Layout/LayoutTopbar';
 import { PERMISSION_CODES } from '@/constants/access';
 import {
   IconArticle as Article,
+  IconBriefcase,
   IconNews as ArticleNyTimes,
   IconCalendarEvent as CalendarDots,
   IconPhotoShare as ImagesSquare,
@@ -45,6 +46,7 @@ const PAGE = {
   members: { label: 'Member Directory', path: '/members', description: 'Find and connect with alumni' },
   gallery: { label: 'Photo Gallery', path: '/gallery', description: 'Albums from meets and campus' },
   businesses: { label: 'Business Directory', path: '/businesses', description: 'Businesses run by alumni' },
+  jobs: { label: 'Jobs & Internships', path: '/jobs', description: 'Openings shared by alumni' },
   transactions: { label: 'Billing & Transactions', path: '/transactions', description: 'Your payments and receipts' },
   donate: { label: 'Donate Now', path: '/donations', description: 'Support students and the school' },
   newsroom: { label: 'Newsroom', path: '/newsroom', description: 'Official news and announcements' },
@@ -78,7 +80,7 @@ export const HEADER_MENU: IHeaderMenuItem[] = [
   {
     label: 'Alumni Center',
     path: '/donations',
-    menu: [PAGE.members, PAGE.gallery, PAGE.businesses, PAGE.donate],
+    menu: [PAGE.members, PAGE.gallery, PAGE.businesses, PAGE.jobs, PAGE.donate],
   },
   COMMUNITY_MENU,
 ];
@@ -97,7 +99,7 @@ export const MEMBER_HEADER_MENU: IHeaderMenuItem[] = [
   {
     label: 'Alumni Center',
     path: '/donations',
-    menu: [PAGE.members, PAGE.gallery, PAGE.businesses, PAGE.transactions, PAGE.donate],
+    menu: [PAGE.members, PAGE.gallery, PAGE.businesses, PAGE.jobs, PAGE.transactions, PAGE.donate],
   },
   COMMUNITY_MENU,
 ];
@@ -120,6 +122,11 @@ export const ADD_ENTITIES: IHeaderMenuItem[] = [
     label: 'New Event',
     path: '/events/new',
     icon: <CalendarDots />,
+  },
+  {
+    label: 'Post a Job',
+    path: '/jobs/new',
+    icon: <IconBriefcase />,
   },
   {
     label: 'Add News',

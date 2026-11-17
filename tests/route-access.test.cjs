@@ -27,3 +27,12 @@ test('create and edit screens stay protected, look-alike slugs do not', () => {
   }
   for (const path of ['/admin', '/profile/x', '/security/']) assert.equal(mod.isProtectedRoute(path), true, path);
 });
+
+test('jobs: board and job pages are public, posting and applicants are not', () => {
+  for (const path of ['/jobs', '/jobs/', '/jobs/frontend-intern-acme', '/jobs/new-grad-role-acme/']) {
+    assert.equal(mod.isProtectedRoute(path), false, path);
+  }
+  for (const path of ['/jobs/new', '/jobs/new/', '/jobs/frontend-intern-acme/applicants', '/jobs/x/applicants/']) {
+    assert.equal(mod.isProtectedRoute(path), true, path);
+  }
+});

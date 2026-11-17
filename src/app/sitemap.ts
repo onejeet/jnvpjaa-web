@@ -8,6 +8,7 @@ const routes = [
   { path: '/events/', priority: 0.8 },
   { path: '/blog/', priority: 0.8 },
   { path: '/newsroom/', priority: 0.8 },
+  { path: '/jobs/', priority: 0.7 },
   { path: '/about/', priority: 0.8 },
   { path: '/contact-us/', priority: 0.8 },
   { path: '/student-hub/skillup-resources/', priority: 0.6 },
@@ -57,7 +58,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     ...staticEntries,
     ...dynamicEntries
-      .filter((entry) => /^\/(blog|events|gallery|newsroom)\/[^/]+\/$/.test(entry.path))
+      .filter((entry) => /^\/(blog|events|gallery|newsroom|jobs)\/[^/]+\/$/.test(entry.path))
       .map((entry) => ({
         url: canonicalUrl(entry.path),
         lastModified: entry.lastModified,

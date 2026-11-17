@@ -29,6 +29,13 @@ export const paths = {
     getPostUrl: (slug: string) => `/newsroom/${encodeURIComponent(slug)}`,
     getEditUrl: (id: string) => `/newsroom/new?id=${encodeURIComponent(id)}`,
   },
+  jobs: {
+    root: '/jobs',
+    new: '/jobs/new',
+    getJobUrl: (slug: string) => `/jobs/${encodeURIComponent(slug)}`,
+    getEditUrl: (slug: string) => `/jobs/new?slug=${encodeURIComponent(slug)}`,
+    getApplicantsUrl: (slug: string) => `/jobs/${encodeURIComponent(slug)}/applicants`,
+  },
   blog: {
     root: '/blog',
     new: '/blog/new',
