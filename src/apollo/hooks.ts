@@ -873,7 +873,7 @@ export type MutationUpdateUserArgs = {
   mobile?: InputMaybe<Scalars['String']['input']>;
   nickName?: InputMaybe<Scalars['String']['input']>;
   profileImage?: InputMaybe<Scalars['String']['input']>;
-  sociaMedia?: InputMaybe<Scalars['JSON']['input']>;
+  socialMedia?: InputMaybe<Scalars['JSON']['input']>;
   whatsAppMobile?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -4137,7 +4137,7 @@ export type UpdateUserMutationVariables = Exact<{
   mobile?: InputMaybe<Scalars['String']['input']>;
   nickName?: InputMaybe<Scalars['String']['input']>;
   profileImage?: InputMaybe<Scalars['String']['input']>;
-  sociaMedia?: InputMaybe<Scalars['JSON']['input']>;
+  socialMedia?: InputMaybe<Scalars['JSON']['input']>;
   whatsAppMobile?: InputMaybe<Scalars['String']['input']>;
 }>;
 
@@ -10476,7 +10476,7 @@ export const UpdateUserDocument = gql`
     $mobile: String
     $nickName: String
     $profileImage: String
-    $sociaMedia: JSON
+    $socialMedia: JSON
     $whatsAppMobile: String
   ) {
     updateUser(
@@ -10495,7 +10495,7 @@ export const UpdateUserDocument = gql`
       mobile: $mobile
       nickName: $nickName
       profileImage: $profileImage
-      sociaMedia: $sociaMedia
+      socialMedia: $socialMedia
       whatsAppMobile: $whatsAppMobile
     ) {
       aboutMe
@@ -10587,7 +10587,7 @@ export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, U
  *      mobile: // value for 'mobile'
  *      nickName: // value for 'nickName'
  *      profileImage: // value for 'profileImage'
- *      sociaMedia: // value for 'sociaMedia'
+ *      socialMedia: // value for 'socialMedia'
  *      whatsAppMobile: // value for 'whatsAppMobile'
  *   },
  * });

@@ -5,6 +5,7 @@ import { Box, Typography, Skeleton, IconButton, Tooltip, Chip, Button } from '@m
 import { ProfileHeaderProps } from '../Profile.types';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import VerifiedBadge from '@/components/common/VerifiedBadge';
+import SocialLinks from '@/components/common/SocialLinks';
 import { IconPencil, IconLock, IconDotsCircleHorizontal } from '@tabler/icons-react';
 import { useProfile } from '@/context/ProfileContext';
 import FacultyBadge from '@/components/common/FacultyBadge';
@@ -514,6 +515,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
           )}
         </Box>
       </Box>
+      {!loading && <SocialLinks socialMedia={user?.socialMedia} sx={{ mt: 2, ml: { xs: 0, md: '220px' } }} />}
       {openPictureView && (
         <Dialog
           maxWidth="md"

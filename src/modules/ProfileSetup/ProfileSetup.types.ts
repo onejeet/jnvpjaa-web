@@ -1,4 +1,5 @@
 import dayjs, { Dayjs } from 'dayjs';
+import type { SocialKey } from '@/utils/socialMedia';
 
 export interface IPersonalInfoFormInput {
   firstName: string;
@@ -10,6 +11,7 @@ export interface IPersonalInfoFormInput {
   extraMobile?: string;
   emergencyMobile?: string;
   whatsAppMobile?: string;
+  socialMedia?: Partial<Record<SocialKey, string>>;
 }
 
 export interface IProfessionInfoFormInput {

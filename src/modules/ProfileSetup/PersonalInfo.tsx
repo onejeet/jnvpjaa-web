@@ -15,6 +15,8 @@ import dayjs from 'dayjs';
 import { useApolloClient } from '@apollo/client';
 import FormPhoneField from '@/components/form/FormPhoneField';
 import { phoneNumberStringConverter, startCase } from '@/utils/helpers';
+import { SOCIAL_BRANDS } from '@/components/common/SocialLinks';
+import { getSocialLinks, SOCIAL_PLATFORMS, socialPrefix, toHandle } from '@/utils/socialMedia';
 
 interface PersonalInfoProps {
   onBack?: () => void;
@@ -39,6 +41,7 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({ user, onNext, onBack, onSuc
       ...(user || {}),
       dob: user?.dob ? dayjs(user?.dob) : undefined,
       gender: user?.gender || undefined,
+      socialMedia: Object.fromEntries(getSocialLinks(user?.socialMedia).map(({ key, handle }) => [key, handle])),
     },
   });
 
@@ -63,6 +66,10 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({ user, onNext, onBack, onSuc
           emergencyMobile: data?.emergencyMobile
             ? phoneNumberStringConverter(data?.emergencyMobile)
             : data?.emergencyMobile,
+          // Every platform is sent, so a cleared field removes that link.
+          socialMedia: Object.fromEntries(
+            SOCIAL_PLATFORMS.map(({ key }) => [key, toHandle(key, data?.socialMedia?.[key] || '')])
+          ),
           //   batch: data?.batch,
         },
         onCompleted: (res) => {
@@ -254,6 +261,48 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({ user, onNext, onBack, onSuc
           />
         </Grid>
 
+        <Grid size={{ xs: 12 }}>
+          <Typography fontWeight={600} fontSize={15}>
+            Social profiles
+          </Typography>
+          <Typography color="text.secondary" fontSize={13}>
+            Type only your username. Leave a field empty to hide it.
+          </Typography>
+        </Grid>
+        {SOCIAL_PLATFORMS.map((platform) => {
+          const { Icon, color } = SOCIAL_BRANDS[platform.key];
+          const name = `socialMedia.${platform.key}` as const;
+          return (
+            <Grid key={platform.key} size={{ xs: 12, sm: 6 }}>
+              <FormTextField
+                fullWidth
+                id={`social-${platform.key}`}
+                aria-label={`${platform.label} username`}
+                placeholder="username"
+                control={control}
+                disabled={loading}
+                name={name}
+                size="small"
+                autoComplete="off"
+                inputProps={{ autoCapitalize: 'none', spellCheck: false }}
+                // Pasting a full profile URL keeps just the username.
+                onBlur={(e) => setValue(name, toHandle(platform.key, e.target.value), { shouldValidate: true })}
+                startAdornment={
+                  <Box display="flex" alignItems="center" gap={0.75} sx={{ color: 'text.secondary', fontSize: 14 }}>
+                    <Icon sx={{ fontSize: 20, color }} aria-hidden />
+                    {socialPrefix(platform)}
+                  </Box>
+                }
+                rules={{
+                  validate: (value?: string) =>
+                    !value ||
+                    platform.pattern.test(toHandle(platform.key, value)) ||
+                    `Enter a valid ${platform.label} username`,
+                }}
+              />
+            </Grid>
+          );
+        })}
         <Grid size={{ xs: 12 }}>
           <Grid size={{ xs: 12 }}>
             <Box display="flex" flexDirection="column">
