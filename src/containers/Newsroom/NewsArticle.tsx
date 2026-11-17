@@ -15,14 +15,19 @@ import LayoutModule from '@/layouts/Layout';
 import NewsPostActions from '@/modules/NewsEditor/NewsPostActions';
 import { NEWS_BYLINE, formatDateline, formatNewsDate } from '@/modules/Newsroom/newsroom.utils';
 import { notoSerif } from '@/utils/theme/fonts';
+import { UNSPLASH_HOME } from '@/utils/unsplash';
 import { Kicker } from './NewsCard';
 import PressContact from './PressContact';
+
+// Cover JSON is stored as sent, so only link credits that are plain https URLs.
+const isHttps = (url?: string | null) => Boolean(url && /^https:\/\//i.test(url));
 
 const NewsArticle: React.FC<{ post: NewsPost }> = ({ post }) => {
   const url = canonicalUrl(paths.newsroom.getPostUrl(post.slug));
   const router = useRouter();
   const { can } = useAuth();
   const canManage = can(PERMISSION_CODES.NEWSROOM_POST_MANAGE);
+  const credits = post.cover?.credits;
   return (
     <LayoutModule disableCover title={`${post.title} • JNVPJAA Newsroom`}>
       <Breadcrumbs items={[{ label: 'Newsroom', path: paths.newsroom.root }, { label: post.title }]} />
@@ -64,12 +69,43 @@ const NewsArticle: React.FC<{ post: NewsPost }> = ({ post }) => {
         </Stack>
 
         {post.cover?.url && (
-          <Box
-            component="img"
-            src={post.cover.url}
-            alt={post.cover.alt || post.title}
-            sx={{ width: '100%', aspectRatio: '16 / 9', objectFit: 'cover', borderRadius: 3, mt: 3, display: 'block' }}
-          />
+          <Box component="figure" sx={{ m: 0, mt: 3 }}>
+            <Box
+              component="img"
+              src={post.cover.url}
+              alt={post.cover.alt || post.title}
+              sx={{ width: '100%', aspectRatio: '16 / 9', objectFit: 'cover', borderRadius: 3, display: 'block' }}
+            />
+            {credits?.name && (
+              <Typography
+                component="figcaption"
+                variant="body2"
+                color="text.secondary"
+                sx={{ mt: 1, a: { color: 'inherit', borderBottom: '1px dotted', textDecoration: 'none' } }}
+              >
+                Photo by{' '}
+                {isHttps(credits.url) ? (
+                  <a href={credits.url!} target="_blank" rel="noopener noreferrer">
+                    {credits.name}
+                  </a>
+                ) : (
+                  credits.name
+                )}
+                {credits.source && (
+                  <>
+                    {' on '}
+                    {credits.source === 'Unsplash' ? (
+                      <a href={UNSPLASH_HOME} target="_blank" rel="noopener noreferrer">
+                        Unsplash
+                      </a>
+                    ) : (
+                      credits.source
+                    )}
+                  </>
+                )}
+              </Typography>
+            )}
+          </Box>
         )}
 
         <Typography

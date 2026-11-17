@@ -342,10 +342,15 @@ const NewsForm: React.FC<{ id?: string; post?: NewsPost | null }> = ({ id, post 
           open={pickCover}
           onClose={() => setPickCover(false)}
           defaultKeyword={getValues('title')}
-          onSelect={(image: Photo) =>
+          onSelect={(image: Photo & Pick<NewsCover, 'credits'>) =>
             setValue(
               'cover',
-              { url: image.url, thumbUrl: image.thumbUrl, alt: image.altDescription || getValues('title') },
+              {
+                url: image.url,
+                thumbUrl: image.thumbUrl,
+                alt: image.altDescription || getValues('title'),
+                credits: image.credits ?? null,
+              },
               { shouldDirty: true }
             )
           }

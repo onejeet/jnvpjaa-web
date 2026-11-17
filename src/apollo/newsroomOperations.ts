@@ -6,6 +6,8 @@ export type NewsStatus = 'DRAFT' | 'PUBLISHED';
 export interface NewsCover {
   url?: string | null;
   alt?: string | null;
+  /** Photographer credit, same shape the blog stores from the Unsplash picker. */
+  credits?: { name?: string | null; url?: string | null; source?: string | null } | null;
   [key: string]: unknown;
 }
 
