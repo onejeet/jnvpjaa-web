@@ -6,6 +6,7 @@ import React from 'react';
 import { useProfile } from '@/context/ProfileContext';
 import {
   IconCake as Cake,
+  IconCalendarCheck,
   IconMailOpened as EnvelopeSimpleOpen,
   IconLock as Lock,
   IconLock as LockSimple,
@@ -114,6 +115,14 @@ export default function AboutSection() {
             <Typography sx={{ ml: 1 }}>{user?.dob ? dayjs(user?.dob)?.format('MMM DD') : '--'}</Typography>
           </Box>
         </Grid>
+        {user?.createdAt && (
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <Box display="flex" alignItems="center">
+              <IconCalendarCheck size={24} />
+              <Typography sx={{ ml: 1 }}>Joined {dayjs(user.createdAt).format('MMM YYYY')}</Typography>
+            </Box>
+          </Grid>
+        )}
 
         {/* <Grid size={{ xs: 12, sm: 4 }}>
           <Box display="flex" alignItems="center">
