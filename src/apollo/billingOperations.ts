@@ -58,6 +58,7 @@ export const GET_ASSOCIATION_TRANSACTIONS = gql`
         billingCategory
         walletImpact
         scholarshipApplicationId
+        isTest
         scholarshipMentor {
           id
           firstName
@@ -109,6 +110,7 @@ export const GET_TRANSACTION_DETAILS = gql`
       billingCategory
       walletImpact
       scholarshipApplicationId
+      isTest
       scholarshipMentor {
         id
         firstName

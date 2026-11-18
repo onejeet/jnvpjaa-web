@@ -23,6 +23,7 @@ import HeaderMenuItem from './HeaderMenuItem';
 import MobileMenu from './MobileMenu';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import { useAuth } from '@/context/AuthContext';
+import useScholarshipAvailability from '@/hooks/useScholarshipAvailability';
 import { usePathname, useRouter } from 'next/navigation';
 import HoverPopover from '@/components/common/HoverPopover';
 import HeaderAddButton from './HeaderAddButton';
@@ -114,9 +115,10 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
   const homeTab = dockTab('/');
   const { user, logoutUser, can, hasRole, access } = useAuth();
 
+  const scholarships = useScholarshipAvailability().enabled;
   const HEADER_MENU = React.useMemo(() => {
-    return getHeaderMenu(Boolean(user?.id));
-  }, [user]);
+    return getHeaderMenu(Boolean(user?.id), { scholarships });
+  }, [user, scholarships]);
 
   const isBirthday = React.useMemo(() => {
     return isBirthdayToday(user?.dob);

@@ -16,6 +16,7 @@ import {
   IconWallet,
 } from '@tabler/icons-react';
 import { GET_BILLING_DASHBOARD } from '@/apollo/billingOperations';
+import useScholarshipAvailability from '@/hooks/useScholarshipAvailability';
 import { formatCompactCurrency } from '@/utils/helpers';
 
 const metricCards = [
@@ -42,6 +43,7 @@ const metricCards = [
   },
   {
     key: 'scholarshipReleasedToMentors',
+    scholarship: true,
     label: 'Scholarship Funds Sent to Mentors',
     description:
       'Current scholarship balance with mentors, including available mentor funds and beneficiary payments awaiting confirmation.',
@@ -50,6 +52,7 @@ const metricCards = [
   },
   {
     key: 'scholarshipPaidToBeneficiaries',
+    scholarship: true,
     label: 'Scholarship Paid to Beneficiaries',
     description: 'Scholarship amount confirmed as received by beneficiaries.',
     icon: IconReceiptRupee,
@@ -78,6 +81,7 @@ const metricCards = [
   },
   {
     key: 'pendingMentorReleaseAmount',
+    scholarship: true,
     label: 'Pending Beneficiary Verification',
     description: 'Scholarship payments released by mentors that beneficiaries have not fully confirmed yet.',
     icon: IconCreditCardPay,
@@ -91,6 +95,7 @@ export default function BillingDashboard() {
     fetchPolicy: 'cache-first',
   });
   const dashboard = data?.getBillingDashboard;
+  const scholarshipsEnabled = useScholarshipAvailability().enabled;
 
   if (error) {
     return (
@@ -104,6 +109,7 @@ export default function BillingDashboard() {
     <Box mt={2}>
       <Grid container spacing={2}>
         {metricCards
+          .filter((card) => !card.scholarship || scholarshipsEnabled)
           .filter((card) => !card.hideWhenZero || Number(dashboard?.[card.key] || 0) > 0 || loading)
           .map((card) => {
             const Icon = card.icon;

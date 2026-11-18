@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import { GridPaginationModel, GridRowParams } from '@mui/x-data-grid';
 import React from 'react';
 import { useQuery } from '@apollo/client';
-import { Skeleton, Stack, Typography } from '@mui/material';
+import { Chip, Skeleton, Stack, Typography } from '@mui/material';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -157,6 +157,7 @@ const useTransactionsTable = () => {
               ) : (
                 <Typography variant="body1">{row?.title || '--'}</Typography>
               )}
+              {row?.isTest && <Chip label="Test" size="small" color="warning" sx={{ ml: 1 }} />}
             </Box>
           ),
       },

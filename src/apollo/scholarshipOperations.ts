@@ -474,3 +474,45 @@ export const GET_MENTOR_FUND_ALLOCATIONS = gql`
     }
   }
 `;
+
+export const SCHOLARSHIP_AVAILABILITY = gql`
+  query ScholarshipAvailability {
+    scholarshipAvailability {
+      enabled
+      testMode
+    }
+  }
+`;
+
+const PLATFORM_SETTINGS_FIELDS = `
+  scholarshipEnabled
+  scholarshipTestMode
+  scholarshipTestRecordCount
+  scholarshipEncryptionConfigured
+`;
+
+export const PLATFORM_SETTINGS = gql`
+  query PlatformSettings {
+    platformSettings {
+      ${PLATFORM_SETTINGS_FIELDS}
+    }
+  }
+`;
+
+export const UPDATE_SCHOLARSHIP_SETTINGS = gql`
+  mutation UpdateScholarshipSettings($enabled: Boolean, $testMode: Boolean) {
+    updateScholarshipSettings(enabled: $enabled, testMode: $testMode) {
+      ${PLATFORM_SETTINGS_FIELDS}
+    }
+  }
+`;
+
+export const WIPE_SCHOLARSHIP_TEST_DATA = gql`
+  mutation WipeScholarshipTestData {
+    wipeScholarshipTestData {
+      deletedRecords
+      deletedTransactions
+      deletedApplications
+    }
+  }
+`;
