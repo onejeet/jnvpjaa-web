@@ -1,18 +1,24 @@
-import { constructMetadata } from '@/config/seo.config';
-import PrincipalMessage from '@/containers/About/PrincipalMessage';
-import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import MessagePage from '@/containers/About/MessagePage';
 import LayoutModule from '@/layouts/Layout';
+import { contentPageMetadata } from '@/modules/ContentPages/contentPageMetadata';
+import type { MessageFields } from '@/modules/ContentPages/contentPages.schema';
+import { getContentPage } from '@/modules/ContentPages/getContentPage';
 
-export const metadata: Metadata = constructMetadata({
-  url: '/principal-message/',
-  title: "Principal's Message • JNVPJAA",
-  description: 'Read the principal’s message for the JNV Paota, Jaipur alumni community.',
-});
+export const dynamic = 'force-dynamic';
 
-export default function PrincipalMessagePage() {
+export const generateMetadata = () =>
+  contentPageMetadata('principal-message', {
+    title: "Principal's Message • JNVPJAA",
+    description: 'Read the principal’s message for the JNV Paota, Jaipur alumni community.',
+  });
+
+export default async function PrincipalMessagePage() {
+  const page = await getContentPage<MessageFields>('principal-message');
+  if (!page) notFound();
   return (
     <LayoutModule disableCover title="Principal's Message • Alumni Network of JNV Paota, Jaipur" containerProps={{}}>
-      <PrincipalMessage />
+      <MessagePage fields={page.fields} crumb="Message from principal" />
     </LayoutModule>
   );
 }

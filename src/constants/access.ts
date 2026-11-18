@@ -42,6 +42,7 @@ export const PERMISSION_CODES = {
   IAM_AUDIT_READ_LIMITED: 'iam.audit.read_limited',
   IAM_AUDIT_READ_ALL: 'iam.audit.read_all',
   NEWSROOM_POST_MANAGE: 'newsroom.post.manage',
+  CONTENT_PAGE_MANAGE: 'content.page.manage',
   JOBS_MODERATE: 'jobs.moderate',
   SYSTEM_FULL_ACCESS: 'system.full_access',
   BILLING_DASHBOARD_READ: 'billing.dashboard.read',

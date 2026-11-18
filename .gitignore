@@ -38,3 +38,6 @@ yarn-error.log*
 
 # storybook
 storybook-static
+
+# Playwright e2e run state (tokens, snapshots, reports)
+e2e/.state/

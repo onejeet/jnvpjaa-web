@@ -1,23 +1,29 @@
-import { constructMetadata } from '@/config/seo.config';
+import { notFound } from 'next/navigation';
 import PastPresidents from '@/containers/PastPresidents/PastPresidents';
-import { Metadata } from 'next';
 import LayoutModule from '@/layouts/Layout';
+import { contentPageMetadata } from '@/modules/ContentPages/contentPageMetadata';
+import type { PeopleListFields } from '@/modules/ContentPages/contentPages.schema';
+import { getContentPage } from '@/modules/ContentPages/getContentPage';
 
-export const metadata: Metadata = constructMetadata({
-  url: '/past-presidents/',
-  title: 'JNVPJAA Past Presidents • Alumni Network of JNV Paota, Jaipur',
-  description:
-    'Explore the past presidents who have served the JNVPJAA alumni association and helped strengthen its community.',
-});
+export const dynamic = 'force-dynamic';
 
-export default function PastPresidentsPage() {
+export const generateMetadata = () =>
+  contentPageMetadata('past-presidents', {
+    title: 'JNVPJAA Past Presidents • Alumni Network of JNV Paota, Jaipur',
+    description:
+      'Explore the past presidents who have served the JNVPJAA alumni association and helped strengthen its community.',
+  });
+
+export default async function PastPresidentsPage() {
+  const page = await getContentPage<PeopleListFields>('past-presidents');
+  if (!page) notFound();
   return (
     <LayoutModule
       disableCover
       title="JNVPJAA Past Presidents • Alumni Network of JNV Paota, Jaipur"
       containerProps={{}}
     >
-      <PastPresidents />
+      <PastPresidents fields={page.fields} />
     </LayoutModule>
   );
 }

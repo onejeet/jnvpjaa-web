@@ -24,6 +24,7 @@ import MobileMenu from './MobileMenu';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import { useAuth } from '@/context/AuthContext';
 import useScholarshipAvailability from '@/hooks/useScholarshipAvailability';
+import useHiddenPagePaths from '@/modules/ContentPages/useHiddenPagePaths';
 import { usePathname, useRouter } from 'next/navigation';
 import HoverPopover from '@/components/common/HoverPopover';
 import HeaderAddButton from './HeaderAddButton';
@@ -116,9 +117,10 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
   const { user, logoutUser, can, hasRole, access } = useAuth();
 
   const scholarships = useScholarshipAvailability().enabled;
+  const hiddenPaths = useHiddenPagePaths();
   const HEADER_MENU = React.useMemo(() => {
-    return getHeaderMenu(Boolean(user?.id), { scholarships });
-  }, [user, scholarships]);
+    return getHeaderMenu(Boolean(user?.id), { scholarships, hiddenPaths });
+  }, [user, scholarships, hiddenPaths]);
 
   const isBirthday = React.useMemo(() => {
     return isBirthdayToday(user?.dob);
@@ -132,6 +134,7 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
       can(PERMISSION_CODES.IAM_ROLE_ASSIGNMENT_MANAGE_PLATFORM_ADMIN) ||
       can(PERMISSION_CODES.IAM_ROLE_ASSIGNMENT_MANAGE_SUPER_ADMIN) ||
       can(PERMISSION_CODES.IAM_EXECUTIVE_POSITION_MANAGE) ||
+      can(PERMISSION_CODES.CONTENT_PAGE_MANAGE) ||
       can(PERMISSION_CODES.SCHOLARSHIP_DASHBOARD_READ_ORG) ||
       can(PERMISSION_CODES.SCHOLARSHIP_APPLICATION_REASSIGN),
     [can]

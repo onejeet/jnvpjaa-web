@@ -25,9 +25,12 @@ type ShellProps = {
   publish: React.ReactNode;
   aside?: React.ReactNode;
   children: React.ReactNode;
+  /** Set when the shell sits beside another sidebar (admin): keeps one column until there is room for two. */
+  inset?: boolean;
 } & Omit<React.ComponentProps<'form'>, 'children'>;
 
-export function EditorShell({ heading, description, publish, aside, children, ...formProps }: ShellProps) {
+export function EditorShell({ heading, description, publish, aside, children, inset, ...formProps }: ShellProps) {
+  const [two, wide] = inset ? (['lg', 'xl'] as const) : (['md', 'lg'] as const);
   return (
     <Box
       component="form"
@@ -35,8 +38,8 @@ export function EditorShell({ heading, description, publish, aside, children, ..
       sx={{
         display: 'grid',
         gap: { xs: 2, md: 3 },
-        gridTemplateColumns: { xs: 'minmax(0, 1fr)', md: 'minmax(0, 1fr) 300px', lg: 'minmax(0, 1fr) 340px' },
-        gridTemplateAreas: { xs: '"header" "publish" "main" "aside"', md: '"header header" "main side"' },
+        gridTemplateColumns: { xs: 'minmax(0, 1fr)', [two]: 'minmax(0, 1fr) 300px', [wide]: 'minmax(0, 1fr) 340px' },
+        gridTemplateAreas: { xs: '"header" "publish" "main" "aside"', [two]: '"header header" "main side"' },
         alignItems: 'start',
         maxWidth: 1240,
         mx: 'auto',
@@ -59,11 +62,11 @@ export function EditorShell({ heading, description, publish, aside, children, ..
       <Box
         sx={{
           gridArea: 'side',
-          display: { xs: 'contents', md: 'flex' },
+          display: { xs: 'contents', [two]: 'flex' },
           flexDirection: 'column',
           gap: 2,
-          position: { md: 'sticky' },
-          top: { md: 88 },
+          position: { [two]: 'sticky' },
+          top: { [two]: 88 },
         }}
       >
         <Box sx={{ gridArea: 'publish' }}>{publish}</Box>
@@ -263,12 +266,16 @@ export function CoverField({
   onPick,
   onRemove,
   disabled,
+  label = 'Add a cover image',
+  hint = 'Free photos from Unsplash',
 }: {
   src?: string | null;
   alt?: string;
   onPick: () => void;
   onRemove?: () => void;
   disabled?: boolean;
+  label?: string;
+  hint?: string;
 }) {
   if (!src) {
     return (
@@ -292,10 +299,10 @@ export function CoverField({
       >
         <IconPhotoPlus size={26} stroke={1.5} />
         <Typography variant="body2" sx={{ fontWeight: 600, color: 'inherit' }}>
-          Add a cover image
+          {label}
         </Typography>
         <Typography variant="caption" color="text.secondary">
-          Free photos from Unsplash
+          {hint}
         </Typography>
       </ButtonBase>
     );

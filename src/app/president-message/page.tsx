@@ -1,18 +1,24 @@
-import { constructMetadata } from '@/config/seo.config';
-import PresidentMessage from '@/containers/About/PresidentMessage';
-import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import MessagePage from '@/containers/About/MessagePage';
 import LayoutModule from '@/layouts/Layout';
+import { contentPageMetadata } from '@/modules/ContentPages/contentPageMetadata';
+import type { MessageFields } from '@/modules/ContentPages/contentPages.schema';
+import { getContentPage } from '@/modules/ContentPages/getContentPage';
 
-export const metadata: Metadata = constructMetadata({
-  url: '/president-message/',
-  title: "President's Message • JNVPJAA",
-  description: 'Read the JNVPJAA president’s message to alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur.',
-});
+export const dynamic = 'force-dynamic';
 
-export default function PresidentMessagePage() {
+export const generateMetadata = () =>
+  contentPageMetadata('president-message', {
+    title: "President's Message • JNVPJAA",
+    description: 'Read the JNVPJAA president’s message to alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur.',
+  });
+
+export default async function PresidentMessagePage() {
+  const page = await getContentPage<MessageFields>('president-message');
+  if (!page) notFound();
   return (
     <LayoutModule disableCover title="President's Message • Alumni Network of JNV Paota, Jaipur" containerProps={{}}>
-      <PresidentMessage />
+      <MessagePage fields={page.fields} crumb="Message from president" />
     </LayoutModule>
   );
 }

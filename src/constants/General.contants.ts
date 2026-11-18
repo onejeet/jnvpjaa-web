@@ -1,5 +1,3 @@
-import { IBhamashahPillar } from '@/containers/Organisation/BhamashahPillars';
-
 import { ProfileCardProps } from '@/components/common/ProfileCard/ProfileCard.types';
 
 export const EXEC_COMMITTEE: ProfileCardProps[] = [
@@ -243,39 +241,6 @@ export const JNVPJAA_SOCIAL_MEDIA: Record<string, any>[] = [
   {
     name: 'linkedin',
     path: 'https://www.linkedin.com/in/company/JNVPJAA/',
-  },
-];
-
-export const BHAASHAH_PILLARS: IBhamashahPillar[] = [
-  {
-    name: 'Jitendra Dhariwal',
-    batch: '1994',
-    type: 'platinum',
-  },
-  {
-    name: 'Shiv Shankar Vijaya',
-    batch: '1994',
-    type: 'platinum',
-  },
-  {
-    name: 'Rajesh Kumar Rajoria',
-    batch: '1994',
-    type: 'silver',
-  },
-  {
-    name: 'Rajendra Meena',
-    batch: '1993',
-    type: 'silver',
-  },
-  {
-    name: 'Siyaram Meena',
-    batch: '1999',
-    type: 'silver',
-  },
-  {
-    name: 'Ravi Prakash Meena',
-    batch: '1994',
-    type: 'silver',
   },
 ];
 

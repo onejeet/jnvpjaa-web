@@ -12,7 +12,6 @@ import {
   ROLE_ASSIGNMENTS_QUERY,
 } from '@/apollo/accessOperations';
 import AlertDialog, { AlertDialogProps } from '@/components/common/AlertDialog';
-import ScholarshipSettings from './ScholarshipSettings';
 import { useGetUserListQuery, useSendMassEmailMutation } from '@/apollo/hooks';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import Button from '@/components/core/Button';
@@ -217,7 +216,9 @@ const evictExecutiveAssignmentCaches = (cache: any) => {
   cache.gc();
 };
 
-const AdminPanel = () => {
+export type AdminPanelSection = 'access' | 'executive' | 'coordinators' | 'assignments' | 'settings';
+
+const AdminPanel = ({ section }: { section: AdminPanelSection }) => {
   const client = useApolloClient();
   const { can, hasRole, user: currentUser } = useAuth();
   const { showAlert } = useAlert();
@@ -235,18 +236,10 @@ const AdminPanel = () => {
     canManageBatchRoles ||
     canManageExecutivePositions ||
     isSuperAdmin;
-  const [adminTab, setAdminTab] = React.useState('access');
   const [assignmentTab, setAssignmentTab] = React.useState('mentors');
   const [showRoleDetails, setShowRoleDetails] = React.useState(false);
   const [showPositionDetails, setShowPositionDetails] = React.useState(false);
-  const adminTabs = [
-    ...(canReadCatalog && canAssignAnyRole ? [{ value: 'access', label: 'Member access' }] : []),
-    ...(canManageExecutivePositions ? [{ value: 'executive', label: 'Executive committee' }] : []),
-    ...(canManageBatchRoles ? [{ value: 'coordinators', label: 'Batch coordinators' }] : []),
-    ...(canReadAccess ? [{ value: 'assignments', label: 'Current assignments' }] : []),
-    ...(isSuperAdmin ? [{ value: 'settings', label: 'Platform settings' }] : []),
-  ];
-  const selectedTab = adminTabs.some((tab) => tab.value === adminTab) ? adminTab : adminTabs[0]?.value;
+  const selectedTab = section;
   const activeAssignmentsExpanded = selectedTab === 'assignments';
   const [selectedBatch, setSelectedBatch] = React.useState('');
   const [addCoordinatorDialogOpen, setAddCoordinatorDialogOpen] = React.useState(false);
@@ -984,51 +977,7 @@ const AdminPanel = () => {
   const { open: roleRemovalDialogOpen, ...roleRemovalDialogProps } = roleRemovalDialog;
 
   return (
-    <Box width="100%" p={{ xs: 2, md: 4 }}>
-      <Stack direction={{ xs: 'column', md: 'row' }} justifyContent="space-between" spacing={2} mb={3}>
-        <Box>
-          <Typography variant="h1">Admin Center</Typography>
-          <Typography color="grey.700">Manage member access and committee responsibilities.</Typography>
-        </Box>
-      </Stack>
-
-      {adminTabs.length > 0 ? (
-        <Paper variant="outlined" sx={{ mb: 3, borderRadius: 2, overflow: 'hidden' }}>
-          <Tabs
-            value={selectedTab}
-            onChange={(_, value) => setAdminTab(value)}
-            variant="scrollable"
-            scrollButtons="auto"
-            allowScrollButtonsMobile
-            aria-label="Admin Center sections"
-            sx={{ px: { xs: 1, md: 2 }, borderBottom: 1, borderColor: 'divider' }}
-          >
-            {adminTabs.map((tab) => (
-              <Tab key={tab.value} value={tab.value} label={tab.label} />
-            ))}
-          </Tabs>
-          <Stack
-            direction={{ xs: 'column', sm: 'row' }}
-            justifyContent="space-between"
-            alignItems={{ sm: 'center' }}
-            gap={1}
-            sx={{ px: 2, py: 1.5 }}
-          >
-            <Typography color="text.secondary" variant="body2">
-              {selectedTab === 'access' && 'Give members a responsibility or change their access.'}
-              {selectedTab === 'executive' && 'Assign members to the executive committee.'}
-              {selectedTab === 'coordinators' && 'View and update batch coordinators.'}
-              {selectedTab === 'assignments' && 'Review who currently holds each responsibility.'}
-              {selectedTab === 'settings' && 'Manage settings that affect the whole platform.'}
-            </Typography>
-          </Stack>
-        </Paper>
-      ) : (
-        <Alert severity="info" sx={{ mb: 2 }}>
-          No administration tasks are available for your account.
-        </Alert>
-      )}
-
+    <Box width="100%">
       <Grid container spacing={2}>
         {selectedTab === 'access' && catalogLoading && (
           <Grid size={12} role="tabpanel" aria-label="Member access">
@@ -1646,12 +1595,6 @@ const AdminPanel = () => {
           </Typography>
           <Button title="Send welcome email" onClick={onSendWelcomeEmail} startIcon={<PaperPlaneTilt size={18} />} />
         </Paper>
-      )}
-
-      {selectedTab === 'settings' && isSuperAdmin && (
-        <Box mt={2} role="tabpanel">
-          <ScholarshipSettings />
-        </Box>
       )}
 
       <Dialog open={addCoordinatorDialogOpen} onClose={() => closeAddCoordinatorDialog()} fullWidth maxWidth="sm">

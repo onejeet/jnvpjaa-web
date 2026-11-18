@@ -109,14 +109,22 @@ export const MEMBER_HEADER_MENU: IHeaderMenuItem[] = [
   COMMUNITY_MENU,
 ];
 
-const withoutPath = (items: IHeaderMenuItem[], path: string): IHeaderMenuItem[] =>
-  items.map((item) => (item.menu ? { ...item, menu: item.menu.filter((link) => link.path !== path) } : item));
+const withoutPaths = (items: IHeaderMenuItem[], paths: string[]): IHeaderMenuItem[] =>
+  paths.length
+    ? items.map((item) =>
+        item.menu ? { ...item, menu: item.menu.filter((link) => !paths.includes(link.path)) } : item
+      )
+    : items;
 
-export const getHeaderMenu = (isLoggedIn?: boolean, options: { scholarships?: boolean } = {}) => {
+export const getHeaderMenu = (
+  isLoggedIn?: boolean,
+  options: { scholarships?: boolean; hiddenPaths?: string[] } = {}
+) => {
+  const hidden = options.hiddenPaths || [];
   if (isLoggedIn) {
-    return options.scholarships ? MEMBER_HEADER_MENU : withoutPath(MEMBER_HEADER_MENU, PAGE.scholarships.path);
+    return withoutPaths(MEMBER_HEADER_MENU, options.scholarships ? hidden : [...hidden, PAGE.scholarships.path]);
   }
-  return HEADER_MENU;
+  return withoutPaths(HEADER_MENU, hidden);
 };
 
 export const ADD_ENTITIES: IHeaderMenuItem[] = [

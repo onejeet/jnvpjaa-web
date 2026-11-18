@@ -18,9 +18,13 @@ import MenuList from '../../components/common/MenuList';
 import { IconHeartFilled as Heart } from '@tabler/icons-react';
 import Link from 'next/link';
 import HelpBanner from '@/components/common/HelpBanner/HelpBanner';
+import useHiddenPagePaths from '@/modules/ContentPages/useHiddenPagePaths';
 import { dmSans } from '@/utils/theme/fonts';
 
 const LayoutFooter: React.FC = () => {
+  const hiddenPaths = useHiddenPagePaths();
+  const visibleLinks = <T extends { path?: string }>(items: T[]) =>
+    items.filter((item) => !item.path || !hiddenPaths.includes(item.path));
   return (
     <Box
       sx={{
@@ -69,7 +73,7 @@ const LayoutFooter: React.FC = () => {
             <Grid size={{ xs: 12, sm: 2.25, md: 2.25 }} pt="25px">
               <MenuList
                 title="About"
-                items={[
+                items={visibleLinks([
                   {
                     label: 'About JNVPJAA',
                     path: '/about',
@@ -86,7 +90,7 @@ const LayoutFooter: React.FC = () => {
                     label: 'Contact Us',
                     path: '/contact-us',
                   },
-                ]}
+                ])}
               />
             </Grid>
             <Grid size={{ xs: 12, sm: 2.25, md: 2.25 }} pt="25px">
