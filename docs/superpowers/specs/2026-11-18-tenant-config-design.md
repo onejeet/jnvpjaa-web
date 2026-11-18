@@ -22,9 +22,9 @@ launched by **adding config and assets, not by editing code**. Today the brand i
   domains (site, api, assets CDN, content CDN), and email sender (address, domain, provider host).
 - SEO config: site name, default title, title template, description, default OG image, locale, keywords, JSON-LD
   organisation data.
-- Feature/module config: each association-specific module (Bhamashah Pillars, Past Presidents,
-  Principal/President/Secretary messages, Vision, Scholarship, Jobs, Businesses, Student Hub, Donations, …) can be
-  switched on or off. A module that is off has its nav entry hidden and its route returning 404.
+- Feature/module config: each association-specific module (Scholarship, Jobs, Businesses, Student Hub, Donations, …)
+  can be switched on or off. A module that is off has its nav entry hidden and its route returning 404. The seven
+  editable content pages are not in this file (see "Content pages" below).
 - Tenant copy: association-specific sentences (e.g. "Navodaya shaped you", the home slogans, the about-page text) move
   into a tenant content file so they can be replaced.
 - JNVPJAA keeps rendering exactly as it does today, with `tenants/jnvpjaa/` as the first tenant.
@@ -125,6 +125,20 @@ jnvpjaa-backend/tenants/
   data. They move to `tenants/jnvpjaa/seed/`, and the seed script reads them from `TENANT`.
 - **Dev-only pages** `typography-lab` and `writing-studio` are not modules. They are hidden in production builds, as
   today if already gated, otherwise behind `NODE_ENV !== 'production'`.
+
+### Content pages (added after the page editor shipped)
+
+The seven pages (President/Principal/Secretary messages, Vision, About, Past Presidents, Bhamashah Pillars) now live
+in the `ContentPage` table and are edited in `/admin/pages/`. That changes three things:
+
+- **Their copy is data, not config.** It does not go in `content.json`. `prisma/seed_data/content_pages.json` moves to
+  `tenants/<id>/seed/content_pages.json`, and `seed_content_pages.ts` reads it from `TENANT`. `_template` ships a
+  placeholder version (generic headings, no people) that a new association fills in from the admin.
+- **Visibility is the admin's `visible` toggle only.** No file flag for these pages: an association that has no
+  Bhamashah Pillars hides it in the admin. One switch, not two.
+- **Allowed image hosts come from config.** `IMAGE_HOSTS` in `contentPages/schema.ts`, the avatar host default in
+  `utils/uploads.ts`, and web `next.config.js` `remotePatterns` all derive from `brand.domains` (site, assets CDN,
+  content CDN) plus the shared stock hosts. This removes today's "keep in sync" comment between the two repos.
 
 ### Shared schema between repos
 

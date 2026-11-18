@@ -29,6 +29,14 @@ import { IconCircleCheck, IconEye, IconPencil } from '@tabler/icons-react';
 import { notFound, useParams, useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
 
+const safeDecode = (value: string) => {
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
+};
+
 interface SingleBlogProps {
   blog?: Blog;
 }
@@ -39,13 +47,13 @@ const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
   const { isAdmin, redirectToSignin, user } = useAuth();
   const { showAlert } = useAlert();
   const { id: queryId } = useParams();
-
-  console.log('ZZ: Blog queryId', queryId);
+  // useParams keeps non-ASCII segments percent-encoded (Hindi slugs), but the API stores the decoded slug.
+  const slug = safeDecode(queryId as string);
 
   const { data, loading } = useGetBlogQuery({
     skip: !!prerenderedBlog?.id,
     variables: {
-      slug: queryId as string,
+      slug,
     },
   });
 
