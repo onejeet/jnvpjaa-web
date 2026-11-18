@@ -12,6 +12,7 @@ import {
   ROLE_ASSIGNMENTS_QUERY,
 } from '@/apollo/accessOperations';
 import AlertDialog, { AlertDialogProps } from '@/components/common/AlertDialog';
+import ScholarshipSettings from './ScholarshipSettings';
 import { useGetUserListQuery, useSendMassEmailMutation } from '@/apollo/hooks';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import Button from '@/components/core/Button';
@@ -229,13 +230,17 @@ const AdminPanel = () => {
   const isSuperAdmin = hasRole(ROLE_CODES.SUPER_ADMIN);
   const canSendWelcomeEmail = isSuperAdmin;
   const canUseAdminCenter =
-    canReadAccess || canReadCatalog || canManageBatchRoles || canManageExecutivePositions || isSuperAdmin;
+    canReadAccess ||
+    (canReadCatalog && canAssignAnyRole) ||
+    canManageBatchRoles ||
+    canManageExecutivePositions ||
+    isSuperAdmin;
   const [adminTab, setAdminTab] = React.useState('access');
   const [assignmentTab, setAssignmentTab] = React.useState('mentors');
   const [showRoleDetails, setShowRoleDetails] = React.useState(false);
   const [showPositionDetails, setShowPositionDetails] = React.useState(false);
   const adminTabs = [
-    ...(canReadAccess && canAssignAnyRole ? [{ value: 'access', label: 'Member access' }] : []),
+    ...(canReadCatalog && canAssignAnyRole ? [{ value: 'access', label: 'Member access' }] : []),
     ...(canManageExecutivePositions ? [{ value: 'executive', label: 'Executive committee' }] : []),
     ...(canManageBatchRoles ? [{ value: 'coordinators', label: 'Batch coordinators' }] : []),
     ...(canReadAccess ? [{ value: 'assignments', label: 'Current assignments' }] : []),
@@ -275,7 +280,9 @@ const AdminPanel = () => {
   const positionDateInvalid = Boolean(positionDateError);
 
   const [assignRole, { loading: assigningRole }] = useMutation(ASSIGN_USER_ROLE_MUTATION, {
-    refetchQueries: ['roleAssignments', 'batchCoordinatorRoleAssignments', 'viewerAccessContext'],
+    refetchQueries: canReadAccess
+      ? ['roleAssignments', 'batchCoordinatorRoleAssignments', 'viewerAccessContext']
+      : ['viewerAccessContext'],
     awaitRefetchQueries: true,
     update: evictRoleAssignmentCaches,
   });
@@ -372,7 +379,7 @@ const AdminPanel = () => {
         limit: roleUserPageSize,
       },
     },
-    skip: !canReadAccess || (selectedRoleRequiresBatch && !roleForm.scopeBatch),
+    skip: !canAssignAnyRole || (selectedRoleRequiresBatch && !roleForm.scopeBatch),
     notifyOnNetworkStatusChange: true,
   });
 
@@ -1040,7 +1047,7 @@ const AdminPanel = () => {
             <Alert severity="info">You do not currently have access to assign member responsibilities.</Alert>
           </Grid>
         )}
-        {selectedTab === 'access' && !catalogLoading && !catalogError && roles.length > 0 && canReadAccess && (
+        {selectedTab === 'access' && !catalogLoading && !catalogError && roles.length > 0 && canAssignAnyRole && (
           <Grid size={12} role="tabpanel" aria-label="Member access">
             <Paper variant="outlined" sx={{ p: { xs: 2, md: 3 }, borderRadius: 2, maxWidth: 760 }}>
               <Typography variant="h3" mb={2}>
@@ -1639,6 +1646,12 @@ const AdminPanel = () => {
           </Typography>
           <Button title="Send welcome email" onClick={onSendWelcomeEmail} startIcon={<PaperPlaneTilt size={18} />} />
         </Paper>
+      )}
+
+      {selectedTab === 'settings' && isSuperAdmin && (
+        <Box mt={2} role="tabpanel">
+          <ScholarshipSettings />
+        </Box>
       )}
 
       <Dialog open={addCoordinatorDialogOpen} onClose={() => closeAddCoordinatorDialog()} fullWidth maxWidth="sm">

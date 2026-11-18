@@ -47,7 +47,12 @@ const PAGE = {
   gallery: { label: 'Photo Gallery', path: '/gallery', description: 'Albums from meets and campus' },
   businesses: { label: 'Business Directory', path: '/businesses', description: 'Businesses run by alumni' },
   jobs: { label: 'Jobs & Internships', path: '/jobs', description: 'Openings shared by alumni' },
-  transactions: { label: 'Billing & Transactions', path: '/transactions', description: 'Your payments and receipts' },
+  transactions: { label: 'Billing & Transactions', path: '/billing', description: 'Your payments and receipts' },
+  scholarships: {
+    label: 'Scholarships',
+    path: '/scholarships',
+    description: 'Request or support student scholarships',
+  },
   donate: { label: 'Donate Now', path: '/donations', description: 'Support students and the school' },
   newsroom: { label: 'Newsroom', path: '/newsroom', description: 'Official news and announcements' },
   events: { label: 'Events', path: '/events', description: 'Meets, reunions and webinars' },
@@ -99,14 +104,17 @@ export const MEMBER_HEADER_MENU: IHeaderMenuItem[] = [
   {
     label: 'Alumni Center',
     path: '/donations',
-    menu: [PAGE.members, PAGE.gallery, PAGE.businesses, PAGE.jobs, PAGE.transactions, PAGE.donate],
+    menu: [PAGE.members, PAGE.gallery, PAGE.businesses, PAGE.jobs, PAGE.scholarships, PAGE.transactions, PAGE.donate],
   },
   COMMUNITY_MENU,
 ];
 
-export const getHeaderMenu = (isLoggedIn?: boolean) => {
+const withoutPath = (items: IHeaderMenuItem[], path: string): IHeaderMenuItem[] =>
+  items.map((item) => (item.menu ? { ...item, menu: item.menu.filter((link) => link.path !== path) } : item));
+
+export const getHeaderMenu = (isLoggedIn?: boolean, options: { scholarships?: boolean } = {}) => {
   if (isLoggedIn) {
-    return MEMBER_HEADER_MENU;
+    return options.scholarships ? MEMBER_HEADER_MENU : withoutPath(MEMBER_HEADER_MENU, PAGE.scholarships.path);
   }
   return HEADER_MENU;
 };

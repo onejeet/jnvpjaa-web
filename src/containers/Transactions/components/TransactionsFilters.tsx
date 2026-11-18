@@ -8,7 +8,7 @@ import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
-const MembersFilters = () => {
+const TransactionsFilters = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -30,12 +30,15 @@ const MembersFilters = () => {
     [searchParams, router]
   );
 
-  const onSearch = React.useCallback(
-    debounce((key: string, value: string | null) => {
-      handleFilterChange(key, value);
-    }, 700),
+  const onSearch = React.useMemo(
+    () =>
+      debounce((key: string, value: string | null) => {
+        handleFilterChange(key, value);
+      }, 700),
     [handleFilterChange]
   );
+
+  React.useEffect(() => () => onSearch.cancel(), [onSearch]);
 
   return (
     <Box container component={Grid} mb={2} spacing={2}>
@@ -94,4 +97,4 @@ const MembersFilters = () => {
   );
 };
 
-export default MembersFilters;
+export default TransactionsFilters;

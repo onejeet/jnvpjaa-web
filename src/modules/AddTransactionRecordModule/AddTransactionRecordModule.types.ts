@@ -5,9 +5,10 @@ export interface IAddTransactionRecordInput {
   type: TransactionType;
   title: string;
   transactionDate: Dayjs;
-  amount: string;
+  amount: number;
   currency: string;
   status: TransactionStatus;
+  billingCategory?: string;
   description?: string;
   method?: string;
   referenceId?: string;

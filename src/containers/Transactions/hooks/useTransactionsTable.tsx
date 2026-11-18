@@ -4,47 +4,97 @@ import { commonTableColumnProps } from '@/constants/General.contants';
 import Box from '@mui/material/Box';
 import { GridPaginationModel, GridRowParams } from '@mui/x-data-grid';
 import React from 'react';
-import { useGetTransactionsQuery } from '@/apollo/hooks';
-import { Skeleton, Typography } from '@mui/material';
+import { useQuery } from '@apollo/client';
+import { Skeleton, Stack, Typography } from '@mui/material';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import { useSearchParams } from 'next/navigation';
-
-import { useAlert } from '@/context/AlertContext';
-import { useApolloClient } from '@apollo/client';
-import { useAuth } from '@/context/AuthContext';
-
 import dayjs from 'dayjs';
-import { formatCurrency, getCurrencySymbol } from '@/utils/helpers';
+import { formatCurrency } from '@/utils/helpers';
 import ProfilePicture from '@/components/common/ProfilePicture';
-import VerifiedBadge from '@/components/common/FacultyBadge';
-import { IconArrowDown, IconArrowUp } from '@tabler/icons-react';
+import { IconArrowDown, IconArrowRight, IconArrowUp } from '@tabler/icons-react';
+import { GET_ASSOCIATION_TRANSACTIONS } from '@/apollo/billingOperations';
+
+const getUserName = (user: any) => `${user?.firstName || ''} ${user?.lastName || ''}`.trim();
+
+const getUserSummary = (user: any) => {
+  if (!user) return '';
+  return user.batch === 0 ? 'Faculty' : `Batch of ${user.batch}`;
+};
+
+const getAssociationParticipants = (transaction: any) => {
+  const isBeneficiaryPayment = transaction?.billingCategory === 'SCHOLARSHIP_BENEFICIARY_PAYMENT';
+  const isMentorAllocation = transaction?.billingCategory === 'SCHOLARSHIP_MENTOR_ALLOCATION';
+  const from = isBeneficiaryPayment
+    ? transaction?.scholarshipMentor || transaction?.recordedBy
+    : transaction?.recordedBy;
+  const to = isBeneficiaryPayment
+    ? transaction?.scholarshipBeneficiary || transaction?.user
+    : isMentorAllocation
+      ? transaction?.scholarshipMentor || transaction?.user
+      : transaction?.user?.id && transaction?.user?.id !== from?.id
+        ? transaction.user
+        : null;
+
+  return {
+    from: from || null,
+    to: to?.id && to.id !== from?.id ? to : null,
+  };
+};
+
+const TransactionParticipantProfile = React.memo(
+  ({ user, loading, onOpenProfile }: { user: any; loading?: boolean; onOpenProfile: (userId: string) => void }) => {
+    const name = getUserName(user);
+    return (
+      <ProfilePicture
+        loading={loading}
+        src={user.profileImage}
+        title={name}
+        summary={getUserSummary(user)}
+        id={user.id}
+        alt={name}
+        maxWidth={150}
+        containerProps={{
+          onClick: (event) => {
+            event.stopPropagation();
+            onOpenProfile(user.id);
+          },
+        }}
+        titleComponentProps={{
+          titleContainerProps: {
+            className: 'title-container',
+          },
+          titleProps: {
+            noWrap: true,
+          },
+        }}
+      />
+    );
+  }
+);
+TransactionParticipantProfile.displayName = 'TransactionParticipantProfile';
 
 const useTransactionsTable = () => {
-  const client = useApolloClient();
-  const { isAdmin, user } = useAuth();
-  const searchParams = useSearchParams();
   const router = useRouter();
-  const [columns, setColumns] = React.useState<any[]>([]);
   const [paginationModel, setPaginationModel] = React.useState<GridPaginationModel>({
     page: 0,
     pageSize: 50,
   });
 
-  const { showAlert } = useAlert();
-
-  const { data: transactionsData, loading } = useGetTransactionsQuery({
+  const { data: transactionsData, loading } = useQuery(GET_ASSOCIATION_TRANSACTIONS, {
     variables: {
       options: {
-        offset: paginationModel?.page || 0,
+        offset: (paginationModel?.page || 0) * (paginationModel?.pageSize || 10),
         limit: paginationModel?.pageSize || 10,
       },
     },
-    notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'cache-first',
   });
 
-  React.useEffect(() => {
-    const columns = [
+  const openProfile = React.useCallback((userId: string) => router.push(`/profile/${userId}`), [router]);
+
+  const columns = React.useMemo<any[]>(
+    () => [
       {
         field: 'date',
         headerName: 'Date',
@@ -88,37 +138,25 @@ const useTransactionsTable = () => {
             </Box>
           ) : (
             <Box height="100%" display="flex" alignItems="center">
-              <Typography variant="body1">{row?.title || '--'}</Typography>
-            </Box>
-          ),
-      },
-      {
-        field: 'type',
-        headerName: 'Type',
-        width: 150,
-        ...commonTableColumnProps,
-        sortable: true,
-        renderCell: ({ row }: GridRowParams) =>
-          row.loading ? (
-            <Box width="100%" height="100%" display="flex" alignItems="center">
-              {' '}
-              <Skeleton width="100%" height={30} />
-            </Box>
-          ) : (
-            <Box
-              height="100%"
-              display="flex"
-              alignItems="center"
-              sx={{
-                svg: {
-                  color: row?.type === 'DEBIT' ? 'error.main' : 'success.main',
-                },
-              }}
-            >
-              {row?.type === 'DEBIT' ? <IconArrowDown size={16} /> : <IconArrowUp size={16} />}
-              <Typography variant="h5" color={row?.type === 'DEBIT' ? 'error.main' : 'success.main'} ml={0.5}>
-                {row?.type || ''}
-              </Typography>
+              {row?.scholarshipApplicationId ? (
+                <Typography
+                  component={Link}
+                  href={`/scholarships/${row.scholarshipApplicationId}`}
+                  variant="body1"
+                  color="primary.main"
+                  sx={{
+                    textDecoration: 'none',
+                    '&:hover': {
+                      textDecoration: 'underline',
+                    },
+                  }}
+                  onClick={(event) => event.stopPropagation()}
+                >
+                  {row?.title || '--'}
+                </Typography>
+              ) : (
+                <Typography variant="body1">{row?.title || '--'}</Typography>
+              )}
             </Box>
           ),
       },
@@ -141,52 +179,62 @@ const useTransactionsTable = () => {
               display="flex"
               alignItems="center"
               color={row?.type === 'DEBIT' ? 'error.main' : 'success.main'}
+              sx={{
+                svg: {
+                  color: row?.type === 'DEBIT' ? 'error.main' : 'success.main',
+                },
+              }}
             >
-              <Typography variant="h5">{`${formatCurrency(row?.amount)}` || ''}</Typography>
+              {row?.type === 'DEBIT' ? <IconArrowDown size={16} /> : <IconArrowUp size={16} />}
+              <Typography variant="h5" ml={0.5}>
+                {`${formatCurrency(row?.amount)}` || ''}
+              </Typography>
             </Box>
           ),
       },
       {
         field: 'user',
-        headerName: 'Added By',
-        width: 230,
+        headerName: 'Associations',
+        width: 360,
         flex: 1,
         ...commonTableColumnProps,
         sortable: true,
-        renderCell: ({ row }: GridRowParams) =>
-          row.loading ? (
+        renderCell: ({ row }: GridRowParams) => {
+          const { from, to } = getAssociationParticipants(row);
+
+          return row.loading ? (
             <Box width="100%" height="100%" display="flex" alignItems="center">
               {' '}
               <Skeleton width="100%" height={30} />
             </Box>
           ) : (
-            <Box height="100%" display="flex" alignItems="center">
-              <ProfilePicture
-                loading={row.loading}
-                src={row?.user?.profileImage}
-                title={`${row.user.firstName} ${row?.user?.lastName}`}
-                summary={row?.user?.batch === 0 ? 'Faculty' : `Batch of ${row?.user?.batch}`}
-                id={row?.user?.id}
-                alt={`${row?.user?.firstname || ''} ${row?.user?.lastname || ''}`}
-                titleComponentProps={{
-                  titleContainerProps: {
-                    className: 'title-container',
-                  },
-                }}
-
-                // titleProps={{
-                //   fontSize: '14px',
-                //   lineHeight: '16.41px',
-                //   bgcolor: 'none',
-                // }}
-              />
-            </Box>
-          ),
+            <Stack height="100%" direction="row" alignItems="center" spacing={1} minWidth={0}>
+              {from ? (
+                <Box minWidth={0}>
+                  <TransactionParticipantProfile user={from} loading={row.loading} onOpenProfile={openProfile} />
+                </Box>
+              ) : (
+                <Typography variant="body2" color="grey.600">
+                  Historical record
+                </Typography>
+              )}
+              {to && (
+                <>
+                  <Box component="span" color="grey.500" display="inline-flex" flexShrink={0}>
+                    <IconArrowRight size={16} />
+                  </Box>
+                  <Box minWidth={0}>
+                    <TransactionParticipantProfile user={to} loading={row.loading} onOpenProfile={openProfile} />
+                  </Box>
+                </>
+              )}
+            </Stack>
+          );
+        },
       },
-    ];
-
-    setColumns(columns);
-  }, [isAdmin, user]);
+    ],
+    [openProfile]
+  );
 
   const onPaginationModelChange = React.useCallback((model: GridPaginationModel) => {
     setPaginationModel(model);
@@ -201,15 +249,14 @@ const useTransactionsTable = () => {
         };
       });
     }
-    return transactionsData?.getTransactions?.data || [];
-  }, [loading, transactionsData, paginationModel]);
+    return transactionsData?.getAssociationTransactions?.data || [];
+  }, [loading, paginationModel.pageSize, transactionsData]);
 
-  console.log('ZZ: rows', rows);
   return {
     rows,
     loading,
     columns,
-    rowCount: transactionsData?.getTransactions?.total || 0,
+    rowCount: transactionsData?.getAssociationTransactions?.total || 0,
     paginationModel,
     onPaginationModelChange,
     // state,
