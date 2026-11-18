@@ -15,7 +15,7 @@ import Button from '@/components/core/Button';
 import { useAlert } from '@/context/AlertContext';
 import Dialog from '@/components/core/Dialog';
 import { useGetPresignedUrlMutation, User, useUpdateUserMutation } from '@/apollo/hooks';
-import { org_info, R2_BUCKET_NAME, R2_ENDPOINT } from '@/config/index';
+import { org_info } from '@/config/index';
 import { useApolloClient } from '@apollo/client';
 import { optimiseImageSize } from '@/utils/media';
 import { isBrowser } from '@/utils/isBrowser';
@@ -186,8 +186,8 @@ export default function ProfilePictureUpload({ user, onNext, onBack, onSuccess, 
 
     const profileImage = await blobToFile(croppedImage);
 
-    // The API only signs uploads named after the uploader's own id (see assertUploadTarget).
-    const fileName = `${user?.id}.jpeg`;
+    // The API names avatars itself (firstname-batch-<random>); the saved URL is read back from the signed URL.
+    const fileName = 'avatar.jpeg';
     const response = await getPresignedUrl({
       variables: {
         fileName,
@@ -196,15 +196,26 @@ export default function ProfilePictureUpload({ user, onNext, onBack, onSuccess, 
     });
     if (response?.data?.getPresignedUrl) {
       const compressedIImage = await optimiseImageSize(profileImage);
-      await fetch(response?.data?.getPresignedUrl, {
-        method: 'PUT',
-        body: compressedIImage,
-        headers: {
-          'Content-Type': profileImage.type,
-          'Access-Control-Allow-Origin': '*',
-        },
-      });
-      const uploadedFileUrl = `${org_info.content_domain}/${R2_BUCKET_NAME}/profile/${fileName}`;
+      // Save the new avatar URL only once the file is really in storage, or the profile points at a missing image.
+      const uploaded =
+        compressedIImage &&
+        (await fetch(response?.data?.getPresignedUrl, {
+          method: 'PUT',
+          body: compressedIImage,
+          headers: {
+            'Content-Type': profileImage.type,
+            'Access-Control-Allow-Origin': '*',
+          },
+        })
+          .then((res) => res.ok)
+          .catch(() => false));
+      if (!uploaded) {
+        setLoading(false);
+        showAlert({ visible: true, type: 'error', message: 'Image upload failed. Please try again.' });
+        return;
+      }
+      // Serve from where the file actually landed in the bucket (profile/<file name>), taken from the signed URL.
+      const uploadedFileUrl = `${org_info.content_domain}${new URL(response.data.getPresignedUrl).pathname}`;
 
       await updateUser({
         variables: {
