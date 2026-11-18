@@ -11,6 +11,15 @@ import FormSelectField from '@/components/form/FormSelectField';
 import FormCurrencyInput from '@/components/form/FormCurrencyInput';
 import { INewEventFormInput } from './NewEvent.types';
 import Button from '@/components/core/Button';
+import {
+  CoverField,
+  EditorField,
+  EditorPanel,
+  EditorSection,
+  EditorShell,
+  EditorTitleField,
+  PublishPanel,
+} from '@/components/editor/EditorShell';
 import FormDateTimeField from '@/components/form/FormDateTimeField';
 import {
   EventStatus,
@@ -22,11 +31,10 @@ import {
 } from '@/apollo/hooks';
 import { paths } from '@/config/paths';
 import TipTapTextEditor from '@/modules/TipTapTextEditor';
-import { IconDeviceFloppy, IconWorld, IconMapPin, IconPhoto } from '@tabler/icons-react';
+import { IconWorld, IconMapPin } from '@tabler/icons-react';
 // import { useApolloClient } from '@apollo/client';
 import { EVENT_CATEGORIES, eventHostingmedium } from '@/constants/Events.constants';
 import dayjs from 'dayjs';
-import Image from 'next/image';
 import { UnsplashImageSelector } from '../UnsplashImageSelector/UnsplashImamgeSelector';
 import { useApolloClient } from '@apollo/client';
 
@@ -169,266 +177,176 @@ const NewEvent = () => {
 
   if (eventDetailsLoading) {
     return (
-      <Box my={3} width="100%" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-        <CircularProgress />
-        <Typography>Loading event data...</Typography>
+      <Box my={8} display="flex" flexDirection="column" alignItems="center" gap={1.5}>
+        <CircularProgress size={28} />
+        <Typography color="text.secondary">Loading the event…</Typography>
       </Box>
     );
   }
 
+  const status = eventData?.getEventDetails?.status;
+  const isLive = status === EventStatus.Published;
+  const state = !status
+    ? { label: 'New event', tone: 'neutral' as const, note: 'Not saved yet. Drafts are visible only to you.' }
+    : isLive
+      ? { label: 'Published', tone: 'live' as const, note: 'Listed on the events page for all members.' }
+      : status === EventStatus.RequestChanges
+        ? { label: 'Changes requested', tone: 'attention' as const, note: 'Make the edits, then publish again.' }
+        : status === EventStatus.PendingApproval
+          ? {
+              label: 'Waiting for review',
+              tone: 'scheduled' as const,
+              note: 'An admin reviews it before it goes live.',
+            }
+          : status === EventStatus.Closed
+            ? { label: 'Closed', tone: 'neutral' as const, note: 'This event has ended.' }
+            : { label: 'Draft', tone: 'neutral' as const, note: 'Only you can see this event.' };
+
   return (
-    <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ width: '100%', p: { xs: 2, sm: 3, md: 4 } }}>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'flex-start',
-          flexWrap: 'wrap',
-          gap: 2,
-          mb: 4,
-        }}
-      >
-        <Box>
-          <Typography variant="overline" sx={{ color: 'text.secondary', letterSpacing: '0.1em' }}>
-            Community events
-          </Typography>
-          <Typography component="h1" variant="h2" sx={{ mt: 0.25 }}>
-            {eventId ? 'Edit event' : 'Create an event'}
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.75 }}>
-            Share the details members need to join.
-          </Typography>
-        </Box>
-        <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center' }}>
+    <EditorShell
+      onSubmit={handleSubmit(onSubmit)}
+      heading={eventId ? 'Edit event' : 'Create an event'}
+      description="Give members everything they need to decide, plan and show up."
+      publish={
+        <PublishPanel status={state.label} tone={state.tone} note={state.note}>
           <Button
-            title={eventData?.getEventDetails?.status === EventStatus.Published ? 'Unpublish' : 'Save'}
-            onClick={() => {
-              saveTypeRef.current = 'draft';
-              handleSubmit(onSubmit);
-            }}
-            startIcon={<IconDeviceFloppy size={16} />}
+            title={isPublishAllowed ? 'Publish' : 'Update'}
             type="submit"
-            color={eventData?.getEventDetails?.status === EventStatus.Published ? 'error' : 'primary'}
-            variant="outlined"
-            disabled={saving}
-            loading={saveTypeRef.current === 'draft' && saving}
-          />
-          <Button
-            title={isPublishAllowed ? 'Save & Publish' : 'Update'}
-            onClick={() => {
-              saveTypeRef.current = 'publish';
-              handleSubmit(onSubmit);
-            }}
-            action="save"
-            type="submit"
-            color="success"
+            onClick={() => (saveTypeRef.current = 'publish')}
             disabled={saving}
             loading={saveTypeRef.current === 'publish' && saving}
           />
-        </Box>
-      </Box>
-      <Grid container spacing={{ xs: 2.5, md: 3 }}>
-        <Grid size={{ xs: 12 }}>
-          <Typography variant="h4" sx={{ fontWeight: 600 }}>
-            The essentials
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-            These details appear in the event listing.
-          </Typography>
-        </Grid>
-        <Grid size={{ xs: 12 }}>
-          <FormTextField
-            fullWidth
-            id="title"
-            label="Event title"
-            autoFocus
-            control={control}
+          <Button
+            title={isLive ? 'Unpublish' : 'Save draft'}
+            type="submit"
+            variant="outlined"
+            color={isLive ? 'error' : 'primary'}
+            onClick={() => (saveTypeRef.current = 'draft')}
             disabled={saving}
-            name="title"
-            rules={{
-              required: 'Required',
-            }}
+            loading={saveTypeRef.current === 'draft' && saving}
           />
-        </Grid>
-        <Grid
-          size={{ xs: 12, md: 3 }}
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 0.75,
-          }}
-        >
-          <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
-            Cover image
-          </Typography>
-          <Box
-            sx={{
-              border: '1px solid',
-              borderColor: 'divider',
-              borderRadius: 1.5,
-              minHeight: 110,
-              p: 1.25,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 1,
-              flexWrap: 'wrap',
-            }}
-          >
-            {cover?.thumbUrl && (
-              <Image
-                src={cover.thumbUrl}
-                width={90}
-                height={64}
-                alt="Selected event cover"
-                style={{ borderRadius: 6, objectFit: 'cover' }}
-              />
-            )}
-            <Button
-              title={cover ? 'Change image' : 'Choose image'}
-              startIcon={<IconPhoto size={18} />}
-              variant="outlined"
-              size="small"
-              onClick={() => setSelectCoverImage(true)}
+        </PublishPanel>
+      }
+      aside={
+        <EditorPanel title="Event settings">
+          <EditorField label="Category">
+            <FormSelectField
+              control={control}
+              name="category"
+              label="Choose a category"
+              selectProps={{ size: 'small', disabled: saving }}
+              options={EVENT_CATEGORIES}
+              rules={{ required: 'Pick a category' }}
             />
-          </Box>
+          </EditorField>
+          <EditorField label="Ticket price" optional="Leave empty if free">
+            <FormCurrencyInput fullWidth id="price" control={control} disabled={saving} name="price" size="small" />
+          </EditorField>
+          <EditorField label="Cover image" optional>
+            <CoverField
+              src={cover?.url || cover?.thumbUrl}
+              alt={cover?.altDescription || undefined}
+              onPick={() => setSelectCoverImage(true)}
+              disabled={saving}
+            />
+          </EditorField>
+        </EditorPanel>
+      }
+    >
+      <EditorTitleField
+        control={control}
+        name="title"
+        placeholder="Name your event"
+        ariaLabel="Event title"
+        disabled={saving}
+        rules={{ required: 'Add a title' }}
+      />
+      <EditorField label="Summary" hint="One or two lines shown on the event card." sx={{ mt: 3 }}>
+        <FormTextField
+          fullWidth
+          id="summary"
+          multiline
+          minRows={2}
+          control={control}
+          disabled={saving}
+          name="summary"
+          placeholder="e.g. An evening of stories and dinner with the 2004 batch"
+          rules={{ required: 'Add a short summary' }}
+        />
+      </EditorField>
+
+      <EditorSection title="When and where">
+        <Grid container spacing={2.5}>
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <EditorField label="Starts">
+              <FormDateTimeField
+                control={control}
+                name="startDate"
+                inputProps={{ label: 'Start date and time', size: 'small', fullWidth: true }}
+                rules={{ required: 'Pick a start time' }}
+              />
+            </EditorField>
+          </Grid>
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <EditorField label="Ends" optional>
+              <FormDateTimeField
+                control={control}
+                name="endDate"
+                inputProps={{ label: 'End date and time', size: 'small', fullWidth: true }}
+              />
+            </EditorField>
+          </Grid>
+          <Grid size={{ xs: 12, sm: 5 }}>
+            <EditorField label="Format">
+              <FormSelectField
+                control={control}
+                name="medium"
+                selectProps={{ size: 'small', id: 'hosting medium', disabled: saving }}
+                options={eventHostingmedium}
+                rules={{ required: 'Pick a format' }}
+              />
+            </EditorField>
+          </Grid>
+          <Grid size={{ xs: 12, sm: 7 }}>
+            <EditorField label={watchMedium === 'online' ? 'Meeting link' : 'Venue'}>
+              <FormTextField
+                key={watchMedium}
+                fullWidth
+                id="location"
+                control={control}
+                disabled={saving}
+                startAdornment={watchMedium === 'online' ? <IconWorld size={18} /> : <IconMapPin size={18} />}
+                name="location"
+                size="small"
+                placeholder={watchMedium === 'online' ? 'https://meet.google.com/…' : 'Venue name and city'}
+                rules={{
+                  required: watchMedium === 'online' ? 'Add the meeting link' : 'Add the venue',
+                  pattern:
+                    watchMedium === 'online'
+                      ? {
+                          value: /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-_]+\.)+[a-zA-Z]{2,}(:\d{1,5})?(\/.*)?$/,
+                          message: 'Enter a valid link',
+                        }
+                      : undefined,
+                }}
+              />
+            </EditorField>
+          </Grid>
         </Grid>
-        <Grid size={{ xs: 12, md: 9 }}>
-          <FormTextField
-            fullWidth
-            id="summary"
-            label="Summary"
-            multiline
-            minRows={3}
-            control={control}
-            disabled={saving}
-            name="summary"
-            // size="small"
-            rules={{
-              required: 'Required',
-            }}
-            helperText="A short introduction for the event listing."
-          />
-        </Grid>
-        <Grid size={{ xs: 12 }}>
-          <Typography variant="subtitle2" sx={{ mb: 0.5, fontWeight: 600 }}>
-            Full description{' '}
-            <Box component="span" sx={{ color: 'text.secondary', fontWeight: 400 }}>
-              (optional)
-            </Box>
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>
-            Add the agenda, audience, and anything participants should prepare.
-          </Typography>
-          <TipTapTextEditor
-            value={description}
-            onChange={(data) => setValue('description', data, { shouldDirty: true })}
-            disabled={saving}
-            height="clamp(340px, 48vh, 480px)"
-            placeholder="Describe the event..."
-          />
-        </Grid>
-        <Grid size={{ xs: 12 }}>
-          <Box sx={{ borderTop: '1px solid', borderColor: 'divider', pt: 3, mt: 0.5 }}>
-            <Typography variant="h4" sx={{ fontWeight: 600 }}>
-              When and where
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-              Set the date and how members can join.
-            </Typography>
-          </Box>
-        </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
-          <FormDateTimeField
-            control={control}
-            name="startDate"
-            inputProps={{
-              label: 'Start Date',
-            }}
-            rules={{
-              required: 'Required',
-            }}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
-          <FormDateTimeField
-            control={control}
-            name="endDate"
-            inputProps={{
-              label: 'End Date',
-            }}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
-          <FormSelectField
-            control={control}
-            name="medium"
-            selectProps={{
-              size: 'small',
-              id: 'hosting medium',
-              disabled: saving,
-            }}
-            options={eventHostingmedium}
-            rules={{
-              required: 'Required',
-            }}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
-          <FormTextField
-            key={watchMedium}
-            fullWidth
-            id="location"
-            label={watchMedium === 'online' ? 'URL' : 'Location'}
-            control={control}
-            disabled={saving}
-            startAdornment={watchMedium === 'online' ? <IconWorld size={18} /> : <IconMapPin size={18} />}
-            name="location"
-            size="small"
-            rules={{
-              required: 'Required',
-              pattern:
-                watchMedium === 'online'
-                  ? {
-                      value: /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-_]+\.)+[a-zA-Z]{2,}(:\d{1,5})?(\/.*)?$/,
-                      message: 'Enter a valid URL',
-                    }
-                  : undefined,
-            }}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
-          <FormSelectField
-            control={control}
-            name="category"
-            selectProps={{
-              //label: 'Category',
-              size: 'small',
-              id: 'medium',
-              disabled: saving,
-            }}
-            options={EVENT_CATEGORIES}
-            rules={{
-              required: 'Required',
-            }}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
-          <FormCurrencyInput
-            fullWidth
-            id="price"
-            label="Price"
-            control={control}
-            disabled={saving}
-            name="price"
-            size="small"
-            helperText="Optional"
-            // rules={{
-            //   required: 'Required',
-            // }}
-          />
-        </Grid>
-      </Grid>
+      </EditorSection>
+
+      <EditorSection
+        title="About the event"
+        hint="Agenda, who it is for, and anything people should bring or prepare. Optional."
+      >
+        <TipTapTextEditor
+          value={description}
+          onChange={(data) => setValue('description', data, { shouldDirty: true })}
+          disabled={saving}
+          height="clamp(320px, 46vh, 480px)"
+          placeholder="Describe the event…"
+        />
+      </EditorSection>
       {selectCoverImage && (
         <UnsplashImageSelector
           open={selectCoverImage}
@@ -437,7 +355,7 @@ const NewEvent = () => {
           onSelect={(image: Photo) => setValue('cover', image, { shouldDirty: true })}
         />
       )}
-    </Box>
+    </EditorShell>
   );
 };
 

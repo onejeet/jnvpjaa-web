@@ -5,8 +5,16 @@ import React from 'react';
 import { useAlert } from '@/context/AlertContext';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm, useWatch } from 'react-hook-form';
-import { Box, CircularProgress, Grid2 as Grid, Typography } from '@mui/material';
-import FormTextField from '@/components/form/FormTextField';
+import { Box, CircularProgress, Typography } from '@mui/material';
+import {
+  CoverField,
+  EditorField,
+  EditorPanel,
+  EditorSection,
+  EditorShell,
+  EditorTitleField,
+  PublishPanel,
+} from '@/components/editor/EditorShell';
 import FormSelectField from '@/components/form/FormSelectField';
 import { INewBlogFormInput } from './NewBlog.types';
 import Button from '@/components/core/Button';
@@ -23,13 +31,12 @@ import {
 } from '@/apollo/hooks';
 import { paths } from '@/config/paths';
 import TipTapTextEditor from '@/modules/TipTapTextEditor';
-import { IconEye, IconDeviceFloppy, IconPhoto } from '@tabler/icons-react';
+import { IconEye } from '@tabler/icons-react';
 import { useApolloClient } from '@apollo/client';
 import dayjs from 'dayjs';
 import { BLOG_CATEGORIES } from '@/constants/Blog.constants';
 import { useAuth } from '@/context/AuthContext';
 import { UnsplashImageSelector } from '../UnsplashImageSelector/UnsplashImamgeSelector';
-import Image from 'next/image';
 
 const NewBlog = () => {
   const router = useRouter();
@@ -164,178 +171,102 @@ const NewBlog = () => {
 
   if (blogDataLoading) {
     return (
-      <Box my={3} width="100%" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-        <CircularProgress />
-        <Typography>Loading blog data...</Typography>
+      <Box my={8} display="flex" flexDirection="column" alignItems="center" gap={1.5}>
+        <CircularProgress size={28} />
+        <Typography color="text.secondary">Loading your story…</Typography>
       </Box>
     );
   }
 
-  return (
-    <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ width: '100%', p: { xs: 2, sm: 3, md: 4 } }}>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'flex-start',
-          flexWrap: 'wrap',
-          gap: 2,
-          mb: 4,
-        }}
-      >
-        <Box>
-          <Typography variant="overline" sx={{ color: 'text.secondary', letterSpacing: '0.1em' }}>
-            Alumni stories
-          </Typography>
-          <Typography component="h1" variant="h2" sx={{ mt: 0.25 }}>
-            {slug ? 'Edit your story' : 'Write a story'}
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.75 }}>
-            Write for the JNV Paota alumni community.
-          </Typography>
-        </Box>
-        <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center' }}>
-          {blogData?.getBlog?.slug && (
-            <Button
-              title="Preview"
-              variant="outlined"
-              startIcon={<IconEye size={18} />}
-              onClick={() =>
-                typeof window !== 'undefined'
-                  ? window.open(paths.blog.getBlogPostUrl(blogData?.getBlog?.slug || ''))
-                  : null
-              }
-            />
-          )}
+  const status = blogData?.getBlog?.status;
+  const isLive = status === BlogStatus.Published || status === BlogStatus.Approved;
+  const state = !status
+    ? { label: 'New story', tone: 'neutral' as const, note: 'Not saved yet. Drafts are visible only to you.' }
+    : isLive
+      ? { label: 'Published', tone: 'live' as const, note: 'Live on the blog for everyone to read.' }
+      : status === BlogStatus.RequestChanges
+        ? { label: 'Changes requested', tone: 'attention' as const, note: 'Make the edits, then publish again.' }
+        : status === BlogStatus.PendingApproval
+          ? {
+              label: 'Waiting for review',
+              tone: 'scheduled' as const,
+              note: 'An admin reviews it before it goes live.',
+            }
+          : { label: 'Draft', tone: 'neutral' as const, note: 'Only you can see this story.' };
 
+  return (
+    <EditorShell
+      onSubmit={handleSubmit(onSubmit)}
+      heading={slug ? 'Edit your story' : 'Write a story'}
+      description="Share an experience, a memory or a lesson with the JNV Paota alumni community."
+      publish={
+        <PublishPanel status={state.label} tone={state.tone} note={state.note}>
           <Button
-            title={blogData?.getBlog?.status === BlogStatus.Published ? 'Unpublish' : 'Save'}
-            onClick={() => {
-              saveTypeRef.current = 'draft';
-              handleSubmit(onSubmit);
-            }}
-            startIcon={<IconDeviceFloppy size={16} />}
+            title={isPublishAllowed ? 'Publish' : 'Update'}
             type="submit"
-            color={blogData?.getBlog?.status === BlogStatus.Published ? 'error' : 'primary'}
-            variant="outlined"
-            disabled={saving}
-            loading={saveTypeRef.current === 'draft' && saving}
-          />
-          <Button
-            title={isPublishAllowed ? 'Save & Publish' : 'Update'}
-            onClick={() => {
-              saveTypeRef.current = 'publish';
-              handleSubmit(onSubmit);
-            }}
-            action="save"
-            type="submit"
-            color="success"
+            onClick={() => (saveTypeRef.current = 'publish')}
             disabled={saving}
             loading={saveTypeRef.current === 'publish' && saving}
           />
-        </Box>
-      </Box>
-      <Grid container spacing={{ xs: 2.5, md: 3 }}>
-        <Grid size={{ xs: 12 }}>
-          <Typography variant="subtitle2" sx={{ mb: 0.75, fontWeight: 600 }}>
-            Title
-          </Typography>
-          <FormTextField
-            fullWidth
-            id="title"
-            autoFocus
-            multiline
-            minRows={1}
-            control={control}
+          <Button
+            title={isLive ? 'Unpublish' : 'Save draft'}
+            type="submit"
+            variant="outlined"
+            color={isLive ? 'error' : 'primary'}
+            onClick={() => (saveTypeRef.current = 'draft')}
             disabled={saving}
-            name="title"
-            size="small"
-            placeholder="Give your story a title"
-            variant="standard"
-            inputProps={{ 'aria-label': 'Story title' }}
-            InputProps={{
-              disableUnderline: true,
-              sx: {
-                fontSize: { xs: '1.75rem', md: '2.15rem' },
-                lineHeight: 1.2,
-                fontWeight: 500,
-                fontFamily: 'Playfair Display',
-                p: 0,
-              },
-            }}
-            sx={{ pb: 1, borderBottom: '1px solid', borderColor: 'divider' }}
-            rules={{
-              required: 'Required',
-            }}
+            loading={saveTypeRef.current === 'draft' && saving}
           />
-        </Grid>
-        <Grid size={{ xs: 12, md: 5 }}>
-          <Typography variant="subtitle2" sx={{ mb: 0.75, fontWeight: 600 }}>
-            Category
-          </Typography>
-          <FormSelectField
-            control={control}
-            name="category"
-            label="Category"
-            selectProps={{ size: 'small', disabled: saving }}
-            options={BLOG_CATEGORIES}
-            rules={{ required: 'Required' }}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 7 }}>
-          <Typography variant="subtitle2" sx={{ mb: 0.75, fontWeight: 600 }}>
-            Cover image
-          </Typography>
-          <Box
-            sx={{
-              minHeight: 64,
-              border: '1px solid',
-              borderColor: 'divider',
-              borderRadius: 1.5,
-              px: 1.5,
-              py: 1,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 1.5,
-            }}
-          >
-            {cover?.thumbUrl && (
-              <Image
-                src={cover.thumbUrl}
-                width={76}
-                height={48}
-                alt="Selected story cover"
-                style={{ borderRadius: 6, objectFit: 'cover' }}
-              />
-            )}
-            <Typography variant="body2" color="text.secondary" sx={{ flex: 1 }}>
-              {cover ? 'Cover selected' : 'Optional'}
-            </Typography>
+          {blogData?.getBlog?.slug && (
             <Button
-              title={cover ? 'Change image' : 'Choose image'}
-              startIcon={<IconPhoto size={18} />}
-              variant="outlined"
-              size="small"
-              onClick={() => setSelectCoverImage(true)}
+              title="Preview"
+              variant="text"
+              startIcon={<IconEye size={18} />}
+              onClick={() => window.open(paths.blog.getBlogPostUrl(blogData?.getBlog?.slug || ''))}
             />
-          </Box>
-        </Grid>
-        <Grid size={{ xs: 12 }}>
-          <Typography variant="subtitle2" sx={{ mb: 0.5, fontWeight: 600 }}>
-            Your story
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>
-            Use headings, lists, and links to make your story easy to read.
-          </Typography>
-          <TipTapTextEditor
-            value={content}
-            onChange={(data) => setValue('content', data, { shouldDirty: true })}
-            disabled={saving}
-            height="clamp(380px, 56vh, 540px)"
-            placeholder="Begin your story..."
-          />
-        </Grid>
-      </Grid>
+          )}
+        </PublishPanel>
+      }
+      aside={
+        <EditorPanel title="Story settings">
+          <EditorField label="Category">
+            <FormSelectField
+              control={control}
+              name="category"
+              label="Choose a category"
+              selectProps={{ size: 'small', disabled: saving }}
+              options={BLOG_CATEGORIES}
+              rules={{ required: 'Pick a category' }}
+            />
+          </EditorField>
+          <EditorField label="Cover image" optional>
+            <CoverField
+              src={cover?.url || cover?.thumbUrl}
+              alt={cover?.altDescription || undefined}
+              onPick={() => setSelectCoverImage(true)}
+              disabled={saving}
+            />
+          </EditorField>
+        </EditorPanel>
+      }
+    >
+      <EditorTitleField
+        control={control}
+        name="title"
+        placeholder="Give your story a title"
+        ariaLabel="Story title"
+        disabled={saving}
+        rules={{ required: 'Add a title' }}
+      />
+      <EditorSection title="Your story" hint="Use headings, lists and links to keep it easy to read.">
+        <TipTapTextEditor
+          value={content}
+          onChange={(data) => setValue('content', data, { shouldDirty: true })}
+          disabled={saving}
+          height="clamp(380px, 56vh, 560px)"
+          placeholder="Begin your story…"
+        />
+      </EditorSection>
       {selectCoverImage && (
         <UnsplashImageSelector
           open={selectCoverImage}
@@ -344,7 +275,7 @@ const NewBlog = () => {
           onSelect={(image: Photo) => setValue('cover', image, { shouldDirty: true })}
         />
       )}
-    </Box>
+    </EditorShell>
   );
 };
 

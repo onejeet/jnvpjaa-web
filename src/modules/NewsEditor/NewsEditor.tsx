@@ -1,13 +1,12 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useMutation, useQuery } from '@apollo/client';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import dayjs, { Dayjs } from 'dayjs';
-import { Box, CircularProgress, FormControlLabel, Grid2 as Grid, Switch, Typography } from '@mui/material';
-import { IconEye, IconPhoto } from '@tabler/icons-react';
+import { Box, CircularProgress, FormControlLabel, Switch, Typography } from '@mui/material';
+import { IconEye } from '@tabler/icons-react';
 import {
   MANAGED_NEWS_POST,
   SAVE_NEWS_POST,
@@ -19,6 +18,15 @@ import {
 } from '@/apollo/newsroomOperations';
 import type { Photo } from '@/apollo/hooks';
 import Button from '@/components/core/Button';
+import {
+  CoverField,
+  EditorField,
+  EditorPanel,
+  EditorSection,
+  EditorShell,
+  EditorTitleField,
+  PublishPanel,
+} from '@/components/editor/EditorShell';
 import FormTextField from '@/components/form/FormTextField';
 import FormSelectField from '@/components/form/FormSelectField';
 import FormDateTimeField from '@/components/form/FormDateTimeField';
@@ -41,12 +49,6 @@ interface NewsFormValues {
 }
 
 const CATEGORY_OPTIONS = Object.entries(NEWS_CATEGORY_LABELS).map(([value, label]) => ({ value, label }));
-
-const label = (text: string) => (
-  <Typography variant="subtitle2" sx={{ mb: 0.75, fontWeight: 600 }}>
-    {text}
-  </Typography>
-);
 
 const toFormValues = (post?: NewsPost | null): NewsFormValues => ({
   title: post?.title ?? '',
@@ -154,26 +156,36 @@ const NewsForm: React.FC<{ id?: string; post?: NewsPost | null }> = ({ id, post 
     handleSubmit(onSubmit)();
   };
 
+  const scheduledFor = isPublished && post?.publishedAt && dayjs(post.publishedAt).isAfter(dayjs());
+  const state = !post
+    ? {
+        label: 'New story',
+        tone: 'neutral' as const,
+        note: 'Not saved yet. Drafts are visible only to newsroom editors.',
+      }
+    : scheduledFor
+      ? {
+          label: 'Scheduled',
+          tone: 'scheduled' as const,
+          note: `Goes live on ${dayjs(post.publishedAt).format('D MMM YYYY, h:mm A')}.`,
+        }
+      : isPublished
+        ? { label: 'Published', tone: 'live' as const, note: 'Live in the newsroom for everyone.' }
+        : { label: 'Draft', tone: 'neutral' as const, note: 'Visible only to newsroom editors.' };
+
   return (
-    <Box component="form" onSubmit={(e) => e.preventDefault()} sx={{ width: '100%', p: { xs: 2, sm: 3, md: 4 } }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 2, mb: 4 }}>
-        <Box>
-          <Typography variant="overline" sx={{ color: 'text.secondary', letterSpacing: '0.1em' }}>
-            Newsroom
-          </Typography>
-          <Typography component="h1" variant="h2" sx={{ mt: 0.25 }}>
-            {id ? 'Edit news' : 'Add news'}
-          </Typography>
-        </Box>
-        <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center' }}>
-          {isPublished && post?.slug && (
-            <Button
-              title="View"
-              variant="outlined"
-              startIcon={<IconEye size={18} />}
-              onClick={() => window.open(paths.newsroom.getPostUrl(post.slug))}
-            />
-          )}
+    <EditorShell
+      onSubmit={(e) => e.preventDefault()}
+      heading={id ? 'Edit news' : 'Add news'}
+      description="Official updates from the association. Lead with the facts: who, what, when and where."
+      publish={
+        <PublishPanel status={state.label} tone={state.tone} note={state.note}>
+          <Button
+            title={isPublished ? 'Update' : isFuture ? 'Schedule' : 'Publish'}
+            disabled={saving}
+            loading={saving && pendingStatus.current === 'PUBLISHED'}
+            onClick={submitAs('PUBLISHED')}
+          />
           <Button
             title={isPublished ? 'Unpublish' : 'Save draft'}
             variant="outlined"
@@ -182,160 +194,145 @@ const NewsForm: React.FC<{ id?: string; post?: NewsPost | null }> = ({ id, post 
             loading={saving && pendingStatus.current === 'DRAFT'}
             onClick={submitAs('DRAFT')}
           />
-          <Button
-            title={isPublished ? 'Update' : isFuture ? 'Schedule' : 'Publish'}
-            color="success"
-            disabled={saving}
-            loading={saving && pendingStatus.current === 'PUBLISHED'}
-            onClick={submitAs('PUBLISHED')}
-          />
-        </Box>
-      </Box>
-
-      <Grid container spacing={{ xs: 2.5, md: 3 }}>
-        <Grid size={12}>
-          {label('Headline')}
-          <FormTextField
-            fullWidth
-            name="title"
-            control={control}
-            disabled={saving}
-            size="small"
-            placeholder="A clear, factual headline"
-            rules={{
-              required: 'Required',
-              minLength: { value: 5, message: 'At least 5 characters' },
-              maxLength: { value: 160, message: 'At most 160 characters' },
-            }}
-          />
-        </Grid>
-        <Grid size={12}>
-          {label('Summary')}
-          <FormTextField
-            fullWidth
-            multiline
-            minRows={2}
-            name="summary"
-            control={control}
-            disabled={saving}
-            size="small"
-            placeholder="One or two sentences shown on cards and in search results"
-            helperText={`${summary?.length || 0}/300`}
-            rules={{
-              required: 'Required',
-              minLength: { value: 20, message: 'At least 20 characters' },
-              maxLength: { value: 300, message: 'At most 300 characters' },
-            }}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 5 }}>
-          {label('Category')}
-          <FormSelectField
-            control={control}
-            name="category"
-            label="Category"
-            selectProps={{ size: 'small', disabled: saving }}
-            options={CATEGORY_OPTIONS}
-            rules={{ required: 'Required' }}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 7 }}>
-          {label('Cover image')}
-          <Box
-            sx={{
-              minHeight: 64,
-              border: '1px solid',
-              borderColor: 'divider',
-              borderRadius: 1.5,
-              px: 1.5,
-              py: 1,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 1.5,
-            }}
-          >
-            {(cover?.thumbUrl || cover?.url) && (
-              <Image
-                src={String(cover.thumbUrl || cover.url)}
-                width={76}
-                height={48}
-                alt="Selected cover"
-                style={{ borderRadius: 6, objectFit: 'cover' }}
-              />
-            )}
-            <Typography variant="body2" color="text.secondary" sx={{ flex: 1 }}>
-              {cover ? 'Cover selected' : 'Optional'}
-            </Typography>
+          {isPublished && post?.slug && (
             <Button
-              title={cover ? 'Change image' : 'Choose image'}
-              startIcon={<IconPhoto size={18} />}
-              variant="outlined"
-              size="small"
-              onClick={() => setPickCover(true)}
+              title="View live"
+              variant="text"
+              startIcon={<IconEye size={18} />}
+              onClick={() => window.open(paths.newsroom.getPostUrl(post.slug))}
             />
-          </Box>
-        </Grid>
-        {category === 'IN_THE_MEDIA' && (
-          <Grid size={12}>
-            {label('Original coverage link')}
-            <FormTextField
-              fullWidth
-              name="sourceUrl"
-              control={control}
-              disabled={saving}
-              size="small"
-              placeholder="https://"
-              rules={{ pattern: { value: /^https:\/\/\S+$/i, message: 'Use a full https:// link' } }}
-            />
-          </Grid>
-        )}
-        <Grid size={{ xs: 12, md: 6 }}>
-          {label('Schedule')}
-          <FormDateTimeField
-            control={control}
-            name="publishedAt"
-            helperText="Leave empty to publish now. A future date schedules it."
-            // The picker misbehaves on unmount without a label (MUI v7 section DOM), so it always gets one.
-            inputProps={{ label: 'Publish date', size: 'small', fullWidth: true }}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 6 }} sx={{ display: 'flex', alignItems: 'center' }}>
-          <Controller
-            control={control}
-            name="isPinned"
-            render={({ field }) => (
-              <FormControlLabel
-                control={<Switch checked={Boolean(field.value)} onChange={(e) => field.onChange(e.target.checked)} />}
-                label="Pin to the top of the newsroom"
+          )}
+        </PublishPanel>
+      }
+      aside={
+        <>
+          <EditorPanel title="News settings">
+            <EditorField label="Category">
+              <FormSelectField
+                control={control}
+                name="category"
+                label="Choose a category"
+                selectProps={{ size: 'small', disabled: saving }}
+                options={CATEGORY_OPTIONS}
+                rules={{ required: 'Pick a category' }}
               />
+            </EditorField>
+            {category === 'IN_THE_MEDIA' && (
+              <EditorField label="Original coverage link" optional>
+                <FormTextField
+                  fullWidth
+                  name="sourceUrl"
+                  control={control}
+                  disabled={saving}
+                  size="small"
+                  placeholder="https://"
+                  rules={{ pattern: { value: /^https:\/\/\S+$/i, message: 'Use a full https:// link' } }}
+                />
+              </EditorField>
             )}
-          />
-        </Grid>
-        {isPublished && (
-          <Grid size={12}>
-            {label('Update note')}
-            <FormTextField
-              fullWidth
-              name="updateNote"
+            <EditorField label="Cover image" optional>
+              <CoverField
+                src={String(cover?.url || cover?.thumbUrl || '') || null}
+                alt={cover?.alt || undefined}
+                onPick={() => setPickCover(true)}
+                onRemove={() => setValue('cover', null, { shouldDirty: true })}
+                disabled={saving}
+              />
+            </EditorField>
+          </EditorPanel>
+          <EditorPanel title="Publishing">
+            <EditorField label="Publish date" optional="Empty means now">
+              <FormDateTimeField
+                control={control}
+                name="publishedAt"
+                helperText="Pick a future date to schedule it."
+                // The picker misbehaves on unmount without a label (MUI v7 section DOM), so it always gets one.
+                inputProps={{ label: 'Date and time', size: 'small', fullWidth: true }}
+              />
+            </EditorField>
+            <Controller
               control={control}
-              disabled={saving}
-              size="small"
-              placeholder="What changed after publication, e.g. 'Corrected the closing date.'"
-              rules={{ maxLength: { value: 200, message: 'At most 200 characters' } }}
+              name="isPinned"
+              render={({ field }) => (
+                <FormControlLabel
+                  sx={{ m: 0, alignItems: 'flex-start', gap: 1.5 }}
+                  control={
+                    <Switch
+                      checked={Boolean(field.value)}
+                      onChange={(e) => field.onChange(e.target.checked)}
+                      sx={{ mt: -0.5, ml: -1 }}
+                    />
+                  }
+                  label={
+                    <Box>
+                      <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                        Pin to the top
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        Keeps it first in the newsroom.
+                      </Typography>
+                    </Box>
+                  }
+                />
+              )}
             />
-          </Grid>
-        )}
-        <Grid size={12}>
-          {label('News')}
-          {/* Not disabled while saving: toggling TipTap's editable state as the page unmounts throws removeChild. */}
-          <TipTapTextEditor
-            value={content}
-            onChange={(html) => setValue('content', html, { shouldDirty: true })}
-            height="clamp(380px, 56vh, 540px)"
-            placeholder="Write the news..."
-          />
-        </Grid>
-      </Grid>
+            {isPublished && (
+              <EditorField label="Update note" optional hint="Shown to readers when you correct a published story.">
+                <FormTextField
+                  fullWidth
+                  multiline
+                  minRows={2}
+                  name="updateNote"
+                  control={control}
+                  disabled={saving}
+                  size="small"
+                  placeholder="e.g. Corrected the closing date."
+                  rules={{ maxLength: { value: 200, message: 'At most 200 characters' } }}
+                />
+              </EditorField>
+            )}
+          </EditorPanel>
+        </>
+      }
+    >
+      <EditorTitleField
+        control={control}
+        name="title"
+        placeholder="A clear, factual headline"
+        ariaLabel="Headline"
+        disabled={saving}
+        rules={{
+          required: 'Add a headline',
+          minLength: { value: 5, message: 'At least 5 characters' },
+          maxLength: { value: 160, message: 'At most 160 characters' },
+        }}
+      />
+      <EditorField label="Summary" hint="One or two sentences shown on cards and in search results." sx={{ mt: 3 }}>
+        <FormTextField
+          fullWidth
+          multiline
+          minRows={2}
+          name="summary"
+          control={control}
+          disabled={saving}
+          placeholder="What happened, in a sentence or two"
+          helperText={`${summary?.length || 0} / 300`}
+          rules={{
+            required: 'Add a summary',
+            minLength: { value: 20, message: 'At least 20 characters' },
+            maxLength: { value: 300, message: 'At most 300 characters' },
+          }}
+        />
+      </EditorField>
+      <EditorSection title="The full story">
+        {/* Not disabled while saving: toggling TipTap's editable state as the page unmounts throws removeChild. */}
+        <TipTapTextEditor
+          value={content}
+          onChange={(html) => setValue('content', html, { shouldDirty: true })}
+          height="clamp(380px, 56vh, 560px)"
+          placeholder="Write the news…"
+        />
+      </EditorSection>
 
       {pickCover && (
         <UnsplashImageSelector
@@ -356,7 +353,7 @@ const NewsForm: React.FC<{ id?: string; post?: NewsPost | null }> = ({ id, post 
           }
         />
       )}
-    </Box>
+    </EditorShell>
   );
 };
 
