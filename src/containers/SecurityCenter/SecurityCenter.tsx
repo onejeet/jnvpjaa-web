@@ -24,6 +24,7 @@ import {
   IconKey,
   IconLock,
   IconLogout,
+  IconMail,
   IconShieldLock,
 } from '@tabler/icons-react';
 import Button from '@/components/core/Button';
@@ -33,8 +34,11 @@ import { useAuth } from '@/context/AuthContext';
 import { useForgotPasswordMutation } from '@/apollo/hooks';
 import { GOOGLE_LOGIN_AVAILABILITY } from '@/apollo/googleAuthOperations';
 import {
+  CONFIRM_EMAIL_CHANGE,
   DISCONNECT_GOOGLE,
+  REQUEST_EMAIL_CHANGE,
   SECURITY_OVERVIEW,
+  START_GOOGLE_EMAIL_CHANGE,
   SecurityOverview,
   SecuritySession,
   SIGN_OUT_OTHER_SESSIONS,
@@ -49,6 +53,15 @@ dayjs.extend(relativeTime);
 
 const CHANGE_PASSWORD_FORM_ID = 'security-change-password';
 const METHOD_LABEL: Record<string, string> = { PASSWORD: 'Password', GOOGLE: 'Google' };
+// Result codes the backend's Google callback appends as ?emailChange=…
+const GOOGLE_EMAIL_RESULT: Record<string, [string, 'success' | 'error']> = {
+  done: ['Your email was changed to your Google address and is now locked.', 'success'],
+  taken: ['That Google email is already used by another account.', 'error'],
+  same: ['That Google account already uses your current email.', 'error'],
+  locked: ['Your email has already been changed once and is locked.', 'error'],
+  'google-linked': ['That Google account is linked to another member.', 'error'],
+  failed: ['Could not change your email with Google. Please try again.', 'error'],
+};
 
 const Section: React.FC<{
   icon: React.ReactNode;
@@ -155,6 +168,25 @@ const SecurityCenter = () => {
   const [disconnectError, setDisconnectError] = React.useState('');
   const [passwordOpen, setPasswordOpen] = React.useState(false);
   const [savingPassword, setSavingPassword] = React.useState(false);
+  const [emailOpen, setEmailOpen] = React.useState(false);
+  const [newEmail, setNewEmail] = React.useState('');
+  const [codeSentTo, setCodeSentTo] = React.useState('');
+  const [code, setCode] = React.useState('');
+  const [emailError, setEmailError] = React.useState('');
+  const [requestEmailChange, { loading: sendingCode }] = useMutation(REQUEST_EMAIL_CHANGE);
+  const [confirmEmailChange, { loading: confirmingEmail }] = useMutation(CONFIRM_EMAIL_CHANGE);
+  const [startGoogleEmailChange, { loading: startingGoogle }] = useMutation(START_GOOGLE_EMAIL_CHANGE);
+
+  React.useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const result = GOOGLE_EMAIL_RESULT[params.get('emailChange') || ''];
+    if (!params.has('emailChange')) return;
+    params.delete('emailChange');
+    window.history.replaceState(null, '', `${window.location.pathname}${params.size ? `?${params}` : ''}`);
+    const [message, type] = result || GOOGLE_EMAIL_RESULT.failed;
+    showAlert({ visible: true, type, message });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const overview = data?.securityOverview;
   const googleEnabled = Boolean(googleData?.googleLoginAvailability?.enabled);
@@ -213,6 +245,49 @@ const SecurityCenter = () => {
         showAlert({ visible: true, type: 'success', message: 'Google account disconnected.' });
       },
       onError: (err) => setDisconnectError(err.message || 'Could not disconnect Google.'),
+    });
+  };
+
+  const closeEmailDialog = () => {
+    setEmailOpen(false);
+    setNewEmail('');
+    setCode('');
+    setCodeSentTo('');
+    setEmailError('');
+  };
+
+  const sendEmailCode = () => {
+    setEmailError('');
+    requestEmailChange({
+      variables: { email: newEmail },
+      onCompleted: (result) => {
+        setCodeSentTo(result.requestEmailChange);
+        setCode('');
+      },
+      onError: (err) => setEmailError(err.message || 'Could not send the code.'),
+    });
+  };
+
+  const confirmEmailCode = () => {
+    setEmailError('');
+    confirmEmailChange({
+      variables: { code: code.trim() },
+      refetchQueries: ['getUserDetails'],
+      update: (cache, { data: result }) =>
+        cache.writeQuery({ query: SECURITY_OVERVIEW, data: { securityOverview: result?.confirmEmailChange } }),
+      onCompleted: () => {
+        closeEmailDialog();
+        showAlert({ visible: true, type: 'success', message: 'Email changed. It is now locked.' });
+      },
+      onError: (err) => setEmailError(err.message || 'Could not confirm the code.'),
+    });
+  };
+
+  const changeEmailWithGoogle = () => {
+    setEmailError('');
+    startGoogleEmailChange({
+      onCompleted: (result) => window.location.assign(result.startGoogleEmailChange),
+      onError: (err) => setEmailError(err.message || 'Could not start Google.'),
     });
   };
 
@@ -299,6 +374,26 @@ const SecurityCenter = () => {
             You&apos;re not signed in anywhere else.
           </Typography>
         )}
+      </Section>
+
+      <Section
+        icon={<IconMail size={22} stroke={1.75} />}
+        title="Email address"
+        description={
+          overview.canChangeEmail
+            ? 'You can change your login email once. After that it is locked.'
+            : 'You have already changed your email once, so it is locked.'
+        }
+        action={!overview.canChangeEmail && <Chip size="small" icon={<IconLock size={14} />} label="Locked" />}
+      >
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems={{ sm: 'center' }}>
+          <Typography variant="body2" flex={1} sx={{ overflowWrap: 'anywhere' }}>
+            {overview.email}
+          </Typography>
+          {overview.canChangeEmail && (
+            <Button title="Change email" variant="outlined" onClick={() => setEmailOpen(true)} />
+          )}
+        </Stack>
       </Section>
 
       <Section
@@ -418,6 +513,79 @@ const SecurityCenter = () => {
             containerProps={{ alignItems: 'stretch' }}
           />
         </Box>
+      </Dialog>
+
+      <Dialog
+        open={emailOpen}
+        title="Change email"
+        maxWidth="xs"
+        onClose={() => !sendingCode && !confirmingEmail && closeEmailDialog()}
+        footerProps={{
+          onCancel: closeEmailDialog,
+          onOkay: codeSentTo ? confirmEmailCode : sendEmailCode,
+          cancelButtonProps: { disabled: sendingCode || confirmingEmail },
+          okayButtonProps: codeSentTo
+            ? { title: 'Confirm', loading: confirmingEmail, disabled: !/^\d{6}$/.test(code.trim()) }
+            : { title: 'Send code', loading: sendingCode, disabled: !newEmail.trim() },
+        }}
+      >
+        <Stack spacing={2} p={2.5}>
+          <Alert severity="warning">You can change your email only once. After that it is locked.</Alert>
+          {emailError && <Alert severity="error">{emailError}</Alert>}
+          {codeSentTo ? (
+            <>
+              <Typography variant="body2" color="text.secondary">
+                Enter the 6-digit code we sent to <b>{codeSentTo}</b>. It is valid for 15 minutes.
+              </Typography>
+              <TextField
+                autoFocus
+                fullWidth
+                label="Verification code"
+                autoComplete="one-time-code"
+                inputProps={{ inputMode: 'numeric', maxLength: 6 }}
+                value={code}
+                onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && /^\d{6}$/.test(code)) confirmEmailCode();
+                }}
+              />
+              <Box>
+                <Button title="Resend code" size="small" variant="text" loading={sendingCode} onClick={sendEmailCode} />
+              </Box>
+            </>
+          ) : (
+            <>
+              <TextField
+                autoFocus
+                fullWidth
+                type="email"
+                label="New email"
+                autoComplete="email"
+                value={newEmail}
+                onChange={(e) => setNewEmail(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && newEmail.trim()) sendEmailCode();
+                }}
+              />
+              {googleEnabled && (
+                <>
+                  <Divider>or</Divider>
+                  <Button
+                    title="Use my Google email"
+                    variant="outlined"
+                    startIcon={<GoogleIcon />}
+                    loading={startingGoogle}
+                    onClick={changeEmailWithGoogle}
+                  />
+                  <Typography variant="caption" color="text.secondary">
+                    Your email becomes the Google account&apos;s address, and that Google account is connected for
+                    sign-in.
+                  </Typography>
+                </>
+              )}
+            </>
+          )}
+        </Stack>
       </Dialog>
 
       <Dialog

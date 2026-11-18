@@ -12,6 +12,7 @@ export interface SecuritySession {
 
 export interface SecurityOverview {
   email: string;
+  canChangeEmail: boolean;
   hasPassword: boolean;
   googleConnected: boolean;
   currentSessionUntracked: boolean;
@@ -21,6 +22,7 @@ export interface SecurityOverview {
 const OVERVIEW_FIELDS = gql`
   fragment SecurityOverviewFields on SecurityOverview {
     email
+    canChangeEmail
     hasPassword
     googleConnected
     currentSessionUntracked
@@ -67,4 +69,25 @@ export const DISCONNECT_GOOGLE = gql`
     }
   }
   ${OVERVIEW_FIELDS}
+`;
+
+export const REQUEST_EMAIL_CHANGE = gql`
+  mutation RequestEmailChange($email: String!) {
+    requestEmailChange(email: $email)
+  }
+`;
+
+export const CONFIRM_EMAIL_CHANGE = gql`
+  mutation ConfirmEmailChange($code: String!) {
+    confirmEmailChange(code: $code) {
+      ...SecurityOverviewFields
+    }
+  }
+  ${OVERVIEW_FIELDS}
+`;
+
+export const START_GOOGLE_EMAIL_CHANGE = gql`
+  mutation StartGoogleEmailChange {
+    startGoogleEmailChange
+  }
 `;
