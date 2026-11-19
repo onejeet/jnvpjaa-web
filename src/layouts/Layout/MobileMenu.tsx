@@ -5,8 +5,10 @@ import NextLink from 'next/link';
 import { usePathname } from 'next/navigation';
 import { alpha, Box, Button, Drawer, IconButton, ListItemButton, Paper, Stack, Typography } from '@mui/material';
 import type { Theme } from '@mui/material';
-import { IconChevronRight, IconX } from '@tabler/icons-react';
+import { IconChevronRight, IconDeviceMobileDown, IconX } from '@tabler/icons-react';
 import Logo from '@/components/common/Logo';
+import InstallAppGuide from '@/components/PWA/InstallAppGuide';
+import { canShowInstallGuide } from '@/components/PWA/installPrompt';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import { paths } from '@/config/paths';
 import { PATH_ICONS } from '@/constants/menuIcons';
@@ -122,6 +124,10 @@ const Group: React.FC<{ title?: string; children: React.ReactNode }> = ({ title,
 
 const MobileMenu: React.FC<MobileMenuProps> = ({ open, onClose, menu, user, accountItems }) => {
   const pathname = usePathname() || '';
+  const [installGuideOpen, setInstallGuideOpen] = React.useState(false);
+  // Client-only check (touch device, not already installed), so the server render never shows the row.
+  const [showInstallRow, setShowInstallRow] = React.useState(false);
+  React.useEffect(() => setShowInstallRow(canShowInstallGuide()), []);
   const isActive = (path: string) => path !== '/' && (pathname === path || pathname.startsWith(`${path}/`));
 
   // Close after navigating to another page.
@@ -149,136 +155,157 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ open, onClose, menu, user, acco
   const fullName = [user?.firstName, user?.lastName].filter(Boolean).join(' ');
 
   return (
-    <Drawer
-      anchor="right"
-      open={open}
-      onClose={onClose}
-      PaperProps={{
-        sx: {
-          width: 'min(88vw, 380px)',
-          height: '100%',
-          bgcolor: (theme: Theme) => (theme.palette.mode === 'light' ? theme.palette.grey[50] : 'background.default'),
-          borderRadius: '20px 0 0 20px',
-          overflow: 'hidden',
-          display: 'flex',
-          flexDirection: 'column',
-        },
-      }}
-    >
-      <Stack
-        direction="row"
-        alignItems="center"
-        justifyContent="space-between"
-        sx={{
-          px: 2,
-          pt: 'calc(12px + env(safe-area-inset-top, 0px))',
-          pb: 1.5,
-          pr: 'max(16px, env(safe-area-inset-right, 0px))',
-          borderBottom: '1px solid',
-          borderColor: 'divider',
-          bgcolor: 'background.paper',
+    <>
+      <Drawer
+        anchor="right"
+        open={open}
+        onClose={onClose}
+        PaperProps={{
+          sx: {
+            width: 'min(88vw, 380px)',
+            height: '100%',
+            bgcolor: (theme: Theme) => (theme.palette.mode === 'light' ? theme.palette.grey[50] : 'background.default'),
+            borderRadius: '20px 0 0 20px',
+            overflow: 'hidden',
+            display: 'flex',
+            flexDirection: 'column',
+          },
         }}
       >
-        <Logo width={195} height={30} />
-        <IconButton onClick={onClose} aria-label="Close menu" sx={{ width: 40, height: 40, bgcolor: 'action.hover' }}>
-          <IconX size={20} />
-        </IconButton>
-      </Stack>
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+          sx={{
+            px: 2,
+            pt: 'calc(12px + env(safe-area-inset-top, 0px))',
+            pb: 1.5,
+            pr: 'max(16px, env(safe-area-inset-right, 0px))',
+            borderBottom: '1px solid',
+            borderColor: 'divider',
+            bgcolor: 'background.paper',
+          }}
+        >
+          <Logo width={195} height={30} />
+          <IconButton onClick={onClose} aria-label="Close menu" sx={{ width: 40, height: 40, bgcolor: 'action.hover' }}>
+            <IconX size={20} />
+          </IconButton>
+        </Stack>
 
-      <Stack
-        spacing={2.5}
-        sx={{
-          flex: 1,
-          minHeight: 0,
-          overflowY: 'auto',
-          overscrollBehavior: 'contain',
-          px: 2,
-          pt: 2,
-          pb: 'calc(24px + env(safe-area-inset-bottom, 0px))',
-          pr: 'max(16px, env(safe-area-inset-right, 0px))',
-        }}
-      >
-        {user?.id ? (
-          <Paper variant="outlined" sx={{ borderRadius: 4, overflow: 'hidden' }}>
-            <ListItemButton component={NextLink} href={paths.profile.root} sx={{ p: 1.5, gap: 1.5 }}>
-              <ProfilePicture
-                src={user.profileImage || undefined}
-                id={user.id}
-                sx={{ width: 48, height: 48 }}
-                slotProps={{ img: { referrerPolicy: 'no-referrer' } }}
-              />
-              <Box flex={1} minWidth={0}>
-                <Typography fontWeight={600} fontSize={16} noWrap>
-                  {fullName || 'Your profile'}
-                </Typography>
-                <Typography variant="body2" color="text.secondary" noWrap>
-                  {user.batch === 0 ? 'Faculty' : user.batch ? `Batch ${user.batch}` : 'View profile'}
-                </Typography>
-              </Box>
-              <IconChevronRight size={18} style={{ opacity: 0.35 }} />
-            </ListItemButton>
-          </Paper>
-        ) : (
-          <Paper
-            variant="outlined"
-            sx={{
-              borderRadius: 4,
-              p: 2,
-              background: (theme: Theme) =>
-                `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.1)}, ${alpha(theme.palette.primary.main, 0.02)})`,
-            }}
-          >
-            <Typography fontWeight={700} fontSize={17}>
-              Welcome back, alumni
-            </Typography>
-            <Typography variant="body2" color="text.secondary" mt={0.5} mb={2}>
-              Sign in to connect with your batchmates, events and the directory.
-            </Typography>
-            <Stack direction="row" spacing={1.25}>
-              <Button
-                component={NextLink}
-                href={paths.auth.signin}
-                variant="contained"
-                disableElevation
-                fullWidth
-                sx={{ minHeight: 44 }}
-              >
-                Sign in
-              </Button>
-              <Button component={NextLink} href={paths.auth.signup} variant="outlined" fullWidth sx={{ minHeight: 44 }}>
-                Join
-              </Button>
-            </Stack>
-          </Paper>
-        )}
+        <Stack
+          spacing={2.5}
+          sx={{
+            flex: 1,
+            minHeight: 0,
+            overflowY: 'auto',
+            overscrollBehavior: 'contain',
+            px: 2,
+            pt: 2,
+            pb: 'calc(24px + env(safe-area-inset-bottom, 0px))',
+            pr: 'max(16px, env(safe-area-inset-right, 0px))',
+          }}
+        >
+          {user?.id ? (
+            <Paper variant="outlined" sx={{ borderRadius: 4, overflow: 'hidden' }}>
+              <ListItemButton component={NextLink} href={paths.profile.root} sx={{ p: 1.5, gap: 1.5 }}>
+                <ProfilePicture
+                  src={user.profileImage || undefined}
+                  id={user.id}
+                  sx={{ width: 48, height: 48 }}
+                  slotProps={{ img: { referrerPolicy: 'no-referrer' } }}
+                />
+                <Box flex={1} minWidth={0}>
+                  <Typography fontWeight={600} fontSize={16} noWrap>
+                    {fullName || 'Your profile'}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" noWrap>
+                    {user.batch === 0 ? 'Faculty' : user.batch ? `Batch ${user.batch}` : 'View profile'}
+                  </Typography>
+                </Box>
+                <IconChevronRight size={18} style={{ opacity: 0.35 }} />
+              </ListItemButton>
+            </Paper>
+          ) : (
+            <Paper
+              variant="outlined"
+              sx={{
+                borderRadius: 4,
+                p: 2,
+                background: (theme: Theme) =>
+                  `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.1)}, ${alpha(theme.palette.primary.main, 0.02)})`,
+              }}
+            >
+              <Typography fontWeight={700} fontSize={17}>
+                Welcome back, alumni
+              </Typography>
+              <Typography variant="body2" color="text.secondary" mt={0.5} mb={2}>
+                Sign in to connect with your batchmates, events and the directory.
+              </Typography>
+              <Stack direction="row" spacing={1.25}>
+                <Button
+                  component={NextLink}
+                  href={paths.auth.signin}
+                  variant="contained"
+                  disableElevation
+                  fullWidth
+                  sx={{ minHeight: 44 }}
+                >
+                  Sign in
+                </Button>
+                <Button
+                  component={NextLink}
+                  href={paths.auth.signup}
+                  variant="outlined"
+                  fullWidth
+                  sx={{ minHeight: 44 }}
+                >
+                  Join
+                </Button>
+              </Stack>
+            </Paper>
+          )}
 
-        {links.length > 0 && <Group title="Explore">{links.map(linkRow)}</Group>}
-        {groups.map((group) => (
-          <Group key={group.label} title={group.label}>
-            {group.menu!.map(linkRow)}
-          </Group>
-        ))}
+          {links.length > 0 && <Group title="Explore">{links.map(linkRow)}</Group>}
+          {groups.map((group) => (
+            <Group key={group.label} title={group.label}>
+              {group.menu!.map(linkRow)}
+            </Group>
+          ))}
 
-        {user?.id && account.length > 0 && (
-          <Group title="Account">
-            {account.map((item) => (
+          {user?.id && account.length > 0 && (
+            <Group title="Account">
+              {account.map((item) => (
+                <Row
+                  key={item.value}
+                  label={item.label}
+                  icon={item.icon}
+                  active={isActive(item.value)}
+                  onClick={item.onClick}
+                />
+              ))}
+            </Group>
+          )}
+          {showInstallRow && (
+            <Group>
               <Row
-                key={item.value}
-                label={item.label}
-                icon={item.icon}
-                active={isActive(item.value)}
-                onClick={item.onClick}
+                label="Install the app"
+                icon={<IconDeviceMobileDown />}
+                onClick={() => {
+                  onClose();
+                  setInstallGuideOpen(true);
+                }}
               />
-            ))}
-          </Group>
-        )}
-        {user?.id && logout && (
-          <Group>
-            <Row label={logout.label} icon={logout.icon} onClick={logout.onClick} danger />
-          </Group>
-        )}
-      </Stack>
-    </Drawer>
+            </Group>
+          )}
+          {user?.id && logout && (
+            <Group>
+              <Row label={logout.label} icon={logout.icon} onClick={logout.onClick} danger />
+            </Group>
+          )}
+        </Stack>
+      </Drawer>
+      <InstallAppGuide open={installGuideOpen} onClose={() => setInstallGuideOpen(false)} />
+    </>
   );
 };
 

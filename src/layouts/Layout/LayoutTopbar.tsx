@@ -40,7 +40,10 @@ import {
   IconUser as User,
   IconShieldCheck,
   IconActivity,
+  IconDeviceMobileDown,
 } from '@tabler/icons-react';
+import InstallAppGuide from '@/components/PWA/InstallAppGuide';
+import { canShowInstallGuide } from '@/components/PWA/installPrompt';
 import { paths } from '@/config/paths';
 import Lottie from '@/components/common/DynamicLottie';
 import giftsLottieIcon from '@/utils/lottie/gifts_art.json';
@@ -84,6 +87,10 @@ type AccountMenuItem = {
 const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
   const [expanded, setExpanded] = React.useState<string>('');
   const [openMenu, setOpenMenu] = React.useState<boolean>(false);
+  // Tablets in landscape get this desktop bar, which has no mobile menu; touch-only, like the menu row.
+  const [showInstall, setShowInstall] = React.useState(false);
+  const [installGuideOpen, setInstallGuideOpen] = React.useState(false);
+  React.useEffect(() => setShowInstall(position !== 'bottom' && canShowInstallGuide()), [position]);
   const closeMenu = React.useCallback(() => setOpenMenu(false), []);
   const router = useRouter();
   const isBottomDock = position === 'bottom';
@@ -499,6 +506,18 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
             {HEADER_MENU.map((item: IHeaderMenuItem) => (
               <HeaderMenuItem key={item.label} item={item} />
             ))}
+            {showInstall && (
+              <Tooltip title="Install the app">
+                <IconButton
+                  onClick={() => setInstallGuideOpen(true)}
+                  aria-label="Install the app"
+                  color="primary"
+                  sx={{ width: 44, height: 44, mx: 0.5 }}
+                >
+                  <IconDeviceMobileDown size={22} />
+                </IconButton>
+              </Tooltip>
+            )}
             {user?.id ? (
               <Box gap={2} display="flex">
                 <HeaderAddButton />
@@ -518,6 +537,7 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
           </Box>
         </Toolbar>
       </Container>
+      {showInstall && <InstallAppGuide open={installGuideOpen} onClose={() => setInstallGuideOpen(false)} />}
       {isBottomDock && (
         <MobileMenu
           open={openMenu}

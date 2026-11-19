@@ -19,12 +19,8 @@ const OfflineDialog: React.FC<OfflineDialogProps> = () => {
   const [retrying, setRetrying] = useState<boolean>(false);
 
   useEffect(() => {
-    const handleOnline = () => {
-      if (user?.id) {
-        setIsOnline(true);
-        setShowDialog(true);
-      }
-    };
+    // Only flips an open offline dialog to "Back online"; never pops up on its own.
+    const handleOnline = () => setIsOnline(true);
 
     const handleOffline = () => {
       if (user?.id) {
@@ -46,10 +42,7 @@ const OfflineDialog: React.FC<OfflineDialogProps> = () => {
     setRetrying(true);
     const online = await checkInternetConnection();
     setRetrying(false);
-    if (online) {
-      setIsOnline(true);
-      setShowDialog(true);
-    }
+    if (online) setIsOnline(true);
   };
 
   const handleClose = () => {

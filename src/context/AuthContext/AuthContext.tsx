@@ -297,7 +297,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }}
     >
       {isLoading ? (
-        <Box width="100%" minHeight="100vh" display="flex" justifyContent="center" alignItems="center">
+        <Box width="100%" minHeight="100dvh" display="flex" justifyContent="center" alignItems="center">
           <LoadingIndicator isBackdrop={false} />
         </Box>
       ) : null}

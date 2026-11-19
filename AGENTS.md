@@ -14,7 +14,7 @@ Primary stack:
 - React 18 client components for most interactive screens
 - MUI v6 with custom theme utilities under `src/utils/theme`
 - Apollo Client 3.13 plus generated GraphQL hooks in `src/apollo/hooks.ts`
-- `next-pwa` with a custom service worker handler under `public/sw-handler.js`
+- `next-pwa` (generated `public/sw.js`), registered and updated by `src/components/PWA/ServiceWorkerUpdater.tsx`
 - React Hook Form for forms
 - TipTap for rich text editing
 
@@ -180,7 +180,7 @@ Directory intent:
 - `src/hooks`: cross-feature hooks
 - `src/utils`: formatting/helpers/media/network/theme/apollo utilities
 - `src/constants`: static menu, address, event, blog, people/coordinator data
-- `public`: static assets, PWA manifest, service worker handler
+- `public`: static assets (PWA manifest is `src/app/manifest.json/route.ts`)
 - `OLD_PAGES`: legacy pages kept for reference; do not assume they are active routes
 
 General pattern:

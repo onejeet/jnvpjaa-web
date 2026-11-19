@@ -15,7 +15,7 @@ export default function NotFound() {
   return (
     <Box
       width="100vw"
-      height="100vh"
+      height="100dvh"
       gap={3}
       display="flex"
       flexDirection="column"

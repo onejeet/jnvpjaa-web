@@ -15,12 +15,22 @@ const imagesOn = (...hosts) =>
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const withPWA = require('next-pwa')({
   dest: 'public',
-  register: true,
+  // src/components/PWA/ServiceWorkerUpdater registers the worker; letting next-pwa do it too would register it twice.
+  register: false,
   disable: process.env.NEXT_PUBLIC_NODE_ENV === 'development', // Disable in dev mode
-  skipWaiting: true,
+  // The new worker waits until the user taps "Update", so a deploy never swaps code under a half-filled form.
+  skipWaiting: false,
   reloadOnOnline: false,
-  customWorkerDir: 'public', // Add this line
   buildExcludes: [/middleware-manifest\.json$/, /app-build-manifest\.json$/],
+  // Precaching all of public/ downloaded 100MB+ on first visit. Only the app shell is precached; images cache at runtime.
+  publicExcludes: [
+    '!noprecache/**/*',
+    '!assets/**/*',
+    '!splashscreens/**/*',
+    '!images/**/*',
+    '!animations/**/*',
+    '!manifest.json',
+  ],
   runtimeCaching: [
     {
       urlPattern: ({ url }) => url.pathname === '/animations/doggie-art-v1.json',
@@ -33,17 +43,29 @@ const withPWA = require('next-pwa')({
     },
     { urlPattern: ({ url }) => url.pathname.startsWith('/auth/google'), handler: 'NetworkOnly' },
     {
-      urlPattern: /^\/_next\/image\?url=/,
+      // Workbox matches a RegExp against the full href, so a path regex never matched same-origin requests.
+      urlPattern: ({ url }) => url.pathname === '/_next/image',
       handler: 'CacheFirst',
       options: {
         cacheName: 'next-image-optimized',
         expiration: {
           maxEntries: 100,
           maxAgeSeconds: 60 * 60 * 24 * 30,
+          purgeOnQuotaError: true,
         },
         cacheableResponse: {
           statuses: [0, 200],
         },
+      },
+    },
+    // Local branding/images under public/assets, no longer precached.
+    {
+      urlPattern: ({ url, sameOrigin }) => sameOrigin && url.pathname.startsWith('/assets/'),
+      handler: 'StaleWhileRevalidate',
+      options: {
+        cacheName: 'local-assets',
+        expiration: { maxEntries: 150, maxAgeSeconds: 60 * 60 * 24 * 30, purgeOnQuotaError: true },
+        cacheableResponse: { statuses: [200] },
       },
     },
     // 2. CDN: the tenant's assets host
@@ -55,6 +77,7 @@ const withPWA = require('next-pwa')({
         expiration: {
           maxEntries: 100,
           maxAgeSeconds: 60 * 60 * 24 * 30,
+          purgeOnQuotaError: true,
         },
         cacheableResponse: {
           statuses: [0, 200],
@@ -71,6 +94,7 @@ const withPWA = require('next-pwa')({
         expiration: {
           maxEntries: 100,
           maxAgeSeconds: 60 * 60 * 24 * 30,
+          purgeOnQuotaError: true,
         },
         cacheableResponse: {
           statuses: [0, 200],
@@ -87,6 +111,7 @@ const withPWA = require('next-pwa')({
         expiration: {
           maxEntries: 100,
           maxAgeSeconds: 60 * 60 * 24 * 30,
+          purgeOnQuotaError: true,
         },
         cacheableResponse: {
           statuses: [0, 200],

@@ -3,24 +3,58 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@/containers/*": ["./src/containers/*"],
-      "@/components/*": ["./src/components/*"],
-      "@/pages/*": ["./src/pages/*"],
-      "@/lib/*": ["./src/lib/*"],
-      "@/hooks/*": ["./src/hooks/*"],
-      "@/styles/*": ["./src/styles/*"],
-      "@/mocks/*": ["./__mocks__/*"],
-      "@/utils/*": ["./src/utils/*"],
-      "@/context/*": ["./src/context/*"],
-      "@/constants/*": ["./src/constants/*"],
-      "@/layouts/*": ["./src/layouts/*"],
-      "@/apollo/*": ["./src/apollo/*"],
-      "@/config/*": ["./src/config/*"],
-      "@/modules/*": ["./src/modules/*"],
-      "@/types/*": ["./src/types/*"]
+      "@/containers/*": [
+        "./src/containers/*"
+      ],
+      "@/components/*": [
+        "./src/components/*"
+      ],
+      "@/pages/*": [
+        "./src/pages/*"
+      ],
+      "@/lib/*": [
+        "./src/lib/*"
+      ],
+      "@/hooks/*": [
+        "./src/hooks/*"
+      ],
+      "@/styles/*": [
+        "./src/styles/*"
+      ],
+      "@/mocks/*": [
+        "./__mocks__/*"
+      ],
+      "@/utils/*": [
+        "./src/utils/*"
+      ],
+      "@/context/*": [
+        "./src/context/*"
+      ],
+      "@/constants/*": [
+        "./src/constants/*"
+      ],
+      "@/layouts/*": [
+        "./src/layouts/*"
+      ],
+      "@/apollo/*": [
+        "./src/apollo/*"
+      ],
+      "@/config/*": [
+        "./src/config/*"
+      ],
+      "@/modules/*": [
+        "./src/modules/*"
+      ],
+      "@/types/*": [
+        "./src/types/*"
+      ]
     },
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -48,7 +82,10 @@
     "codegen/generate.js",
     "codegen/generateOperations.js",
     "codegen/generate.js",
-    ".next-leaks/types/**/*.ts"
+    ".next-leaks/types/**/*.ts",
+    ".next-pwa-check/types/**/*.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }
