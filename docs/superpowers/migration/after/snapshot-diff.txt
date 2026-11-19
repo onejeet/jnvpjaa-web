@@ -1,0 +1,70 @@
+/contact-us	facts.cacheControl
+    - "s-maxage=31536000, stale-while-revalidate"
+    + "s-maxage=31536000"
+/contact-us/	facts.cacheControl
+    - "s-maxage=31536000, stale-while-revalidate"
+    + "s-maxage=31536000"
+/donations	facts.cacheControl
+    - "s-maxage=31536000, stale-while-revalidate"
+    + "s-maxage=31536000"
+/donations/	facts.cacheControl
+    - "s-maxage=31536000, stale-while-revalidate"
+    + "s-maxage=31536000"
+/executive-committee	facts.cacheControl
+    - "s-maxage=31536000, stale-while-revalidate"
+    + "s-maxage=31536000"
+/executive-committee/	facts.cacheControl
+    - "s-maxage=31536000, stale-while-revalidate"
+    + "s-maxage=31536000"
+/forgot-password	facts.cacheControl
+    - "s-maxage=31536000, stale-while-revalidate"
+    + "s-maxage=31536000"
+/gallery	facts.cacheControl
+    - "s-maxage=31536000, stale-while-revalidate"
+    + "s-maxage=31536000"
+/gallery/	facts.cacheControl
+    - "s-maxage=31536000, stale-while-revalidate"
+    + "s-maxage=31536000"
+/manifest.json	facts.cacheControl
+    - null
+    + "s-maxage=31536000"
+/members/	facts.cacheControl
+    - "s-maxage=31536000, stale-while-revalidate"
+    + "s-maxage=31536000"
+/privacy_policy	facts.cacheControl
+    - "s-maxage=31536000, stale-while-revalidate"
+    + "s-maxage=31536000"
+/privacy_policy/	facts.cacheControl
+    - "s-maxage=31536000, stale-while-revalidate"
+    + "s-maxage=31536000"
+/profile	facts.cacheControl
+    - "s-maxage=31536000, stale-while-revalidate"
+    + "s-maxage=31536000"
+/robots.txt	facts.cacheControl
+    - null
+    + "s-maxage=31536000"
+/scholarships	facts.cacheControl
+    - "s-maxage=31536000, stale-while-revalidate"
+    + "s-maxage=31536000"
+/signin	facts.cacheControl
+    - "s-maxage=31536000, stale-while-revalidate"
+    + "s-maxage=31536000"
+/signup	facts.cacheControl
+    - "s-maxage=31536000, stale-while-revalidate"
+    + "s-maxage=31536000"
+/student-hub/career-counselling/	facts.cacheControl
+    - "s-maxage=31536000, stale-while-revalidate"
+    + "s-maxage=31536000"
+/student-hub/skillup-resources/	facts.cacheControl
+    - "s-maxage=31536000, stale-while-revalidate"
+    + "s-maxage=31536000"
+/sw.js	bodyHash
+    - "b15c161881c81362"
+    + "0dc52d518dd4c4a0"
+/terms_condition	facts.cacheControl
+    - "s-maxage=31536000, stale-while-revalidate"
+    + "s-maxage=31536000"
+/terms_condition/	facts.cacheControl
+    - "s-maxage=31536000, stale-while-revalidate"
+    + "s-maxage=31536000"
+23 difference(s), 0 slower page(s) (>20% and >50ms)

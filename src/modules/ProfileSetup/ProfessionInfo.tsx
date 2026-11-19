@@ -101,7 +101,6 @@ const ProfessionInfo: React.FC<ProfessionInfoProps> = ({ user, onNext, onBack, o
       mutation({
         variables,
         onCompleted: (res) => {
-          console.log('Completed', res);
           client?.refetchQueries({
             include: ['getUserDetails'],
           });
@@ -114,7 +113,7 @@ const ProfessionInfo: React.FC<ProfessionInfoProps> = ({ user, onNext, onBack, o
             type: 'error',
             message: err?.message || 'Update failed. Please try again.',
           });
-          console.log('Error: ', err?.message);
+          console.error('Error: ', err?.message);
         },
       });
     },

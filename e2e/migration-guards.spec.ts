@@ -94,3 +94,23 @@ test('the Google auth callback is private, unreferred and unindexed', async ({ r
   expect(h['referrer-policy']).toBe('no-referrer');
   expect(h['x-robots-tag']).toContain('noindex');
 });
+
+// Next 15 streams metadata into <body> on routes with a loading boundary; crawlers read canonical/OG from <head> only.
+for (const ua of ['Mozilla/5.0 (Macintosh) Chrome/131', 'Googlebot/2.1 (+http://www.google.com/bot.html)']) {
+  test(`metadata is in <head> for ${ua.split('/')[0]}`, async ({ request }) => {
+    for (const path of ['/', '/jobs/', '/newsroom/', '/blog/', '/events/']) {
+      const html = await (await request.get(path, { headers: { 'user-agent': ua } })).text();
+      const head = html.slice(0, html.indexOf('</head>'));
+      expect(head, `${path} title`).toMatch(/<title>[^<]+<\/title>/);
+      expect(head, `${path} canonical`).toContain('rel="canonical"');
+      expect(head, `${path} og:title`).toContain('property="og:title"');
+    }
+  });
+}
+
+// iOS shows the apple-touch-startup-image splash screens only with the prefixed tag, which Next 15 stopped emitting.
+test('home declares both web-app-capable tags, once each', async ({ request }) => {
+  const html = await (await request.get('/')).text();
+  expect(html.match(/<meta name="apple-mobile-web-app-capable" content="yes"/g)).toHaveLength(1);
+  expect(html.match(/<meta name="mobile-web-app-capable" content="yes"/g)).toHaveLength(1);
+});

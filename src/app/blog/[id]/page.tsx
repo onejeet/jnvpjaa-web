@@ -4,6 +4,7 @@ import { JsonLd } from '@/components/JsonLd';
 import SingleBlog from '@/containers/SingleBlog';
 import { SEO_CONFIG, canonicalUrl, generateSchema } from '@/config/seo.config';
 import { initializeApollo } from '@/utils/apollo';
+import { graphqlErrorCode } from '@/utils/index';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
@@ -17,7 +18,7 @@ const getBlog = cache(async (slug: string) => {
     variables: { slug },
     errorPolicy: 'all',
   });
-  if (errors?.some((error) => error.extensions?.code !== 'NOT_FOUND')) {
+  if (errors?.some((error) => graphqlErrorCode(error) !== 'NOT_FOUND')) {
     throw new Error('Could not load blog post');
   }
   const blog = data?.getBlog;
@@ -25,7 +26,7 @@ const getBlog = cache(async (slug: string) => {
 });
 
 export async function generateMetadata(props: { params: Promise<{ id: string }> }): Promise<Metadata> {
-  if (await isRouterNavigation()) return { title: `Blog | ${brand.shortName}` };
+  if (await isRouterNavigation()) return { title: 'Blog' };
   const params = await props.params;
   const blog = await getBlog(decodeURIComponent(params.id));
   if (!blog) return { title: 'Blog post not found', robots: { index: false, follow: false } };

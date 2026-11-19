@@ -53,8 +53,6 @@ const EventListModule: React.FC<EventListModuleProps> = ({
     return eventData?.getEventList?.data || initialEvents?.data || [];
   }, [loading, eventData, propLoading, initialEvents]);
 
-  console.log('ZZ: listData', listData);
-
   return (
     <Grid container spacing={3} mt={2}>
       {listData?.length > 0 ? (

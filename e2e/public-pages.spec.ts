@@ -126,3 +126,16 @@ test('every internal link on the home page still resolves (site smoke)', async (
   }
   expect(broken).toEqual([]);
 });
+
+// A missing (or unpublished) post is a 404, not a server error: crawlers drop 404s but retry and flag 5xx.
+for (const url of [
+  '/blog/qa-missing-post/',
+  '/events/999999/',
+  '/newsroom/qa-missing-post/',
+  '/gallery/qa-missing-album/',
+  '/jobs/qa-missing-job/',
+]) {
+  test(`missing content ${url} answers 404`, async ({ request }) => {
+    expect((await request.get(url)).status()).toBe(404);
+  });
+}

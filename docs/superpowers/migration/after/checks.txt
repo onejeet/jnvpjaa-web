@@ -1,0 +1,5 @@
+tsc ok
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+tenant:check ok — brand.json and features.json match in both repos
+
+tenant:leaks ok — 0 hits in demo web and backend builds

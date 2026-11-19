@@ -1,0 +1,3495 @@
+{
+  "base": "http://localhost:3890",
+  "takenAt": "2026-11-19T10:40:28.548Z",
+  "pages": {
+    "/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "JNVPJAA | JNV Paota Jaipur Alumni Association",
+        "description": "Connect with alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur. Explore JNVPJAA events, alumni stories, photo galleries and community initiatives.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/",
+        "og": {
+          "og:description": "Connect with alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur. Explore JNVPJAA events, alumni stories, photo galleries and community initiatives.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "JNVPJAA | JNV Paota Jaipur Alumni Association",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "JNVPJAA | JNV Paota Jaipur Alumni Association",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Connect with alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur. Explore JNVPJAA events, alumni stories, photo galleries and community initiatives.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "JNVPJAA | JNV Paota Jaipur Alumni Association"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "Organization",
+          "WebPage",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "9933749e34f19076",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "JNV Paota Alumni Network",
+        "textLength": 1284,
+        "textHash": "ab6f16af819160c7",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 39,
+      "totalMs": 43
+    },
+    "/about": {
+      "status": 200,
+      "redirects": [
+        "308 /about/"
+      ],
+      "facts": {
+        "title": "About JNVPJAA • Alumni Network of JNV Paota, Jaipur",
+        "description": "The Official Alumni Network of Jawahar Navodaya Vidyalaya Paota, Jaipur. JNVs are a testament to innovative state-sponsored education in India. Connect with fellow alumni, share experiences, and stay updated on events that honor our shared journey and the values of our beloved school.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/about/",
+        "og": {
+          "og:description": "The Official Alumni Network of Jawahar Navodaya Vidyalaya Paota, Jaipur. JNVs are a testament to innovative state-sponsored education in India. Connect with fellow alumni, share experiences, and stay updated on events that honor our shared journey and the values of our beloved school.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "About JNVPJAA • Alumni Network of JNV Paota, Jaipur",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "About JNVPJAA • Alumni Network of JNV Paota, Jaipur",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/about/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "The Official Alumni Network of Jawahar Navodaya Vidyalaya Paota, Jaipur. JNVs are a testament to innovative state-sponsored education in India. Connect with fellow alumni, share experiences, and stay updated on events that honor our shared journey and the values of our beloved school.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "About JNVPJAA • Alumni Network of JNV Paota, Jaipur"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "AboutPage",
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "bc6e340d4d0600b8",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "Who We Are",
+        "textLength": 2362,
+        "textHash": "7b8a2a50de5a5dc1",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 2,
+      "totalMs": 32
+    },
+    "/vision": {
+      "status": 200,
+      "redirects": [
+        "308 /vision/"
+      ],
+      "facts": {
+        "title": "Vision & Mission • Alumni Network of JNV Paota, Jaipur | JNVPJAA",
+        "description": "Learn about the JNVPJAA vision and mission for connecting JNV Paota alumni and supporting students and the school community.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/vision/",
+        "og": {
+          "og:description": "Learn about the JNVPJAA vision and mission for connecting JNV Paota alumni and supporting students and the school community.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Vision & Mission • Alumni Network of JNV Paota, Jaipur",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Vision & Mission • Alumni Network of JNV Paota, Jaipur",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/vision/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Learn about the JNVPJAA vision and mission for connecting JNV Paota alumni and supporting students and the school community.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Vision & Mission • Alumni Network of JNV Paota, Jaipur"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "Organization",
+          "WebPage",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "022ae1b36fece523",
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "Vision & Mission",
+        "textLength": 3917,
+        "textHash": "0219e766fe40771b",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 1,
+      "totalMs": 34
+    },
+    "/president-message": {
+      "status": 200,
+      "redirects": [
+        "308 /president-message/"
+      ],
+      "facts": {
+        "title": "President's Message • JNVPJAA",
+        "description": "Read the JNVPJAA president’s message to alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/president-message/",
+        "og": {
+          "og:description": "Read the JNVPJAA president’s message to alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "President's Message • JNVPJAA",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "President's Message • JNVPJAA",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/president-message/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Read the JNVPJAA president’s message to alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "President's Message • JNVPJAA"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "Message from President",
+        "textLength": 3963,
+        "textHash": "ff0fd1cc12316557",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 1,
+      "totalMs": 25
+    },
+    "/principal-message": {
+      "status": 200,
+      "redirects": [
+        "308 /principal-message/"
+      ],
+      "facts": {
+        "title": "Principal's Message • JNVPJAA",
+        "description": "Read the principal’s message for the JNV Paota, Jaipur alumni community.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/principal-message/",
+        "og": {
+          "og:description": "Read the principal’s message for the JNV Paota, Jaipur alumni community.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Principal's Message • JNVPJAA",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Principal's Message • JNVPJAA",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/principal-message/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Read the principal’s message for the JNV Paota, Jaipur alumni community.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Principal's Message • JNVPJAA"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "Message from Principal",
+        "textLength": 1317,
+        "textHash": "b74010f8f89f9d4f",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 1,
+      "totalMs": 25
+    },
+    "/secretary-message": {
+      "status": 200,
+      "redirects": [
+        "308 /secretary-message/"
+      ],
+      "facts": {
+        "title": "Secretary's Message • JNVPJAA",
+        "description": "Read the JNVPJAA secretary’s message about alumni connections and association activities.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/secretary-message/",
+        "og": {
+          "og:description": "Read the JNVPJAA secretary’s message about alumni connections and association activities.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Secretary's Message • JNVPJAA",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Secretary's Message • JNVPJAA",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/secretary-message/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Read the JNVPJAA secretary’s message about alumni connections and association activities.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Secretary's Message • JNVPJAA"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "Message from Secretary",
+        "textLength": 3227,
+        "textHash": "c1300f19539a9f15",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 1,
+      "totalMs": 23
+    },
+    "/past-presidents": {
+      "status": 200,
+      "redirects": [
+        "308 /past-presidents/"
+      ],
+      "facts": {
+        "title": "JNVPJAA Past Presidents • Alumni Network of JNV Paota, Jaipur",
+        "description": "Explore the past presidents who have served the JNVPJAA alumni association and helped strengthen its community.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/past-presidents/",
+        "og": {
+          "og:description": "Explore the past presidents who have served the JNVPJAA alumni association and helped strengthen its community.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "JNVPJAA Past Presidents • Alumni Network of JNV Paota, Jaipur",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "JNVPJAA Past Presidents • Alumni Network of JNV Paota, Jaipur",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/past-presidents/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Explore the past presidents who have served the JNVPJAA alumni association and helped strengthen its community.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "JNVPJAA Past Presidents • Alumni Network of JNV Paota, Jaipur"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "Past Presidents",
+        "textLength": 1390,
+        "textHash": "1b6aee3ac802facd",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 1,
+      "totalMs": 26
+    },
+    "/bhamashah-pillars": {
+      "status": 200,
+      "redirects": [
+        "308 /bhamashah-pillars/"
+      ],
+      "facts": {
+        "title": "JNVPJAA Bhamashah Pillars • Alumni Network of JNV Paota, Jaipur",
+        "description": "Recognize the supporters and contributors behind JNVPJAA educational and alumni community initiatives.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/bhamashah-pillars/",
+        "og": {
+          "og:description": "Recognize the supporters and contributors behind JNVPJAA educational and alumni community initiatives.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "JNVPJAA Bhamashah Pillars • Alumni Network of JNV Paota, Jaipur",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "JNVPJAA Bhamashah Pillars • Alumni Network of JNV Paota, Jaipur",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/bhamashah-pillars/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Recognize the supporters and contributors behind JNVPJAA educational and alumni community initiatives.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "JNVPJAA Bhamashah Pillars • Alumni Network of JNV Paota, Jaipur"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "Bhamashah Pillars",
+        "textLength": 1634,
+        "textHash": "5bcf7e4faa150725",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 1,
+      "totalMs": 29
+    },
+    "/executive-committee": {
+      "status": 200,
+      "redirects": [
+        "308 /executive-committee/"
+      ],
+      "facts": {
+        "title": "Executive Committee • Alumni Network of JNV Paota, Jaipur | JNVPJAA",
+        "description": "Meet the JNVPJAA executive committee and the alumni volunteers guiding our association and community initiatives.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/executive-committee/",
+        "og": {
+          "og:description": "Meet the JNVPJAA executive committee and the alumni volunteers guiding our association and community initiatives.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Executive Committee • Alumni Network of JNV Paota, Jaipur",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Executive Committee • Alumni Network of JNV Paota, Jaipur",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/executive-committee/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Meet the JNVPJAA executive committee and the alumni volunteers guiding our association and community initiatives.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Executive Committee • Alumni Network of JNV Paota, Jaipur"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "The JNVPJAA Executive Commmittee",
+        "textLength": 771,
+        "textHash": "83c8dafd9c3aadec",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "s-maxage=31536000",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 1,
+      "totalMs": 4
+    },
+    "/batch-coordinators": {
+      "status": 200,
+      "redirects": [
+        "308 /batch-coordinators/"
+      ],
+      "facts": {
+        "title": "Batch Coordinators • Alumni Network of JNV Paota, Jaipur | JNVPJAA",
+        "description": "Find JNVPJAA batch coordinators who help alumni of JNV Paota, Jaipur stay connected across graduating years.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/batch-coordinators/",
+        "og": {
+          "og:description": "Find JNVPJAA batch coordinators who help alumni of JNV Paota, Jaipur stay connected across graduating years.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Batch Coordinators • Alumni Network of JNV Paota, Jaipur",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Batch Coordinators • Alumni Network of JNV Paota, Jaipur",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/batch-coordinators/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Find JNVPJAA batch coordinators who help alumni of JNV Paota, Jaipur stay connected across graduating years.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Batch Coordinators • Alumni Network of JNV Paota, Jaipur"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "Batch Coordinators",
+        "textLength": 842,
+        "textHash": "90e6a8282a539098",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 1,
+      "totalMs": 58
+    },
+    "/blog": {
+      "status": 200,
+      "redirects": [
+        "308 /blog/"
+      ],
+      "facts": {
+        "title": "Blog • Alumni Network of JNV Paota, Jaipur | JNVPJAA",
+        "description": "Read stories, memories and insights from the JNV Paota, Jaipur alumni community on the JNVPJAA blog.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/blog/",
+        "og": {
+          "og:description": "Read stories, memories and insights from the JNV Paota, Jaipur alumni community on the JNVPJAA blog.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Blog • Alumni Network of JNV Paota, Jaipur",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Blog • Alumni Network of JNV Paota, Jaipur",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/blog/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Read stories, memories and insights from the JNV Paota, Jaipur alumni community on the JNVPJAA blog.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Blog • Alumni Network of JNV Paota, Jaipur"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "CollectionPage",
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "3f37567f7a4509f6",
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "Blog",
+        "textLength": 1240,
+        "textHash": "a95f4a740a4996d2",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 1,
+      "totalMs": 32
+    },
+    "/events": {
+      "status": 200,
+      "redirects": [
+        "308 /events/"
+      ],
+      "facts": {
+        "title": "Events • JNVPJAA",
+        "description": "Explore JNVPJAA alumni reunions, meetups, sports events and community activities for JNV Paota, Jaipur.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/events/",
+        "og": {
+          "og:description": "Explore JNVPJAA alumni reunions, meetups, sports events and community activities for JNV Paota, Jaipur.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Events • JNVPJAA",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Events • JNVPJAA",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/events/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Explore JNVPJAA alumni reunions, meetups, sports events and community activities for JNV Paota, Jaipur.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Events • JNVPJAA"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "CollectionPage",
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "47f033c4a61305ad",
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "Events",
+        "textLength": 556,
+        "textHash": "77bd96ad00fb77a4",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 1,
+      "totalMs": 30
+    },
+    "/newsroom": {
+      "status": 200,
+      "redirects": [
+        "308 /newsroom/"
+      ],
+      "facts": {
+        "title": "Newsroom • JNVPJAA",
+        "description": "Official news, announcements and press releases from the JNV Paota Jaipur Alumni Association.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/newsroom/",
+        "og": {
+          "og:description": "Official news, announcements and press releases from the JNV Paota Jaipur Alumni Association.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Newsroom • JNVPJAA",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Newsroom • JNVPJAA",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/newsroom/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Official news, announcements and press releases from the JNV Paota Jaipur Alumni Association.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Newsroom • JNVPJAA"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "CollectionPage",
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "3af8a28c011ce9c3",
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "Newsroom",
+        "textLength": 791,
+        "textHash": "2c71239f67f36def",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 1,
+      "totalMs": 27
+    },
+    "/gallery": {
+      "status": 200,
+      "redirects": [
+        "308 /gallery/"
+      ],
+      "facts": {
+        "title": "Photos Gallery • JNVPJAA",
+        "description": "Explore photos from JNVPJAA alumni reunions, school events and community activities at JNV Paota, Jaipur.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/gallery/",
+        "og": {
+          "og:description": "Explore photos from JNVPJAA alumni reunions, school events and community activities at JNV Paota, Jaipur.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Photos Gallery • JNVPJAA",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Photos Gallery • JNVPJAA",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/gallery/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Explore photos from JNVPJAA alumni reunions, school events and community activities at JNV Paota, Jaipur.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Photos Gallery • JNVPJAA"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "CollectionPage",
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "6fae8ef9b99e4f1b",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "Photo Gallery",
+        "textLength": 616,
+        "textHash": "b1515ab071d0aab6",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "s-maxage=31536000",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 0,
+      "totalMs": 4
+    },
+    "/businesses": {
+      "status": 200,
+      "redirects": [
+        "308 /businesses/"
+      ],
+      "facts": {
+        "title": "Businesses by Alumni • JNVPJAA",
+        "description": "Discover businesses founded or owned by alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/businesses/",
+        "og": {
+          "og:description": "Discover businesses founded or owned by alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Businesses by Alumni • JNVPJAA",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Businesses by Alumni • JNVPJAA",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/businesses/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Discover businesses founded or owned by alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Businesses by Alumni • JNVPJAA"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "CollectionPage",
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "50c09eba4d35bd49",
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "Businesses By Alumni",
+        "textLength": 2522,
+        "textHash": "98788d859abf8d8e",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 1,
+      "totalMs": 51
+    },
+    "/jobs": {
+      "status": 200,
+      "redirects": [
+        "308 /jobs/"
+      ],
+      "facts": {
+        "title": "Jobs & Internships • JNVPJAA",
+        "description": "Jobs and internships shared by alumni of JNV Paota, Jaipur — apply in one step with your profile.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/jobs/",
+        "og": {
+          "og:description": "Jobs and internships shared by alumni of JNV Paota, Jaipur — apply in one step with your profile.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Jobs & Internships • JNVPJAA",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Jobs & Internships • JNVPJAA",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/jobs/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Jobs and internships shared by alumni of JNV Paota, Jaipur — apply in one step with your profile.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Jobs & Internships • JNVPJAA"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "CollectionPage",
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "1da2d48d9b94dd7d",
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "Jobs & Internships",
+        "textLength": 1092,
+        "textHash": "5cb1740ef7542bec",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 1,
+      "totalMs": 40
+    },
+    "/student-hub": {
+      "status": 404,
+      "redirects": [
+        "308 /student-hub/"
+      ],
+      "facts": {
+        "title": "JNVPJAA | JNV Paota Jaipur Alumni Association",
+        "description": "Connect with alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur. Explore JNVPJAA events, alumni stories, photo galleries and community initiatives.",
+        "robots": "noindex",
+        "canonical": "https://jnvpjaa.org/",
+        "og": {
+          "og:description": "Connect with alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur. Explore JNVPJAA events, alumni stories, photo galleries and community initiatives.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "JNVPJAA",
+          "og:image:height": "585",
+          "og:image:width": "1300",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "JNVPJAA | JNV Paota Jaipur Alumni Association",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Connect with alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur. Explore JNVPJAA events, alumni stories, photo galleries and community initiatives.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "JNVPJAA | JNV Paota Jaipur Alumni Association"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": null,
+        "textLength": 0,
+        "textHash": "e3b0c44298fc1c14",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 1,
+      "totalMs": 4
+    },
+    "/scholarships": {
+      "status": 200,
+      "redirects": [
+        "308 /scholarships/",
+        "307 /signin/?r=L3NjaG9sYXJzaGlwcy8%3D"
+      ],
+      "facts": {
+        "title": "Signin • Alumni Network of JNV Paota, Jaipur | JNVPJAA",
+        "description": "The Official Alumni Network of Jawahar Navodaya Vidyalaya Paota, Jaipur. JNVs are a testament to innovative state-sponsored education in India. Connect with fellow alumni, share experiences, and stay updated on events that honor our shared journey and the values of our beloved school.",
+        "robots": "noindex, nofollow",
+        "canonical": "https://jnvpjaa.org/signin/",
+        "og": {
+          "og:description": "The Official Alumni Network of Jawahar Navodaya Vidyalaya Paota, Jaipur. JNVs are a testament to innovative state-sponsored education in India. Connect with fellow alumni, share experiences, and stay updated on events that honor our shared journey and the values of our beloved school.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Signin • Alumni Network of JNV Paota, Jaipur",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Signin • Alumni Network of JNV Paota, Jaipur",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/signin/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "The Official Alumni Network of Jawahar Navodaya Vidyalaya Paota, Jaipur. JNVs are a testament to innovative state-sponsored education in India. Connect with fellow alumni, share experiences, and stay updated on events that honor our shared journey and the values of our beloved school.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Signin • Alumni Network of JNV Paota, Jaipur"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": null,
+        "textLength": 0,
+        "textHash": "e3b0c44298fc1c14",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "s-maxage=31536000",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 1,
+      "totalMs": 5
+    },
+    "/donations": {
+      "status": 200,
+      "redirects": [
+        "308 /donations/"
+      ],
+      "facts": {
+        "title": "Donations • Alumni Network of JNV Paota, Jaipur | JNVPJAA",
+        "description": "Support JNVPJAA educational initiatives, student opportunities and alumni community activities for JNV Paota, Jaipur.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/donations/",
+        "og": {
+          "og:description": "Support JNVPJAA educational initiatives, student opportunities and alumni community activities for JNV Paota, Jaipur.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Donations • Alumni Network of JNV Paota, Jaipur",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Donations • Alumni Network of JNV Paota, Jaipur",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/donations/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Support JNVPJAA educational initiatives, student opportunities and alumni community activities for JNV Paota, Jaipur.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Donations • Alumni Network of JNV Paota, Jaipur"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "Organization",
+          "WebPage",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4",
+          "f352af1840cc0e13"
+        ],
+        "h1": "Donations",
+        "textLength": 1024,
+        "textHash": "13fd9143bfb8ee5c",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "s-maxage=31536000",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 1,
+      "totalMs": 5
+    },
+    "/contact-us": {
+      "status": 200,
+      "redirects": [
+        "308 /contact-us/"
+      ],
+      "facts": {
+        "title": "Contact Us • Alumni Network of JNV Paota, Jaipur | JNVPJAA",
+        "description": "Contact the JNVPJAA alumni association for questions about membership, events and community initiatives at JNV Paota, Jaipur.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/contact-us/",
+        "og": {
+          "og:description": "Contact the JNVPJAA alumni association for questions about membership, events and community initiatives at JNV Paota, Jaipur.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Contact Us • Alumni Network of JNV Paota, Jaipur",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Contact Us • Alumni Network of JNV Paota, Jaipur",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/contact-us/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Contact the JNVPJAA alumni association for questions about membership, events and community initiatives at JNV Paota, Jaipur.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Contact Us • Alumni Network of JNV Paota, Jaipur"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "ContactPage",
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "9d8d9bf25cb96091",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "ContactUs",
+        "textLength": 837,
+        "textHash": "b990393a957b0416",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "s-maxage=31536000",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 1,
+      "totalMs": 5
+    },
+    "/privacy_policy": {
+      "status": 200,
+      "redirects": [
+        "308 /privacy_policy/"
+      ],
+      "facts": {
+        "title": "Privacy Policy • Alumni Network of JNV Paota, Jaipur | JNVPJAA",
+        "description": "How JNVPJAA collects, uses, shares and protects personal data, including Google sign-in, member directory and your rights under Indian law.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/privacy_policy/",
+        "og": {
+          "og:description": "How JNVPJAA collects, uses, shares and protects personal data, including Google sign-in, member directory and your rights under Indian law.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Privacy Policy • Alumni Network of JNV Paota, Jaipur",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Privacy Policy • Alumni Network of JNV Paota, Jaipur",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/privacy_policy/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "How JNVPJAA collects, uses, shares and protects personal data, including Google sign-in, member directory and your rights under Indian law.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Privacy Policy • Alumni Network of JNV Paota, Jaipur"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "Privacy Policy",
+        "textLength": 13627,
+        "textHash": "916912fac2e81960",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "s-maxage=31536000",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 1,
+      "totalMs": 6
+    },
+    "/terms_condition": {
+      "status": 200,
+      "redirects": [
+        "308 /terms_condition/"
+      ],
+      "facts": {
+        "title": "Terms of Use • Alumni Network of JNV Paota, Jaipur | JNVPJAA",
+        "description": "The rules for using the JNVPJAA website and member portal: eligibility, accounts, Google sign-in, member conduct, content and liability.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/terms_condition/",
+        "og": {
+          "og:description": "The rules for using the JNVPJAA website and member portal: eligibility, accounts, Google sign-in, member conduct, content and liability.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Terms of Use • Alumni Network of JNV Paota, Jaipur",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Terms of Use • Alumni Network of JNV Paota, Jaipur",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/terms_condition/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "The rules for using the JNVPJAA website and member portal: eligibility, accounts, Google sign-in, member conduct, content and liability.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Terms of Use • Alumni Network of JNV Paota, Jaipur"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "Terms of Use",
+        "textLength": 9199,
+        "textHash": "58f1de49bee682a0",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "s-maxage=31536000",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 1,
+      "totalMs": 5
+    },
+    "/signin": {
+      "status": 200,
+      "redirects": [
+        "308 /signin/"
+      ],
+      "facts": {
+        "title": "Signin • Alumni Network of JNV Paota, Jaipur | JNVPJAA",
+        "description": "The Official Alumni Network of Jawahar Navodaya Vidyalaya Paota, Jaipur. JNVs are a testament to innovative state-sponsored education in India. Connect with fellow alumni, share experiences, and stay updated on events that honor our shared journey and the values of our beloved school.",
+        "robots": "noindex, nofollow",
+        "canonical": "https://jnvpjaa.org/signin/",
+        "og": {
+          "og:description": "The Official Alumni Network of Jawahar Navodaya Vidyalaya Paota, Jaipur. JNVs are a testament to innovative state-sponsored education in India. Connect with fellow alumni, share experiences, and stay updated on events that honor our shared journey and the values of our beloved school.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Signin • Alumni Network of JNV Paota, Jaipur",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Signin • Alumni Network of JNV Paota, Jaipur",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/signin/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "The Official Alumni Network of Jawahar Navodaya Vidyalaya Paota, Jaipur. JNVs are a testament to innovative state-sponsored education in India. Connect with fellow alumni, share experiences, and stay updated on events that honor our shared journey and the values of our beloved school.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Signin • Alumni Network of JNV Paota, Jaipur"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": null,
+        "textLength": 0,
+        "textHash": "e3b0c44298fc1c14",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "s-maxage=31536000",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 1,
+      "totalMs": 3
+    },
+    "/signup": {
+      "status": 200,
+      "redirects": [
+        "308 /signup/"
+      ],
+      "facts": {
+        "title": "Signup • Alumni Network of JNV Paota, Jaipur | JNVPJAA",
+        "description": "The Official Alumni Network of Jawahar Navodaya Vidyalaya Paota, Jaipur. JNVs are a testament to innovative state-sponsored education in India. Connect with fellow alumni, share experiences, and stay updated on events that honor our shared journey and the values of our beloved school.",
+        "robots": "noindex, nofollow",
+        "canonical": "https://jnvpjaa.org/signup/",
+        "og": {
+          "og:description": "The Official Alumni Network of Jawahar Navodaya Vidyalaya Paota, Jaipur. JNVs are a testament to innovative state-sponsored education in India. Connect with fellow alumni, share experiences, and stay updated on events that honor our shared journey and the values of our beloved school.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Signup • Alumni Network of JNV Paota, Jaipur",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Signup • Alumni Network of JNV Paota, Jaipur",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/signup/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "The Official Alumni Network of Jawahar Navodaya Vidyalaya Paota, Jaipur. JNVs are a testament to innovative state-sponsored education in India. Connect with fellow alumni, share experiences, and stay updated on events that honor our shared journey and the values of our beloved school.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Signup • Alumni Network of JNV Paota, Jaipur"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": null,
+        "textLength": 0,
+        "textHash": "e3b0c44298fc1c14",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "s-maxage=31536000",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 1,
+      "totalMs": 3
+    },
+    "/forgot-password": {
+      "status": 200,
+      "redirects": [
+        "308 /forgot-password/"
+      ],
+      "facts": {
+        "title": "Forgot Password • Alumni Network of JNV Paota, Jaipur | JNVPJAA",
+        "description": "The Official Alumni Network of Jawahar Navodaya Vidyalaya Paota, Jaipur. JNVs are a testament to innovative state-sponsored education in India. Connect with fellow alumni, share experiences, and stay updated on events that honor our shared journey and the values of our beloved school.",
+        "robots": "noindex, nofollow",
+        "canonical": "https://jnvpjaa.org/forgot-password/",
+        "og": {
+          "og:description": "The Official Alumni Network of Jawahar Navodaya Vidyalaya Paota, Jaipur. JNVs are a testament to innovative state-sponsored education in India. Connect with fellow alumni, share experiences, and stay updated on events that honor our shared journey and the values of our beloved school.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Forgot Password • Alumni Network of JNV Paota, Jaipur",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Forgot Password • Alumni Network of JNV Paota, Jaipur",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/forgot-password/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "The Official Alumni Network of Jawahar Navodaya Vidyalaya Paota, Jaipur. JNVs are a testament to innovative state-sponsored education in India. Connect with fellow alumni, share experiences, and stay updated on events that honor our shared journey and the values of our beloved school.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Forgot Password • Alumni Network of JNV Paota, Jaipur"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": null,
+        "textLength": 0,
+        "textHash": "e3b0c44298fc1c14",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "s-maxage=31536000",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 1,
+      "totalMs": 3
+    },
+    "/events/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "Events • JNVPJAA",
+        "description": "Explore JNVPJAA alumni reunions, meetups, sports events and community activities for JNV Paota, Jaipur.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/events/",
+        "og": {
+          "og:description": "Explore JNVPJAA alumni reunions, meetups, sports events and community activities for JNV Paota, Jaipur.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Events • JNVPJAA",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Events • JNVPJAA",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/events/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Explore JNVPJAA alumni reunions, meetups, sports events and community activities for JNV Paota, Jaipur.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Events • JNVPJAA"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "CollectionPage",
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "47f033c4a61305ad",
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "Events",
+        "textLength": 556,
+        "textHash": "77bd96ad00fb77a4",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 22,
+      "totalMs": 25
+    },
+    "/blog/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "Blog • Alumni Network of JNV Paota, Jaipur | JNVPJAA",
+        "description": "Read stories, memories and insights from the JNV Paota, Jaipur alumni community on the JNVPJAA blog.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/blog/",
+        "og": {
+          "og:description": "Read stories, memories and insights from the JNV Paota, Jaipur alumni community on the JNVPJAA blog.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Blog • Alumni Network of JNV Paota, Jaipur",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Blog • Alumni Network of JNV Paota, Jaipur",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/blog/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Read stories, memories and insights from the JNV Paota, Jaipur alumni community on the JNVPJAA blog.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Blog • Alumni Network of JNV Paota, Jaipur"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "CollectionPage",
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "3f37567f7a4509f6",
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "Blog",
+        "textLength": 1240,
+        "textHash": "a95f4a740a4996d2",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 30,
+      "totalMs": 32
+    },
+    "/newsroom/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "Newsroom • JNVPJAA",
+        "description": "Official news, announcements and press releases from the JNV Paota Jaipur Alumni Association.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/newsroom/",
+        "og": {
+          "og:description": "Official news, announcements and press releases from the JNV Paota Jaipur Alumni Association.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Newsroom • JNVPJAA",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Newsroom • JNVPJAA",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/newsroom/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Official news, announcements and press releases from the JNV Paota Jaipur Alumni Association.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Newsroom • JNVPJAA"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "CollectionPage",
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "3af8a28c011ce9c3",
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "Newsroom",
+        "textLength": 791,
+        "textHash": "2c71239f67f36def",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 24,
+      "totalMs": 27
+    },
+    "/jobs/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "Jobs & Internships • JNVPJAA",
+        "description": "Jobs and internships shared by alumni of JNV Paota, Jaipur — apply in one step with your profile.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/jobs/",
+        "og": {
+          "og:description": "Jobs and internships shared by alumni of JNV Paota, Jaipur — apply in one step with your profile.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Jobs & Internships • JNVPJAA",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Jobs & Internships • JNVPJAA",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/jobs/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Jobs and internships shared by alumni of JNV Paota, Jaipur — apply in one step with your profile.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Jobs & Internships • JNVPJAA"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "CollectionPage",
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "1da2d48d9b94dd7d",
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "Jobs & Internships",
+        "textLength": 1092,
+        "textHash": "5cb1740ef7542bec",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 16,
+      "totalMs": 35
+    },
+    "/about/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "About JNVPJAA • Alumni Network of JNV Paota, Jaipur",
+        "description": "The Official Alumni Network of Jawahar Navodaya Vidyalaya Paota, Jaipur. JNVs are a testament to innovative state-sponsored education in India. Connect with fellow alumni, share experiences, and stay updated on events that honor our shared journey and the values of our beloved school.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/about/",
+        "og": {
+          "og:description": "The Official Alumni Network of Jawahar Navodaya Vidyalaya Paota, Jaipur. JNVs are a testament to innovative state-sponsored education in India. Connect with fellow alumni, share experiences, and stay updated on events that honor our shared journey and the values of our beloved school.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "About JNVPJAA • Alumni Network of JNV Paota, Jaipur",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "About JNVPJAA • Alumni Network of JNV Paota, Jaipur",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/about/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "The Official Alumni Network of Jawahar Navodaya Vidyalaya Paota, Jaipur. JNVs are a testament to innovative state-sponsored education in India. Connect with fellow alumni, share experiences, and stay updated on events that honor our shared journey and the values of our beloved school.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "About JNVPJAA • Alumni Network of JNV Paota, Jaipur"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "AboutPage",
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "bc6e340d4d0600b8",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "Who We Are",
+        "textLength": 2362,
+        "textHash": "7b8a2a50de5a5dc1",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 19,
+      "totalMs": 22
+    },
+    "/contact-us/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "Contact Us • Alumni Network of JNV Paota, Jaipur | JNVPJAA",
+        "description": "Contact the JNVPJAA alumni association for questions about membership, events and community initiatives at JNV Paota, Jaipur.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/contact-us/",
+        "og": {
+          "og:description": "Contact the JNVPJAA alumni association for questions about membership, events and community initiatives at JNV Paota, Jaipur.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Contact Us • Alumni Network of JNV Paota, Jaipur",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Contact Us • Alumni Network of JNV Paota, Jaipur",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/contact-us/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Contact the JNVPJAA alumni association for questions about membership, events and community initiatives at JNV Paota, Jaipur.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Contact Us • Alumni Network of JNV Paota, Jaipur"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "ContactPage",
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "9d8d9bf25cb96091",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "ContactUs",
+        "textLength": 837,
+        "textHash": "b990393a957b0416",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "s-maxage=31536000",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 3,
+      "totalMs": 4
+    },
+    "/student-hub/skillup-resources/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "SkillUp Resources • Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur | JNVPJAA",
+        "description": "Find skill development resources and learning opportunities shared for JNV Paota, Jaipur students and alumni.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/student-hub/skillup-resources/",
+        "og": {
+          "og:description": "Find skill development resources and learning opportunities shared for JNV Paota, Jaipur students and alumni.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "SkillUp Resources • Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "SkillUp Resources • Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/student-hub/skillup-resources/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Find skill development resources and learning opportunities shared for JNV Paota, Jaipur students and alumni.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "SkillUp Resources • Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "Recommended Learning Resources",
+        "textLength": 699,
+        "textHash": "1e89db36cba9a361",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "s-maxage=31536000",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 3,
+      "totalMs": 3
+    },
+    "/student-hub/career-counselling/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "Career Counselling • Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur | JNVPJAA",
+        "description": "Explore career counselling and guidance for students of Jawahar Navodaya Vidyalaya Paota, Jaipur from the alumni community.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/student-hub/career-counselling/",
+        "og": {
+          "og:description": "Explore career counselling and guidance for students of Jawahar Navodaya Vidyalaya Paota, Jaipur from the alumni community.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Career Counselling • Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Career Counselling • Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/student-hub/career-counselling/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Explore career counselling and guidance for students of Jawahar Navodaya Vidyalaya Paota, Jaipur from the alumni community.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Career Counselling • Alumni Network of Jawahar Navodaya Vidyalaya, Paota, Jaipur"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "Career Counselling",
+        "textLength": 1390,
+        "textHash": "1ff8f850f4ec4c07",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "s-maxage=31536000",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 4,
+      "totalMs": 4
+    },
+    "/privacy_policy/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "Privacy Policy • Alumni Network of JNV Paota, Jaipur | JNVPJAA",
+        "description": "How JNVPJAA collects, uses, shares and protects personal data, including Google sign-in, member directory and your rights under Indian law.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/privacy_policy/",
+        "og": {
+          "og:description": "How JNVPJAA collects, uses, shares and protects personal data, including Google sign-in, member directory and your rights under Indian law.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Privacy Policy • Alumni Network of JNV Paota, Jaipur",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Privacy Policy • Alumni Network of JNV Paota, Jaipur",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/privacy_policy/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "How JNVPJAA collects, uses, shares and protects personal data, including Google sign-in, member directory and your rights under Indian law.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Privacy Policy • Alumni Network of JNV Paota, Jaipur"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "Privacy Policy",
+        "textLength": 13627,
+        "textHash": "916912fac2e81960",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "s-maxage=31536000",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 4,
+      "totalMs": 5
+    },
+    "/terms_condition/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "Terms of Use • Alumni Network of JNV Paota, Jaipur | JNVPJAA",
+        "description": "The rules for using the JNVPJAA website and member portal: eligibility, accounts, Google sign-in, member conduct, content and liability.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/terms_condition/",
+        "og": {
+          "og:description": "The rules for using the JNVPJAA website and member portal: eligibility, accounts, Google sign-in, member conduct, content and liability.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Terms of Use • Alumni Network of JNV Paota, Jaipur",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Terms of Use • Alumni Network of JNV Paota, Jaipur",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/terms_condition/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "The rules for using the JNVPJAA website and member portal: eligibility, accounts, Google sign-in, member conduct, content and liability.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Terms of Use • Alumni Network of JNV Paota, Jaipur"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "Terms of Use",
+        "textLength": 9199,
+        "textHash": "58f1de49bee682a0",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "s-maxage=31536000",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 4,
+      "totalMs": 4
+    },
+    "/vision/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "Vision & Mission • Alumni Network of JNV Paota, Jaipur | JNVPJAA",
+        "description": "Learn about the JNVPJAA vision and mission for connecting JNV Paota alumni and supporting students and the school community.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/vision/",
+        "og": {
+          "og:description": "Learn about the JNVPJAA vision and mission for connecting JNV Paota alumni and supporting students and the school community.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Vision & Mission • Alumni Network of JNV Paota, Jaipur",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Vision & Mission • Alumni Network of JNV Paota, Jaipur",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/vision/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Learn about the JNVPJAA vision and mission for connecting JNV Paota alumni and supporting students and the school community.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Vision & Mission • Alumni Network of JNV Paota, Jaipur"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "Organization",
+          "WebPage",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "022ae1b36fece523",
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "Vision & Mission",
+        "textLength": 3917,
+        "textHash": "0219e766fe40771b",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 22,
+      "totalMs": 26
+    },
+    "/president-message/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "President's Message • JNVPJAA",
+        "description": "Read the JNVPJAA president’s message to alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/president-message/",
+        "og": {
+          "og:description": "Read the JNVPJAA president’s message to alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "President's Message • JNVPJAA",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "President's Message • JNVPJAA",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/president-message/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Read the JNVPJAA president’s message to alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "President's Message • JNVPJAA"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "Message from President",
+        "textLength": 3963,
+        "textHash": "ff0fd1cc12316557",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 19,
+      "totalMs": 23
+    },
+    "/secretary-message/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "Secretary's Message • JNVPJAA",
+        "description": "Read the JNVPJAA secretary’s message about alumni connections and association activities.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/secretary-message/",
+        "og": {
+          "og:description": "Read the JNVPJAA secretary’s message about alumni connections and association activities.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Secretary's Message • JNVPJAA",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Secretary's Message • JNVPJAA",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/secretary-message/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Read the JNVPJAA secretary’s message about alumni connections and association activities.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Secretary's Message • JNVPJAA"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "Message from Secretary",
+        "textLength": 3227,
+        "textHash": "c1300f19539a9f15",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 20,
+      "totalMs": 24
+    },
+    "/executive-committee/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "Executive Committee • Alumni Network of JNV Paota, Jaipur | JNVPJAA",
+        "description": "Meet the JNVPJAA executive committee and the alumni volunteers guiding our association and community initiatives.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/executive-committee/",
+        "og": {
+          "og:description": "Meet the JNVPJAA executive committee and the alumni volunteers guiding our association and community initiatives.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Executive Committee • Alumni Network of JNV Paota, Jaipur",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Executive Committee • Alumni Network of JNV Paota, Jaipur",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/executive-committee/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Meet the JNVPJAA executive committee and the alumni volunteers guiding our association and community initiatives.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Executive Committee • Alumni Network of JNV Paota, Jaipur"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "The JNVPJAA Executive Commmittee",
+        "textLength": 771,
+        "textHash": "83c8dafd9c3aadec",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "s-maxage=31536000",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 3,
+      "totalMs": 3
+    },
+    "/principal-message/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "Principal's Message • JNVPJAA",
+        "description": "Read the principal’s message for the JNV Paota, Jaipur alumni community.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/principal-message/",
+        "og": {
+          "og:description": "Read the principal’s message for the JNV Paota, Jaipur alumni community.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Principal's Message • JNVPJAA",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Principal's Message • JNVPJAA",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/principal-message/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Read the principal’s message for the JNV Paota, Jaipur alumni community.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Principal's Message • JNVPJAA"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "Message from Principal",
+        "textLength": 1317,
+        "textHash": "b74010f8f89f9d4f",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 19,
+      "totalMs": 23
+    },
+    "/batch-coordinators/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "Batch Coordinators • Alumni Network of JNV Paota, Jaipur | JNVPJAA",
+        "description": "Find JNVPJAA batch coordinators who help alumni of JNV Paota, Jaipur stay connected across graduating years.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/batch-coordinators/",
+        "og": {
+          "og:description": "Find JNVPJAA batch coordinators who help alumni of JNV Paota, Jaipur stay connected across graduating years.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Batch Coordinators • Alumni Network of JNV Paota, Jaipur",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Batch Coordinators • Alumni Network of JNV Paota, Jaipur",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/batch-coordinators/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Find JNVPJAA batch coordinators who help alumni of JNV Paota, Jaipur stay connected across graduating years.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Batch Coordinators • Alumni Network of JNV Paota, Jaipur"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "Batch Coordinators",
+        "textLength": 842,
+        "textHash": "90e6a8282a539098",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 45,
+      "totalMs": 49
+    },
+    "/bhamashah-pillars/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "JNVPJAA Bhamashah Pillars • Alumni Network of JNV Paota, Jaipur",
+        "description": "Recognize the supporters and contributors behind JNVPJAA educational and alumni community initiatives.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/bhamashah-pillars/",
+        "og": {
+          "og:description": "Recognize the supporters and contributors behind JNVPJAA educational and alumni community initiatives.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "JNVPJAA Bhamashah Pillars • Alumni Network of JNV Paota, Jaipur",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "JNVPJAA Bhamashah Pillars • Alumni Network of JNV Paota, Jaipur",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/bhamashah-pillars/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Recognize the supporters and contributors behind JNVPJAA educational and alumni community initiatives.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "JNVPJAA Bhamashah Pillars • Alumni Network of JNV Paota, Jaipur"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "Bhamashah Pillars",
+        "textLength": 1634,
+        "textHash": "5bcf7e4faa150725",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 20,
+      "totalMs": 24
+    },
+    "/donations/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "Donations • Alumni Network of JNV Paota, Jaipur | JNVPJAA",
+        "description": "Support JNVPJAA educational initiatives, student opportunities and alumni community activities for JNV Paota, Jaipur.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/donations/",
+        "og": {
+          "og:description": "Support JNVPJAA educational initiatives, student opportunities and alumni community activities for JNV Paota, Jaipur.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Donations • Alumni Network of JNV Paota, Jaipur",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Donations • Alumni Network of JNV Paota, Jaipur",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/donations/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Support JNVPJAA educational initiatives, student opportunities and alumni community activities for JNV Paota, Jaipur.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Donations • Alumni Network of JNV Paota, Jaipur"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "Organization",
+          "WebPage",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4",
+          "f352af1840cc0e13"
+        ],
+        "h1": "Donations",
+        "textLength": 1024,
+        "textHash": "13fd9143bfb8ee5c",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "s-maxage=31536000",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 3,
+      "totalMs": 4
+    },
+    "/members/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "Members Directory • JNVPJAA",
+        "description": "Discover and connect with alumni and faculty members of Jawahar Navodaya Vidyalaya Paota, Jaipur.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/members/",
+        "og": {
+          "og:description": "Discover and connect with alumni and faculty members of Jawahar Navodaya Vidyalaya Paota, Jaipur.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Members Directory • JNVPJAA",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Members Directory • JNVPJAA",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/members/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Discover and connect with alumni and faculty members of Jawahar Navodaya Vidyalaya Paota, Jaipur.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Members Directory • JNVPJAA"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "CollectionPage",
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4",
+          "fbe76b378c43b69d"
+        ],
+        "h1": "Alumni Members",
+        "textLength": 590,
+        "textHash": "985460cff7b4a55f",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "s-maxage=31536000",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 3,
+      "totalMs": 4
+    },
+    "/past-presidents/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "JNVPJAA Past Presidents • Alumni Network of JNV Paota, Jaipur",
+        "description": "Explore the past presidents who have served the JNVPJAA alumni association and helped strengthen its community.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/past-presidents/",
+        "og": {
+          "og:description": "Explore the past presidents who have served the JNVPJAA alumni association and helped strengthen its community.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "JNVPJAA Past Presidents • Alumni Network of JNV Paota, Jaipur",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "JNVPJAA Past Presidents • Alumni Network of JNV Paota, Jaipur",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/past-presidents/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Explore the past presidents who have served the JNVPJAA alumni association and helped strengthen its community.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "JNVPJAA Past Presidents • Alumni Network of JNV Paota, Jaipur"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "Past Presidents",
+        "textLength": 1390,
+        "textHash": "1b6aee3ac802facd",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 20,
+      "totalMs": 24
+    },
+    "/gallery/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "Photos Gallery • JNVPJAA",
+        "description": "Explore photos from JNVPJAA alumni reunions, school events and community activities at JNV Paota, Jaipur.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/gallery/",
+        "og": {
+          "og:description": "Explore photos from JNVPJAA alumni reunions, school events and community activities at JNV Paota, Jaipur.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Photos Gallery • JNVPJAA",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Photos Gallery • JNVPJAA",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/gallery/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Explore photos from JNVPJAA alumni reunions, school events and community activities at JNV Paota, Jaipur.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Photos Gallery • JNVPJAA"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "CollectionPage",
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "6fae8ef9b99e4f1b",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "Photo Gallery",
+        "textLength": 616,
+        "textHash": "b1515ab071d0aab6",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "s-maxage=31536000",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 4,
+      "totalMs": 4
+    },
+    "/businesses/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "Businesses by Alumni • JNVPJAA",
+        "description": "Discover businesses founded or owned by alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur.",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/businesses/",
+        "og": {
+          "og:description": "Discover businesses founded or owned by alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Businesses by Alumni • JNVPJAA",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Businesses by Alumni • JNVPJAA",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/businesses/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Discover businesses founded or owned by alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Businesses by Alumni • JNVPJAA"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "CollectionPage",
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "50c09eba4d35bd49",
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "Businesses By Alumni",
+        "textLength": 2522,
+        "textHash": "98788d859abf8d8e",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 32,
+      "totalMs": 35
+    },
+    "/blog/%E0%A4%AD%E0%A4%BE%E0%A4%88-%E0%A4%B9%E0%A4%AE%E0%A4%BE%E0%A4%B0%E0%A5%87-%E0%A4%B8%E0%A4%BE%E0%A4%A5-%E0%A4%AD%E0%A5%80-%E0%A4%AB%E0%A4%BC%E0%A5%8D%E0%A4%B0%E0%A5%87%E0%A4%AE-%E0%A4%AE%E0%A5%87%E0%A4%82-%E0%A4%86-%E0%A4%9C%E0%A4%BE%E0%A4%8F%E0%A4%97%E0%A4%BE-%E0%A4%95%E0%A5%8D%E0%A4%AF%E0%A4%BE/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "भाई हमारे साथ भी फ़्रेम में आ जाएगा क्या? | JNVPJAA Blog",
+        "description": "ये बात उन दिनों की है जब हम नए नए टीन एजर बने थे, होंठों के ऊपर छोटी छोटी मूँछे दिखने लगी थी...",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/blog/%E0%A4%AD%E0%A4%BE%E0%A4%88-%E0%A4%B9%E0%A4%AE%E0%A4%BE%E0%A4%B0%E0%A5%87-%E0%A4%B8%E0%A4%BE%E0%A4%A5-%E0%A4%AD%E0%A5%80-%E0%A4%AB%E0%A4%BC%E0%A5%8D%E0%A4%B0%E0%A5%87%E0%A4%AE-%E0%A4%AE%E0%A5%87%E0%A4%82-%E0%A4%86-%E0%A4%9C%E0%A4%BE%E0%A4%8F%E0%A4%97%E0%A4%BE-%E0%A4%95%E0%A5%8D%E0%A4%AF%E0%A4%BE/",
+        "og": {
+          "og:description": "ये बात उन दिनों की है जब हम नए नए टीन एजर बने थे, होंठों के ऊपर छोटी छोटी मूँछे दिखने लगी थी...",
+          "og:image": "https://images.unsplash.com/photo-1533254012848-644c18f39289?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDAxNjF8MHwxfHNlYXJjaHwxfHxmcmllbmRzJTIwaW5kaWFufGVufDB8MHx8fDE3NDUzODc2MDN8MA&ixlib=rb-4.0.3&q=80&w=1080",
+          "og:image:alt": "भाई हमारे साथ भी फ़्रेम में आ जाएगा क्या?",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "भाई हमारे साथ भी फ़्रेम में आ जाएगा क्या? | JNVPJAA Blog",
+          "og:type": "article",
+          "og:url": "https://jnvpjaa.org/blog/%E0%A4%AD%E0%A4%BE%E0%A4%88-%E0%A4%B9%E0%A4%AE%E0%A4%BE%E0%A4%B0%E0%A5%87-%E0%A4%B8%E0%A4%BE%E0%A4%A5-%E0%A4%AD%E0%A5%80-%E0%A4%AB%E0%A4%BC%E0%A5%8D%E0%A4%B0%E0%A5%87%E0%A4%AE-%E0%A4%AE%E0%A5%87%E0%A4%82-%E0%A4%86-%E0%A4%9C%E0%A4%BE%E0%A4%8F%E0%A4%97%E0%A4%BE-%E0%A4%95%E0%A5%8D%E0%A4%AF%E0%A4%BE/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "ये बात उन दिनों की है जब हम नए नए टीन एजर बने थे, होंठों के ऊपर छोटी छोटी मूँछे दिखने लगी थी...",
+          "twitter:image": "https://images.unsplash.com/photo-1533254012848-644c18f39289?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDAxNjF8MHwxfHNlYXJjaHwxfHxmcmllbmRzJTIwaW5kaWFufGVufDB8MHx8fDE3NDUzODc2MDN8MA&ixlib=rb-4.0.3&q=80&w=1080",
+          "twitter:title": "भाई हमारे साथ भी फ़्रेम में आ जाएगा क्या? | JNVPJAA Blog"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "BlogPosting",
+          "BreadcrumbList",
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "aa9e955e5b6460d5",
+          "db01b5dbc40ac3d4",
+          "dc99a0878dcf0414"
+        ],
+        "h1": "भाई हमारे साथ भी फ़्रेम में आ जाएगा क्या?",
+        "textLength": 3165,
+        "textHash": "703410b6c38332d5",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 29,
+      "totalMs": 32
+    },
+    "/blog/%E0%A4%AE%E0%A5%87%E0%A4%B0%E0%A4%BE-%E0%A4%A6%E0%A5%87%E0%A4%B6-%E0%A4%AE%E0%A5%88%E0%A4%82-%E0%A4%B9%E0%A5%80-%E0%A4%B8%E0%A4%81%E0%A4%B5%E0%A4%BE%E0%A4%B0%E0%A5%82%E0%A4%81/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "मेरा देश मैं ही सँवारूँ | JNVPJAA Blog",
+        "description": "भारत विविधताओं का एक_देश प्राकृतिक संपदाओं से, संसाधनों से, दर्शनीय स्थलों...",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/blog/%E0%A4%AE%E0%A5%87%E0%A4%B0%E0%A4%BE-%E0%A4%A6%E0%A5%87%E0%A4%B6-%E0%A4%AE%E0%A5%88%E0%A4%82-%E0%A4%B9%E0%A5%80-%E0%A4%B8%E0%A4%81%E0%A4%B5%E0%A4%BE%E0%A4%B0%E0%A5%82%E0%A4%81/",
+        "og": {
+          "og:description": "भारत विविधताओं का एक_देश प्राकृतिक संपदाओं से, संसाधनों से, दर्शनीय स्थलों...",
+          "og:image": "https://images.unsplash.com/photo-1442570468985-f63ed5de9086?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDAxNjF8MHwxfHNlYXJjaHw2fHxpbmRpYXxlbnwwfDB8fHwxNzQ1Mzg3NTU4fDA&ixlib=rb-4.0.3&q=80&w=1080",
+          "og:image:alt": "मेरा देश मैं ही सँवारूँ",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "मेरा देश मैं ही सँवारूँ | JNVPJAA Blog",
+          "og:type": "article",
+          "og:url": "https://jnvpjaa.org/blog/%E0%A4%AE%E0%A5%87%E0%A4%B0%E0%A4%BE-%E0%A4%A6%E0%A5%87%E0%A4%B6-%E0%A4%AE%E0%A5%88%E0%A4%82-%E0%A4%B9%E0%A5%80-%E0%A4%B8%E0%A4%81%E0%A4%B5%E0%A4%BE%E0%A4%B0%E0%A5%82%E0%A4%81/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "भारत विविधताओं का एक_देश प्राकृतिक संपदाओं से, संसाधनों से, दर्शनीय स्थलों...",
+          "twitter:image": "https://images.unsplash.com/photo-1442570468985-f63ed5de9086?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDAxNjF8MHwxfHNlYXJjaHw2fHxpbmRpYXxlbnwwfDB8fHwxNzQ1Mzg3NTU4fDA&ixlib=rb-4.0.3&q=80&w=1080",
+          "twitter:title": "मेरा देश मैं ही सँवारूँ | JNVPJAA Blog"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "BlogPosting",
+          "BreadcrumbList",
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "0bd2b794e8fcf3b7",
+          "0e7e21253606c80d",
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": "मेरा देश मैं ही सँवारूँ",
+        "textLength": 3091,
+        "textHash": "9a1cb6b4d46c3ed7",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 26,
+      "totalMs": 31
+    },
+    "/blog/navodaya-a-journey-from-dreams-to-destiny/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "Navodaya: A Journey from Dreams to Destiny | JNVPJAA Blog",
+        "description": "Some places shape your life, give wings to your dreams, and lay the foundation...",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/blog/navodaya-a-journey-from-dreams-to-destiny/",
+        "og": {
+          "og:description": "Some places shape your life, give wings to your dreams, and lay the foundation...",
+          "og:image": "https://images.unsplash.com/photo-1548438294-1ad5d5f4f063?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDAxNjF8MHwxfHNlYXJjaHwyfHxkcmVhbXN8ZW58MHwwfHx8MTc0NTM4NzU0MXww&ixlib=rb-4.0.3&q=80&w=1080",
+          "og:image:alt": "Navodaya: A Journey from Dreams to Destiny",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Navodaya: A Journey from Dreams to Destiny | JNVPJAA Blog",
+          "og:type": "article",
+          "og:url": "https://jnvpjaa.org/blog/navodaya-a-journey-from-dreams-to-destiny/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Some places shape your life, give wings to your dreams, and lay the foundation...",
+          "twitter:image": "https://images.unsplash.com/photo-1548438294-1ad5d5f4f063?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDAxNjF8MHwxfHNlYXJjaHwyfHxkcmVhbXN8ZW58MHwwfHx8MTc0NTM4NzU0MXww&ixlib=rb-4.0.3&q=80&w=1080",
+          "twitter:title": "Navodaya: A Journey from Dreams to Destiny | JNVPJAA Blog"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "BlogPosting",
+          "BreadcrumbList",
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "46f3dd3e64cc252e",
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4",
+          "faacbfc9a7b3bb86"
+        ],
+        "h1": "Navodaya: A Journey from Dreams to Destiny",
+        "textLength": 3257,
+        "textHash": "dbe27e15118d5599",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 29,
+      "totalMs": 32
+    },
+    "/gallery/1c0fc366-8156-4c92-a5a3-bc531a0385ec/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "Reunion Batch of 2003 | JNVPJAA Gallery",
+        "description": "Reunion of 2003 batch",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/gallery/1c0fc366-8156-4c92-a5a3-bc531a0385ec/",
+        "og": {
+          "og:description": "Reunion of 2003 batch",
+          "og:image": "https://assets.jnvpjaa.org/gallery/reunion-batch-of-2003-1.jpeg",
+          "og:image:alt": "Reunion Batch of 2003",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Reunion Batch of 2003 | JNVPJAA Gallery",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/gallery/1c0fc366-8156-4c92-a5a3-bc531a0385ec/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Reunion of 2003 batch",
+          "twitter:image": "https://assets.jnvpjaa.org/gallery/reunion-batch-of-2003-1.jpeg",
+          "twitter:title": "Reunion Batch of 2003 | JNVPJAA Gallery"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "BreadcrumbList",
+          "CollectionPage",
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "1b111bd5a60c8de6",
+          "4b5185123c7cbb70",
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": null,
+        "textLength": 396,
+        "textHash": "f03af63c4c05ef48",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 24,
+      "totalMs": 27
+    },
+    "/gallery/cfebed3a-f057-4309-a186-d7dc797d749c/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "Milan 2017 | JNVPJAA Gallery",
+        "description": "Get together organized by JNV Paota Jaipur Alumni Association",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/gallery/cfebed3a-f057-4309-a186-d7dc797d749c/",
+        "og": {
+          "og:description": "Get together organized by JNV Paota Jaipur Alumni Association",
+          "og:image": "https://assets.jnvpjaa.org/gallery/milan-2017-1.jpeg",
+          "og:image:alt": "Milan 2017",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Milan 2017 | JNVPJAA Gallery",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/gallery/cfebed3a-f057-4309-a186-d7dc797d749c/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Get together organized by JNV Paota Jaipur Alumni Association",
+          "twitter:image": "https://assets.jnvpjaa.org/gallery/milan-2017-1.jpeg",
+          "twitter:title": "Milan 2017 | JNVPJAA Gallery"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "BreadcrumbList",
+          "CollectionPage",
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "66c5984fe147ae67",
+          "6cd0f418af16de8f",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": null,
+        "textLength": 396,
+        "textHash": "f03af63c4c05ef48",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 23,
+      "totalMs": 26
+    },
+    "/gallery/b0a6f707-d87b-4cc2-b356-429659fd4ba5/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "Batch of 2007 | JNVPJAA Gallery",
+        "description": "Batch of 2007",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/gallery/b0a6f707-d87b-4cc2-b356-429659fd4ba5/",
+        "og": {
+          "og:description": "Batch of 2007",
+          "og:image": "https://assets.jnvpjaa.org/gallery/batch-of-2007-1.jpeg",
+          "og:image:alt": "Batch of 2007",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Batch of 2007 | JNVPJAA Gallery",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/gallery/b0a6f707-d87b-4cc2-b356-429659fd4ba5/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Batch of 2007",
+          "twitter:image": "https://assets.jnvpjaa.org/gallery/batch-of-2007-1.jpeg",
+          "twitter:title": "Batch of 2007 | JNVPJAA Gallery"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "BreadcrumbList",
+          "CollectionPage",
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "4364c173325f71bc",
+          "5bcecc4c1575a484",
+          "c084db674e439ef1",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": null,
+        "textLength": 396,
+        "textHash": "f03af63c4c05ef48",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 23,
+      "totalMs": 26
+    },
+    "/gallery/b1e63bad-6de7-48ab-8416-de9fecb058eb/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "Reunion Batch of 2017 | JNVPJAA Gallery",
+        "description": "Reunion Batch of 2017",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/gallery/b1e63bad-6de7-48ab-8416-de9fecb058eb/",
+        "og": {
+          "og:description": "Reunion Batch of 2017",
+          "og:image": "https://assets.jnvpjaa.org/gallery/reunion-batch-of-2017-1.jpeg",
+          "og:image:alt": "Reunion Batch of 2017",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Reunion Batch of 2017 | JNVPJAA Gallery",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/gallery/b1e63bad-6de7-48ab-8416-de9fecb058eb/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Reunion Batch of 2017",
+          "twitter:image": "https://assets.jnvpjaa.org/gallery/reunion-batch-of-2017-1.jpeg",
+          "twitter:title": "Reunion Batch of 2017 | JNVPJAA Gallery"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "BreadcrumbList",
+          "CollectionPage",
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "6d39577444f98f89",
+          "db01b5dbc40ac3d4",
+          "fb887885ab8316f0"
+        ],
+        "h1": null,
+        "textLength": 396,
+        "textHash": "f03af63c4c05ef48",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 25,
+      "totalMs": 28
+    },
+    "/gallery/a4dc7ff3-483f-4bc0-ad19-231e337e8254/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "Reunion Batch of 2009 | JNVPJAA Gallery",
+        "description": "Reunion Batch of 2009",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/gallery/a4dc7ff3-483f-4bc0-ad19-231e337e8254/",
+        "og": {
+          "og:description": "Reunion Batch of 2009",
+          "og:image": "https://assets.jnvpjaa.org/gallery/reunion-batch-of-2009-1.jpeg",
+          "og:image:alt": "Reunion Batch of 2009",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Reunion Batch of 2009 | JNVPJAA Gallery",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/gallery/a4dc7ff3-483f-4bc0-ad19-231e337e8254/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Reunion Batch of 2009",
+          "twitter:image": "https://assets.jnvpjaa.org/gallery/reunion-batch-of-2009-1.jpeg",
+          "twitter:title": "Reunion Batch of 2009 | JNVPJAA Gallery"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "BreadcrumbList",
+          "CollectionPage",
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "1d2756b3c163eef6",
+          "21c6f52f05a56f7c",
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": null,
+        "textLength": 396,
+        "textHash": "f03af63c4c05ef48",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 24,
+      "totalMs": 27
+    },
+    "/gallery/77437b53-244d-4442-90d7-8a7d62da9c5f/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "Reunion Batch of 1999 | JNVPJAA Gallery",
+        "description": "Reunion Batch of 1999",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/gallery/77437b53-244d-4442-90d7-8a7d62da9c5f/",
+        "og": {
+          "og:description": "Reunion Batch of 1999",
+          "og:image": "https://assets.jnvpjaa.org/gallery/reunion-batch-of-1999-1.jpeg",
+          "og:image:alt": "Reunion Batch of 1999",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Reunion Batch of 1999 | JNVPJAA Gallery",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/gallery/77437b53-244d-4442-90d7-8a7d62da9c5f/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Reunion Batch of 1999",
+          "twitter:image": "https://assets.jnvpjaa.org/gallery/reunion-batch-of-1999-1.jpeg",
+          "twitter:title": "Reunion Batch of 1999 | JNVPJAA Gallery"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "BreadcrumbList",
+          "CollectionPage",
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "271343fda40000bd",
+          "5bcecc4c1575a484",
+          "bcd1c7cc9e6bd8ad",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": null,
+        "textLength": 396,
+        "textHash": "f03af63c4c05ef48",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 26,
+      "totalMs": 28
+    },
+    "/gallery/32c93578-45b1-4dae-9d8c-517a9a12a6f8/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "Reunion Batch of 2013 | JNVPJAA Gallery",
+        "description": "Reunion Batch of 2013",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/gallery/32c93578-45b1-4dae-9d8c-517a9a12a6f8/",
+        "og": {
+          "og:description": "Reunion Batch of 2013",
+          "og:image": "https://assets.jnvpjaa.org/gallery/reunion-batch-of-2013-1.jpeg",
+          "og:image:alt": "Reunion Batch of 2013",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Reunion Batch of 2013 | JNVPJAA Gallery",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/gallery/32c93578-45b1-4dae-9d8c-517a9a12a6f8/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Reunion Batch of 2013",
+          "twitter:image": "https://assets.jnvpjaa.org/gallery/reunion-batch-of-2013-1.jpeg",
+          "twitter:title": "Reunion Batch of 2013 | JNVPJAA Gallery"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "BreadcrumbList",
+          "CollectionPage",
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "2a429a438e474a86",
+          "5bcecc4c1575a484",
+          "7fd0bfecff953e52",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": null,
+        "textLength": 396,
+        "textHash": "f03af63c4c05ef48",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 25,
+      "totalMs": 27
+    },
+    "/gallery/8eb3aa2c-a8d7-4d97-bbb6-161d3ad5dab2/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "Reunion Batch of 2016 | JNVPJAA Gallery",
+        "description": "Reunion Batch of 2016",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/gallery/8eb3aa2c-a8d7-4d97-bbb6-161d3ad5dab2/",
+        "og": {
+          "og:description": "Reunion Batch of 2016",
+          "og:image": "https://assets.jnvpjaa.org/gallery/reunion-batch-of-2016-1.jpeg",
+          "og:image:alt": "Reunion Batch of 2016",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Reunion Batch of 2016 | JNVPJAA Gallery",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/gallery/8eb3aa2c-a8d7-4d97-bbb6-161d3ad5dab2/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Reunion Batch of 2016",
+          "twitter:image": "https://assets.jnvpjaa.org/gallery/reunion-batch-of-2016-1.jpeg",
+          "twitter:title": "Reunion Batch of 2016 | JNVPJAA Gallery"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "BreadcrumbList",
+          "CollectionPage",
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "c66e94a6d7b3ad4b",
+          "db01b5dbc40ac3d4",
+          "e7c45dfbcf2a517e"
+        ],
+        "h1": null,
+        "textLength": 396,
+        "textHash": "f03af63c4c05ef48",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 26,
+      "totalMs": 29
+    },
+    "/gallery/0389518a-fb85-4fe4-91f7-f25cc3398edc/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "Reunion Batch of 2006 | JNVPJAA Gallery",
+        "description": "Reunion Batch of 2006",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/gallery/0389518a-fb85-4fe4-91f7-f25cc3398edc/",
+        "og": {
+          "og:description": "Reunion Batch of 2006",
+          "og:image": "https://assets.jnvpjaa.org/gallery/reunion-batch-of-2006-1.jpeg",
+          "og:image:alt": "Reunion Batch of 2006",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Reunion Batch of 2006 | JNVPJAA Gallery",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/gallery/0389518a-fb85-4fe4-91f7-f25cc3398edc/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Reunion Batch of 2006",
+          "twitter:image": "https://assets.jnvpjaa.org/gallery/reunion-batch-of-2006-1.jpeg",
+          "twitter:title": "Reunion Batch of 2006 | JNVPJAA Gallery"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "BreadcrumbList",
+          "CollectionPage",
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "64a68a6635b0c9a5",
+          "db01b5dbc40ac3d4",
+          "dba9f55bd0a93e58"
+        ],
+        "h1": null,
+        "textLength": 396,
+        "textHash": "f03af63c4c05ef48",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 27,
+      "totalMs": 30
+    },
+    "/gallery/02996e20-f1ce-45f5-9aeb-56bf88d294fb/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "Reunion Batch of 2004 | JNVPJAA Gallery",
+        "description": "Reunion Batch of 2004",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/gallery/02996e20-f1ce-45f5-9aeb-56bf88d294fb/",
+        "og": {
+          "og:description": "Reunion Batch of 2004",
+          "og:image": "https://assets.jnvpjaa.org/gallery/reunion-batch-of-2004-1.jpeg",
+          "og:image:alt": "Reunion Batch of 2004",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Reunion Batch of 2004 | JNVPJAA Gallery",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/gallery/02996e20-f1ce-45f5-9aeb-56bf88d294fb/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Reunion Batch of 2004",
+          "twitter:image": "https://assets.jnvpjaa.org/gallery/reunion-batch-of-2004-1.jpeg",
+          "twitter:title": "Reunion Batch of 2004 | JNVPJAA Gallery"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "BreadcrumbList",
+          "CollectionPage",
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "0c5c430716bdd571",
+          "5bcecc4c1575a484",
+          "974328f3d7058e0c",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": null,
+        "textLength": 396,
+        "textHash": "f03af63c4c05ef48",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 24,
+      "totalMs": 26
+    },
+    "/gallery/acf9157c-9e94-4e74-bd78-cc5d3cddae4d/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "Reunion Batch of 1995 | JNVPJAA Gallery",
+        "description": "Reunion Batch of 1995",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/gallery/acf9157c-9e94-4e74-bd78-cc5d3cddae4d/",
+        "og": {
+          "og:description": "Reunion Batch of 1995",
+          "og:image": "https://assets.jnvpjaa.org/gallery/reunion-batch-of-1995-1.jpeg",
+          "og:image:alt": "Reunion Batch of 1995",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Reunion Batch of 1995 | JNVPJAA Gallery",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/gallery/acf9157c-9e94-4e74-bd78-cc5d3cddae4d/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Reunion Batch of 1995",
+          "twitter:image": "https://assets.jnvpjaa.org/gallery/reunion-batch-of-1995-1.jpeg",
+          "twitter:title": "Reunion Batch of 1995 | JNVPJAA Gallery"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "BreadcrumbList",
+          "CollectionPage",
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "1dd763976b12dcc5",
+          "5bcecc4c1575a484",
+          "9383391b2e830d80",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": null,
+        "textLength": 396,
+        "textHash": "f03af63c4c05ef48",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 26,
+      "totalMs": 28
+    },
+    "/gallery/ef5cdc97-46c4-4664-9ae2-a9ae784901aa/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "Reunion Batch of 1996 | JNVPJAA Gallery",
+        "description": "Reunion Batch of 1996",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/gallery/ef5cdc97-46c4-4664-9ae2-a9ae784901aa/",
+        "og": {
+          "og:description": "Reunion Batch of 1996",
+          "og:image": "https://assets.jnvpjaa.org/gallery/reunion-batch-of-1996-1.jpeg",
+          "og:image:alt": "Reunion Batch of 1996",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Reunion Batch of 1996 | JNVPJAA Gallery",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/gallery/ef5cdc97-46c4-4664-9ae2-a9ae784901aa/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Reunion Batch of 1996",
+          "twitter:image": "https://assets.jnvpjaa.org/gallery/reunion-batch-of-1996-1.jpeg",
+          "twitter:title": "Reunion Batch of 1996 | JNVPJAA Gallery"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "BreadcrumbList",
+          "CollectionPage",
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "59d52e07316c0f77",
+          "5bcecc4c1575a484",
+          "806473d236346c8a",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": null,
+        "textLength": 396,
+        "textHash": "f03af63c4c05ef48",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 27,
+      "totalMs": 29
+    },
+    "/gallery/0535db13-b87e-438b-ac68-cf0f20242c7f/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "Blood Donation Camp 2019 | JNVPJAA Gallery",
+        "description": "Organized jointly with CISF, Jaipur International Airport",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/gallery/0535db13-b87e-438b-ac68-cf0f20242c7f/",
+        "og": {
+          "og:description": "Organized jointly with CISF, Jaipur International Airport",
+          "og:image": "https://assets.jnvpjaa.org/gallery/blood-donation-camp-2019-1.jpeg",
+          "og:image:alt": "Blood Donation Camp 2019",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Blood Donation Camp 2019 | JNVPJAA Gallery",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/gallery/0535db13-b87e-438b-ac68-cf0f20242c7f/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Organized jointly with CISF, Jaipur International Airport",
+          "twitter:image": "https://assets.jnvpjaa.org/gallery/blood-donation-camp-2019-1.jpeg",
+          "twitter:title": "Blood Donation Camp 2019 | JNVPJAA Gallery"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "BreadcrumbList",
+          "CollectionPage",
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "479d2e573626009f",
+          "5bcecc4c1575a484",
+          "5d6ce312c92b15c0",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": null,
+        "textLength": 396,
+        "textHash": "f03af63c4c05ef48",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 25,
+      "totalMs": 28
+    },
+    "/gallery/0991130a-70d0-4e7c-a60a-be264148ced1/": {
+      "status": 200,
+      "redirects": [],
+      "facts": {
+        "title": "Plantation Drive July 7, 2019 | JNVPJAA Gallery",
+        "description": "Plantation Drive July 7, 2019",
+        "robots": null,
+        "canonical": "https://jnvpjaa.org/gallery/0991130a-70d0-4e7c-a60a-be264148ced1/",
+        "og": {
+          "og:description": "Plantation Drive July 7, 2019",
+          "og:image": "https://assets.jnvpjaa.org/gallery/plantation-drive-july-7-2019-1.jpeg",
+          "og:image:alt": "Plantation Drive July 7, 2019",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Plantation Drive July 7, 2019 | JNVPJAA Gallery",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/gallery/0991130a-70d0-4e7c-a60a-be264148ced1/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Plantation Drive July 7, 2019",
+          "twitter:image": "https://assets.jnvpjaa.org/gallery/plantation-drive-july-7-2019-1.jpeg",
+          "twitter:title": "Plantation Drive July 7, 2019 | JNVPJAA Gallery"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "BreadcrumbList",
+          "CollectionPage",
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "91278ace3be4a564",
+          "bd743d401117402a",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": null,
+        "textLength": 396,
+        "textHash": "f03af63c4c05ef48",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 25,
+      "totalMs": 27
+    },
+    "/this-does-not-exist-xyz": {
+      "status": 404,
+      "redirects": [
+        "308 /this-does-not-exist-xyz/"
+      ],
+      "facts": {
+        "title": "JNVPJAA | JNV Paota Jaipur Alumni Association",
+        "description": "Connect with alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur. Explore JNVPJAA events, alumni stories, photo galleries and community initiatives.",
+        "robots": "noindex",
+        "canonical": "https://jnvpjaa.org/",
+        "og": {
+          "og:description": "Connect with alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur. Explore JNVPJAA events, alumni stories, photo galleries and community initiatives.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "JNVPJAA",
+          "og:image:height": "585",
+          "og:image:width": "1300",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "JNVPJAA | JNV Paota Jaipur Alumni Association",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "Connect with alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur. Explore JNVPJAA events, alumni stories, photo galleries and community initiatives.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "JNVPJAA | JNV Paota Jaipur Alumni Association"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": null,
+        "textLength": 0,
+        "textHash": "e3b0c44298fc1c14",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 0,
+      "totalMs": 2
+    },
+    "/profile": {
+      "status": 200,
+      "redirects": [
+        "308 /profile/",
+        "307 /signin/?r=L3Byb2ZpbGUv"
+      ],
+      "facts": {
+        "title": "Signin • Alumni Network of JNV Paota, Jaipur | JNVPJAA",
+        "description": "The Official Alumni Network of Jawahar Navodaya Vidyalaya Paota, Jaipur. JNVs are a testament to innovative state-sponsored education in India. Connect with fellow alumni, share experiences, and stay updated on events that honor our shared journey and the values of our beloved school.",
+        "robots": "noindex, nofollow",
+        "canonical": "https://jnvpjaa.org/signin/",
+        "og": {
+          "og:description": "The Official Alumni Network of Jawahar Navodaya Vidyalaya Paota, Jaipur. JNVs are a testament to innovative state-sponsored education in India. Connect with fellow alumni, share experiences, and stay updated on events that honor our shared journey and the values of our beloved school.",
+          "og:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "og:image:alt": "Signin • Alumni Network of JNV Paota, Jaipur",
+          "og:locale": "en_IN",
+          "og:site_name": "JNVPJAA",
+          "og:title": "Signin • Alumni Network of JNV Paota, Jaipur",
+          "og:type": "website",
+          "og:url": "https://jnvpjaa.org/signin/"
+        },
+        "twitter": {
+          "twitter:card": "summary_large_image",
+          "twitter:description": "The Official Alumni Network of Jawahar Navodaya Vidyalaya Paota, Jaipur. JNVs are a testament to innovative state-sponsored education in India. Connect with fellow alumni, share experiences, and stay updated on events that honor our shared journey and the values of our beloved school.",
+          "twitter:image": "https://jnvpjaa.org/assets/images/cover-2.webp",
+          "twitter:title": "Signin • Alumni Network of JNV Paota, Jaipur"
+        },
+        "hreflang": [],
+        "jsonLdTypes": [
+          "Organization",
+          "WebSite"
+        ],
+        "jsonLdHashes": [
+          "5bcecc4c1575a484",
+          "db01b5dbc40ac3d4"
+        ],
+        "h1": null,
+        "textLength": 0,
+        "textHash": "e3b0c44298fc1c14",
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "s-maxage=31536000",
+        "xRobotsTag": null,
+        "contentType": "text/html; charset=utf-8"
+      },
+      "ttfbMs": 0,
+      "totalMs": 3
+    },
+    "/robots.txt": {
+      "status": 200,
+      "redirects": [],
+      "bodyHash": "31bfbddcd496c7cc",
+      "facts": {
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "s-maxage=31536000",
+        "contentType": "text/plain; charset=UTF-8"
+      },
+      "ttfbMs": 2,
+      "totalMs": 2
+    },
+    "/sitemap.xml": {
+      "status": 200,
+      "redirects": [],
+      "bodyHash": "794d385e7e31b98f",
+      "facts": {
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "public, max-age=0, must-revalidate",
+        "contentType": "application/xml"
+      },
+      "ttfbMs": 6,
+      "totalMs": 6
+    },
+    "/newsroom/feed.xml": {
+      "status": 200,
+      "redirects": [],
+      "bodyHash": "60084b5b9d4cc7a2",
+      "facts": {
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "public, max-age=300",
+        "contentType": "application/rss+xml; charset=utf-8"
+      },
+      "ttfbMs": 6,
+      "totalMs": 7
+    },
+    "/manifest.json": {
+      "status": 200,
+      "redirects": [],
+      "bodyHash": "4c710f2ec960f285",
+      "facts": {
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "s-maxage=31536000",
+        "contentType": "application/manifest+json"
+      },
+      "ttfbMs": 1,
+      "totalMs": 1
+    },
+    "/sw.js": {
+      "status": 200,
+      "redirects": [],
+      "bodyHash": "0dc52d518dd4c4a0",
+      "facts": {
+        "security": {
+          "x-frame-options": "DENY",
+          "referrer-policy": "strict-origin-when-cross-origin",
+          "permissions-policy": "camera=(), microphone=(), geolocation=()",
+          "x-content-type-options": "nosniff"
+        },
+        "cacheControl": "public, max-age=0",
+        "contentType": "application/javascript; charset=UTF-8"
+      },
+      "ttfbMs": 1,
+      "totalMs": 1
+    }
+  }
+}

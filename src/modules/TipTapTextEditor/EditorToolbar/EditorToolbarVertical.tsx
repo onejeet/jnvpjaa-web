@@ -3,7 +3,7 @@
 import React from 'react';
 import { Box, IconButton, Popover, Tooltip } from '@mui/material';
 import { IconArrowBackUp, IconArrowForwardUp, IconMoodSmile } from '@tabler/icons-react';
-import { useCurrentEditor } from '@tiptap/react';
+import { useToolbarEditor } from '@/modules/TipTapTextEditor/useToolbarEditor';
 import EmojiPicker, { SkinTones } from 'emoji-picker-react';
 import type { EditorToolbarProps } from '../TipTapTextEditor.types';
 import type { TAlign } from './components/AlignButton';
@@ -28,7 +28,7 @@ const groupSx = {
 };
 
 const EditorToolbar: React.FC<EditorToolbarProps> = ({ toolsHidden = [], defaultColors, disabled, ...boxProps }) => {
-  const { editor } = useCurrentEditor();
+  const { editor } = useToolbarEditor();
   const [alignAnchor, setAlignAnchor] = React.useState<HTMLButtonElement | null>(null);
   const [emojiAnchor, setEmojiAnchor] = React.useState<HTMLButtonElement | null>(null);
   const hidden = (tool: string) => toolsHidden.includes(tool);

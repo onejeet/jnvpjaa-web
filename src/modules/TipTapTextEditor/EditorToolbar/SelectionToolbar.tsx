@@ -3,7 +3,7 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import { useCurrentEditor } from '@tiptap/react';
-import { BubbleMenu } from '@tiptap/react/menus';
+import { BubbleMenu, type BubbleMenuProps } from '@tiptap/react/menus';
 import AnchorEditorButton from './components/AnchorEditorButton';
 import ColorPicker from './components/ColorPicker';
 import MarkButton from './components/MarkButton';
@@ -13,6 +13,12 @@ interface SelectionToolbarProps {
   toolsHidden?: string[];
 }
 
+// Stable identities: BubbleMenu dispatches an options-update transaction whenever these props change identity.
+const shouldShow: BubbleMenuProps['shouldShow'] = ({ editor, state }) =>
+  editor.isEditable && !state.selection.empty && !editor.isActive('codeBlock');
+const menuOptions: BubbleMenuProps['options'] = { placement: 'bottom-start', offset: 6 };
+const appendTo = () => document.body;
+
 const SelectionToolbar: React.FC<SelectionToolbarProps> = ({ disabled, toolsHidden = [] }) => {
   const { editor } = useCurrentEditor();
   if (!editor || disabled) return null;
@@ -21,11 +27,9 @@ const SelectionToolbar: React.FC<SelectionToolbarProps> = ({ disabled, toolsHidd
     <BubbleMenu
       editor={editor}
       pluginKey="selected-text-formatting"
-      shouldShow={({ editor: currentEditor, state }) =>
-        currentEditor.isEditable && !state.selection.empty && !currentEditor.isActive('codeBlock')
-      }
-      options={{ placement: 'bottom-start', offset: 6 }}
-      appendTo={() => document.body}
+      shouldShow={shouldShow}
+      options={menuOptions}
+      appendTo={appendTo}
     >
       <Box
         role="toolbar"

@@ -1,11 +1,11 @@
 import React from 'react';
 import IconButton from '@mui/material/IconButton';
-import { useCurrentEditor } from '@tiptap/react';
+import { useToolbarEditor } from '@/modules/TipTapTextEditor/useToolbarEditor';
 import { Box } from '@mui/material';
 import ToolIcon from './ToolIcon';
 
 const IndentationButtons: React.FC = () => {
-  const { editor } = useCurrentEditor();
+  const { editor } = useToolbarEditor();
 
   return (
     <Box display="flex" gap={2}>

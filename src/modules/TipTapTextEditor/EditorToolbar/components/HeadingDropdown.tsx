@@ -1,12 +1,12 @@
 import React from 'react';
 import Button from '@mui/material/Button';
 import type { Level } from '@tiptap/extension-heading';
-import { useCurrentEditor } from '@tiptap/react';
+import { useToolbarEditor } from '@/modules/TipTapTextEditor/useToolbarEditor';
 import Menu from '@/components/core/Menu';
 import { HEADINGS_LIST } from '../../constants';
 
 const HeadingDropdown: React.FC<{ disabled?: boolean }> = ({ disabled }) => {
-  const { editor } = useCurrentEditor();
+  const { editor } = useToolbarEditor();
   const level = editor?.getAttributes('heading')?.level;
 
   return (

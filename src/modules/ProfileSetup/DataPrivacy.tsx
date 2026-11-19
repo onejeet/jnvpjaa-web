@@ -99,7 +99,6 @@ const DataPrivacy: React.FC<DataPrivacyProps> = ({ user, isLastStep, onNext, onB
         ...vars,
       },
       onCompleted: (res) => {
-        console.log('COmpleted', res);
         client?.refetchQueries({
           include: ['getUserDetails'],
         });
@@ -113,7 +112,7 @@ const DataPrivacy: React.FC<DataPrivacyProps> = ({ user, isLastStep, onNext, onB
           type: 'error',
           message: err?.message || 'Image upload failed. Please try again.',
         });
-        console.log('Error: ', err?.message);
+        console.error('Error: ', err?.message);
       },
     });
   }, [updateUser, showAlert, isConfidential, onSuccess, onNext, user, client]);

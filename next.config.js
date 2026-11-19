@@ -178,6 +178,10 @@ const nextConfig = {
     NEXT_PUBLIC_GRAPHQL_ENDPOINT: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || `https://${domains.api}/client`,
   },
   trailingSlash: true,
+  poweredByHeader: false,
+  // Next 15 streams metadata into <body> for non-bot UAs on routes with a loading boundary (e.g. /jobs); crawlers and
+  // unfurlers read title/canonical/OG from <head>. Matching every UA keeps metadata blocking in <head>, as in Next 14.
+  htmlLimitedBots: /.*/,
   // `*.dev.tsx` routes (the landing layout preview) exist under `next dev` only and are never built for production.
   pageExtensions: isDev ? ['dev.tsx', 'tsx', 'ts', 'jsx', 'js'] : ['tsx', 'ts', 'jsx', 'js'],
   async headers() {
@@ -208,6 +212,12 @@ const nextConfig = {
           {
             key: 'X-Content-Type-Options',
             value: 'nosniff',
+          },
+          // Directives no page here needs, so they can't break GTM, uploads or embeds. A script/connect allow-list
+          // needs a CSP report endpoint and a report-only run in production first.
+          {
+            key: 'Content-Security-Policy',
+            value: "object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
           },
         ],
       },

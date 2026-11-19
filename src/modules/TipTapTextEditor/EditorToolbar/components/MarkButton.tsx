@@ -2,7 +2,7 @@ import React from 'react';
 /* MUI */
 import IconButton from '@mui/material/IconButton';
 /* TIPTAP */
-import { useCurrentEditor } from '@tiptap/react';
+import { useToolbarEditor } from '@/modules/TipTapTextEditor/useToolbarEditor';
 
 /* CONSTANTS */
 import { EDITOR_ICONS } from '../../constants';
@@ -15,7 +15,7 @@ const MarkButton: React.FC<{
   format: 'bold' | 'underline' | 'italic' | 'strike' | 'code' | 'orderedList' | 'bulletList';
   disabled?: boolean;
 }> = ({ format, disabled }) => {
-  const { editor } = useCurrentEditor();
+  const { editor } = useToolbarEditor();
 
   const handleMark = (action: 'bold' | 'underline' | 'italic' | 'strike' | 'code' | 'orderedList' | 'bulletList') => {
     if (!editor) return;

@@ -73,7 +73,6 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({ user, onNext, onBack, onSuc
           //   batch: data?.batch,
         },
         onCompleted: (res) => {
-          console.log('COmpleted', res);
           client?.refetchQueries({
             include: ['getUserDetails'],
           });
@@ -87,7 +86,7 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({ user, onNext, onBack, onSuc
             type: 'error',
             message: err?.message || 'Update failed. Please try again.',
           });
-          console.log('Error: ', err?.message);
+          console.error('Error: ', err?.message);
         },
       });
     },

@@ -58,7 +58,6 @@ const ProfileForm = () => {
           //   batch: data?.batch,
         },
         onCompleted: (res) => {
-          console.log('COmpleted', res);
           client?.refetchQueries({
             include: ['getIconUserDetails'],
           });
@@ -69,7 +68,7 @@ const ProfileForm = () => {
             type: 'error',
             message: 'Something went wrong',
           });
-          console.log('Error: ', err?.message);
+          console.error('Error: ', err?.message);
         },
       });
     },

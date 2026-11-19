@@ -10,14 +10,6 @@ const MmembersTable = () => {
   const filters = Object.fromEntries(searchParams.entries());
   const { rows, loading, columns, rowCount, paginationModel, onPaginationModelChange } = useMembersTable();
 
-  const handleEdit = (id: string) => {
-    console.log('Edit user:', id);
-  };
-
-  const handleDelete = (id: string) => {
-    console.log('Delete user:', id);
-  };
-
   return (
     <DataGrid
       // height={tableHeight}

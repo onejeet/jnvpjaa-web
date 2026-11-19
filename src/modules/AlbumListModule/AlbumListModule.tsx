@@ -48,8 +48,6 @@ const AlbumListModule: React.FC<AlbumListModuleProps> = ({
     return albumData?.getAlbums?.data || [];
   }, [loading, albumData, propLoading]);
 
-  console.log('ZZ: listData', listData);
-
   return (
     <Grid container spacing={3} mt={2}>
       {listData?.length > 0 ? (

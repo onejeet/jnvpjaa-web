@@ -10,13 +10,13 @@ frontend flows depend on the backend GraphQL/auth contract.
 Primary stack:
 
 - Node.js 22.x enforced via `engines`, `.nvmrc`, `.node-version`, and `.npmrc`
-- Next.js App Router under `src/app`
-- React 18 client components for most interactive screens
+- Next.js 15.5 App Router under `src/app` (`params`/`searchParams`/`headers()` are async; metadata is kept in `<head>` via `htmlLimitedBots` in `next.config.js`)
+- React 19 client components for most interactive screens
 - MUI v6 with custom theme utilities under `src/utils/theme`
 - Apollo Client 3.13 plus generated GraphQL hooks in `src/apollo/hooks.ts`
 - `next-pwa` (generated `public/sw.js`), registered and updated by `src/components/PWA/ServiceWorkerUpdater.tsx`
 - React Hook Form for forms
-- TipTap for rich text editing
+- Tiptap 3 for rich text editing (StarterKit bundles Link/Underline; `BubbleMenu` comes from `@tiptap/react/menus`)
 
 Important scripts in `package.json`:
 

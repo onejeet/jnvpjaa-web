@@ -52,8 +52,6 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, claps: initialCl
   const [sanitizedContent, setSanitizedContent] = React.useState(content || '');
   const [newClaps, setNewClaps] = React.useState(0);
 
-  console.log('ZZ: cover', cover);
-
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const updateClapRef = React.useRef(updateClap);

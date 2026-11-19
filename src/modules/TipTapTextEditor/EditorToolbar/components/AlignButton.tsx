@@ -1,6 +1,6 @@
 import React from 'react';
 import IconButton from '@mui/material/IconButton';
-import { useCurrentEditor } from '@tiptap/react';
+import { useToolbarEditor } from '@/modules/TipTapTextEditor/useToolbarEditor';
 import { EDITOR_ICONS } from '../../constants';
 
 export type TAlign = 'left' | 'right' | 'center' | 'justify';
@@ -10,7 +10,7 @@ interface AlignButtonProps {
 }
 
 const AlignButton: React.FC<AlignButtonProps> = ({ format }) => {
-  const { editor } = useCurrentEditor();
+  const { editor } = useToolbarEditor();
 
   const handleAlign = (action: TAlign) => {
     if (!editor) return;

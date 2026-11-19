@@ -31,7 +31,6 @@ const useMembersTable = () => {
     page: 0,
     pageSize: 50,
   });
-  console.log('ZZ: SWARCH PARAMS', searchParams?.get('batch'));
 
   const { showAlert } = useAlert();
   const [handleUserVerification] = useVerifyUserMutation();
@@ -484,7 +483,6 @@ const useMembersTable = () => {
     return userListData?.getUserList?.data || [];
   }, [loading, userListData, paginationModel]);
 
-  console.log('ZZ: rows', rows);
   return {
     rows,
     loading,

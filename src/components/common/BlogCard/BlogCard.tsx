@@ -166,8 +166,6 @@ const BlogCard: React.FC<IBlogCardProps> = ({
     return items;
   }, [isAdminUser, slug, id, author, user, status, isReadOnly]);
 
-  console.log('SS: BLOG', status, menuItems);
-
   return (
     <Box width="100%" display="flex" gap={{ xs: 1, md: 2 }}>
       <Box

@@ -4,6 +4,7 @@ import { JsonLd } from '@/components/JsonLd';
 import EventDetails from '@/containers/EventDetails';
 import { SEO_CONFIG, canonicalUrl, generateSchema } from '@/config/seo.config';
 import { initializeApollo } from '@/utils/apollo';
+import { graphqlErrorCode } from '@/utils/index';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
@@ -20,7 +21,7 @@ const getPublicEvent = cache(async (id: string) => {
     variables: { id: numericId },
     errorPolicy: 'all',
   });
-  if (errors?.some((error) => error.extensions?.code !== 'NOT_FOUND')) {
+  if (errors?.some((error) => graphqlErrorCode(error) !== 'NOT_FOUND')) {
     throw new Error('Could not load event');
   }
   const event = data?.getEventDetails;
@@ -28,7 +29,7 @@ const getPublicEvent = cache(async (id: string) => {
 });
 
 export async function generateMetadata(props: { params: Promise<{ id: string }> }): Promise<Metadata> {
-  if (await isRouterNavigation()) return { title: `Event | ${brand.shortName}` };
+  if (await isRouterNavigation()) return { title: 'Event' };
   const params = await props.params;
   const event = await getPublicEvent(params.id);
   if (!event) return { title: 'Event not found', robots: { index: false, follow: false } };

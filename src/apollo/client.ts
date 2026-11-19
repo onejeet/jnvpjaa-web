@@ -1,4 +1,5 @@
 'use client';
+import { graphqlErrorCode } from '@/utils/index';
 
 import { HttpLink, ApolloLink, from, split, Observable } from '@apollo/client';
 import { ApolloClient, InMemoryCache } from '@apollo/experimental-nextjs-app-support';
@@ -23,7 +24,7 @@ const errorLink = new ApolloLink((operation, forward) => {
     forward(operation).subscribe({
       next: async (result) => {
         if (result?.errors?.length) {
-          const isUnauth = result.errors[0]?.extensions?.code === 'NOT_AUTHORISED';
+          const isUnauth = graphqlErrorCode(result.errors[0]) === 'NOT_AUTHORISED';
 
           if (isUnauth) {
             const isLoggedIn = typeof window !== 'undefined' && localStorage.getItem('logged_in') === 'true';

@@ -1,11 +1,11 @@
 import React from 'react';
 import IconButton from '@mui/material/IconButton';
-import { useCurrentEditor } from '@tiptap/react';
+import { useToolbarEditor } from '@/modules/TipTapTextEditor/useToolbarEditor';
 import ToolIcon from './ToolIcon';
 import { Tooltip } from '@mui/material';
 
 const BlockquoteButton: React.FC<{ disabled?: boolean }> = ({ disabled }) => {
-  const { editor } = useCurrentEditor();
+  const { editor } = useToolbarEditor();
 
   return (
     <Tooltip title="Blockquote" arrow>

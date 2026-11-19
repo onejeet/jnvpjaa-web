@@ -7,6 +7,6 @@ declare module '@tenant/*' {
 // The home page layout named in tenants/$TENANT/landing.json; next.config.js aliases this to src/containers/Landing/home/<layout>.tsx.
 // Declared here, not as a tsconfig path, because Next resolves tsconfig paths before webpack aliases.
 declare module '@landing/Home' {
-  const Home: () => Promise<JSX.Element>;
+  const Home: () => Promise<React.JSX.Element>;
   export default Home;
 }

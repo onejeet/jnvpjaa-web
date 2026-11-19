@@ -6,14 +6,14 @@ import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
-import { useCurrentEditor } from '@tiptap/react';
+import { useToolbarEditor } from '@/modules/TipTapTextEditor/useToolbarEditor';
 import ToolIcon from './ToolIcon';
 import Button from '@/components/core/Button';
 import { Tooltip } from '@mui/material';
 import { isYouTubeUrl } from '../../editorUrl';
 
 const VideoButton: React.FC<{ disabled?: boolean }> = ({ disabled }) => {
-  const { editor } = useCurrentEditor();
+  const { editor } = useToolbarEditor();
 
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
   const [url, setUrl] = React.useState('');

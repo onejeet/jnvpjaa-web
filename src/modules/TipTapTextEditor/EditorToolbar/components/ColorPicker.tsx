@@ -1,10 +1,10 @@
 import React from 'react';
 import { rgbToHex } from '@mui/system';
-import { useCurrentEditor } from '@tiptap/react';
+import { useToolbarEditor } from '@/modules/TipTapTextEditor/useToolbarEditor';
 import ColorPickerInput from '@/components/common/ColorPickerInput';
 
 const ColorPicker: React.FC<{ defaultColors?: string[]; disabled?: boolean }> = ({ defaultColors, disabled }) => {
-  const { editor } = useCurrentEditor();
+  const { editor } = useToolbarEditor();
   return (
     <ColorPickerInput
       onChange={(value: string) => editor?.chain().focus().setColor(value).run()}

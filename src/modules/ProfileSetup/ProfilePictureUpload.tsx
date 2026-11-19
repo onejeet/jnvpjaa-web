@@ -242,7 +242,7 @@ export default function ProfilePictureUpload({ user, onNext, onBack, onSuccess, 
       return;
     }
     setLoading(false);
-    console.log('ERROR: Presigned URL failed');
+    console.error('ERROR: Presigned URL failed');
   };
 
   const handleRemove = () => {
@@ -253,8 +253,6 @@ export default function ProfilePictureUpload({ user, onNext, onBack, onSuccess, 
   const handleButtonClick = () => {
     fileInputRef.current?.click();
   };
-
-  console.log('ZZ: croppedImage', croppedImage);
 
   return (
     <Box

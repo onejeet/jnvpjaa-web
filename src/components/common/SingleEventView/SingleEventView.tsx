@@ -84,7 +84,6 @@ const SingleEventView: React.FC<SingleEventViewProps> = ({
     createdBy,
     shortUrl = '',
   } = event || {};
-  console.log('event', event, user);
   const isRSVPDone = React.useMemo(() => {
     return attendees && attendees?.findIndex((att: Maybe<UserBasic>) => att?.id === user?.id) !== -1;
   }, [attendees, user]);

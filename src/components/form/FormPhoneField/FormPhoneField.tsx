@@ -27,9 +27,6 @@ const FormPhoneField = <
           maxLength: (value) => {
             const { phoneNumber } = phoneNumberJSONConverter(String(value || '')); // Remove non-numeric characters
             if (value) {
-              console.log('ZZ: BB VALIDARION', value, matchIsValidTel(value));
-            }
-            if (value) {
               if (matchIsValidTel(value)) return true;
               else return 'Invalid mobile number';
             }
@@ -41,7 +38,6 @@ const FormPhoneField = <
       render={({ field, fieldState: { error } }) => {
         const handleChange = (value: any, countryData: any) => {
           const { phoneNumber } = phoneNumberJSONConverter(value);
-          console.log('ZZ: BBB', value, countryData, phoneNumber);
           if (!countryData.countryCode) {
             return;
           }

@@ -62,8 +62,10 @@ export const defaultMetadata: Metadata = {
     ],
     apple: [{ url: '/splashscreens/apple-icon-180.png', sizes: '180x180' }],
   },
+  // Next 15 emits `mobile-web-app-capable` from appleWebApp.capable but dropped the prefixed tag, which iOS still
+  // needs to use the apple-touch-startup-image splash screens.
   other: {
-    'mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-capable': 'yes',
   },
 };
 

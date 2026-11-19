@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation';
 import { useSigninMutation } from '@/apollo/hooks';
 import { useApolloClient } from '@apollo/client';
 import { paths } from '@/config/paths';
+import { safeReturnPath } from '@/utils/routeAccess';
 
 const SigninForm = () => {
   const [loading, setLoading] = React.useState<boolean>(false);
@@ -35,15 +36,7 @@ const SigninForm = () => {
         if (!result?.signin?.user) throw new Error('Could not sign in. Please try again.');
         localStorage.setItem('logged_in', 'true');
         setUser(result.signin.user);
-        let destination = paths.profile.root;
-        try {
-          const encoded = new URLSearchParams(window.location.search).get('r');
-          const requested = encoded ? atob(encoded) : '';
-          if (requested.startsWith('/') && !requested.startsWith('//') && !requested.includes('\\'))
-            destination = requested;
-        } catch {
-          /* Keep the profile destination for an invalid return path. */
-        }
+        const destination = safeReturnPath(new URLSearchParams(window.location.search).get('r')) || paths.profile.root;
         router.push(
           result.signin.user.metadata?.isFirstLogin !== false ? `${paths.profile.setup}?welcome=1` : destination
         );

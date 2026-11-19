@@ -10,9 +10,9 @@
 > [PWA] Service worker: /Users/onejeet/Desktop/Work/JNVPJAA/jnvpjaa-web/public/sw.js
 > [PWA]   url: /sw.js
 > [PWA]   scope: /
-(node:4446) [DEP_WEBPACK_EXTERNALS_FUNCTION_PARAMETERS] DeprecationWarning: The externals-function should be defined like ({context, request}, cb) => { ... }
+(node:9505) [DEP_WEBPACK_EXTERNALS_FUNCTION_PARAMETERS] DeprecationWarning: The externals-function should be defined like ({context, request}, cb) => { ... }
 (Use `node --trace-deprecation ...` to show where the warning was created)
- ✓ Compiled successfully in 24.1s
+ ✓ Compiled successfully in 27.6s
    Linting and checking validity of types ...
 
 ./src/components/common/BlogCard/BlogCard.tsx
@@ -77,11 +77,10 @@ info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/d
    Generating static pages (0/34) ...
 ZZ: pathnme false false
 ZZ: pathnme false false
-ZZ: pathnme false true
 ZZ: pathnme false false
+ZZ: pathnme false false
+ZZ: pathnme false true
 ZZ: pathnme true false
-ZZ: pathnme false true
-ZZ: pathnme false false
 ZZ: pathnme false false
 ZZ: listData [
   { id: '', title: '', description: '' },
@@ -99,22 +98,23 @@ ZZ: pathnme false true
 ZZ: pathnme true false
 ZZ: pathnme false false
 ZZ: pathnme false false
+ZZ: pathnme true false
+ZZ: pathnme false false
+ZZ: pathnme false true
+ZZ: pathnme false true
+ZZ: pathnme false false
+ZZ: pathnme false true
+ZZ: pathnme false true
+ZZ: pathnme false true
 ZZ: pathnme false true
    Generating static pages (16/34) 
-ZZ: pathnme false true
-ZZ: pathnme false true
-ZZ: pathnme false true
-ZZ: pathnme false false
-ZZ: pathnme false true
-ZZ: pathnme false true
-ZZ: pathnme false true
-ZZ: pathnme false false
-ZZ: pathnme false true
-ZZ: pathnme true false
-ZZ: pathnme false true
-ZZ: pathnme false false
-ZZ: pathnme false false
    Generating static pages (25/34) 
+ZZ: pathnme false true
+ZZ: pathnme false true
+ZZ: pathnme false false
+ZZ: pathnme false false
+ZZ: pathnme false true
+ZZ: pathnme false true
  ✓ Generating static pages (34/34)
 ZZ: pathnme false true
    Finalizing page optimization ...

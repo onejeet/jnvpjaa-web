@@ -7,7 +7,8 @@ import LoadingIndicator from '@/components/common/LoadingIndicator';
 import { AuthProviderProps, LoadingDataProps, TAuthContextData } from './AuthContext.types';
 import { Box } from '@mui/material';
 import { paths } from '@/config/paths';
-import { decodeBase64, encodeBase64 } from '@/utils/index';
+import { encodeBase64 } from '@/utils/index';
+import { safeReturnPath } from '@/utils/routeAccess';
 import { useGetUserDetailsLazyQuery, useLogoutMutation, User } from '@/apollo/hooks';
 import { useApolloClient } from '@apollo/client';
 import { useAlert } from '../AlertContext';
@@ -23,23 +24,6 @@ const AUTH_ROUTES = ['/signin', '/signup', '/forgot-password'];
 const isAuthRoute = (pathname: string) =>
   AUTH_ROUTES.some((route) => pathname === route || pathname === `${route}/` || pathname.startsWith(`${route}/`));
 
-const isSafeRedirectPath = (path?: string | null) => {
-  if (!path) return false;
-
-  return path.startsWith('/') && !path.startsWith('//') && !/^https?:\/\//i.test(path);
-};
-
-const getSafeRedirectPath = (encodedPath?: string | null) => {
-  if (!encodedPath) return null;
-
-  try {
-    const decodedPath = decodeBase64(encodedPath);
-    return isSafeRedirectPath(decodedPath) ? decodedPath : null;
-  } catch (error) {
-    return null;
-  }
-};
-
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -51,8 +35,6 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   // Same rules as the middleware (whole "/new" and "/edit" segments), plus the client-only activity page.
   const checkAuth = React.useMemo(() => isProtectedRoute(pathname) || pathname.startsWith('/activity'), [pathname]);
-
-  console.log('ZZ: pathnme', isAuthPage, checkAuth);
 
   const [user, setUser] = useState<User | null>(null);
   const [access, setAccess] = useState<any>(null);
@@ -103,7 +85,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (isAuthPage || customPass) {
         const redirectParam =
           typeof window === 'undefined' ? null : new URLSearchParams(window.location.search).get('r');
-        const redirectPath = getSafeRedirectPath(redirectParam);
+        const redirectPath = safeReturnPath(redirectParam);
         if (redirectPath) {
           await router.push(redirectPath);
         } else {
@@ -187,7 +169,6 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const onLoginStateChange = (event: Record<string, any>) => {
     // const isLoggedIn = localStorage.getItem('logged_in');
-    console.log('ZZ: Strogae', event);
     if (!event.key || (event.key === 'logged_in' && (event.newValue === '0' || !event.newValue))) {
       if (checkAuth) {
         window.location.href = paths.home;

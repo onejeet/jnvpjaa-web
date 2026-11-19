@@ -41,8 +41,6 @@ const BusinessListModule: React.FC<BusinessListModuleProps> = ({
     return businessesData?.getBusinesses?.data || ssrData?.data || [];
   }, [loading, businessesData, propLoading, ssrData]);
 
-  console.log('ZZ: listData', listData);
-
   return (
     <Grid container spacing={3} mt={2}>
       {listData?.length > 0 ? (

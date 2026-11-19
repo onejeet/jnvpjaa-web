@@ -1,0 +1,746 @@
+
+> jnvpjaa-web@0.1.0 test:e2e
+> playwright test
+
+
+Running 113 tests using 1 worker
+
+  ✓    1 [chromium] › e2e/access-control.spec.ts:27:9 › signed out › /admin/ sends you to sign in (7.6s)
+  ✓    2 [chromium] › e2e/access-control.spec.ts:27:9 › signed out › /admin/pages/ sends you to sign in (7.4s)
+  ✓    3 [chromium] › e2e/access-control.spec.ts:27:9 › signed out › /admin/pages/vision/ sends you to sign in (7.3s)
+  ✓    4 [chromium] › e2e/access-control.spec.ts:27:9 › signed out › /admin/settings/ sends you to sign in (6.6s)
+  ✓    5 [chromium] › e2e/access-control.spec.ts:50:7 › superadmin sees exactly their admin sections (2.5s)
+  ✓    6 [chromium] › e2e/access-control.spec.ts:50:7 › president sees exactly their admin sections (868ms)
+  ✓    7 [chromium] › e2e/access-control.spec.ts:50:7 › treasurer sees exactly their admin sections (982ms)
+  ✓    8 [chromium] › e2e/access-control.spec.ts:61:5 › a plain member gets a clear empty state, not an error (1.1s)
+  ✓    9 [chromium] › e2e/access-control.spec.ts:78:7 › president typing a forbidden admin URL gets "no access", not the section (1.3s)
+  ✓   10 [chromium] › e2e/access-control.spec.ts:78:7 › treasurer typing a forbidden admin URL gets "no access", not the section (1.7s)
+  ✓   11 [chromium] › e2e/access-control.spec.ts:90:5 › president can open the editor directly (714ms)
+  ✓   12 [chromium] › e2e/access-control.spec.ts:100:9 › API refuses editors without the permission › anonymous cannot read editor data or save (66ms)
+  ✓   13 [chromium] › e2e/access-control.spec.ts:100:9 › API refuses editors without the permission › member cannot read editor data or save (60ms)
+  ✓   14 [chromium] › e2e/access-control.spec.ts:100:9 › API refuses editors without the permission › treasurer cannot read editor data or save (65ms)
+  ✓   15 [chromium] › e2e/access-control.spec.ts:125:7 › API refuses editors without the permission › a forged or expired token is refused (3ms)
+  ✓   16 [chromium] › e2e/access-control.spec.ts:137:5 › public queries never leak who edited a page (7ms)
+  -   17 [chromium] › e2e/capture-screens.spec.ts:31:5 › capture screenshots and hydration errors
+  ✓   18 [chromium] › e2e/content-api.spec.ts:19:5 › script, event handlers and javascript: links are stripped before storage and never run (1.9s)
+  ✓   19 [chromium] › e2e/content-api.spec.ts:49:5 › image URLs must be https on an allowed host (290ms)
+  ✓   20 [chromium] › e2e/content-api.spec.ts:65:5 › size limits are enforced server-side (241ms)
+  ✓   21 [chromium] › e2e/content-api.spec.ts:84:5 › wrong shapes are rejected: unknown keys, wrong page type, unknown group, null (253ms)
+  ✓   22 [chromium] › e2e/content-api.spec.ts:109:5 › unknown slugs and SEO overflow are refused (78ms)
+  ✓   23 [chromium] › e2e/content-api.spec.ts:126:5 › stale or missing version is a conflict, never an overwrite (39ms)
+  ✓   24 [chromium] › e2e/content-api.spec.ts:141:5 › two simultaneous saves of the same version: exactly one wins (58ms)
+  ✓   25 [chromium] › e2e/content-api.spec.ts:171:5 › unicode, emoji and RTL text survive a round trip (524ms)
+  ✓   26 [chromium] › e2e/content-api.spec.ts:181:5 › public queries only reveal visible pages (71ms)
+  ✓   27 [chromium] › e2e/editor-roundtrip.spec.ts:35:5 › stored rich text round-trips through the editor unchanged (1.1s)
+  ✓   28 [chromium] › e2e/editor-roundtrip.spec.ts:58:5 › hostile HTML loaded into the editor leaves nothing executable (1.4s)
+  ✓   29 [chromium] › e2e/editor-roundtrip.spec.ts:73:5 › paste keeps formatting and drops scripts (656ms)
+  ✓   30 [chromium] › e2e/editor-toolbar.spec.ts:27:5 › marks, blocks, alignment, headings and history (3.1s)
+  ✓   31 [chromium] › e2e/editor-toolbar.spec.ts:76:5 › link and YouTube insertion (1.1s)
+  ✓   32 [chromium] › e2e/editor-toolbar.spec.ts:100:7 › selection toolbar opens below the selection and works at 1366px (1.3s)
+  ✓   33 [chromium] › e2e/editor-toolbar.spec.ts:100:7 › selection toolbar opens below the selection and works at 375px (1.3s)
+  ✓   34 [chromium] › e2e/migration-guards.spec.ts:20:5 › blog detail pages are server-rendered on a direct load (150ms)
+  ✓   35 [chromium] › e2e/migration-guards.spec.ts:33:5 › Devanagari blog slugs resolve both percent-encoded and raw (1.6s)
+  ✓   36 [chromium] › e2e/migration-guards.spec.ts:43:5 › client navigation from the blog list renders the post (1.3s)
+  ✓   37 [chromium] › e2e/migration-guards.spec.ts:56:5 › hostile HTML is stripped when a blog is saved (36ms)
+  ✓   38 [chromium] › e2e/migration-guards.spec.ts:74:5 › signed out, a protected route redirects to signin with the return path (8ms)
+  ✓   39 [chromium] › e2e/migration-guards.spec.ts:82:5 › signed in, auth routes redirect to the profile (14ms)
+  ✓   40 [chromium] › e2e/migration-guards.spec.ts:90:5 › the Google auth callback is private, unreferred and unindexed (18ms)
+  ✓   41 [chromium] › e2e/migration-guards.spec.ts:100:7 › metadata is in <head> for Mozilla (171ms)
+  ✓   42 [chromium] › e2e/migration-guards.spec.ts:100:7 › metadata is in <head> for Googlebot (212ms)
+  ✓   43 [chromium] › e2e/migration-guards.spec.ts:112:5 › home declares both web-app-capable tags, once each (41ms)
+  ✓   44 [chromium] › e2e/page-editor.spec.ts:29:5 › pages index lists the seven pages in order with their state (679ms)
+  ✓   45 [chromium] › e2e/page-editor.spec.ts:43:7 › president-message: opens with nothing unsaved and no errors (2.3s)
+  ✓   46 [chromium] › e2e/page-editor.spec.ts:43:7 › principal-message: opens with nothing unsaved and no errors (2.4s)
+  ✓   47 [chromium] › e2e/page-editor.spec.ts:43:7 › secretary-message: opens with nothing unsaved and no errors (2.3s)
+  ✓   48 [chromium] › e2e/page-editor.spec.ts:43:7 › vision: opens with nothing unsaved and no errors (2.4s)
+  ✓   49 [chromium] › e2e/page-editor.spec.ts:43:7 › about: opens with nothing unsaved and no errors (2.5s)
+  ✓   50 [chromium] › e2e/page-editor.spec.ts:43:7 › past-presidents: opens with nothing unsaved and no errors (2.3s)
+  ✓   51 [chromium] › e2e/page-editor.spec.ts:43:7 › bhamashah-pillars: opens with nothing unsaved and no errors (2.4s)
+  ✓   52 [chromium] › e2e/page-editor.spec.ts:54:5 › unknown or hostile slugs are a 404, not an editor (5.9s)
+  ✓   53 [chromium] › e2e/page-editor.spec.ts:63:5 › editing a heading publishes it to the public page (1.5s)
+  ✓   54 [chromium] › e2e/page-editor.spec.ts:79:5 › required, too-long and SEO-limit inputs block saving and say why (1.1s)
+  ✓   55 [chromium] › e2e/page-editor.spec.ts:100:5 › a second editor saving first makes your save fail loudly, and Reload recovers (2.7s)
+  ✓   56 [chromium] › e2e/page-editor.spec.ts:123:5 › hiding a page 404s it publicly, drops its links, and keeps it editable (15.0s)
+  ✓   57 [chromium] › e2e/page-editor.spec.ts:153:5 › past presidents: add, reorder and remove people (2.2s)
+  ✓   58 [chromium] › e2e/page-editor.spec.ts:184:5 › a new person with no name cannot be saved (1.0s)
+  ✓   59 [chromium] › e2e/page-editor.spec.ts:193:5 › bhamashah: hiding a group removes it from the public page only (1.7s)
+  ✓   60 [chromium] › e2e/page-editor.spec.ts:208:5 › text page: sections can be added up to the limit and the last one cannot be removed (2.0s)
+  ✓   61 [chromium] › e2e/page-editor.spec.ts:222:5 › typed markup is shown as text, never executed (2.7s)
+  ✓   62 [chromium] › e2e/page-editor.spec.ts:240:5 › unsaved edits: in-app links ask first; staying keeps the edit (2.1s)
+  ✓   63 [chromium] › e2e/page-editor.spec.ts:256:5 › unsaved edits: closing the tab triggers the browser prompt (702ms)
+  ✓   64 [chromium] › e2e/page-editor.spec.ts:266:5 › saved changes do not trigger the leave prompt (969ms)
+  ✓   65 [chromium] › e2e/page-editor.spec.ts:279:7 › photo upload › rejects the wrong file type and oversized files with a message (1.2s)
+  ✓   66 [chromium] › e2e/page-editor.spec.ts:289:7 › photo upload › a successful upload stores a content-domain URL with alt text (917ms)
+  ✓   67 [chromium] › e2e/page-editor.spec.ts:311:5 › editor works at phone width with no sideways scroll (5.5s)
+  ✓   68 [chromium] › e2e/page-editor.spec.ts:331:5 › SEO fields save without touching content and reach the public page (1.5s)
+  ✓   69 [chromium] › e2e/public-pages.spec.ts:17:7 › public /president-message renders its stored content without errors (449ms)
+  ✓   70 [chromium] › e2e/public-pages.spec.ts:17:7 › public /principal-message renders its stored content without errors (496ms)
+  ✓   71 [chromium] › e2e/public-pages.spec.ts:17:7 › public /secretary-message renders its stored content without errors (440ms)
+  ✓   72 [chromium] › e2e/public-pages.spec.ts:17:7 › public /vision renders its stored content without errors (487ms)
+  ✓   73 [chromium] › e2e/public-pages.spec.ts:17:7 › public /about renders its stored content without errors (516ms)
+  ✓   74 [chromium] › e2e/public-pages.spec.ts:17:7 › public /past-presidents renders its stored content without errors (521ms)
+  ✓   75 [chromium] › e2e/public-pages.spec.ts:17:7 › public /bhamashah-pillars renders its stored content without errors (442ms)
+  ✓   76 [chromium] › e2e/public-pages.spec.ts:40:5 › message pages show the signer and photo with alt text (831ms)
+  ✓   77 [chromium] › e2e/public-pages.spec.ts:54:5 › past presidents table lists every visible person and exposes no email address (531ms)
+  ✓   78 [chromium] › e2e/public-pages.spec.ts:68:5 › bhamashah pillars shows each visible group with its people or empty text (507ms)
+  ✓   79 [chromium] › e2e/public-pages.spec.ts:79:5 › about and vision keep their structured data (708ms)
+  ✓   80 [chromium] › e2e/public-pages.spec.ts:90:9 › phone width › /president-message has no horizontal scroll at 375px (4.1s)
+  ✓   81 [chromium] › e2e/public-pages.spec.ts:90:9 › phone width › /principal-message has no horizontal scroll at 375px (2.3s)
+  ✓   82 [chromium] › e2e/public-pages.spec.ts:90:9 › phone width › /secretary-message has no horizontal scroll at 375px (2.3s)
+  ✓   83 [chromium] › e2e/public-pages.spec.ts:90:9 › phone width › /vision has no horizontal scroll at 375px (2.2s)
+  ✓   84 [chromium] › e2e/public-pages.spec.ts:90:9 › phone width › /about has no horizontal scroll at 375px (2.4s)
+  ✓   85 [chromium] › e2e/public-pages.spec.ts:90:9 › phone width › /past-presidents has no horizontal scroll at 375px (2.3s)
+  ✓   86 [chromium] › e2e/public-pages.spec.ts:90:9 › phone width › /bhamashah-pillars has no horizontal scroll at 375px (2.2s)
+  ✓   87 [chromium] › e2e/public-pages.spec.ts:99:5 › footer links to the moved pages all resolve (6.5s)
+  ✓   88 [chromium] › e2e/public-pages.spec.ts:111:5 › every internal link on the home page still resolves (site smoke) (8.9s)
+  ✓   89 [chromium] › e2e/regression.spec.ts:26:7 › admin /admin/ renders its section with the matching nav item selected (2.6s)
+  ✓   90 [chromium] › e2e/regression.spec.ts:26:7 › admin /admin/access/ renders its section with the matching nav item selected (3.0s)
+  ✓   91 [chromium] › e2e/regression.spec.ts:26:7 › admin /admin/executive/ renders its section with the matching nav item selected (2.6s)
+  ✓   92 [chromium] › e2e/regression.spec.ts:26:7 › admin /admin/coordinators/ renders its section with the matching nav item selected (11.4s)
+  ✓   93 [chromium] › e2e/regression.spec.ts:26:7 › admin /admin/assignments/ renders its section with the matching nav item selected (2.7s)
+  ✓   94 [chromium] › e2e/regression.spec.ts:26:7 › admin /admin/settings/ renders its section with the matching nav item selected (2.6s)
+  ✓   95 [chromium] › e2e/regression.spec.ts:26:7 › admin /admin/scholarship/ renders its section with the matching nav item selected (3.0s)
+  ✓   96 [chromium] › e2e/regression.spec.ts:26:7 › admin /admin/pages/ renders its section with the matching nav item selected (2.5s)
+  ✓   97 [chromium] › e2e/regression.spec.ts:39:5 › unknown admin section never renders a section (976ms)
+  ✓   98 [chromium] › e2e/regression.spec.ts:48:5 › overview cards lead to every section (1.4s)
+  ✓   99 [chromium] › e2e/regression.spec.ts:60:5 › sidebar navigation is client-side and keeps the shell (1.5s)
+  ✓  100 [chromium] › e2e/regression.spec.ts:70:5 › the top bar offers the admin area to a president (12.4s)
+  ✓  101 [chromium] › e2e/regression.spec.ts:86:7 › /newsroom/new/ editor still renders in two columns on desktop (629ms)
+  ✓  102 [chromium] › e2e/regression.spec.ts:86:7 › /blog/new/ editor still renders in two columns on desktop (631ms)
+  ✓  103 [chromium] › e2e/regression.spec.ts:86:7 › /jobs/new/ editor still renders in two columns on desktop (706ms)
+  ✓  104 [chromium] › e2e/regression.spec.ts:86:7 › /events/new/ editor still renders in two columns on desktop (606ms)
+  ✓  105 [chromium] › e2e/regression.spec.ts:102:7 › signed-in /profile/ still loads cleanly (3.0s)
+  ✓  106 [chromium] › e2e/regression.spec.ts:102:7 › signed-in /billing/ still loads cleanly (2.6s)
+  ✓  107 [chromium] › e2e/regression.spec.ts:102:7 › signed-in /security/ still loads cleanly (2.6s)
+  ✓  108 [chromium] › e2e/regression.spec.ts:102:7 › signed-in /activity/ still loads cleanly (2.5s)
+  ✓  109 [chromium] › e2e/regression.spec.ts:102:7 › signed-in /members/ still loads cleanly (13.1s)
+  ✓  110 [chromium] › e2e/regression.spec.ts:102:7 › signed-in /newsroom/ still loads cleanly (2.9s)
+  ✓  111 [chromium] › e2e/regression.spec.ts:102:7 › signed-in /events/ still loads cleanly (3.5s)
+  ✘  112 [chromium] › e2e/tenant-identity.spec.ts:92:5 › JNVPJAA renders identically to the pre-migration baseline (45.1s)
+  -  113 [chromium] › e2e/tenant-modules.spec.ts:10:5 › a disabled module 404s on every route and disappears from header and footer
+
+
+  1) [chromium] › e2e/tenant-identity.spec.ts:92:5 › JNVPJAA renders identically to the pre-migration baseline 
+
+    Error: /
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 6[39m
+    [31m+ Received  + 2[39m
+
+    [33m@@ -36,12 +36,12 @@[39m
+    [2m      },[22m
+    [2m    ],[22m
+    [2m    "links": Array [[22m
+    [2m      Array [[22m
+    [2m        "apple-touch-icon",[22m
+    [32m-       "/icons/icon-512.png",[39m
+    [32m-       "",[39m
+    [31m+       "/splashscreens/apple-icon-180.png",[39m
+    [31m+       "180x180",[39m
+    [2m      ],[22m
+    [2m      Array [[22m
+    [2m        "canonical",[22m
+    [2m        "https://jnvpjaa.org/",[22m
+    [2m        "",[22m
+    [33m@@ -85,14 +85,10 @@[39m
+    [2m        "JNVPJAA",[22m
+    [2m      ],[22m
+    [2m      Array [[22m
+    [2m        "description",[22m
+    [2m        "Connect with alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur. Explore JNVPJAA events, alumni stories, photo galleries and community initiatives.",[22m
+    [32m-     ],[39m
+    [32m-     Array [[39m
+    [32m-       "emotion-insertion-point",[39m
+    [32m-       "",[39m
+    [2m      ],[22m
+    [2m      Array [[22m
+    [2m        "mobile-web-app-capable",[22m
+    [2m        "yes",[22m
+    [2m      ],[22m
+
+       99 |   expect(existsSync(BASELINE), 'run once with E2E_CAPTURE_BASELINE=1 before changing anything').toBe(true);
+      100 |   const baseline = JSON.parse(readFileSync(BASELINE, 'utf8'));
+    > 101 |   for (const key of Object.keys(baseline)) expect.soft(actual[key], key).toEqual(baseline[key]);
+          |                                                                          ^
+      102 | });
+      103 |
+        at /Users/onejeet/Desktop/Work/JNVPJAA/jnvpjaa-web/e2e/tenant-identity.spec.ts:101:74
+
+    Error: /about/
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 6[39m
+    [31m+ Received  + 2[39m
+
+    [33m@@ -36,12 +36,12 @@[39m
+    [2m      },[22m
+    [2m    ],[22m
+    [2m    "links": Array [[22m
+    [2m      Array [[22m
+    [2m        "apple-touch-icon",[22m
+    [32m-       "/icons/icon-512.png",[39m
+    [32m-       "",[39m
+    [31m+       "/splashscreens/apple-icon-180.png",[39m
+    [31m+       "180x180",[39m
+    [2m      ],[22m
+    [2m      Array [[22m
+    [2m        "canonical",[22m
+    [2m        "https://jnvpjaa.org/about/",[22m
+    [2m        "",[22m
+    [33m@@ -85,14 +85,10 @@[39m
+    [2m        "JNVPJAA",[22m
+    [2m      ],[22m
+    [2m      Array [[22m
+    [2m        "description",[22m
+    [2m        "The Official Alumni Network of Jawahar Navodaya Vidyalaya Paota, Jaipur. JNVs are a testament to innovative state-sponsored education in India. Connect with fellow alumni, share experiences, and stay updated on events that honor our shared journey and the values of our beloved school.",[22m
+    [32m-     ],[39m
+    [32m-     Array [[39m
+    [32m-       "emotion-insertion-point",[39m
+    [32m-       "",[39m
+    [2m      ],[22m
+    [2m      Array [[22m
+    [2m        "mobile-web-app-capable",[22m
+    [2m        "yes",[22m
+    [2m      ],[22m
+
+       99 |   expect(existsSync(BASELINE), 'run once with E2E_CAPTURE_BASELINE=1 before changing anything').toBe(true);
+      100 |   const baseline = JSON.parse(readFileSync(BASELINE, 'utf8'));
+    > 101 |   for (const key of Object.keys(baseline)) expect.soft(actual[key], key).toEqual(baseline[key]);
+          |                                                                          ^
+      102 | });
+      103 |
+        at /Users/onejeet/Desktop/Work/JNVPJAA/jnvpjaa-web/e2e/tenant-identity.spec.ts:101:74
+
+    Error: /vision/
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 6[39m
+    [31m+ Received  + 2[39m
+
+    [33m@@ -36,12 +36,12 @@[39m
+    [2m      },[22m
+    [2m    ],[22m
+    [2m    "links": Array [[22m
+    [2m      Array [[22m
+    [2m        "apple-touch-icon",[22m
+    [32m-       "/icons/icon-512.png",[39m
+    [32m-       "",[39m
+    [31m+       "/splashscreens/apple-icon-180.png",[39m
+    [31m+       "180x180",[39m
+    [2m      ],[22m
+    [2m      Array [[22m
+    [2m        "canonical",[22m
+    [2m        "https://jnvpjaa.org/vision/",[22m
+    [2m        "",[22m
+    [33m@@ -85,14 +85,10 @@[39m
+    [2m        "JNVPJAA",[22m
+    [2m      ],[22m
+    [2m      Array [[22m
+    [2m        "description",[22m
+    [2m        "Learn about the JNVPJAA vision and mission for connecting JNV Paota alumni and supporting students and the school community.",[22m
+    [32m-     ],[39m
+    [32m-     Array [[39m
+    [32m-       "emotion-insertion-point",[39m
+    [32m-       "",[39m
+    [2m      ],[22m
+    [2m      Array [[22m
+    [2m        "mobile-web-app-capable",[22m
+    [2m        "yes",[22m
+    [2m      ],[22m
+
+       99 |   expect(existsSync(BASELINE), 'run once with E2E_CAPTURE_BASELINE=1 before changing anything').toBe(true);
+      100 |   const baseline = JSON.parse(readFileSync(BASELINE, 'utf8'));
+    > 101 |   for (const key of Object.keys(baseline)) expect.soft(actual[key], key).toEqual(baseline[key]);
+          |                                                                          ^
+      102 | });
+      103 |
+        at /Users/onejeet/Desktop/Work/JNVPJAA/jnvpjaa-web/e2e/tenant-identity.spec.ts:101:74
+
+    Error: /president-message/
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 6[39m
+    [31m+ Received  + 2[39m
+
+    [33m@@ -24,12 +24,12 @@[39m
+    [2m      },[22m
+    [2m    ],[22m
+    [2m    "links": Array [[22m
+    [2m      Array [[22m
+    [2m        "apple-touch-icon",[22m
+    [32m-       "/icons/icon-512.png",[39m
+    [32m-       "",[39m
+    [31m+       "/splashscreens/apple-icon-180.png",[39m
+    [31m+       "180x180",[39m
+    [2m      ],[22m
+    [2m      Array [[22m
+    [2m        "canonical",[22m
+    [2m        "https://jnvpjaa.org/president-message/",[22m
+    [2m        "",[22m
+    [33m@@ -73,14 +73,10 @@[39m
+    [2m        "JNVPJAA",[22m
+    [2m      ],[22m
+    [2m      Array [[22m
+    [2m        "description",[22m
+    [2m        "Read the JNVPJAA president’s message to alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur.",[22m
+    [32m-     ],[39m
+    [32m-     Array [[39m
+    [32m-       "emotion-insertion-point",[39m
+    [32m-       "",[39m
+    [2m      ],[22m
+    [2m      Array [[22m
+    [2m        "mobile-web-app-capable",[22m
+    [2m        "yes",[22m
+    [2m      ],[22m
+
+       99 |   expect(existsSync(BASELINE), 'run once with E2E_CAPTURE_BASELINE=1 before changing anything').toBe(true);
+      100 |   const baseline = JSON.parse(readFileSync(BASELINE, 'utf8'));
+    > 101 |   for (const key of Object.keys(baseline)) expect.soft(actual[key], key).toEqual(baseline[key]);
+          |                                                                          ^
+      102 | });
+      103 |
+        at /Users/onejeet/Desktop/Work/JNVPJAA/jnvpjaa-web/e2e/tenant-identity.spec.ts:101:74
+
+    Error: /events/
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 6[39m
+    [31m+ Received  + 2[39m
+
+    [33m@@ -36,12 +36,12 @@[39m
+    [2m      },[22m
+    [2m    ],[22m
+    [2m    "links": Array [[22m
+    [2m      Array [[22m
+    [2m        "apple-touch-icon",[22m
+    [32m-       "/icons/icon-512.png",[39m
+    [32m-       "",[39m
+    [31m+       "/splashscreens/apple-icon-180.png",[39m
+    [31m+       "180x180",[39m
+    [2m      ],[22m
+    [2m      Array [[22m
+    [2m        "canonical",[22m
+    [2m        "https://jnvpjaa.org/events/",[22m
+    [2m        "",[22m
+    [33m@@ -85,14 +85,10 @@[39m
+    [2m        "JNVPJAA",[22m
+    [2m      ],[22m
+    [2m      Array [[22m
+    [2m        "description",[22m
+    [2m        "Explore JNVPJAA alumni reunions, meetups, sports events and community activities for JNV Paota, Jaipur.",[22m
+    [32m-     ],[39m
+    [32m-     Array [[39m
+    [32m-       "emotion-insertion-point",[39m
+    [32m-       "",[39m
+    [2m      ],[22m
+    [2m      Array [[22m
+    [2m        "mobile-web-app-capable",[22m
+    [2m        "yes",[22m
+    [2m      ],[22m
+
+       99 |   expect(existsSync(BASELINE), 'run once with E2E_CAPTURE_BASELINE=1 before changing anything').toBe(true);
+      100 |   const baseline = JSON.parse(readFileSync(BASELINE, 'utf8'));
+    > 101 |   for (const key of Object.keys(baseline)) expect.soft(actual[key], key).toEqual(baseline[key]);
+          |                                                                          ^
+      102 | });
+      103 |
+        at /Users/onejeet/Desktop/Work/JNVPJAA/jnvpjaa-web/e2e/tenant-identity.spec.ts:101:74
+
+    Error: /contact-us/
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 6[39m
+    [31m+ Received  + 2[39m
+
+    [33m@@ -36,12 +36,12 @@[39m
+    [2m      },[22m
+    [2m    ],[22m
+    [2m    "links": Array [[22m
+    [2m      Array [[22m
+    [2m        "apple-touch-icon",[22m
+    [32m-       "/icons/icon-512.png",[39m
+    [32m-       "",[39m
+    [31m+       "/splashscreens/apple-icon-180.png",[39m
+    [31m+       "180x180",[39m
+    [2m      ],[22m
+    [2m      Array [[22m
+    [2m        "canonical",[22m
+    [2m        "https://jnvpjaa.org/contact-us/",[22m
+    [2m        "",[22m
+    [33m@@ -85,14 +85,10 @@[39m
+    [2m        "JNVPJAA",[22m
+    [2m      ],[22m
+    [2m      Array [[22m
+    [2m        "description",[22m
+    [2m        "Contact the JNVPJAA alumni association for questions about membership, events and community initiatives at JNV Paota, Jaipur.",[22m
+    [32m-     ],[39m
+    [32m-     Array [[39m
+    [32m-       "emotion-insertion-point",[39m
+    [32m-       "",[39m
+    [2m      ],[22m
+    [2m      Array [[22m
+    [2m        "mobile-web-app-capable",[22m
+    [2m        "yes",[22m
+    [2m      ],[22m
+
+       99 |   expect(existsSync(BASELINE), 'run once with E2E_CAPTURE_BASELINE=1 before changing anything').toBe(true);
+      100 |   const baseline = JSON.parse(readFileSync(BASELINE, 'utf8'));
+    > 101 |   for (const key of Object.keys(baseline)) expect.soft(actual[key], key).toEqual(baseline[key]);
+          |                                                                          ^
+      102 | });
+      103 |
+        at /Users/onejeet/Desktop/Work/JNVPJAA/jnvpjaa-web/e2e/tenant-identity.spec.ts:101:74
+
+    Error: /privacy_policy/
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 6[39m
+    [31m+ Received  + 2[39m
+
+    [33m@@ -24,12 +24,12 @@[39m
+    [2m      },[22m
+    [2m    ],[22m
+    [2m    "links": Array [[22m
+    [2m      Array [[22m
+    [2m        "apple-touch-icon",[22m
+    [32m-       "/icons/icon-512.png",[39m
+    [32m-       "",[39m
+    [31m+       "/splashscreens/apple-icon-180.png",[39m
+    [31m+       "180x180",[39m
+    [2m      ],[22m
+    [2m      Array [[22m
+    [2m        "canonical",[22m
+    [2m        "https://jnvpjaa.org/privacy_policy/",[22m
+    [2m        "",[22m
+    [33m@@ -73,14 +73,10 @@[39m
+    [2m        "JNVPJAA",[22m
+    [2m      ],[22m
+    [2m      Array [[22m
+    [2m        "description",[22m
+    [2m        "How JNVPJAA collects, uses, shares and protects personal data, including Google sign-in, member directory and your rights under Indian law.",[22m
+    [32m-     ],[39m
+    [32m-     Array [[39m
+    [32m-       "emotion-insertion-point",[39m
+    [32m-       "",[39m
+    [2m      ],[22m
+    [2m      Array [[22m
+    [2m        "mobile-web-app-capable",[22m
+    [2m        "yes",[22m
+    [2m      ],[22m
+
+       99 |   expect(existsSync(BASELINE), 'run once with E2E_CAPTURE_BASELINE=1 before changing anything').toBe(true);
+      100 |   const baseline = JSON.parse(readFileSync(BASELINE, 'utf8'));
+    > 101 |   for (const key of Object.keys(baseline)) expect.soft(actual[key], key).toEqual(baseline[key]);
+          |                                                                          ^
+      102 | });
+      103 |
+        at /Users/onejeet/Desktop/Work/JNVPJAA/jnvpjaa-web/e2e/tenant-identity.spec.ts:101:74
+
+    Error: /terms_condition/
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 6[39m
+    [31m+ Received  + 2[39m
+
+    [33m@@ -24,12 +24,12 @@[39m
+    [2m      },[22m
+    [2m    ],[22m
+    [2m    "links": Array [[22m
+    [2m      Array [[22m
+    [2m        "apple-touch-icon",[22m
+    [32m-       "/icons/icon-512.png",[39m
+    [32m-       "",[39m
+    [31m+       "/splashscreens/apple-icon-180.png",[39m
+    [31m+       "180x180",[39m
+    [2m      ],[22m
+    [2m      Array [[22m
+    [2m        "canonical",[22m
+    [2m        "https://jnvpjaa.org/terms_condition/",[22m
+    [2m        "",[22m
+    [33m@@ -73,14 +73,10 @@[39m
+    [2m        "JNVPJAA",[22m
+    [2m      ],[22m
+    [2m      Array [[22m
+    [2m        "description",[22m
+    [2m        "The rules for using the JNVPJAA website and member portal: eligibility, accounts, Google sign-in, member conduct, content and liability.",[22m
+    [32m-     ],[39m
+    [32m-     Array [[39m
+    [32m-       "emotion-insertion-point",[39m
+    [32m-       "",[39m
+    [2m      ],[22m
+    [2m      Array [[22m
+    [2m        "mobile-web-app-capable",[22m
+    [2m        "yes",[22m
+    [2m      ],[22m
+
+       99 |   expect(existsSync(BASELINE), 'run once with E2E_CAPTURE_BASELINE=1 before changing anything').toBe(true);
+      100 |   const baseline = JSON.parse(readFileSync(BASELINE, 'utf8'));
+    > 101 |   for (const key of Object.keys(baseline)) expect.soft(actual[key], key).toEqual(baseline[key]);
+          |                                                                          ^
+      102 | });
+      103 |
+        at /Users/onejeet/Desktop/Work/JNVPJAA/jnvpjaa-web/e2e/tenant-identity.spec.ts:101:74
+
+    Error: /members/
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 6[39m
+    [31m+ Received  + 2[39m
+
+    [33m@@ -36,12 +36,12 @@[39m
+    [2m      },[22m
+    [2m    ],[22m
+    [2m    "links": Array [[22m
+    [2m      Array [[22m
+    [2m        "apple-touch-icon",[22m
+    [32m-       "/icons/icon-512.png",[39m
+    [32m-       "",[39m
+    [31m+       "/splashscreens/apple-icon-180.png",[39m
+    [31m+       "180x180",[39m
+    [2m      ],[22m
+    [2m      Array [[22m
+    [2m        "canonical",[22m
+    [2m        "https://jnvpjaa.org/members/",[22m
+    [2m        "",[22m
+    [33m@@ -85,14 +85,10 @@[39m
+    [2m        "JNVPJAA",[22m
+    [2m      ],[22m
+    [2m      Array [[22m
+    [2m        "description",[22m
+    [2m        "Discover and connect with alumni and faculty members of Jawahar Navodaya Vidyalaya Paota, Jaipur.",[22m
+    [32m-     ],[39m
+    [32m-     Array [[39m
+    [32m-       "emotion-insertion-point",[39m
+    [32m-       "",[39m
+    [2m      ],[22m
+    [2m      Array [[22m
+    [2m        "mobile-web-app-capable",[22m
+    [2m        "yes",[22m
+    [2m      ],[22m
+
+       99 |   expect(existsSync(BASELINE), 'run once with E2E_CAPTURE_BASELINE=1 before changing anything').toBe(true);
+      100 |   const baseline = JSON.parse(readFileSync(BASELINE, 'utf8'));
+    > 101 |   for (const key of Object.keys(baseline)) expect.soft(actual[key], key).toEqual(baseline[key]);
+          |                                                                          ^
+      102 | });
+      103 |
+        at /Users/onejeet/Desktop/Work/JNVPJAA/jnvpjaa-web/e2e/tenant-identity.spec.ts:101:74
+
+    Error: /jobs/
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 6[39m
+    [31m+ Received  + 2[39m
+
+    [33m@@ -36,12 +36,12 @@[39m
+    [2m      },[22m
+    [2m    ],[22m
+    [2m    "links": Array [[22m
+    [2m      Array [[22m
+    [2m        "apple-touch-icon",[22m
+    [32m-       "/icons/icon-512.png",[39m
+    [32m-       "",[39m
+    [31m+       "/splashscreens/apple-icon-180.png",[39m
+    [31m+       "180x180",[39m
+    [2m      ],[22m
+    [2m      Array [[22m
+    [2m        "canonical",[22m
+    [2m        "https://jnvpjaa.org/jobs/",[22m
+    [2m        "",[22m
+    [33m@@ -85,14 +85,10 @@[39m
+    [2m        "JNVPJAA",[22m
+    [2m      ],[22m
+    [2m      Array [[22m
+    [2m        "description",[22m
+    [2m        "Jobs and internships shared by alumni of JNV Paota, Jaipur — apply in one step with your profile.",[22m
+    [32m-     ],[39m
+    [32m-     Array [[39m
+    [32m-       "emotion-insertion-point",[39m
+    [32m-       "",[39m
+    [2m      ],[22m
+    [2m      Array [[22m
+    [2m        "mobile-web-app-capable",[22m
+    [2m        "yes",[22m
+    [2m      ],[22m
+
+       99 |   expect(existsSync(BASELINE), 'run once with E2E_CAPTURE_BASELINE=1 before changing anything').toBe(true);
+      100 |   const baseline = JSON.parse(readFileSync(BASELINE, 'utf8'));
+    > 101 |   for (const key of Object.keys(baseline)) expect.soft(actual[key], key).toEqual(baseline[key]);
+          |                                                                          ^
+      102 | });
+      103 |
+        at /Users/onejeet/Desktop/Work/JNVPJAA/jnvpjaa-web/e2e/tenant-identity.spec.ts:101:74
+
+    Error: /scholarships/
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 6[39m
+    [31m+ Received  + 2[39m
+
+    [33m@@ -24,12 +24,12 @@[39m
+    [2m      },[22m
+    [2m    ],[22m
+    [2m    "links": Array [[22m
+    [2m      Array [[22m
+    [2m        "apple-touch-icon",[22m
+    [32m-       "/icons/icon-512.png",[39m
+    [32m-       "",[39m
+    [31m+       "/splashscreens/apple-icon-180.png",[39m
+    [31m+       "180x180",[39m
+    [2m      ],[22m
+    [2m      Array [[22m
+    [2m        "canonical",[22m
+    [2m        "https://jnvpjaa.org/signin/",[22m
+    [2m        "",[22m
+    [33m@@ -73,14 +73,10 @@[39m
+    [2m        "JNVPJAA",[22m
+    [2m      ],[22m
+    [2m      Array [[22m
+    [2m        "description",[22m
+    [2m        "The Official Alumni Network of Jawahar Navodaya Vidyalaya Paota, Jaipur. JNVs are a testament to innovative state-sponsored education in India. Connect with fellow alumni, share experiences, and stay updated on events that honor our shared journey and the values of our beloved school.",[22m
+    [32m-     ],[39m
+    [32m-     Array [[39m
+    [32m-       "emotion-insertion-point",[39m
+    [32m-       "",[39m
+    [2m      ],[22m
+    [2m      Array [[22m
+    [2m        "mobile-web-app-capable",[22m
+    [2m        "yes",[22m
+    [2m      ],[22m
+
+       99 |   expect(existsSync(BASELINE), 'run once with E2E_CAPTURE_BASELINE=1 before changing anything').toBe(true);
+      100 |   const baseline = JSON.parse(readFileSync(BASELINE, 'utf8'));
+    > 101 |   for (const key of Object.keys(baseline)) expect.soft(actual[key], key).toEqual(baseline[key]);
+          |                                                                          ^
+      102 | });
+      103 |
+        at /Users/onejeet/Desktop/Work/JNVPJAA/jnvpjaa-web/e2e/tenant-identity.spec.ts:101:74
+
+    Error: manifest
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 12[39m
+    [31m+ Received  + 45[39m
+
+    [33m@@ -2,36 +2,69 @@[39m
+    [2m    "background_color": "#808588",[22m
+    [2m    "description": "Alumni Network of JNV Paota, Jaipur",[22m
+    [2m    "display": "standalone",[22m
+    [2m    "icons": Array [[22m
+    [2m      Object {[22m
+    [32m-       "purpose": "any",[39m
+    [2m        "sizes": "192x192",[22m
+    [2m        "src": "/icons/icon-192.png",[22m
+    [2m        "type": "image/png",[22m
+    [2m      },[22m
+    [2m      Object {[22m
+    [32m-       "purpose": "maskable",[39m
+    [31m+       "sizes": "512x512",[39m
+    [31m+       "src": "/icons/icon-512.png",[39m
+    [31m+       "type": "image/png",[39m
+    [31m+     },[39m
+    [31m+   ],[39m
+    [31m+   "id": "/",[39m
+    [31m+   "lang": "en",[39m
+    [31m+   "name": "JNVPJAA",[39m
+    [31m+   "scope": "/",[39m
+    [31m+   "short_name": "JNVPJAA",[39m
+    [31m+   "shortcuts": Array [[39m
+    [31m+     Object {[39m
+    [31m+       "icons": Array [[39m
+    [31m+         Object {[39m
+    [2m            "sizes": "192x192",[22m
+    [2m            "src": "/icons/icon-192.png",[22m
+    [2m            "type": "image/png",[22m
+    [31m+         },[39m
+    [31m+       ],[39m
+    [31m+       "name": "Events",[39m
+    [31m+       "url": "/events/",[39m
+    [2m      },[22m
+    [2m      Object {[22m
+    [32m-       "purpose": "any",[39m
+    [32m-       "sizes": "512x512",[39m
+    [32m-       "src": "/icons/icon-512.png",[39m
+    [31m+       "icons": Array [[39m
+    [31m+         Object {[39m
+    [31m+           "sizes": "192x192",[39m
+    [31m+           "src": "/icons/icon-192.png",[39m
+    [31m+           "type": "image/png",[39m
+    [31m+         },[39m
+    [31m+       ],[39m
+    [31m+       "name": "Members",[39m
+    [31m+       "url": "/members/",[39m
+    [31m+     },[39m
+    [31m+     Object {[39m
+    [31m+       "icons": Array [[39m
+    [31m+         Object {[39m
+    [31m+           "sizes": "192x192",[39m
+    [31m+           "src": "/icons/icon-192.png",[39m
+    [2m            "type": "image/png",[22m
+    [31m+         },[39m
+    [31m+       ],[39m
+    [31m+       "name": "Jobs",[39m
+    [31m+       "url": "/jobs/",[39m
+    [2m      },[22m
+    [2m      Object {[22m
+    [32m-       "purpose": "maskable",[39m
+    [32m-       "sizes": "512x512",[39m
+    [32m-       "src": "/icons/icon-512.png",[39m
+    [31m+       "icons": Array [[39m
+    [31m+         Object {[39m
+    [31m+           "sizes": "192x192",[39m
+    [31m+           "src": "/icons/icon-192.png",[39m
+    [2m            "type": "image/png",[22m
+    [2m          },[22m
+    [2m        ],[22m
+    [32m-   "id": "/",[39m
+    [32m-   "name": "JNVPJAA",[39m
+    [32m-   "scope": "/",[39m
+    [32m-   "short_name": "JNVPJAA",[39m
+    [31m+       "name": "Blog",[39m
+    [31m+       "url": "/blog/",[39m
+    [31m+     },[39m
+    [31m+   ],[39m
+    [2m    "start_url": "/",[22m
+    [2m    "theme_color": "#C62835",[22m
+    [2m  }[22m
+
+       99 |   expect(existsSync(BASELINE), 'run once with E2E_CAPTURE_BASELINE=1 before changing anything').toBe(true);
+      100 |   const baseline = JSON.parse(readFileSync(BASELINE, 'utf8'));
+    > 101 |   for (const key of Object.keys(baseline)) expect.soft(actual[key], key).toEqual(baseline[key]);
+          |                                                                          ^
+      102 | });
+      103 |
+        at /Users/onejeet/Desktop/Work/JNVPJAA/jnvpjaa-web/e2e/tenant-identity.spec.ts:101:74
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/.state/results/tenant-identity-JNVPJAA-re-66126--the-pre-migration-baseline-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/.state/results/tenant-identity-JNVPJAA-re-66126--the-pre-migration-baseline-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/.state/results/tenant-identity-JNVPJAA-re-66126--the-pre-migration-baseline-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/.state/results/tenant-identity-JNVPJAA-re-66126--the-pre-migration-baseline-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › e2e/tenant-identity.spec.ts:92:5 › JNVPJAA renders identically to the pre-migration baseline 
+  2 skipped
+  110 passed (4.8m)

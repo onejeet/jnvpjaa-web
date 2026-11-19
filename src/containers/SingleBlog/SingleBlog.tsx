@@ -69,8 +69,6 @@ const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
   const dataLoading = !id || loading;
   const claps = clapQuery?.getClapsCount;
 
-  console.log('ZZ: prerenderedBlog', prerenderedBlog);
-
   const blog: Blog | undefined = React.useMemo(() => data?.getBlog || prerenderedBlog, [data, prerenderedBlog]);
   const [publisBlog, { loading: publishBlogLoading }] = useUpdateBlogMutation();
   const [handleVerifyBlog] = useApproveBlogMutation();
@@ -290,7 +288,6 @@ const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
   );
   const updateClap = React.useCallback(
     (cla: number) => {
-      console.log('ZZ: updateClap', claps, id);
       if (cla > 0 && id) {
         blogClapUpdate({
           variables: {

@@ -73,6 +73,20 @@ test('marks, blocks, alignment, headings and history', async ({ browser }) => {
   await context.close();
 });
 
+test('toolbar reflects the formatting under the cursor', async ({ browser }) => {
+  const context = await signedIn(browser, 'member', { viewport: { width: 1366, height: 900 } });
+  const page = await context.newPage();
+  await open(page);
+  const bold = tools(page).getByRole('button', { name: 'Bold', exact: true });
+  await reset(page, '<p><strong>bold</strong> plain</p>');
+  // Selection-only moves (no content change) must still update the pressed state.
+  await page.evaluate(() => (document.querySelector('.ProseMirror') as any).editor.commands.setTextSelection(3));
+  await expect(bold).toHaveAttribute('aria-pressed', 'true');
+  await page.evaluate(() => (document.querySelector('.ProseMirror') as any).editor.commands.setTextSelection(8));
+  await expect(bold).toHaveAttribute('aria-pressed', 'false');
+  await context.close();
+});
+
 test('link and YouTube insertion', async ({ browser }) => {
   const context = await signedIn(browser, 'member', { viewport: { width: 1366, height: 900 } });
   const page = await context.newPage();

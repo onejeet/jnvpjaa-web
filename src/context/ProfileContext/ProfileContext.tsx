@@ -25,7 +25,6 @@ const ProfileProvider = ({ children, userId }: ProfileProviderProps) => {
   const [editingProfile, setEditingProfile] = React.useState<boolean>(false);
   const params = useParams();
   const id = params.id;
-  console.log('ZZ: Profile COntext', id, userId);
   const { data: userData, loading: userDataLoading } = useGetUserDetailsQuery({
     skip: !userId,
     variables: {
@@ -60,8 +59,6 @@ const ProfileProvider = ({ children, userId }: ProfileProviderProps) => {
     },
     [isProfileEditable, updateUser]
   );
-
-  console.log('ZZ: editingProfile', editingProfile);
 
   return (
     <ProfileContext.Provider

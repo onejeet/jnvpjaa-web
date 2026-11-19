@@ -16,7 +16,7 @@ export async function requestGoogleAuth(query: string, variables: Record<string,
       throw Object.assign(
         new Error(result.errors?.[0]?.message || 'Could not complete Google sign-in. Please try again.'),
         {
-          code: result.errors?.[0]?.extensions?.code,
+          code: result.errors?.[0]?.extensions?.code ?? result.errors?.[0]?.code,
         }
       );
     }

@@ -1,7 +1,7 @@
 import React from 'react';
 /* MUI */
 import IconButton from '@mui/material/IconButton';
-import { useCurrentEditor } from '@tiptap/react';
+import { useToolbarEditor } from '@/modules/TipTapTextEditor/useToolbarEditor';
 
 /* CORE */
 import Menu from '@/components/core/Menu';
@@ -13,7 +13,7 @@ import ToolIcon from './ToolIcon';
 import Button from '@/components/core/Button';
 
 const FontFamilySelect: React.FC<any> = ({ toggleBlock }) => {
-  const { editor } = useCurrentEditor();
+  const { editor } = useToolbarEditor();
 
   return (
     <Menu
