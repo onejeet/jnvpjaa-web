@@ -20,6 +20,15 @@ Web (`jnvpjaa-web/tenants/<id>/`):
   blocks its API on the backend.
 - `content.json`: every piece of UI copy that names the association, read through `t('key')`. A missing key throws an
   error at build time.
+- `landing.json`: the home page design. `layout` is `classic` (the original page) or one of the landing layouts
+  `homecoming` (photo-led), `welcome` (classmate finder and pathways), `spotlight` (story-led, with quick links) or
+  `impact` (giving-led). The layout is picked at build time: `next.config.js` points `@landing/Home` at
+  `src/containers/Landing/home/<layout>.tsx`, so a build carries only that layout's code and CSS, and changing `layout`
+  needs a rebuild and redeploy. The file also holds the hero title, subtitle and photos (asset paths), the vision line,
+  up to four published figures, and the join and giving copy. News, stories, events, birthdays and albums are read from
+  the API on every request, and each layout asks only for what it shows. In development only,
+  `/preview/landing/<layout>` (`page.dev.tsx`) shows any layout with the current tenant's content; production builds
+  leave that route out.
 - `fonts/`: `body.woff2`, `display.woff2` and `serif.woff2` (variable fonts).
 - `public/`: favicon, PWA icons, splash screens and local branding images. `npm run dev` and `npm run build` copy these
   into `public/`, and a switch of tenant removes the previous tenant's files.
@@ -37,8 +46,8 @@ folder named by `SEED_DATA_DIR`, which `prisma/seed.ts` and the backfill script 
 ## Adding an association
 
 1. Copy `_template/` to `tenants/<new-id>/` in **both** repos. The id must be lowercase letters, digits or `-`.
-2. Fill in `brand.json` and copy it to the other repo unchanged. Then fill in `seo.json`, `features.json`, both
-   `content.json` files and `seed/content_pages.json`.
+2. Fill in `brand.json` and copy it to the other repo unchanged. Then fill in `seo.json`, `features.json`,
+   `landing.json`, both `content.json` files and `seed/content_pages.json`.
 3. Add the `public/` assets (favicon, `icons/icon-192.png`, `icons/icon-512.png`, `icons/logo-square.png`,
    `splashscreens/apple-icon-180.png`, `assets/branding/logo-full.webp`, `assets/images/cover-2.webp`) and the three
    fonts.

@@ -167,7 +167,7 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, claps: initialCl
 
             {!statusMessage && (
               <Box gap={1} display="flex" alignItems="center">
-                <SocialShareModal title={title} url={shortUrl} />
+                <SocialShareModal title={title} url={shortUrl} image={cover?.url} />
                 <ClapButton
                   initialClaps={initialClaps}
                   claps={newClaps}
@@ -290,7 +290,7 @@ const SingleBlogView: React.FC<ISingleBlogViewProps> = ({ blog, claps: initialCl
               alignItems="center"
               flexDirection={{ xs: 'column', sm: 'row' }}
             >
-              <SocialShareModal title={title} url={shortUrl} btn_type="button" />
+              <SocialShareModal title={title} url={shortUrl} image={cover?.url} btn_type="button" />
               <Divider
                 orientation="vertical"
                 sx={{

@@ -55,3 +55,7 @@ e2e/.state/
 /.next-check/
 /.next-leaks/
 /.next-leaks.log
+/.next-lh/
+/.next-pwa-check/
+/.impeccable/review/
+/.impeccable/hook.cache.json

@@ -7,7 +7,13 @@ const { resolveTenant } = require('../../tenants/resolve');
 
 const load = (id: string): any => {
   const read = (f: string) => JSON.parse(readFileSync(path.join(__dirname, '../../tenants', id, `${f}.json`), 'utf8'));
-  return { brand: read('brand'), seo: read('seo'), features: read('features'), content: read('content') };
+  return {
+    brand: read('brand'),
+    seo: read('seo'),
+    features: read('features'),
+    content: read('content'),
+    landing: read('landing'),
+  };
 };
 
 test('jnvpjaa tenant parses', () => {

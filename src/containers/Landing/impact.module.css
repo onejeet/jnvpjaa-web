@@ -1,0 +1,188 @@
+/* Impact: giving-led hero, the record so far, where support goes and ways to give. */
+.imHero {
+  background: var(--surface);
+  padding: 40px 0 56px;
+}
+.imHero > div {
+  display: grid;
+  gap: 40px;
+  align-items: center;
+}
+.imCopy h1 {
+  font-size: clamp(2.4rem, 1.4rem + 4.4vw, 4.4rem);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  max-width: 13ch;
+}
+.imCopy p {
+  margin: 20px 0 28px;
+  max-width: 46ch;
+  font-size: 1.15rem;
+  color: var(--muted);
+}
+.imPhotos {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 0.6fr;
+  gap: 14px;
+  align-items: end;
+}
+.imPhotos img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 20px;
+}
+.imPhotos img:first-child {
+  aspect-ratio: 3 / 4;
+}
+.imPhotos img:last-child {
+  aspect-ratio: 1;
+  margin-bottom: -28px;
+}
+.imRecord {
+  display: grid;
+  gap: 32px;
+}
+.imRecord p {
+  margin-top: 14px;
+  max-width: 44ch;
+}
+.imRecord dl {
+  margin: 0;
+  border-top: 1px solid var(--text);
+}
+.imRecord dl div {
+  display: grid;
+  grid-template-columns: minmax(7ch, auto) 1fr;
+  gap: 20px;
+  align-items: baseline;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+.imRecord dd {
+  margin: 0;
+  font: 700 clamp(2rem, 1.4rem + 2.4vw, 3.2rem) / 1 var(--font-display);
+  color: var(--p700);
+  font-variant-numeric: tabular-nums;
+}
+.imRecord dt {
+  font-size: 1.05rem;
+}
+.imAreas {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 16px;
+}
+.imAreas li {
+  display: grid;
+  grid-template-columns: 88px 1fr;
+  gap: 18px;
+  align-items: center;
+  padding: 14px;
+  background: var(--card);
+  border-radius: 18px;
+}
+.imAreas img {
+  width: 88px;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 12px;
+}
+.imAreas h3 {
+  font-size: 1.35rem;
+  margin-bottom: 4px;
+}
+.imWays {
+  background: var(--p900);
+  color: color-mix(in oklab, var(--p50) 90%, transparent);
+  padding: 64px 0;
+}
+.imWays h2 {
+  color: #fff;
+}
+.imWays ul {
+  list-style: none;
+  margin: 24px 0 0;
+  padding: 0;
+  border-top: 1px solid rgb(255 255 255 / 0.2);
+}
+.imWays li a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 22px 0;
+  border-bottom: 1px solid rgb(255 255 255 / 0.2);
+  text-decoration: none;
+  transition: padding 0.3s var(--ease);
+}
+.imWays li a:hover {
+  padding-left: 8px;
+}
+.imWays strong {
+  display: block;
+  color: #fff;
+  font: 700 clamp(1.4rem, 1.1rem + 1.2vw, 2rem) / 1.2 var(--font-display);
+}
+.imTrust {
+  align-self: end;
+  margin-top: 28px !important;
+  font-size: 0.95rem;
+}
+.imTrust a {
+  color: #fff !important;
+  text-decoration: underline;
+}
+@media (min-width: 640px) {
+  .imAreas {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+  .imAreas li {
+    grid-template-columns: 1fr;
+    align-items: start;
+    padding: 0 0 22px;
+    overflow: hidden;
+  }
+  .imAreas img {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    border-radius: 0;
+  }
+  .imAreas li > div {
+    padding: 0 22px;
+  }
+}
+@media (min-width: 960px) {
+  .imHero {
+    padding: 72px 0 96px;
+  }
+  .imHero > div {
+    grid-template-columns: 1.1fr 1fr;
+    gap: 64px;
+  }
+  .imRecord {
+    grid-template-columns: 1fr 1.2fr;
+    gap: 72px;
+  }
+  .imWays {
+    padding: 104px 0;
+  }
+  .imWays > div {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    column-gap: 72px;
+  }
+  .imWays ul {
+    margin: 0;
+    grid-row: span 2;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .imWays li a {
+    transition: none;
+  }
+}

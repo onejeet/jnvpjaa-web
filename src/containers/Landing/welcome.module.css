@@ -1,0 +1,194 @@
+/* Welcome: hero with classmate finder, three pathways and the lifetime band. */
+.wlHero {
+  position: relative;
+  min-height: min(78svh, 680px);
+  display: flex;
+  align-items: center;
+  color: #fff;
+  isolation: isolate;
+}
+.wlHero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: color-mix(in oklab, var(--p900) 62%, transparent);
+}
+.wlCopy {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding-top: 72px;
+  padding-bottom: 72px;
+  text-align: center;
+}
+.wlCopy h1 {
+  font-size: clamp(2.4rem, 1.4rem + 5vw, 4.75rem);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  max-width: 16ch;
+  margin: 0 auto;
+}
+.wlCopy > p:first-of-type {
+  max-width: 50ch;
+  margin: 18px auto 32px;
+  font-size: clamp(1.05rem, 1rem + 0.4vw, 1.25rem);
+  color: rgb(255 255 255 / 0.92);
+}
+.finder {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 620px;
+  margin: 0 auto;
+  padding: 6px 6px 6px 18px;
+  background: #fff;
+  color: var(--text);
+  border-radius: 999px;
+  box-shadow: 0 24px 50px -24px rgb(0 0 0 / 0.55);
+}
+.finder svg {
+  flex: none;
+  color: var(--muted);
+}
+.finder input {
+  flex: 1;
+  min-width: 0;
+  min-height: 48px;
+  border: 0;
+  background: transparent;
+  font: 1.05rem var(--font-body);
+  color: inherit;
+  outline: none;
+}
+.finder:focus-within {
+  box-shadow:
+    0 0 0 3px var(--p300),
+    0 24px 50px -24px rgb(0 0 0 / 0.55);
+}
+.wlNote {
+  margin-top: 16px !important;
+  font-size: 0.95rem;
+  color: rgb(255 255 255 / 0.85);
+}
+.wlNote a {
+  font-weight: 700;
+}
+.paths {
+  display: grid;
+  gap: 16px;
+}
+.pathTile {
+  position: relative;
+  display: grid;
+  min-height: 300px;
+  border-radius: 20px;
+  overflow: hidden;
+  color: #fff !important;
+  text-decoration: none;
+  isolation: isolate;
+}
+.pathTile img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+  transition: transform 0.6s var(--ease);
+}
+.pathTile::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, transparent 25%, color-mix(in oklab, var(--p900) 90%, transparent) 100%);
+}
+.pathTile:hover img {
+  transform: scale(1.04);
+}
+.pathTile div {
+  align-self: end;
+  padding: 24px;
+  display: grid;
+  gap: 8px;
+}
+.pathTile h2 {
+  font-size: 1.75rem;
+}
+.pathTile p {
+  color: rgb(255 255 255 / 0.88);
+}
+.pathTile span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+}
+.lifetime {
+  background: var(--p900);
+  color: color-mix(in oklab, var(--p50) 90%, transparent);
+  padding: 64px 0;
+}
+.lifetime > div {
+  display: grid;
+  gap: 40px;
+}
+.lifetime h2 {
+  color: #fff;
+  font-size: clamp(2rem, 1.3rem + 3vw, 3.4rem);
+  line-height: 1.05;
+  max-width: 14ch;
+}
+.lifetime p {
+  margin: 16px 0 28px;
+  max-width: 48ch;
+  font: 400 1.2rem/1.5 var(--font-serif);
+  font-style: italic;
+}
+.lifetime dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 1px solid rgb(255 255 255 / 0.18);
+}
+.lifetime dl div {
+  padding: 20px 0;
+  border-bottom: 1px solid rgb(255 255 255 / 0.18);
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 4px;
+}
+.lifetime dd {
+  margin: 0;
+  color: #fff;
+  font: 700 clamp(2rem, 1.4rem + 2vw, 3rem) / 1 var(--font-display);
+  font-variant-numeric: tabular-nums;
+}
+.lifetime dt {
+  font-size: 0.95rem;
+}
+@media (min-width: 640px) {
+  .paths {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+  .lifetime dl {
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 32px;
+  }
+}
+@media (min-width: 960px) {
+  .lifetime {
+    padding: 104px 0;
+  }
+  .lifetime > div {
+    grid-template-columns: 1fr 1fr;
+    gap: 72px;
+    align-items: center;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pathTile img {
+    transition: none;
+  }
+}

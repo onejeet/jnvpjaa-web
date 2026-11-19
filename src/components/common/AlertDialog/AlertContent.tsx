@@ -5,14 +5,14 @@ import ListItem from '@mui/material/ListItem';
 import Typography from '@mui/material/Typography';
 import type { AlertContentProps } from './AlertDialog.types';
 import { IconQuestionMark as SealQuestion, IconLoader as Spinner, IconHelpCircleFilled } from '@tabler/icons-react';
-import Lottie from '@/components/common/DynamicLottie';
-import successLottieIcon from '@/utils/lottie/success3_icon.json';
-import deleteLottieIcon from '@/utils/lottie/delete_icon.json';
-import errorLottieIcon from '@/utils/lottie/error_icon.json';
-import loadingLottieIcon from '@/utils/lottie/loading_icon.json';
-import appLottieIcon from '@/utils/lottie/app.json';
+import { LazyLottie } from '@/components/common/DynamicLottie';
+const successLottieIcon = () => import('@/utils/lottie/success3_icon.json');
+const deleteLottieIcon = () => import('@/utils/lottie/delete_icon.json');
+const errorLottieIcon = () => import('@/utils/lottie/error_icon.json');
+const loadingLottieIcon = () => import('@/utils/lottie/loading_icon.json');
+const appLottieIcon = () => import('@/utils/lottie/app.json');
 
-const AlertContent: React.FC<AlertContentProps> = ({ title, message, action = 'delete', items = [] }) => {
+const AlertContent: React.FC<AlertContentProps> = ({ title, message, action = 'delete', items = [], titleId }) => {
   const MessageComp = React.useMemo(() => {
     switch (action) {
       case 'approve':
@@ -96,11 +96,11 @@ const AlertContent: React.FC<AlertContentProps> = ({ title, message, action = 'd
     }
 
     return (
-      <Typography fontSize="1.5rem" variant="h6" lineHeight="normal">
+      <Typography id={titleId} fontSize="1.5rem" variant="h6" lineHeight="normal">
         {upTitle}
       </Typography>
     );
-  }, [action, title]);
+  }, [action, title, titleId]);
 
   const iconComp = React.useMemo(() => {
     if (
@@ -112,25 +112,25 @@ const AlertContent: React.FC<AlertContentProps> = ({ title, message, action = 'd
     ) {
       return <SealQuestion size={100} />;
     } else if (action === 'loading') {
-      return <Lottie animationData={loadingLottieIcon} loop={true} style={{ width: '130px', height: '130px' }} />;
+      return <LazyLottie animation={loadingLottieIcon} loop={true} style={{ width: '130px', height: '130px' }} />;
       // return <Image width={60} height={60} src="/svg/loading_animation.svg" alt="loading" />;
       // return <Spinner fill="grey.700" size={100} />;
     } else if (action === 'success') {
-      return <Lottie animationData={successLottieIcon} loop={true} style={{ width: '100px', height: '100px' }} />;
+      return <LazyLottie animation={successLottieIcon} loop={true} style={{ width: '100px', height: '100px' }} />;
       // return <Image width={60} height={60} src="/svg/success_animation.svg" alt="success" />;
       // return <TaskAltIcon sx={{ color: 'success.main', fontSize: '100px' }} />;
     } else if (action === 'error') {
-      return <Lottie animationData={errorLottieIcon} loop={true} style={{ width: '100px', height: '100px' }} />;
+      return <LazyLottie animation={errorLottieIcon} loop={true} style={{ width: '100px', height: '100px' }} />;
       // return <Image width={60} height={60} src="/svg/error_animation.svg" alt="success" />;
       // return <ErrorIcon sx={{ color: 'error.main', fontSize: '100px' }} />;
     } else if (action === 'deleting') {
-      return <Lottie animationData={deleteLottieIcon} loop={true} style={{ width: '100px', height: '100px' }} />;
+      return <LazyLottie animation={deleteLottieIcon} loop={true} style={{ width: '100px', height: '100px' }} />;
       // return <Image width={60} height={60} src="/svg/delete_animation.svg" alt="deleting" />;
       // return <DeleteIcon sx={{ color: 'error.main', fontSize: '100px' }} />;
     } else if (action === 'unsaved') {
       return <IconHelpCircleFilled size={100} />;
     } else if (action === 'app') {
-      return <Lottie animationData={appLottieIcon} loop={true} style={{ width: '100px', height: '100px' }} />;
+      return <LazyLottie animation={appLottieIcon} loop={true} style={{ width: '100px', height: '100px' }} />;
     }
   }, [action]);
 

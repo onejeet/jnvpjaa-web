@@ -1,0 +1,19 @@
+{
+  "layout": "homecoming",
+  "hero": {
+    "title": "Welcome home, alumni.",
+    "subtitle": "Reconnect with your batch, support today's students and join the next reunion.",
+    "images": ["/images/cover.webp"]
+  },
+  "vision": "To keep every former student connected, and every student who follows us supported.",
+  "stats": [],
+  "join": {
+    "title": "Your batch is already here.",
+    "body": "Sign up with your passing year to find your batchmates."
+  },
+  "giving": {
+    "title": "Pay it forward.",
+    "body": "Alumni fund scholarships, mentoring and campus projects.",
+    "areas": []
+  }
+}

@@ -5,6 +5,17 @@
 const tenant = require('./tenants/resolve').resolveTenant();
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { domains } = require(`${tenant.dir}/brand.json`);
+// The home page bundles only the layout tenants/<id>/landing.json names; the others never reach the build.
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { layout: landingLayout } = require(`${tenant.dir}/landing.json`);
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const path = require('path');
+const landingHome = path.join(__dirname, 'src/containers/Landing/home', `${landingLayout}.tsx`);
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+if (!require('fs').existsSync(landingHome)) {
+  throw new Error(`tenants/${tenant.id}/landing.json: layout "${landingLayout}" has no ${landingHome}.`);
+}
+const isDev = process.env.NODE_ENV !== 'production';
 const STOCK_HOSTS = ['images.unsplash.com', 'cdn.pixabay.com'];
 const imagesOn = (...hosts) =>
   new RegExp(
@@ -167,6 +178,8 @@ const nextConfig = {
     NEXT_PUBLIC_GRAPHQL_ENDPOINT: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || `https://${domains.api}/client`,
   },
   trailingSlash: true,
+  // `*.dev.tsx` routes (the landing layout preview) exist under `next dev` only and are never built for production.
+  pageExtensions: isDev ? ['dev.tsx', 'tsx', 'ts', 'jsx', 'js'] : ['tsx', 'ts', 'jsx', 'js'],
   async headers() {
     return [
       {
@@ -214,6 +227,7 @@ const nextConfig = {
       ...(config.resolve.alias || {}),
       canvas: false,
       '@tenant': tenant.dir,
+      '@landing/Home': landingHome,
     };
 
     // Exclude browser-specific packages from server-side rendering

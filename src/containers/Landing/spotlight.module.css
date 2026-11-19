@@ -1,0 +1,235 @@
+/* Spotlight: story-led hero, quick links, stories beside what is coming up, Connect / Volunteer / Give. */
+.spIntro {
+  display: grid;
+  gap: 12px;
+  padding: 36px 0 24px;
+}
+.spIntro h1 {
+  font-size: clamp(2rem, 1.3rem + 3vw, 3.25rem);
+  line-height: 1.08;
+  max-width: 18ch;
+}
+.spIntro p {
+  max-width: 52ch;
+  font-size: 1.1rem;
+}
+.spHero {
+  position: relative;
+  display: grid;
+}
+.spHero > img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 20px;
+}
+.spPanel {
+  position: relative;
+  margin: -48px 12px 0;
+  background: var(--card);
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 30px 60px -36px color-mix(in oklab, var(--p900) 70%, transparent);
+  display: grid;
+  gap: 12px;
+}
+.spPanel h2 {
+  font-size: clamp(1.5rem, 1.1rem + 1.8vw, 2.4rem);
+  line-height: 1.12;
+}
+.spPanel h2 a {
+  text-decoration: none;
+}
+.spPanel h2 a:hover {
+  text-decoration: underline;
+}
+.quick {
+  display: flex;
+  gap: 10px;
+  margin-top: 28px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+.quick a {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 0 20px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    border-color 0.2s,
+    background-color 0.2s;
+}
+.quick a:hover {
+  border-color: var(--p300);
+  background: var(--p50);
+}
+.quick svg {
+  color: var(--accent);
+}
+.spCols {
+  display: grid;
+  gap: 48px;
+}
+.spList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+.spList li {
+  border-bottom: 1px solid var(--line);
+}
+.spList a {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 16px;
+  align-items: center;
+  padding: 16px 0;
+  text-decoration: none;
+}
+.spList img {
+  width: 96px;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 12px;
+}
+.spList h3 {
+  font-size: 1.2rem;
+  line-height: 1.25;
+  margin-bottom: 6px;
+}
+.spList a:hover h3 {
+  text-decoration: underline;
+}
+.spSide {
+  display: grid;
+  gap: 36px;
+  align-content: start;
+}
+.spSideH {
+  font-size: 1.4rem;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--text);
+  margin-bottom: 4px;
+}
+.spEvents,
+.spNews {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.spEvents a,
+.spNews a {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+}
+.spNews a {
+  display: grid;
+  gap: 4px;
+}
+.spEvents strong,
+.spNews strong {
+  display: block;
+  line-height: 1.3;
+}
+.spSide p {
+  padding-top: 14px;
+}
+.strip {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(220px, 1fr);
+  gap: 14px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 6px;
+}
+.strip a {
+  scroll-snap-align: start;
+  text-decoration: none;
+  display: grid;
+  gap: 8px;
+  font-weight: 600;
+}
+.strip img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 14px;
+}
+.tri {
+  display: grid;
+  gap: 32px;
+}
+.tri div {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+}
+.tri h2 {
+  font-size: 2rem;
+}
+@media (min-width: 640px) {
+  .spHero > img {
+    aspect-ratio: 16 / 8;
+  }
+  .spPanel {
+    position: absolute;
+    left: 24px;
+    bottom: 24px;
+    margin: 0;
+    max-width: 560px;
+    padding: 28px;
+  }
+  .tri {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0;
+  }
+  .tri div {
+    padding: 0 28px;
+    border-left: 1px solid var(--line);
+  }
+  .tri div:first-child {
+    padding-left: 0;
+    border-left: 0;
+  }
+}
+@media (min-width: 960px) {
+  .spIntro {
+    grid-template-columns: 1.2fr 1fr;
+    align-items: end;
+    gap: 48px;
+    padding: 56px 0 32px;
+  }
+  .spHero > img {
+    aspect-ratio: 16 / 7;
+  }
+  .spPanel {
+    left: 40px;
+    bottom: 40px;
+    padding: 36px;
+  }
+  .spCols {
+    grid-template-columns: 1.7fr 1fr;
+    gap: 64px;
+  }
+  .spList a {
+    grid-template-columns: 160px 1fr;
+    gap: 24px;
+  }
+  .spList img {
+    width: 160px;
+    aspect-ratio: 4 / 3;
+  }
+}

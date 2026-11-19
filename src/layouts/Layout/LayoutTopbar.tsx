@@ -45,8 +45,8 @@ import {
 import InstallAppGuide from '@/components/PWA/InstallAppGuide';
 import { canShowInstallGuide } from '@/components/PWA/installPrompt';
 import { paths } from '@/config/paths';
-import Lottie from '@/components/common/DynamicLottie';
-import giftsLottieIcon from '@/utils/lottie/gifts_art.json';
+import { LazyLottie } from '@/components/common/DynamicLottie';
+const giftsLottieIcon = () => import('@/utils/lottie/gifts_art.json');
 import { isBirthdayToday } from '@/utils/helpers';
 import GlobalBgShade from '@/components/common/GlobalBgShade';
 import { PERMISSION_CODES, ROLE_CODES } from '@/constants/access';
@@ -292,7 +292,7 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
               </Typography>
               <Box maxWidth={50} maxHeight={30} display="flex" overflow="hidden" alignItems="center">
                 <Suspense fallback={null}>
-                  <Lottie animationData={giftsLottieIcon} loop={true} style={{ width: '100px', height: '50px' }} />
+                  <LazyLottie animation={giftsLottieIcon} loop={true} style={{ width: '100px', height: '50px' }} />
                 </Suspense>
               </Box>
             </Box>
@@ -524,15 +524,14 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
                 {ACCOUNT_COMP}
               </Box>
             ) : (
-              <NextLink href="/signin" passHref style={{ textDecoration: 'none' }}>
-                <Button
-                  // startIcon={<Login sx={{ fontSize: '14px' }} />}
-                  variant="outlined"
-                  sx={{ display: { xs: 'none', md: 'block' }, ml: '8px', whiteSpace: 'nowrap' }}
-                >
-                  Alumni Login
-                </Button>
-              </NextLink>
+              <Button
+                component={NextLink}
+                href="/signin"
+                variant="outlined"
+                sx={{ display: { xs: 'none', md: 'block' }, ml: '8px', whiteSpace: 'nowrap' }}
+              >
+                Alumni Login
+              </Button>
             )}
           </Box>
         </Toolbar>

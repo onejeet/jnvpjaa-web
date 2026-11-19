@@ -120,9 +120,12 @@
     "typescript": "5.5.4"
   },
   "lint-staged": {
-    "src/**/*": [
-      "npm run prettier:format",
-      "npm run eslint:format"
+    "src/**/*.{js,jsx,ts,tsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "src/**/*.{css,json}": [
+      "prettier --write"
     ]
   },
   "overrides": {

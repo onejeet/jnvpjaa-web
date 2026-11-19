@@ -14,6 +14,8 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
   ...restProps
 }) => {
   const { action, maxWidth = 'sm' } = restProps || {};
+  // MUI labels the dialog by a DialogTitle id this dialog never renders; point it at the visible title instead.
+  const titleId = React.useId();
 
   const btnColor: string = React.useMemo(() => {
     if (action === 'delete') {
@@ -26,7 +28,10 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
       return 'error';
     } else if (action === 'reject') {
       return 'error';
-    } else if (action === 'approve' || action === 'app' || action === 'update') {
+    } else if (action === 'app') {
+      // White on the success green is 3.3:1; the brand primary passes 4.5:1.
+      return 'primary';
+    } else if (action === 'approve' || action === 'update') {
       return 'success';
     } else if (action === 'success') {
       return 'success';
@@ -88,8 +93,9 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
       }}
       hideHeader
       disableBackdropClick
+      aria-labelledby={titleId}
     >
-      <AlertContent {...restProps} />
+      <AlertContent {...restProps} titleId={titleId} />
     </Dialog>
   );
 };

@@ -1,0 +1,58 @@
+{
+  "layout": "classic",
+  "hero": {
+    "title": "Once a Navodayan, always family.",
+    "subtitle": "Reconnect with your batch, back the students who walk the same corridors today, and be there for the next reunion.",
+    "images": [
+      "/images/cover.webp",
+      "/gallery/milan-sept-2019-11.jpeg",
+      "/gallery/sports-fest-mar-2025-5.jpg",
+      "/gallery/sports-fest-mar-2025-1.jpg",
+      "/gallery/plantation-drive-july-27-2020-1.jpeg",
+      "/gallery/milan-sept-2019-20.jpeg",
+      "/gallery/sports-fest-mar-2025-107.jpg",
+      "/gallery/sports-fest-mar-2025-15.jpg"
+    ]
+  },
+  "vision": "To strengthen the bond between our alumni and the school, and to stand behind every student who follows us.",
+  "stats": [
+    {
+      "value": "40+",
+      "label": "Years of togetherness"
+    },
+    {
+      "value": "34+",
+      "label": "Batches"
+    },
+    {
+      "value": "2400+",
+      "label": "Alumni members"
+    },
+    {
+      "value": "₹70+ lac",
+      "label": "Funds disbursed"
+    }
+  ],
+  "join": {
+    "title": "Your batch is already here.",
+    "body": "Sign up with your passing year to find batchmates, hear about reunions first and post jobs to the network."
+  },
+  "giving": {
+    "title": "The school gave us a start. Pay it forward.",
+    "body": "Alumni fund scholarships, mentoring and campus projects. Every rupee is recorded in the association's public accounts.",
+    "areas": [
+      {
+        "title": "Scholarships",
+        "body": "Fees and coaching for students from the school who need a hand to reach college."
+      },
+      {
+        "title": "Mentoring",
+        "body": "Alumni guide students through careers, exams and their first jobs."
+      },
+      {
+        "title": "Campus & community",
+        "body": "Plantation drives, sports fests and projects that bring batches back to campus."
+      }
+    ]
+  }
+}

@@ -30,3 +30,23 @@ export const REMOVE_MEMBER = gql`
     }
   }
 `;
+
+export type RecentMember = {
+  id: string;
+  firstName?: string | null;
+  lastName?: string | null;
+  profileImage?: string | null;
+  batch?: number | null;
+};
+
+export const RECENT_MEMBERS = gql`
+  query RecentMembers($limit: Int) {
+    recentMembers(limit: $limit) {
+      id
+      firstName
+      lastName
+      profileImage
+      batch
+    }
+  }
+`;

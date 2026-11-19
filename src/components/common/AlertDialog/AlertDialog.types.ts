@@ -17,6 +17,8 @@ export interface AlertContentProps {
     | 'request'
     | 'app';
   items?: string[];
+  /** Set by AlertDialog so the dialog is named by its visible title. */
+  titleId?: string;
 }
 
 export interface AlertDialogProps extends AlertContentProps {

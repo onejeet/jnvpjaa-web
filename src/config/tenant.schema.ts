@@ -89,19 +89,50 @@ export const featuresSchema = z
 
 export const contentSchema = z.record(text);
 
+/** Home page design. `classic` is the original page; the others are the landing layouts in src/containers/Landing. */
+export const LANDING_LAYOUTS = ['classic', 'homecoming', 'welcome', 'spotlight', 'impact'] as const;
+export type LandingLayout = (typeof LANDING_LAYOUTS)[number];
+
+const assetPath = z.string().startsWith('/');
+export const landingSchema = z
+  .object({
+    layout: z.enum(LANDING_LAYOUTS),
+    hero: z.object({ title: text, subtitle: text, images: z.array(assetPath).min(1) }).strict(),
+    vision: text,
+    // The association's own published figures; shown as they are written.
+    stats: z.array(z.object({ value: text, label: text }).strict()).max(4),
+    join: z.object({ title: text, body: text }).strict(),
+    giving: z
+      .object({
+        title: text,
+        body: text,
+        areas: z.array(z.object({ title: text, body: text }).strict()).max(3),
+        quote: z.object({ text, by: text, image: assetPath }).strict().optional(),
+      })
+      .strict(),
+  })
+  .strict();
+
 export type Brand = z.infer<typeof brandSchema>;
 export type Seo = z.infer<typeof seoSchema>;
 export type Features = z.infer<typeof featuresSchema>;
 export type Content = z.infer<typeof contentSchema>;
-export type Tenant = { id: string; brand: Brand; seo: Seo; features: Features; content: Content };
+export type Landing = z.infer<typeof landingSchema>;
+export type Tenant = { id: string; brand: Brand; seo: Seo; features: Features; content: Content; landing: Landing };
 
-/** Validate a tenant's four config files; the error names every bad field so a broken tenant fails the build clearly. */
+/** Validate a tenant's five config files; the error names every bad field so a broken tenant fails the build clearly. */
 export function parseTenant(
-  raw: { brand: unknown; seo: unknown; features: unknown; content: unknown },
+  raw: { brand: unknown; seo: unknown; features: unknown; content: unknown; landing: unknown },
   id: string | undefined
 ): Tenant {
   const result = z
-    .object({ brand: brandSchema, seo: seoSchema, features: featuresSchema, content: contentSchema })
+    .object({
+      brand: brandSchema,
+      seo: seoSchema,
+      features: featuresSchema,
+      content: contentSchema,
+      landing: landingSchema,
+    })
     .safeParse(raw);
   if (!result.success) {
     const issues = result.error.issues.map((i) => `  - ${i.path.join('.')}: ${i.message}`).join('\n');
