@@ -23,7 +23,8 @@ const getPost = cache(async (slug: string): Promise<NewsPost | null> => {
   return data?.newsPost || null;
 });
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const params = await props.params;
   const post = await getPost(decodeURIComponent(params.slug));
   if (!post) return { title: 'News not found', robots: { index: false, follow: false } };
 
@@ -50,7 +51,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default async function NewsArticlePage({ params }: { params: { slug: string } }) {
+export default async function NewsArticlePage(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const post = await getPost(decodeURIComponent(params.slug));
   if (!post) notFound();
 

@@ -6,8 +6,8 @@ import { requireModule } from '@/config/features';
 
 const PANEL_SECTIONS: AdminPanelSection[] = ['access', 'executive', 'coordinators', 'assignments', 'settings'];
 
-export default function AdminSectionPage({ params }: { params: { section: string } }) {
-  const { section } = params;
+export default async function AdminSectionPage(props: { params: Promise<{ section: string }> }) {
+  const { section } = await props.params;
   if (section === 'scholarship') {
     requireModule('scholarship');
     return <ScholarshipSettings />;

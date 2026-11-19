@@ -27,8 +27,9 @@ const getPublicEvent = cache(async (id: string) => {
   return event?.status === EventStatus.Published ? event : null;
 });
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  if (isRouterNavigation()) return { title: `Event | ${brand.shortName}` };
+export async function generateMetadata(props: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  if (await isRouterNavigation()) return { title: `Event | ${brand.shortName}` };
+  const params = await props.params;
   const event = await getPublicEvent(params.id);
   if (!event) return { title: 'Event not found', robots: { index: false, follow: false } };
 
@@ -54,8 +55,9 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   };
 }
 
-export default async function EventDetailsPage({ params }: { params: { id: string } }) {
-  if (isRouterNavigation()) return <EventDetails />;
+export default async function EventDetailsPage(props: { params: Promise<{ id: string }> }) {
+  if (await isRouterNavigation()) return <EventDetails />;
+  const params = await props.params;
   const event = await getPublicEvent(params.id);
   if (!event) notFound();
 

@@ -59,8 +59,8 @@ async function getJobs(filters: JobFilters): Promise<{ data: Job[]; total: numbe
   }
 }
 
-export default async function JobsPage({ searchParams }: { searchParams: SearchParams }) {
-  const filters = readFilters(searchParams || {});
+export default async function JobsPage(props: { searchParams: Promise<SearchParams> }) {
+  const filters = readFilters((await props.searchParams) || {});
   const { data, total, failed } = await getJobs(filters);
   return (
     <>

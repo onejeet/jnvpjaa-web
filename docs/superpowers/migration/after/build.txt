@@ -1,0 +1,192 @@
+   ▲ Next.js 15.5.29
+   - Environments: .env.local, .env
+
+   Creating an optimized production build ...
+> [PWA] Compile server
+> [PWA] Compile server
+> [PWA] Compile client (static)
+> [PWA] Auto register service worker is disabled, please call following code in componentDidMount callback or useEffect hook
+> [PWA]   window.workbox.register()
+> [PWA] Service worker: /Users/onejeet/Desktop/Work/JNVPJAA/jnvpjaa-web/public/sw.js
+> [PWA]   url: /sw.js
+> [PWA]   scope: /
+(node:4446) [DEP_WEBPACK_EXTERNALS_FUNCTION_PARAMETERS] DeprecationWarning: The externals-function should be defined like ({context, request}, cb) => { ... }
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ✓ Compiled successfully in 24.1s
+   Linting and checking validity of types ...
+
+./src/components/common/BlogCard/BlogCard.tsx
+167:6  Warning: React Hook React.useMemo has missing dependencies: 'onDelete', 'onEdit', 'onPublish', and 'onVerify'. Either include them or remove the dependency array. If 'onEdit' changes too often, find the parent component that defines it and wrap that definition in useCallback.  react-hooks/exhaustive-deps
+
+./src/components/common/BusinessCard/BusinessCard.tsx
+46:6  Warning: React Hook React.useMemo has an unnecessary dependency: 'status'. Either exclude it or remove the dependency array. Outer scope values like 'status' aren't valid dependencies because mutating them doesn't re-render the component.  react-hooks/exhaustive-deps
+165:6  Warning: React Hook React.useMemo has missing dependencies: 'onDelete', 'onEdit', 'onPublish', and 'onVerify'. Either include them or remove the dependency array. Outer scope values like 'status' aren't valid dependencies because mutating them doesn't re-render the component.  react-hooks/exhaustive-deps
+
+./src/components/common/CelebratonConfetti/CelebratonConfetti.tsx
+33:6  Warning: React Hook useEffect has a missing dependency: 'theme.zIndex.appBar'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/components/common/ClapButton/ClapButton.tsx
+38:6  Warning: React Hook React.useEffect has a missing dependency: 'showTooltip'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/components/common/ScrollToTop/ScrollToTop.tsx
+37:6  Warning: React Hook useEffect has a missing dependency: 'checkScrollTop'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/containers/Businesses/components/BusinessListFilters.tsx
+35:20  Warning: React Hook useCallback received a function whose dependencies are unknown. Pass an inline function instead.  react-hooks/exhaustive-deps
+
+./src/containers/Home/components/BirthdaySlider.tsx
+33:59  Warning: The ref value 'swiperRef.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'swiperRef.current' to a variable inside the effect, and use that variable in the cleanup function.  react-hooks/exhaustive-deps
+
+./src/containers/Home/components/ImageSlider.tsx
+61:59  Warning: The ref value 'swiperRef.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'swiperRef.current' to a variable inside the effect, and use that variable in the cleanup function.  react-hooks/exhaustive-deps
+
+./src/containers/Members/components/MembersFilters.tsx
+40:20  Warning: React Hook useCallback received a function whose dependencies are unknown. Pass an inline function instead.  react-hooks/exhaustive-deps
+
+./src/containers/Organisation/components/BatchCoordinatorFilters.tsx
+33:20  Warning: React Hook useCallback received a function whose dependencies are unknown. Pass an inline function instead.  react-hooks/exhaustive-deps
+
+./src/containers/SingleBlog/SingleBlog.tsx
+137:6  Warning: React Hook React.useMemo has missing dependencies: 'approveBlogPost', 'publishBlogPost', and 'router'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+214:5  Warning: React Hook React.useCallback has missing dependencies: 'client.cache', 'publisBlog', and 'redirectToSignin'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+289:5  Warning: React Hook React.useCallback has missing dependencies: 'client.cache', 'handleVerifyBlog', 'redirectToSignin', 'showAlert', and 'user?.id'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/context/AuthContext/AuthContext.tsx
+130:5  Warning: React Hook React.useCallback has a missing dependency: 'loadingData?.type'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+143:6  Warning: React Hook React.useEffect has missing dependencies: 'checkAuth', 'loadingData?.loading', 'redirectToSignin', and 'user?.id'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+186:6  Warning: React Hook useEffect has missing dependencies: 'checkAuth', 'fetchUserData', 'isAuthPage', 'onLoginStateChange', and 'pathname'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/context/ProfileContext/ProfileContext.tsx
+61:5  Warning: React Hook React.useCallback has an unnecessary dependency: 'isProfileEditable'. Either exclude it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/hooks/useEvents.ts
+97:5  Warning: React Hook React.useCallback has a missing dependency: 'client.cache'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+243:5  Warning: React Hook React.useCallback has an unnecessary dependency: 'isAdmin'. Either exclude it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/modules/BlogListModule/BlogListModule.tsx
+147:5  Warning: React Hook React.useCallback has missing dependencies: 'client.cache', 'handleVerifyBlog', 'redirectToSignin', 'showAlert', and 'user?.id'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+223:5  Warning: React Hook React.useCallback has missing dependencies: 'client.cache', 'deleteBlog', and 'redirectToSignin'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+301:5  Warning: React Hook React.useCallback has missing dependencies: 'client.cache', 'publisBlog', and 'redirectToSignin'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/modules/ProfileSetup/Addresses.tsx
+72:6  Warning: React Hook React.useEffect has a missing dependency: 'reset'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+108:5  Warning: React Hook React.useCallback has unnecessary dependencies: 'client' and 'user.id'. Either exclude them or remove the dependency array.  react-hooks/exhaustive-deps
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+   Collecting page data ...
+   Generating static pages (0/34) ...
+ZZ: pathnme false false
+ZZ: pathnme false false
+ZZ: pathnme false true
+ZZ: pathnme false false
+ZZ: pathnme true false
+ZZ: pathnme false true
+ZZ: pathnme false false
+ZZ: pathnme false false
+ZZ: listData [
+  { id: '', title: '', description: '' },
+  { id: '', title: '', description: '' },
+  { id: '', title: '', description: '' },
+  { id: '', title: '', description: '' },
+  { id: '', title: '', description: '' },
+  { id: '', title: '', description: '' }
+]
+ZZ: pathnme false true
+ZZ: pathnme false true
+ZZ: pathnme false true
+ZZ: pathnme false true
+   Generating static pages (8/34) 
+ZZ: pathnme true false
+ZZ: pathnme false false
+ZZ: pathnme false false
+ZZ: pathnme false true
+   Generating static pages (16/34) 
+ZZ: pathnme false true
+ZZ: pathnme false true
+ZZ: pathnme false true
+ZZ: pathnme false false
+ZZ: pathnme false true
+ZZ: pathnme false true
+ZZ: pathnme false true
+ZZ: pathnme false false
+ZZ: pathnme false true
+ZZ: pathnme true false
+ZZ: pathnme false true
+ZZ: pathnme false false
+ZZ: pathnme false false
+   Generating static pages (25/34) 
+ ✓ Generating static pages (34/34)
+ZZ: pathnme false true
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                 Size  First Load JS
+┌ ƒ /                                    42.5 kB         402 kB
+├ ○ /_not-found                            195 B         103 kB
+├ ƒ /about                                 737 B         354 kB
+├ ○ /activity                            6.19 kB         373 kB
+├ ○ /admin                               11.4 kB         280 kB
+├ ƒ /admin/[section]                     16.2 kB         474 kB
+├ ○ /admin/pages                           14 kB         226 kB
+├ ƒ /admin/pages/[slug]                  14.2 kB         593 kB
+├ ƒ /auth/google                         11.8 kB         255 kB
+├ ƒ /batch-coordinators                   5.4 kB         492 kB
+├ ƒ /bhamashah-pillars                   2.13 kB         355 kB
+├ ○ /billing                             14.7 kB         575 kB
+├ ƒ /blog                                10.7 kB         367 kB
+├ ƒ /blog/[id]                           19.4 kB         471 kB
+├ ○ /blog/new                            7.52 kB         651 kB
+├ ƒ /businesses                            10 kB         379 kB
+├ ○ /change-password                       195 B         103 kB
+├ ○ /contact-us                            710 B         354 kB
+├ ○ /donations                             737 B         354 kB
+├ ƒ /events                              5.28 kB         379 kB
+├ ƒ /events/[id]                         13.1 kB         464 kB
+├ ○ /events/edit                           504 B         722 kB
+├ ○ /events/new                            512 B         722 kB
+├ ○ /executive-committee                 5.43 kB         372 kB
+├ ○ /forgot-password                     3.59 kB         386 kB
+├ ○ /gallery                             3.62 kB         354 kB
+├ ƒ /gallery/[id]                        6.41 kB         360 kB
+├ ƒ /jobs                                  264 B         400 kB
+├ ƒ /jobs/[slug]                           264 B         400 kB
+├ ƒ /jobs/[slug]/applicants                285 B         400 kB
+├ ƒ /jobs/new                            15.9 kB         711 kB
+├ ○ /manifest.json                         195 B         103 kB
+├ ○ /members                             7.65 kB         494 kB
+├ ƒ /newsroom                              951 B         367 kB
+├ ƒ /newsroom/[slug]                       951 B         367 kB
+├ ƒ /newsroom/feed.xml                     195 B         103 kB
+├ ƒ /newsroom/new                        15.8 kB         726 kB
+├ ƒ /past-presidents                      3.1 kB         489 kB
+├ ƒ /president-message                     737 B         354 kB
+├ ƒ /principal-message                     737 B         354 kB
+├ ○ /privacy_policy                        266 B         351 kB
+├ ○ /profile                               395 B         814 kB
+├ ƒ /profile/[id]                          434 B         814 kB
+├ ○ /profile/setup                         17 kB         779 kB
+├ ○ /robots.txt                            195 B         103 kB
+├ ○ /scholarships                        19.2 kB         426 kB
+├ ƒ /scholarships/[id]                   15.8 kB         417 kB
+├ ○ /scholarships/new                    7.45 kB         374 kB
+├ ƒ /secretary-message                     737 B         354 kB
+├ ○ /security                            10.8 kB         394 kB
+├ ○ /signin                              4.11 kB         387 kB
+├ ○ /signup                              11.2 kB         437 kB
+├ ƒ /sitemap.xml                           195 B         103 kB
+├ ○ /student-hub/career-counselling        737 B         354 kB
+├ ○ /student-hub/skillup-resources       1.24 kB         354 kB
+├ ○ /terms_condition                       266 B         351 kB
+├ ○ /transactions                          195 B         103 kB
+└ ƒ /vision                                737 B         354 kB
++ First Load JS shared by all             103 kB
+  ├ chunks/1255-86e4d12090d5d04a.js      46.3 kB
+  ├ chunks/4bd1b696-100b9d70ed4e49c1.js  54.2 kB
+  └ other shared chunks (total)          2.31 kB
+
+
+ƒ Middleware                             53.3 kB
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

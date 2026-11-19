@@ -2,12 +2,8 @@
 
 import React from 'react';
 import Box from '@mui/material/Box';
-import { Color } from '@tiptap/extension-color';
-import FontFamily from '@tiptap/extension-font-family';
-import Link from '@tiptap/extension-link';
 import TextAlign from '@tiptap/extension-text-align';
-import TextStyle from '@tiptap/extension-text-style';
-import Underline from '@tiptap/extension-underline';
+import { Color, FontFamily, TextStyle } from '@tiptap/extension-text-style';
 import Youtube from '@tiptap/extension-youtube';
 import Placeholder from '@tiptap/extension-placeholder';
 import { EditorProvider } from '@tiptap/react';
@@ -84,13 +80,17 @@ const TipTapTextEditor = ({
         <EditorProvider
           key={id}
           content={value}
+          immediatelyRender={false}
           onUpdate={({ editor }) => {
             onChange(editor?.getHTML() as string);
           }}
           extensions={[
-            StarterKit,
+            // StarterKit 3 bundles Link and Underline. TrailingNode is off because Tiptap 2 had no trailing node.
+            StarterKit.configure({
+              link: { protocols: ['https'], openOnClick: false },
+              trailingNode: false,
+            }),
             Indentation,
-            Underline,
             TextAlign.configure({
               alignments: ['left', 'right', 'center', 'justify'],
               types: ['heading', 'paragraph'],
@@ -108,10 +108,6 @@ const TipTapTextEditor = ({
               types: ['textStyle'],
             }),
             // FontSize,
-            Link.configure({
-              protocols: ['https'],
-              openOnClick: false,
-            }),
             Youtube.configure({
               controls: false,
               nocookie: true,

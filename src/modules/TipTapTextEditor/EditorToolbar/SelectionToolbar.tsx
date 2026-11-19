@@ -2,7 +2,8 @@
 
 import React from 'react';
 import Box from '@mui/material/Box';
-import { BubbleMenu, useCurrentEditor } from '@tiptap/react';
+import { useCurrentEditor } from '@tiptap/react';
+import { BubbleMenu } from '@tiptap/react/menus';
 import AnchorEditorButton from './components/AnchorEditorButton';
 import ColorPicker from './components/ColorPicker';
 import MarkButton from './components/MarkButton';
@@ -23,7 +24,8 @@ const SelectionToolbar: React.FC<SelectionToolbarProps> = ({ disabled, toolsHidd
       shouldShow={({ editor: currentEditor, state }) =>
         currentEditor.isEditable && !state.selection.empty && !currentEditor.isActive('codeBlock')
       }
-      tippyOptions={{ duration: 100, placement: 'bottom-start', offset: [0, 6], appendTo: () => document.body }}
+      options={{ placement: 'bottom-start', offset: 6 }}
+      appendTo={() => document.body}
     >
       <Box
         role="toolbar"

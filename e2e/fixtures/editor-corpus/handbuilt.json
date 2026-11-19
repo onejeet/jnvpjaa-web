@@ -1,0 +1,17 @@
+[
+  { "id": "hb:marks", "source": "handbuilt", "kind": "blog", "html": "<p><strong>bold</strong> <em>italic</em> <u>underline</u> <s>strike</s> <code>code</code> <strong><em>both</em></strong></p>" },
+  { "id": "hb:headings", "source": "handbuilt", "kind": "blog", "html": "<h1>One</h1><h2>Two</h2><h3>Three</h3><p>Body</p>" },
+  { "id": "hb:lists", "source": "handbuilt", "kind": "blog", "html": "<ul><li><p>a</p><ul><li><p>a.1</p></li></ul></li><li><p>b</p></li></ul><ol><li><p>one</p></li><li><p>two</p><ol><li><p>two.1</p></li></ol></li></ol>" },
+  { "id": "hb:align", "source": "handbuilt", "kind": "blog", "html": "<p style=\"text-align: center\">center</p><p style=\"text-align: right\">right</p><p style=\"text-align: justify\">justify</p><h2 style=\"text-align: center\">heading center</h2>" },
+  { "id": "hb:indent", "source": "handbuilt", "kind": "blog", "html": "<p style=\"margin-left: 40px\">indented</p><p>not indented</p>" },
+  { "id": "hb:color", "source": "handbuilt", "kind": "blog", "html": "<p>plain <span style=\"color: #cc0000\">red</span> plain <span style=\"color: rgb(0, 102, 204)\">blue</span></p>" },
+  { "id": "hb:font-family", "source": "handbuilt", "kind": "blog", "html": "<p><span style=\"font-family: Georgia\">serif</span> and <span style=\"font-family: Georgia; color: #333333\">serif grey</span></p>" },
+  { "id": "hb:font-size", "source": "handbuilt", "kind": "blog", "html": "<p>normal <span style=\"font-size: 20px\">big</span> normal</p>" },
+  { "id": "hb:link", "source": "handbuilt", "kind": "blog", "html": "<p>see <a href=\"https://jnvpjaa.org/about\" target=\"_blank\" rel=\"noopener noreferrer nofollow\">about</a> and <a href=\"http://insecure.example.com\">insecure</a></p>" },
+  { "id": "hb:image", "source": "handbuilt", "kind": "blog", "html": "<p>before</p><img src=\"https://images.unsplash.com/photo-1?w=800\" alt=\"campus\"><p>after</p>" },
+  { "id": "hb:youtube", "source": "handbuilt", "kind": "blog", "html": "<p>video:</p><div data-youtube-video=\"\"><iframe width=\"640\" height=\"480\" allowfullscreen=\"true\" autoplay=\"false\" disablekbcontrols=\"false\" enableiframeapi=\"false\" endtime=\"0\" ivloadpolicy=\"0\" loop=\"false\" modestbranding=\"true\" origin=\"\" playlist=\"\" src=\"https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?controls=0&amp;modestbranding=1\" start=\"0\"></iframe></div>" },
+  { "id": "hb:blockquote", "source": "handbuilt", "kind": "blog", "html": "<blockquote><p>quoted <strong>text</strong></p></blockquote><hr><p>after rule</p>" },
+  { "id": "hb:hardbreak", "source": "handbuilt", "kind": "blog", "html": "<p>line one<br>line two</p>" },
+  { "id": "hb:empty", "source": "handbuilt", "kind": "blog", "html": "" },
+  { "id": "hb:hostile", "source": "handbuilt", "kind": "blog", "html": "<img src=x onerror=\"window.__xss=1\"><a href=\"javascript:window.__xss=2\">x</a><p __proto__=\"y\" onclick=\"window.__xss=3\">z</p><script>window.__xss=4</script>" }
+]

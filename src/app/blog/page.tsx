@@ -29,7 +29,7 @@ async function getBlog() {
 }
 
 export default async function BlogPage() {
-  const blogData = isRouterNavigation() ? undefined : await getBlog();
+  const blogData = (await isRouterNavigation()) ? undefined : await getBlog();
   return (
     <>
       <JsonLd

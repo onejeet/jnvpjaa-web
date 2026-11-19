@@ -6,23 +6,25 @@ import LayoutModule from '@/layouts/Layout';
 import { NewsEditor, NewsroomGate } from '@/modules/NewsEditor';
 import { brand } from '@/config/tenant';
 
-type Props = { searchParams: { id?: string | string[] } };
+type Props = { searchParams: Promise<{ id?: string | string[] }> };
 
-const editId = ({ searchParams }: Props) =>
-  typeof searchParams.id === 'string' && searchParams.id ? searchParams.id : undefined;
+const editId = async (props: Props) => {
+  const searchParams = await props.searchParams;
+  return typeof searchParams.id === 'string' && searchParams.id ? searchParams.id : undefined;
+};
 
-export function generateMetadata(props: Props): Metadata {
+export async function generateMetadata(props: Props): Promise<Metadata> {
   return constructMetadata({
     url: '/newsroom/new/',
     noIndex: true,
-    title: `${editId(props) ? 'Edit' : 'Add'} News • ${brand.shortName} Newsroom`,
+    title: `${(await editId(props)) ? 'Edit' : 'Add'} News • ${brand.shortName} Newsroom`,
     description: `Write and publish ${brand.shortName} news`,
   });
 }
 
 // Same pattern as the blog: /newsroom/new creates, /newsroom/new?id=… edits.
-export default function NewNewsArticlePage(props: Props) {
-  const id = editId(props);
+export default async function NewNewsArticlePage(props: Props) {
+  const id = await editId(props);
   return (
     <LayoutModule disableCover title={`${id ? 'Edit' : 'Add'} News • ${brand.shortName} Newsroom`} containerProps={{}}>
       <Breadcrumbs

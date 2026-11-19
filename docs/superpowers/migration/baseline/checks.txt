@@ -1,0 +1,31 @@
+== tsc
+(clean after fixing e2e/migration-guards.spec.ts matchAll iteration)
+exit 0
+== lint
+
+./src/hooks/useEvents.ts
+97:5  Warning: React Hook React.useCallback has a missing dependency: 'client.cache'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+243:5  Warning: React Hook React.useCallback has an unnecessary dependency: 'isAdmin'. Either exclude it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/modules/BlogListModule/BlogListModule.tsx
+147:5  Warning: React Hook React.useCallback has missing dependencies: 'client.cache', 'handleVerifyBlog', 'redirectToSignin', 'showAlert', and 'user?.id'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+223:5  Warning: React Hook React.useCallback has missing dependencies: 'client.cache', 'deleteBlog', and 'redirectToSignin'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+301:5  Warning: React Hook React.useCallback has missing dependencies: 'client.cache', 'publisBlog', and 'redirectToSignin'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/modules/ProfileSetup/Addresses.tsx
+72:6  Warning: React Hook React.useEffect has a missing dependency: 'reset'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+108:5  Warning: React Hook React.useCallback has unnecessary dependencies: 'client' and 'user.id'. Either exclude them or remove the dependency array.  react-hooks/exhaustive-deps
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
+== tenant:check
+
+> jnvpjaa-web@0.1.0 tenant:check
+> node scripts/tenant-check.js
+
+tenant:check ok — brand.json and features.json match in both repos
+== tenant:leaks
+<s> [webpack.Progress] 99% cache shutdown
+<s> [webpack.Progress] 99% cache shutdown
+<s> [webpack.Progress] 100% 
+
+tenant:leaks ok — 0 hits in demo web and backend builds

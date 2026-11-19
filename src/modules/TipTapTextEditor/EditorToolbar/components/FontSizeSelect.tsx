@@ -15,7 +15,6 @@ const FontSizeSelect: React.FC<any> = ({ toggleBlock }) => {
         editor
           ?.chain()
           .focus()
-          // @ts-expect-error type error
           .setFontSize(val as string)
           .run()
       }

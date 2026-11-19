@@ -16,7 +16,7 @@ export const metadata: Metadata = constructMetadata({
 
 // This is a Server Component that fetches data
 async function getBatchCoordinators() {
-  const requestHeaders = headers();
+  const requestHeaders = await headers();
   const cookieHeader = requestHeaders.get('cookie');
   const apolloClient = initializeApollo({ cookie: cookieHeader ?? '' });
 

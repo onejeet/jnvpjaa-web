@@ -12,7 +12,7 @@ const TipTapTextEditorWrapper = ({ children, value, disabled }: TipTapTextEditor
   React.useEffect(() => {
     if (!editor) return;
     if (editor.getHTML() !== value && !(editor.isEmpty && !value)) {
-      editor.commands.setContent(value || '', false, { preserveWhitespace: 'full' });
+      editor.commands.setContent(value || '', { emitUpdate: false, parseOptions: { preserveWhitespace: 'full' } });
     }
   }, [editor, value]);
 

@@ -133,9 +133,9 @@ export function watchErrors(page: Page) {
   page.on('console', (msg) => {
     if (msg.type() !== 'error') return;
     const text = msg.text();
-    // Dev-only noise unrelated to the app's behaviour.
+    // Dev-only noise, and Vercel-hosted scripts (/_vercel/*) a local production build does not serve.
     if (
-      /Download the (React|Apollo) DevTools|Failed to load resource|favicon|net::ERR_|\[Fast Refresh\]|webpack-hmr/i.test(
+      /Download the (React|Apollo) DevTools|Failed to load resource|favicon|net::ERR_|\[Fast Refresh\]|webpack-hmr|\/_vercel\//i.test(
         text
       )
     )

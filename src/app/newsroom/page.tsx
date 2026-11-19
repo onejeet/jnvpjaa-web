@@ -37,7 +37,8 @@ async function getNews(category?: NewsCategory): Promise<NewsPost[]> {
   }
 }
 
-export default async function NewsroomPage({ searchParams }: { searchParams: { type?: string } }) {
+export default async function NewsroomPage(props: { searchParams: Promise<{ type?: string }> }) {
+  const searchParams = await props.searchParams;
   const category = isNewsCategory(searchParams?.type) ? searchParams.type : undefined;
   const posts = await getNews(category);
   return (

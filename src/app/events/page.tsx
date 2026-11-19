@@ -16,7 +16,7 @@ export const metadata: Metadata = constructMetadata({
 });
 
 export default async function EventsPage() {
-  if (isRouterNavigation()) return <Events />;
+  if (await isRouterNavigation()) return <Events />;
   const { data } = await initializeApollo().query<GetEventListQuery>({
     query: GetEventListDocument,
     variables: { options: { limit: 50 } },

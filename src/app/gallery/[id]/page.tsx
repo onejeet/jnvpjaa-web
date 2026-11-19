@@ -21,7 +21,8 @@ const getPublicAlbum = cache(async (id: string) => {
   return album?.total_photos ? album : null;
 });
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const params = await props.params;
   const album = await getPublicAlbum(params.id);
   if (!album) return { title: 'Album not found', robots: { index: false, follow: false } };
 
@@ -48,7 +49,8 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   };
 }
 
-export default async function SingleAlbumPage({ params }: { params: { id: string } }) {
+export default async function SingleAlbumPage(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const album = await getPublicAlbum(params.id);
   if (!album) notFound();
   const albumTitle = album.title || 'Photo album';

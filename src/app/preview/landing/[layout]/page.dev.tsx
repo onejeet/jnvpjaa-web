@@ -17,7 +17,8 @@ const LAYOUTS = {
 
 // `next dev` only (the .dev.tsx extension is not a page in production builds, see next.config.js):
 // shows every landing layout with the current tenant's content before one is chosen in landing.json.
-export default function LandingPreview({ params }: { params: { layout: string } }) {
+export default async function LandingPreview(props: { params: Promise<{ layout: string }> }) {
+  const params = await props.params;
   const entry = LAYOUTS[params.layout as keyof typeof LAYOUTS];
   if (!entry) notFound();
   return <LandingPage {...entry} />;

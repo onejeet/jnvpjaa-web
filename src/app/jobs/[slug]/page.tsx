@@ -74,7 +74,8 @@ const jobPostingSchema = (job: Job) => ({
     : {}),
 });
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const params = await props.params;
   const job = await getJob(decodeURIComponent(params.slug));
   if (!job) return { title: 'Job not found', robots: { index: false, follow: false } };
 
@@ -100,7 +101,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default async function JobPage({ params }: { params: { slug: string } }) {
+export default async function JobPage(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const job = await getJob(decodeURIComponent(params.slug));
   if (!job) notFound();
 

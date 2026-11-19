@@ -24,8 +24,9 @@ const getBlog = cache(async (slug: string) => {
   return blog?.status === BlogStatus.Published ? blog : null;
 });
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  if (isRouterNavigation()) return { title: `Blog | ${brand.shortName}` };
+export async function generateMetadata(props: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  if (await isRouterNavigation()) return { title: `Blog | ${brand.shortName}` };
+  const params = await props.params;
   const blog = await getBlog(decodeURIComponent(params.id));
   if (!blog) return { title: 'Blog post not found', robots: { index: false, follow: false } };
 
@@ -53,8 +54,9 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   };
 }
 
-export default async function BlogPostPage({ params }: { params: { id: string } }) {
-  if (isRouterNavigation()) return <SingleBlog />;
+export default async function BlogPostPage(props: { params: Promise<{ id: string }> }) {
+  if (await isRouterNavigation()) return <SingleBlog />;
+  const params = await props.params;
   const blog = await getBlog(decodeURIComponent(params.id));
   if (!blog) notFound();
 

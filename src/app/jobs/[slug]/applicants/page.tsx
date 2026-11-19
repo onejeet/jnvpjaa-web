@@ -6,9 +6,10 @@ import { JobApplicants } from '@/containers/Jobs';
 import LayoutModule from '@/layouts/Layout';
 import { brand } from '@/config/tenant';
 
-type Props = { params: { slug: string } };
+type Props = { params: Promise<{ slug: string }> };
 
-export function generateMetadata({ params }: Props): Metadata {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   return constructMetadata({
     url: `/jobs/${params.slug}/applicants/`,
     noIndex: true,
@@ -18,7 +19,8 @@ export function generateMetadata({ params }: Props): Metadata {
 }
 
 // Private to the poster and moderators; the API authorises the applicant list.
-export default function JobApplicantsPage({ params }: Props) {
+export default async function JobApplicantsPage(props: Props) {
+  const params = await props.params;
   const slug = decodeURIComponent(params.slug);
   return (
     <LayoutModule disableCover title={`Applicants • ${brand.shortName} Jobs`} containerProps={{}}>

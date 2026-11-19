@@ -1,0 +1,284 @@
+
+> jnvpjaa-web@0.1.0 test:unit
+> playwright test -c playwright.unit.config.ts
+
+
+Running 24 tests using 5 workers
+
+  ✓   1 src/config/landing.unit.ts:8:5 › every tenant landing config parses and the live tenant keeps the classic home page (3ms)
+  ✓   2 src/config/tenant-check.unit.ts:16:5 › tenant:check reports features.json drift between the repos (8ms)
+  ✓   3 src/config/tenant.unit.ts:19:5 › jnvpjaa tenant parses (11ms)
+  ✓   4 src/config/landing.unit.ts:13:5 › every layout has the home entry next.config.js points @landing/Home at (2ms)
+  ✓   6 src/config/tenant.unit.ts:25:5 › missing required field names the path (4ms)
+  ✓   5 src/config/content.unit.ts:4:5 › t() returns tenant copy and fails loudly on a missing key (6ms)
+  ✓   8 src/config/landing.unit.ts:19:5 › an unknown landing layout is rejected by name (11ms)
+  ✓   9 src/config/tenantAssets.unit.ts:19:5 › copies the tenant public files and fonts into place (10ms)
+  ✓   7 src/config/features.unit.ts:7:5 › filterNav drops disabled items and keeps siblings and module-less items (4ms)
+  ✓  10 src/config/tenant.unit.ts:31:5 › unknown feature key is rejected (2ms)
+  ✓  11 src/config/content.unit.ts:9:5 › assetUrl() points at the tenant assets host (2ms)
+  ✓  12 src/config/landing.unit.ts:25:5 › a failing landing query yields an empty list so its section hides (1ms)
+  ✓  14 src/config/features.unit.ts:25:5 › filterNav removes a group whose children are all disabled (1ms)
+  ✓  15 src/config/tenant.unit.ts:37:5 › optional socials may be absent (1ms)
+  ✓  16 src/config/features.unit.ts:33:5 › filterNav keeps everything when all modules are on (1ms)
+  ✓  13 src/config/tenantAssets.unit.ts:29:5 › a tenant missing a font fails with the file it needs (15ms)
+  ✓  17 src/config/tenant.unit.ts:43:5 › domains reject a scheme (1ms)
+  ✓  18 src/config/features.unit.ts:38:5 › moduleForPath maps routes and sub-routes, not look-alikes (8ms)
+  ✓  20 src/config/tenant.unit.ts:49:5 › resolveTenant fails without TENANT and for an unknown id (3ms)
+  ✓  19 src/config/tenantAssets.unit.ts:35:5 › switching tenants removes the previous tenant's files (14ms)
+  ✓  21 src/config/features.unit.ts:47:5 › profile tabs leave out disabled modules (4ms)
+  ✓  22 src/config/tenant.unit.ts:55:5 › the build-time tenant module exposes the validated jnvpjaa config (2ms)
+  ✓  23 src/utils/theme/palette/palette.unit.ts:5:5 › default palette uses the tenant primary scale (5ms)
+  ✓  24 src/utils/theme/palette/palette.unit.ts:13:5 › palette follows a different brand theme (1ms)
+
+  24 passed (1.8s)
+-- node --test tests/*.test.cjs
+TAP version 13
+# node:internal/modules/cjs/loader:1433
+#   throw err;
+#   ^
+# Error: Cannot find module './tenant'
+# Require stack:
+# - /Users/onejeet/Desktop/Work/JNVPJAA/jnvpjaa-web/tests/admin-nav.test.cjs
+#     at Function._resolveFilename (node:internal/modules/cjs/loader:1430:15)
+#     at defaultResolveImpl (node:internal/modules/cjs/loader:1040:19)
+#     at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1045:22)
+#     at Function._load (node:internal/modules/cjs/loader:1216:25)
+#     at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+#     at Module.require (node:internal/modules/cjs/loader:1527:12)
+#     at require (node:internal/modules/helpers:147:16)
+#     at localRequire (/Users/onejeet/Desktop/Work/JNVPJAA/jnvpjaa-web/tests/admin-nav.test.cjs:14:101)
+#     at evalmachine.<anonymous>:6:18
+#     at Script.runInContext (node:vm:149:12) {
+#   code: 'MODULE_NOT_FOUND',
+#   requireStack: [
+#     '/Users/onejeet/Desktop/Work/JNVPJAA/jnvpjaa-web/tests/admin-nav.test.cjs'
+#   ]
+# }
+# Node.js v22.23.4
+# Subtest: tests/admin-nav.test.cjs
+not ok 1 - tests/admin-nav.test.cjs
+  ---
+  duration_ms: 296.386792
+  type: 'test'
+  location: '/Users/onejeet/Desktop/Work/JNVPJAA/jnvpjaa-web/tests/admin-nav.test.cjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: threads: newest conversation first, replies in order, empty tombstones dropped
+ok 2 - threads: newest conversation first, replies in order, empty tombstones dropped
+  ---
+  duration_ms: 0.933333
+  type: 'test'
+  ...
+# Subtest: reaction toggle adds, removes and drops empty pills
+ok 3 - reaction toggle adds, removes and drops empty pills
+  ---
+  duration_ms: 0.193958
+  type: 'test'
+  ...
+# Subtest: links are split out without trailing punctuation
+ok 4 - links are split out without trailing punctuation
+  ---
+  duration_ms: 0.177416
+  type: 'test'
+  ...
+# node:internal/modules/cjs/loader:1433
+#   throw err;
+#   ^
+# Error: Cannot find module '@/config/tenant'
+# Require stack:
+# - /Users/onejeet/Desktop/Work/JNVPJAA/jnvpjaa-web/tests/content-pages.test.cjs
+#     at Function._resolveFilename (node:internal/modules/cjs/loader:1430:15)
+#     at defaultResolveImpl (node:internal/modules/cjs/loader:1040:19)
+#     at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1045:22)
+#     at Function._load (node:internal/modules/cjs/loader:1216:25)
+#     at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+#     at Module.require (node:internal/modules/cjs/loader:1527:12)
+#     at require (node:internal/modules/helpers:147:16)
+#     at evalmachine.<anonymous>:4:18
+#     at Script.runInContext (node:vm:149:12)
+#     at Script.runInNewContext (node:vm:154:17) {
+#   code: 'MODULE_NOT_FOUND',
+#   requireStack: [
+#     '/Users/onejeet/Desktop/Work/JNVPJAA/jnvpjaa-web/tests/content-pages.test.cjs'
+#   ]
+# }
+# Node.js v22.23.4
+# Subtest: tests/content-pages.test.cjs
+not ok 3 - tests/content-pages.test.cjs
+  ---
+  duration_ms: 269.045
+  type: 'test'
+  location: '/Users/onejeet/Desktop/Work/JNVPJAA/jnvpjaa-web/tests/content-pages.test.cjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: session devices get readable names
+ok 6 - session devices get readable names
+  ---
+  duration_ms: 1.00725
+  type: 'test'
+  ...
+# Subtest: reads the flow using cookies without caching
+ok 7 - reads the flow using cookies without caching
+  ---
+  duration_ms: 1.107917
+  type: 'test'
+  ...
+# Subtest: aborts a stalled request instead of leaving the callback loading forever
+ok 8 - aborts a stalled request instead of leaving the callback loading forever
+  ---
+  duration_ms: 1.288333
+  type: 'test'
+  ...
+# Subtest: preserves expired-flow errors for the sign-in notice
+ok 9 - preserves expired-flow errors for the sign-in notice
+  ---
+  duration_ms: 0.669875
+  type: 'test'
+  ...
+# Subtest: rejects missing response data
+ok 10 - rejects missing response data
+  ---
+  duration_ms: 0.622709
+  type: 'test'
+  ...
+# Subtest: groups newest-first events into year and month buckets in order
+ok 11 - groups newest-first events into year and month buckets in order
+  ---
+  duration_ms: 2.987417
+  type: 'test'
+  ...
+# Subtest: returns no groups for no events
+ok 12 - returns no groups for no events
+  ---
+  duration_ms: 0.08975
+  type: 'test'
+  ...
+# Subtest: salary uses rupees with Indian grouping
+ok 13 - salary uses rupees with Indian grouping
+  ---
+  duration_ms: 11.537334
+  type: 'test'
+  ...
+# Subtest: deadline label shows the last day to apply in India time
+ok 14 - deadline label shows the last day to apply in India time
+  ---
+  duration_ms: 4.424708
+  type: 'test'
+  ...
+# Subtest: social handles become profile links
+ok 15 - social handles become profile links
+  ---
+  duration_ms: 0.090083
+  type: 'test'
+  ...
+# Subtest: https check matches the API rule
+ok 16 - https check matches the API rule
+  ---
+  duration_ms: 0.206083
+  type: 'test'
+  ...
+# Subtest: amount input groups digits the Indian way and keeps only digits
+ok 17 - amount input groups digits the Indian way and keeps only digits
+  ---
+  duration_ms: 0.157625
+  type: 'test'
+  ...
+# node:internal/modules/cjs/loader:1433
+#   throw err;
+#   ^
+# Error: Cannot find module '@/config/tenant'
+# Require stack:
+# - /Users/onejeet/Desktop/Work/JNVPJAA/jnvpjaa-web/tests/newsroom-utils.test.cjs
+#     at Function._resolveFilename (node:internal/modules/cjs/loader:1430:15)
+#     at defaultResolveImpl (node:internal/modules/cjs/loader:1040:19)
+#     at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1045:22)
+#     at Function._load (node:internal/modules/cjs/loader:1216:25)
+#     at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+#     at Module.require (node:internal/modules/cjs/loader:1527:12)
+#     at require (node:internal/modules/helpers:147:16)
+#     at evalmachine.<anonymous>:7:18
+#     at Script.runInContext (node:vm:149:12)
+#     at Script.runInNewContext (node:vm:154:17) {
+#   code: 'MODULE_NOT_FOUND',
+#   requireStack: [
+#     '/Users/onejeet/Desktop/Work/JNVPJAA/jnvpjaa-web/tests/newsroom-utils.test.cjs'
+#   ]
+# }
+# Node.js v22.23.4
+# Subtest: tests/newsroom-utils.test.cjs
+not ok 8 - tests/newsroom-utils.test.cjs
+  ---
+  duration_ms: 278.613417
+  type: 'test'
+  location: '/Users/onejeet/Desktop/Work/JNVPJAA/jnvpjaa-web/tests/newsroom-utils.test.cjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: newsroom pages are public, its editor is not
+ok 19 - newsroom pages are public, its editor is not
+  ---
+  duration_ms: 1.462125
+  type: 'test'
+  ...
+# Subtest: create and edit screens stay protected, look-alike slugs do not
+ok 20 - create and edit screens stay protected, look-alike slugs do not
+  ---
+  duration_ms: 0.173833
+  type: 'test'
+  ...
+# Subtest: jobs: board and job pages are public, posting and applicants are not
+ok 21 - jobs: board and job pages are public, posting and applicants are not
+  ---
+  duration_ms: 0.327875
+  type: 'test'
+  ...
+# Subtest: parsePage extracts the SEO head, structured data and visible text
+ok 22 - parsePage extracts the SEO head, structured data and visible text
+  ---
+  duration_ms: 8.551834
+  type: 'test'
+  ...
+# Subtest: diffSnapshots reports exactly the changed field
+ok 23 - diffSnapshots reports exactly the changed field
+  ---
+  duration_ms: 0.487375
+  type: 'test'
+  ...
+# Subtest: diffSnapshots ignores timing and flags missing pages
+ok 24 - diffSnapshots ignores timing and flags missing pages
+  ---
+  duration_ms: 0.1755
+  type: 'test'
+  ...
+# Subtest: a pasted profile URL or @handle becomes the bare handle
+ok 25 - a pasted profile URL or @handle becomes the bare handle
+  ---
+  duration_ms: 0.593792
+  type: 'test'
+  ...
+# Subtest: links are built only from valid stored handles, in platform order
+ok 26 - links are built only from valid stored handles, in platform order
+  ---
+  duration_ms: 0.509083
+  type: 'test'
+  ...
+1..26
+# tests 26
+# suites 0
+# pass 23
+# fail 3
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 467.440333

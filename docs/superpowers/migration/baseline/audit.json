@@ -1,0 +1,2330 @@
+{
+  "auditReportVersion": 2,
+  "vulnerabilities": {
+    "@graphql-codegen/add": {
+      "name": "@graphql-codegen/add",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "@graphql-codegen/plugin-helpers"
+      ],
+      "effects": [],
+      "range": "1.13.6-alpha-01e83c2c.25 - 1.13.6-alpha-e05b7bda.36 || 1.14.1-alpha-02e7bdc6.12 - 7.0.0-alpha-20260430125644-b20ffe821614c625689575ab43d971db7e7ab327",
+      "nodes": [
+        "node_modules/@graphql-codegen/add"
+      ],
+      "fixAvailable": true
+    },
+    "@graphql-codegen/cli": {
+      "name": "@graphql-codegen/cli",
+      "severity": "high",
+      "isDirect": true,
+      "via": [
+        "@graphql-codegen/client-preset",
+        "@graphql-codegen/core",
+        "@graphql-codegen/plugin-helpers",
+        "@graphql-tools/github-loader",
+        "@graphql-tools/prisma-loader",
+        "@graphql-tools/url-loader",
+        "@graphql-tools/utils",
+        "graphql-config"
+      ],
+      "effects": [],
+      "range": "1.13.6-alpha-01e83c2c.25 - 1.13.6-alpha-e05b7bda.36 || >=1.14.1-alpha-02e7bdc6.12",
+      "nodes": [
+        "node_modules/@graphql-codegen/cli"
+      ],
+      "fixAvailable": {
+        "name": "@graphql-codegen/cli",
+        "version": "8.0.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@graphql-codegen/client-preset": {
+      "name": "@graphql-codegen/client-preset",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "@graphql-codegen/add",
+        "@graphql-codegen/gql-tag-operations",
+        "@graphql-codegen/plugin-helpers",
+        "@graphql-codegen/typed-document-node",
+        "@graphql-codegen/typescript",
+        "@graphql-codegen/typescript-operations",
+        "@graphql-codegen/visitor-plugin-common",
+        "@graphql-tools/utils"
+      ],
+      "effects": [
+        "@graphql-codegen/cli"
+      ],
+      "range": "<=6.2.1",
+      "nodes": [
+        "node_modules/@graphql-codegen/client-preset"
+      ],
+      "fixAvailable": {
+        "name": "@graphql-codegen/cli",
+        "version": "8.0.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@graphql-codegen/core": {
+      "name": "@graphql-codegen/core",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "@graphql-codegen/plugin-helpers",
+        "@graphql-tools/utils"
+      ],
+      "effects": [
+        "@graphql-codegen/cli"
+      ],
+      "range": "1.13.6-alpha-01e83c2c.25 - 1.13.6-alpha-e05b7bda.36 || 1.14.1-alpha-02e7bdc6.12 - 6.2.1",
+      "nodes": [
+        "node_modules/@graphql-codegen/core"
+      ],
+      "fixAvailable": {
+        "name": "@graphql-codegen/cli",
+        "version": "8.0.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@graphql-codegen/gql-tag-operations": {
+      "name": "@graphql-codegen/gql-tag-operations",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "@graphql-codegen/plugin-helpers",
+        "@graphql-codegen/visitor-plugin-common",
+        "@graphql-tools/utils"
+      ],
+      "effects": [
+        "@graphql-codegen/client-preset"
+      ],
+      "range": "<=6.1.0",
+      "nodes": [
+        "node_modules/@graphql-codegen/gql-tag-operations"
+      ],
+      "fixAvailable": {
+        "name": "@graphql-codegen/cli",
+        "version": "8.0.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@graphql-codegen/plugin-helpers": {
+      "name": "@graphql-codegen/plugin-helpers",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "@graphql-tools/utils",
+        "lodash"
+      ],
+      "effects": [
+        "@graphql-codegen/add",
+        "@graphql-codegen/core",
+        "@graphql-codegen/gql-tag-operations",
+        "@graphql-codegen/schema-ast",
+        "@graphql-codegen/typed-document-node",
+        "@graphql-codegen/typescript",
+        "@graphql-codegen/typescript-operations",
+        "@graphql-codegen/typescript-react-apollo",
+        "@graphql-codegen/visitor-plugin-common"
+      ],
+      "range": "1.13.6-alpha-01e83c2c.25 - 1.13.6-alpha-e05b7bda.36 || 1.14.1-alpha-02e7bdc6.12 - 7.4.1",
+      "nodes": [
+        "node_modules/@graphql-codegen/plugin-helpers",
+        "node_modules/@graphql-codegen/typescript-react-apollo/node_modules/@graphql-codegen/plugin-helpers"
+      ],
+      "fixAvailable": {
+        "name": "@graphql-codegen/cli",
+        "version": "8.0.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@graphql-codegen/schema-ast": {
+      "name": "@graphql-codegen/schema-ast",
+      "severity": "high",
+      "isDirect": true,
+      "via": [
+        "@graphql-codegen/plugin-helpers",
+        "@graphql-tools/utils"
+      ],
+      "effects": [
+        "@graphql-codegen/typescript"
+      ],
+      "range": "1.13.6-alpha-01e83c2c.25 - 1.13.6-alpha-e05b7bda.36 || 1.14.1-alpha-02e7bdc6.12 - 6.1.0",
+      "nodes": [
+        "node_modules/@graphql-codegen/schema-ast"
+      ],
+      "fixAvailable": {
+        "name": "@graphql-codegen/schema-ast",
+        "version": "7.0.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@graphql-codegen/typed-document-node": {
+      "name": "@graphql-codegen/typed-document-node",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "@graphql-codegen/plugin-helpers",
+        "@graphql-codegen/visitor-plugin-common"
+      ],
+      "effects": [],
+      "range": "<=7.0.0-alpha-20260430125644-b20ffe821614c625689575ab43d971db7e7ab327",
+      "nodes": [
+        "node_modules/@graphql-codegen/typed-document-node"
+      ],
+      "fixAvailable": true
+    },
+    "@graphql-codegen/typescript": {
+      "name": "@graphql-codegen/typescript",
+      "severity": "high",
+      "isDirect": true,
+      "via": [
+        "@graphql-codegen/plugin-helpers",
+        "@graphql-codegen/schema-ast",
+        "@graphql-codegen/visitor-plugin-common"
+      ],
+      "effects": [
+        "@graphql-codegen/typescript-operations"
+      ],
+      "range": "1.13.6-alpha-01e83c2c.25 - 1.13.6-alpha-e05b7bda.36 || 1.14.1-alpha-02e7bdc6.12 - 6.0.0-alpha-20260430125644-b20ffe821614c625689575ab43d971db7e7ab327 || 6.0.1-alpha-20260502160734-b8d4179e8ad9ae452ace9c1dee36c8dd1dc0a688 - 6.0.1-alpha-20260506131057-3452f127737a96e67180eff01da10092b2c5bad0",
+      "nodes": [
+        "node_modules/@graphql-codegen/typescript"
+      ],
+      "fixAvailable": {
+        "name": "@graphql-codegen/typescript",
+        "version": "7.0.1",
+        "isSemVerMajor": true
+      }
+    },
+    "@graphql-codegen/typescript-operations": {
+      "name": "@graphql-codegen/typescript-operations",
+      "severity": "high",
+      "isDirect": true,
+      "via": [
+        "@graphql-codegen/plugin-helpers",
+        "@graphql-codegen/typescript",
+        "@graphql-codegen/visitor-plugin-common"
+      ],
+      "effects": [],
+      "range": "1.13.6-alpha-01e83c2c.25 - 1.13.6-alpha-e05b7bda.36 || 1.14.1-alpha-02e7bdc6.12 - 6.0.0-alpha-20260430125644-b20ffe821614c625689575ab43d971db7e7ab327 || 6.0.1-alpha-20260506131057-3452f127737a96e67180eff01da10092b2c5bad0",
+      "nodes": [
+        "node_modules/@graphql-codegen/typescript-operations"
+      ],
+      "fixAvailable": {
+        "name": "@graphql-codegen/typescript-operations",
+        "version": "7.0.1",
+        "isSemVerMajor": true
+      }
+    },
+    "@graphql-codegen/typescript-react-apollo": {
+      "name": "@graphql-codegen/typescript-react-apollo",
+      "severity": "high",
+      "isDirect": true,
+      "via": [
+        "@graphql-codegen/plugin-helpers",
+        "@graphql-codegen/visitor-plugin-common"
+      ],
+      "effects": [],
+      "range": "1.13.6-alpha-01e83c2c.25 - 1.13.6-alpha-e05b7bda.36 || 1.14.1-alpha-02e7bdc6.12 - 5.0.0",
+      "nodes": [
+        "node_modules/@graphql-codegen/typescript-react-apollo"
+      ],
+      "fixAvailable": {
+        "name": "@graphql-codegen/typescript-react-apollo",
+        "version": "6.0.1",
+        "isSemVerMajor": true
+      }
+    },
+    "@graphql-codegen/visitor-plugin-common": {
+      "name": "@graphql-codegen/visitor-plugin-common",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "@graphql-codegen/plugin-helpers",
+        "@graphql-tools/utils"
+      ],
+      "effects": [
+        "@graphql-codegen/client-preset",
+        "@graphql-codegen/gql-tag-operations",
+        "@graphql-codegen/typed-document-node",
+        "@graphql-codegen/typescript",
+        "@graphql-codegen/typescript-operations",
+        "@graphql-codegen/typescript-react-apollo"
+      ],
+      "range": "1.13.6-alpha-01e83c2c.25 - 1.13.6-alpha-e05b7bda.36 || 1.14.1-alpha-02e7bdc6.12 - 7.2.9-alpha-20261008113150-6f952a000a92677bc734a0094218c0a510ecc3ce || 7.3.0-alpha-20260930101424-b690e1a9bbb7bc65f39b67112cbeca529460e183 - 7.3.0-alpha-20261012105234-33471d80f2bfd12d5b21cec6ef384bdfd57907b1",
+      "nodes": [
+        "node_modules/@graphql-codegen/typescript-react-apollo/node_modules/@graphql-codegen/visitor-plugin-common",
+        "node_modules/@graphql-codegen/visitor-plugin-common"
+      ],
+      "fixAvailable": {
+        "name": "@graphql-codegen/typescript",
+        "version": "7.0.1",
+        "isSemVerMajor": true
+      }
+    },
+    "@graphql-tools/batch-execute": {
+      "name": "@graphql-tools/batch-execute",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "@graphql-tools/utils"
+      ],
+      "effects": [
+        "@graphql-tools/delegate"
+      ],
+      "range": "<=10.1.0",
+      "nodes": [
+        "node_modules/@graphql-tools/batch-execute"
+      ],
+      "fixAvailable": {
+        "name": "@graphql-codegen/cli",
+        "version": "8.0.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@graphql-tools/delegate": {
+      "name": "@graphql-tools/delegate",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "@graphql-tools/batch-execute",
+        "@graphql-tools/executor",
+        "@graphql-tools/utils"
+      ],
+      "effects": [
+        "@graphql-tools/wrap"
+      ],
+      "range": "<=12.1.4",
+      "nodes": [
+        "node_modules/@graphql-tools/delegate"
+      ],
+      "fixAvailable": {
+        "name": "@graphql-codegen/cli",
+        "version": "8.0.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@graphql-tools/executor": {
+      "name": "@graphql-tools/executor",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "@graphql-tools/utils"
+      ],
+      "effects": [
+        "@graphql-tools/delegate"
+      ],
+      "range": "<=2.0.0-rc-20260806160344-fea2a9cb67cc8f883edfb5fdf4843ab4c69bd409",
+      "nodes": [
+        "node_modules/@graphql-tools/executor"
+      ],
+      "fixAvailable": {
+        "name": "@graphql-codegen/cli",
+        "version": "8.0.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@graphql-tools/executor-common": {
+      "name": "@graphql-tools/executor-common",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "@graphql-tools/utils"
+      ],
+      "effects": [
+        "@graphql-tools/executor-graphql-ws",
+        "@graphql-tools/executor-http"
+      ],
+      "range": "<=1.0.7-alpha-afeb95d5ca8e2de8af2a2bb3a086413badc5e7ea",
+      "nodes": [
+        "node_modules/@graphql-tools/executor-common",
+        "node_modules/@graphql-tools/executor-graphql-ws/node_modules/@graphql-tools/executor-common"
+      ],
+      "fixAvailable": {
+        "name": "@graphql-codegen/cli",
+        "version": "8.0.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@graphql-tools/executor-graphql-ws": {
+      "name": "@graphql-tools/executor-graphql-ws",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "@graphql-tools/executor-common",
+        "@graphql-tools/utils"
+      ],
+      "effects": [
+        "@graphql-tools/url-loader"
+      ],
+      "range": "<=3.1.6-alpha-afeb95d5ca8e2de8af2a2bb3a086413badc5e7ea || 4.0.0-alpha-034241bcdef6497585e439a2e9a94a59578d53f8 - 4.0.0-alpha-4b5b3bde47b4259f12274ccaa81b524d49e57e6a",
+      "nodes": [
+        "node_modules/@graphql-tools/executor-graphql-ws"
+      ],
+      "fixAvailable": {
+        "name": "@graphql-codegen/cli",
+        "version": "8.0.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@graphql-tools/executor-http": {
+      "name": "@graphql-tools/executor-http",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "@graphql-tools/executor-common",
+        "@graphql-tools/utils"
+      ],
+      "effects": [
+        "@graphql-tools/github-loader"
+      ],
+      "range": "<=3.3.1-alpha-afeb95d5ca8e2de8af2a2bb3a086413badc5e7ea",
+      "nodes": [
+        "node_modules/@graphql-tools/executor-http"
+      ],
+      "fixAvailable": true
+    },
+    "@graphql-tools/github-loader": {
+      "name": "@graphql-tools/github-loader",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "@graphql-tools/executor-http",
+        "@graphql-tools/utils"
+      ],
+      "effects": [],
+      "range": "<=9.1.7-alpha-20260811213401-1eff5799faeb287f78dcafd6415e2afe144cee07",
+      "nodes": [
+        "node_modules/@graphql-tools/github-loader"
+      ],
+      "fixAvailable": true
+    },
+    "@graphql-tools/prisma-loader": {
+      "name": "@graphql-tools/prisma-loader",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "@graphql-tools/url-loader",
+        "@graphql-tools/utils"
+      ],
+      "effects": [
+        "@graphql-codegen/cli"
+      ],
+      "range": "*",
+      "nodes": [
+        "node_modules/@graphql-tools/prisma-loader"
+      ],
+      "fixAvailable": {
+        "name": "@graphql-codegen/cli",
+        "version": "8.0.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@graphql-tools/url-loader": {
+      "name": "@graphql-tools/url-loader",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "@graphql-tools/executor-graphql-ws",
+        "@graphql-tools/executor-http",
+        "@graphql-tools/utils",
+        "@graphql-tools/wrap"
+      ],
+      "effects": [
+        "@graphql-codegen/cli",
+        "@graphql-tools/prisma-loader"
+      ],
+      "range": "<=9.1.7-alpha-20260811213401-1eff5799faeb287f78dcafd6415e2afe144cee07",
+      "nodes": [
+        "node_modules/@graphql-tools/url-loader"
+      ],
+      "fixAvailable": {
+        "name": "@graphql-codegen/cli",
+        "version": "8.0.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@graphql-tools/utils": {
+      "name": "@graphql-tools/utils",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1241230,
+          "name": "@graphql-tools/utils",
+          "dependency": "@graphql-tools/utils",
+          "title": "GraphQL Tools has prototype pollution in well-established utility function `mergeDeep`",
+          "url": "https://github.com/advisories/GHSA-7mx3-vvmw-hjmv",
+          "severity": "high",
+          "cwe": [
+            "CWE-1321"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": "<=12.0.0"
+        },
+        {
+          "source": 1242879,
+          "name": "@graphql-tools/utils",
+          "dependency": "@graphql-tools/utils",
+          "title": "GraphQL Tools: Prototype pollution in mergeIncrementalResult via non-primitive path segments",
+          "url": "https://github.com/advisories/GHSA-c4qx-w738-7hr3",
+          "severity": "high",
+          "cwe": [
+            "CWE-1321"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": ">=10.10.1 <=12.0.1"
+        }
+      ],
+      "effects": [
+        "@graphql-codegen/cli",
+        "@graphql-codegen/client-preset",
+        "@graphql-codegen/core",
+        "@graphql-codegen/gql-tag-operations",
+        "@graphql-codegen/plugin-helpers",
+        "@graphql-codegen/schema-ast",
+        "@graphql-codegen/visitor-plugin-common",
+        "@graphql-tools/batch-execute",
+        "@graphql-tools/delegate",
+        "@graphql-tools/executor",
+        "@graphql-tools/executor-common",
+        "@graphql-tools/executor-graphql-ws",
+        "@graphql-tools/executor-http",
+        "@graphql-tools/github-loader",
+        "@graphql-tools/prisma-loader",
+        "@graphql-tools/url-loader",
+        "@graphql-tools/wrap"
+      ],
+      "range": "<=12.0.1",
+      "nodes": [
+        "node_modules/@graphql-codegen/typescript-react-apollo/node_modules/@graphql-tools/utils",
+        "node_modules/@graphql-tools/executor/node_modules/@graphql-tools/utils",
+        "node_modules/@graphql-tools/utils"
+      ],
+      "fixAvailable": {
+        "name": "@graphql-codegen/schema-ast",
+        "version": "7.0.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@graphql-tools/wrap": {
+      "name": "@graphql-tools/wrap",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "@graphql-tools/delegate",
+        "@graphql-tools/utils"
+      ],
+      "effects": [
+        "@graphql-tools/url-loader"
+      ],
+      "range": "<=11.1.24 || 12.0.0-alpha-034241bcdef6497585e439a2e9a94a59578d53f8 - 12.0.0-alpha-867b030a134dc2c2689f3de003ea23d205c70774",
+      "nodes": [
+        "node_modules/@graphql-tools/wrap"
+      ],
+      "fixAvailable": {
+        "name": "@graphql-codegen/cli",
+        "version": "8.0.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@next/eslint-plugin-next": {
+      "name": "@next/eslint-plugin-next",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "glob"
+      ],
+      "effects": [
+        "eslint-config-next"
+      ],
+      "range": "14.0.5-canary.0 - 15.0.0-rc.1",
+      "nodes": [
+        "node_modules/@next/eslint-plugin-next"
+      ],
+      "fixAvailable": {
+        "name": "eslint-config-next",
+        "version": "16.4.6",
+        "isSemVerMajor": true
+      }
+    },
+    "@tiptap/core": {
+      "name": "@tiptap/core",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1158508,
+          "name": "@tiptap/core",
+          "dependency": "@tiptap/core",
+          "title": "Tiptap: mergeAttributes() turns an own __proto__ key into inherited executable DOM attributes",
+          "url": "https://github.com/advisories/GHSA-cp6q-959q-f8rh",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-79",
+            "CWE-1321"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": ">=2.0.0-alpha.0 <3.30.4"
+        }
+      ],
+      "effects": [
+        "@tiptap/extension-blockquote",
+        "@tiptap/extension-bold",
+        "@tiptap/extension-bubble-menu",
+        "@tiptap/extension-bullet-list",
+        "@tiptap/extension-code",
+        "@tiptap/extension-code-block",
+        "@tiptap/extension-color",
+        "@tiptap/extension-document",
+        "@tiptap/extension-dropcursor",
+        "@tiptap/extension-floating-menu",
+        "@tiptap/extension-font-family",
+        "@tiptap/extension-gapcursor",
+        "@tiptap/extension-hard-break",
+        "@tiptap/extension-heading",
+        "@tiptap/extension-history",
+        "@tiptap/extension-horizontal-rule",
+        "@tiptap/extension-italic",
+        "@tiptap/extension-link",
+        "@tiptap/extension-list-item",
+        "@tiptap/extension-ordered-list",
+        "@tiptap/extension-paragraph",
+        "@tiptap/extension-placeholder",
+        "@tiptap/extension-strike",
+        "@tiptap/extension-text",
+        "@tiptap/extension-text-align",
+        "@tiptap/extension-text-style",
+        "@tiptap/extension-underline",
+        "@tiptap/extension-youtube",
+        "@tiptap/react",
+        "@tiptap/starter-kit",
+        "@tiptap/suggestion"
+      ],
+      "range": "<=3.30.3",
+      "nodes": [
+        "node_modules/@tiptap/core"
+      ],
+      "fixAvailable": {
+        "name": "@tiptap/extension-font-family",
+        "version": "3.34.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@tiptap/extension-blockquote": {
+      "name": "@tiptap/extension-blockquote",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@tiptap/core"
+      ],
+      "effects": [],
+      "range": "<=3.0.0-next.8 || 3.22.4 - 3.30.3",
+      "nodes": [
+        "node_modules/@tiptap/extension-blockquote"
+      ],
+      "fixAvailable": true
+    },
+    "@tiptap/extension-bold": {
+      "name": "@tiptap/extension-bold",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@tiptap/core"
+      ],
+      "effects": [],
+      "range": "<=3.0.0-next.8 || 3.22.4 - 3.30.3",
+      "nodes": [
+        "node_modules/@tiptap/extension-bold"
+      ],
+      "fixAvailable": true
+    },
+    "@tiptap/extension-bubble-menu": {
+      "name": "@tiptap/extension-bubble-menu",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@tiptap/core"
+      ],
+      "effects": [
+        "@tiptap/react"
+      ],
+      "range": "<=3.0.0-next.8 || 3.22.4 - 3.30.3",
+      "nodes": [
+        "node_modules/@tiptap/extension-bubble-menu"
+      ],
+      "fixAvailable": {
+        "name": "@tiptap/react",
+        "version": "3.34.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@tiptap/extension-bullet-list": {
+      "name": "@tiptap/extension-bullet-list",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": [
+        "@tiptap/core"
+      ],
+      "effects": [],
+      "range": "<=2.27.3",
+      "nodes": [
+        "node_modules/@tiptap/extension-bullet-list"
+      ],
+      "fixAvailable": {
+        "name": "@tiptap/extension-bullet-list",
+        "version": "3.34.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@tiptap/extension-code": {
+      "name": "@tiptap/extension-code",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@tiptap/core"
+      ],
+      "effects": [],
+      "range": "<=3.0.0-next.8 || 3.22.4 - 3.30.3",
+      "nodes": [
+        "node_modules/@tiptap/extension-code"
+      ],
+      "fixAvailable": true
+    },
+    "@tiptap/extension-code-block": {
+      "name": "@tiptap/extension-code-block",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@tiptap/core"
+      ],
+      "effects": [],
+      "range": "<=3.0.0-next.8 || 3.22.4 - 3.30.3",
+      "nodes": [
+        "node_modules/@tiptap/extension-code-block"
+      ],
+      "fixAvailable": true
+    },
+    "@tiptap/extension-color": {
+      "name": "@tiptap/extension-color",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": [
+        "@tiptap/core",
+        "@tiptap/extension-text-style"
+      ],
+      "effects": [],
+      "range": "<=3.0.0-next.8 || 3.22.4 - 3.30.3",
+      "nodes": [
+        "node_modules/@tiptap/extension-color"
+      ],
+      "fixAvailable": {
+        "name": "@tiptap/extension-color",
+        "version": "3.34.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@tiptap/extension-document": {
+      "name": "@tiptap/extension-document",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@tiptap/core"
+      ],
+      "effects": [],
+      "range": "<=3.0.0-next.8 || 3.22.4 - 3.30.3",
+      "nodes": [
+        "node_modules/@tiptap/extension-document"
+      ],
+      "fixAvailable": true
+    },
+    "@tiptap/extension-dropcursor": {
+      "name": "@tiptap/extension-dropcursor",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@tiptap/core"
+      ],
+      "effects": [
+        "@tiptap/starter-kit"
+      ],
+      "range": "<=2.27.3",
+      "nodes": [
+        "node_modules/@tiptap/extension-dropcursor"
+      ],
+      "fixAvailable": {
+        "name": "@tiptap/starter-kit",
+        "version": "3.34.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@tiptap/extension-floating-menu": {
+      "name": "@tiptap/extension-floating-menu",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@tiptap/core"
+      ],
+      "effects": [],
+      "range": "<=3.0.0-next.8 || 3.22.4 - 3.30.3",
+      "nodes": [
+        "node_modules/@tiptap/extension-floating-menu"
+      ],
+      "fixAvailable": true
+    },
+    "@tiptap/extension-font-family": {
+      "name": "@tiptap/extension-font-family",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": [
+        "@tiptap/core",
+        "@tiptap/extension-text-style"
+      ],
+      "effects": [],
+      "range": "<=3.0.0-next.8 || 3.22.4 - 3.30.3",
+      "nodes": [
+        "node_modules/@tiptap/extension-font-family"
+      ],
+      "fixAvailable": {
+        "name": "@tiptap/extension-font-family",
+        "version": "3.34.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@tiptap/extension-gapcursor": {
+      "name": "@tiptap/extension-gapcursor",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@tiptap/core"
+      ],
+      "effects": [],
+      "range": "<=2.27.3",
+      "nodes": [
+        "node_modules/@tiptap/extension-gapcursor"
+      ],
+      "fixAvailable": true
+    },
+    "@tiptap/extension-hard-break": {
+      "name": "@tiptap/extension-hard-break",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@tiptap/core"
+      ],
+      "effects": [],
+      "range": "<=3.0.0-next.8 || 3.22.4 - 3.30.3",
+      "nodes": [
+        "node_modules/@tiptap/extension-hard-break"
+      ],
+      "fixAvailable": true
+    },
+    "@tiptap/extension-heading": {
+      "name": "@tiptap/extension-heading",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": [
+        "@tiptap/core"
+      ],
+      "effects": [],
+      "range": "<=3.0.0-next.8 || 3.22.4 - 3.30.3",
+      "nodes": [
+        "node_modules/@tiptap/extension-heading"
+      ],
+      "fixAvailable": {
+        "name": "@tiptap/extension-heading",
+        "version": "3.34.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@tiptap/extension-history": {
+      "name": "@tiptap/extension-history",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@tiptap/core"
+      ],
+      "effects": [],
+      "range": "<=2.27.3",
+      "nodes": [
+        "node_modules/@tiptap/extension-history"
+      ],
+      "fixAvailable": true
+    },
+    "@tiptap/extension-horizontal-rule": {
+      "name": "@tiptap/extension-horizontal-rule",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@tiptap/core"
+      ],
+      "effects": [],
+      "range": "<=3.0.0-next.8 || 3.22.4 - 3.30.3",
+      "nodes": [
+        "node_modules/@tiptap/extension-horizontal-rule"
+      ],
+      "fixAvailable": true
+    },
+    "@tiptap/extension-italic": {
+      "name": "@tiptap/extension-italic",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@tiptap/core"
+      ],
+      "effects": [],
+      "range": "<=3.0.0-next.8 || 3.22.4 - 3.30.3",
+      "nodes": [
+        "node_modules/@tiptap/extension-italic"
+      ],
+      "fixAvailable": true
+    },
+    "@tiptap/extension-link": {
+      "name": "@tiptap/extension-link",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": [
+        "@tiptap/core"
+      ],
+      "effects": [],
+      "range": "<=3.0.0-next.8 || 3.22.4 - 3.30.3",
+      "nodes": [
+        "node_modules/@tiptap/extension-link"
+      ],
+      "fixAvailable": {
+        "name": "@tiptap/extension-link",
+        "version": "3.34.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@tiptap/extension-list-item": {
+      "name": "@tiptap/extension-list-item",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": [
+        "@tiptap/core"
+      ],
+      "effects": [],
+      "range": "<=2.27.3",
+      "nodes": [
+        "node_modules/@tiptap/extension-list-item"
+      ],
+      "fixAvailable": {
+        "name": "@tiptap/extension-list-item",
+        "version": "3.34.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@tiptap/extension-ordered-list": {
+      "name": "@tiptap/extension-ordered-list",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": [
+        "@tiptap/core"
+      ],
+      "effects": [],
+      "range": "<=2.27.3",
+      "nodes": [
+        "node_modules/@tiptap/extension-ordered-list"
+      ],
+      "fixAvailable": {
+        "name": "@tiptap/extension-ordered-list",
+        "version": "3.34.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@tiptap/extension-paragraph": {
+      "name": "@tiptap/extension-paragraph",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": [
+        "@tiptap/core"
+      ],
+      "effects": [],
+      "range": "<=3.0.0-next.8 || 3.22.4 - 3.30.3",
+      "nodes": [
+        "node_modules/@tiptap/extension-paragraph"
+      ],
+      "fixAvailable": {
+        "name": "@tiptap/extension-paragraph",
+        "version": "3.34.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@tiptap/extension-placeholder": {
+      "name": "@tiptap/extension-placeholder",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": [
+        "@tiptap/core"
+      ],
+      "effects": [],
+      "range": "<=2.27.3",
+      "nodes": [
+        "node_modules/@tiptap/extension-placeholder"
+      ],
+      "fixAvailable": {
+        "name": "@tiptap/extension-placeholder",
+        "version": "3.34.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@tiptap/extension-strike": {
+      "name": "@tiptap/extension-strike",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@tiptap/core"
+      ],
+      "effects": [],
+      "range": "<=3.0.0-next.8 || 3.22.4 - 3.30.3",
+      "nodes": [
+        "node_modules/@tiptap/extension-strike"
+      ],
+      "fixAvailable": true
+    },
+    "@tiptap/extension-text": {
+      "name": "@tiptap/extension-text",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@tiptap/core"
+      ],
+      "effects": [],
+      "range": "<=3.0.0-next.8 || 3.22.4 - 3.30.3",
+      "nodes": [
+        "node_modules/@tiptap/extension-text"
+      ],
+      "fixAvailable": true
+    },
+    "@tiptap/extension-text-align": {
+      "name": "@tiptap/extension-text-align",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": [
+        "@tiptap/core"
+      ],
+      "effects": [],
+      "range": "<=3.0.0-next.8 || 3.22.4 - 3.30.3",
+      "nodes": [
+        "node_modules/@tiptap/extension-text-align"
+      ],
+      "fixAvailable": {
+        "name": "@tiptap/extension-text-align",
+        "version": "3.34.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@tiptap/extension-text-style": {
+      "name": "@tiptap/extension-text-style",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": [
+        "@tiptap/core"
+      ],
+      "effects": [
+        "@tiptap/extension-color",
+        "@tiptap/extension-font-family",
+        "@tiptap/starter-kit"
+      ],
+      "range": "<=3.0.0-next.8 || 3.22.4 - 3.30.3",
+      "nodes": [
+        "node_modules/@tiptap/extension-text-style"
+      ],
+      "fixAvailable": {
+        "name": "@tiptap/extension-text-style",
+        "version": "3.34.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@tiptap/extension-underline": {
+      "name": "@tiptap/extension-underline",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": [
+        "@tiptap/core"
+      ],
+      "effects": [],
+      "range": "<=3.0.0-next.8 || 3.22.4 - 3.30.3",
+      "nodes": [
+        "node_modules/@tiptap/extension-underline"
+      ],
+      "fixAvailable": {
+        "name": "@tiptap/extension-underline",
+        "version": "3.34.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@tiptap/extension-youtube": {
+      "name": "@tiptap/extension-youtube",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": [
+        "@tiptap/core"
+      ],
+      "effects": [],
+      "range": "<=3.0.0-next.8 || 3.22.4 - 3.30.3",
+      "nodes": [
+        "node_modules/@tiptap/extension-youtube"
+      ],
+      "fixAvailable": {
+        "name": "@tiptap/extension-youtube",
+        "version": "3.34.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@tiptap/react": {
+      "name": "@tiptap/react",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": [
+        "@tiptap/core",
+        "@tiptap/extension-bubble-menu",
+        "@tiptap/extension-floating-menu"
+      ],
+      "effects": [],
+      "range": "<=3.0.0-next.8 || 3.22.4 - 3.30.3",
+      "nodes": [
+        "node_modules/@tiptap/react"
+      ],
+      "fixAvailable": {
+        "name": "@tiptap/react",
+        "version": "3.34.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@tiptap/starter-kit": {
+      "name": "@tiptap/starter-kit",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": [
+        "@tiptap/core",
+        "@tiptap/extension-blockquote",
+        "@tiptap/extension-bold",
+        "@tiptap/extension-bullet-list",
+        "@tiptap/extension-code",
+        "@tiptap/extension-code-block",
+        "@tiptap/extension-document",
+        "@tiptap/extension-dropcursor",
+        "@tiptap/extension-gapcursor",
+        "@tiptap/extension-hard-break",
+        "@tiptap/extension-heading",
+        "@tiptap/extension-history",
+        "@tiptap/extension-horizontal-rule",
+        "@tiptap/extension-italic",
+        "@tiptap/extension-list-item",
+        "@tiptap/extension-ordered-list",
+        "@tiptap/extension-paragraph",
+        "@tiptap/extension-strike",
+        "@tiptap/extension-text",
+        "@tiptap/extension-text-style"
+      ],
+      "effects": [],
+      "range": "<=3.0.0-next.8 || 3.30.0 - 3.30.3",
+      "nodes": [
+        "node_modules/@tiptap/starter-kit"
+      ],
+      "fixAvailable": {
+        "name": "@tiptap/starter-kit",
+        "version": "3.34.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@tiptap/suggestion": {
+      "name": "@tiptap/suggestion",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": [
+        "@tiptap/core"
+      ],
+      "effects": [],
+      "range": "<=3.0.0-next.8 || 3.22.4 - 3.30.3",
+      "nodes": [
+        "node_modules/@tiptap/suggestion"
+      ],
+      "fixAvailable": {
+        "name": "@tiptap/suggestion",
+        "version": "3.34.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@typescript-eslint/eslint-plugin": {
+      "name": "@typescript-eslint/eslint-plugin",
+      "severity": "high",
+      "isDirect": true,
+      "via": [
+        "@typescript-eslint/type-utils",
+        "@typescript-eslint/utils"
+      ],
+      "effects": [],
+      "range": "6.16.0 - 7.5.0",
+      "nodes": [
+        "node_modules/@typescript-eslint/eslint-plugin"
+      ],
+      "fixAvailable": {
+        "name": "@typescript-eslint/eslint-plugin",
+        "version": "7.18.0",
+        "isSemVerMajor": false
+      }
+    },
+    "@typescript-eslint/parser": {
+      "name": "@typescript-eslint/parser",
+      "severity": "high",
+      "isDirect": true,
+      "via": [
+        "@typescript-eslint/typescript-estree"
+      ],
+      "effects": [],
+      "range": "6.16.0 - 7.5.0",
+      "nodes": [
+        "node_modules/@typescript-eslint/parser"
+      ],
+      "fixAvailable": {
+        "name": "@typescript-eslint/parser",
+        "version": "8.73.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@typescript-eslint/type-utils": {
+      "name": "@typescript-eslint/type-utils",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "@typescript-eslint/typescript-estree",
+        "@typescript-eslint/utils"
+      ],
+      "effects": [],
+      "range": "6.16.0 - 7.5.0",
+      "nodes": [
+        "node_modules/@typescript-eslint/type-utils"
+      ],
+      "fixAvailable": true
+    },
+    "@typescript-eslint/typescript-estree": {
+      "name": "@typescript-eslint/typescript-estree",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "minimatch"
+      ],
+      "effects": [
+        "@typescript-eslint/parser",
+        "@typescript-eslint/type-utils",
+        "@typescript-eslint/utils"
+      ],
+      "range": "6.16.0 - 7.5.0",
+      "nodes": [
+        "node_modules/@typescript-eslint/type-utils/node_modules/@typescript-eslint/typescript-estree",
+        "node_modules/@typescript-eslint/typescript-estree",
+        "node_modules/@typescript-eslint/utils/node_modules/@typescript-eslint/typescript-estree"
+      ],
+      "fixAvailable": {
+        "name": "@typescript-eslint/parser",
+        "version": "8.73.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@typescript-eslint/utils": {
+      "name": "@typescript-eslint/utils",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "@typescript-eslint/typescript-estree"
+      ],
+      "effects": [
+        "@typescript-eslint/eslint-plugin"
+      ],
+      "range": "6.16.0 - 7.5.0",
+      "nodes": [
+        "node_modules/@typescript-eslint/utils"
+      ],
+      "fixAvailable": {
+        "name": "@typescript-eslint/eslint-plugin",
+        "version": "7.18.0",
+        "isSemVerMajor": false
+      }
+    },
+    "brace-expansion": {
+      "name": "brace-expansion",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1130589,
+          "name": "brace-expansion",
+          "dependency": "brace-expansion",
+          "title": "brace-expansion: DoS via unbounded expansion length causing an out-of-memory process crash",
+          "url": "https://github.com/advisories/GHSA-mh99-v99m-4gvg",
+          "severity": "high",
+          "cwe": [
+            "CWE-400",
+            "CWE-770"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": ">=2.0.0 <2.1.3"
+        },
+        {
+          "source": 1130736,
+          "name": "brace-expansion",
+          "dependency": "brace-expansion",
+          "title": "brace-expansion: DoS via unbounded intermediate arrays, bypassing the CVE-2026-14257 mitigation",
+          "url": "https://github.com/advisories/GHSA-rgw5-rvv9-x895",
+          "severity": "high",
+          "cwe": [
+            "CWE-400",
+            "CWE-770"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": ">=2.0.0 <2.1.4"
+        },
+        {
+          "source": 1240101,
+          "name": "brace-expansion",
+          "dependency": "brace-expansion",
+          "title": "brace-expansion: Quadratic-time expansion of the `{a},b}` rewrite causes CPU denial of service",
+          "url": "https://github.com/advisories/GHSA-q2hr-2g5m-vwhr",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-400",
+            "CWE-407"
+          ],
+          "cvss": {
+            "score": 5.3,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+          },
+          "range": ">=2.0.0 <2.1.7"
+        },
+        {
+          "source": 1240105,
+          "name": "brace-expansion",
+          "dependency": "brace-expansion",
+          "title": "brace-expansion: DoS via uncontrolled recursion on nested brace groups causing stack exhaustion",
+          "url": "https://github.com/advisories/GHSA-qhr7-859c-m2p7",
+          "severity": "high",
+          "cwe": [
+            "CWE-400",
+            "CWE-674"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": ">=2.0.0 <2.1.6"
+        },
+        {
+          "source": 1240109,
+          "name": "brace-expansion",
+          "dependency": "brace-expansion",
+          "title": "brace-expansion: DoS via uncontrolled recursion in parseCommaParts causing stack exhaustion",
+          "url": "https://github.com/advisories/GHSA-6j4f-fj2g-mc7p",
+          "severity": "high",
+          "cwe": [
+            "CWE-400",
+            "CWE-674"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": ">=2.0.0 <2.1.5"
+        }
+      ],
+      "effects": [],
+      "range": "2.0.0 - 2.1.6",
+      "nodes": [
+        "node_modules/brace-expansion"
+      ],
+      "fixAvailable": true
+    },
+    "eslint-config-next": {
+      "name": "eslint-config-next",
+      "severity": "high",
+      "isDirect": true,
+      "via": [
+        "@next/eslint-plugin-next"
+      ],
+      "effects": [],
+      "range": "14.0.5-canary.0 - 15.0.0-rc.1",
+      "nodes": [
+        "node_modules/eslint-config-next"
+      ],
+      "fixAvailable": {
+        "name": "eslint-config-next",
+        "version": "16.4.6",
+        "isSemVerMajor": true
+      }
+    },
+    "glob": {
+      "name": "glob",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1109842,
+          "name": "glob",
+          "dependency": "glob",
+          "title": "glob CLI: Command injection via -c/--cmd executes matches with shell:true",
+          "url": "https://github.com/advisories/GHSA-5j98-mcp5-4vw2",
+          "severity": "high",
+          "cwe": [
+            "CWE-78"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H"
+          },
+          "range": ">=10.2.0 <10.5.0"
+        },
+        {
+          "source": 1244013,
+          "name": "glob",
+          "dependency": "glob",
+          "title": "Glob: AbortSignal cancellation bypass allows post-timeout filesystem traversal",
+          "url": "https://github.com/advisories/GHSA-3g3m-2fjr-6pw4",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-400"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": ">=9.0.0 <=14.0.1"
+        },
+        "minimatch"
+      ],
+      "effects": [
+        "@next/eslint-plugin-next",
+        "workbox-build"
+      ],
+      "range": "9.0.0 - 14.0.1",
+      "nodes": [
+        "node_modules/glob",
+        "node_modules/workbox-build/node_modules/glob"
+      ],
+      "fixAvailable": {
+        "name": "eslint-config-next",
+        "version": "16.4.6",
+        "isSemVerMajor": true
+      }
+    },
+    "graphql-config": {
+      "name": "graphql-config",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "minimatch"
+      ],
+      "effects": [
+        "@graphql-codegen/cli"
+      ],
+      "range": ">=5.1.1",
+      "nodes": [
+        "node_modules/graphql-config"
+      ],
+      "fixAvailable": {
+        "name": "@graphql-codegen/cli",
+        "version": "8.0.0",
+        "isSemVerMajor": true
+      }
+    },
+    "lint-staged": {
+      "name": "lint-staged",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": [
+        "yaml"
+      ],
+      "effects": [],
+      "range": "13.3.0 - 15.4.1 || 16.2.0",
+      "nodes": [
+        "node_modules/lint-staged"
+      ],
+      "fixAvailable": {
+        "name": "lint-staged",
+        "version": "15.5.2",
+        "isSemVerMajor": false
+      }
+    },
+    "lodash": {
+      "name": "lodash",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1115806,
+          "name": "lodash",
+          "dependency": "lodash",
+          "title": "lodash vulnerable to Code Injection via `_.template` imports key names",
+          "url": "https://github.com/advisories/GHSA-r5fr-rjxr-66jc",
+          "severity": "high",
+          "cwe": [
+            "CWE-94"
+          ],
+          "cvss": {
+            "score": 8.1,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H"
+          },
+          "range": ">=4.0.0 <=4.17.23"
+        },
+        {
+          "source": 1244437,
+          "name": "lodash",
+          "dependency": "lodash",
+          "title": "lodash vulnerable to prototype pollution via array-path bypass in `_.unset`, `_.omit`, and `_.pullAt",
+          "url": "https://github.com/advisories/GHSA-f23m-r3pf-42rh",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-1321"
+          ],
+          "cvss": {
+            "score": 6.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:L"
+          },
+          "range": "=4.17.23"
+        }
+      ],
+      "effects": [
+        "@graphql-codegen/plugin-helpers"
+      ],
+      "range": "4.0.0 - 4.17.23",
+      "nodes": [
+        "node_modules/lodash"
+      ],
+      "fixAvailable": {
+        "name": "@graphql-codegen/cli",
+        "version": "8.0.0",
+        "isSemVerMajor": true
+      }
+    },
+    "minimatch": {
+      "name": "minimatch",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1113465,
+          "name": "minimatch",
+          "dependency": "minimatch",
+          "title": "minimatch has a ReDoS via repeated wildcards with non-matching literal in pattern",
+          "url": "https://github.com/advisories/GHSA-3ppc-4f35-3m26",
+          "severity": "high",
+          "cwe": [
+            "CWE-1333"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": ">=9.0.0 <9.0.6"
+        },
+        {
+          "source": 1113544,
+          "name": "minimatch",
+          "dependency": "minimatch",
+          "title": "minimatch has ReDoS: matchOne() combinatorial backtracking via multiple non-adjacent GLOBSTAR segments",
+          "url": "https://github.com/advisories/GHSA-7r86-cg39-jmmj",
+          "severity": "high",
+          "cwe": [
+            "CWE-407"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": ">=9.0.0 <9.0.7"
+        },
+        {
+          "source": 1113552,
+          "name": "minimatch",
+          "dependency": "minimatch",
+          "title": "minimatch ReDoS: nested *() extglobs generate catastrophically backtracking regular expressions",
+          "url": "https://github.com/advisories/GHSA-23c5-xmqv-rm74",
+          "severity": "high",
+          "cwe": [
+            "CWE-1333"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": ">=9.0.0 <9.0.7"
+        },
+        {
+          "source": 1244623,
+          "name": "minimatch",
+          "dependency": "minimatch",
+          "title": "minimatch has potential denial of service via globparts amplification",
+          "url": "https://github.com/advisories/GHSA-g3hv-75wg-m249",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-405"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": ">=7.0.0 <11.0.1"
+        }
+      ],
+      "effects": [
+        "@typescript-eslint/typescript-estree",
+        "glob",
+        "graphql-config"
+      ],
+      "range": "7.0.0 - 11.0.0",
+      "nodes": [
+        "node_modules/graphql-config/node_modules/minimatch",
+        "node_modules/minimatch",
+        "node_modules/workbox-build/node_modules/minimatch"
+      ],
+      "fixAvailable": {
+        "name": "@typescript-eslint/parser",
+        "version": "8.73.0",
+        "isSemVerMajor": true
+      }
+    },
+    "next": {
+      "name": "next",
+      "severity": "critical",
+      "isDirect": true,
+      "via": [
+        {
+          "source": 1112593,
+          "name": "next",
+          "dependency": "next",
+          "title": "Next.js self-hosted applications vulnerable to DoS via Image Optimizer remotePatterns configuration",
+          "url": "https://github.com/advisories/GHSA-9g9p-9gw9-jx7f",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-400",
+            "CWE-770"
+          ],
+          "cvss": {
+            "score": 5.9,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": ">=10.0.0 <15.5.10"
+        },
+        {
+          "source": 1112653,
+          "name": "next",
+          "dependency": "next",
+          "title": "Next.js HTTP request deserialization can lead to DoS when using insecure React Server Components",
+          "url": "https://github.com/advisories/GHSA-h25m-26qc-wcjf",
+          "severity": "high",
+          "cwe": [
+            "CWE-400",
+            "CWE-502"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": ">=13.0.0 <15.0.8"
+        },
+        {
+          "source": 1114897,
+          "name": "next",
+          "dependency": "next",
+          "title": "Next.js: HTTP request smuggling in rewrites",
+          "url": "https://github.com/advisories/GHSA-ggv3-7p47-pfv8",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-444"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": ">=9.5.0 <15.5.13"
+        },
+        {
+          "source": 1114940,
+          "name": "next",
+          "dependency": "next",
+          "title": "Next.js: Unbounded next/image disk cache growth can exhaust storage",
+          "url": "https://github.com/advisories/GHSA-3x4c-7xq6-9pq8",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-400"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": ">=10.0.0 <15.5.14"
+        },
+        {
+          "source": 1116376,
+          "name": "next",
+          "dependency": "next",
+          "title": "Next.js has a Denial of Service with Server Components",
+          "url": "https://github.com/advisories/GHSA-q4gf-8mx6-v5v3",
+          "severity": "high",
+          "cwe": [
+            "CWE-770"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": ">=13.0.0 <15.5.15"
+        },
+        {
+          "source": 1117931,
+          "name": "next",
+          "dependency": "next",
+          "title": "Next.js Vulnerable to Denial of Service with Server Components",
+          "url": "https://github.com/advisories/GHSA-8h8q-6873-q5fj",
+          "severity": "high",
+          "cwe": [
+            "CWE-770"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": ">=13.0.0 <15.5.16"
+        },
+        {
+          "source": 1118942,
+          "name": "next",
+          "dependency": "next",
+          "title": "Next.js's Middleware / Proxy redirects can be cache-poisoned",
+          "url": "https://github.com/advisories/GHSA-3g8h-86w9-wvmq",
+          "severity": "low",
+          "cwe": [
+            "CWE-349"
+          ],
+          "cvss": {
+            "score": 3.7,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L"
+          },
+          "range": ">=12.2.0 <15.5.16"
+        },
+        {
+          "source": 1118944,
+          "name": "next",
+          "dependency": "next",
+          "title": "Next.js vulnerable to cross-site scripting in App Router applications using CSP nonces",
+          "url": "https://github.com/advisories/GHSA-ffhc-5mcf-pf4q",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-79"
+          ],
+          "cvss": {
+            "score": 4.7,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:C/C:L/I:L/A:N"
+          },
+          "range": ">=13.4.0 <15.5.16"
+        },
+        {
+          "source": 1118946,
+          "name": "next",
+          "dependency": "next",
+          "title": "Next.js vulnerable to cache poisoning via collisions in React Server Component cache-busting",
+          "url": "https://github.com/advisories/GHSA-vfv6-92ff-j949",
+          "severity": "low",
+          "cwe": [
+            "CWE-328"
+          ],
+          "cvss": {
+            "score": 3.7,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N"
+          },
+          "range": ">=13.4.6 <15.5.16"
+        },
+        {
+          "source": 1118948,
+          "name": "next",
+          "dependency": "next",
+          "title": "Next.js has cross-site scripting in beforeInteractive scripts with untrusted input",
+          "url": "https://github.com/advisories/GHSA-gx5p-jg67-6x7h",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-79"
+          ],
+          "cvss": {
+            "score": 6.1,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+          },
+          "range": ">=13.0.0 <15.5.16"
+        },
+        {
+          "source": 1118952,
+          "name": "next",
+          "dependency": "next",
+          "title": "Next.js has a Denial of Service in the Image Optimization API",
+          "url": "https://github.com/advisories/GHSA-h64f-5h5j-jqjh",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-770"
+          ],
+          "cvss": {
+            "score": 5.9,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": ">=10.0.0 <15.5.16"
+        },
+        {
+          "source": 1118954,
+          "name": "next",
+          "dependency": "next",
+          "title": "Next.js vulnerable to server-side request forgery in applications using WebSocket upgrades",
+          "url": "https://github.com/advisories/GHSA-c4j6-fc7j-m34r",
+          "severity": "high",
+          "cwe": [
+            "CWE-918"
+          ],
+          "cvss": {
+            "score": 8.6,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:N/A:N"
+          },
+          "range": ">=13.4.13 <15.5.16"
+        },
+        {
+          "source": 1118958,
+          "name": "next",
+          "dependency": "next",
+          "title": "Next.js vulnerable to cache poisoning in React Server Component responses",
+          "url": "https://github.com/advisories/GHSA-wfc6-r584-vfw7",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-436"
+          ],
+          "cvss": {
+            "score": 5.4,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:N/I:L/A:L"
+          },
+          "range": ">=14.2.0 <15.5.16"
+        },
+        {
+          "source": 1118962,
+          "name": "next",
+          "dependency": "next",
+          "title": "Next.js has a Middleware / Proxy bypass in Pages Router applications using i18n",
+          "url": "https://github.com/advisories/GHSA-36qx-fr4f-26g5",
+          "severity": "high",
+          "cwe": [
+            "CWE-863"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
+          },
+          "range": ">=12.2.0 <15.5.16"
+        },
+        {
+          "source": 1124172,
+          "name": "next",
+          "dependency": "next",
+          "title": "Next.js: Denial of Service in App Router using Server Actions",
+          "url": "https://github.com/advisories/GHSA-m99w-x7hq-7vfj",
+          "severity": "high",
+          "cwe": [
+            "CWE-834"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": ">=13.0.0 <15.5.21"
+        },
+        {
+          "source": 1124185,
+          "name": "next",
+          "dependency": "next",
+          "title": "Next.js: Server-Side Request Forgery in Server Actions on custom servers",
+          "url": "https://github.com/advisories/GHSA-89xv-2m56-2m9x",
+          "severity": "high",
+          "cwe": [
+            "CWE-918"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": ">=14.1.1 <15.5.21"
+        },
+        {
+          "source": 1124187,
+          "name": "next",
+          "dependency": "next",
+          "title": "Next.js: Cache confusion of response bodies for requests with bodies",
+          "url": "https://github.com/advisories/GHSA-68g3-v927-f742",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-524"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": ">=13.0.0 <15.5.21"
+        },
+        {
+          "source": 1124189,
+          "name": "next",
+          "dependency": "next",
+          "title": "Next.js: Cache confusion of response bodies for requests with bodies containing invalid UTF-8 byte sequences",
+          "url": "https://github.com/advisories/GHSA-4633-3j49-mh5q",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-116"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": ">=13.0.0 <15.5.21"
+        },
+        {
+          "source": 1124191,
+          "name": "next",
+          "dependency": "next",
+          "title": "Next.js: Unbounded Server Action payload in Edge runtime",
+          "url": "https://github.com/advisories/GHSA-4c39-4ccg-62r3",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-770"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": ">=13.0.0 <15.5.21"
+        },
+        {
+          "source": 1124193,
+          "name": "next",
+          "dependency": "next",
+          "title": "Next.js: Server-Side Request Forgery in rewrites via attacker-controlled destination hostname",
+          "url": "https://github.com/advisories/GHSA-p9j2-gv94-2wf4",
+          "severity": "high",
+          "cwe": [
+            "CWE-918"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": ">=12.0.0 <15.5.21"
+        },
+        {
+          "source": 1124197,
+          "name": "next",
+          "dependency": "next",
+          "title": "Next.js: Unauthenticated disclosure of internal Server Function endpoints",
+          "url": "https://github.com/advisories/GHSA-955p-x3mx-jcvp",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-201"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": ">=13.0.0 <15.5.21"
+        },
+        {
+          "source": 1193677,
+          "name": "next",
+          "dependency": "next",
+          "title": "Next.js: Unauthenticated Remote Code Execution on windows-hosted servers",
+          "url": "https://github.com/advisories/GHSA-p293-qw3h-jr36",
+          "severity": "critical",
+          "cwe": [
+            "CWE-22"
+          ],
+          "cvss": {
+            "score": 9,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:H"
+          },
+          "range": ">=13.4.0 <15.5.24"
+        },
+        {
+          "source": 1193733,
+          "name": "next",
+          "dependency": "next",
+          "title": "Next.js: Unauthenticated Remote Code Execution in Image Optimization API when AVIF files are used",
+          "url": "https://github.com/advisories/GHSA-2xp9-vwfh-vxw4",
+          "severity": "critical",
+          "cwe": [
+            "CWE-1395"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": ">=10.0.0 <15.5.24"
+        },
+        {
+          "source": 1242817,
+          "name": "next",
+          "dependency": "next",
+          "title": "Next.js: Unauthenticated Remote Code Execution in Image Optimization API when SVG files are used",
+          "url": "https://github.com/advisories/GHSA-2464-fhr4-w9xw",
+          "severity": "critical",
+          "cwe": [
+            "CWE-1395"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": ">=10.0.0 <=15.5.27"
+        },
+        {
+          "source": 1242819,
+          "name": "next",
+          "dependency": "next",
+          "title": "Next.js: Denial of Service in App Router using Server Actions",
+          "url": "https://github.com/advisories/GHSA-p3m5-59mp-jv5r",
+          "severity": "high",
+          "cwe": [
+            "CWE-770"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": ">=13.0.0 <=15.5.27"
+        },
+        "postcss"
+      ],
+      "effects": [],
+      "range": "9.3.4-canary.0 - 16.3.0-preview.10",
+      "nodes": [
+        "node_modules/next"
+      ],
+      "fixAvailable": {
+        "name": "next",
+        "version": "16.4.6",
+        "isSemVerMajor": true
+      }
+    },
+    "next-pwa": {
+      "name": "next-pwa",
+      "severity": "high",
+      "isDirect": true,
+      "via": [
+        "workbox-webpack-plugin"
+      ],
+      "effects": [],
+      "range": ">=2.1.0",
+      "nodes": [
+        "node_modules/next-pwa"
+      ],
+      "fixAvailable": {
+        "name": "next-pwa",
+        "version": "2.0.2",
+        "isSemVerMajor": true
+      }
+    },
+    "postcss": {
+      "name": "postcss",
+      "severity": "high",
+      "isDirect": true,
+      "via": [
+        {
+          "source": 1117015,
+          "name": "postcss",
+          "dependency": "postcss",
+          "title": "PostCSS has XSS via Unescaped </style> in its CSS Stringify Output",
+          "url": "https://github.com/advisories/GHSA-qx2v-qp2m-jg93",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-79"
+          ],
+          "cvss": {
+            "score": 6.1,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+          },
+          "range": "<8.5.10"
+        },
+        {
+          "source": 1124252,
+          "name": "postcss",
+          "dependency": "postcss",
+          "title": "PostCSS: Arbitrary file read and information disclosure via attacker-controlled sourceMappingURL in CSS comments",
+          "url": "https://github.com/advisories/GHSA-6g55-p6wh-862q",
+          "severity": "high",
+          "cwe": [
+            "CWE-22",
+            "CWE-200"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
+          },
+          "range": "<=8.5.11"
+        },
+        {
+          "source": 1130709,
+          "name": "postcss",
+          "dependency": "postcss",
+          "title": "PostCSS: incomplete fix of GHSA-6g55-p6wh-862q — attacker-controlled sourceMappingURL reads arbitrary .map files when `from` is unset",
+          "url": "https://github.com/advisories/GHSA-fxqj-rqcc-2cmp",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-22",
+            "CWE-200"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": "<=8.5.22"
+        },
+        {
+          "source": 1139510,
+          "name": "postcss",
+          "dependency": "postcss",
+          "title": "PostCSS: Path Traversal in Previous Source Map Auto-Loading (sourceMappingURL) leads to Arbitrary .map File Disclosure",
+          "url": "https://github.com/advisories/GHSA-r28c-9q8g-f849",
+          "severity": "high",
+          "cwe": [
+            "CWE-22"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
+          },
+          "range": "<=8.5.17"
+        }
+      ],
+      "effects": [
+        "next"
+      ],
+      "range": "<=8.5.22",
+      "nodes": [
+        "node_modules/next/node_modules/postcss",
+        "node_modules/postcss"
+      ],
+      "fixAvailable": {
+        "name": "next",
+        "version": "16.4.6",
+        "isSemVerMajor": true
+      }
+    },
+    "rollup-plugin-terser": {
+      "name": "rollup-plugin-terser",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "serialize-javascript"
+      ],
+      "effects": [
+        "workbox-build"
+      ],
+      "range": "3.0.0 || >=4.0.4",
+      "nodes": [
+        "node_modules/next-pwa/node_modules/rollup-plugin-terser"
+      ],
+      "fixAvailable": {
+        "name": "next-pwa",
+        "version": "2.0.2",
+        "isSemVerMajor": true
+      }
+    },
+    "serialize-javascript": {
+      "name": "serialize-javascript",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1113686,
+          "name": "serialize-javascript",
+          "dependency": "serialize-javascript",
+          "title": "Serialize JavaScript is Vulnerable to RCE via RegExp.flags and Date.prototype.toISOString()",
+          "url": "https://github.com/advisories/GHSA-5c6j-r48x-rmvq",
+          "severity": "high",
+          "cwe": [
+            "CWE-96"
+          ],
+          "cvss": {
+            "score": 8.1,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H"
+          },
+          "range": "<=7.0.2"
+        },
+        {
+          "source": 1243082,
+          "name": "serialize-javascript",
+          "dependency": "serialize-javascript",
+          "title": "Serialize JavaScript: Cross-site scripting (XSS) via unescaped </script at the end of a serialized function body",
+          "url": "https://github.com/advisories/GHSA-m5mm-p8h7-m29v",
+          "severity": "low",
+          "cwe": [
+            "CWE-79"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": "<7.1.3"
+        }
+      ],
+      "effects": [
+        "rollup-plugin-terser"
+      ],
+      "range": "<=7.1.2",
+      "nodes": [
+        "node_modules/next-pwa/node_modules/serialize-javascript"
+      ],
+      "fixAvailable": {
+        "name": "next-pwa",
+        "version": "2.0.2",
+        "isSemVerMajor": true
+      }
+    },
+    "workbox-build": {
+      "name": "workbox-build",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "glob",
+        "rollup-plugin-terser"
+      ],
+      "effects": [
+        "workbox-webpack-plugin"
+      ],
+      "range": ">=7.4.0 || 5.0.0-alpha.0 - 7.0.0",
+      "nodes": [
+        "node_modules/next-pwa/node_modules/workbox-build",
+        "node_modules/workbox-build"
+      ],
+      "fixAvailable": {
+        "name": "next-pwa",
+        "version": "2.0.2",
+        "isSemVerMajor": true
+      }
+    },
+    "workbox-webpack-plugin": {
+      "name": "workbox-webpack-plugin",
+      "severity": "high",
+      "isDirect": true,
+      "via": [
+        "workbox-build",
+        "workbox-build"
+      ],
+      "effects": [
+        "next-pwa"
+      ],
+      "range": ">=7.4.0 || 5.0.0-alpha.0 - 7.0.0",
+      "nodes": [
+        "node_modules/next-pwa/node_modules/workbox-webpack-plugin",
+        "node_modules/workbox-webpack-plugin"
+      ],
+      "fixAvailable": {
+        "name": "next-pwa",
+        "version": "2.0.2",
+        "isSemVerMajor": true
+      }
+    },
+    "yaml": {
+      "name": "yaml",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1115556,
+          "name": "yaml",
+          "dependency": "yaml",
+          "title": "yaml is vulnerable to Stack Overflow via deeply nested YAML collections",
+          "url": "https://github.com/advisories/GHSA-48c2-rrv3-qjmp",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-674"
+          ],
+          "cvss": {
+            "score": 4.3,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:L"
+          },
+          "range": ">=2.0.0 <2.8.3"
+        }
+      ],
+      "effects": [
+        "lint-staged"
+      ],
+      "range": "2.0.0 - 2.8.2",
+      "nodes": [
+        "node_modules/lint-staged/node_modules/yaml"
+      ],
+      "fixAvailable": {
+        "name": "lint-staged",
+        "version": "15.5.2",
+        "isSemVerMajor": false
+      }
+    },
+    "zod": {
+      "name": "zod",
+      "severity": "high",
+      "isDirect": true,
+      "via": [
+        {
+          "source": 1243066,
+          "name": "zod",
+          "dependency": "zod",
+          "title": "Zod can exhaust memory while validating oversized constrained collections",
+          "url": "https://github.com/advisories/GHSA-mrhx-c7xc-m3w5",
+          "severity": "high",
+          "cwe": [
+            "CWE-770"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": "<4.6.6"
+        }
+      ],
+      "effects": [],
+      "range": "<4.6.6",
+      "nodes": [
+        "node_modules/zod"
+      ],
+      "fixAvailable": {
+        "name": "zod",
+        "version": "4.6.7",
+        "isSemVerMajor": true
+      }
+    }
+  },
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 35,
+      "high": 41,
+      "critical": 1,
+      "total": 77
+    },
+    "dependencies": {
+      "prod": 737,
+      "dev": 525,
+      "optional": 64,
+      "peer": 47,
+      "peerOptional": 0,
+      "total": 1343
+    }
+  }
+}

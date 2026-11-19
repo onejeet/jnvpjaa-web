@@ -143,7 +143,13 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ toolsHidden = [], default
         onClose={() => setAlignAnchor(null)}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       >
-        <Box role="group" aria-label="Choose alignment" sx={{ display: 'flex', p: 0.5 }}>
+        {/* Choosing focuses the editor, outside the popover, so Escape can't reach it: close on choice. */}
+        <Box
+          role="group"
+          aria-label="Choose alignment"
+          onClick={() => setAlignAnchor(null)}
+          sx={{ display: 'flex', p: 0.5 }}
+        >
           {(['left', 'center', 'right', 'justify'] as TAlign[]).map((format) => (
             <AlignButton key={format} format={format} />
           ))}
