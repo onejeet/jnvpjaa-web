@@ -1,6 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
 import React from 'react';
+import { assetUrl, brand, t } from '@/config/tenant';
 
 const SloganBanner = () => {
   return (
@@ -54,11 +55,7 @@ const SloganBanner = () => {
           },
         }}
       >
-        {`JNVPJAA is an alumni association of ex-students who once studied at the cherished Jawahar Navodaya Vidyalaya,
-        Paota, Jaipur. The school, tucked away in the Paota village of Rajasthan's Jaipur district, is among several
-        hundred JNVs conceptualized, funded and managed by Navodaya Vidyalaya Samiti, a semi-autonomous body under the
-        aegis of federal government's Ministry of Human Resource Development. The JNVs, one mandated for each district,
-        are wonderful examples of state sponsorship of fully-residential quality education at an unprecedented scale.`}
+        {t('home.aboutBody')}
       </Typography>
 
       <Box
@@ -69,10 +66,10 @@ const SloganBanner = () => {
         mt="-30px"
       >
         <Image
-          src="https://assets.jnvpjaa.org/svg/alumni-impact.svg"
+          src={assetUrl('/svg/alumni-impact.svg')}
           width={600}
           height={400}
-          alt="JNVPJAA Imapact"
+          alt={`${brand.shortName} impact`}
           layout="responsive"
         />
       </Box>

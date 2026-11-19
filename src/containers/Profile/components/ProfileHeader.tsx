@@ -24,6 +24,7 @@ import ProfilePictureUpload from '@/modules/ProfileSetup/ProfilePictureUpload';
 import { GET_OR_CREATE_PROFILE_COVER } from '@/apollo/profileCoverOperations';
 import { UNSPLASH_HOME, withUnsplashReferral } from '@/utils/unsplash';
 import { MEMBER_MANAGEMENT_ELIGIBILITY, SET_MEMBER_DISABLED } from '@/apollo/memberOperations';
+import { brand } from '@/config/tenant';
 
 const profilePositionRoleCodes = new Set([ROLE_CODES.BATCH_COORDINATOR, ROLE_CODES.FINANCE_MANAGER]);
 
@@ -157,7 +158,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
         type: 'custom',
         title: user?.isConfidential ? 'Make Contact Info Protected' : 'Keep Contact Info Private',
         message: user?.isConfidential
-          ? `${user?.firstName || ''}'s email and phone number will be visible to all the verified alumni of JNVPJAA. Rest assured, the data still be not visible to public.`
+          ? `${user?.firstName || ''}'s email and phone number will be visible to all the verified alumni of ${brand.shortName}. Rest assured, the data still be not visible to public.`
           : `${user?.firstName || ''}'s email and phone number will remain completely hidden—no one will be able to access them.`,
         onOkay: () => {
           showAlert(
@@ -196,7 +197,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
                   type: 'success',
                   title: user?.isConfidential ? 'Contact Info is Protected' : 'Contact Info is Private',
                   message: user?.isConfidential
-                    ? `${user?.firstName || ''}'s email and phone number will be visible to all the verified alumni of JNVPJAA. Rest assured, they data still be not visible to public.`
+                    ? `${user?.firstName || ''}'s email and phone number will be visible to all the verified alumni of ${brand.shortName}. Rest assured, they data still be not visible to public.`
                     : `${user?.firstName || ''}'s email and phone number will remain completely hidden—no one will be able to access them.`,
                   action: 'success',
                 },

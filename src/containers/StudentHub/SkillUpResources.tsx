@@ -2,6 +2,7 @@ import { Paper, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Breadcrumbs from '@/components/common/Breadcrumbs';
 import EmptyView from '@/components/common/EmptyView';
+import { assetUrl, brand } from '@/config/tenant';
 
 const breadcrumbsList = [
   {
@@ -36,7 +37,7 @@ const SkillUpResources = () => {
           </Typography>
           <EmptyView message="Coming Soon" />
           {/* <Image
-            src="https://assets.jnvpjaa.org/svg/under_construction.svg"
+            src={assetUrl('/svg/under_construction.svg')}
             width={417}
             height={200}
             layout="fixed"
@@ -50,7 +51,7 @@ const SkillUpResources = () => {
             sx={{ borderRadius: '10px', maxWidth: '100%', maxHeight: '400px', overflow: 'hidden' }}
           >
             <img
-              src="https://assets.jnvpjaa.org/images/contact-us-3.webp"
+              src={assetUrl('/images/contact-us-3.webp')}
               width="100%"
               alt="mission"
               style={{ objectFit: 'scale-down', position: 'relative' }}
@@ -60,12 +61,12 @@ const SkillUpResources = () => {
             <FmdGoodIcon sx={{ mr: '10px' }} /> Registered Address
           </Typography>
           <Typography color="grey.800" mt={2}>
-            JNV Paota Jaipur Alumni Association, <br />
+            {brand.legalName}, <br />
             35, Karani Colony, Shanti Nagar, <br />
             Opposite NBC, Khatipura Road, Jaipur, Rajasthan 302006, India.
           </Typography>
           <Typography color="grey.800" mt={2}>
-            Email: alumni@jnvpjaa.org <br /> <br />
+            Email: {brand.contact.email} <br /> <br />
             For any urgent help, please contact through Batch Coordinators.
           </Typography> */}
         </Box>

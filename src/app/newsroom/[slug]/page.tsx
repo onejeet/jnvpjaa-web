@@ -7,6 +7,7 @@ import { SEO_CONFIG, canonicalUrl, generateSchema } from '@/config/seo.config';
 import { NewsArticle } from '@/containers/Newsroom';
 import { NO_STORE } from '@/modules/Newsroom/newsroom.utils';
 import { initializeApollo } from '@/utils/apollo';
+import { brand } from '@/config/tenant';
 
 export const dynamic = 'force-dynamic';
 
@@ -28,7 +29,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
   const url = canonicalUrl(`/newsroom/${encodeURIComponent(post.slug)}`);
   const image = post.cover?.url || SEO_CONFIG.defaultImage;
-  const title = `${post.title} | JNVPJAA Newsroom`;
+  const title = `${post.title} | ${brand.shortName} Newsroom`;
   return {
     title: { absolute: title },
     description: post.summary,

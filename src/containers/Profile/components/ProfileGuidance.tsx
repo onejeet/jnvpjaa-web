@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Alert, Box, Button, Paper, Stack, Typography } from '@mui/material';
 import { useProfile } from '@/context/ProfileContext';
 import React from 'react';
+import { brand } from '@/config/tenant';
 
 export default function ProfileGuidance() {
   const { user, isCurrentUserProfile } = useProfile();
@@ -50,7 +51,11 @@ export default function ProfileGuidance() {
             {user.firstName} {user.lastName}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {user.batch === 0 ? 'Faculty' : user.batch ? `Batch of ${user.batch}` : 'JNV Paota member'}
+            {user.batch === 0
+              ? 'Faculty'
+              : user.batch
+                ? `Batch of ${user.batch}`
+                : `${brand.institution.shortName} member`}
             {user.companyInfo?.[0]?.position && user.companyInfo?.[0]?.companyName
               ? ` · ${user.companyInfo[0].position} at ${user.companyInfo[0].companyName}`
               : ''}

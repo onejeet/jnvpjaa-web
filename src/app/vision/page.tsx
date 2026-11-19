@@ -6,13 +6,13 @@ import LayoutModule from '@/layouts/Layout';
 import { contentPageMetadata } from '@/modules/ContentPages/contentPageMetadata';
 import type { TextFields } from '@/modules/ContentPages/contentPages.schema';
 import { getContentPage } from '@/modules/ContentPages/getContentPage';
+import { brand } from '@/config/tenant';
 
 export const dynamic = 'force-dynamic';
 
 const FALLBACK = {
-  title: 'Vision & Mission • Alumni Network of JNV Paota, Jaipur',
-  description:
-    'Learn about the JNVPJAA vision and mission for connecting JNV Paota alumni and supporting students and the school community.',
+  title: `Vision & Mission • ${brand.tagline}`,
+  description: `Learn about the ${brand.shortName} vision and mission for connecting ${brand.institution.shortName} alumni and supporting students and the school community.`,
 };
 
 export const generateMetadata = () => contentPageMetadata('vision', FALLBACK);
@@ -24,12 +24,12 @@ export default async function VisionPage() {
     <>
       <JsonLd
         data={generateSchema.webPage(
-          'JNVPJAA Vision and Mission',
+          `${brand.shortName} Vision and Mission`,
           '/vision/',
           page.seoDescription || FALLBACK.description
         )}
       />
-      <LayoutModule disableCover title="Vision & Mission • Alumni Network of JNV Paota, Jaipur" containerProps={{}}>
+      <LayoutModule disableCover title={`Vision & Mission • ${brand.tagline}`} containerProps={{}}>
         <TextPage fields={page.fields} crumb="Vision & Mission" />
       </LayoutModule>
     </>

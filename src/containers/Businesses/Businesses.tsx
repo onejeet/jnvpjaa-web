@@ -12,6 +12,7 @@ import BusinessListFilters from './components/BusinessListFilters';
 import { useSearchParams } from 'next/navigation';
 import Dialog from '@/components/core/Dialog';
 import { BusinessListResponse } from '@/apollo/hooks';
+import { brand, t } from '@/config/tenant';
 
 interface BusinessesProps {
   data: BusinessListResponse;
@@ -36,7 +37,7 @@ const Businesses: React.FC<BusinessesProps> = ({ data }) => {
   return (
     <LayoutModule
       disableCover
-      title={`Businesses By Alumni • Alumni Network of JNV Paota, Jaipur`}
+      title={`Businesses By Alumni • ${brand.tagline}`}
       //   containerProps={{ sx: { py: 2 } }}
     >
       <Box display="flex" alignItems="start" gap={2} justifyContent="space-between">
@@ -71,10 +72,10 @@ const Businesses: React.FC<BusinessesProps> = ({ data }) => {
           footerProps={{ onOkay: () => setAddBusiness(false), okayButtonProps: { title: 'Okay' } }}
         >
           <Typography p={3}>
-            If you would like to list your business and gain visibility within the JNVPJAA alumni network, we invite you
-            to connect with the alumni association. Simply reach out to us at{' '}
-            <a href="mailto: jnvpjaaorg@gmail.com">jnvpjaaorg@gmail.com</a> with your business details, including the
-            name, description, and contact information. <br />
+            If you would like to list your business and gain visibility within the {brand.shortName} alumni network, we
+            invite you to connect with the alumni association. Simply reach out to us at{' '}
+            <a href={`mailto: ${t('businesses.listingEmail')}`}>{t('businesses.listingEmail')}</a> with your business
+            details, including the name, description, and contact information. <br />
             Our team will guide you through the process of getting your business featured and help you tap into the
             strength of our supportive alumni community.
           </Typography>

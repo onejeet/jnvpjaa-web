@@ -4,6 +4,7 @@ import { Box, Stack } from '@mui/material';
 
 import { EditorSection } from '@/components/editor/EditorShell';
 import { ImageInput, RichTextInput, TextInput } from './shared';
+import { brand } from '@/config/tenant';
 
 const MessageFields = () => (
   <Stack gap={3}>
@@ -20,7 +21,7 @@ const MessageFields = () => (
         <ImageInput name="fields.photo" label="Photo" hint="Shown beside the message." />
         <Box display="grid" gridTemplateColumns={{ xs: '1fr', sm: '1fr 1fr' }} gap={2}>
           <TextInput name="fields.signerName" label="Name" optional />
-          <TextInput name="fields.signerRole" label="Role" optional placeholder="President, JNVPJAA" />
+          <TextInput name="fields.signerRole" label="Role" optional placeholder={`President, ${brand.shortName}`} />
         </Box>
       </Stack>
     </EditorSection>

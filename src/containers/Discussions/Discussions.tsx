@@ -7,13 +7,14 @@ import { IconPlus, IconX } from '@tabler/icons-react';
 import DiscussionListModule from '@/modules/DiscussionListModule/DiscussionListModule';
 import React from 'react';
 import NewDiscussion from '@/modules/NewDiscussion';
+import { brand } from '@/config/tenant';
 
 export default function Discussions() {
   const [showNew, setShowNew] = React.useState(false);
   const [refreshKey, setRefreshKey] = React.useState(0);
 
   return (
-    <LayoutModule disableCover title={`Discussions • Alumni Network of JNV Paota, Jaipur`}>
+    <LayoutModule disableCover title={`Discussions • ${brand.tagline}`}>
       <Box display="flex" alignItems="start" justifyContent="space-between" mb={1}>
         <Box width="100%">
           <Typography variant="h1" mb={1}>

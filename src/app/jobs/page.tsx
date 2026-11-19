@@ -11,13 +11,18 @@ import {
 } from '@/modules/Jobs/jobs.utils';
 import { NO_STORE } from '@/modules/Newsroom/newsroom.utils';
 import { initializeApollo } from '@/utils/apollo';
+import { brand } from '@/config/tenant';
 
 // New openings must appear as soon as they are posted.
 export const dynamic = 'force-dynamic';
 
-const description = 'Jobs and internships shared by alumni of JNV Paota, Jaipur — apply in one step with your profile.';
+const description = `Jobs and internships shared by alumni of ${brand.institution.shortName}, ${brand.institution.city} — apply in one step with your profile.`;
 
-export const metadata = constructMetadata({ url: '/jobs/', title: 'Jobs & Internships • JNVPJAA', description });
+export const metadata = constructMetadata({
+  url: '/jobs/',
+  title: `Jobs & Internships • ${brand.shortName}`,
+  description,
+});
 
 type SearchParams = Record<string, string | string[] | undefined>;
 
@@ -59,7 +64,7 @@ export default async function JobsPage({ searchParams }: { searchParams: SearchP
   const { data, total, failed } = await getJobs(filters);
   return (
     <>
-      <JsonLd data={generateSchema.collectionPage('JNVPJAA Jobs & Internships', '/jobs/', description)} />
+      <JsonLd data={generateSchema.collectionPage(`${brand.shortName} Jobs & Internships`, '/jobs/', description)} />
       <JobsBoard jobs={data} total={total} filters={filters} failed={failed} />
     </>
   );

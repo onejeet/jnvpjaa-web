@@ -4,6 +4,7 @@ import { Box, Paper, Stack, Typography } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import Link from 'next/link';
 import AlumniArtwork from './AlumniArtwork';
+import { brand, t } from '@/config/tenant';
 
 type Props = {
   title: string;
@@ -71,7 +72,7 @@ export default function AuthShell({
           }}
         >
           <Typography variant="overline" sx={{ fontSize: 11, letterSpacing: '0.12em', color: 'primary.main' }}>
-            JNVPJAA · PAOTA, JAIPUR
+            {t('auth.kicker')}
           </Typography>
           <Typography
             component="p"
@@ -91,14 +92,14 @@ export default function AuthShell({
             sx={{ mt: 1.5, maxWidth: 270, lineHeight: 1.65, display: { xs: 'none', md: 'block' } }}
           >
             {registration
-              ? 'Your next chapter with the JNV Paota community starts here.'
+              ? `Your next chapter with the ${brand.institution.shortName} community starts here.`
               : 'Back to the people who made school feel like home.'}
           </Typography>
           <Box sx={{ mt: 4, color: 'primary.main', display: { xs: 'none', md: 'block' } }}>
             <AlumniArtwork />
           </Box>
           <Typography variant="caption" color="text.secondary" sx={{ mt: 2, display: { xs: 'none', md: 'block' } }}>
-            Jawahar Navodaya Vidyalaya · Paota
+            {t('auth.schoolCaption')}
           </Typography>
         </Box>
         <Box sx={{ p: { xs: 2.5, sm: 3, md: 4 }, minWidth: 0, alignSelf: 'center' }}>{content}</Box>

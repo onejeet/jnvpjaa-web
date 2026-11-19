@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Grid2 as Grid, Typography } from '@mui/material';
+import { assetUrl } from '@/config/tenant';
 
 const metrics = [
   {
@@ -31,7 +32,7 @@ export default function MetricsNumbers() {
     <Box py={{ xs: 2, sm: 3 }} bgcolor="grey.100" width="100%" display="flex">
       {/* <Typography variant="h1" fontSize="40px">
         Recent Stories & Experiences
-        <Image src="https://assets.jnvpjaa.org/svg/underline.svg" width={300} height={40} alt="uderline" />
+        <Image src={assetUrl('/svg/underline.svg')} width={300} height={40} alt="uderline" />
       </Typography> */}
       {/* <SpecialTitle title="Recent Stories & Experiences" /> */}
       <Box

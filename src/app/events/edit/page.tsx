@@ -3,6 +3,7 @@
 import LayoutModule from '@/layouts/Layout';
 import NewEvent from 'src/modules/NewEvent';
 import Breadcrumbs from '@/components/common/Breadcrumbs';
+import { brand } from '@/config/tenant';
 
 // Note: This is a Client Component because it requires authentication
 // Metadata is defined in the layout.tsx file
@@ -11,7 +12,7 @@ const breadcrumbsList = [{ label: 'Events', path: '/events' }, { label: 'Edit ev
 
 export default function EditEventPage() {
   return (
-    <LayoutModule disableCover title="Edit Event • Alumni Network of JNV Paota, Jaipur" containerProps={{}}>
+    <LayoutModule disableCover title={`Edit Event • ${brand.tagline}`} containerProps={{}}>
       <Breadcrumbs items={breadcrumbsList} />
       <NewEvent />
     </LayoutModule>

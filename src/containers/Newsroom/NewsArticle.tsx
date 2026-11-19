@@ -18,6 +18,7 @@ import { notoSerif } from '@/utils/theme/fonts';
 import { UNSPLASH_HOME } from '@/utils/unsplash';
 import { Kicker } from './NewsCard';
 import PressContact from './PressContact';
+import { brand } from '@/config/tenant';
 
 // Cover JSON is stored as sent, so only link credits that are plain https URLs.
 const isHttps = (url?: string | null) => Boolean(url && /^https:\/\//i.test(url));
@@ -29,7 +30,7 @@ const NewsArticle: React.FC<{ post: NewsPost }> = ({ post }) => {
   const canManage = can(PERMISSION_CODES.NEWSROOM_POST_MANAGE);
   const credits = post.cover?.credits;
   return (
-    <LayoutModule disableCover title={`${post.title} • JNVPJAA Newsroom`}>
+    <LayoutModule disableCover title={`${post.title} • ${brand.shortName} Newsroom`}>
       <Breadcrumbs items={[{ label: 'Newsroom', path: paths.newsroom.root }, { label: post.title }]} />
       {canManage && (
         <Stack direction="row" justifyContent="flex-end" sx={{ maxWidth: 760, mx: 'auto' }}>

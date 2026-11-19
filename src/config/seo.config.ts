@@ -1,16 +1,17 @@
 import { Metadata } from 'next';
 
-const siteUrl = 'https://jnvpjaa.org';
+import { brand, seo } from '@/config/tenant';
+
+const siteUrl = `https://${brand.domains.site}`;
 
 export const SEO_CONFIG = {
-  siteName: 'JNVPJAA',
-  title: 'JNVPJAA | JNV Paota Jaipur Alumni Association',
-  titleTemplate: '%s | JNVPJAA',
-  description:
-    'Connect with alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur. Explore JNVPJAA events, alumni stories, photo galleries and community initiatives.',
+  siteName: seo.siteName,
+  title: seo.title,
+  titleTemplate: seo.titleTemplate,
+  description: seo.description,
   url: siteUrl,
-  defaultImage: `${siteUrl}/assets/images/cover-2.webp`,
-  locale: 'en_IN',
+  defaultImage: `${siteUrl}${seo.defaultImage}`,
+  locale: seo.locale,
 };
 
 export function canonicalUrl(path: string): string {
@@ -40,8 +41,8 @@ export const defaultMetadata: Metadata = {
     images: [
       {
         url: SEO_CONFIG.defaultImage,
-        width: 1300,
-        height: 585,
+        width: seo.defaultImageSize.width,
+        height: seo.defaultImageSize.height,
         alt: SEO_CONFIG.siteName,
       },
     ],
@@ -83,7 +84,11 @@ export function constructMetadata({
   const canonical = canonicalUrl(url);
 
   return {
-    title: { absolute: customTitle.includes('JNVPJAA') ? customTitle : `${customTitle} | JNVPJAA` },
+    title: {
+      absolute: customTitle.includes(SEO_CONFIG.siteName)
+        ? customTitle
+        : SEO_CONFIG.titleTemplate.replace('%s', customTitle),
+    },
     description: description || SEO_CONFIG.description,
     alternates: {
       canonical,
@@ -131,7 +136,7 @@ export const generateSchema = {
     '@id': `${SEO_CONFIG.url}/#website`,
     name: SEO_CONFIG.siteName,
     url: SEO_CONFIG.url,
-    inLanguage: 'en-IN',
+    inLanguage: seo.language,
     publisher: { '@id': `${SEO_CONFIG.url}/#organization` },
   }),
   breadcrumb: (items: { name: string; url: string }[]) => ({
@@ -151,7 +156,7 @@ export const generateSchema = {
     name,
     description,
     url: canonicalUrl(path),
-    inLanguage: 'en-IN',
+    inLanguage: seo.language,
     isPartOf: { '@id': `${SEO_CONFIG.url}/#website` },
   }),
   webPage: (name: string, path: string, description: string, type = 'WebPage') => ({
@@ -161,7 +166,7 @@ export const generateSchema = {
     name,
     description,
     url: canonicalUrl(path),
-    inLanguage: 'en-IN',
+    inLanguage: seo.language,
     isPartOf: { '@id': `${SEO_CONFIG.url}/#website` },
   }),
   blogPosting: (blog: any) => ({
@@ -187,7 +192,7 @@ export const generateSchema = {
     dateCreated: blog.createdAt,
     dateModified: blog.updatedAt || blog.createdAt,
     description: blog.summary || undefined,
-    inLanguage: 'en-IN',
+    inLanguage: seo.language,
     mainEntityOfPage: {
       '@type': 'WebPage',
       '@id': canonicalUrl(`/blog/${encodeURIComponent(blog.slug)}`),
@@ -211,7 +216,7 @@ export const generateSchema = {
     datePublished: post.publishedAt,
     dateModified: post.updatedAt || post.publishedAt,
     description: post.summary || undefined,
-    inLanguage: 'en-IN',
+    inLanguage: seo.language,
     mainEntityOfPage: {
       '@type': 'WebPage',
       '@id': canonicalUrl(`/newsroom/${encodeURIComponent(post.slug)}`),

@@ -6,6 +6,7 @@ import { initializeApollo } from '@/utils/apollo';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
+import { brand } from '@/config/tenant';
 
 export const dynamic = 'force-dynamic';
 
@@ -24,8 +25,9 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   const album = await getPublicAlbum(params.id);
   if (!album) return { title: 'Album not found', robots: { index: false, follow: false } };
 
-  const title = `${album.title} | JNVPJAA Gallery`;
-  const description = album.description || `Photos from ${album.title}, shared by the JNVPJAA alumni community.`;
+  const title = `${album.title} | ${brand.shortName} Gallery`;
+  const description =
+    album.description || `Photos from ${album.title}, shared by the ${brand.shortName} alumni community.`;
   const url = canonicalUrl(`/gallery/${album.id}`);
   const image = album.coverImage || SEO_CONFIG.defaultImage;
 
@@ -57,7 +59,7 @@ export default async function SingleAlbumPage({ params }: { params: { id: string
         data={generateSchema.collectionPage(
           albumTitle,
           `/gallery/${album.id}/`,
-          album.description || `Photos from ${albumTitle}, shared by the JNVPJAA alumni community.`
+          album.description || `Photos from ${albumTitle}, shared by the ${brand.shortName} alumni community.`
         )}
       />
       <JsonLd

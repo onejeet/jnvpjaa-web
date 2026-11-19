@@ -9,6 +9,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { IconPalette as Palette } from '@tabler/icons-react';
 import { HexColorPicker } from 'react-colorful';
+import { brand } from '@/config/tenant';
 
 /* TYPES */
 import type { ColorPickerInputProps } from './ColorPickerInput.types';
@@ -136,7 +137,7 @@ const ColorPickerInput: React.FC<ColorPickerInputProps> = ({
         }}
       >
         <Box display="flex" width="100%" flexDirection="column">
-          <HexColorPicker color={value || '#081D13'} onChange={onChange} />
+          <HexColorPicker color={value || brand.theme.secondary.light} onChange={onChange} />
           <Box alignItems="center" display="flex" px="10px">
             <Typography color="grey.700" variant="subtitle2">
               #

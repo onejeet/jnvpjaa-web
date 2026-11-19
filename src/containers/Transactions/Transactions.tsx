@@ -13,6 +13,7 @@ import AddTransactionRecordModule from '@/modules/AddTransactionRecordModule';
 import SetOpeningBalanceModule from '@/modules/SetOpeningBalanceModule';
 import { GET_ASSOCIATION_OPENING_BALANCE_STATUS } from '@/apollo/billingOperations';
 import { EXECUTIVE_POSITION_CODES, PERMISSION_CODES } from '@/constants/access';
+import { brand } from '@/config/tenant';
 
 export default function Transactions() {
   const [addRecord, setAddRecord] = React.useState<boolean>(false);
@@ -37,7 +38,7 @@ export default function Transactions() {
   return (
     <LayoutModule
       disableCover
-      title={`Billing & Transactions • Alumni Network of JNV Paota, Jaipur`}
+      title={`Billing & Transactions • ${brand.tagline}`}
       //   containerProps={{ sx: { py: 2 } }}
     >
       <Box display="flex" alignItems="start" gap={2} justifyContent="space-between">

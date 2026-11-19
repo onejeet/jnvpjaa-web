@@ -5,6 +5,7 @@ import { Box, Tooltip, useMediaQuery, useTheme } from '@mui/material';
 import { IconLock as LockSimple } from '@tabler/icons-react';
 import Image from 'next/image';
 import React from 'react';
+import { assetUrl } from '@/config/tenant';
 
 interface Props {
   size?: number;
@@ -28,13 +29,7 @@ const VerifiedBadge: React.FC<Props> = ({ size, title, isPrivate, isPrivateInfoC
   return (
     <Box display="flex" alignItems="center" gap={0.5}>
       <Tooltip title={title || 'Verified by admin'} arrow placement="top">
-        <Image
-          src="https://assets.jnvpjaa.org/svg/verified.svg"
-          width={finalSize}
-          height={finalSize}
-          alt="verified user"
-          priority
-        />
+        <Image src={assetUrl('/svg/verified.svg')} width={finalSize} height={finalSize} alt="verified user" priority />
       </Tooltip>
       {isPrivate && user?.id && (
         <Tooltip

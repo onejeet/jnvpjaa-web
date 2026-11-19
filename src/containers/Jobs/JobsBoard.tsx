@@ -33,6 +33,7 @@ import {
 } from '@/modules/Jobs/jobs.utils';
 import JobCard from './JobCard';
 import { JobGridSkeleton } from './JobSkeletons';
+import { brand } from '@/config/tenant';
 
 interface JobsBoardProps {
   jobs: Job[];
@@ -156,7 +157,7 @@ const JobsBoard: React.FC<JobsBoardProps> = ({ jobs, total, filters: loaded, fai
   const retry = () => startTransition(() => router.refresh());
 
   return (
-    <LayoutModule disableCover title="Jobs & Internships • JNVPJAA">
+    <LayoutModule disableCover title={`Jobs & Internships • ${brand.shortName}`}>
       <Stack spacing={{ xs: 3, md: 4 }} pb={{ xs: 4, md: 6 }}>
         <Box display="flex" alignItems="flex-start" justifyContent="space-between" gap={2} flexWrap="wrap">
           <Box>

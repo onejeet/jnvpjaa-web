@@ -1,5 +1,6 @@
 import { dmSans } from '@/utils/theme/fonts';
 import { Box, Divider, Typography } from '@mui/material';
+import { assetUrl, t } from '@/config/tenant';
 
 const Hero = () => {
   return (
@@ -14,7 +15,7 @@ const Hero = () => {
         }}
         sx={{
           backgroundColor: 'grey.800',
-          backgroundImage: 'url(https://assets.jnvpjaa.org/images/cover.webp)',
+          backgroundImage: `url(${assetUrl('/images/cover.webp')})`,
           backgroundRepeat: 'no-repeat',
           // Phones: crop the photo instead of squashing it into a tall box.
           backgroundSize: { xs: 'cover', md: '100% 100%' },
@@ -58,7 +59,7 @@ const Hero = () => {
             color="grey.300"
             // sx={{ fontFamily: 'Playwrite CU' }}
           >
-            JNV Paota Alumni Network
+            {t('home.heroTitle')}
           </Typography> */}
         </Box>
         <Box
@@ -88,7 +89,7 @@ const Hero = () => {
             textAlign="center"
             color="background.paper"
           >
-            JNV Paota Alumni Network
+            {t('home.heroTitle')}
           </Typography>
         </Box>
       </Box>

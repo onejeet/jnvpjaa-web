@@ -48,6 +48,7 @@ import {
   Typography,
 } from '@mui/material';
 import { IconSend as PaperPlaneTilt, IconShieldCheck } from '@tabler/icons-react';
+import { brand } from '@/config/tenant';
 
 const batchRoles = [ROLE_CODES.BATCH_COORDINATOR, ROLE_CODES.BATCH_MENTOR];
 const roleUserPageSize = 25;
@@ -492,10 +493,10 @@ const AdminPanel = ({ section }: { section: AdminPanelSection }) => {
       });
       await sendEmail({
         variables: {
-          subject: '🙌 New JNVPJAA Portal Awaits – Let’s Go! 🎉 ',
+          subject: `🙌 New ${brand.shortName} Portal Awaits – Let’s Go! 🎉 `,
           template: 'newPortalWelcome',
           context: {
-            url: 'https://jnvpjaa.org',
+            url: `https://${brand.domains.site}`,
           },
         },
       });

@@ -75,6 +75,7 @@ import { GET_ASSOCIATION_WALLET_SUMMARY } from '@/apollo/billingOperations';
 import { invalidateActiveQueryFields, invalidateBillingLedgerQueries } from '@/apollo/cacheInvalidation';
 import { formatCurrency, getFullName, humanizeScholarshipStatus } from './helpers';
 import { useScholarshipLoginGuard } from './useScholarshipLoginGuard';
+import { brand } from '@/config/tenant';
 
 type DashboardCardConfig = {
   title: string;
@@ -1705,8 +1706,8 @@ const MentorFundReleaseDialog = ({
     >
       <Box p={2.5}>
         <Alert severity="info" sx={{ mb: 2 }}>
-          This records funds released by JNVPJAA to a batch mentor. The mentor will confirm the received amount before
-          it becomes available for beneficiary approvals.
+          This records funds released by {brand.shortName} to a batch mentor. The mentor will confirm the received
+          amount before it becomes available for beneficiary approvals.
         </Alert>
         <Stack spacing={{ xs: 4, md: 3 }}>
           <Paper variant="outlined" sx={{ p: 1.5, borderRadius: 1, bgcolor: 'success.50' }}>
@@ -1915,7 +1916,7 @@ export default function Scholarships() {
 
   if (!canRender) {
     return (
-      <LayoutModule disableCover title="Scholarships • Alumni Network of JNV Paota, Jaipur">
+      <LayoutModule disableCover title={`Scholarships • ${brand.tagline}`}>
         <Box py={8} display="flex" justifyContent="center">
           <CircularProgress size={28} />
         </Box>
@@ -1924,7 +1925,7 @@ export default function Scholarships() {
   }
 
   return (
-    <LayoutModule disableCover title="Scholarships • Alumni Network of JNV Paota, Jaipur">
+    <LayoutModule disableCover title={`Scholarships • ${brand.tagline}`}>
       <Box display="flex" alignItems="flex-start" justifyContent="space-between" gap={2} mb={2}>
         <Box>
           <Typography variant="h1">Scholarships</Typography>

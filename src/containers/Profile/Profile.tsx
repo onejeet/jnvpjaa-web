@@ -18,6 +18,7 @@ import Lottie from '@/components/common/DynamicLottie';
 import CelebratonConfetti from '@/components/common/CelebratonConfetti';
 import BusinessSection from './components/BusinessSection';
 import ProfileGuidance from './components/ProfileGuidance';
+import { brand } from '@/config/tenant';
 
 export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState('about');
@@ -31,7 +32,7 @@ export default function ProfilePage() {
     <>
       <LayoutModule
         disableCover
-        title={`${user?.firstName || ''} Profile • Alumni Network of JNV Paota, Jaipur`}
+        title={`${user?.firstName || ''} Profile • ${brand.tagline}`}
         containerProps={{ sx: { py: 0 } }}
       >
         <Box sx={{ my: 4 }}>

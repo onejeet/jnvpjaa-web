@@ -11,6 +11,7 @@ import ProfessionInfo from '@/modules/ProfileSetup/ProfessionInfo';
 import ProfilePictureUpload from '@/modules/ProfileSetup/ProfilePictureUpload';
 import Addresses from '@/modules/ProfileSetup/Addresses';
 import DataPrivacy from '@/modules/ProfileSetup/DataPrivacy';
+import { brand } from '@/config/tenant';
 
 const COMPLETE_PROFILE_SETUP = gql`
   mutation CompleteProfileSetup {
@@ -86,7 +87,7 @@ export default function ProfileSetup() {
   const back = () => moveTo(Math.max(0, step - 1));
 
   return (
-    <LayoutModule disableCover title="Profile Setup • Alumni Network of JNV Paota, Jaipur">
+    <LayoutModule disableCover title={`Profile Setup • ${brand.tagline}`}>
       <Box sx={{ maxWidth: 760, mx: 'auto', py: { xs: 2, md: 4 }, px: { xs: 1, md: 0 } }}>
         <Stack spacing={1} mb={3}>
           <Typography variant="overline" color="primary.main">

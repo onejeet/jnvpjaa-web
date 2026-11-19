@@ -28,6 +28,7 @@ import { Box } from '@mui/material';
 import { IconCircleCheck, IconEye, IconPencil } from '@tabler/icons-react';
 import { notFound, useParams, useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
+import { brand } from '@/config/tenant';
 
 const safeDecode = (value: string) => {
   try {
@@ -320,7 +321,7 @@ const SingleBlog: React.FC<SingleBlogProps> = ({ blog: prerenderedBlog }) => {
   }
 
   return (
-    <LayoutModule disableCover title={`${blog?.title || 'Blog'} • Alumni Network of JNV Paota, Jaipur`}>
+    <LayoutModule disableCover title={`${blog?.title || 'Blog'} • ${brand.tagline}`}>
       <Box mb={1} display="flex" justifyContent="start" alignItems="center" flexWrap="wrap">
         <Breadcrumbs items={breadcrumbsList} loading={dataLoading} />
         {buttonProps && (

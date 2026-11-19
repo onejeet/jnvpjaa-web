@@ -5,6 +5,7 @@ import { UserBasic } from '@/apollo/hooks';
 import ProfilePicture from '../ProfilePicture';
 import Image from 'next/image';
 import { formatCompactNumber } from '@/utils/helpers';
+import { assetUrl } from '@/config/tenant';
 
 interface ClapButtonProps {
   initialClaps?: number;
@@ -54,7 +55,7 @@ const ClapButton: React.FC<ClapButtonProps> = ({
           alignItems: 'center',
         }}
       >
-        <Image src="https://assets.jnvpjaa.org/svg/clap_icon.svg" width={20} height={20} alt="claps" />
+        <Image src={assetUrl('/svg/clap_icon.svg')} width={20} height={20} alt="claps" />
 
         {total > 0 && (
           <Typography
@@ -85,7 +86,7 @@ const ClapButton: React.FC<ClapButtonProps> = ({
                 sm: '24px',
               },
               fontWeight: 500,
-              background: 'linear-gradient(90deg,#217bfe 10%, #078efb 30%, #C62835 100%)',
+              background: (t) => `linear-gradient(90deg,#217bfe 10%, #078efb 30%, ${t.palette.primary.main} 100%)`,
               backgroundClip: 'text',
               color: 'transparent',
             }}
@@ -138,7 +139,7 @@ const ClapButton: React.FC<ClapButtonProps> = ({
             },
           }}
         >
-          <Image src="https://assets.jnvpjaa.org/svg/clap_icon.svg" width={30} height={30} alt="claps" />
+          <Image src={assetUrl('/svg/clap_icon.svg')} width={30} height={30} alt="claps" />
 
           {total > 0 && (
             <Typography

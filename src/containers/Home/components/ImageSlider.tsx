@@ -9,73 +9,13 @@ import 'swiper/css/pagination';
 import { Box } from '@mui/material';
 import Image from 'next/image';
 import SpecialTitle from '@/components/common/SpecialTitle';
+import { assetUrl, content } from '@/config/tenant';
 
-const localSlides = [
-  {
-    url: 'https://assets.jnvpjaa.org/gallery/sports-fest-mar-2025-5.jpg',
-    createdAt: '2025-03-15 07:09:24',
-  },
-  {
-    url: 'https://assets.jnvpjaa.org/gallery/sports-fest-mar-2025-1.jpg',
-    createdAt: '2025-03-15 07:09:24',
-  },
-  {
-    url: 'https://assets.jnvpjaa.org/gallery/sports-fest-mar-2025-6.jpg',
-    createdAt: '2025-03-15 07:09:24',
-  },
-  {
-    url: 'https://assets.jnvpjaa.org/gallery/sports-fest-mar-2025-15.jpg',
-    createdAt: '2025-03-15 07:09:24',
-  },
-  {
-    url: 'https://assets.jnvpjaa.org/gallery/sports-fest-mar-2025-34.jpg',
-    createdAt: '2025-03-15 07:09:24',
-  },
-  {
-    url: 'https://assets.jnvpjaa.org/gallery/sports-fest-mar-2025-107.jpg',
-    createdAt: '2025-03-15 07:09:24',
-  },
-  {
-    url: 'https://assets.jnvpjaa.org/gallery/plantation-drive-july-27-2020-1.jpeg',
-    createdAt: '2020-07-28 07:09:24',
-  },
-  {
-    url: 'https://assets.jnvpjaa.org/gallery/milan-sept-2019-11.jpeg',
-    createdAt: '2019-09-14 07:09:24',
-  },
-  {
-    url: 'https://assets.jnvpjaa.org/gallery/milan-sept-2019-20.jpeg',
-    createdAt: '2019-09-14 07:09:24',
-  },
-  {
-    url: 'https://assets.jnvpjaa.org/gallery/sports-fest-mar-2025-11.jpg',
-    createdAt: '2025-03-15 07:09:24',
-  },
-  {
-    url: 'https://assets.jnvpjaa.org/gallery/sports-fest-mar-2025-12.jpg',
-    createdAt: '2025-03-15 07:09:24',
-  },
-  {
-    url: 'https://assets.jnvpjaa.org/gallery/sports-fest-mar-2025-13.jpg',
-    createdAt: '2025-03-15 07:09:24',
-  },
-  {
-    url: 'https://assets.jnvpjaa.org/gallery/sports-fest-mar-2025-14.jpg',
-    createdAt: '2025-03-15 07:09:24',
-  },
-  {
-    url: 'https://assets.jnvpjaa.org/gallery/sports-fest-mar-2025-16.jpg',
-    createdAt: '2025-03-15 07:09:24',
-  },
-  {
-    url: 'https://assets.jnvpjaa.org/gallery/sports-fest-mar-2025-19.jpg',
-    createdAt: '2025-03-15 07:09:24',
-  },
-  {
-    url: 'https://assets.jnvpjaa.org/gallery/sports-fest-mar-2025-4.jpg',
-    createdAt: '2025-03-15 07:09:24',
-  },
-];
+// Asset paths, one per line, from tenants/<id>/content.json; a tenant without them shows no slider.
+const localSlides = (content['home.sliderImages'] || '')
+  .split('\n')
+  .filter(Boolean)
+  .map((path) => ({ url: assetUrl(path) }));
 
 const swiperBreakpoints = {
   // when window width is >= 0px (mobile)
@@ -122,6 +62,8 @@ const ImageSlider: React.FC = () => {
     };
   }, []);
 
+  if (!localSlides.length) return null;
+
   return (
     <Box
       width="100%"
@@ -148,7 +90,7 @@ const ImageSlider: React.FC = () => {
         loop
       >
         {localSlides?.map((slide, idx) => (
-          <SwiperSlide key={`${slide.createdAt}-${idx}`}>
+          <SwiperSlide key={`${slide.url}-${idx}`}>
             <Box
               sx={{
                 position: 'relative',

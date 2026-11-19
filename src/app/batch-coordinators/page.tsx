@@ -6,12 +6,12 @@ import LayoutModule from '@/layouts/Layout';
 import { headers } from 'next/headers';
 import { BATCH_COORDINATOR_ROLE_ASSIGNMENTS_QUERY } from '@/apollo/accessOperations';
 import { BatchCoordinatorRoleAssignment } from '@/types/access';
+import { brand } from '@/config/tenant';
 
 export const metadata: Metadata = constructMetadata({
   url: '/batch-coordinators/',
-  title: 'Batch Coordinators • Alumni Network of JNV Paota, Jaipur',
-  description:
-    'Find JNVPJAA batch coordinators who help alumni of JNV Paota, Jaipur stay connected across graduating years.',
+  title: `Batch Coordinators • ${brand.tagline}`,
+  description: `Find ${brand.shortName} batch coordinators who help alumni of ${brand.institution.shortName}, ${brand.institution.city} stay connected across graduating years.`,
 });
 
 // This is a Server Component that fetches data
@@ -43,7 +43,7 @@ export default async function BatchCoordinatorsPage() {
   const coordinators = await getBatchCoordinators();
 
   return (
-    <LayoutModule disableCover title="Batch Coordinators • Alumni Network of JNV Paota, Jaipur" containerProps={{}}>
+    <LayoutModule disableCover title={`Batch Coordinators • ${brand.tagline}`} containerProps={{}}>
       <BatchCoordinators coordinators={coordinators || []} />
     </LayoutModule>
   );

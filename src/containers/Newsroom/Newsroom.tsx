@@ -14,6 +14,7 @@ import NewsDrafts from '@/modules/NewsEditor/NewsDrafts';
 import { NEWS_CATEGORY_LABELS } from '@/modules/Newsroom/newsroom.utils';
 import NewsCard from './NewsCard';
 import PressContact from './PressContact';
+import { brand } from '@/config/tenant';
 
 interface NewsroomProps {
   posts: NewsPost[];
@@ -34,7 +35,7 @@ const Newsroom: React.FC<NewsroomProps> = ({ posts, category }) => {
   ];
 
   return (
-    <LayoutModule disableCover title="Newsroom • Alumni Network of JNV Paota, Jaipur">
+    <LayoutModule disableCover title={`Newsroom • ${brand.tagline}`}>
       <Stack spacing={{ xs: 3, md: 4 }} pb={{ xs: 4, md: 6 }}>
         <Box display="flex" alignItems="flex-start" justifyContent="space-between" gap={2}>
           <Box>
@@ -42,7 +43,7 @@ const Newsroom: React.FC<NewsroomProps> = ({ posts, category }) => {
               Newsroom
             </Typography>
             <Typography color="grey.800" maxWidth={720}>
-              Official news, announcements and press releases from the JNV Paota Jaipur Alumni Association.
+              Official news, announcements and press releases from the {brand.legalName}.
             </Typography>
           </Box>
           {canManage && (

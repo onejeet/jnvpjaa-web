@@ -1,9 +1,11 @@
+import { brand } from '@/config/tenant';
+
 const Tooltip = () => {
   return {
     MuiTooltip: {
       styleOverrides: {
         tooltip: {
-          backgroundColor: '#081D13',
+          backgroundColor: brand.theme.secondary.light,
           padding: '8px 12px',
           borderRadius: 6,
           fontSize: '12px',
@@ -11,7 +13,7 @@ const Tooltip = () => {
           fontWeight: 'normal',
         },
         arrow: {
-          color: '#081D13',
+          color: brand.theme.secondary.light,
         },
       },
     },

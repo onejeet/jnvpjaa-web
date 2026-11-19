@@ -7,6 +7,7 @@ import { SEO_CONFIG, canonicalUrl, generateSchema } from '@/config/seo.config';
 import { JobDetail } from '@/containers/Jobs';
 import { NO_STORE } from '@/modules/Newsroom/newsroom.utils';
 import { initializeApollo } from '@/utils/apollo';
+import { brand } from '@/config/tenant';
 
 export const dynamic = 'force-dynamic';
 
@@ -78,7 +79,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   if (!job) return { title: 'Job not found', robots: { index: false, follow: false } };
 
   const url = canonicalUrl(`/jobs/${encodeURIComponent(job.slug)}`);
-  const title = `${job.title} at ${job.company} | JNVPJAA Jobs`;
+  const title = `${job.title} at ${job.company} | ${brand.shortName} Jobs`;
   const description = plainText(job.description).slice(0, 160) || `${job.title} at ${job.company}`;
   return {
     title: { absolute: title },

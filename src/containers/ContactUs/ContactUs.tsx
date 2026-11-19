@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 
 import Breadcrumbs from '@/components/common/Breadcrumbs';
 import { IconMapPin } from '@tabler/icons-react';
+import { assetUrl, brand } from '@/config/tenant';
 
 const breadcrumbsList = [
   {
@@ -37,7 +38,7 @@ const ContactUs = () => {
             sx={{ borderRadius: '10px', maxWidth: '100%', maxHeight: '400px', overflow: 'hidden' }}
           >
             <img
-              src="https://assets.jnvpjaa.org/images/contact-us-3.webp"
+              src={assetUrl('/images/contact-us-3.webp')}
               width="100%"
               alt="mission"
               style={{ objectFit: 'scale-down', position: 'relative' }}
@@ -54,12 +55,12 @@ const ContactUs = () => {
             <IconMapPin size={24} /> Registered Address
           </Typography>
           <Typography color="grey.800" mt={1}>
-            JNV Paota Jaipur Alumni Association, <br />
+            {brand.legalName}, <br />
             35, Karani Colony, Shanti Nagar, <br />
             Opposite NBC, Khatipura Road, Jaipur, Rajasthan 302006, India.
           </Typography>
           <Typography color="grey.800" mt={2} sx={{ a: { color: 'primary.main' } }}>
-            Email: <a href="mailto:alumni@jnvpjaa.org">alumni@jnvpjaa.org</a>
+            Email: <a href={`mailto:${brand.contact.email}`}>{brand.contact.email}</a>
           </Typography>
           <Typography color="grey.800" mt={2} fontWeight={500}>
             For any urgent help, please contact through Batch Coordinators.

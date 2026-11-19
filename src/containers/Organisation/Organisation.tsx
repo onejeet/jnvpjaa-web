@@ -31,6 +31,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useGetUserListQuery } from '@/apollo/hooks';
 import Button from '@/components/core/Button';
 import { useRouter } from 'next/navigation';
+import { brand } from '@/config/tenant';
 
 const executiveCommitteePositionOrder = [
   'PRESIDENT',
@@ -137,10 +138,10 @@ const Organizations = () => {
 
   return (
     <Box>
-      <Typography variant="h1">The JNVPJAA Executive Commmittee</Typography>
+      <Typography variant="h1">The {brand.shortName} Executive Commmittee</Typography>
       <Typography color="grey.800" mt={2}>
         {`The dedicated individuals who lead and shape our vibrant alumni association. Our committee members bring diverse expertise and a shared passion for fostering
-        community and connection among JNVPJAA alumni. Meet the team driving our mission forward and discover the faces
+        community and connection among ${brand.shortName} alumni. Meet the team driving our mission forward and discover the faces
         behind the initiatives that keep our alumni network strong and engaged.`}
       </Typography>
       <Grid container spacing={3} mt={4}>

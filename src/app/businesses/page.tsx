@@ -13,11 +13,12 @@ import {
 import Businesses from '@/containers/Businesses';
 import { initializeApollo } from '@/utils/apollo';
 import { Metadata } from 'next';
+import { brand } from '@/config/tenant';
 
 export const metadata: Metadata = constructMetadata({
   url: '/businesses/',
-  title: 'Businesses by Alumni • JNVPJAA',
-  description: 'Discover businesses founded or owned by alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur.',
+  title: `Businesses by Alumni • ${brand.shortName}`,
+  description: `Discover businesses founded or owned by alumni of ${brand.institution.name}.`,
 });
 
 // This is a Server Component that fetches data

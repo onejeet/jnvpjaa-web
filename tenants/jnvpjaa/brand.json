@@ -1,0 +1,56 @@
+{
+  "id": "jnvpjaa",
+  "name": "JNVPJAA",
+  "shortName": "JNVPJAA",
+  "legalName": "JNV Paota Jaipur Alumni Association",
+  "tagline": "Alumni Network of JNV Paota, Jaipur",
+  "institution": {
+    "name": "Jawahar Navodaya Vidyalaya Paota, Jaipur",
+    "shortName": "JNV Paota",
+    "city": "Jaipur"
+  },
+  "logo": {
+    "full": "https://assets.jnvpjaa.org/branding/logo-full.webp",
+    "square": "https://assets.jnvpjaa.org/branding/logo-square-white_transparent.webp",
+    "emailFull": "https://assets.jnvpjaa.org/branding/logo-full.png",
+    "emailGreyIcon": "https://assets.jnvpjaa.org/branding/logo-square-white_transparent-gray_small.png"
+  },
+  "theme": {
+    "primary": {
+      "50": "#FDE7E8",
+      "100": "#F8C2C5",
+      "200": "#F39A9F",
+      "300": "#EE7278",
+      "400": "#E94D54",
+      "500": "#C62835",
+      "600": "#AF232F",
+      "700": "#951D27",
+      "800": "#7C1720",
+      "900": "#5C1016"
+    },
+    "secondary": { "light": "#081D13", "dark": "#212a33" },
+    "manifestBackground": "#808588"
+  },
+  "socials": {
+    "facebook": "https://www.facebook.com/JNVPJAA/",
+    "instagram": "https://www.instagram.com/JNVPJAA/",
+    "twitter": "https://www.twitter.com/JNVPJAA/",
+    "linkedin": "https://www.linkedin.com/in/company/JNVPJAA/"
+  },
+  "contact": {
+    "email": "alumni@jnvpjaa.org",
+    "address": ["35, Karani Colony, Shanti Nagar,", "Opposite NBC, Khatipura Road, Jaipur, Rajasthan 302006, India."]
+  },
+  "domains": {
+    "site": "jnvpjaa.org",
+    "api": "api.jnvpjaa.org",
+    "assets": "assets.jnvpjaa.org",
+    "content": "content.jnvpjaa.org"
+  },
+  "email": {
+    "from": "noreply@jnvpjaa.org",
+    "domain": "jnvpjaa.org",
+    "host": "api.zeptomail.in"
+  },
+  "analytics": { "gtmId": "GTM-W7R5B5JB" }
+}

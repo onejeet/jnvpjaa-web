@@ -1,0 +1,59 @@
+{
+  "id": "demo",
+  "name": "Demo Alumni",
+  "shortName": "Demo Alumni",
+  "legalName": "Demo Alumni Association",
+  "tagline": "Alumni Network of Demo Public School",
+  "institution": {
+    "name": "Demo Public School",
+    "shortName": "Demo School",
+    "city": "Springfield"
+  },
+  "logo": {
+    "full": "https://assets.demo.example/branding/logo-full.webp",
+    "square": "https://assets.demo.example/branding/logo-square.webp",
+    "emailFull": "https://assets.demo.example/branding/logo-full.png",
+    "emailGreyIcon": "https://assets.demo.example/branding/logo-square-grey.png"
+  },
+  "theme": {
+    "primary": {
+      "50": "#e6f6f4",
+      "100": "#c0e9e3",
+      "200": "#96dbd0",
+      "300": "#6bcdbd",
+      "400": "#4bc2ae",
+      "500": "#2bb7a0",
+      "600": "#26a792",
+      "700": "#1f9480",
+      "800": "#19826f",
+      "900": "#0e6251"
+    },
+    "secondary": {
+      "light": "#f59e0b",
+      "dark": "#b45309"
+    },
+    "manifestBackground": "#ffffff"
+  },
+  "socials": {
+    "facebook": "https://www.facebook.com/example",
+    "linkedin": "https://www.linkedin.com/company/example"
+  },
+  "contact": {
+    "email": "hello@demo.example",
+    "address": [
+      "1 School Road,",
+      "Springfield 00000."
+    ]
+  },
+  "domains": {
+    "site": "demo.example",
+    "api": "api.demo.example",
+    "assets": "assets.demo.example",
+    "content": "content.demo.example"
+  },
+  "email": {
+    "from": "noreply@demo.example",
+    "domain": "demo.example",
+    "host": "api.zeptomail.in"
+  }
+}

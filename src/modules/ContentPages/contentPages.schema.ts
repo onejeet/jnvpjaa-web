@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import type { ContentPageType } from './contentPages.registry';
 
-// Mirrors jnvpjaa-backend/src/services/contentPages/schema.ts (the backend also sanitises rich text).
+// Mirrors the backend's src/services/contentPages/schema.ts (the backend also sanitises rich text).
 const short = (max = 200) => z.string().trim().max(max, `Use ${max} characters or fewer`);
 const required = (max = 200) => short(max).min(1, 'Required');
 const richText = (min = 1) =>

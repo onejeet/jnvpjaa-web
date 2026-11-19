@@ -37,6 +37,7 @@ import { EVENT_CATEGORIES, eventHostingmedium } from '@/constants/Events.constan
 import dayjs from 'dayjs';
 import { UnsplashImageSelector } from '../UnsplashImageSelector/UnsplashImamgeSelector';
 import { useApolloClient } from '@apollo/client';
+import { assetUrl } from '@/config/tenant';
 
 const NewEvent = () => {
   const router = useRouter();
@@ -148,7 +149,7 @@ const NewEvent = () => {
       crateEvent({
         variables: {
           ...data,
-          image: `https://assets.jnvpjaa.org/events/${data?.category}.jpg`,
+          image: assetUrl(`/events/${data?.category}.jpg`),
           price: data?.price || 0,
           startDate: data?.startDate?.toISOString(),
           endDate: data?.endDate?.toISOString(),

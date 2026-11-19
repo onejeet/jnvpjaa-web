@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 
 import Breadcrumbs from '@/components/common/Breadcrumbs';
 import Image from 'next/image';
+import { assetUrl, brand } from '@/config/tenant';
 
 const breadcrumbsList = [
   {
@@ -52,7 +53,7 @@ const CareerCounselling = () => {
             sx={{ borderRadius: '10px', maxWidth: '100%', maxHeight: '400px', overflow: 'hidden' }}
           >
             <Image
-              src="https://assets.jnvpjaa.org/images/career-councelling.webp"
+              src={assetUrl('/images/career-councelling.webp')}
               // width="100%"
               fill
               alt="mission"
@@ -64,10 +65,11 @@ const CareerCounselling = () => {
             {`Selecting a career involves careful consideration of many factors. It’s wise to seek insights from those who have successfully navigated their own journeys. While there are plenty of commercial career guidance services out there, they often focus more on profits than on truly helping you make informed decisions. Instead, turn to trusted mentors and fellow alumni who can offer personalized advice and support as you explore your options. Your path is unique, and the right guidance can make all the difference.`}
           </Typography>
           <Typography color="grey.800" mt={2}>
-            We encourage all students to take advantage of the Career Counseling Cell, facilitated by your fellow JNV
-            Paota Jaipur alumni. For personalized guidance and support, please email us at
-            <Box component="a" href="mailto: alumni@jnvpjaa.org" color="primary.main" ml="4px">
-              alumni@jnvpjaa.org
+            We encourage all students to take advantage of the Career Counseling Cell, facilitated by your fellow{' '}
+            {brand.institution.shortName} {brand.institution.city} alumni. For personalized guidance and support, please
+            email us at
+            <Box component="a" href={`mailto: ${brand.contact.email}`} color="primary.main" ml="4px">
+              {brand.contact.email}
             </Box>
             .<br />{' '}
             {`Don’t forget to include your phone number so we can reach out to you directly! Your future is
@@ -76,7 +78,7 @@ const CareerCounselling = () => {
         </Box>
         <Box display={{ xs: 'none', md: 'block' }} sx={{ borderRadius: '10px', maxWidth: '100%', overflow: 'hidden' }}>
           <Image
-            src="https://assets.jnvpjaa.org/images/career-councelling.webp"
+            src={assetUrl('/images/career-councelling.webp')}
             fill
             // width="100%"
             alt="mission"

@@ -35,7 +35,7 @@ const EmptyView: React.FC<IProps> = ({ type, message, buttonProps }) => {
         {animation && <Lottie animationData={animation} loop style={{ width: '100%', height: '100%' }} />}
       </Box>
 
-      {/* <Image src="https://assets.jnvpjaa.org/svg/doggie.svg" alt="empty" width={500} height={300} /> */}
+      {/* <Image src="/svg/doggie.svg" alt="empty" width={500} height={300} /> */}
       <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" mt={-10}>
         {React.isValidElement(message) ? (
           message

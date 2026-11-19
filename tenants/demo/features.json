@@ -1,0 +1,14 @@
+{
+  "blog": true,
+  "events": true,
+  "gallery": true,
+  "businesses": true,
+  "jobs": true,
+  "newsroom": true,
+  "scholarship": true,
+  "donations": true,
+  "studentHub": true,
+  "batchCoordinators": true,
+  "executiveCommittee": true,
+  "discussions": true
+}

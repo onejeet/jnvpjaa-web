@@ -1,8 +1,9 @@
 import ActivityCenter from '@/containers/ActivityCenter/ActivityCenter';
 import LayoutModule from '@/layouts/Layout';
 import { Box } from '@mui/material';
+import { brand } from '@/config/tenant';
 
-export const metadata = { title: 'Activity Center • Alumni Network of JNV Paota, Jaipur' };
+export const metadata = { title: `Activity Center • ${brand.tagline}` };
 
 export default function ActivityPage() {
   return (

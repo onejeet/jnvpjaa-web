@@ -4,6 +4,7 @@ import { paths } from '@/config/paths';
 import { constructMetadata } from '@/config/seo.config';
 import LayoutModule from '@/layouts/Layout';
 import { NewsEditor, NewsroomGate } from '@/modules/NewsEditor';
+import { brand } from '@/config/tenant';
 
 type Props = { searchParams: { id?: string | string[] } };
 
@@ -14,8 +15,8 @@ export function generateMetadata(props: Props): Metadata {
   return constructMetadata({
     url: '/newsroom/new/',
     noIndex: true,
-    title: `${editId(props) ? 'Edit' : 'Add'} News • JNVPJAA Newsroom`,
-    description: 'Write and publish JNVPJAA news',
+    title: `${editId(props) ? 'Edit' : 'Add'} News • ${brand.shortName} Newsroom`,
+    description: `Write and publish ${brand.shortName} news`,
   });
 }
 
@@ -23,7 +24,7 @@ export function generateMetadata(props: Props): Metadata {
 export default function NewNewsArticlePage(props: Props) {
   const id = editId(props);
   return (
-    <LayoutModule disableCover title={`${id ? 'Edit' : 'Add'} News • JNVPJAA Newsroom`} containerProps={{}}>
+    <LayoutModule disableCover title={`${id ? 'Edit' : 'Add'} News • ${brand.shortName} Newsroom`} containerProps={{}}>
       <Breadcrumbs
         items={[{ label: 'Newsroom', path: paths.newsroom.root }, { label: id ? 'Edit news' : 'Add news' }]}
       />

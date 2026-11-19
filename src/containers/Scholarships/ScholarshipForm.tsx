@@ -19,6 +19,7 @@ import {
 } from '@/apollo/scholarshipOperations';
 import { invalidateActiveQueryFields } from '@/apollo/cacheInvalidation';
 import { useScholarshipLoginGuard } from './useScholarshipLoginGuard';
+import { brand } from '@/config/tenant';
 
 type ScholarshipFormState = {
   requestedAmount: number | null;
@@ -114,7 +115,7 @@ export default function ScholarshipForm() {
 
   if (!canRender) {
     return (
-      <LayoutModule disableCover title="New Scholarship Application • Alumni Network of JNV Paota, Jaipur">
+      <LayoutModule disableCover title={`New Scholarship Application • ${brand.tagline}`}>
         <Box py={8} display="flex" justifyContent="center">
           <Typography color="grey.700">Loading...</Typography>
         </Box>
@@ -123,7 +124,7 @@ export default function ScholarshipForm() {
   }
 
   return (
-    <LayoutModule disableCover title="New Scholarship Application • Alumni Network of JNV Paota, Jaipur">
+    <LayoutModule disableCover title={`New Scholarship Application • ${brand.tagline}`}>
       <Box maxWidth={900} mx="auto">
         <Typography variant="h1">New Scholarship Application</Typography>
         <Typography color="grey.800" mb={3}>

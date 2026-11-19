@@ -1,19 +1,20 @@
 import { Metadata } from 'next';
+import { assetUrl, brand } from '@/config/tenant';
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
-  title: 'Transactions • JNVPJAA',
-  description: 'View your transaction history with JNVPJAA',
+  title: `Transactions • ${brand.shortName}`,
+  description: `View your transaction history with ${brand.shortName}`,
   openGraph: {
-    url: 'https://jnvpjaa.org/transactions',
-    title: 'Transactions • JNVPJAA',
-    description: 'View your transaction history with JNVPJAA',
+    url: `https://${brand.domains.site}/transactions`,
+    title: `Transactions • ${brand.shortName}`,
+    description: `View your transaction history with ${brand.shortName}`,
     images: [
       {
-        url: 'https://assets.jnvpjaa.org/images/cover-2.webp',
+        url: assetUrl('/images/cover-2.webp'),
         width: 1280,
         height: 720,
-        alt: 'JNVPJAA',
+        alt: `${brand.shortName}`,
       },
     ],
   },

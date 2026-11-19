@@ -1,0 +1,10 @@
+{
+  "siteName": "JNVPJAA",
+  "title": "JNVPJAA | JNV Paota Jaipur Alumni Association",
+  "titleTemplate": "%s | JNVPJAA",
+  "description": "Connect with alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur. Explore JNVPJAA events, alumni stories, photo galleries and community initiatives.",
+  "defaultImage": "/assets/images/cover-2.webp",
+  "defaultImageSize": { "width": 1300, "height": 585 },
+  "locale": "en_IN",
+  "language": "en-IN"
+}

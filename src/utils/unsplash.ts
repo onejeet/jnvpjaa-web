@@ -1,6 +1,8 @@
+import { brand } from '@/config/tenant';
+
 export const withUnsplashReferral = (value: string) => {
   const url = new URL(value);
-  url.searchParams.set('utm_source', 'jnvpjaa');
+  url.searchParams.set('utm_source', brand.id);
   url.searchParams.set('utm_medium', 'referral');
   return url.toString();
 };

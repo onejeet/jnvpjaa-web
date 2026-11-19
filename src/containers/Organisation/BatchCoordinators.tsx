@@ -6,6 +6,7 @@ import useBatchCoordinators from './Hooks/useBatchCoordinators';
 import BatchCoordinatorFilters from './components/BatchCoordinatorFilters';
 import DataGrid from '@/components/core/DataGrid';
 import { BatchCoordinatorRoleAssignment } from '@/types/access';
+import { brand } from '@/config/tenant';
 
 interface BatchCoordinatorsProps {
   coordinators?: BatchCoordinatorRoleAssignment[];
@@ -18,9 +19,9 @@ const BatchCoordinators: React.FC<BatchCoordinatorsProps> = ({ coordinators }) =
     <Box>
       <Typography variant="h1">Batch Coordinators</Typography>
       <Typography color="grey.800" mt={2} mb={3}>
-        {`Welcome to the JNVPJAA Executive Committee page! Here, you'll find the dedicated individuals who lead and shape
+        {`Welcome to the ${brand.shortName} Executive Committee page! Here, you'll find the dedicated individuals who lead and shape
         our vibrant alumni association. Our committee members bring diverse expertise and a shared passion for fostering
-        community and connection among JNVPJAA alumni. Meet the team driving our mission forward and discover the faces
+        community and connection among ${brand.shortName} alumni. Meet the team driving our mission forward and discover the faces
         behind the initiatives that keep our alumni network strong and engaged.`}
       </Typography>
       <BatchCoordinatorFilters />

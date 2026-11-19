@@ -47,6 +47,7 @@ import {
 import ApplyDialog from './ApplyDialog';
 import { Fact } from './JobCard';
 import JobOwnerActions from './JobOwnerActions';
+import { brand } from '@/config/tenant';
 
 const formatDay = (iso: string) =>
   new Intl.DateTimeFormat('en-GB', {
@@ -118,7 +119,7 @@ const JobDetail: React.FC<{ job: Job }> = ({ job: initial }) => {
   };
 
   return (
-    <LayoutModule disableCover title={`${job.title} at ${job.company} • JNVPJAA Jobs`}>
+    <LayoutModule disableCover title={`${job.title} at ${job.company} • ${brand.shortName} Jobs`}>
       <Breadcrumbs items={[{ label: 'Jobs & Internships', path: paths.jobs.root }, { label: job.title }]} />
       <Box component="article" sx={{ maxWidth: 820, mx: 'auto', pt: { xs: 1, md: 2 }, pb: { xs: 4, md: 6 } }}>
         <Stack spacing={2}>

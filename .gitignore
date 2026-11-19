@@ -41,3 +41,17 @@ storybook-static
 
 # Playwright e2e run state (tokens, snapshots, reports)
 e2e/.state/
+.superpowers/
+
+# Copied from tenants/$TENANT by scripts/tenant-assets.js (predev/prebuild)
+/public/favicon.png
+/public/icons/
+/public/splashscreens/
+/public/assets/
+/public/.tenant-assets.json
+# Member photos are personal data: keep them out of git (deploy them from a private copy).
+/tenants/*/public/assets/profile/
+/src/utils/theme/fonts/files/
+/.next-check/
+/.next-leaks/
+/.next-leaks.log

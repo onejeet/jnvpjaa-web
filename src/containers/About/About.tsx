@@ -4,16 +4,17 @@ import Image from 'next/image';
 
 import type { TextFields } from '@/modules/ContentPages/contentPages.schema';
 import TextPage from './TextPage';
+import { assetUrl, brand } from '@/config/tenant';
 
 // The logo and motto are brand marks, not editable copy.
 const About = ({ fields }: { fields: TextFields }) => (
-  <TextPage fields={fields} crumb="About JNVPJAA">
+  <TextPage fields={fields} crumb={`About ${brand.shortName}`}>
     <Box mt={3} display="flex" flexDirection={{ xs: 'column', sm: 'row' }} alignItems="center" gap={3}>
       <Image
-        src="https://assets.jnvpjaa.org/branding/logo-square-white.jpg"
+        src={assetUrl('/branding/logo-square-white.jpg')}
         width={150}
         height={150}
-        alt="JNVPJAA logo"
+        alt={`${brand.shortName} logo`}
       />
       <Typography
         flex={1}

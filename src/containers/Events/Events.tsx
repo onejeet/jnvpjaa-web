@@ -13,6 +13,7 @@ import Button from '@/components/core/Button';
 import EventListModule from '@/modules/EventListModule';
 import PastEventListModule from '@/modules/PastEventListModule';
 import { GetEventListQuery } from '@/apollo/hooks';
+import { brand } from '@/config/tenant';
 
 export default function Events({ initialEvents }: { initialEvents?: GetEventListQuery['getEventList'] }) {
   const [isPendingApporvalOnly, setIsPendingApporvalOnly] = React.useState<boolean>(false);
@@ -28,7 +29,7 @@ export default function Events({ initialEvents }: { initialEvents?: GetEventList
   return (
     <LayoutModule
       disableCover
-      title={`Events • Alumni Network of JNV Paota, Jaipur`}
+      title={`Events • ${brand.tagline}`}
       //   containerProps={{ sx: { py: 2 } }}
     >
       <Box display="flex" alignItems="center" justifyContent="space-between" mb={1}>

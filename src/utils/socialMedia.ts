@@ -1,5 +1,5 @@
 // Members store handles only; URLs are always built from these fixed domains.
-// Patterns must match jnvpjaa-backend src/utils/socialMedia.ts, which enforces them.
+// Patterns must match the backend's src/utils/socialMedia.ts, which enforces them.
 export const SOCIAL_PLATFORMS = [
   { key: 'linkedin', label: 'LinkedIn', domains: ['linkedin.com'], path: 'in/', pattern: /^[A-Za-z0-9-]{3,100}$/ },
   { key: 'x', label: 'X', domains: ['x.com', 'twitter.com'], path: '', pattern: /^[A-Za-z0-9_]{1,15}$/ },

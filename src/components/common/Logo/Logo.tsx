@@ -1,6 +1,7 @@
 import Box from '@mui/material/Box';
 import Image from 'next/image';
 import React from 'react';
+import { brand } from '@/config/tenant';
 
 interface Props {
   width?: number;
@@ -16,20 +17,20 @@ const Logo: React.FC<Props> = ({ width, height, icon, type = 'regular', priority
       case 'regular':
         return (
           <Image
-            src="https://assets.jnvpjaa.org/branding/logo-full.webp"
+            src={brand.logo.full}
             width={width || 390}
             height={height || 60}
-            alt="JNVPJAA logo"
+            alt={`${brand.shortName} logo`}
             priority={priority}
           />
         );
       case 'icon':
         return (
           <Image
-            src="https://assets.jnvpjaa.org/branding/logo-square-white_transparent.webp"
+            src={brand.logo.square}
             width={width || 40}
             height={height || 40}
-            alt="JNVPJAA logo"
+            alt={`${brand.shortName} logo`}
             priority={priority}
           />
         );

@@ -2,17 +2,18 @@ import { constructMetadata } from '@/config/seo.config';
 import LegalDocument, { LegalSection } from '@/components/common/LegalDocument';
 import { Metadata, NextPage } from 'next';
 import Link from 'next/link';
+import { brand, t } from '@/config/tenant';
 
 import LayoutModule from '@/layouts/Layout';
 
 export const metadata: Metadata = constructMetadata({
   url: '/privacy_policy/',
-  title: 'Privacy Policy • Alumni Network of JNV Paota, Jaipur',
-  description:
-    'How JNVPJAA collects, uses, shares and protects personal data, including Google sign-in, member directory and your rights under Indian law.',
+  title: `Privacy Policy • ${brand.tagline}`,
+  description: `How ${brand.shortName} collects, uses, shares and protects personal data, including Google sign-in, member directory and your rights under Indian law.`,
 });
 
-const CONTACT_EMAIL = 'alumni@jnvpjaa.org';
+const CONTACT_EMAIL = brand.contact.email;
+const POSTAL_ADDRESS = brand.contact.address.join(' ').replace(/\.$/, '');
 const mail = <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>;
 
 const sections: LegalSection[] = [
@@ -22,17 +23,17 @@ const sections: LegalSection[] = [
     content: (
       <>
         <p>
-          The Portal is run by the <strong>JNV Paota Jaipur Alumni Association</strong> (&quot;JNVPJAA&quot;,
-          &quot;we&quot;, &quot;us&quot;), 35, Karani Colony, Shanti Nagar, Opposite NBC, Khatipura Road, Jaipur,
-          Rajasthan 302006, India. For personal data you give us, we are the <strong>Data Fiduciary</strong> under the
-          Digital Personal Data Protection Act, 2023 (&quot;DPDP Act&quot;) and the body corporate responsible under the
-          Information Technology Act, 2000 and its rules.
+          The Portal is run by the <strong>{brand.legalName}</strong> (&quot;{brand.shortName}&quot;, &quot;we&quot;,
+          &quot;us&quot;), 35, Karani Colony, Shanti Nagar, Opposite NBC, Khatipura Road, Jaipur, Rajasthan 302006,
+          India. For personal data you give us, we are the <strong>Data Fiduciary</strong> under the Digital Personal
+          Data Protection Act, 2023 (&quot;DPDP Act&quot;) and the body corporate responsible under the Information
+          Technology Act, 2000 and its rules.
         </p>
         <p>
-          &quot;Portal&quot; means the alumni website at <a href="https://www.jnvpjaa.org">https://www.jnvpjaa.org</a>,
-          including the members-only area and the systems that run it. Membership is free, voluntary and open only to
-          alumni and faculty of the school. We do not sell anything on the Portal, and your data is never the price of
-          membership.
+          &quot;Portal&quot; means the alumni website at{' '}
+          <a href={`https://www.${brand.domains.site}`}>https://www.{brand.domains.site}</a>, including the members-only
+          area and the systems that run it. Membership is free, voluntary and open only to alumni and faculty of the
+          school. We do not sell anything on the Portal, and your data is never the price of membership.
         </p>
       </>
     ),
@@ -45,7 +46,7 @@ const sections: LegalSection[] = [
         <h3>Data you give us when you register</h3>
         <ul>
           <li>First and last name, email address, mobile number (with country code), gender.</li>
-          <li>Your JNV Paota batch (passing-out year), or that you are faculty.</li>
+          <li>Your {brand.institution.shortName} batch (passing-out year), or that you are faculty.</li>
           <li>A password, if you sign up with email. We store only a one-way hash, never the password itself.</li>
         </ul>
 
@@ -102,14 +103,16 @@ const sections: LegalSection[] = [
           Google we receive and use only:
         </p>
         <ul>
-          <li>your Google account identifier (a number that links your Google account to your JNVPJAA account);</li>
+          <li>
+            your Google account identifier (a number that links your Google account to your {brand.shortName} account);
+          </li>
           <li>your email address and whether Google has verified it;</li>
           <li>your first and last name.</li>
         </ul>
         <p>
-          We use this data only to sign you in, to link Google to an existing JNVPJAA account with the same email, and
-          to pre-fill your registration form. New accounts created through Google still need approval by the association
-          before they become active.
+          We use this data only to sign you in, to link Google to an existing {brand.shortName} account with the same
+          email, and to pre-fill your registration form. New accounts created through Google still need approval by the
+          association before they become active.
         </p>
         <p>We do not:</p>
         <ul>
@@ -123,8 +126,8 @@ const sections: LegalSection[] = [
           15 minutes and is then deleted.
         </p>
         <p>
-          <strong>Google API Services User Data Policy.</strong> JNVPJAA&apos;s use and transfer of information received
-          from Google APIs adheres to the{' '}
+          <strong>Google API Services User Data Policy.</strong> {brand.shortName}&apos;s use and transfer of
+          information received from Google APIs adheres to the{' '}
           <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noreferrer">
             Google API Services User Data Policy
           </a>
@@ -132,7 +135,7 @@ const sections: LegalSection[] = [
           to train AI or machine-learning models.
         </p>
         <p>
-          You can remove JNVPJAA&apos;s access at any time from{' '}
+          You can remove {brand.shortName}&apos;s access at any time from{' '}
           <a href="https://myaccount.google.com/connections" target="_blank" rel="noreferrer">
             your Google account&apos;s third-party connections
           </a>
@@ -149,8 +152,8 @@ const sections: LegalSection[] = [
         <p>We use personal data only for these purposes:</p>
         <ul>
           <li>
-            <strong>Running your account:</strong> registration, verifying that you are a JNV Paota alumnus or faculty
-            member, sign-in, password reset and keeping your sessions secure.
+            <strong>Running your account:</strong> registration, verifying that you are a {brand.institution.shortName}{' '}
+            alumnus or faculty member, sign-in, password reset and keeping your sessions secure.
           </li>
           <li>
             <strong>The alumni directory and community:</strong> showing your profile to other members, enabling events,
@@ -510,9 +513,9 @@ const sections: LegalSection[] = [
         </p>
         <ul>
           <li>Grievance Officer: {mail}</li>
-          <li>Post: 35, Karani Colony, Shanti Nagar, Opposite NBC, Khatipura Road, Jaipur, Rajasthan 302006, India</li>
+          <li>Post: {POSTAL_ADDRESS}</li>
           <li>
-            Web: <Link href="/contact-us">jnvpjaa.org/contact-us</Link>
+            Web: <Link href="/contact-us">{brand.domains.site}/contact-us</Link>
           </li>
         </ul>
       </>
@@ -521,15 +524,15 @@ const sections: LegalSection[] = [
 ];
 
 const PrivacyPage: NextPage = () => (
-  <LayoutModule disableCover title="JNVPJAA Privacy Policy • Alumni Network of JNV Paota, Jaipur" containerProps={{}}>
+  <LayoutModule disableCover title={`${brand.shortName} Privacy Policy • ${brand.tagline}`} containerProps={{}}>
     <LegalDocument
       title="Privacy Policy"
       lastUpdated="November 17, 2026"
       intro={
         <p>
-          This policy explains what personal data the JNV Paota Jaipur Alumni Association collects when you use our
-          website and member portal, why we collect it, who can see it, and the choices and rights you have. It applies
-          whether you sign in with email and password or with Google.
+          This policy explains what personal data the {brand.legalName} collects when you use our website and member
+          portal, why we collect it, who can see it, and the choices and rights you have. It applies whether you sign in
+          with email and password or with Google.
         </p>
       }
       sections={sections}

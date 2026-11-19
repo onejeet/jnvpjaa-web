@@ -1,4 +1,5 @@
-import { Palette, alpha, PaletteOptions, PaletteMode } from '@mui/material';
+import { alpha, PaletteOptions, PaletteMode } from '@mui/material';
+import { brand, type Brand } from '@/config/tenant';
 
 export interface SimplePaletteColorOptions {
   light?: string;
@@ -36,22 +37,11 @@ interface DefaultPaletteOptions extends PaletteOptions {
   accent?: AccentColorOptions;
   secondary?: SimplePaletteColorOptions;
 }
-const DefaultPalette = (mode: PaletteMode): DefaultPaletteOptions => {
+export const buildPalette = (theme: Brand['theme'], mode: PaletteMode): DefaultPaletteOptions => {
   // ** Vars
   const isLightMode = mode === 'light';
-  const PRIMARY_COLOR = {
-    50: '#FDE7E8',
-    100: '#F8C2C5',
-    200: '#F39A9F',
-    300: '#EE7278',
-    400: '#E94D54',
-    500: '#C62835', // Main color
-    600: '#AF232F',
-    700: '#951D27',
-    800: '#7C1720',
-    900: '#5C1016',
-  };
-  const SECONDARY_COLOR = isLightMode ? '#081D13' : '#212a33';
+  const PRIMARY_COLOR = theme.primary;
+  const SECONDARY_COLOR = isLightMode ? theme.secondary.light : theme.secondary.dark;
   const GREY_COLOR_BASE = '#c9d1d9';
   const TEXT_COLOR = isLightMode ? SECONDARY_COLOR : '#e8eaed';
   const BACKGROUND_COLOR = isLightMode ? '#FAFBFC' : '#192128';
@@ -142,5 +132,7 @@ const DefaultPalette = (mode: PaletteMode): DefaultPaletteOptions => {
         },
   };
 };
+
+const DefaultPalette = (mode: PaletteMode) => buildPalette(brand.theme, mode);
 
 export default DefaultPalette;

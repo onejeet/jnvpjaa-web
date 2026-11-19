@@ -1,3 +1,5 @@
+import { brand, t } from '@/config/tenant';
+
 export interface DiscussionReply {
   id: string;
   authorId: string;
@@ -23,7 +25,7 @@ export interface DiscussionThread {
   replies: DiscussionReply[];
 }
 
-const STORAGE_KEY = 'jnvpjaa_discussions_v1';
+const STORAGE_KEY = `${brand.id}_discussions_v1`;
 
 function readStore(): DiscussionThread[] {
   if (typeof window === 'undefined') return [];
@@ -123,9 +125,8 @@ export function seedDiscussionsIfEmpty(): boolean {
   const sample: DiscussionThread[] = [
     {
       id: crypto.randomUUID(),
-      title: 'How did JNV shape your career path? Share your story',
-      content:
-        'From hostel nights to board exams — how did JNV influence your personal or professional journey? Any career tips for current students?',
+      title: `How did ${t('school.nickname')} shape your career path? Share your story`,
+      content: `From hostel nights to board exams — how did ${t('school.nickname')} influence your personal or professional journey? Any career tips for current students?`,
       authorId: 'u1',
       authorName: 'Aakash Sharma',
       authorImage: undefined,
@@ -138,7 +139,7 @@ export function seedDiscussionsIfEmpty(): boolean {
           id: crypto.randomUUID(),
           authorId: 'u2',
           authorName: 'Priya Verma',
-          content: 'Discipline and peer support at JNV helped me crack GATE. Highly recommend group studies.',
+          content: `Discipline and peer support at ${t('school.nickname')} helped me crack GATE. Highly recommend group studies.`,
           createdAt: minus(110),
           authorImage: undefined,
           likes: 3,

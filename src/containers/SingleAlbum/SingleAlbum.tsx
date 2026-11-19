@@ -14,6 +14,7 @@ import { IconCalendarEvent, IconCircleCheck, IconEye, IconPencil, IconStar, Icon
 import dayjs from 'dayjs';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
+import { brand } from '@/config/tenant';
 
 interface SingleAlbumProps {
   albumId?: string;
@@ -280,7 +281,7 @@ const SingleAlbum: React.FC<SingleAlbumProps> = ({ albumId }) => {
   // );
 
   return (
-    <LayoutModule disableCover title={`${album?.title || 'Blog'} • Alumni Network of JNV Paota, Jaipur`}>
+    <LayoutModule disableCover title={`${album?.title || 'Blog'} • ${brand.tagline}`}>
       <Box mb={2} display="flex" flexDirection="column" justifyContent="start" alignItems="start">
         <Breadcrumbs items={breadcrumbsList} loading={dataLoading} />
         <Box width="100%">

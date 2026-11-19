@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isProtectedRoute } from '@/utils/routeAccess';
+import { isPathEnabled } from '@/config/features';
+import { ROUTER_NAVIGATION_HEADER } from '@/utils/routerNavigationHeader';
 
 const AUTH_ROUTES = ['/signin', '/signup', '/forgot-password'];
 const isAuthRoute = (pathname: string) =>
@@ -15,6 +17,12 @@ const encodeRedirectPath = (path: string) => {
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  // A module this tenant has switched off is a real 404 (notFound() in a streamed layout still answers 200).
+  if (!isPathEnabled(pathname)) {
+    const missing = request.nextUrl.clone();
+    missing.pathname = '/__module-disabled';
+    return NextResponse.rewrite(missing);
+  }
   if (pathname.startsWith('/auth/google')) {
     const response = NextResponse.next();
     response.headers.set('Cache-Control', 'private, no-store, max-age=0');
@@ -47,9 +55,9 @@ export function middleware(request: NextRequest) {
     // (including router navigation and prefetch) use destination "empty";
     // direct page loads use "document". Requests without Fetch Metadata keep SSR.
     if (request.headers.get('sec-fetch-dest') === 'empty') {
-      requestHeaders.set('x-jnvpjaa-router-navigation', '1');
+      requestHeaders.set(ROUTER_NAVIGATION_HEADER, '1');
     } else {
-      requestHeaders.delete('x-jnvpjaa-router-navigation');
+      requestHeaders.delete(ROUTER_NAVIGATION_HEADER);
     }
     return NextResponse.next({ request: { headers: requestHeaders } });
   }

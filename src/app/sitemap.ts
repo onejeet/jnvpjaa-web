@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { canonicalUrl } from '@/config/seo.config';
+import { isPathEnabled } from '@/config/features';
 
 export const dynamic = 'force-dynamic';
 
@@ -32,7 +33,7 @@ const routes = [
 type SitemapEntry = { path: string; lastModified: string };
 
 async function getPublicEntries(): Promise<SitemapEntry[]> {
-  const response = await fetch(process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || 'https://api.jnvpjaa.org/client', {
+  const response = await fetch(process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT as string, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({ query: '{ publicSitemapEntries { path lastModified } }' }),
@@ -51,15 +52,19 @@ async function getPublicEntries(): Promise<SitemapEntry[]> {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const dynamicEntries = await getPublicEntries();
-  const staticEntries = routes.map(({ path, priority }) => ({
-    url: canonicalUrl(path),
-    priority,
-  }));
+  const staticEntries = routes
+    .filter(({ path }) => isPathEnabled(path))
+    .map(({ path, priority }) => ({
+      url: canonicalUrl(path),
+      priority,
+    }));
 
   return [
     ...staticEntries,
     ...dynamicEntries
-      .filter((entry) => /^\/(blog|events|gallery|newsroom|jobs)\/[^/]+\/$/.test(entry.path))
+      .filter(
+        (entry) => /^\/(blog|events|gallery|newsroom|jobs)\/[^/]+\/$/.test(entry.path) && isPathEnabled(entry.path)
+      )
       .map((entry) => ({
         url: canonicalUrl(entry.path),
         lastModified: entry.lastModified,

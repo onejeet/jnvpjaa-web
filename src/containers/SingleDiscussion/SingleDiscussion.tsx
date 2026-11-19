@@ -11,6 +11,7 @@ import { IconThumbUp, IconThumbDown } from '@tabler/icons-react';
 import { paths } from '@/config/paths';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import { useAuth } from '@/context/AuthContext';
+import { brand } from '@/config/tenant';
 
 // Geometry constants (in px) to align connector with avatar center
 const SPACING_UNIT = 8; // MUI default
@@ -47,7 +48,7 @@ export default function SingleDiscussion() {
 
   if (!thread) {
     return (
-      <LayoutModule disableCover title={`Discussion • Alumni Network of JNV Paota, Jaipur`}>
+      <LayoutModule disableCover title={`Discussion • ${brand.tagline}`}>
         <Box maxWidth={900} mx="auto">
           <Typography>Thread not found.</Typography>
         </Box>
@@ -230,7 +231,7 @@ export default function SingleDiscussion() {
   };
 
   return (
-    <LayoutModule disableCover title={`${thread.title} • Alumni Network of JNV Paota, Jaipur`}>
+    <LayoutModule disableCover title={`${thread.title} • ${brand.tagline}`}>
       <Box mb={1} display="flex" justifyContent="start" alignItems="center" flexWrap="wrap">
         <Breadcrumbs items={breadcrumbsList} loading={false} />
       </Box>

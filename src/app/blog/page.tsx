@@ -5,14 +5,15 @@ import { BlogListResponse, GetBlogListDocument, GetBlogListQuery } from '@/apoll
 import Blog from '@/containers/Blog';
 import { initializeApollo } from '@/utils/apollo';
 import { Metadata } from 'next';
+import { brand } from '@/config/tenant';
 
 // Published posts must be visible without waiting for a new deployment or cache purge.
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = constructMetadata({
   url: '/blog/',
-  title: 'Blog • Alumni Network of JNV Paota, Jaipur',
-  description: 'Read stories, memories and insights from the JNV Paota, Jaipur alumni community on the JNVPJAA blog.',
+  title: `Blog • ${brand.tagline}`,
+  description: `Read stories, memories and insights from the ${brand.institution.shortName}, ${brand.institution.city} alumni community on the ${brand.shortName} blog.`,
 });
 
 // This is a Server Component that fetches data
@@ -31,7 +32,9 @@ export default async function BlogPage() {
   const blogData = isRouterNavigation() ? undefined : await getBlog();
   return (
     <>
-      <JsonLd data={generateSchema.collectionPage('JNVPJAA Blog', '/blog/', metadata.description as string)} />
+      <JsonLd
+        data={generateSchema.collectionPage(`${brand.shortName} Blog`, '/blog/', metadata.description as string)}
+      />
       <Blog data={blogData as BlogListResponse} />
     </>
   );

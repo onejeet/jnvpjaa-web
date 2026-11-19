@@ -10,6 +10,7 @@ import { Box, Checkbox, Divider, FormControlLabel, Grid2 as Grid, Typography } f
 import { IconPlus } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
 import React from 'react';
+import { brand } from '@/config/tenant';
 
 interface BlogProps {
   data?: BlogListResponse;
@@ -29,7 +30,7 @@ const Blog: React.FC<BlogProps> = ({ data }) => {
   return (
     <LayoutModule
       disableCover
-      title={`Blog • Alumni Network of JNV Paota, Jaipur`}
+      title={`Blog • ${brand.tagline}`}
       //   containerProps={{ sx: { py: 2 } }}
     >
       <Box display="flex" alignItems="start" justifyContent="space-between" mb={1}>

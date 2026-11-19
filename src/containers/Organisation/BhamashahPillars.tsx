@@ -7,12 +7,13 @@ import Breadcrumbs from '@/components/common/Breadcrumbs';
 import ProfileCard from '@/components/common/ProfileCard';
 import PageRichText from '@/modules/ContentPages/PageRichText';
 import type { PeopleListFields } from '@/modules/ContentPages/contentPages.schema';
+import { t } from '@/config/tenant';
 
 const GROUP_COLORS: Record<string, string> = { platinum: '#CF7878', gold: '#DAA511', silver: '#BCB198' };
 
 const BhamashahPillars = ({ fields }: { fields: PeopleListFields }) => (
   <Box>
-    <Breadcrumbs items={[{ label: 'Home', path: '/' }, { label: 'Bhamashah Pillars' }]} />
+    <Breadcrumbs items={[{ label: 'Home', path: '/' }, { label: t('pages.honourRoll') }]} />
     <Box component={Paper} p={2} my={2}>
       <Typography variant="h1" mb={3}>
         {fields.heading}

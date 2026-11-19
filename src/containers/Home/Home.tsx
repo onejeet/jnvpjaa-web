@@ -9,6 +9,7 @@ import type { NewsPost } from '@/apollo/newsroomOperations';
 // import DynamicBirthdaySlider from './components/DynamicBirthdaySlider';
 import BirthdaySlider from './components/BirthdaySlider';
 import ImageSlider from './components/ImageSlider';
+import { isEnabled } from '@/config/features';
 
 const Home = ({ news }: { news?: NewsPost[] }) => {
   return (
@@ -16,10 +17,10 @@ const Home = ({ news }: { news?: NewsPost[] }) => {
       <Hero />
       <SloganBanner />
       <MetricsNumbers />
-      <LatestNews posts={news} />
+      {isEnabled('newsroom') && <LatestNews posts={news} />}
       {/* <UpcomingEvents /> */}
       <ImageSlider />
-      <FeaturedBlogs />
+      {isEnabled('blog') && <FeaturedBlogs />}
       <BirthdaySlider />
     </Box>
   );

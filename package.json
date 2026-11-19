@@ -5,8 +5,10 @@
   "private": true,
   "author": "Jeet from Dots Created",
   "scripts": {
+    "predev": "node scripts/tenant-assets.js",
+    "prebuild": "node scripts/tenant-assets.js",
     "dev": "cross-env NEXT_PUBLIC_NODE_ENV=development NEXT_PUBLIC_GRAPHQL_ENDPOINT=http://localhost:4000/client next dev -H 0.0.0.0 -p 3890",
-    "build": "rm -rf .next public/sw.js public/workbox-*.js && NEXT_PUBLIC_NODE_ENV=production NEXT_PUBLIC_GRAPHQL_ENDPOINT=https://api.jnvpjaa.org/client next build",
+    "build": "rm -rf .next public/sw.js public/workbox-*.js && NEXT_PUBLIC_NODE_ENV=production next build",
     "start": "next start",
     "prettier:format": "prettier --write .",
     "prettier:check": "prettier --check \"**/*.{ts,tsx,json}\"",
@@ -14,7 +16,10 @@
     "eslint:format": "eslint src --fix",
     "postinstall": "npx husky",
     "codegen": "graphql-codegen --config codegen/generate.js",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:unit": "playwright test -c playwright.unit.config.ts",
+    "tenant:check": "node scripts/tenant-check.js",
+    "tenant:leaks": "bash scripts/tenant-leaks.sh"
   },
   "engines": {
     "node": ">=22.23.4 <23"

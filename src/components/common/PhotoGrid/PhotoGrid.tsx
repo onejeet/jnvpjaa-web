@@ -9,6 +9,7 @@ import {
 import Masonry from 'react-masonry-css';
 import Image from 'next/image';
 import ImageWithFallback from '../ImageWithFallback';
+import { brand } from '@/config/tenant';
 
 interface PhotoGridProps {
   photos: Photo[];
@@ -109,7 +110,7 @@ export default function PhotoGrid({ photos, loading, authView, onSelect, breakpo
                     zIndex: 10,
                   }}
                 >
-                  JNVPJAA
+                  {brand.shortName}
                 </Box>
               )}
             </>

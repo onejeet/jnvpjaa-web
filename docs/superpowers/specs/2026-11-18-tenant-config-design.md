@@ -22,9 +22,9 @@ launched by **adding config and assets, not by editing code**. Today the brand i
   domains (site, api, assets CDN, content CDN), and email sender (address, domain, provider host).
 - SEO config: site name, default title, title template, description, default OG image, locale, keywords, JSON-LD
   organisation data.
-- Feature/module config: each association-specific module (Scholarship, Jobs, Businesses, Student Hub, Donations, …)
-  can be switched on or off. A module that is off has its nav entry hidden and its route returning 404. The seven
-  editable content pages are not in this file (see "Content pages" below).
+- Feature/module config: each association-specific module (Scholarship, Jobs, Businesses, Student Hub, Donations, …) can
+  be switched on or off. A module that is off has its nav entry hidden and its route returning 404. The seven editable
+  content pages are not in this file (see "Content pages" below).
 - Tenant copy: association-specific sentences (e.g. "Navodaya shaped you", the home slogans, the about-page text) move
   into a tenant content file so they can be replaced.
 - JNVPJAA keeps rendering exactly as it does today, with `tenants/jnvpjaa/` as the first tenant.
@@ -128,8 +128,8 @@ jnvpjaa-backend/tenants/
 
 ### Content pages (added after the page editor shipped)
 
-The seven pages (President/Principal/Secretary messages, Vision, About, Past Presidents, Bhamashah Pillars) now live
-in the `ContentPage` table and are edited in `/admin/pages/`. That changes three things:
+The seven pages (President/Principal/Secretary messages, Vision, About, Past Presidents, Bhamashah Pillars) now live in
+the `ContentPage` table and are edited in `/admin/pages/`. That changes three things:
 
 - **Their copy is data, not config.** It does not go in `content.json`. `prisma/seed_data/content_pages.json` moves to
   `tenants/<id>/seed/content_pages.json`, and `seed_content_pages.ts` reads it from `TENANT`. `_template` ships a

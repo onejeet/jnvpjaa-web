@@ -2,6 +2,7 @@
 
 import { Box, BoxProps, Typography, TypographyProps, useMediaQuery, useTheme } from '@mui/material';
 import React from 'react';
+import { assetUrl } from '@/config/tenant';
 
 interface SpecialTitleProps {
   title: string;
@@ -25,7 +26,7 @@ const SpecialTitle: React.FC<SpecialTitleProps> = ({ title, containerProps = {},
           height: '40px',
           width: '80%',
           backgroundRepeat: 'no-repeat',
-          backgroundImage: 'url("https://assets.jnvpjaa.org/svg/underline.svg")',
+          backgroundImage: `url("${assetUrl('/svg/underline.svg')}")`,
         }}
       />
     </Box>

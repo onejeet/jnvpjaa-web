@@ -1,5 +1,6 @@
 import { headers } from 'next/headers';
+import { ROUTER_NAVIGATION_HEADER } from './routerNavigationHeader';
 
 export function isRouterNavigation() {
-  return headers().get('x-jnvpjaa-router-navigation') === '1';
+  return headers().get(ROUTER_NAVIGATION_HEADER) === '1';
 }

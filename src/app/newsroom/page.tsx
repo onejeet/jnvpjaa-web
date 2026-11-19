@@ -5,19 +5,20 @@ import { constructMetadata, generateSchema } from '@/config/seo.config';
 import Newsroom from '@/containers/Newsroom';
 import { NO_STORE, isNewsCategory } from '@/modules/Newsroom/newsroom.utils';
 import { initializeApollo } from '@/utils/apollo';
+import { brand } from '@/config/tenant';
 
 // New posts must appear as soon as they are published.
 export const dynamic = 'force-dynamic';
 
-const description = 'Official news, announcements and press releases from the JNV Paota Jaipur Alumni Association.';
+const description = `Official news, announcements and press releases from the ${brand.legalName}.`;
 
-const base = constructMetadata({ url: '/newsroom/', title: 'Newsroom • JNVPJAA', description });
+const base = constructMetadata({ url: '/newsroom/', title: `Newsroom • ${brand.shortName}`, description });
 
 export const metadata: Metadata = {
   ...base,
   alternates: {
     ...base.alternates,
-    types: { 'application/rss+xml': [{ url: '/newsroom/feed.xml', title: 'JNVPJAA Newsroom' }] },
+    types: { 'application/rss+xml': [{ url: '/newsroom/feed.xml', title: `${brand.shortName} Newsroom` }] },
   },
 };
 
@@ -41,7 +42,7 @@ export default async function NewsroomPage({ searchParams }: { searchParams: { t
   const posts = await getNews(category);
   return (
     <>
-      <JsonLd data={generateSchema.collectionPage('JNVPJAA Newsroom', '/newsroom/', description)} />
+      <JsonLd data={generateSchema.collectionPage(`${brand.shortName} Newsroom`, '/newsroom/', description)} />
       <Newsroom posts={posts} category={category} />
     </>
   );

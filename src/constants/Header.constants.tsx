@@ -1,5 +1,6 @@
 import { IHeaderMenuItem } from 'src/layouts/Layout/LayoutTopbar';
 import { PERMISSION_CODES } from '@/constants/access';
+import { filterNav } from '@/config/features';
 import {
   IconArticle as Article,
   IconBriefcase,
@@ -8,10 +9,11 @@ import {
   IconPhotoShare as ImagesSquare,
   IconTicket as Ticket,
 } from '@tabler/icons-react';
+import { brand, t } from '@/config/tenant';
 
 // Each page once, with the one-liner the desktop dropdown shows under its name.
 const PAGE = {
-  about: { label: 'About JNVPJAA', path: '/about', description: 'Our school, story and association' },
+  about: { label: `About ${brand.shortName}`, path: '/about', description: 'Our school, story and association' },
   vision: { label: 'Vision and Mission', path: '/vision', description: 'What the association works towards' },
   contact: { label: 'Contact Us', path: '/contact-us', description: 'Reach the association team' },
   president: { label: 'Message from President', path: '/president-message', description: 'A note to all alumni' },
@@ -20,14 +22,22 @@ const PAGE = {
     path: '/secretary-message',
     description: 'On alumni connections and activities',
   },
-  principal: { label: 'Message from Principal', path: '/principal-message', description: 'From JNV Paota, Jaipur' },
+  principal: {
+    label: 'Message from Principal',
+    path: '/principal-message',
+    description: `From ${brand.institution.shortName}, ${brand.institution.city}`,
+  },
   committee: { label: 'Executive Committee', path: '/executive-committee', description: 'Current office bearers' },
   coordinators: {
     label: 'Batch Coordinators',
     path: '/batch-coordinators',
     description: 'Your point of contact in each batch',
   },
-  pillars: { label: 'Bhamashah Pillars', path: '/bhamashah-pillars', description: 'Supporters behind our initiatives' },
+  pillars: {
+    label: t('pages.honourRoll'),
+    path: '/bhamashah-pillars',
+    description: 'Supporters behind our initiatives',
+  },
   pastPresidents: {
     label: 'Past Presidents',
     path: '/past-presidents',
@@ -122,12 +132,14 @@ export const getHeaderMenu = (
 ) => {
   const hidden = options.hiddenPaths || [];
   if (isLoggedIn) {
-    return withoutPaths(MEMBER_HEADER_MENU, options.scholarships ? hidden : [...hidden, PAGE.scholarships.path]);
+    return filterNav(
+      withoutPaths(MEMBER_HEADER_MENU, options.scholarships ? hidden : [...hidden, PAGE.scholarships.path])
+    );
   }
-  return withoutPaths(HEADER_MENU, hidden);
+  return filterNav(withoutPaths(HEADER_MENU, hidden));
 };
 
-export const ADD_ENTITIES: IHeaderMenuItem[] = [
+export const ADD_ENTITIES: IHeaderMenuItem[] = filterNav<IHeaderMenuItem>([
   {
     label: 'New Blog Post',
     path: '/blog/new',
@@ -155,4 +167,4 @@ export const ADD_ENTITIES: IHeaderMenuItem[] = [
   //   path: '/gallery/new',
   //   icon: <ImagesSquare />,
   // },
-];
+]);

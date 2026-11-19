@@ -37,6 +37,7 @@ import dayjs from 'dayjs';
 import { BLOG_CATEGORIES } from '@/constants/Blog.constants';
 import { useAuth } from '@/context/AuthContext';
 import { UnsplashImageSelector } from '../UnsplashImageSelector/UnsplashImamgeSelector';
+import { brand } from '@/config/tenant';
 
 const NewBlog = () => {
   const router = useRouter();
@@ -144,7 +145,7 @@ const NewBlog = () => {
           content: data?.content,
           categoryId: data?.category,
           cover: data?.cover,
-          // image: `https://jnvpjaa.org/assets/events/${data?.category}.jpg`,
+          // image: `https://${brand.domains.site}/assets/events/${data?.category}.jpg`,
           status: saveTypeRef.current === 'publish' ? BlogStatus.Published : BlogStatus.Draft,
           authorId: user?.id,
         },
@@ -198,7 +199,7 @@ const NewBlog = () => {
     <EditorShell
       onSubmit={handleSubmit(onSubmit)}
       heading={slug ? 'Edit your story' : 'Write a story'}
-      description="Share an experience, a memory or a lesson with the JNV Paota alumni community."
+      description={`Share an experience, a memory or a lesson with the ${brand.institution.shortName} alumni community.`}
       publish={
         <PublishPanel status={state.label} tone={state.tone} note={state.note}>
           <Button

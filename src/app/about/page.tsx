@@ -6,13 +6,13 @@ import LayoutModule from '@/layouts/Layout';
 import { contentPageMetadata } from '@/modules/ContentPages/contentPageMetadata';
 import type { TextFields } from '@/modules/ContentPages/contentPages.schema';
 import { getContentPage } from '@/modules/ContentPages/getContentPage';
+import { brand, t } from '@/config/tenant';
 
 export const dynamic = 'force-dynamic';
 
 const FALLBACK = {
-  title: 'About JNVPJAA • Alumni Network of JNV Paota, Jaipur',
-  description:
-    'The Official Alumni Network of Jawahar Navodaya Vidyalaya Paota, Jaipur. JNVs are a testament to innovative state-sponsored education in India. Connect with fellow alumni, share experiences, and stay updated on events that honor our shared journey and the values of our beloved school.',
+  title: `About ${brand.shortName} • ${brand.tagline}`,
+  description: `${t('seo.portalDescription')}`,
 };
 
 export const generateMetadata = () => contentPageMetadata('about', FALLBACK);
@@ -24,13 +24,13 @@ export default async function AboutPage() {
     <>
       <JsonLd
         data={generateSchema.webPage(
-          'About JNVPJAA',
+          `About ${brand.shortName}`,
           '/about/',
           page.seoDescription || FALLBACK.description,
           'AboutPage'
         )}
       />
-      <LayoutModule disableCover title="About JNVPJAA • Alumni Network of JNV Paota, Jaipur" containerProps={{}}>
+      <LayoutModule disableCover title={`About ${brand.shortName} • ${brand.tagline}`} containerProps={{}}>
         <About fields={page.fields} />
       </LayoutModule>
     </>

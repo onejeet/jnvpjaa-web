@@ -64,6 +64,7 @@ import {
 import { invalidateActiveQueryFields, invalidateBillingLedgerQueries } from '@/apollo/cacheInvalidation';
 import { formatCurrency, formatDateTime, getFullName, humanizeScholarshipStatus } from './helpers';
 import { useScholarshipLoginGuard } from './useScholarshipLoginGuard';
+import { brand } from '@/config/tenant';
 
 const getDetailGuidance = (application: any, isOwner: boolean, isAssignedMentor: boolean) => {
   if (!application) return null;
@@ -545,7 +546,7 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
 
   if (!canRender || (applicationQuery.loading && !application)) {
     return (
-      <LayoutModule disableCover title="Scholarship Application • Alumni Network of JNV Paota, Jaipur">
+      <LayoutModule disableCover title={`Scholarship Application • ${brand.tagline}`}>
         <Box py={8} display="flex" justifyContent="center">
           <CircularProgress size={28} />
         </Box>
@@ -555,7 +556,7 @@ export default function ScholarshipDetail({ applicationId }: { applicationId: st
 
   if (!application) {
     return (
-      <LayoutModule disableCover title="Scholarship Application • Alumni Network of JNV Paota, Jaipur">
+      <LayoutModule disableCover title={`Scholarship Application • ${brand.tagline}`}>
         <Alert severity="error">Scholarship application could not be loaded.</Alert>
       </LayoutModule>
     );

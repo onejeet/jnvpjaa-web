@@ -2,16 +2,17 @@ import { constructMetadata } from '@/config/seo.config';
 import LegalDocument, { LegalSection } from '@/components/common/LegalDocument';
 import { Metadata } from 'next';
 import Link from 'next/link';
+import { brand, t } from '@/config/tenant';
 import LayoutModule from '@/layouts/Layout';
 
 export const metadata: Metadata = constructMetadata({
   url: '/terms_condition/',
-  title: 'Terms of Use • Alumni Network of JNV Paota, Jaipur',
-  description:
-    'The rules for using the JNVPJAA website and member portal: eligibility, accounts, Google sign-in, member conduct, content and liability.',
+  title: `Terms of Use • ${brand.tagline}`,
+  description: `The rules for using the ${brand.shortName} website and member portal: eligibility, accounts, Google sign-in, member conduct, content and liability.`,
 });
 
-const CONTACT_EMAIL = 'alumni@jnvpjaa.org';
+const CONTACT_EMAIL = brand.contact.email;
+const POSTAL_ADDRESS = brand.contact.address.join(' ').replace(/\.$/, '');
 const mail = <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>;
 
 const sections: LegalSection[] = [
@@ -21,10 +22,10 @@ const sections: LegalSection[] = [
     content: (
       <>
         <p>
-          These Terms of Use (&quot;Terms&quot;) are an agreement between you and the{' '}
-          <strong>JNV Paota Jaipur Alumni Association</strong> (&quot;JNVPJAA&quot;, &quot;we&quot;, &quot;us&quot;) for
-          your use of <a href="https://www.jnvpjaa.org">www.jnvpjaa.org</a>, the member portal and related services (the
-          &quot;Portal&quot;).
+          These Terms of Use (&quot;Terms&quot;) are an agreement between you and the <strong>{brand.legalName}</strong>{' '}
+          (&quot;{brand.shortName}&quot;, &quot;we&quot;, &quot;us&quot;) for your use of{' '}
+          <a href={`https://www.${brand.domains.site}`}>www.{brand.domains.site}</a>, the member portal and related
+          services (the &quot;Portal&quot;).
         </p>
         <p>
           By creating an account, signing in (with email or Google), or using the Portal, you accept these Terms and
@@ -42,7 +43,7 @@ const sections: LegalSection[] = [
       <>
         <p>Member accounts are for:</p>
         <ul>
-          <li>former students of Jawahar Navodaya Vidyalaya, Paota, Jaipur; and</li>
+          <li>former students of {t('school.titleName')}; and</li>
           <li>current and former faculty and staff of the school.</li>
         </ul>
         <p>
@@ -114,12 +115,14 @@ const sections: LegalSection[] = [
         <ul>
           <li>
             scrape, copy in bulk, export or sell member information, or use it for marketing, recruitment agencies,
-            fundraising unrelated to JNVPJAA, or any commercial purpose;
+            fundraising unrelated to {brand.shortName}, or any commercial purpose;
           </li>
           <li>send spam, chain messages or unsolicited promotions to members;</li>
           <li>try to access accounts, data or admin areas you are not authorised to use, or test our security;</li>
           <li>overload the Portal, or use bots or automated tools without our written permission;</li>
-          <li>collect money from members in the name of JNVPJAA without the association&apos;s written approval.</li>
+          <li>
+            collect money from members in the name of {brand.shortName} without the association&apos;s written approval.
+          </li>
         </ul>
       </>
     ),
@@ -130,10 +133,10 @@ const sections: LegalSection[] = [
     content: (
       <>
         <p>
-          You keep ownership of the blogs, comments, photos and other content you post. You give JNVPJAA a free,
-          worldwide, non-exclusive licence to host, display, reproduce, resize and share that content on the Portal and
-          on the association&apos;s official channels (for example, newsletters or social media pages about alumni
-          events), for as long as it is on the Portal.
+          You keep ownership of the blogs, comments, photos and other content you post. You give {brand.shortName} a
+          free, worldwide, non-exclusive licence to host, display, reproduce, resize and share that content on the
+          Portal and on the association&apos;s official channels (for example, newsletters or social media pages about
+          alumni events), for as long as it is on the Portal.
         </p>
         <p>
           You confirm you have the right to post it, and that people clearly identifiable in photos you upload are
@@ -169,8 +172,9 @@ const sections: LegalSection[] = [
     content: (
       <ul>
         <li>
-          <strong>Jobs:</strong> jobs are posted by members, not by JNVPJAA. We do not check them, guarantee them, or
-          act as a recruiter. Never pay anyone to get a job. Your application details go to the member who posted it.
+          <strong>Jobs:</strong> jobs are posted by members, not by {brand.shortName}. We do not check them, guarantee
+          them, or act as a recruiter. Never pay anyone to get a job. Your application details go to the member who
+          posted it.
         </li>
         <li>
           <strong>Business directory:</strong> listings are provided by members. Dealing with a listed business is
@@ -193,10 +197,9 @@ const sections: LegalSection[] = [
     title: 'Our name and materials',
     content: (
       <p>
-        The JNVPJAA name, logo, design and content created by the association belong to the association. You may share
-        links and short extracts with credit, but may not use our name or logo to suggest endorsement without written
-        permission. &quot;Jawahar Navodaya Vidyalaya&quot; and related marks belong to their respective owners; JNVPJAA
-        is an independent alumni association and is not run by Navodaya Vidyalaya Samiti.
+        The {brand.shortName} name, logo, design and content created by the association belong to the association. You
+        may share links and short extracts with credit, but may not use our name or logo to suggest endorsement without
+        written permission. {t('legal.marksNotice')}
       </p>
     ),
   },
@@ -222,10 +225,10 @@ const sections: LegalSection[] = [
     title: 'Disclaimers',
     content: (
       <p>
-        JNVPJAA is a volunteer-run, not-for-profit alumni association. The Portal is provided &quot;as is&quot; and
-        &quot;as available&quot;. We do not promise it will always be available or error-free, and we do not verify
-        everything members post. Information shared by members (including jobs, business listings and advice) is their
-        own and not endorsed by us.
+        {brand.shortName} is a volunteer-run, not-for-profit alumni association. The Portal is provided &quot;as
+        is&quot; and &quot;as available&quot;. We do not promise it will always be available or error-free, and we do
+        not verify everything members post. Information shared by members (including jobs, business listings and advice)
+        is their own and not endorsed by us.
       </p>
     ),
   },
@@ -234,10 +237,10 @@ const sections: LegalSection[] = [
     title: 'Limitation of liability',
     content: (
       <p>
-        To the extent the law allows, JNVPJAA, its office-bearers and volunteers are not liable for indirect or
-        consequential loss, loss of data or opportunity, or for the acts of members or third parties, arising from your
-        use of the Portal. Because membership is free, our total liability to you for any claim is limited to ₹1,000.
-        This does not limit liability for fraud, or for anything that cannot be limited by law.
+        To the extent the law allows, {brand.shortName}, its office-bearers and volunteers are not liable for indirect
+        or consequential loss, loss of data or opportunity, or for the acts of members or third parties, arising from
+        your use of the Portal. Because membership is free, our total liability to you for any claim is limited to
+        ₹1,000. This does not limit liability for fraud, or for anything that cannot be limited by law.
       </p>
     ),
   },
@@ -246,8 +249,8 @@ const sections: LegalSection[] = [
     title: 'Your responsibility to us',
     content: (
       <p>
-        If someone makes a claim against JNVPJAA because of content you posted or your breach of these Terms or the law,
-        you agree to cover the reasonable costs and losses that result.
+        If someone makes a claim against {brand.shortName} because of content you posted or your breach of these Terms
+        or the law, you agree to cover the reasonable costs and losses that result.
       </p>
     ),
   },
@@ -281,9 +284,9 @@ const sections: LegalSection[] = [
         <p>For complaints about content, accounts or these Terms, contact our Grievance Officer:</p>
         <ul>
           <li>Grievance Officer: {mail}</li>
-          <li>Post: 35, Karani Colony, Shanti Nagar, Opposite NBC, Khatipura Road, Jaipur, Rajasthan 302006, India</li>
+          <li>Post: {POSTAL_ADDRESS}</li>
           <li>
-            Web: <Link href="/contact-us">jnvpjaa.org/contact-us</Link>
+            Web: <Link href="/contact-us">{brand.domains.site}/contact-us</Link>
           </li>
         </ul>
       </>
@@ -293,14 +296,14 @@ const sections: LegalSection[] = [
 
 export default function TermsConditionPage() {
   return (
-    <LayoutModule disableCover title="Terms of Use • Alumni Network of JNV Paota, Jaipur" containerProps={{}}>
+    <LayoutModule disableCover title={`Terms of Use • ${brand.tagline}`} containerProps={{}}>
       <LegalDocument
         title="Terms of Use"
         lastUpdated="November 17, 2026"
         intro={
           <p>
-            Please read these terms before using the JNVPJAA website and member portal. They explain who can join, what
-            you can and cannot do, and how we handle disputes.
+            Please read these terms before using the {brand.shortName} website and member portal. They explain who can
+            join, what you can and cannot do, and how we handle disputes.
           </p>
         }
         sections={sections}

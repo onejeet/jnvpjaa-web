@@ -7,6 +7,7 @@ import { initializeApollo } from '@/utils/apollo';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
+import { brand } from '@/config/tenant';
 
 export const dynamic = 'force-dynamic';
 
@@ -27,12 +28,12 @@ const getPublicEvent = cache(async (id: string) => {
 });
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  if (isRouterNavigation()) return { title: 'Event | JNVPJAA' };
+  if (isRouterNavigation()) return { title: `Event | ${brand.shortName}` };
   const event = await getPublicEvent(params.id);
   if (!event) return { title: 'Event not found', robots: { index: false, follow: false } };
 
   const url = canonicalUrl(`/events/${event.id}`);
-  const title = `${event.title} | JNVPJAA Events`;
+  const title = `${event.title} | ${brand.shortName} Events`;
   const description = event.summary || SEO_CONFIG.description;
   const image = event.cover?.url || SEO_CONFIG.defaultImage;
 

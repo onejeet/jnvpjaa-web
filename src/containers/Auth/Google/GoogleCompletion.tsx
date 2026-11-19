@@ -7,6 +7,7 @@ import { Alert, Box, Button, Checkbox, FormControlLabel, MenuItem, Stack, TextFi
 import Link from 'next/link';
 import { getBatchOptions } from '@/utils/helpers';
 import { requestGoogleAuth as request } from './requestGoogleAuth';
+import { brand } from '@/config/tenant';
 
 type Flow = { status: string; email?: string; firstName?: string; lastName?: string; returnPath?: string };
 const fields = 'status email firstName lastName returnPath';
@@ -110,7 +111,7 @@ export default function GoogleCompletion() {
       title={flow.status === 'REGISTER' ? 'Complete your registration' : 'Connect your Google account'}
       description={
         flow.status === 'REGISTER'
-          ? 'A few details to help us verify your connection to JNV Paota.'
+          ? `A few details to help us verify your connection to ${brand.institution.shortName}.`
           : 'Confirm your current password to securely connect Google to your existing account.'
       }
     >

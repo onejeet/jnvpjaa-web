@@ -8,6 +8,7 @@ import Button from '@/components/core/Button';
 import { IconPlus, IconCirclePlus } from '@tabler/icons-react';
 import { useAuth } from '@/context/AuthContext';
 import AlbumListModule from '@/modules/AlbumListModule';
+import { brand } from '@/config/tenant';
 
 export default function Gallery() {
   const [addAlbum, setAddAlbum] = React.useState<boolean>(false);
@@ -18,7 +19,7 @@ export default function Gallery() {
   return (
     <LayoutModule
       disableCover
-      title={`Photo Gallery • Alumni Network of JNV Paota, Jaipur`}
+      title={`Photo Gallery • ${brand.tagline}`}
       //   containerProps={{ sx: { py: 2 } }}
     >
       <Box display="flex" alignItems="start" gap={2} justifyContent="space-between">

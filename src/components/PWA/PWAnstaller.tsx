@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import AlertDialog, { AlertDialogProps } from '../common/AlertDialog';
+import { brand } from '@/config/tenant';
 
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
@@ -50,8 +51,8 @@ export default function PWAInstaller() {
   return (
     <AlertDialog
       open={showInstallDialog}
-      title="Install JNVPJAA App"
-      message="Get quick access to JNVPJAA by installing the app on your device. Enjoy a faster and better experience! 🚀"
+      title={`Install ${brand.shortName} App`}
+      message={`Get quick access to ${brand.shortName} by installing the app on your device. Enjoy a faster and better experience! 🚀`}
       onOkay={handleInstall}
       onCancel={() => setShowInstallDialog(false)}
       okayButtonProps={{

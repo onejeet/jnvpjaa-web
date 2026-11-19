@@ -260,7 +260,7 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
             fontWeight={500}
             sx={{
               pr: 4,
-              background: 'linear-gradient(90deg,#C62835 0,#217bfe 70%, #078efb 100%)',
+              background: (t) => `linear-gradient(90deg,${t.palette.primary.main} 0,#217bfe 70%, #078efb 100%)`,
               backgroundClip: 'text',
               color: 'transparent',
             }}
@@ -273,7 +273,7 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
               {/* <Cake size={32} /> */}
               <Typography
                 sx={{
-                  background: 'linear-gradient(90deg,#C62835 0,#217bfe 70%, #078efb 100%)',
+                  background: (t) => `linear-gradient(90deg,${t.palette.primary.main} 0,#217bfe 70%, #078efb 100%)`,
                   backgroundClip: 'text',
                   color: 'transparent',
                   fontWeight: 500,

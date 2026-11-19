@@ -1,6 +1,5 @@
 'use client';
 
-import { JNVPJAA_SOCIAL_MEDIA } from '@/constants/General.contants';
 import { getSocialMediaIcon } from '@/utils/helpers';
 import { IconButton, Stack } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
@@ -20,11 +19,13 @@ import Link from 'next/link';
 import HelpBanner from '@/components/common/HelpBanner/HelpBanner';
 import useHiddenPagePaths from '@/modules/ContentPages/useHiddenPagePaths';
 import { dmSans } from '@/utils/theme/fonts';
+import { isPathEnabled } from '@/config/features';
+import { brand } from '@/config/tenant';
 
 const LayoutFooter: React.FC = () => {
   const hiddenPaths = useHiddenPagePaths();
   const visibleLinks = <T extends { path?: string }>(items: T[]) =>
-    items.filter((item) => !item.path || !hiddenPaths.includes(item.path));
+    items.filter((item) => !item.path || (!hiddenPaths.includes(item.path) && isPathEnabled(item.path)));
   return (
     <Box
       sx={{
@@ -75,7 +76,7 @@ const LayoutFooter: React.FC = () => {
                 title="About"
                 items={visibleLinks([
                   {
-                    label: 'About JNVPJAA',
+                    label: `About ${brand.shortName}`,
                     path: '/about',
                   },
                   {
@@ -149,7 +150,7 @@ const LayoutFooter: React.FC = () => {
             {/* <Grid item xs={12} md={6} mt={{ xs: '20px' }}> */}
             <Grid size={{ xs: 12 }} display="flex" width="100%" justifyContent="center">
               <Stack direction="row" spacing="16px" alignItems="center">
-                {JNVPJAA_SOCIAL_MEDIA?.map(({ path, name }: Record<string, any>, index: number) => (
+                {Object.entries(brand.socials).map(([name, path], index) => (
                   <NextLink
                     href={path || '/'}
                     as={path}
@@ -191,7 +192,7 @@ const LayoutFooter: React.FC = () => {
               >
                 &nbsp; &#169; &nbsp;
                 {new Date().getFullYear()}
-                &nbsp;JNVPJAA. All Rights Reserved.
+                &nbsp;{brand.shortName}. All Rights Reserved.
               </Typography>
             </Grid>
             <Grid
@@ -228,7 +229,11 @@ const LayoutFooter: React.FC = () => {
                 alignItems="center"
               >
                 Crafted with <Heart size={20} /> by
-                <Link href="https://dotscreated.com?ref=jnvpjaa" target="_blank" style={{ textDecoration: 'none' }}>
+                <Link
+                  href={`https://dotscreated.com?ref=${brand.id}`}
+                  target="_blank"
+                  style={{ textDecoration: 'none' }}
+                >
                   <Box
                     component="span"
                     ml={1}

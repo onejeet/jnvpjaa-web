@@ -7,6 +7,7 @@ import { initializeApollo } from '@/utils/apollo';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
+import { brand } from '@/config/tenant';
 
 export const dynamic = 'force-dynamic';
 
@@ -24,14 +25,14 @@ const getBlog = cache(async (slug: string) => {
 });
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  if (isRouterNavigation()) return { title: 'Blog | JNVPJAA' };
+  if (isRouterNavigation()) return { title: `Blog | ${brand.shortName}` };
   const blog = await getBlog(decodeURIComponent(params.id));
   if (!blog) return { title: 'Blog post not found', robots: { index: false, follow: false } };
 
   const url = canonicalUrl(`/blog/${encodeURIComponent(blog.slug || params.id)}`);
   const description = blog.summary || SEO_CONFIG.description;
   const image = blog.cover?.url || SEO_CONFIG.defaultImage;
-  const title = `${blog.title} | JNVPJAA Blog`;
+  const title = `${blog.title} | ${brand.shortName} Blog`;
 
   return {
     title: { absolute: title },

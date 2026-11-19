@@ -2,6 +2,7 @@ import { NEWS_POSTS, type NewsListResult } from '@/apollo/newsroomOperations';
 import { SEO_CONFIG, canonicalUrl } from '@/config/seo.config';
 import { NEWS_CATEGORY_LABELS, NO_STORE } from '@/modules/Newsroom/newsroom.utils';
 import { initializeApollo } from '@/utils/apollo';
+import { brand } from '@/config/tenant';
 
 export const dynamic = 'force-dynamic';
 
@@ -32,10 +33,10 @@ export async function GET() {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>JNVPJAA Newsroom</title>
+    <title>${brand.shortName} Newsroom</title>
     <link>${canonicalUrl('/newsroom/')}</link>
     <atom:link href="${SEO_CONFIG.url}/newsroom/feed.xml" rel="self" type="application/rss+xml" />
-    <description>Official news from the JNV Paota Jaipur Alumni Association.</description>
+    <description>Official news from the ${brand.legalName}.</description>
     <language>en-IN</language>
 ${items}
   </channel>

@@ -4,6 +4,7 @@ import { paths } from '@/config/paths';
 import { constructMetadata } from '@/config/seo.config';
 import { JobApplicants } from '@/containers/Jobs';
 import LayoutModule from '@/layouts/Layout';
+import { brand } from '@/config/tenant';
 
 type Props = { params: { slug: string } };
 
@@ -11,7 +12,7 @@ export function generateMetadata({ params }: Props): Metadata {
   return constructMetadata({
     url: `/jobs/${params.slug}/applicants/`,
     noIndex: true,
-    title: 'Applicants • JNVPJAA Jobs',
+    title: `Applicants • ${brand.shortName} Jobs`,
     description: 'Members who applied to this job',
   });
 }
@@ -20,7 +21,7 @@ export function generateMetadata({ params }: Props): Metadata {
 export default function JobApplicantsPage({ params }: Props) {
   const slug = decodeURIComponent(params.slug);
   return (
-    <LayoutModule disableCover title="Applicants • JNVPJAA Jobs" containerProps={{}}>
+    <LayoutModule disableCover title={`Applicants • ${brand.shortName} Jobs`} containerProps={{}}>
       <Breadcrumbs
         items={[
           { label: 'Jobs & Internships', path: paths.jobs.root },

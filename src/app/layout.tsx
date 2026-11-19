@@ -203,12 +203,13 @@ const appleStartupImages = [
 ];
 
 import { defaultMetadata, generateSchema } from '@/config/seo.config';
+import { brand } from '@/config/tenant';
 
 export const metadata: Metadata = {
   ...defaultMetadata,
   appleWebApp: {
     capable: true,
-    title: 'JNVPJAA',
+    title: brand.shortName,
     statusBarStyle: 'default',
     startupImage: appleStartupImages,
   },
@@ -219,12 +220,12 @@ export const viewport: Viewport = {
   initialScale: 1,
   // Lets the bottom tab bar sit over the home-indicator area; it already pads itself with env(safe-area-inset-bottom).
   viewportFit: 'cover',
-  themeColor: '#C62835',
+  themeColor: brand.theme.primary['500'],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" style={{ ['--brand-primary' as string]: brand.theme.primary['500'] }}>
       <head>
         <link href="https://fonts.googleapis.com/css2?family=Playwrite+CU:wght@400&display=swap" rel="stylesheet" />
         <JsonLd data={generateSchema.organization()} />
@@ -233,7 +234,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={dmSans.className}>
         <Providers>
           {children}
-          <GoogleTagManager gtmId="GTM-W7R5B5JB" />
+          {brand.analytics?.gtmId && <GoogleTagManager gtmId={brand.analytics.gtmId} />}
           <Analytics />
         </Providers>
       </body>

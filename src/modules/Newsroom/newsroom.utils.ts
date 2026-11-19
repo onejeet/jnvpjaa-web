@@ -1,5 +1,6 @@
 // Dependency-free on purpose: tests load this file on its own.
 import type { NewsCategory } from '@/apollo/newsroomOperations';
+import { brand } from '@/config/tenant';
 
 export const NEWS_CATEGORY_LABELS: Record<NewsCategory, string> = {
   ANNOUNCEMENT: 'Announcement',
@@ -8,7 +9,7 @@ export const NEWS_CATEGORY_LABELS: Record<NewsCategory, string> = {
   IN_THE_MEDIA: 'In the media',
 };
 
-export const NEWS_BYLINE = 'JNVPJAA Communications';
+export const NEWS_BYLINE = `${brand.shortName} Communications`;
 export const NEWS_DATELINE_PLACE = 'JAIPUR';
 
 // Fixed to India time so the server's own timezone can never shift the printed day.

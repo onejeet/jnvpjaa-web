@@ -1,4 +1,5 @@
 import { PERMISSION_CODES, ROLE_CODES } from '@/constants/access';
+import { isEnabled } from '@/config/features';
 
 export interface AdminAccess {
   can: (code: string) => boolean;
@@ -83,7 +84,7 @@ const GROUPS: { label: string; items: Entry[] }[] = [
         href: '/newsroom',
         description: 'Publish official news and announcements.',
         external: true,
-        allowed: (a) => a.can(PERMISSION_CODES.NEWSROOM_POST_MANAGE),
+        allowed: (a) => isEnabled('newsroom') && a.can(PERMISSION_CODES.NEWSROOM_POST_MANAGE),
       },
     ],
   },
@@ -102,7 +103,7 @@ const GROUPS: { label: string; items: Entry[] }[] = [
         label: 'Scholarship',
         href: '/admin/scholarship',
         description: 'Turn the scholarship module on or off and manage test mode.',
-        allowed: isSuperAdmin,
+        allowed: (a) => isEnabled('scholarship') && isSuperAdmin(a),
       },
     ],
   },

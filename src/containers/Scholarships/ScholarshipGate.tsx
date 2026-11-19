@@ -7,8 +7,9 @@ import EmptyView from '@/components/common/EmptyView';
 import { useAuth } from '@/context/AuthContext';
 import useScholarshipAvailability from '@/hooks/useScholarshipAvailability';
 import LayoutModule from '@/layouts/Layout';
+import { brand } from '@/config/tenant';
 
-const TITLE = 'Scholarships • Alumni Network of JNV Paota, Jaipur';
+const TITLE = `Scholarships • ${brand.tagline}`;
 
 /**
  * Keeps every /scholarships page closed until a Super Admin switches the module on.

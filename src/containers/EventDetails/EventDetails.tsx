@@ -11,6 +11,7 @@ import LayoutModule from '@/layouts/Layout';
 import { Box } from '@mui/material';
 import { useParams } from 'next/navigation';
 import React from 'react';
+import { brand } from '@/config/tenant';
 
 interface EventDetailsProps {
   event?: Event;
@@ -46,7 +47,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({ event: initialData }) => {
   );
 
   return (
-    <LayoutModule disableCover title={`${event?.title || 'Event'} • Alumni Network of JNV Paota, Jaipur`}>
+    <LayoutModule disableCover title={`${event?.title || 'Event'} • ${brand.tagline}`}>
       <Box mb={1} display="flex" justifyContent="start" alignItems="center">
         <Breadcrumbs items={breadcrumbsList} loading={contentLoading} />
         {/* {buttonProps && (

@@ -1,6 +1,8 @@
+import { t } from '@/config/tenant';
+
 export type ContentPageType = 'message' | 'text' | 'people-list';
 
-// Fixed page set. Keep identical to jnvpjaa-backend/src/services/contentPages/schema.ts (a test checks it).
+// Fixed page set. Keep identical to the backend's src/services/contentPages/schema.ts (a test checks it).
 export const CONTENT_PAGES = {
   'president-message': { type: 'message', label: "President's Message", path: '/president-message' },
   'principal-message': { type: 'message', label: "Principal's Message", path: '/principal-message' },
@@ -8,7 +10,8 @@ export const CONTENT_PAGES = {
   vision: { type: 'text', label: 'Vision & Mission', path: '/vision' },
   about: { type: 'text', label: 'About', path: '/about' },
   'past-presidents': { type: 'people-list', label: 'Past Presidents', path: '/past-presidents' },
-  'bhamashah-pillars': { type: 'people-list', label: 'Bhamashah Pillars', path: '/bhamashah-pillars' },
+  // The slug is a fixed URL; each tenant names the page (e.g. "Distinguished Alumni").
+  'bhamashah-pillars': { type: 'people-list', label: t('pages.honourRoll'), path: '/bhamashah-pillars' },
 } as const satisfies Record<string, { type: ContentPageType; label: string; path: string }>;
 
 export type ContentPageSlug = keyof typeof CONTENT_PAGES;

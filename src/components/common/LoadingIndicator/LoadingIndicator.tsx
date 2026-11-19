@@ -11,9 +11,10 @@ import { alpha } from '@mui/system';
 /* TYPES */
 import type { LoadingIndicatorProps } from './LoadingIndicator.types';
 import Image from 'next/image';
+import { assetUrl, brand } from '@/config/tenant';
 
-const LOADING_SPINNER_SRC = 'https://assets.jnvpjaa.org/svg/triangle-spin.svg';
-const LOADING_LOGO_SRC = 'https://assets.jnvpjaa.org/branding/logo-square-white.webp';
+const LOADING_SPINNER_SRC = assetUrl('/svg/triangle-spin.svg');
+const LOADING_LOGO_SRC = assetUrl('/branding/logo-square-white.webp');
 
 const getContent = (props: LoadingIndicatorProps) => {
   const { size, children, icon, ...restProps } = props;
@@ -34,7 +35,7 @@ const getContent = (props: LoadingIndicatorProps) => {
 
       {children || (
         <Box width={logoSize} height={logoSize} borderRadius="50%" overflow="hidden" position="relative" flexShrink={0}>
-          <Image src={LOADING_LOGO_SRC} alt="JNVPJAA logo" fill sizes={`${logoSize}px`} priority />
+          <Image src={LOADING_LOGO_SRC} alt={`${brand.shortName} logo`} fill sizes={`${logoSize}px`} priority />
         </Box>
       )}
     </Box>

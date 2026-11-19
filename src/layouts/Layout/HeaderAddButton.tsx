@@ -103,7 +103,7 @@ const HeaderAddButton: React.FC<HeaderAddButtonProps> = ({ isMobile }) => {
             sx={{
               fontSize: '16px',
               fontWeight: 400,
-              background: 'linear-gradient(90deg,#C62835 0,#217bfe 70%, #078efb 100%)',
+              background: (t) => `linear-gradient(90deg,${t.palette.primary.main} 0,#217bfe 70%, #078efb 100%)`,
               backgroundClip: 'text',
               color: 'transparent',
               opacity: 1,

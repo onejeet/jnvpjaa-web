@@ -1,5 +1,14 @@
 /** @type {import('next').NextConfig} */
 
+// Fails the build when TENANT is unset or unknown; never falls back to another association's brand.
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const tenant = require('./tenants/resolve').resolveTenant();
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { domains } = require(`${tenant.dir}/brand.json`);
+const STOCK_HOSTS = ['images.unsplash.com', 'cdn.pixabay.com'];
+const imagesOn = (...hosts) =>
+  new RegExp(`^https:\\/\\/(${hosts.map((h) => h.replace(/\./g, '\\.')).join('|')})\\/.*\\.(png|jpg|jpeg|webp|gif|svg)$`, 'i');
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const withPWA = require('next-pwa')({
   dest: 'public',
@@ -34,9 +43,9 @@ const withPWA = require('next-pwa')({
         },
       },
     },
-    // 2. CDN: assets.jnvpjaa.org
+    // 2. CDN: the tenant's assets host
     {
-      urlPattern: /^https:\/\/assets\.jnvpjaa\.org\/.*\.(png|jpg|jpeg|webp|gif|svg)$/i,
+      urlPattern: imagesOn(domains.assets),
       handler: 'CacheFirst',
       options: {
         cacheName: 'cdn-assets-images',
@@ -50,9 +59,9 @@ const withPWA = require('next-pwa')({
       },
     },
 
-    // 3. CDN: content.jnvpjaa.org
+    // 3. CDN: the tenant's content (uploads) host
     {
-      urlPattern: /^https:\/\/content\.jnvpjaa\.org\/.*\.(png|jpg|jpeg|webp|gif|svg)$/i,
+      urlPattern: imagesOn(domains.content),
       handler: 'CacheFirst',
       options: {
         cacheName: 'cdn-content-images',
@@ -68,7 +77,7 @@ const withPWA = require('next-pwa')({
 
     // 4. External: Unsplash, Pixabay
     {
-      urlPattern: /^https:\/\/(images\.unsplash\.com|cdn\.pixabay\.com)\/.*\.(png|jpg|jpeg|webp|gif|svg)$/i,
+      urlPattern: imagesOn(...STOCK_HOSTS),
       handler: 'CacheFirst',
       options: {
         cacheName: 'external-images',
@@ -124,6 +133,11 @@ const withPWA = require('next-pwa')({
 
 const nextConfig = {
   reactStrictMode: true,
+  // Lets a check build (e.g. the tenant leak check) run beside a live dev server.
+  distDir: process.env.NEXT_DIST_DIR || '.next',
+  env: {
+    NEXT_PUBLIC_GRAPHQL_ENDPOINT: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || `https://${domains.api}/client`,
+  },
   trailingSlash: true,
   async headers() {
     return [
@@ -159,28 +173,11 @@ const nextConfig = {
     ];
   },
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'jnvpjaa.org',
-      },
-      {
-        protocol: 'https',
-        hostname: 'assets.jnvpjaa.org',
-      },
-      {
-        protocol: 'https',
-        hostname: 'content.jnvpjaa.org',
-      },
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'cdn.pixabay.com',
-      },
-    ],
+    // Keep in sync with the backend's imageHosts(): pages may only store images next/image can load.
+    remotePatterns: [domains.site, domains.assets, domains.content, ...STOCK_HOSTS].map((hostname) => ({
+      protocol: 'https',
+      hostname,
+    })),
   },
   transpilePackages: ['mui-tel-input'],
   webpack: (config, { isServer }) => {
@@ -188,6 +185,7 @@ const nextConfig = {
     config.resolve.alias = {
       ...(config.resolve.alias || {}),
       canvas: false,
+      '@tenant': tenant.dir,
     };
 
     // Exclude browser-specific packages from server-side rendering

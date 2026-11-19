@@ -1,0 +1,13 @@
+{
+  "siteName": "YAA",
+  "title": "YAA | Your School Alumni Association",
+  "titleTemplate": "%s | YAA",
+  "description": "Connect with alumni of Your School. Explore events, alumni stories, photo galleries and community initiatives.",
+  "defaultImage": "/assets/images/cover-2.webp",
+  "defaultImageSize": {
+    "width": 1300,
+    "height": 585
+  },
+  "locale": "en_IN",
+  "language": "en-IN"
+}
