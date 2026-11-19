@@ -2,126 +2,45 @@
   "/": {
     "title": "JNVPJAA | JNV Paota Jaipur Alumni Association",
     "metas": [
-      [
-        "apple-mobile-web-app-capable",
-        "yes"
-      ],
-      [
-        "apple-mobile-web-app-status-bar-style",
-        "default"
-      ],
-      [
-        "apple-mobile-web-app-title",
-        "JNVPJAA"
-      ],
-      [
-        "application-name",
-        "JNVPJAA"
-      ],
+      ["apple-mobile-web-app-capable", "yes"],
+      ["apple-mobile-web-app-status-bar-style", "default"],
+      ["apple-mobile-web-app-title", "JNVPJAA"],
+      ["application-name", "JNVPJAA"],
       [
         "description",
         "Connect with alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur. Explore JNVPJAA events, alumni stories, photo galleries and community initiatives."
       ],
-      [
-        "emotion-insertion-point",
-        ""
-      ],
-      [
-        "mobile-web-app-capable",
-        "yes"
-      ],
-      [
-        "next-size-adjust",
-        ""
-      ],
+      ["emotion-insertion-point", ""],
+      ["mobile-web-app-capable", "yes"],
+      ["next-size-adjust", ""],
       [
         "og:description",
         "Connect with alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur. Explore JNVPJAA events, alumni stories, photo galleries and community initiatives."
       ],
-      [
-        "og:image:alt",
-        "JNVPJAA | JNV Paota Jaipur Alumni Association"
-      ],
-      [
-        "og:image",
-        "https://jnvpjaa.org/assets/images/cover-2.webp"
-      ],
-      [
-        "og:locale",
-        "en_IN"
-      ],
-      [
-        "og:site_name",
-        "JNVPJAA"
-      ],
-      [
-        "og:title",
-        "JNVPJAA | JNV Paota Jaipur Alumni Association"
-      ],
-      [
-        "og:type",
-        "website"
-      ],
-      [
-        "og:url",
-        "https://jnvpjaa.org/"
-      ],
-      [
-        "theme-color",
-        "#C62835"
-      ],
-      [
-        "twitter:card",
-        "summary_large_image"
-      ],
+      ["og:image:alt", "JNVPJAA | JNV Paota Jaipur Alumni Association"],
+      ["og:image", "https://jnvpjaa.org/assets/images/cover-2.webp"],
+      ["og:locale", "en_IN"],
+      ["og:site_name", "JNVPJAA"],
+      ["og:title", "JNVPJAA | JNV Paota Jaipur Alumni Association"],
+      ["og:type", "website"],
+      ["og:url", "https://jnvpjaa.org/"],
+      ["theme-color", "#C62835"],
+      ["twitter:card", "summary_large_image"],
       [
         "twitter:description",
         "Connect with alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur. Explore JNVPJAA events, alumni stories, photo galleries and community initiatives."
       ],
-      [
-        "twitter:image",
-        "https://jnvpjaa.org/assets/images/cover-2.webp"
-      ],
-      [
-        "twitter:title",
-        "JNVPJAA | JNV Paota Jaipur Alumni Association"
-      ],
-      [
-        "viewport",
-        "width=device-width, initial-scale=1, viewport-fit=cover"
-      ]
+      ["twitter:image", "https://jnvpjaa.org/assets/images/cover-2.webp"],
+      ["twitter:title", "JNVPJAA | JNV Paota Jaipur Alumni Association"],
+      ["viewport", "width=device-width, initial-scale=1, viewport-fit=cover"]
     ],
     "links": [
-      [
-        "apple-touch-icon",
-        "/icons/icon-512.png",
-        ""
-      ],
-      [
-        "canonical",
-        "https://jnvpjaa.org/",
-        ""
-      ],
-      [
-        "icon",
-        "/favicon.png",
-        ""
-      ],
-      [
-        "icon",
-        "/icons/icon-192.png",
-        "192x192"
-      ],
-      [
-        "icon",
-        "/icons/icon-512.png",
-        "512x512"
-      ],
-      [
-        "manifest",
-        "/manifest.json",
-        ""
-      ]
+      ["apple-touch-icon", "/icons/icon-512.png", ""],
+      ["canonical", "https://jnvpjaa.org/", ""],
+      ["icon", "/favicon.png", ""],
+      ["icon", "/icons/icon-192.png", "192x192"],
+      ["icon", "/icons/icon-512.png", "512x512"],
+      ["manifest", "/manifest.json", ""]
     ],
     "ldJson": [
       {
@@ -163,126 +82,45 @@
   "/about/": {
     "title": "About JNVPJAA • Alumni Network of JNV Paota, Jaipur",
     "metas": [
-      [
-        "apple-mobile-web-app-capable",
-        "yes"
-      ],
-      [
-        "apple-mobile-web-app-status-bar-style",
-        "default"
-      ],
-      [
-        "apple-mobile-web-app-title",
-        "JNVPJAA"
-      ],
-      [
-        "application-name",
-        "JNVPJAA"
-      ],
+      ["apple-mobile-web-app-capable", "yes"],
+      ["apple-mobile-web-app-status-bar-style", "default"],
+      ["apple-mobile-web-app-title", "JNVPJAA"],
+      ["application-name", "JNVPJAA"],
       [
         "description",
         "The Official Alumni Network of Jawahar Navodaya Vidyalaya Paota, Jaipur. JNVs are a testament to innovative state-sponsored education in India. Connect with fellow alumni, share experiences, and stay updated on events that honor our shared journey and the values of our beloved school."
       ],
-      [
-        "emotion-insertion-point",
-        ""
-      ],
-      [
-        "mobile-web-app-capable",
-        "yes"
-      ],
-      [
-        "next-size-adjust",
-        ""
-      ],
+      ["emotion-insertion-point", ""],
+      ["mobile-web-app-capable", "yes"],
+      ["next-size-adjust", ""],
       [
         "og:description",
         "The Official Alumni Network of Jawahar Navodaya Vidyalaya Paota, Jaipur. JNVs are a testament to innovative state-sponsored education in India. Connect with fellow alumni, share experiences, and stay updated on events that honor our shared journey and the values of our beloved school."
       ],
-      [
-        "og:image:alt",
-        "About JNVPJAA • Alumni Network of JNV Paota, Jaipur"
-      ],
-      [
-        "og:image",
-        "https://jnvpjaa.org/assets/images/cover-2.webp"
-      ],
-      [
-        "og:locale",
-        "en_IN"
-      ],
-      [
-        "og:site_name",
-        "JNVPJAA"
-      ],
-      [
-        "og:title",
-        "About JNVPJAA • Alumni Network of JNV Paota, Jaipur"
-      ],
-      [
-        "og:type",
-        "website"
-      ],
-      [
-        "og:url",
-        "https://jnvpjaa.org/about/"
-      ],
-      [
-        "theme-color",
-        "#C62835"
-      ],
-      [
-        "twitter:card",
-        "summary_large_image"
-      ],
+      ["og:image:alt", "About JNVPJAA • Alumni Network of JNV Paota, Jaipur"],
+      ["og:image", "https://jnvpjaa.org/assets/images/cover-2.webp"],
+      ["og:locale", "en_IN"],
+      ["og:site_name", "JNVPJAA"],
+      ["og:title", "About JNVPJAA • Alumni Network of JNV Paota, Jaipur"],
+      ["og:type", "website"],
+      ["og:url", "https://jnvpjaa.org/about/"],
+      ["theme-color", "#C62835"],
+      ["twitter:card", "summary_large_image"],
       [
         "twitter:description",
         "The Official Alumni Network of Jawahar Navodaya Vidyalaya Paota, Jaipur. JNVs are a testament to innovative state-sponsored education in India. Connect with fellow alumni, share experiences, and stay updated on events that honor our shared journey and the values of our beloved school."
       ],
-      [
-        "twitter:image",
-        "https://jnvpjaa.org/assets/images/cover-2.webp"
-      ],
-      [
-        "twitter:title",
-        "About JNVPJAA • Alumni Network of JNV Paota, Jaipur"
-      ],
-      [
-        "viewport",
-        "width=device-width, initial-scale=1, viewport-fit=cover"
-      ]
+      ["twitter:image", "https://jnvpjaa.org/assets/images/cover-2.webp"],
+      ["twitter:title", "About JNVPJAA • Alumni Network of JNV Paota, Jaipur"],
+      ["viewport", "width=device-width, initial-scale=1, viewport-fit=cover"]
     ],
     "links": [
-      [
-        "apple-touch-icon",
-        "/icons/icon-512.png",
-        ""
-      ],
-      [
-        "canonical",
-        "https://jnvpjaa.org/about/",
-        ""
-      ],
-      [
-        "icon",
-        "/favicon.png",
-        ""
-      ],
-      [
-        "icon",
-        "/icons/icon-192.png",
-        "192x192"
-      ],
-      [
-        "icon",
-        "/icons/icon-512.png",
-        "512x512"
-      ],
-      [
-        "manifest",
-        "/manifest.json",
-        ""
-      ]
+      ["apple-touch-icon", "/icons/icon-512.png", ""],
+      ["canonical", "https://jnvpjaa.org/about/", ""],
+      ["icon", "/favicon.png", ""],
+      ["icon", "/icons/icon-192.png", "192x192"],
+      ["icon", "/icons/icon-512.png", "512x512"],
+      ["manifest", "/manifest.json", ""]
     ],
     "ldJson": [
       {
@@ -324,126 +162,45 @@
   "/vision/": {
     "title": "Vision & Mission • Alumni Network of JNV Paota, Jaipur | JNVPJAA",
     "metas": [
-      [
-        "apple-mobile-web-app-capable",
-        "yes"
-      ],
-      [
-        "apple-mobile-web-app-status-bar-style",
-        "default"
-      ],
-      [
-        "apple-mobile-web-app-title",
-        "JNVPJAA"
-      ],
-      [
-        "application-name",
-        "JNVPJAA"
-      ],
+      ["apple-mobile-web-app-capable", "yes"],
+      ["apple-mobile-web-app-status-bar-style", "default"],
+      ["apple-mobile-web-app-title", "JNVPJAA"],
+      ["application-name", "JNVPJAA"],
       [
         "description",
         "Learn about the JNVPJAA vision and mission for connecting JNV Paota alumni and supporting students and the school community."
       ],
-      [
-        "emotion-insertion-point",
-        ""
-      ],
-      [
-        "mobile-web-app-capable",
-        "yes"
-      ],
-      [
-        "next-size-adjust",
-        ""
-      ],
+      ["emotion-insertion-point", ""],
+      ["mobile-web-app-capable", "yes"],
+      ["next-size-adjust", ""],
       [
         "og:description",
         "Learn about the JNVPJAA vision and mission for connecting JNV Paota alumni and supporting students and the school community."
       ],
-      [
-        "og:image:alt",
-        "Vision & Mission • Alumni Network of JNV Paota, Jaipur"
-      ],
-      [
-        "og:image",
-        "https://jnvpjaa.org/assets/images/cover-2.webp"
-      ],
-      [
-        "og:locale",
-        "en_IN"
-      ],
-      [
-        "og:site_name",
-        "JNVPJAA"
-      ],
-      [
-        "og:title",
-        "Vision & Mission • Alumni Network of JNV Paota, Jaipur"
-      ],
-      [
-        "og:type",
-        "website"
-      ],
-      [
-        "og:url",
-        "https://jnvpjaa.org/vision/"
-      ],
-      [
-        "theme-color",
-        "#C62835"
-      ],
-      [
-        "twitter:card",
-        "summary_large_image"
-      ],
+      ["og:image:alt", "Vision & Mission • Alumni Network of JNV Paota, Jaipur"],
+      ["og:image", "https://jnvpjaa.org/assets/images/cover-2.webp"],
+      ["og:locale", "en_IN"],
+      ["og:site_name", "JNVPJAA"],
+      ["og:title", "Vision & Mission • Alumni Network of JNV Paota, Jaipur"],
+      ["og:type", "website"],
+      ["og:url", "https://jnvpjaa.org/vision/"],
+      ["theme-color", "#C62835"],
+      ["twitter:card", "summary_large_image"],
       [
         "twitter:description",
         "Learn about the JNVPJAA vision and mission for connecting JNV Paota alumni and supporting students and the school community."
       ],
-      [
-        "twitter:image",
-        "https://jnvpjaa.org/assets/images/cover-2.webp"
-      ],
-      [
-        "twitter:title",
-        "Vision & Mission • Alumni Network of JNV Paota, Jaipur"
-      ],
-      [
-        "viewport",
-        "width=device-width, initial-scale=1, viewport-fit=cover"
-      ]
+      ["twitter:image", "https://jnvpjaa.org/assets/images/cover-2.webp"],
+      ["twitter:title", "Vision & Mission • Alumni Network of JNV Paota, Jaipur"],
+      ["viewport", "width=device-width, initial-scale=1, viewport-fit=cover"]
     ],
     "links": [
-      [
-        "apple-touch-icon",
-        "/icons/icon-512.png",
-        ""
-      ],
-      [
-        "canonical",
-        "https://jnvpjaa.org/vision/",
-        ""
-      ],
-      [
-        "icon",
-        "/favicon.png",
-        ""
-      ],
-      [
-        "icon",
-        "/icons/icon-192.png",
-        "192x192"
-      ],
-      [
-        "icon",
-        "/icons/icon-512.png",
-        "512x512"
-      ],
-      [
-        "manifest",
-        "/manifest.json",
-        ""
-      ]
+      ["apple-touch-icon", "/icons/icon-512.png", ""],
+      ["canonical", "https://jnvpjaa.org/vision/", ""],
+      ["icon", "/favicon.png", ""],
+      ["icon", "/icons/icon-192.png", "192x192"],
+      ["icon", "/icons/icon-512.png", "512x512"],
+      ["manifest", "/manifest.json", ""]
     ],
     "ldJson": [
       {
@@ -485,126 +242,39 @@
   "/president-message/": {
     "title": "President's Message • JNVPJAA",
     "metas": [
-      [
-        "apple-mobile-web-app-capable",
-        "yes"
-      ],
-      [
-        "apple-mobile-web-app-status-bar-style",
-        "default"
-      ],
-      [
-        "apple-mobile-web-app-title",
-        "JNVPJAA"
-      ],
-      [
-        "application-name",
-        "JNVPJAA"
-      ],
-      [
-        "description",
-        "Read the JNVPJAA president’s message to alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur."
-      ],
-      [
-        "emotion-insertion-point",
-        ""
-      ],
-      [
-        "mobile-web-app-capable",
-        "yes"
-      ],
-      [
-        "next-size-adjust",
-        ""
-      ],
-      [
-        "og:description",
-        "Read the JNVPJAA president’s message to alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur."
-      ],
-      [
-        "og:image:alt",
-        "President's Message • JNVPJAA"
-      ],
-      [
-        "og:image",
-        "https://jnvpjaa.org/assets/images/cover-2.webp"
-      ],
-      [
-        "og:locale",
-        "en_IN"
-      ],
-      [
-        "og:site_name",
-        "JNVPJAA"
-      ],
-      [
-        "og:title",
-        "President's Message • JNVPJAA"
-      ],
-      [
-        "og:type",
-        "website"
-      ],
-      [
-        "og:url",
-        "https://jnvpjaa.org/president-message/"
-      ],
-      [
-        "theme-color",
-        "#C62835"
-      ],
-      [
-        "twitter:card",
-        "summary_large_image"
-      ],
+      ["apple-mobile-web-app-capable", "yes"],
+      ["apple-mobile-web-app-status-bar-style", "default"],
+      ["apple-mobile-web-app-title", "JNVPJAA"],
+      ["application-name", "JNVPJAA"],
+      ["description", "Read the JNVPJAA president’s message to alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur."],
+      ["emotion-insertion-point", ""],
+      ["mobile-web-app-capable", "yes"],
+      ["next-size-adjust", ""],
+      ["og:description", "Read the JNVPJAA president’s message to alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur."],
+      ["og:image:alt", "President's Message • JNVPJAA"],
+      ["og:image", "https://jnvpjaa.org/assets/images/cover-2.webp"],
+      ["og:locale", "en_IN"],
+      ["og:site_name", "JNVPJAA"],
+      ["og:title", "President's Message • JNVPJAA"],
+      ["og:type", "website"],
+      ["og:url", "https://jnvpjaa.org/president-message/"],
+      ["theme-color", "#C62835"],
+      ["twitter:card", "summary_large_image"],
       [
         "twitter:description",
         "Read the JNVPJAA president’s message to alumni of Jawahar Navodaya Vidyalaya Paota, Jaipur."
       ],
-      [
-        "twitter:image",
-        "https://jnvpjaa.org/assets/images/cover-2.webp"
-      ],
-      [
-        "twitter:title",
-        "President's Message • JNVPJAA"
-      ],
-      [
-        "viewport",
-        "width=device-width, initial-scale=1, viewport-fit=cover"
-      ]
+      ["twitter:image", "https://jnvpjaa.org/assets/images/cover-2.webp"],
+      ["twitter:title", "President's Message • JNVPJAA"],
+      ["viewport", "width=device-width, initial-scale=1, viewport-fit=cover"]
     ],
     "links": [
-      [
-        "apple-touch-icon",
-        "/icons/icon-512.png",
-        ""
-      ],
-      [
-        "canonical",
-        "https://jnvpjaa.org/president-message/",
-        ""
-      ],
-      [
-        "icon",
-        "/favicon.png",
-        ""
-      ],
-      [
-        "icon",
-        "/icons/icon-192.png",
-        "192x192"
-      ],
-      [
-        "icon",
-        "/icons/icon-512.png",
-        "512x512"
-      ],
-      [
-        "manifest",
-        "/manifest.json",
-        ""
-      ]
+      ["apple-touch-icon", "/icons/icon-512.png", ""],
+      ["canonical", "https://jnvpjaa.org/president-message/", ""],
+      ["icon", "/favicon.png", ""],
+      ["icon", "/icons/icon-192.png", "192x192"],
+      ["icon", "/icons/icon-512.png", "512x512"],
+      ["manifest", "/manifest.json", ""]
     ],
     "ldJson": [
       {
@@ -634,126 +304,45 @@
   "/events/": {
     "title": "Events • JNVPJAA",
     "metas": [
-      [
-        "apple-mobile-web-app-capable",
-        "yes"
-      ],
-      [
-        "apple-mobile-web-app-status-bar-style",
-        "default"
-      ],
-      [
-        "apple-mobile-web-app-title",
-        "JNVPJAA"
-      ],
-      [
-        "application-name",
-        "JNVPJAA"
-      ],
+      ["apple-mobile-web-app-capable", "yes"],
+      ["apple-mobile-web-app-status-bar-style", "default"],
+      ["apple-mobile-web-app-title", "JNVPJAA"],
+      ["application-name", "JNVPJAA"],
       [
         "description",
         "Explore JNVPJAA alumni reunions, meetups, sports events and community activities for JNV Paota, Jaipur."
       ],
-      [
-        "emotion-insertion-point",
-        ""
-      ],
-      [
-        "mobile-web-app-capable",
-        "yes"
-      ],
-      [
-        "next-size-adjust",
-        ""
-      ],
+      ["emotion-insertion-point", ""],
+      ["mobile-web-app-capable", "yes"],
+      ["next-size-adjust", ""],
       [
         "og:description",
         "Explore JNVPJAA alumni reunions, meetups, sports events and community activities for JNV Paota, Jaipur."
       ],
-      [
-        "og:image:alt",
-        "Events • JNVPJAA"
-      ],
-      [
-        "og:image",
-        "https://jnvpjaa.org/assets/images/cover-2.webp"
-      ],
-      [
-        "og:locale",
-        "en_IN"
-      ],
-      [
-        "og:site_name",
-        "JNVPJAA"
-      ],
-      [
-        "og:title",
-        "Events • JNVPJAA"
-      ],
-      [
-        "og:type",
-        "website"
-      ],
-      [
-        "og:url",
-        "https://jnvpjaa.org/events/"
-      ],
-      [
-        "theme-color",
-        "#C62835"
-      ],
-      [
-        "twitter:card",
-        "summary_large_image"
-      ],
+      ["og:image:alt", "Events • JNVPJAA"],
+      ["og:image", "https://jnvpjaa.org/assets/images/cover-2.webp"],
+      ["og:locale", "en_IN"],
+      ["og:site_name", "JNVPJAA"],
+      ["og:title", "Events • JNVPJAA"],
+      ["og:type", "website"],
+      ["og:url", "https://jnvpjaa.org/events/"],
+      ["theme-color", "#C62835"],
+      ["twitter:card", "summary_large_image"],
       [
         "twitter:description",
         "Explore JNVPJAA alumni reunions, meetups, sports events and community activities for JNV Paota, Jaipur."
       ],
-      [
-        "twitter:image",
-        "https://jnvpjaa.org/assets/images/cover-2.webp"
-      ],
-      [
-        "twitter:title",
-        "Events • JNVPJAA"
-      ],
-      [
-        "viewport",
-        "width=device-width, initial-scale=1, viewport-fit=cover"
-      ]
+      ["twitter:image", "https://jnvpjaa.org/assets/images/cover-2.webp"],
+      ["twitter:title", "Events • JNVPJAA"],
+      ["viewport", "width=device-width, initial-scale=1, viewport-fit=cover"]
     ],
     "links": [
-      [
-        "apple-touch-icon",
-        "/icons/icon-512.png",
-        ""
-      ],
-      [
-        "canonical",
-        "https://jnvpjaa.org/events/",
-        ""
-      ],
-      [
-        "icon",
-        "/favicon.png",
-        ""
-      ],
-      [
-        "icon",
-        "/icons/icon-192.png",
-        "192x192"
-      ],
-      [
-        "icon",
-        "/icons/icon-512.png",
-        "512x512"
-      ],
-      [
-        "manifest",
-        "/manifest.json",
-        ""
-      ]
+      ["apple-touch-icon", "/icons/icon-512.png", ""],
+      ["canonical", "https://jnvpjaa.org/events/", ""],
+      ["icon", "/favicon.png", ""],
+      ["icon", "/icons/icon-192.png", "192x192"],
+      ["icon", "/icons/icon-512.png", "512x512"],
+      ["manifest", "/manifest.json", ""]
     ],
     "ldJson": [
       {
@@ -795,126 +384,45 @@
   "/contact-us/": {
     "title": "Contact Us • Alumni Network of JNV Paota, Jaipur | JNVPJAA",
     "metas": [
-      [
-        "apple-mobile-web-app-capable",
-        "yes"
-      ],
-      [
-        "apple-mobile-web-app-status-bar-style",
-        "default"
-      ],
-      [
-        "apple-mobile-web-app-title",
-        "JNVPJAA"
-      ],
-      [
-        "application-name",
-        "JNVPJAA"
-      ],
+      ["apple-mobile-web-app-capable", "yes"],
+      ["apple-mobile-web-app-status-bar-style", "default"],
+      ["apple-mobile-web-app-title", "JNVPJAA"],
+      ["application-name", "JNVPJAA"],
       [
         "description",
         "Contact the JNVPJAA alumni association for questions about membership, events and community initiatives at JNV Paota, Jaipur."
       ],
-      [
-        "emotion-insertion-point",
-        ""
-      ],
-      [
-        "mobile-web-app-capable",
-        "yes"
-      ],
-      [
-        "next-size-adjust",
-        ""
-      ],
+      ["emotion-insertion-point", ""],
+      ["mobile-web-app-capable", "yes"],
+      ["next-size-adjust", ""],
       [
         "og:description",
         "Contact the JNVPJAA alumni association for questions about membership, events and community initiatives at JNV Paota, Jaipur."
       ],
-      [
-        "og:image:alt",
-        "Contact Us • Alumni Network of JNV Paota, Jaipur"
-      ],
-      [
-        "og:image",
-        "https://jnvpjaa.org/assets/images/cover-2.webp"
-      ],
-      [
-        "og:locale",
-        "en_IN"
-      ],
-      [
-        "og:site_name",
-        "JNVPJAA"
-      ],
-      [
-        "og:title",
-        "Contact Us • Alumni Network of JNV Paota, Jaipur"
-      ],
-      [
-        "og:type",
-        "website"
-      ],
-      [
-        "og:url",
-        "https://jnvpjaa.org/contact-us/"
-      ],
-      [
-        "theme-color",
-        "#C62835"
-      ],
-      [
-        "twitter:card",
-        "summary_large_image"
-      ],
+      ["og:image:alt", "Contact Us • Alumni Network of JNV Paota, Jaipur"],
+      ["og:image", "https://jnvpjaa.org/assets/images/cover-2.webp"],
+      ["og:locale", "en_IN"],
+      ["og:site_name", "JNVPJAA"],
+      ["og:title", "Contact Us • Alumni Network of JNV Paota, Jaipur"],
+      ["og:type", "website"],
+      ["og:url", "https://jnvpjaa.org/contact-us/"],
+      ["theme-color", "#C62835"],
+      ["twitter:card", "summary_large_image"],
       [
         "twitter:description",
         "Contact the JNVPJAA alumni association for questions about membership, events and community initiatives at JNV Paota, Jaipur."
       ],
-      [
-        "twitter:image",
-        "https://jnvpjaa.org/assets/images/cover-2.webp"
-      ],
-      [
-        "twitter:title",
-        "Contact Us • Alumni Network of JNV Paota, Jaipur"
-      ],
-      [
-        "viewport",
-        "width=device-width, initial-scale=1, viewport-fit=cover"
-      ]
+      ["twitter:image", "https://jnvpjaa.org/assets/images/cover-2.webp"],
+      ["twitter:title", "Contact Us • Alumni Network of JNV Paota, Jaipur"],
+      ["viewport", "width=device-width, initial-scale=1, viewport-fit=cover"]
     ],
     "links": [
-      [
-        "apple-touch-icon",
-        "/icons/icon-512.png",
-        ""
-      ],
-      [
-        "canonical",
-        "https://jnvpjaa.org/contact-us/",
-        ""
-      ],
-      [
-        "icon",
-        "/favicon.png",
-        ""
-      ],
-      [
-        "icon",
-        "/icons/icon-192.png",
-        "192x192"
-      ],
-      [
-        "icon",
-        "/icons/icon-512.png",
-        "512x512"
-      ],
-      [
-        "manifest",
-        "/manifest.json",
-        ""
-      ]
+      ["apple-touch-icon", "/icons/icon-512.png", ""],
+      ["canonical", "https://jnvpjaa.org/contact-us/", ""],
+      ["icon", "/favicon.png", ""],
+      ["icon", "/icons/icon-192.png", "192x192"],
+      ["icon", "/icons/icon-512.png", "512x512"],
+      ["manifest", "/manifest.json", ""]
     ],
     "ldJson": [
       {
@@ -956,126 +464,45 @@
   "/privacy_policy/": {
     "title": "Privacy Policy • Alumni Network of JNV Paota, Jaipur | JNVPJAA",
     "metas": [
-      [
-        "apple-mobile-web-app-capable",
-        "yes"
-      ],
-      [
-        "apple-mobile-web-app-status-bar-style",
-        "default"
-      ],
-      [
-        "apple-mobile-web-app-title",
-        "JNVPJAA"
-      ],
-      [
-        "application-name",
-        "JNVPJAA"
-      ],
+      ["apple-mobile-web-app-capable", "yes"],
+      ["apple-mobile-web-app-status-bar-style", "default"],
+      ["apple-mobile-web-app-title", "JNVPJAA"],
+      ["application-name", "JNVPJAA"],
       [
         "description",
         "How JNVPJAA collects, uses, shares and protects personal data, including Google sign-in, member directory and your rights under Indian law."
       ],
-      [
-        "emotion-insertion-point",
-        ""
-      ],
-      [
-        "mobile-web-app-capable",
-        "yes"
-      ],
-      [
-        "next-size-adjust",
-        ""
-      ],
+      ["emotion-insertion-point", ""],
+      ["mobile-web-app-capable", "yes"],
+      ["next-size-adjust", ""],
       [
         "og:description",
         "How JNVPJAA collects, uses, shares and protects personal data, including Google sign-in, member directory and your rights under Indian law."
       ],
-      [
-        "og:image:alt",
-        "Privacy Policy • Alumni Network of JNV Paota, Jaipur"
-      ],
-      [
-        "og:image",
-        "https://jnvpjaa.org/assets/images/cover-2.webp"
-      ],
-      [
-        "og:locale",
-        "en_IN"
-      ],
-      [
-        "og:site_name",
-        "JNVPJAA"
-      ],
-      [
-        "og:title",
-        "Privacy Policy • Alumni Network of JNV Paota, Jaipur"
-      ],
-      [
-        "og:type",
-        "website"
-      ],
-      [
-        "og:url",
-        "https://jnvpjaa.org/privacy_policy/"
-      ],
-      [
-        "theme-color",
-        "#C62835"
-      ],
-      [
-        "twitter:card",
-        "summary_large_image"
-      ],
+      ["og:image:alt", "Privacy Policy • Alumni Network of JNV Paota, Jaipur"],
+      ["og:image", "https://jnvpjaa.org/assets/images/cover-2.webp"],
+      ["og:locale", "en_IN"],
+      ["og:site_name", "JNVPJAA"],
+      ["og:title", "Privacy Policy • Alumni Network of JNV Paota, Jaipur"],
+      ["og:type", "website"],
+      ["og:url", "https://jnvpjaa.org/privacy_policy/"],
+      ["theme-color", "#C62835"],
+      ["twitter:card", "summary_large_image"],
       [
         "twitter:description",
         "How JNVPJAA collects, uses, shares and protects personal data, including Google sign-in, member directory and your rights under Indian law."
       ],
-      [
-        "twitter:image",
-        "https://jnvpjaa.org/assets/images/cover-2.webp"
-      ],
-      [
-        "twitter:title",
-        "Privacy Policy • Alumni Network of JNV Paota, Jaipur"
-      ],
-      [
-        "viewport",
-        "width=device-width, initial-scale=1, viewport-fit=cover"
-      ]
+      ["twitter:image", "https://jnvpjaa.org/assets/images/cover-2.webp"],
+      ["twitter:title", "Privacy Policy • Alumni Network of JNV Paota, Jaipur"],
+      ["viewport", "width=device-width, initial-scale=1, viewport-fit=cover"]
     ],
     "links": [
-      [
-        "apple-touch-icon",
-        "/icons/icon-512.png",
-        ""
-      ],
-      [
-        "canonical",
-        "https://jnvpjaa.org/privacy_policy/",
-        ""
-      ],
-      [
-        "icon",
-        "/favicon.png",
-        ""
-      ],
-      [
-        "icon",
-        "/icons/icon-192.png",
-        "192x192"
-      ],
-      [
-        "icon",
-        "/icons/icon-512.png",
-        "512x512"
-      ],
-      [
-        "manifest",
-        "/manifest.json",
-        ""
-      ]
+      ["apple-touch-icon", "/icons/icon-512.png", ""],
+      ["canonical", "https://jnvpjaa.org/privacy_policy/", ""],
+      ["icon", "/favicon.png", ""],
+      ["icon", "/icons/icon-192.png", "192x192"],
+      ["icon", "/icons/icon-512.png", "512x512"],
+      ["manifest", "/manifest.json", ""]
     ],
     "ldJson": [
       {
@@ -1105,126 +532,45 @@
   "/terms_condition/": {
     "title": "Terms of Use • Alumni Network of JNV Paota, Jaipur | JNVPJAA",
     "metas": [
-      [
-        "apple-mobile-web-app-capable",
-        "yes"
-      ],
-      [
-        "apple-mobile-web-app-status-bar-style",
-        "default"
-      ],
-      [
-        "apple-mobile-web-app-title",
-        "JNVPJAA"
-      ],
-      [
-        "application-name",
-        "JNVPJAA"
-      ],
+      ["apple-mobile-web-app-capable", "yes"],
+      ["apple-mobile-web-app-status-bar-style", "default"],
+      ["apple-mobile-web-app-title", "JNVPJAA"],
+      ["application-name", "JNVPJAA"],
       [
         "description",
         "The rules for using the JNVPJAA website and member portal: eligibility, accounts, Google sign-in, member conduct, content and liability."
       ],
-      [
-        "emotion-insertion-point",
-        ""
-      ],
-      [
-        "mobile-web-app-capable",
-        "yes"
-      ],
-      [
-        "next-size-adjust",
-        ""
-      ],
+      ["emotion-insertion-point", ""],
+      ["mobile-web-app-capable", "yes"],
+      ["next-size-adjust", ""],
       [
         "og:description",
         "The rules for using the JNVPJAA website and member portal: eligibility, accounts, Google sign-in, member conduct, content and liability."
       ],
-      [
-        "og:image:alt",
-        "Terms of Use • Alumni Network of JNV Paota, Jaipur"
-      ],
-      [
-        "og:image",
-        "https://jnvpjaa.org/assets/images/cover-2.webp"
-      ],
-      [
-        "og:locale",
-        "en_IN"
-      ],
-      [
-        "og:site_name",
-        "JNVPJAA"
-      ],
-      [
-        "og:title",
-        "Terms of Use • Alumni Network of JNV Paota, Jaipur"
-      ],
-      [
-        "og:type",
-        "website"
-      ],
-      [
-        "og:url",
-        "https://jnvpjaa.org/terms_condition/"
-      ],
-      [
-        "theme-color",
-        "#C62835"
-      ],
-      [
-        "twitter:card",
-        "summary_large_image"
-      ],
+      ["og:image:alt", "Terms of Use • Alumni Network of JNV Paota, Jaipur"],
+      ["og:image", "https://jnvpjaa.org/assets/images/cover-2.webp"],
+      ["og:locale", "en_IN"],
+      ["og:site_name", "JNVPJAA"],
+      ["og:title", "Terms of Use • Alumni Network of JNV Paota, Jaipur"],
+      ["og:type", "website"],
+      ["og:url", "https://jnvpjaa.org/terms_condition/"],
+      ["theme-color", "#C62835"],
+      ["twitter:card", "summary_large_image"],
       [
         "twitter:description",
         "The rules for using the JNVPJAA website and member portal: eligibility, accounts, Google sign-in, member conduct, content and liability."
       ],
-      [
-        "twitter:image",
-        "https://jnvpjaa.org/assets/images/cover-2.webp"
-      ],
-      [
-        "twitter:title",
-        "Terms of Use • Alumni Network of JNV Paota, Jaipur"
-      ],
-      [
-        "viewport",
-        "width=device-width, initial-scale=1, viewport-fit=cover"
-      ]
+      ["twitter:image", "https://jnvpjaa.org/assets/images/cover-2.webp"],
+      ["twitter:title", "Terms of Use • Alumni Network of JNV Paota, Jaipur"],
+      ["viewport", "width=device-width, initial-scale=1, viewport-fit=cover"]
     ],
     "links": [
-      [
-        "apple-touch-icon",
-        "/icons/icon-512.png",
-        ""
-      ],
-      [
-        "canonical",
-        "https://jnvpjaa.org/terms_condition/",
-        ""
-      ],
-      [
-        "icon",
-        "/favicon.png",
-        ""
-      ],
-      [
-        "icon",
-        "/icons/icon-192.png",
-        "192x192"
-      ],
-      [
-        "icon",
-        "/icons/icon-512.png",
-        "512x512"
-      ],
-      [
-        "manifest",
-        "/manifest.json",
-        ""
-      ]
+      ["apple-touch-icon", "/icons/icon-512.png", ""],
+      ["canonical", "https://jnvpjaa.org/terms_condition/", ""],
+      ["icon", "/favicon.png", ""],
+      ["icon", "/icons/icon-192.png", "192x192"],
+      ["icon", "/icons/icon-512.png", "512x512"],
+      ["manifest", "/manifest.json", ""]
     ],
     "ldJson": [
       {
@@ -1254,126 +600,45 @@
   "/members/": {
     "title": "Members Directory • JNVPJAA",
     "metas": [
-      [
-        "apple-mobile-web-app-capable",
-        "yes"
-      ],
-      [
-        "apple-mobile-web-app-status-bar-style",
-        "default"
-      ],
-      [
-        "apple-mobile-web-app-title",
-        "JNVPJAA"
-      ],
-      [
-        "application-name",
-        "JNVPJAA"
-      ],
+      ["apple-mobile-web-app-capable", "yes"],
+      ["apple-mobile-web-app-status-bar-style", "default"],
+      ["apple-mobile-web-app-title", "JNVPJAA"],
+      ["application-name", "JNVPJAA"],
       [
         "description",
         "Discover and connect with alumni and faculty members of Jawahar Navodaya Vidyalaya Paota, Jaipur."
       ],
-      [
-        "emotion-insertion-point",
-        ""
-      ],
-      [
-        "mobile-web-app-capable",
-        "yes"
-      ],
-      [
-        "next-size-adjust",
-        ""
-      ],
+      ["emotion-insertion-point", ""],
+      ["mobile-web-app-capable", "yes"],
+      ["next-size-adjust", ""],
       [
         "og:description",
         "Discover and connect with alumni and faculty members of Jawahar Navodaya Vidyalaya Paota, Jaipur."
       ],
-      [
-        "og:image:alt",
-        "Members Directory • JNVPJAA"
-      ],
-      [
-        "og:image",
-        "https://jnvpjaa.org/assets/images/cover-2.webp"
-      ],
-      [
-        "og:locale",
-        "en_IN"
-      ],
-      [
-        "og:site_name",
-        "JNVPJAA"
-      ],
-      [
-        "og:title",
-        "Members Directory • JNVPJAA"
-      ],
-      [
-        "og:type",
-        "website"
-      ],
-      [
-        "og:url",
-        "https://jnvpjaa.org/members/"
-      ],
-      [
-        "theme-color",
-        "#C62835"
-      ],
-      [
-        "twitter:card",
-        "summary_large_image"
-      ],
+      ["og:image:alt", "Members Directory • JNVPJAA"],
+      ["og:image", "https://jnvpjaa.org/assets/images/cover-2.webp"],
+      ["og:locale", "en_IN"],
+      ["og:site_name", "JNVPJAA"],
+      ["og:title", "Members Directory • JNVPJAA"],
+      ["og:type", "website"],
+      ["og:url", "https://jnvpjaa.org/members/"],
+      ["theme-color", "#C62835"],
+      ["twitter:card", "summary_large_image"],
       [
         "twitter:description",
         "Discover and connect with alumni and faculty members of Jawahar Navodaya Vidyalaya Paota, Jaipur."
       ],
-      [
-        "twitter:image",
-        "https://jnvpjaa.org/assets/images/cover-2.webp"
-      ],
-      [
-        "twitter:title",
-        "Members Directory • JNVPJAA"
-      ],
-      [
-        "viewport",
-        "width=device-width, initial-scale=1, viewport-fit=cover"
-      ]
+      ["twitter:image", "https://jnvpjaa.org/assets/images/cover-2.webp"],
+      ["twitter:title", "Members Directory • JNVPJAA"],
+      ["viewport", "width=device-width, initial-scale=1, viewport-fit=cover"]
     ],
     "links": [
-      [
-        "apple-touch-icon",
-        "/icons/icon-512.png",
-        ""
-      ],
-      [
-        "canonical",
-        "https://jnvpjaa.org/members/",
-        ""
-      ],
-      [
-        "icon",
-        "/favicon.png",
-        ""
-      ],
-      [
-        "icon",
-        "/icons/icon-192.png",
-        "192x192"
-      ],
-      [
-        "icon",
-        "/icons/icon-512.png",
-        "512x512"
-      ],
-      [
-        "manifest",
-        "/manifest.json",
-        ""
-      ]
+      ["apple-touch-icon", "/icons/icon-512.png", ""],
+      ["canonical", "https://jnvpjaa.org/members/", ""],
+      ["icon", "/favicon.png", ""],
+      ["icon", "/icons/icon-192.png", "192x192"],
+      ["icon", "/icons/icon-512.png", "512x512"],
+      ["manifest", "/manifest.json", ""]
     ],
     "ldJson": [
       {
@@ -1415,126 +680,45 @@
   "/jobs/": {
     "title": "Jobs & Internships • JNVPJAA",
     "metas": [
-      [
-        "apple-mobile-web-app-capable",
-        "yes"
-      ],
-      [
-        "apple-mobile-web-app-status-bar-style",
-        "default"
-      ],
-      [
-        "apple-mobile-web-app-title",
-        "JNVPJAA"
-      ],
-      [
-        "application-name",
-        "JNVPJAA"
-      ],
+      ["apple-mobile-web-app-capable", "yes"],
+      ["apple-mobile-web-app-status-bar-style", "default"],
+      ["apple-mobile-web-app-title", "JNVPJAA"],
+      ["application-name", "JNVPJAA"],
       [
         "description",
         "Jobs and internships shared by alumni of JNV Paota, Jaipur — apply in one step with your profile."
       ],
-      [
-        "emotion-insertion-point",
-        ""
-      ],
-      [
-        "mobile-web-app-capable",
-        "yes"
-      ],
-      [
-        "next-size-adjust",
-        ""
-      ],
+      ["emotion-insertion-point", ""],
+      ["mobile-web-app-capable", "yes"],
+      ["next-size-adjust", ""],
       [
         "og:description",
         "Jobs and internships shared by alumni of JNV Paota, Jaipur — apply in one step with your profile."
       ],
-      [
-        "og:image:alt",
-        "Jobs & Internships • JNVPJAA"
-      ],
-      [
-        "og:image",
-        "https://jnvpjaa.org/assets/images/cover-2.webp"
-      ],
-      [
-        "og:locale",
-        "en_IN"
-      ],
-      [
-        "og:site_name",
-        "JNVPJAA"
-      ],
-      [
-        "og:title",
-        "Jobs & Internships • JNVPJAA"
-      ],
-      [
-        "og:type",
-        "website"
-      ],
-      [
-        "og:url",
-        "https://jnvpjaa.org/jobs/"
-      ],
-      [
-        "theme-color",
-        "#C62835"
-      ],
-      [
-        "twitter:card",
-        "summary_large_image"
-      ],
+      ["og:image:alt", "Jobs & Internships • JNVPJAA"],
+      ["og:image", "https://jnvpjaa.org/assets/images/cover-2.webp"],
+      ["og:locale", "en_IN"],
+      ["og:site_name", "JNVPJAA"],
+      ["og:title", "Jobs & Internships • JNVPJAA"],
+      ["og:type", "website"],
+      ["og:url", "https://jnvpjaa.org/jobs/"],
+      ["theme-color", "#C62835"],
+      ["twitter:card", "summary_large_image"],
       [
         "twitter:description",
         "Jobs and internships shared by alumni of JNV Paota, Jaipur — apply in one step with your profile."
       ],
-      [
-        "twitter:image",
-        "https://jnvpjaa.org/assets/images/cover-2.webp"
-      ],
-      [
-        "twitter:title",
-        "Jobs & Internships • JNVPJAA"
-      ],
-      [
-        "viewport",
-        "width=device-width, initial-scale=1, viewport-fit=cover"
-      ]
+      ["twitter:image", "https://jnvpjaa.org/assets/images/cover-2.webp"],
+      ["twitter:title", "Jobs & Internships • JNVPJAA"],
+      ["viewport", "width=device-width, initial-scale=1, viewport-fit=cover"]
     ],
     "links": [
-      [
-        "apple-touch-icon",
-        "/icons/icon-512.png",
-        ""
-      ],
-      [
-        "canonical",
-        "https://jnvpjaa.org/jobs/",
-        ""
-      ],
-      [
-        "icon",
-        "/favicon.png",
-        ""
-      ],
-      [
-        "icon",
-        "/icons/icon-192.png",
-        "192x192"
-      ],
-      [
-        "icon",
-        "/icons/icon-512.png",
-        "512x512"
-      ],
-      [
-        "manifest",
-        "/manifest.json",
-        ""
-      ]
+      ["apple-touch-icon", "/icons/icon-512.png", ""],
+      ["canonical", "https://jnvpjaa.org/jobs/", ""],
+      ["icon", "/favicon.png", ""],
+      ["icon", "/icons/icon-192.png", "192x192"],
+      ["icon", "/icons/icon-512.png", "512x512"],
+      ["manifest", "/manifest.json", ""]
     ],
     "ldJson": [
       {
@@ -1576,130 +760,46 @@
   "/scholarships/": {
     "title": "Signin • Alumni Network of JNV Paota, Jaipur | JNVPJAA",
     "metas": [
-      [
-        "apple-mobile-web-app-capable",
-        "yes"
-      ],
-      [
-        "apple-mobile-web-app-status-bar-style",
-        "default"
-      ],
-      [
-        "apple-mobile-web-app-title",
-        "JNVPJAA"
-      ],
-      [
-        "application-name",
-        "JNVPJAA"
-      ],
+      ["apple-mobile-web-app-capable", "yes"],
+      ["apple-mobile-web-app-status-bar-style", "default"],
+      ["apple-mobile-web-app-title", "JNVPJAA"],
+      ["application-name", "JNVPJAA"],
       [
         "description",
         "The Official Alumni Network of Jawahar Navodaya Vidyalaya Paota, Jaipur. JNVs are a testament to innovative state-sponsored education in India. Connect with fellow alumni, share experiences, and stay updated on events that honor our shared journey and the values of our beloved school."
       ],
-      [
-        "emotion-insertion-point",
-        ""
-      ],
-      [
-        "mobile-web-app-capable",
-        "yes"
-      ],
-      [
-        "next-size-adjust",
-        ""
-      ],
+      ["emotion-insertion-point", ""],
+      ["mobile-web-app-capable", "yes"],
+      ["next-size-adjust", ""],
       [
         "og:description",
         "The Official Alumni Network of Jawahar Navodaya Vidyalaya Paota, Jaipur. JNVs are a testament to innovative state-sponsored education in India. Connect with fellow alumni, share experiences, and stay updated on events that honor our shared journey and the values of our beloved school."
       ],
-      [
-        "og:image:alt",
-        "Signin • Alumni Network of JNV Paota, Jaipur"
-      ],
-      [
-        "og:image",
-        "https://jnvpjaa.org/assets/images/cover-2.webp"
-      ],
-      [
-        "og:locale",
-        "en_IN"
-      ],
-      [
-        "og:site_name",
-        "JNVPJAA"
-      ],
-      [
-        "og:title",
-        "Signin • Alumni Network of JNV Paota, Jaipur"
-      ],
-      [
-        "og:type",
-        "website"
-      ],
-      [
-        "og:url",
-        "https://jnvpjaa.org/signin/"
-      ],
-      [
-        "robots",
-        "noindex, nofollow"
-      ],
-      [
-        "theme-color",
-        "#C62835"
-      ],
-      [
-        "twitter:card",
-        "summary_large_image"
-      ],
+      ["og:image:alt", "Signin • Alumni Network of JNV Paota, Jaipur"],
+      ["og:image", "https://jnvpjaa.org/assets/images/cover-2.webp"],
+      ["og:locale", "en_IN"],
+      ["og:site_name", "JNVPJAA"],
+      ["og:title", "Signin • Alumni Network of JNV Paota, Jaipur"],
+      ["og:type", "website"],
+      ["og:url", "https://jnvpjaa.org/signin/"],
+      ["robots", "noindex, nofollow"],
+      ["theme-color", "#C62835"],
+      ["twitter:card", "summary_large_image"],
       [
         "twitter:description",
         "The Official Alumni Network of Jawahar Navodaya Vidyalaya Paota, Jaipur. JNVs are a testament to innovative state-sponsored education in India. Connect with fellow alumni, share experiences, and stay updated on events that honor our shared journey and the values of our beloved school."
       ],
-      [
-        "twitter:image",
-        "https://jnvpjaa.org/assets/images/cover-2.webp"
-      ],
-      [
-        "twitter:title",
-        "Signin • Alumni Network of JNV Paota, Jaipur"
-      ],
-      [
-        "viewport",
-        "width=device-width, initial-scale=1, viewport-fit=cover"
-      ]
+      ["twitter:image", "https://jnvpjaa.org/assets/images/cover-2.webp"],
+      ["twitter:title", "Signin • Alumni Network of JNV Paota, Jaipur"],
+      ["viewport", "width=device-width, initial-scale=1, viewport-fit=cover"]
     ],
     "links": [
-      [
-        "apple-touch-icon",
-        "/icons/icon-512.png",
-        ""
-      ],
-      [
-        "canonical",
-        "https://jnvpjaa.org/signin/",
-        ""
-      ],
-      [
-        "icon",
-        "/favicon.png",
-        ""
-      ],
-      [
-        "icon",
-        "/icons/icon-192.png",
-        "192x192"
-      ],
-      [
-        "icon",
-        "/icons/icon-512.png",
-        "512x512"
-      ],
-      [
-        "manifest",
-        "/manifest.json",
-        ""
-      ]
+      ["apple-touch-icon", "/icons/icon-512.png", ""],
+      ["canonical", "https://jnvpjaa.org/signin/", ""],
+      ["icon", "/favicon.png", ""],
+      ["icon", "/icons/icon-192.png", "192x192"],
+      ["icon", "/icons/icon-512.png", "512x512"],
+      ["manifest", "/manifest.json", ""]
     ],
     "ldJson": [
       {

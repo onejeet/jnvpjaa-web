@@ -40,10 +40,7 @@
   },
   "contact": {
     "email": "hello@demo.example",
-    "address": [
-      "1 School Road,",
-      "Springfield 00000."
-    ]
+    "address": ["1 School Road,", "Springfield 00000."]
   },
   "domains": {
     "site": "demo.example",

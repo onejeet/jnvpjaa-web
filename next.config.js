@@ -7,7 +7,10 @@ const tenant = require('./tenants/resolve').resolveTenant();
 const { domains } = require(`${tenant.dir}/brand.json`);
 const STOCK_HOSTS = ['images.unsplash.com', 'cdn.pixabay.com'];
 const imagesOn = (...hosts) =>
-  new RegExp(`^https:\\/\\/(${hosts.map((h) => h.replace(/\./g, '\\.')).join('|')})\\/.*\\.(png|jpg|jpeg|webp|gif|svg)$`, 'i');
+  new RegExp(
+    `^https:\\/\\/(${hosts.map((h) => h.replace(/\./g, '\\.')).join('|')})\\/.*\\.(png|jpg|jpeg|webp|gif|svg)$`,
+    'i'
+  );
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const withPWA = require('next-pwa')({

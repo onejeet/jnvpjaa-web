@@ -37,10 +37,7 @@
   "socials": {},
   "contact": {
     "email": "contact@example.org",
-    "address": [
-      "Street address,",
-      "City, Postcode, Country."
-    ]
+    "address": ["Street address,", "City, Postcode, Country."]
   },
   "domains": {
     "site": "example.org",
