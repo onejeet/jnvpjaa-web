@@ -21,6 +21,19 @@ import {
 } from '@/apollo/billingOperations';
 import { invalidateBillingLedgerQueries } from '@/apollo/cacheInvalidation';
 
+// Mirrors the backend allow-list in attachment.service.ts so bad files are rejected before the entry is booked.
+const ATTACHMENT_MIME_TYPES = ['application/pdf', 'image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif'];
+const MAX_ATTACHMENT_SIZE_BYTES = 10 * 1024 * 1024;
+
+const attachmentProblem = (file: File | null) => {
+  if (!file) return null;
+  if (!ATTACHMENT_MIME_TYPES.includes(file.type))
+    return 'Only PDF and image (JPEG, PNG, WebP, HEIC) attachments are allowed.';
+  if (file.size <= 0) return 'Attachment file is empty.';
+  if (file.size > MAX_ATTACHMENT_SIZE_BYTES) return 'Attachment must be 10 MB or smaller.';
+  return null;
+};
+
 const AddTransactionRecordModule: React.FC<any> = ({ onClose }) => {
   const client = useApolloClient();
   const { showAlert } = useAlert();
@@ -39,8 +52,14 @@ const AddTransactionRecordModule: React.FC<any> = ({ onClose }) => {
   const [createDebit, debitState] = useMutation(CREATE_ASSOCIATION_DEBIT);
   const [createAttachmentUpload, attachmentUploadState] = useMutation(CREATE_TRANSACTION_ATTACHMENT_UPLOAD);
   const [finalizeAttachmentUpload, finalizeAttachmentState] = useMutation(FINALIZE_TRANSACTION_ATTACHMENT_UPLOAD);
+  // Covers the whole submit (booking, upload, refresh), not just the individual mutations.
+  const [submitting, setSubmitting] = React.useState(false);
   const saving =
-    creditState.loading || debitState.loading || attachmentUploadState.loading || finalizeAttachmentState.loading;
+    submitting ||
+    creditState.loading ||
+    debitState.loading ||
+    attachmentUploadState.loading ||
+    finalizeAttachmentState.loading;
 
   React.useEffect(() => {
     setValue('billingCategory', selectedType === TransactionType.Credit ? 'DONATION' : 'OTHER_ACTIVITY');
@@ -78,9 +97,17 @@ const AddTransactionRecordModule: React.FC<any> = ({ onClose }) => {
 
   const onSubmit = React.useCallback(
     async (data: IAddTransactionRecordInput) => {
+      if (submitting) return;
+      const fileProblem = attachmentProblem(attachmentFile);
+      if (fileProblem) {
+        showAlert({ visible: true, type: 'error', message: fileProblem });
+        return;
+      }
       const mutation = data.type === TransactionType.Credit ? createCredit : createDebit;
+      setSubmitting(true);
+      let result;
       try {
-        const result = await mutation({
+        result = await mutation({
           variables: {
             title: data.title,
             amount: data.amount,
@@ -91,35 +118,57 @@ const AddTransactionRecordModule: React.FC<any> = ({ onClose }) => {
             description: data.description || null,
           },
         });
-        const transactionId = result.data?.createAssociationCredit?.id || result.data?.createAssociationDebit?.id;
-        if (attachmentFile && transactionId) {
-          await uploadAttachment(transactionId, attachmentFile);
-        }
-
-        await refreshBillingQueries();
-        showAlert({
-          visible: true,
-          type: 'success',
-          message: attachmentFile
-            ? 'Billing entry and attachment recorded successfully.'
-            : 'Billing entry recorded successfully.',
-        });
-        setAttachmentFile(null);
-        reset({
-          type: TransactionType.Debit,
-          billingCategory: 'OTHER_ACTIVITY',
-          transactionDate: dayjs(),
-        });
-        onClose();
       } catch (err: any) {
         showAlert({
           visible: true,
           type: 'error',
           message: err?.message || 'Something went wrong.',
         });
+        setSubmitting(false);
+        return;
       }
+
+      // The entry is booked from here on: never leave the dialog open, or a retry books it twice.
+      const transactionId = result.data?.createAssociationCredit?.id || result.data?.createAssociationDebit?.id;
+      let attachmentError: string | null = null;
+      if (attachmentFile && transactionId) {
+        try {
+          await uploadAttachment(transactionId, attachmentFile);
+        } catch (err: any) {
+          attachmentError = err?.message || 'Attachment upload failed.';
+        }
+      }
+
+      await refreshBillingQueries().catch(() => undefined);
+      showAlert({
+        visible: true,
+        type: attachmentError ? 'error' : 'success',
+        message: attachmentError
+          ? `Billing entry recorded, but the attachment was not saved (${attachmentError}). Do not re-enter the entry.`
+          : attachmentFile
+            ? 'Billing entry and attachment recorded successfully.'
+            : 'Billing entry recorded successfully.',
+      });
+      setAttachmentFile(null);
+      reset({
+        type: TransactionType.Debit,
+        billingCategory: 'OTHER_ACTIVITY',
+        transactionDate: dayjs(),
+      });
+      setSubmitting(false);
+      onClose();
     },
-    [attachmentFile, createCredit, createDebit, onClose, refreshBillingQueries, reset, showAlert, uploadAttachment]
+    [
+      submitting,
+      attachmentFile,
+      createCredit,
+      createDebit,
+      onClose,
+      refreshBillingQueries,
+      reset,
+      showAlert,
+      uploadAttachment,
+    ]
   );
 
   return (
@@ -317,7 +366,7 @@ const AddTransactionRecordModule: React.FC<any> = ({ onClose }) => {
               size="small"
               disabled={saving}
               InputLabelProps={{ shrink: true }}
-              inputProps={{ accept: 'image/*,application/pdf' }}
+              inputProps={{ accept: ATTACHMENT_MIME_TYPES.join(',') }}
               onChange={(event) => {
                 const file = (event.target as HTMLInputElement).files?.[0] || null;
                 setAttachmentFile(file);

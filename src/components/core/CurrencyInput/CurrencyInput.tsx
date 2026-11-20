@@ -51,6 +51,8 @@ const CurrencyInput = React.forwardRef<HTMLDivElement, CurrencyInputProps>(
         }}
         startAdornment={<IconCurrencyRupee size={18} />}
         onChange={(event) => {
+          // Reject rather than strip: stripping turns "-500" into 500 and "1e5" into 15.
+          if (/[^\d.,\s₹]/.test(event.target.value)) return;
           const normalized = normalizeInputText(event.target.value, maxFractionDigits);
           setDisplayValue(formatCurrencyInputValue(normalized));
           onValueChange?.(parseCurrencyInputValue(normalized));

@@ -81,7 +81,11 @@ const useTransactionsTable = () => {
     pageSize: 50,
   });
 
-  const { data: transactionsData, loading } = useQuery(GET_ASSOCIATION_TRANSACTIONS, {
+  const {
+    data: transactionsData,
+    previousData,
+    loading,
+  } = useQuery(GET_ASSOCIATION_TRANSACTIONS, {
     variables: {
       options: {
         offset: (paginationModel?.page || 0) * (paginationModel?.pageSize || 10),
@@ -257,7 +261,8 @@ const useTransactionsTable = () => {
     rows,
     loading,
     columns,
-    rowCount: transactionsData?.getAssociationTransactions?.total || 0,
+    // Keep the last known total while a page loads, or the grid sees 0 rows and snaps back to page 1.
+    rowCount: (transactionsData ?? previousData)?.getAssociationTransactions?.total || 0,
     paginationModel,
     onPaginationModelChange,
     // state,

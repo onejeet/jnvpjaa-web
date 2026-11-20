@@ -21,6 +21,8 @@ const publicOperations = [
 // Error handling link
 const errorLink = new ApolloLink((operation, forward) => {
   return new Observable((observer) => {
+    // Set synchronously before the refresh await, so the first stream's complete() doesn't end the retry.
+    let retrying = false;
     forward(operation).subscribe({
       next: async (result) => {
         if (result?.errors?.length) {
@@ -30,6 +32,7 @@ const errorLink = new ApolloLink((operation, forward) => {
             const isLoggedIn = typeof window !== 'undefined' && localStorage.getItem('logged_in') === 'true';
 
             if (isLoggedIn) {
+              retrying = true;
               try {
                 await refreshAccessToken();
                 // Retry the operation
@@ -53,6 +56,9 @@ const errorLink = new ApolloLink((operation, forward) => {
       },
       error: (error) => {
         observer.error(error);
+      },
+      complete: () => {
+        if (!retrying) observer.complete();
       },
     });
   });

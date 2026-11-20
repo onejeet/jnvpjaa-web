@@ -52,12 +52,12 @@ export default function Transactions() {
           (isMobile ? (
             <Box display="flex" gap={1}>
               {canSetOpeningBalance && (
-                <IconButton color="primary" onClick={() => setSetOpeningBalance(true)}>
+                <IconButton color="primary" aria-label="Opening Balance" onClick={() => setSetOpeningBalance(true)}>
                   <IconWallet size={24} />
                 </IconButton>
               )}
               {canCreateTransaction && (
-                <IconButton color="primary" onClick={() => setAddRecord(true)}>
+                <IconButton color="primary" aria-label="Add Transaction" onClick={() => setAddRecord(true)}>
                   <IconCirclePlus size={24} />
                 </IconButton>
               )}
