@@ -213,24 +213,26 @@ const LayoutFooter: React.FC = () => {
               }}
               mb={{ xs: 1, md: 2 }}
             >
-              <Typography
-                sx={{
-                  color: 'grey.800',
-                  opacity: 1,
-                }}
-                variant="body2"
-                display="flex"
-                alignItems="center"
-              >
-                Powered by
-                <Link
+              <Stack alignItems="center" gap={0.5}>
+                <Typography variant="body2" color="grey.800">
+                  Powered by
+                </Typography>
+                <Box
+                  component={Link}
                   href={`https://dotscreated.com/products/batchd/?ref=${brand.id}`}
                   target="_blank"
-                  style={{ display: 'inline-flex', marginLeft: 8 }}
+                  rel="noopener"
+                  aria-label="Batchd"
+                  sx={{
+                    display: 'inline-flex',
+                    cursor: 'pointer',
+                    transition: 'opacity .2s',
+                    '&:hover': { opacity: 0.8 },
+                  }}
                 >
-                  <Image src="/batchd-logo.png" alt="Batchd" width={79} height={20} />
-                </Link>
-              </Typography>
+                  <Image src="/batchd-logo.png" alt="Batchd" width={94} height={24} />
+                </Box>
+              </Stack>
             </Grid>
             <Grid
               size={{
