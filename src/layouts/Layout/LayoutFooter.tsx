@@ -14,7 +14,6 @@ import React from 'react';
 import Logo from '@/components/common/Logo';
 
 import MenuList from '../../components/common/MenuList';
-import { IconHeartFilled as Heart } from '@tabler/icons-react';
 import Link from 'next/link';
 import HelpBanner from '@/components/common/HelpBanner/HelpBanner';
 import useHiddenPagePaths from '@/modules/ContentPages/useHiddenPagePaths';
@@ -218,16 +217,12 @@ const LayoutFooter: React.FC = () => {
                 sx={{
                   color: 'grey.800',
                   opacity: 1,
-                  svg: {
-                    color: 'error.main',
-                    mx: 1,
-                  },
                 }}
                 variant="body2"
                 display="flex"
                 alignItems="center"
               >
-                Crafted with <Heart size={20} /> by
+                Powered by
                 <Link
                   href={`https://dotscreated.com/products/batchd/?ref=${brand.id}`}
                   target="_blank"
