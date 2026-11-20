@@ -1,3 +1,6 @@
+import { DeferOnNavigation } from '@/components/DeferOnNavigation';
+import PageSkeleton from '@/components/common/PageSkeleton';
+import LayoutModule from '@/layouts/Layout';
 import { constructMetadata, generateSchema } from '@/config/seo.config';
 import { JsonLd } from '@/components/JsonLd';
 export const dynamic = 'force-dynamic';
@@ -42,7 +45,7 @@ async function getBusiness() {
   }
 }
 
-export default async function BusinessesPage() {
+async function BusinessesContent() {
   const data = await getBusiness();
   return (
     <>
@@ -51,5 +54,19 @@ export default async function BusinessesPage() {
       />
       <Businesses data={data as BusinessListResponse} />
     </>
+  );
+}
+
+export default function BusinessesPage() {
+  return (
+    <DeferOnNavigation
+      fallback={
+        <LayoutModule disableCover>
+          <PageSkeleton variant="grid" />
+        </LayoutModule>
+      }
+    >
+      <BusinessesContent />
+    </DeferOnNavigation>
   );
 }

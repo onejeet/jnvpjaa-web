@@ -1,3 +1,5 @@
+import { DeferOnNavigation } from '@/components/DeferOnNavigation';
+import PageSkeleton from '@/components/common/PageSkeleton';
 import { notFound } from 'next/navigation';
 import BhamashahPillars from '@/containers/Organisation/BhamashahPillars';
 import LayoutModule from '@/layouts/Layout';
@@ -14,12 +16,26 @@ export const generateMetadata = () =>
     description: `Recognize the supporters and contributors behind ${brand.shortName} educational and alumni community initiatives.`,
   });
 
-export default async function BhamashahPillarsPage() {
+async function BhamashahPillarsContent() {
   const page = await getContentPage<PeopleListFields>('bhamashah-pillars');
   if (!page) notFound();
   return (
     <LayoutModule disableCover title={`${brand.shortName} ${t('pages.honourRoll')} • ${brand.tagline}`}>
       <BhamashahPillars fields={page.fields} />
     </LayoutModule>
+  );
+}
+
+export default function BhamashahPillarsPage() {
+  return (
+    <DeferOnNavigation
+      fallback={
+        <LayoutModule disableCover>
+          <PageSkeleton variant="grid" />
+        </LayoutModule>
+      }
+    >
+      <BhamashahPillarsContent />
+    </DeferOnNavigation>
   );
 }

@@ -1,3 +1,5 @@
+import { DeferOnNavigation } from '@/components/DeferOnNavigation';
+import PageSkeleton from '@/components/common/PageSkeleton';
 import { notFound } from 'next/navigation';
 import MessagePage from '@/containers/About/MessagePage';
 import LayoutModule from '@/layouts/Layout';
@@ -14,12 +16,26 @@ export const generateMetadata = () =>
     description: `Read the principal’s message for the ${brand.institution.shortName}, ${brand.institution.city} alumni community.`,
   });
 
-export default async function PrincipalMessagePage() {
+async function PrincipalMessageContent() {
   const page = await getContentPage<MessageFields>('principal-message');
   if (!page) notFound();
   return (
     <LayoutModule disableCover title={`Principal's Message • ${brand.tagline}`} containerProps={{}}>
       <MessagePage fields={page.fields} crumb="Message from principal" />
     </LayoutModule>
+  );
+}
+
+export default function PrincipalMessagePage() {
+  return (
+    <DeferOnNavigation
+      fallback={
+        <LayoutModule disableCover containerProps={{}}>
+          <PageSkeleton media />
+        </LayoutModule>
+      }
+    >
+      <PrincipalMessageContent />
+    </DeferOnNavigation>
   );
 }

@@ -49,20 +49,16 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(profileUrl);
   }
 
-  if (/^\/(blog|events)(?:\/|$)/.test(pathname)) {
-    const requestHeaders = new Headers(request.headers);
-    // Next 14 strips Flight headers before middleware runs. Browser fetches
-    // (including router navigation and prefetch) use destination "empty";
-    // direct page loads use "document". Requests without Fetch Metadata keep SSR.
-    if (request.headers.get('sec-fetch-dest') === 'empty') {
-      requestHeaders.set(ROUTER_NAVIGATION_HEADER, '1');
-    } else {
-      requestHeaders.delete(ROUTER_NAVIGATION_HEADER);
-    }
-    return NextResponse.next({ request: { headers: requestHeaders } });
+  const requestHeaders = new Headers(request.headers);
+  // Next strips Flight headers before pages can read them. Browser fetches
+  // (including router navigation and prefetch) use destination "empty";
+  // direct page loads use "document". Requests without Fetch Metadata keep SSR.
+  if (request.headers.get('sec-fetch-dest') === 'empty') {
+    requestHeaders.set(ROUTER_NAVIGATION_HEADER, '1');
+  } else {
+    requestHeaders.delete(ROUTER_NAVIGATION_HEADER);
   }
-
-  return NextResponse.next();
+  return NextResponse.next({ request: { headers: requestHeaders } });
 }
 
 export const config = {

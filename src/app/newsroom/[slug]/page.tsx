@@ -1,3 +1,8 @@
+import { isRouterNavigation } from '@/utils/isRouterNavigation';
+import { DocumentTitle } from '@/components/DocumentTitle';
+import { DeferOnNavigation } from '@/components/DeferOnNavigation';
+import PageSkeleton from '@/components/common/PageSkeleton';
+import LayoutModule from '@/layouts/Layout';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
@@ -23,14 +28,18 @@ const getPost = cache(async (slug: string): Promise<NewsPost | null> => {
   return data?.newsPost || null;
 });
 
+const newsPageTitle = (title: string) => `${title} | ${brand.shortName} Newsroom`;
+
 export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  // Next holds in-app navigation until metadata resolves; the page sets the real title when the post arrives.
+  if (await isRouterNavigation()) return { title: 'Newsroom' };
   const params = await props.params;
   const post = await getPost(decodeURIComponent(params.slug));
   if (!post) return { title: 'News not found', robots: { index: false, follow: false } };
 
   const url = canonicalUrl(`/newsroom/${encodeURIComponent(post.slug)}`);
   const image = post.cover?.url || SEO_CONFIG.defaultImage;
-  const title = `${post.title} | ${brand.shortName} Newsroom`;
+  const title = newsPageTitle(post.title);
   return {
     title: { absolute: title },
     description: post.summary,
@@ -51,13 +60,14 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
   };
 }
 
-export default async function NewsArticlePage(props: { params: Promise<{ slug: string }> }) {
+async function NewsArticleContent(props: { params: Promise<{ slug: string }> }) {
   const params = await props.params;
   const post = await getPost(decodeURIComponent(params.slug));
   if (!post) notFound();
 
   return (
     <>
+      <DocumentTitle title={newsPageTitle(post.title)} />
       <JsonLd data={generateSchema.newsArticle(post)} />
       <JsonLd
         data={generateSchema.breadcrumb([
@@ -68,5 +78,19 @@ export default async function NewsArticlePage(props: { params: Promise<{ slug: s
       />
       <NewsArticle post={post} />
     </>
+  );
+}
+
+export default function NewsArticlePage(props: { params: Promise<{ slug: string }> }) {
+  return (
+    <DeferOnNavigation
+      fallback={
+        <LayoutModule disableCover>
+          <PageSkeleton />
+        </LayoutModule>
+      }
+    >
+      <NewsArticleContent {...props} />
+    </DeferOnNavigation>
   );
 }

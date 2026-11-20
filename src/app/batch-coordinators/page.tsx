@@ -1,3 +1,5 @@
+import { DeferOnNavigation } from '@/components/DeferOnNavigation';
+import PageSkeleton from '@/components/common/PageSkeleton';
 import { constructMetadata } from '@/config/seo.config';
 import BatchCoordinators from '@/containers/Organisation/BatchCoordinators';
 import { initializeApollo } from '@/utils/apollo';
@@ -39,12 +41,26 @@ async function getBatchCoordinators() {
   }
 }
 
-export default async function BatchCoordinatorsPage() {
+async function BatchCoordinatorsContent() {
   const coordinators = await getBatchCoordinators();
 
   return (
     <LayoutModule disableCover title={`Batch Coordinators • ${brand.tagline}`} containerProps={{}}>
       <BatchCoordinators coordinators={coordinators || []} />
     </LayoutModule>
+  );
+}
+
+export default function BatchCoordinatorsPage() {
+  return (
+    <DeferOnNavigation
+      fallback={
+        <LayoutModule disableCover containerProps={{}}>
+          <PageSkeleton variant="grid" />
+        </LayoutModule>
+      }
+    >
+      <BatchCoordinatorsContent />
+    </DeferOnNavigation>
   );
 }

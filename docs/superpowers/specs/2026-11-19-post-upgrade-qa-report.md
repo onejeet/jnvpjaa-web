@@ -65,8 +65,11 @@ a test that failed first. What is left needs infrastructure or production access
 7. **Debug logging (low).** All `console.log` debug output is removed (including logs of whole query results and
    member data). Logs in error paths became `console.error`.
 8. **`/jobs/<missing>` was a soft 404 (low, SEO).** `jobs/loading.tsx` wrapped the detail page, so the 200 shell
-   streamed before `notFound()`. The board's page and skeleton moved to `src/app/jobs/(board)/` (same URL). Missing
-   jobs now answer 404; the detail page no longer has a skeleton. Test: `public-pages` "missing content /jobs/…".
+   streamed before `notFound()`. All `loading.tsx` files are gone. Pages that fetch data wrap it in
+   `DeferOnNavigation`: direct loads wait for the data (full HTML, real 404s), and in-app navigation shows the page's
+   own skeleton at once and streams the data in. Metadata that looks up data is skipped on in-app navigation, because
+   Next holds the navigation until metadata resolves; detail pages set the real tab title when their data arrives.
+   Tests: `public-pages` "missing content /jobs/…" and `navigation.spec.ts`.
 9. **Event short links (low).** `createEvent` called is.gd for every event, drafts included. A link is now made only
    once an event is published, on any of the four publish paths. Test: backend `event-ended` "only published events…".
 10. **Smaller cleanups.** Deleted the unused `BusinessCard` (it linked to a `/business/<id>` route that doesn't exist)

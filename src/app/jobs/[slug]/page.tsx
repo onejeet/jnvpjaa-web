@@ -5,6 +5,11 @@ import { JOB, type Job } from '@/apollo/jobsOperations';
 import { JsonLd } from '@/components/JsonLd';
 import { SEO_CONFIG, canonicalUrl, generateSchema } from '@/config/seo.config';
 import { JobDetail } from '@/containers/Jobs';
+import { JobDetailSkeleton } from '@/containers/Jobs/JobSkeletons';
+import { isRouterNavigation } from '@/utils/isRouterNavigation';
+import { DocumentTitle } from '@/components/DocumentTitle';
+import { DeferOnNavigation } from '@/components/DeferOnNavigation';
+import LayoutModule from '@/layouts/Layout';
 import { NO_STORE } from '@/modules/Newsroom/newsroom.utils';
 import { initializeApollo } from '@/utils/apollo';
 import { brand } from '@/config/tenant';
@@ -74,13 +79,17 @@ const jobPostingSchema = (job: Job) => ({
     : {}),
 });
 
+const jobPageTitle = (job: Job) => `${job.title} at ${job.company} | ${brand.shortName} Jobs`;
+
 export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  // Next holds in-app navigation until metadata resolves; the page sets the real title when the job arrives.
+  if (await isRouterNavigation()) return { title: 'Jobs & Internships' };
   const params = await props.params;
   const job = await getJob(decodeURIComponent(params.slug));
   if (!job) return { title: 'Job not found', robots: { index: false, follow: false } };
 
   const url = canonicalUrl(`/jobs/${encodeURIComponent(job.slug)}`);
-  const title = `${job.title} at ${job.company} | ${brand.shortName} Jobs`;
+  const title = jobPageTitle(job);
   const description = plainText(job.description).slice(0, 160) || `${job.title} at ${job.company}`;
   return {
     title: { absolute: title },
@@ -103,11 +112,26 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
 
 export default async function JobPage(props: { params: Promise<{ slug: string }> }) {
   const params = await props.params;
-  const job = await getJob(decodeURIComponent(params.slug));
+  return (
+    <DeferOnNavigation
+      fallback={
+        <LayoutModule disableCover>
+          <JobDetailSkeleton />
+        </LayoutModule>
+      }
+    >
+      <JobContent slug={decodeURIComponent(params.slug)} />
+    </DeferOnNavigation>
+  );
+}
+
+async function JobContent({ slug }: { slug: string }) {
+  const job = await getJob(slug);
   if (!job) notFound();
 
   return (
     <>
+      <DocumentTitle title={jobPageTitle(job)} />
       {job.isAccepting && <JsonLd data={jobPostingSchema(job)} />}
       <JsonLd
         data={generateSchema.breadcrumb([

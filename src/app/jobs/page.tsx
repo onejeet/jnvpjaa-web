@@ -1,3 +1,6 @@
+import { DeferOnNavigation } from '@/components/DeferOnNavigation';
+import { JobsBoardSkeleton } from '@/containers/Jobs/JobSkeletons';
+import LayoutModule from '@/layouts/Layout';
 import { JOBS, type Job, type JobExperience, type JobType, type WorkMode } from '@/apollo/jobsOperations';
 import { JsonLd } from '@/components/JsonLd';
 import { constructMetadata, generateSchema } from '@/config/seo.config';
@@ -59,7 +62,7 @@ async function getJobs(filters: JobFilters): Promise<{ data: Job[]; total: numbe
   }
 }
 
-export default async function JobsPage(props: { searchParams: Promise<SearchParams> }) {
+async function JobsContent(props: { searchParams: Promise<SearchParams> }) {
   const filters = readFilters((await props.searchParams) || {});
   const { data, total, failed } = await getJobs(filters);
   return (
@@ -67,5 +70,19 @@ export default async function JobsPage(props: { searchParams: Promise<SearchPara
       <JsonLd data={generateSchema.collectionPage(`${brand.shortName} Jobs & Internships`, '/jobs/', description)} />
       <JobsBoard jobs={data} total={total} filters={filters} failed={failed} />
     </>
+  );
+}
+
+export default function JobsPage(props: { searchParams: Promise<SearchParams> }) {
+  return (
+    <DeferOnNavigation
+      fallback={
+        <LayoutModule disableCover>
+          <JobsBoardSkeleton />
+        </LayoutModule>
+      }
+    >
+      <JobsContent {...props} />
+    </DeferOnNavigation>
   );
 }

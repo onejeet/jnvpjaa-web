@@ -74,16 +74,17 @@
     ]
   },
   "include": [
-    "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
+    ".next-leaks/types/**/*.ts",
+    ".next-pwa-check/types/**/*.ts",
     ".next/types/**/*.ts",
     "codegen/codegen.js",
     "codegen/generate.js",
-    "codegen/generateOperations.js",
     "codegen/generate.js",
-    ".next-leaks/types/**/*.ts",
-    ".next-pwa-check/types/**/*.ts"
+    "codegen/generateOperations.js",
+    "next-env.d.ts",
+    ".next-build/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

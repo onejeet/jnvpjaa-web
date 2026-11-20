@@ -222,7 +222,6 @@ const SignupForm = () => {
             label="Mobile"
             control={control}
             disabled={loading}
-            startAdornment="+91"
             name="mobile"
             size="small"
             onChange={(e) => {

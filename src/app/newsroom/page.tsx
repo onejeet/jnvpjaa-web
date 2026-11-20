@@ -1,3 +1,6 @@
+import { DeferOnNavigation } from '@/components/DeferOnNavigation';
+import PageSkeleton from '@/components/common/PageSkeleton';
+import LayoutModule from '@/layouts/Layout';
 import { Metadata } from 'next';
 import { NEWS_POSTS, type NewsCategory, type NewsListResult, type NewsPost } from '@/apollo/newsroomOperations';
 import { JsonLd } from '@/components/JsonLd';
@@ -37,7 +40,7 @@ async function getNews(category?: NewsCategory): Promise<NewsPost[]> {
   }
 }
 
-export default async function NewsroomPage(props: { searchParams: Promise<{ type?: string }> }) {
+async function NewsroomContent(props: { searchParams: Promise<{ type?: string }> }) {
   const searchParams = await props.searchParams;
   const category = isNewsCategory(searchParams?.type) ? searchParams.type : undefined;
   const posts = await getNews(category);
@@ -46,5 +49,19 @@ export default async function NewsroomPage(props: { searchParams: Promise<{ type
       <JsonLd data={generateSchema.collectionPage(`${brand.shortName} Newsroom`, '/newsroom/', description)} />
       <Newsroom posts={posts} category={category} />
     </>
+  );
+}
+
+export default function NewsroomPage(props: { searchParams: Promise<{ type?: string }> }) {
+  return (
+    <DeferOnNavigation
+      fallback={
+        <LayoutModule disableCover>
+          <PageSkeleton variant="grid" />
+        </LayoutModule>
+      }
+    >
+      <NewsroomContent {...props} />
+    </DeferOnNavigation>
   );
 }

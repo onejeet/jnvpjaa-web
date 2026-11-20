@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import { Box, Card, Divider, Grid2 as Grid, Skeleton, Stack } from '@mui/material';
 

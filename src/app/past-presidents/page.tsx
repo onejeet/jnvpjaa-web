@@ -1,3 +1,5 @@
+import { DeferOnNavigation } from '@/components/DeferOnNavigation';
+import PageSkeleton from '@/components/common/PageSkeleton';
 import { notFound } from 'next/navigation';
 import PastPresidents from '@/containers/PastPresidents/PastPresidents';
 import LayoutModule from '@/layouts/Layout';
@@ -14,12 +16,26 @@ export const generateMetadata = () =>
     description: `Explore the past presidents who have served the ${brand.shortName} alumni association and helped strengthen its community.`,
   });
 
-export default async function PastPresidentsPage() {
+async function PastPresidentsContent() {
   const page = await getContentPage<PeopleListFields>('past-presidents');
   if (!page) notFound();
   return (
     <LayoutModule disableCover title={`${brand.shortName} Past Presidents • ${brand.tagline}`} containerProps={{}}>
       <PastPresidents fields={page.fields} />
     </LayoutModule>
+  );
+}
+
+export default function PastPresidentsPage() {
+  return (
+    <DeferOnNavigation
+      fallback={
+        <LayoutModule disableCover containerProps={{}}>
+          <PageSkeleton variant="table" />
+        </LayoutModule>
+      }
+    >
+      <PastPresidentsContent />
+    </DeferOnNavigation>
   );
 }

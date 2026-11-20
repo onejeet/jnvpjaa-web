@@ -1,3 +1,8 @@
+import { isRouterNavigation } from '@/utils/isRouterNavigation';
+import { DocumentTitle } from '@/components/DocumentTitle';
+import { DeferOnNavigation } from '@/components/DeferOnNavigation';
+import PageSkeleton from '@/components/common/PageSkeleton';
+import LayoutModule from '@/layouts/Layout';
 import { GetAlbumDocument, GetAlbumQuery } from '@/apollo/hooks';
 import { JsonLd } from '@/components/JsonLd';
 import SingleAlbum from '@/containers/SingleAlbum';
@@ -21,12 +26,16 @@ const getPublicAlbum = cache(async (id: string) => {
   return album?.total_photos ? album : null;
 });
 
+const albumPageTitle = (title?: string | null) => `${title || 'Photo album'} | ${brand.shortName} Gallery`;
+
 export async function generateMetadata(props: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  // Next holds in-app navigation until metadata resolves; the page sets the real title when the album arrives.
+  if (await isRouterNavigation()) return { title: 'Gallery' };
   const params = await props.params;
   const album = await getPublicAlbum(params.id);
   if (!album) return { title: 'Album not found', robots: { index: false, follow: false } };
 
-  const title = `${album.title} | ${brand.shortName} Gallery`;
+  const title = albumPageTitle(album.title);
   const description =
     album.description || `Photos from ${album.title}, shared by the ${brand.shortName} alumni community.`;
   const url = canonicalUrl(`/gallery/${album.id}`);
@@ -49,7 +58,7 @@ export async function generateMetadata(props: { params: Promise<{ id: string }> 
   };
 }
 
-export default async function SingleAlbumPage(props: { params: Promise<{ id: string }> }) {
+async function SingleAlbumContent(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const album = await getPublicAlbum(params.id);
   if (!album) notFound();
@@ -57,6 +66,7 @@ export default async function SingleAlbumPage(props: { params: Promise<{ id: str
 
   return (
     <>
+      <DocumentTitle title={albumPageTitle(album.title)} />
       <JsonLd
         data={generateSchema.collectionPage(
           albumTitle,
@@ -73,5 +83,19 @@ export default async function SingleAlbumPage(props: { params: Promise<{ id: str
       />
       <SingleAlbum albumId={album.id} />
     </>
+  );
+}
+
+export default function SingleAlbumPage(props: { params: Promise<{ id: string }> }) {
+  return (
+    <DeferOnNavigation
+      fallback={
+        <LayoutModule disableCover>
+          <PageSkeleton variant="grid" />
+        </LayoutModule>
+      }
+    >
+      <SingleAlbumContent {...props} />
+    </DeferOnNavigation>
   );
 }

@@ -1,3 +1,5 @@
+import { DeferOnNavigation } from '@/components/DeferOnNavigation';
+import PageSkeleton from '@/components/common/PageSkeleton';
 import { notFound } from 'next/navigation';
 import { JsonLd } from '@/components/JsonLd';
 import { generateSchema } from '@/config/seo.config';
@@ -17,7 +19,7 @@ const FALLBACK = {
 
 export const generateMetadata = () => contentPageMetadata('vision', FALLBACK);
 
-export default async function VisionPage() {
+async function VisionContent() {
   const page = await getContentPage<TextFields>('vision');
   if (!page) notFound();
   return (
@@ -33,5 +35,19 @@ export default async function VisionPage() {
         <TextPage fields={page.fields} crumb="Vision & Mission" />
       </LayoutModule>
     </>
+  );
+}
+
+export default function VisionPage() {
+  return (
+    <DeferOnNavigation
+      fallback={
+        <LayoutModule disableCover containerProps={{}}>
+          <PageSkeleton />
+        </LayoutModule>
+      }
+    >
+      <VisionContent />
+    </DeferOnNavigation>
   );
 }
