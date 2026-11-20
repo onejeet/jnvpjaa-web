@@ -18,7 +18,6 @@ import { IconHeartFilled as Heart } from '@tabler/icons-react';
 import Link from 'next/link';
 import HelpBanner from '@/components/common/HelpBanner/HelpBanner';
 import useHiddenPagePaths from '@/modules/ContentPages/useHiddenPagePaths';
-import { dmSans } from '@/utils/theme/fonts';
 import { isPathEnabled } from '@/config/features';
 import { brand } from '@/config/tenant';
 
@@ -230,29 +229,11 @@ const LayoutFooter: React.FC = () => {
               >
                 Crafted with <Heart size={20} /> by
                 <Link
-                  href={`https://dotscreated.com?ref=${brand.id}`}
+                  href={`https://dotscreated.com/products/batchd/?ref=${brand.id}`}
                   target="_blank"
-                  style={{ textDecoration: 'none' }}
+                  style={{ display: 'inline-flex', marginLeft: 8 }}
                 >
-                  <Box
-                    component="span"
-                    ml={1}
-                    color="primary.main"
-                    sx={{
-                      borderBottom: '1px dotted',
-                      borderColor: 'primary.300',
-                      cursor: 'pointer',
-                      fontFamily: dmSans.style.fontFamily,
-                      opacity: 1,
-                      '&:hover': {
-                        opacity: 1,
-                        borderColor: 'primary.main',
-                      },
-                    }}
-                  >
-                    {' '}
-                    Dots Created
-                  </Box>
+                  <Image src="/batchd-logo.png" alt="Batchd" width={79} height={20} />
                 </Link>
               </Typography>
             </Grid>
