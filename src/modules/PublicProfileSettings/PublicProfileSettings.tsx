@@ -53,7 +53,7 @@ const clientRuleMessage = (value: string) => {
 };
 
 /** A member's public /@username page: the switch to show or hide it, the link, and the username editor. */
-const PublicProfileSettings: React.FC<{ compact?: boolean }> = ({ compact }) => {
+const PublicProfileSettings: React.FC = () => {
   const client = useApolloClient();
   const { showAlert } = useAlert();
   const { data, loading, error, refetch } = useQuery<{ myPublicProfile: MyPublicProfile }>(MY_PUBLIC_PROFILE, {
@@ -201,7 +201,7 @@ const PublicProfileSettings: React.FC<{ compact?: boolean }> = ({ compact }) => 
     ) : null;
 
   return (
-    <Stack spacing={compact ? 2 : 2.5}>
+    <Stack spacing={2.5}>
       <FormControlLabel
         sx={{ alignItems: 'flex-start', m: 0, gap: 1.5 }}
         control={

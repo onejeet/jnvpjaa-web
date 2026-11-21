@@ -44,6 +44,7 @@ const ShareProfileButton: React.FC<Props> = ({
         startIcon={<IconShare3 size={18} />}
         onClick={() => setOpen(true)}
         aria-haspopup="dialog"
+        sx={{ whiteSpace: 'nowrap', flexShrink: 0 }}
       />
       {open && <ShareSheet username={username} name={name} onClose={() => setOpen(false)} />}
     </>

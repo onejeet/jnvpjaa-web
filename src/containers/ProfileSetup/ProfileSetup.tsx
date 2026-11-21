@@ -11,6 +11,7 @@ import ProfessionInfo from '@/modules/ProfileSetup/ProfessionInfo';
 import ProfilePictureUpload from '@/modules/ProfileSetup/ProfilePictureUpload';
 import Addresses from '@/modules/ProfileSetup/Addresses';
 import DataPrivacy from '@/modules/ProfileSetup/DataPrivacy';
+import PublicProfileSettings from '@/modules/PublicProfileSettings/PublicProfileSettings';
 import { brand } from '@/config/tenant';
 
 const COMPLETE_PROFILE_SETUP = gql`
@@ -31,6 +32,11 @@ const editSections = [
   { id: 'photo', title: 'Photo', description: 'Choose a profile picture.' },
   { id: 'work', title: 'Your work', description: 'Keep your current organisation and role up to date.' },
   { id: 'addresses', title: 'Addresses', description: 'Update your home and work addresses.' },
+  {
+    id: 'public',
+    title: 'Public profile',
+    description: 'Your @username, and whether anyone with the link can see your verified page.',
+  },
   { id: 'privacy', title: 'Privacy', description: 'Choose who can see your contact details.' },
 ];
 
@@ -132,6 +138,20 @@ export default function ProfileSetup() {
           {steps[step].id === 'photo' && <ProfilePictureUpload user={user} onBack={back} onNext={next} />}
           {steps[step].id === 'work' && <ProfessionInfo user={user} onBack={back} onNext={next} />}
           {steps[step].id === 'addresses' && <Addresses user={user} onBack={back} onNext={next} />}
+          {steps[step].id === 'public' && (
+            // Same control as the Security Center; it saves on its own, so this section only needs navigation.
+            <Stack p={{ xs: 2, md: 3 }} spacing={3}>
+              <PublicProfileSettings />
+              <Stack direction="row" justifyContent="space-between">
+                <Button variant="outlined" onClick={back}>
+                  Back
+                </Button>
+                <Button variant="contained" onClick={next}>
+                  Next
+                </Button>
+              </Stack>
+            </Stack>
+          )}
           {steps[step].id === 'privacy' && <DataPrivacy user={user} onBack={back} onNext={next} isLastStep />}
         </Paper>
         {step === 0 && !isEditing && (

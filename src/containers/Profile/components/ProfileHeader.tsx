@@ -6,7 +6,7 @@ import { ProfileHeaderProps } from '../Profile.types';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import VerifiedBadge from '@/components/common/VerifiedBadge';
 import SocialLinks from '@/components/common/SocialLinks';
-import { IconPencil, IconLock, IconDotsCircleHorizontal, IconPhotoEdit } from '@tabler/icons-react';
+import { IconPencil, IconLock, IconDotsCircleHorizontal, IconPhotoEdit, IconWorld } from '@tabler/icons-react';
 import { useProfile } from '@/context/ProfileContext';
 import FacultyBadge from '@/components/common/FacultyBadge';
 import Menu from '@/components/core/Menu';
@@ -26,8 +26,16 @@ import { UnsplashImageSelector } from '@/modules/UnsplashImageSelector/UnsplashI
 import { UNSPLASH_HOME, withUnsplashReferral } from '@/utils/unsplash';
 import { MEMBER_MANAGEMENT_ELIGIBILITY, SET_MEMBER_DISABLED } from '@/apollo/memberOperations';
 import { brand } from '@/config/tenant';
-import { MY_PUBLIC_PROFILE, type MyPublicProfile } from '@/apollo/publicProfileOperations';
+import {
+  MEMBER_USERNAME,
+  MY_PUBLIC_PROFILE,
+  PUBLIC_PROFILE,
+  type MyPublicProfile,
+  type PublicProfile,
+} from '@/apollo/publicProfileOperations';
 import ShareProfileButton from '@/containers/PublicProfile/ShareProfileButton';
+import { publicProfilePath } from '@/utils/publicProfilePath';
+import Link from 'next/link';
 
 const profilePositionRoleCodes = new Set([ROLE_CODES.BATCH_COORDINATOR, ROLE_CODES.FINANCE_MANAGER]);
 
@@ -55,7 +63,21 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
     skip: !isOwnProfile,
   });
   const shareable = isOwnProfile ? publicProfileData?.myPublicProfile : undefined;
-  const shareUsername = shareable?.featureEnabled && !shareable.hidden ? shareable.username : null;
+  // Someone else's page: offer it only if the public lookup (feature on, not hidden, verified) finds it.
+  const { data: memberData } = useQuery<{ getUserDetails: { id: string; username?: string | null } | null }>(
+    MEMBER_USERNAME,
+    { variables: { id: user?.id }, skip: !user?.id || isOwnProfile }
+  );
+  const memberUsername = memberData?.getUserDetails?.username;
+  const { data: memberPublicData } = useQuery<{ publicProfile: { profile: PublicProfile | null } }>(PUBLIC_PROFILE, {
+    variables: { username: memberUsername },
+    skip: !memberUsername || isOwnProfile,
+  });
+  const shareUsername = isOwnProfile
+    ? shareable?.featureEnabled && !shareable.hidden
+      ? shareable.username
+      : null
+    : memberPublicData?.publicProfile?.profile?.username || null;
   const changeCover = async (photoId: string) => {
     try {
       const { data } = await setMyProfileCover({ variables: { photoId } });
@@ -503,6 +525,18 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
             summaryProps={{ color: 'grey.600', fontSize: '14px', mt: { xs: 0, md: 1 } }}
           />
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            {shareUsername && !editingProfile && (
+              <Button
+                component={Link}
+                href={publicProfilePath(shareUsername)}
+                variant="outlined"
+                size="small"
+                startIcon={<IconWorld size={18} />}
+                sx={{ whiteSpace: 'nowrap', flexShrink: 0 }}
+              >
+                Public view
+              </Button>
+            )}
             {shareUsername && !editingProfile && (
               <ShareProfileButton
                 username={shareUsername}

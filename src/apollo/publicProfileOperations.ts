@@ -131,3 +131,13 @@ export const UPDATE_PUBLIC_PROFILES_SETTING = gql`
 export const USERNAME_PATTERN = /^[a-z](?:[a-z0-9]|[._](?=[a-z0-9])){2,29}$/;
 
 export { publicProfilePath } from '@/utils/publicProfilePath';
+
+/** Another member's @username, to check whether their public page is live before offering to share it. */
+export const MEMBER_USERNAME = gql`
+  query MemberUsername($id: String) {
+    getUserDetails(id: $id) {
+      id
+      username
+    }
+  }
+`;
