@@ -20,6 +20,9 @@ const encodeRedirectPath = (path: string) => {
 const PUBLIC_PROFILE = /^\/(?:@|%40)([^/]+)\/?$/i;
 const PUBLIC_PROFILE_INTERNAL = /^\/u\/([^/]+)\/?$/;
 
+// /blog/<slug>.md and /events/<id>.md: Markdown copies of public pages for AI crawlers and agents.
+const MARKDOWN_TWIN = /^\/(blog|events)\/([^/]+)\.md$/;
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const internalProfile = PUBLIC_PROFILE_INTERNAL.exec(pathname);
@@ -34,6 +37,12 @@ export function middleware(request: NextRequest) {
     const missing = request.nextUrl.clone();
     missing.pathname = '/__module-disabled';
     return NextResponse.rewrite(missing);
+  }
+  const markdownTwin = MARKDOWN_TWIN.exec(pathname);
+  if (markdownTwin) {
+    const target = request.nextUrl.clone();
+    target.pathname = `/md/${markdownTwin[1]}/${markdownTwin[2]}/`;
+    return NextResponse.rewrite(target);
   }
   if (pathname.startsWith('/auth/google')) {
     const response = NextResponse.next();

@@ -9,6 +9,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
 import { brand } from '@/config/tenant';
+import { blogMarkdownUrl } from '@/utils/llms';
 
 export const dynamic = 'force-dynamic';
 
@@ -39,7 +40,7 @@ export async function generateMetadata(props: { params: Promise<{ id: string }> 
   return {
     title: { absolute: title },
     description,
-    alternates: { canonical: url },
+    alternates: { canonical: url, types: { 'text/markdown': blogMarkdownUrl(blog.slug || params.id) } },
     openGraph: {
       type: 'article',
       url,

@@ -5,6 +5,8 @@ import {
   GetBlogListDocument,
   GetBlogListQuery,
   GetBlogQuery,
+  GetEventDetailsDocument,
+  GetEventDetailsQuery,
   GetEventListDocument,
   GetEventListQuery,
 } from '@/apollo/hooks';
@@ -92,7 +94,7 @@ export async function buildLlmsTxt(): Promise<string> {
     lines.push('## Blog posts', '');
     for (const b of blogs) {
       lines.push(
-        `- [${b.title}](${canonicalUrl(`/blog/${encodeURIComponent(b.slug!)}/`)})${b.summary ? `: ${b.summary.trim()}` : ''}`
+        `- [${b.title}](${canonicalUrl(`/blog/${encodeURIComponent(b.slug!)}/`)}) ([Markdown](${blogMarkdownUrl(b.slug!)}))${b.summary ? `: ${b.summary.trim()}` : ''}`
       );
     }
     lines.push('');
@@ -101,7 +103,7 @@ export async function buildLlmsTxt(): Promise<string> {
     lines.push('## Events', '');
     for (const e of events) {
       lines.push(
-        `- [${e.title}](${canonicalUrl(`/events/${e.id}/`)}) (${day(e.startDate)})${e.summary ? `: ${e.summary.trim()}` : ''}`
+        `- [${e.title}](${canonicalUrl(`/events/${e.id}/`)}) (${day(e.startDate)}, [Markdown](${eventMarkdownUrl(e.id)}))${e.summary ? `: ${e.summary.trim()}` : ''}`
       );
     }
     lines.push('');
@@ -109,56 +111,91 @@ export async function buildLlmsTxt(): Promise<string> {
   return lines.join('\n');
 }
 
+type BlogMeta = {
+  slug?: string | null;
+  title: string;
+  summary?: string | null;
+  createdAt?: string | null;
+  author?: { firstName?: string | null; lastName?: string | null } | null;
+};
+type EventMeta = {
+  id: number;
+  title: string;
+  summary?: string | null;
+  description?: string | null;
+  startDate?: string | null;
+  endDate?: string | null;
+  medium?: string | null;
+  location?: string | null;
+};
+
+export const blogMarkdownUrl = (slug: string) => `${SEO_CONFIG.url}/blog/${encodeURIComponent(slug)}.md`;
+export const eventMarkdownUrl = (id: number | string) => `${SEO_CONFIG.url}/events/${id}.md`;
+
+async function fetchPublishedBlog(slug: string) {
+  const { data } = await initializeApollo()
+    .query<GetBlogQuery>({ query: GetBlogDocument, variables: { slug }, errorPolicy: 'all' })
+    .catch(() => ({ data: undefined }));
+  return data?.getBlog?.status === BlogStatus.Published ? data.getBlog : null;
+}
+
+function blogSection(meta: BlogMeta, content: string | null | undefined, level: '#' | '##') {
+  const author = `${meta.author?.firstName || ''} ${meta.author?.lastName || ''}`.trim();
+  return [
+    `${level} ${meta.title}`,
+    '',
+    `URL: ${canonicalUrl(`/blog/${encodeURIComponent(meta.slug!)}/`)}`,
+    `Published: ${day(meta.createdAt)}${author ? ` · Author: ${author}` : ''} · Publisher: ${brand.legalName}`,
+    '',
+    ...(meta.summary ? [`> ${meta.summary.trim()}`, ''] : []),
+    htmlToMarkdown(content) || '',
+    '',
+  ].join('\n');
+}
+
+function eventSection(e: EventMeta, level: '#' | '##') {
+  return [
+    `${level} ${level === '##' ? 'Event: ' : ''}${e.title}`,
+    '',
+    `URL: ${canonicalUrl(`/events/${e.id}/`)}`,
+    `Date: ${day(e.startDate)}${e.endDate ? ` to ${day(e.endDate)}` : ''} · Mode: ${e.medium || 'offline'}${e.location && e.location !== 'protected' ? ` · Venue: ${e.location}` : ''} · Organizer: ${brand.legalName}`,
+    '',
+    htmlToMarkdown(e.description) || e.summary || '',
+    '',
+  ].join('\n');
+}
+
+/** Markdown twin of /blog/<slug>/, or null when the post is missing or unpublished. */
+export async function buildBlogMarkdown(slug: string): Promise<string | null> {
+  if (!isEnabled('blog')) return null;
+  const blog = await fetchPublishedBlog(slug);
+  return blog ? blogSection(blog as BlogMeta, blog.content, '#') : null;
+}
+
+/** Markdown twin of /events/<id>/, or null when the event is missing or unpublished. */
+export async function buildEventMarkdown(id: string): Promise<string | null> {
+  const numericId = Number(id);
+  if (!isEnabled('events') || !Number.isSafeInteger(numericId) || numericId <= 0) return null;
+  const { data } = await initializeApollo()
+    .query<GetEventDetailsQuery>({ query: GetEventDetailsDocument, variables: { id: numericId }, errorPolicy: 'all' })
+    .catch(() => ({ data: undefined }));
+  const event = data?.getEventDetails;
+  return event?.status === EventStatus.Published ? eventSection(event as EventMeta, '#') : null;
+}
+
 export async function buildLlmsFullTxt(): Promise<string> {
   const { blogs, events } = await loadPublicContent();
-  const client = initializeApollo();
-  const posts = await Promise.all(
-    blogs.map((b) =>
-      client
-        .query<GetBlogQuery>({ query: GetBlogDocument, variables: { slug: b.slug }, errorPolicy: 'all' })
-        .then((r) => r.data?.getBlog)
-        .catch(() => null)
-    )
-  );
-
+  const posts = await Promise.all(blogs.map((b) => fetchPublishedBlog(b.slug!)));
   const parts = [header()];
-  posts.forEach((post, i) => {
-    const b = post?.status === BlogStatus.Published ? post : null;
-    const meta = blogs[i];
-    const author =
-      `${b?.author?.firstName || meta.author?.firstName || ''} ${b?.author?.lastName || meta.author?.lastName || ''}`.trim();
-    parts.push(
-      '---',
-      '',
-      `## ${meta.title}`,
-      '',
-      `URL: ${canonicalUrl(`/blog/${encodeURIComponent(meta.slug!)}/`)}`,
-      `Published: ${day(meta.createdAt)}${author ? ` · Author: ${author}` : ''}`,
-      '',
-      htmlToMarkdown(b?.content) || meta.summary || '',
-      ''
-    );
-  });
-  for (const e of events) {
-    parts.push(
-      '---',
-      '',
-      `## Event: ${e.title}`,
-      '',
-      `URL: ${canonicalUrl(`/events/${e.id}/`)}`,
-      `Date: ${day(e.startDate)}${e.endDate ? ` to ${day(e.endDate)}` : ''} · Mode: ${e.medium || 'offline'}${e.location && e.location !== 'protected' ? ` · Venue: ${e.location}` : ''}`,
-      '',
-      htmlToMarkdown(e.description) || e.summary || '',
-      ''
-    );
-  }
+  blogs.forEach((meta, i) => parts.push('---', '', blogSection(meta as BlogMeta, posts[i]?.content, '##')));
+  for (const e of events) parts.push('---', '', eventSection(e as EventMeta, '##'));
   return parts.join('\n');
 }
 
-export const markdownResponse = (body: string) =>
+export const markdownResponse = (body: string, contentType = 'text/plain') =>
   new Response(body, {
     headers: {
-      'content-type': 'text/plain; charset=utf-8',
+      'content-type': `${contentType}; charset=utf-8`,
       'cache-control': 'public, s-maxage=3600, stale-while-revalidate=86400',
       'x-robots-tag': 'noindex',
     },
