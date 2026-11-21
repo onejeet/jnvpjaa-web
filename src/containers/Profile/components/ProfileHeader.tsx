@@ -14,7 +14,6 @@ import React from 'react';
 import { useAlert } from '@/context/AlertContext';
 import { useApolloClient, useMutation, useQuery } from '@apollo/client';
 import { paths } from '@/config/paths';
-import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { GetUserDetailsDocument } from '@/apollo/hooks';
 import Dialog from '@/components/core/Dialog';
@@ -52,7 +51,6 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
   const { user, loading, isProfileEditable, editingProfile, saveProfile } = useProfile();
   const { showAlert } = useAlert();
   const { user: authUser, isAdmin, positions: authPositions, roles: authRoles, hasRole, setUser } = useAuth();
-  const router = useRouter();
   const client = useApolloClient();
   const [setMemberDisabled, { loading: changingMemberStatus }] = useMutation(SET_MEMBER_DISABLED);
   const [getOrCreateProfileCover] = useMutation(GET_OR_CREATE_PROFILE_COVER);
@@ -270,12 +268,6 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
       ...(isProfileEditable
         ? [
             {
-              label: 'Edit',
-              value: 'edit',
-              onClick: () => router.push(paths.profile.setup),
-              icon: <IconPencil size={16} />,
-            },
-            {
               label: isConfidential ? 'Make Contact Info Visible' : 'Keep Contact Info Private',
               value: 'privacy',
               onClick: () => handleDataPrivacyUpdate(),
@@ -301,15 +293,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
           ]
         : []),
     ];
-  }, [
-    isProfileEditable,
-    canManageMember,
-    changingMemberStatus,
-    user,
-    handleDataPrivacyUpdate,
-    changeMemberStatus,
-    router,
-  ]);
+  }, [isProfileEditable, canManageMember, changingMemberStatus, user, handleDataPrivacyUpdate, changeMemberStatus]);
 
   return (
     <Box sx={{ mb: 4 }}>
@@ -491,40 +475,64 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
         <Box
           display="flex"
           justifyContent="space-between"
-          sx={{ mt: { xs: 0.5, md: 1 }, ml: { xs: '100px', md: '220px' } }}
+          alignItems={{ md: 'flex-start' }}
+          flexWrap={{ xs: 'wrap', md: 'nowrap' }}
+          sx={{ mt: { xs: 0.5, md: 1 } }}
         >
-          <Title
-            loading={loading}
-            title={
-              <Box display="flex" alignItems="center">
-                <Typography
-                  variant="body1"
-                  fontSize={{
-                    xs: 16,
-                    md: 28,
-                  }}
-                  fontWeight={500}
-                  mr={0.5}
-                >{`${user?.firstName} ${user?.lastName || ''}`}</Typography>
-                {user?.isVerified && (
-                  <VerifiedBadge
-                    size={26}
-                    isPrivate={user?.isConfidential}
-                    handlePrivateInfo={handleDataPrivacyUpdate}
-                    isPrivateInfoChangeAllowed={user?.id === authUser?.id || isAdmin}
-                  />
-                )}
-                {user?.batch === 0 && <FacultyBadge size={26} />}
-                {user?.isVerified && user?.disabled && (
-                  <Chip label="Disabled" color="warning" size="small" sx={{ ml: 1, fontWeight: 600 }} />
-                )}
-              </Box>
-            }
-            titleProps={{ fontWeight: 600, fontSize: '30px' }}
-            summary={profileSummary}
-            summaryProps={{ color: 'grey.600', fontSize: '14px', mt: { xs: 0, md: 1 } }}
-          />
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Box flex={1} minWidth={0} ml={{ xs: '100px', md: '220px' }}>
+            <Title
+              loading={loading}
+              title={
+                <Box display="flex" alignItems="center">
+                  <Typography
+                    variant="body1"
+                    fontSize={{
+                      xs: 16,
+                      md: 28,
+                    }}
+                    fontWeight={500}
+                    mr={0.5}
+                  >{`${user?.firstName} ${user?.lastName || ''}`}</Typography>
+                  {user?.isVerified && (
+                    <VerifiedBadge
+                      size={26}
+                      isPrivate={user?.isConfidential}
+                      handlePrivateInfo={handleDataPrivacyUpdate}
+                      isPrivateInfoChangeAllowed={user?.id === authUser?.id || isAdmin}
+                    />
+                  )}
+                  {user?.batch === 0 && <FacultyBadge size={26} />}
+                  {user?.isVerified && user?.disabled && (
+                    <Chip label="Disabled" color="warning" size="small" sx={{ ml: 1, fontWeight: 600 }} />
+                  )}
+                </Box>
+              }
+              titleProps={{ fontWeight: 600, fontSize: '30px' }}
+              summary={profileSummary}
+              summaryProps={{ color: 'grey.600', fontSize: '14px', mt: { xs: 0, md: 1 } }}
+            />
+          </Box>
+          {/* Phones: one full-width row of actions under the name (Edit and Contact never show together). */}
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: { xs: 0.75, md: 1 },
+              flexWrap: 'nowrap',
+              width: { xs: '100%', md: 'auto' },
+              mt: { xs: 1.5, md: 0 },
+              ml: { md: 2 },
+              flexShrink: 0,
+              '& > .MuiButton-root': {
+                flex: { xs: '1 1 auto', md: 'none' },
+                minWidth: { xs: 0, md: 64 },
+                px: { xs: 1, md: 1.25 },
+                '& .MuiButton-startIcon': { mr: { xs: 0.5, md: 1 } },
+                // Narrow phones: text only, so the three actions and the menu share one row.
+                '@media (max-width: 399px)': { '& .MuiButton-startIcon': { display: 'none' } },
+              },
+            }}
+          >
             {shareUsername && !editingProfile && (
               <Button
                 component={Link}
@@ -541,9 +549,22 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
               <ShareProfileButton
                 username={shareUsername}
                 name={`${user?.firstName || ''} ${user?.lastName || ''}`.trim()}
+                label="Share"
                 variant="outlined"
                 size="small"
               />
+            )}
+            {isProfileEditable && !editingProfile && (
+              <Button
+                component={Link}
+                href={paths.profile.setup}
+                variant="outlined"
+                size="small"
+                startIcon={<IconPencil size={18} />}
+                sx={{ whiteSpace: 'nowrap', flexShrink: 0 }}
+              >
+                Edit
+              </Button>
             )}
             {!isProfileEditable && !user?.isConfidential && user?.email && !loading && (
               <Button component="a" href={`mailto:${user.email}`} variant="outlined" size="small">

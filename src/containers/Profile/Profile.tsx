@@ -17,7 +17,6 @@ import giftsLottieIcon from '@/utils/lottie/gifts_art.json';
 import Lottie from '@/components/common/DynamicLottie';
 import CelebratonConfetti from '@/components/common/CelebratonConfetti';
 import BusinessSection from './components/BusinessSection';
-import ProfileGuidance from './components/ProfileGuidance';
 import { brand } from '@/config/tenant';
 
 export default function ProfilePage() {
@@ -46,7 +45,6 @@ export default function ProfilePage() {
               </Typography>
             </Box>
           )}
-          {!editingProfile && <ProfileGuidance />}
           {!editingProfile && <ProfileTabs activeTab={activeTab} onTabChange={setActiveTab} user={user} />}
 
           <Box sx={{ mt: 3 }}>
