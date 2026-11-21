@@ -146,7 +146,13 @@ const LayoutFooter: React.FC = () => {
             alignItems="center"
           >
             {/* <Grid item xs={12} md={6} mt={{ xs: '20px' }}> */}
-            <Grid size={{ xs: 12 }} display="flex" width="100%" justifyContent="center">
+            <Grid
+              size={{ xs: 12, md: 4 }}
+              display="flex"
+              justifyContent={{ xs: 'center', md: 'end' }}
+              mb={{ xs: 0, md: 2 }}
+              sx={{ order: { md: 3 } }}
+            >
               <Stack direction="row" spacing="16px" alignItems="center">
                 {Object.entries(brand.socials).map(([name, path], index) => (
                   <NextLink
@@ -175,10 +181,11 @@ const LayoutFooter: React.FC = () => {
             </Grid>
 
             <Grid
-              size={{ xs: 12, md: 6 }}
+              size={{ xs: 12, md: 4 }}
               textAlign={{ xs: 'center', md: 'left' }}
               mt={{ xs: '10px', md: 0 }}
               mb={{ xs: 0, md: 2 }}
+              sx={{ order: { md: 1 } }}
             >
               <Typography
                 sx={{
@@ -196,16 +203,14 @@ const LayoutFooter: React.FC = () => {
             <Grid
               size={{
                 xs: 12,
-                md: 6,
+                md: 4,
               }}
               display="flex"
-              justifyContent={{
-                xs: 'center',
-                md: 'end',
-              }}
+              justifyContent="center"
               color="grey.800"
               sx={{
                 opacity: 1,
+                order: { md: 2 },
               }}
               mt={{
                 xs: '10px',
@@ -245,6 +250,7 @@ const LayoutFooter: React.FC = () => {
                 md: 'end',
               }}
               width="100%"
+              sx={{ order: { md: 4 } }}
             >
               <HelpBanner />
             </Grid>
