@@ -2,12 +2,13 @@
 
 import { Avatar, Box, Chip, Divider, Link as MuiLink, Paper, Stack, Typography } from '@mui/material';
 import { alpha, useTheme } from '@mui/material/styles';
-import { IconExternalLink, IconRosetteDiscountCheckFilled, IconUsersGroup } from '@tabler/icons-react';
+import { IconExternalLink, IconPencil, IconRosetteDiscountCheckFilled, IconUsersGroup } from '@tabler/icons-react';
 import Link from 'next/link';
 import React from 'react';
 import { type PublicProfile } from '@/apollo/publicProfileOperations';
 import SocialLinks from '@/components/common/SocialLinks/SocialLinks';
 import Button from '@/components/core/Button';
+import { paths } from '@/config/paths';
 import { brand } from '@/config/tenant';
 import { useAuth } from '@/context/AuthContext';
 import ShareProfileButton from './ShareProfileButton';
@@ -154,6 +155,23 @@ const Businesses: React.FC<{ businesses: PublicProfile['businesses'] }> = ({ bus
 const PublicProfileView: React.FC<{ profile: PublicProfile }> = ({ profile }) => {
   const theme = useTheme();
   const { user } = useAuth();
+  // Your own page: offer the same Edit as your full profile.
+  const isOwnProfile = Boolean(user?.id) && user?.publicUsername === profile.username;
+  const actions = (
+    <Stack direction="row" spacing={1}>
+      {isOwnProfile && (
+        <Button
+          title="Edit"
+          variant="outlined"
+          component={Link}
+          href={paths.profile.setup}
+          startIcon={<IconPencil size={18} />}
+          sx={{ whiteSpace: 'nowrap', flexShrink: 0 }}
+        />
+      )}
+      <ShareProfileButton username={profile.username} name={profile.name} photo={profile.profileImage} />
+    </Stack>
+  );
   const primary = theme.palette.primary;
   const firstName = profile.name.split(/\s+/)[0] || profile.name;
   const socialMedia = Object.fromEntries(profile.socialLinks.map((link) => [link.platform, link.handle]));
@@ -234,7 +252,7 @@ const PublicProfileView: React.FC<{ profile: PublicProfile }> = ({ profile }) =>
               {initials(profile.name)}
             </Avatar>
             <Box display={{ xs: 'none', sm: 'block' }} pb={0.5}>
-              <ShareProfileButton username={profile.username} name={profile.name} photo={profile.profileImage} />
+              {actions}
             </Box>
           </Stack>
 
@@ -315,7 +333,7 @@ const PublicProfileView: React.FC<{ profile: PublicProfile }> = ({ profile }) =>
           </Stack>
 
           <Box display={{ xs: 'block', sm: 'none' }} mt={3}>
-            <ShareProfileButton username={profile.username} name={profile.name} photo={profile.profileImage} />
+            {actions}
           </Box>
         </Box>
       </Paper>

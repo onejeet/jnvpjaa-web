@@ -226,7 +226,8 @@ export default function ProfilePictureUpload({ user, onNext, onBack, onSuccess, 
           client.cache.evict({ fieldName: 'getUserDetails' });
           client.cache.evict({ fieldName: 'getUserList' });
           client.cache.gc();
-          setCroppedImage(uploadedFileUrl);
+          // The API saves an optimised copy under a new name, so show the URL it stored.
+          setCroppedImage(res?.updateUser?.profileImage || uploadedFileUrl);
           onNext?.();
           onSuccess?.(res?.updateUser as User);
         },

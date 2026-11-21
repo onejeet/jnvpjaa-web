@@ -23030,6 +23030,7 @@ export type GetUserDetailsQuery = {
         mobile?: string | undefined;
         nickName?: string | undefined;
         profileImage?: string | undefined;
+        publicUsername?: string | null | undefined;
         socialMedia?: any | undefined;
         updatedAt: any;
         whatsAppMobile?: string | undefined;
@@ -46504,6 +46505,7 @@ export const GetUserDetailsDocument = gql`
         validUntil
       }
       profileImage
+      publicUsername
       role {
         code
         id

@@ -30,29 +30,32 @@ const remember = <T,>(cache: Map<string, T>, key: string, value: T, max = 200) =
   return value;
 };
 const cards = new Map<string, ArrayBuffer>();
-const photos = new Map<string, Promise<string>>();
+const photos = new Map<string, Promise<string | null>>();
 const stamps = new Map<string, Promise<string>>();
 
-const dataUri = async (response: Response) =>
-  `data:${response.headers.get('content-type')};base64,${Buffer.from(await response.arrayBuffer()).toString('base64')}`;
-
-/** The photo at card size via Next's image optimizer (resized and cached there), not the multi-MB original. */
+/**
+ * The photo at card size via Next's image optimizer (resized and cached there), not the multi-MB original.
+ * satori draws only JPEG and PNG, and the optimizer keeps WebP photos as WebP, so sharp turns it into JPEG.
+ * Resolves to null when the photo can't be drawn, so the card shows initials instead of an empty circle.
+ */
 const photoSrc = (origin: string, url: string) =>
   photos.get(url) ||
   remember(
     photos,
     url,
-    fetch(`${origin}/_next/image/?url=${encodeURIComponent(url)}&w=384&q=80`, {
-      // satori reads JPEG and PNG, not WebP/AVIF.
-      headers: { Accept: 'image/jpeg,image/png' },
-      signal: AbortSignal.timeout(4000),
-    })
-      .then((response) =>
-        response.ok && /image\/(jpeg|png)/.test(response.headers.get('content-type') || '') ? dataUri(response) : url
-      )
+    fetch(`${origin}/_next/image/?url=${encodeURIComponent(url)}&w=384&q=80`, { signal: AbortSignal.timeout(4000) })
+      .then(async (response) => {
+        if (!response.ok) throw new Error(`photo ${response.status}`);
+        const { default: sharp } = await import('sharp');
+        const jpeg = await sharp(Buffer.from(await response.arrayBuffer()))
+          .resize(384, 384, { fit: 'cover' })
+          .jpeg({ quality: 82 })
+          .toBuffer();
+        return `data:image/jpeg;base64,${jpeg.toString('base64')}`;
+      })
       .catch(() => {
         photos.delete(url);
-        return url;
+        return null;
       })
   );
 
