@@ -295,6 +295,11 @@ const PublicProfileView: React.FC<{ profile: PublicProfile }> = ({ profile }) =>
                   />
                 ))}
               </Stack>
+              {profile.socialLinks.length > 0 && (
+                <Box mt={2}>
+                  <SocialLinks socialMedia={socialMedia} />
+                </Box>
+              )}
             </Box>
             <Box mt={-1} flexShrink={0} width={{ xs: 72, sm: 96 }}>
               <VerifiedSeal faculty={profile.isFaculty} />
@@ -315,22 +320,16 @@ const PublicProfileView: React.FC<{ profile: PublicProfile }> = ({ profile }) =>
           {profile.businesses.length > 0 && <Businesses businesses={profile.businesses} />}
           {profile.stories.length > 0 && <Stories stories={profile.stories} />}
 
-          {(stats.length > 0 || profile.socialLinks.length > 0) && <Divider sx={{ my: 3 }} />}
-          <Stack
-            direction={{ xs: 'column', sm: 'row' }}
-            spacing={3}
-            justifyContent="space-between"
-            alignItems={{ sm: 'center' }}
-          >
-            {stats.length > 0 && (
+          {stats.length > 0 && (
+            <>
+              <Divider sx={{ my: 3 }} />
               <Stack direction="row" spacing={5}>
                 {stats.map((stat) => (
                   <Stat key={stat.label} {...stat} />
                 ))}
               </Stack>
-            )}
-            <SocialLinks socialMedia={socialMedia} />
-          </Stack>
+            </>
+          )}
 
           <Box display={{ xs: 'block', sm: 'none' }} mt={3}>
             {actions}
