@@ -2,7 +2,7 @@
 
 import { Avatar, Box, Chip, Divider, Link as MuiLink, Paper, Stack, Typography } from '@mui/material';
 import { alpha, useTheme } from '@mui/material/styles';
-import { IconRosetteDiscountCheckFilled, IconUsersGroup } from '@tabler/icons-react';
+import { IconExternalLink, IconRosetteDiscountCheckFilled, IconUsersGroup } from '@tabler/icons-react';
 import Link from 'next/link';
 import React from 'react';
 import { type PublicProfile } from '@/apollo/publicProfileOperations';
@@ -29,6 +29,125 @@ const Stat: React.FC<{ value: number; label: string }> = ({ value, label }) => (
     <Typography variant="body2" color="text.secondary">
       {label}
     </Typography>
+  </Box>
+);
+
+const SECTION_TITLE = { component: 'h2', variant: 'h5', fontWeight: 600, mb: 1.5 } as const;
+const clamp = (lines: number) => ({
+  display: '-webkit-box',
+  WebkitLineClamp: lines,
+  WebkitBoxOrient: 'vertical' as const,
+  overflow: 'hidden',
+  overflowWrap: 'anywhere' as const,
+});
+const monthYear = (value: string) =>
+  new Date(value).toLocaleDateString('en-IN', { month: 'short', year: 'numeric', timeZone: 'UTC' });
+
+const Stories: React.FC<{ stories: PublicProfile['stories'] }> = ({ stories }) => (
+  <Box component="section" aria-labelledby="public-stories" mt={4}>
+    <Typography id="public-stories" {...SECTION_TITLE}>
+      Stories
+    </Typography>
+    <Box display="grid" gridTemplateColumns={{ xs: '1fr', sm: '1fr 1fr' }} gap={1.5}>
+      {stories.map((story) => (
+        <Paper
+          key={story.slug}
+          component={Link}
+          href={`/blog/${encodeURIComponent(story.slug)}/`}
+          variant="outlined"
+          sx={{
+            p: 1.5,
+            borderRadius: 3,
+            display: 'flex',
+            gap: 1.5,
+            textDecoration: 'none',
+            color: 'inherit',
+            minWidth: 0,
+            transition: 'border-color .15s',
+            '&:hover': { borderColor: 'primary.main' },
+          }}
+        >
+          {story.coverUrl && (
+            <Box
+              component="img"
+              src={story.coverUrl}
+              alt=""
+              loading="lazy"
+              sx={{ width: 72, height: 72, borderRadius: 2, objectFit: 'cover', flexShrink: 0 }}
+            />
+          )}
+          <Box minWidth={0}>
+            <Typography fontWeight={600} sx={clamp(2)}>
+              {story.title}
+            </Typography>
+            {story.summary && (
+              <Typography variant="body2" color="text.secondary" mt={0.25} sx={clamp(2)}>
+                {story.summary}
+              </Typography>
+            )}
+            <Typography variant="caption" color="text.secondary" display="block" mt={0.5}>
+              {monthYear(story.publishedAt)}
+            </Typography>
+          </Box>
+        </Paper>
+      ))}
+    </Box>
+  </Box>
+);
+
+const Businesses: React.FC<{ businesses: PublicProfile['businesses'] }> = ({ businesses }) => (
+  <Box component="section" aria-labelledby="public-businesses" mt={4}>
+    <Typography id="public-businesses" {...SECTION_TITLE}>
+      {businesses.length === 1 ? 'Business' : 'Businesses'}
+    </Typography>
+    <Stack spacing={1.5}>
+      {businesses.map((business) => (
+        <Paper
+          key={`${business.name}-${business.location}`}
+          variant="outlined"
+          sx={{ p: { xs: 1.5, sm: 2 }, borderRadius: 3, display: 'flex', gap: 1.5, minWidth: 0 }}
+        >
+          <Avatar
+            src={business.logoUrl || undefined}
+            alt=""
+            variant="rounded"
+            sx={{ width: 48, height: 48, borderRadius: 2, bgcolor: 'primary.light', fontWeight: 700 }}
+          >
+            {business.name[0]?.toUpperCase()}
+          </Avatar>
+          <Box minWidth={0} flex={1}>
+            <Typography fontWeight={600} sx={{ overflowWrap: 'anywhere' }}>
+              {business.name}
+            </Typography>
+            {(business.category || business.location) && (
+              <Typography variant="body2" color="text.secondary">
+                {[business.category, business.location].filter(Boolean).join(' · ')}
+              </Typography>
+            )}
+            {business.description && (
+              <Typography variant="body2" mt={0.75} sx={clamp(3)}>
+                {business.description}
+              </Typography>
+            )}
+            {business.website && (
+              <MuiLink
+                href={business.website}
+                target="_blank"
+                rel="noopener noreferrer nofollow ugc"
+                variant="body2"
+                fontWeight={500}
+                sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.5, mt: 0.75, maxWidth: '100%' }}
+              >
+                <Box component="span" sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {business.website.replace(/^https:\/\/(www\.)?/, '').replace(/\/$/, '')}
+                </Box>
+                <IconExternalLink size={14} style={{ flexShrink: 0 }} />
+              </MuiLink>
+            )}
+          </Box>
+        </Paper>
+      ))}
+    </Stack>
   </Box>
 );
 
@@ -174,6 +293,9 @@ const PublicProfileView: React.FC<{ profile: PublicProfile }> = ({ profile }) =>
               </Typography>
             </Box>
           )}
+
+          {profile.businesses.length > 0 && <Businesses businesses={profile.businesses} />}
+          {profile.stories.length > 0 && <Stories stories={profile.stories} />}
 
           {(stats.length > 0 || profile.socialLinks.length > 0) && <Divider sx={{ my: 3 }} />}
           <Stack

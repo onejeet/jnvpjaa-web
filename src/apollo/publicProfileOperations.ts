@@ -18,6 +18,15 @@ export type PublicProfile = {
   socialLinks: { platform: string; handle: string }[];
   eventsAttended?: number | null;
   storiesPublished?: number | null;
+  stories: { slug: string; title: string; summary?: string | null; coverUrl?: string | null; publishedAt: string }[];
+  businesses: {
+    name: string;
+    category?: string | null;
+    description?: string | null;
+    logoUrl?: string | null;
+    website?: string | null;
+    location?: string | null;
+  }[];
 };
 
 export type MyPublicProfile = {
@@ -63,6 +72,21 @@ export const PUBLIC_PROFILE = gql`
         }
         eventsAttended
         storiesPublished
+        stories {
+          slug
+          title
+          summary
+          coverUrl
+          publishedAt
+        }
+        businesses {
+          name
+          category
+          description
+          logoUrl
+          website
+          location
+        }
       }
     }
   }

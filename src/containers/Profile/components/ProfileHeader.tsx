@@ -297,7 +297,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
 
   return (
     <Box sx={{ mb: 4 }}>
-      {/* Avatar and edit button are pinned to this box's bottom, so nothing may follow inside it. */}
+      {/* Desktop pins the avatar to this box's bottom; phones pin it to the cover (see ProfilePicture sx). */}
       <Box sx={{ position: 'relative' }}>
         {loading ? (
           <Box>
@@ -429,10 +429,9 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
             },
             border: '4px solid #fff',
             position: 'absolute',
-            bottom: {
-              xs: 0,
-              md: -24,
-            },
+            // Phones: pinned to the cover (180px tall), half over it, so rows added below can't push it down.
+            top: { xs: 130, md: 'auto' },
+            bottom: { xs: 'auto', md: -24 },
             left: {
               xs: 2,
               md: 32,
@@ -455,10 +454,8 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
                   xs: 72,
                   md: 174,
                 },
-                bottom: {
-                  xs: 0,
-                  md: -18,
-                },
+                top: { xs: 200, md: 'auto' },
+                bottom: { xs: 'auto', md: -18 },
                 bgcolor: 'background.paper',
                 border: '1px solid',
                 borderColor: 'divider',
@@ -479,7 +476,8 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
           flexWrap={{ xs: 'wrap', md: 'nowrap' }}
           sx={{ mt: { xs: 0.5, md: 1 } }}
         >
-          <Box flex={1} minWidth={0} ml={{ xs: '100px', md: '220px' }}>
+          {/* minHeight on phones: keeps the action row clear of the avatar's lower half. */}
+          <Box flex={1} minWidth={0} ml={{ xs: '108px', md: '220px' }} minHeight={{ xs: 52, md: 0 }}>
             <Title
               loading={loading}
               title={
@@ -520,12 +518,13 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
               gap: { xs: 0.75, md: 1 },
               flexWrap: 'nowrap',
               width: { xs: '100%', md: 'auto' },
-              mt: { xs: 1.5, md: 0 },
+              mt: { xs: 2, md: 0 },
               ml: { md: 2 },
               flexShrink: 0,
               '& > .MuiButton-root': {
                 flex: { xs: '1 1 auto', md: 'none' },
                 minWidth: { xs: 0, md: 64 },
+                minHeight: { xs: 36, md: 0 },
                 px: { xs: 1, md: 1.25 },
                 '& .MuiButton-startIcon': { mr: { xs: 0.5, md: 1 } },
                 // Narrow phones: text only, so the three actions and the menu share one row.
