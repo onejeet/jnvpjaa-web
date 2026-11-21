@@ -21,6 +21,7 @@ import {
   IconDeviceDesktop,
   IconDeviceMobile,
   IconDevices,
+  IconId,
   IconKey,
   IconLock,
   IconLogout,
@@ -48,6 +49,7 @@ import ChangePasswordForm from '@/containers/Auth/ChangePassword/ChangePasswordF
 import { GoogleIcon, googleStartUrl } from '@/containers/Auth/Google/GoogleButton';
 import { paths } from '@/config/paths';
 import { describeDevice } from './describeDevice';
+import PublicProfileSettings from '@/modules/PublicProfileSettings/PublicProfileSettings';
 
 dayjs.extend(relativeTime);
 
@@ -394,6 +396,14 @@ const SecurityCenter = () => {
             <Button title="Change email" variant="outlined" onClick={() => setEmailOpen(true)} />
           )}
         </Stack>
+      </Section>
+
+      <Section
+        icon={<IconId size={22} stroke={1.75} />}
+        title="Public profile & username"
+        description="Your verified page at your own @username, for sharing outside the portal."
+      >
+        <PublicProfileSettings />
       </Section>
 
       <Section

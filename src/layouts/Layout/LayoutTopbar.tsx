@@ -528,7 +528,7 @@ const LayoutTopbar: React.FC<LayoutTopbarProps> = ({ position = 'top' }) => {
                 component={NextLink}
                 href="/signin"
                 variant="outlined"
-                sx={{ display: { xs: 'none', md: 'block' }, ml: '8px', whiteSpace: 'nowrap' }}
+                sx={{ display: { xs: 'none', md: 'inline-flex' }, ml: '8px', whiteSpace: 'nowrap', flexShrink: 0 }}
               >
                 Alumni Login
               </Button>

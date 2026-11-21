@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import PublicProfilesAdminSettings from './PublicProfilesAdminSettings';
 import { useApolloClient, useMutation, useQuery } from '@apollo/client';
 import {
   ACCESS_CATALOG_QUERY,
@@ -1580,6 +1581,8 @@ const AdminPanel = ({ section }: { section: AdminPanelSection }) => {
           </Stack>
         </Paper>
       )}
+
+      {selectedTab === 'settings' && isSuperAdmin && <PublicProfilesAdminSettings />}
 
       {selectedTab === 'settings' && canSendWelcomeEmail && (
         <Paper

@@ -6,7 +6,7 @@ import { ProfileHeaderProps } from '../Profile.types';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import VerifiedBadge from '@/components/common/VerifiedBadge';
 import SocialLinks from '@/components/common/SocialLinks';
-import { IconPencil, IconLock, IconDotsCircleHorizontal } from '@tabler/icons-react';
+import { IconPencil, IconLock, IconDotsCircleHorizontal, IconPhotoEdit } from '@tabler/icons-react';
 import { useProfile } from '@/context/ProfileContext';
 import FacultyBadge from '@/components/common/FacultyBadge';
 import Menu from '@/components/core/Menu';
@@ -21,7 +21,8 @@ import Dialog from '@/components/core/Dialog';
 import Image from 'next/image';
 import { ROLE_CODES, ROLE_LABELS } from '@/constants/access';
 import ProfilePictureUpload from '@/modules/ProfileSetup/ProfilePictureUpload';
-import { GET_OR_CREATE_PROFILE_COVER } from '@/apollo/profileCoverOperations';
+import { GET_OR_CREATE_PROFILE_COVER, SET_MY_PROFILE_COVER } from '@/apollo/profileCoverOperations';
+import { UnsplashImageSelector } from '@/modules/UnsplashImageSelector/UnsplashImamgeSelector';
 import { UNSPLASH_HOME, withUnsplashReferral } from '@/utils/unsplash';
 import { MEMBER_MANAGEMENT_ELIGIBILITY, SET_MEMBER_DISABLED } from '@/apollo/memberOperations';
 import { brand } from '@/config/tenant';
@@ -45,6 +46,18 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
   const client = useApolloClient();
   const [setMemberDisabled, { loading: changingMemberStatus }] = useMutation(SET_MEMBER_DISABLED);
   const [getOrCreateProfileCover] = useMutation(GET_OR_CREATE_PROFILE_COVER);
+  const [setMyProfileCover, { loading: savingCover }] = useMutation(SET_MY_PROFILE_COVER);
+  const [coverPickerOpen, setCoverPickerOpen] = React.useState(false);
+  const isOwnProfile = Boolean(user?.id && user.id === authUser?.id);
+  const changeCover = async (photoId: string) => {
+    try {
+      const { data } = await setMyProfileCover({ variables: { photoId } });
+      if (data?.setMyProfileCover) setCover(data.setMyProfileCover);
+      showAlert({ visible: true, type: 'success', message: 'Cover photo updated.' });
+    } catch (err: any) {
+      showAlert({ visible: true, type: 'error', message: err?.message || 'Could not update the cover photo.' });
+    }
+  };
   const superAdminViewingMember = hasRole(ROLE_CODES.SUPER_ADMIN) && Boolean(user?.id && user.id !== authUser?.id);
   const { data: memberAccess } = useQuery(MEMBER_MANAGEMENT_ELIGIBILITY, {
     variables: { id: user?.id || '' },
@@ -355,6 +368,28 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
                 </a>
               </Typography>
             )}
+            {isOwnProfile && (
+              <Button
+                size="small"
+                variant="contained"
+                color="inherit"
+                disabled={savingCover}
+                onClick={() => setCoverPickerOpen(true)}
+                startIcon={<IconPhotoEdit size={18} />}
+                sx={{
+                  position: 'absolute',
+                  top: 12,
+                  right: 12,
+                  minHeight: 36,
+                  bgcolor: 'rgba(255,255,255,0.92)',
+                  color: 'text.primary',
+                  boxShadow: 1,
+                  '&:hover': { bgcolor: 'common.white' },
+                }}
+              >
+                {savingCover ? 'Saving…' : 'Change cover'}
+              </Button>
+            )}
           </Box>
         )}
 
@@ -552,6 +587,15 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
             }}
           />
         </Dialog>
+      )}
+      {coverPickerOpen && (
+        <UnsplashImageSelector
+          open
+          defaultKeyword="landscape"
+          trackDownload={false}
+          onClose={() => setCoverPickerOpen(false)}
+          onSelect={(photo) => photo?.id && changeCover(photo.id)}
+        />
       )}
     </Box>
   );

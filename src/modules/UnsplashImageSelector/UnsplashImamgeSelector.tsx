@@ -15,6 +15,8 @@ interface Props {
   onClose: () => void;
   onSelect?: (photo: Photo) => void;
   defaultKeyword?: string;
+  /** Off when the server records the Unsplash download itself. */
+  trackDownload?: boolean;
 }
 
 const breakpointProps = {
@@ -24,7 +26,13 @@ const breakpointProps = {
   600: 2,
 };
 
-export const UnsplashImageSelector: React.FC<Props> = ({ open, onClose, onSelect, defaultKeyword = '' }) => {
+export const UnsplashImageSelector: React.FC<Props> = ({
+  open,
+  onClose,
+  onSelect,
+  defaultKeyword = '',
+  trackDownload: shouldTrackDownload = true,
+}) => {
   const [selected, setSelected] = React.useState<Photo | null>(null);
   const { images, loading, error, search, trackDownload } = useUnsplashSearch(defaultKeyword);
 
@@ -45,7 +53,7 @@ export const UnsplashImageSelector: React.FC<Props> = ({ open, onClose, onSelect
           if (selected?.id) {
             onSelect?.(selected);
             onClose?.();
-            trackDownload?.(selected.id);
+            if (shouldTrackDownload) trackDownload?.(selected.id);
           } else {
             showAlert({
               visible: true,

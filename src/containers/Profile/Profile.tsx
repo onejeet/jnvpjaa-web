@@ -10,7 +10,9 @@ import LayoutModule from '@/layouts/Layout';
 import { useProfile } from '@/context/ProfileContext';
 import LoadingData from '@/components/common/LoadingData';
 import EventSection from './components/EventSection';
-import { Paper, Typography } from '@mui/material';
+import { Paper, Stack, Typography } from '@mui/material';
+import { useAuth } from '@/context/AuthContext';
+import PublicProfileSettings from '@/modules/PublicProfileSettings/PublicProfileSettings';
 import ProfileForm from './components/ProfileForm';
 import { isBirthdayToday } from '@/utils/helpers';
 import giftsLottieIcon from '@/utils/lottie/gifts_art.json';
@@ -23,6 +25,7 @@ import { brand } from '@/config/tenant';
 export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState('about');
   const { user, loading, editingProfile } = useProfile();
+  const { user: authUser } = useAuth();
 
   const isBirthday = React.useMemo(() => {
     return isBirthdayToday(user?.dob);
@@ -53,9 +56,19 @@ export default function ProfilePage() {
             {loading ? (
               <LoadingData />
             ) : editingProfile ? (
-              <Paper elevation={3} sx={{ p: 3 }}>
-                <ProfileForm />
-              </Paper>
+              <Stack spacing={3}>
+                <Paper elevation={3} sx={{ p: 3 }}>
+                  <ProfileForm />
+                </Paper>
+                {user?.id && user.id === authUser?.id && (
+                  <Paper elevation={3} sx={{ p: 3 }} aria-labelledby="public-profile-settings-title">
+                    <Typography id="public-profile-settings-title" variant="h4" fontWeight={600} mb={2}>
+                      Public profile &amp; username
+                    </Typography>
+                    <PublicProfileSettings compact />
+                  </Paper>
+                )}
+              </Stack>
             ) : (
               <>
                 {activeTab === 'about' && <AboutSection />}

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { isProtectedRoute } from '@/utils/routeAccess';
 import { isPathEnabled } from '@/config/features';
 import { ROUTER_NAVIGATION_HEADER } from '@/utils/routerNavigationHeader';
+import { publicProfilePath } from '@/utils/publicProfilePath';
 
 const AUTH_ROUTES = ['/signin', '/signup', '/forgot-password'];
 const isAuthRoute = (pathname: string) =>
@@ -15,8 +16,19 @@ const encodeRedirectPath = (path: string) => {
   return btoa(path);
 };
 
+// /@username is the public address; the page itself lives at /u/[username] because "@" folders are parallel routes.
+const PUBLIC_PROFILE = /^\/(?:@|%40)([^/]+)\/?$/i;
+const PUBLIC_PROFILE_INTERNAL = /^\/u\/([^/]+)\/?$/;
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const internalProfile = PUBLIC_PROFILE_INTERNAL.exec(pathname);
+  if (internalProfile) {
+    // One shareable address: the internal path always forwards to /@username.
+    const canonical = request.nextUrl.clone();
+    canonical.pathname = publicProfilePath(internalProfile[1]);
+    return NextResponse.redirect(canonical, 308);
+  }
   // A module this tenant has switched off is a real 404 (notFound() in a streamed layout still answers 200).
   if (!isPathEnabled(pathname)) {
     const missing = request.nextUrl.clone();
@@ -57,6 +69,12 @@ export function middleware(request: NextRequest) {
     requestHeaders.set(ROUTER_NAVIGATION_HEADER, '1');
   } else {
     requestHeaders.delete(ROUTER_NAVIGATION_HEADER);
+  }
+  const publicProfile = PUBLIC_PROFILE.exec(pathname);
+  if (publicProfile) {
+    const target = request.nextUrl.clone();
+    target.pathname = `/u/${publicProfile[1]}/`;
+    return NextResponse.rewrite(target, { request: { headers: requestHeaders } });
   }
   return NextResponse.next({ request: { headers: requestHeaders } });
 }
