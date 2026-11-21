@@ -1,0 +1,5 @@
+{
+  "icon": "public/assets/branding/logo-square-white_transparent.png",
+  "crop": { "x": 1007, "y": 1012, "radius": 772 },
+  "text": { "alumni": "Verified Alumni", "faculty": "Verified Faculty", "bottom": "JNVPJAA" }
+}

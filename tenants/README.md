@@ -30,6 +30,13 @@ Web (`jnvpjaa-web/tenants/<id>/`):
   `/preview/landing/<layout>` (`page.dev.tsx`) shows any layout with the current tenant's content; production builds
   leave that route out.
 - `fonts/`: `body.woff2`, `display.woff2` and `serif.woff2` (variable fonts).
+- `stamp.json`: the "verified" stamp on public profiles and their share images. `icon` is a file path inside the tenant
+  folder (the association's emblem); optional `crop` (`x`, `y`, `radius` in the icon's pixels) cuts a circle out of a
+  logo that carries its own lettering; optional `text` overrides `alumni`, `faculty` and `bottom` (default:
+  `brand.shortName`). The colour is `brand.theme.primary.500`. `scripts/tenant-stamp.js` draws
+  `public/assets/branding/stamp-{alumni,faculty}.png` and records a hash of its inputs in `stamp.lock.json`;
+  `npm run dev`/`build` redraw it only when that hash changes, and `npm run tenant:stamp` forces a redraw. Commit the
+  PNGs and the lock file.
 - `public/`: favicon, PWA icons, splash screens and local branding images. `npm run dev` and `npm run build` copy these
   into `public/`, and a switch of tenant removes the previous tenant's files.
 
@@ -51,7 +58,8 @@ folder named by `SEED_DATA_DIR`, which `prisma/seed.ts` and the backfill script 
 3. Add the `public/` assets (favicon, `icons/icon-192.png`, `icons/icon-512.png`, `icons/logo-square.png`,
    `splashscreens/apple-icon-180.png`, `assets/branding/logo-full.webp`, `assets/images/cover-2.webp`) and the three
    fonts.
-4. Upload the shared image set to the tenant's assets CDN (`https://<brand.domains.assets>`), because the web loads
+4. Write `stamp.json` and run `TENANT=<id> npm run tenant:stamp`; check the PNGs it draws.
+5. Upload the shared image set to the tenant's assets CDN (`https://<brand.domains.assets>`), because the web loads
    these through `assetUrl()`:
    - `/branding/logo-square-white.{jpg,webp}`
    - `/events/<category>.jpg` (one per event category)
@@ -59,13 +67,13 @@ folder named by `SEED_DATA_DIR`, which `prisma/seed.ts` and the backfill script 
    - `/images/{career-councelling,contact-us-3,cover-2,cover,donation}.webp`
    - `/people/principal.webp`
    - `/svg/{alumni-impact,clap_icon,triangle-spin,under_construction,underline,verified}.svg`
-5. Run `npm run tenant:check` (both repos have the tenant and the same `brand.json` and `features.json`) and
+6. Run `npm run tenant:check` (both repos have the tenant and the same `brand.json` and `features.json`) and
    `TENANT=<new-id> npm run build` (a missing content key or an invalid file fails the build). Run
    `npm run tenant:leaks` if you changed shared code.
-6. In Coolify, set `TENANT=<new-id>` on **both** apps: as a **build** variable for the web (it is baked into the bundle)
+7. In Coolify, set `TENANT=<new-id>` on **both** apps: as a **build** variable for the web (it is baked into the bundle)
    and as a **runtime** variable for the backend. On the backend, also set `SEED_DATA_DIR` if you will seed private
    data, and `SMTP_HOST` only if you use direct SMTP. Set the usual secrets and the domain names from `brand.json`.
-7. Deploy, run the content-page seed once, then sign in and edit the seven pages under `/admin/pages/`.
+8. Deploy, run the content-page seed once, then sign in and edit the seven pages under `/admin/pages/`.
 
 ## Checks
 

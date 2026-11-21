@@ -26,6 +26,8 @@ import { UnsplashImageSelector } from '@/modules/UnsplashImageSelector/UnsplashI
 import { UNSPLASH_HOME, withUnsplashReferral } from '@/utils/unsplash';
 import { MEMBER_MANAGEMENT_ELIGIBILITY, SET_MEMBER_DISABLED } from '@/apollo/memberOperations';
 import { brand } from '@/config/tenant';
+import { MY_PUBLIC_PROFILE, type MyPublicProfile } from '@/apollo/publicProfileOperations';
+import ShareProfileButton from '@/containers/PublicProfile/ShareProfileButton';
 
 const profilePositionRoleCodes = new Set([ROLE_CODES.BATCH_COORDINATOR, ROLE_CODES.FINANCE_MANAGER]);
 
@@ -49,6 +51,11 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
   const [setMyProfileCover, { loading: savingCover }] = useMutation(SET_MY_PROFILE_COVER);
   const [coverPickerOpen, setCoverPickerOpen] = React.useState(false);
   const isOwnProfile = Boolean(user?.id && user.id === authUser?.id);
+  const { data: publicProfileData } = useQuery<{ myPublicProfile: MyPublicProfile }>(MY_PUBLIC_PROFILE, {
+    skip: !isOwnProfile,
+  });
+  const shareable = isOwnProfile ? publicProfileData?.myPublicProfile : undefined;
+  const shareUsername = shareable?.featureEnabled && !shareable.hidden ? shareable.username : null;
   const changeCover = async (photoId: string) => {
     try {
       const { data } = await setMyProfileCover({ variables: { photoId } });
@@ -496,6 +503,14 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
             summaryProps={{ color: 'grey.600', fontSize: '14px', mt: { xs: 0, md: 1 } }}
           />
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            {shareUsername && !editingProfile && (
+              <ShareProfileButton
+                username={shareUsername}
+                name={`${user?.firstName || ''} ${user?.lastName || ''}`.trim()}
+                variant="outlined"
+                size="small"
+              />
+            )}
             {!isProfileEditable && !user?.isConfidential && user?.email && !loading && (
               <Button component="a" href={`mailto:${user.email}`} variant="outlined" size="small">
                 Contact

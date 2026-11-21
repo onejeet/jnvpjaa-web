@@ -5,7 +5,7 @@ import { alpha, useTheme } from '@mui/material/styles';
 import { IconRosetteDiscountCheckFilled, IconUsersGroup } from '@tabler/icons-react';
 import Link from 'next/link';
 import React from 'react';
-import { publicProfilePath, type PublicProfile } from '@/apollo/publicProfileOperations';
+import { type PublicProfile } from '@/apollo/publicProfileOperations';
 import SocialLinks from '@/components/common/SocialLinks/SocialLinks';
 import Button from '@/components/core/Button';
 import { brand } from '@/config/tenant';
@@ -115,10 +115,7 @@ const PublicProfileView: React.FC<{ profile: PublicProfile }> = ({ profile }) =>
               {initials(profile.name)}
             </Avatar>
             <Box display={{ xs: 'none', sm: 'block' }} pb={0.5}>
-              <ShareProfileButton
-                path={publicProfilePath(profile.username)}
-                title={`${profile.name} on ${brand.shortName}`}
-              />
+              <ShareProfileButton username={profile.username} name={profile.name} />
             </Box>
           </Stack>
 
@@ -162,11 +159,7 @@ const PublicProfileView: React.FC<{ profile: PublicProfile }> = ({ profile }) =>
                 ))}
               </Stack>
             </Box>
-            <Box
-              mt={-1}
-              flexShrink={0}
-              sx={{ width: { xs: 64, sm: 84 }, '& svg': { width: '100%', height: 'auto', display: 'block' } }}
-            >
+            <Box mt={-1} flexShrink={0} width={{ xs: 72, sm: 96 }}>
               <VerifiedSeal faculty={profile.isFaculty} />
             </Box>
           </Stack>
@@ -200,10 +193,7 @@ const PublicProfileView: React.FC<{ profile: PublicProfile }> = ({ profile }) =>
           </Stack>
 
           <Box display={{ xs: 'block', sm: 'none' }} mt={3}>
-            <ShareProfileButton
-              path={publicProfilePath(profile.username)}
-              title={`${profile.name} on ${brand.shortName}`}
-            />
+            <ShareProfileButton username={profile.username} name={profile.name} />
           </Box>
         </Box>
       </Paper>

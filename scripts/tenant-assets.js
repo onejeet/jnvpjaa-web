@@ -1,5 +1,5 @@
 // Copies tenants/$TENANT/public/* into public/ and tenants/$TENANT/fonts/* into the theme's font folder.
-// Run by predev/prebuild. A record of what was copied is kept so switching tenants never leaves the previous brand behind.
+// Run by predev/prebuild, after redrawing the verified stamp if its config changed (scripts/tenant-stamp.js). A record of what was copied is kept so switching tenants never leaves the previous brand behind.
 const fs = require('fs');
 const path = require('path');
 const { resolveTenant } = require('../tenants/resolve');
@@ -42,8 +42,18 @@ if (require.main === module) {
   // Same env files Next reads, so TENANT from .env.local works for `npm run dev`.
   require('@next/env').loadEnvConfig(path.join(__dirname, '..'));
   const tenant = resolveTenant();
-  const copied = copyTenantAssets(tenant, path.join(__dirname, '..'));
-  console.log(`tenant ${tenant.id}: ${copied.length} asset files in place`);
+  // The stamp lands in tenants/<id>/public, so draw it (only if its inputs changed) before copying.
+  require('./tenant-stamp')
+    .generateStamps(tenant)
+    .then(({ changed, hash }) => {
+      if (changed) console.log(`tenant ${tenant.id}: stamp redrawn (${hash})`);
+      const copied = copyTenantAssets(tenant, path.join(__dirname, '..'));
+      console.log(`tenant ${tenant.id}: ${copied.length} asset files in place`);
+    })
+    .catch((error) => {
+      console.error(error.message);
+      process.exit(1);
+    });
 }
 
 module.exports = { copyTenantAssets };
