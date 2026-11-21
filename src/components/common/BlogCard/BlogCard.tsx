@@ -14,7 +14,9 @@ import {
   IconPlaystationX as XCircle,
 } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
+import NextLink from 'next/link';
 import { paths } from '@/config/paths';
+import { useMemberHref } from '@/hooks/useMemberHref';
 import { IBlogCardProps } from './BlogCard.types';
 import { BlogStatus } from '@/apollo/hooks';
 import { getFormattedLabel, startCase } from '@/utils/helpers';
@@ -35,6 +37,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
 }) => {
   const { id, slug, title, summary, status, claps = 0, updatedAt, createdAt, author } = blog;
   const router = useRouter();
+  const authorHref = useMemberHref()(author);
 
   const statusColor = React.useMemo(() => {
     switch (status) {
@@ -282,7 +285,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
             title={`${author?.firstName || ''} ${author?.lastName || ''}`}
             alt={`${author?.firstName || ''} ${author?.lastName || ''}`}
             src={author?.profileImage}
-            onClick={() => (author?.id ? router.push(paths.profile.getProfileUrl(author?.id)) : null)}
+            onClick={authorHref ? () => router.push(authorHref) : undefined}
             summary={`Batch of ${author?.batch || ''}`}
             titleComponentProps={{
               titleProps: {
@@ -371,8 +374,19 @@ const BlogCard: React.FC<IBlogCardProps> = ({
           {loading ? (
             <Skeleton width="80%" height={32} />
           ) : (
-            <Typography variant="h1" sx={{ display: 'flex', fontWeight: 500, alignItems: 'center' }}>
-              {title}{' '}
+            <Typography variant="h1" component="h2" sx={{ display: 'flex', fontWeight: 500, alignItems: 'center' }}>
+              {slug ? (
+                // Real anchor so crawlers can follow listing → post; the card's own onClick still covers the rest.
+                <NextLink
+                  href={`${paths.blog.getBlogPostUrl(encodeURIComponent(slug))}/`}
+                  onClick={(e) => e.stopPropagation()}
+                  style={{ color: 'inherit', textDecoration: 'none' }}
+                >
+                  {title}
+                </NextLink>
+              ) : (
+                title
+              )}{' '}
               {status !== BlogStatus.Published && (
                 <Chip size="small" label={getFormattedLabel(status)} color={statusColor} sx={{ ml: 1 }} />
               )}{' '}
@@ -402,7 +416,7 @@ const BlogCard: React.FC<IBlogCardProps> = ({
             loading={loading}
             id={author?.id}
             size={44}
-            onClick={() => (author?.id ? router.push(paths.profile.getProfileUrl(author?.id)) : null)}
+            onClick={authorHref ? () => router.push(authorHref) : undefined}
             src={author?.profileImage}
             summary={author?.isFaculty ? 'Faculty' : author?.batch ? `Batch of ${author?.batch}` : ''}
             containerProps={{

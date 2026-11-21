@@ -9,6 +9,7 @@ export type SalaryPeriod = 'YEAR' | 'MONTH';
 
 export interface JobPoster {
   id: string;
+  publicUsername?: string | null;
   firstName: string;
   lastName: string;
   profileImage?: string | null;
@@ -133,6 +134,7 @@ const CARD_FIELDS = gql`
     isAccepting
     postedBy {
       id
+      publicUsername
       firstName
       lastName
       profileImage

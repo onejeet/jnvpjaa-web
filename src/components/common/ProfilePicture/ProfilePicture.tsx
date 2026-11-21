@@ -33,7 +33,7 @@ const ProfilePicture: React.FC<ProfilePictureProps> = ({
       width="100%"
       onClick={onClick}
       maxWidth={maxWidth || 'fit-content'}
-      sx={{ cursor: 'pointer' }}
+      sx={{ cursor: onClick ? 'pointer' : undefined }}
       {...containerProps}
     >
       <Box display="flex" {...avatarContainerProps}>

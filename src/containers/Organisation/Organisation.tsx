@@ -28,6 +28,7 @@ import {
 } from '@/apollo/accessOperations';
 import { PERMISSION_CODES } from '@/constants/access';
 import { useAuth } from '@/context/AuthContext';
+import { useMemberHref } from '@/hooks/useMemberHref';
 import { useGetUserListQuery } from '@/apollo/hooks';
 import Button from '@/components/core/Button';
 import { useRouter } from 'next/navigation';
@@ -50,6 +51,7 @@ const getExecutiveCommitteePositionRank = (positionCode?: string | null) => {
 
 const Organizations = () => {
   const { can, user } = useAuth();
+  const hrefFor = useMemberHref();
   const router = useRouter();
   const canManagePositions = can(PERMISSION_CODES.IAM_EXECUTIVE_POSITION_MANAGE);
   const { data } = useQuery(PUBLIC_EXECUTIVE_COMMITTEE_QUERY);
@@ -171,12 +173,13 @@ const Organizations = () => {
               )}
               <Box
                 onClick={() => {
-                  if (user?.id && assignment?.userId) {
-                    router.push(`/profile/${assignment.userId}`);
-                  }
+                  const href = hrefFor({ id: assignment?.userId, publicUsername: assignment?.publicUsername });
+                  if (href) router.push(href);
                 }}
                 sx={{
-                  cursor: user?.id && assignment?.userId ? 'pointer' : 'default',
+                  cursor: hrefFor({ id: assignment?.userId, publicUsername: assignment?.publicUsername })
+                    ? 'pointer'
+                    : 'default',
                 }}
               >
                 <ProfileCard {...card} />

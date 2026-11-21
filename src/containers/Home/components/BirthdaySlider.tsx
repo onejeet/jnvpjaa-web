@@ -6,13 +6,14 @@ import { Navigation, Autoplay, FreeMode } from 'swiper/modules';
 import { useUpcomingBirthdaysQuery } from '@/apollo/hooks';
 import React from 'react';
 import ProfilePicture from '@/components/common/ProfilePicture';
-import { paths } from '@/config/paths';
 import { useRouter } from 'next/navigation';
+import { useMemberHref } from '@/hooks/useMemberHref';
 
 const BirthdaySlider = () => {
   const { data, loading } = useUpcomingBirthdaysQuery();
   const theme = useTheme();
   const router = useRouter();
+  const hrefFor = useMemberHref();
 
   const [autoplay, setAutoplay] = React.useState(false);
   const swiperRef = React.useRef<any>(null);
@@ -109,7 +110,11 @@ const BirthdaySlider = () => {
                 flexDirection="column"
                 justifyContent="center"
                 alignItems="center"
-                onClick={() => router.push(paths.profile.getProfileUrl(user?.id))}
+                onClick={() => {
+                  const href = hrefFor(user);
+                  if (href) router.push(href);
+                }}
+                sx={{ cursor: hrefFor(user) ? 'pointer' : 'default' }}
               >
                 <ProfilePicture
                   src={user.profileImage}

@@ -17,7 +17,7 @@ import {
 } from '@mui/material';
 import { IconArrowBackUp, IconDots, IconMoodPlus, IconPencil, IconTrash } from '@tabler/icons-react';
 import ProfilePicture from '@/components/common/ProfilePicture';
-import { paths } from '@/config/paths';
+import { useMemberHref } from '@/hooks/useMemberHref';
 import dynamic from 'next/dynamic';
 import { EmojiClickData, EmojiStyle, SkinTones } from 'emoji-picker-react';
 import { COMMENT_REACTION_CODES, ThreadComment } from '@/apollo/commentOperations';
@@ -89,6 +89,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
   const [menuAnchor, setMenuAnchor] = React.useState<HTMLElement | null>(null);
   const [reactAnchor, setReactAnchor] = React.useState<HTMLElement | null>(null);
   const { author } = comment;
+  const authorHref = useMemberHref()(author);
   const isOwn = !!viewer?.id && viewer.id === comment.authorId;
   const canDelete = isOwn || !!isAdmin;
   const pending = comment.id.startsWith('temp-');
@@ -135,17 +136,23 @@ const CommentItem: React.FC<CommentItemProps> = ({
       <Box flex={1} minWidth={0}>
         {/* Header: name · batch · time, vertically centred on the avatar's top half */}
         <Box display="flex" alignItems="center" columnGap={1} minHeight={22} pt="2px" flexWrap="wrap">
-          <MuiLink
-            component={Link}
-            href={author?.id ? paths.profile.getProfileUrl(author.id) : '#'}
-            underline="hover"
-            color="text.primary"
-            fontWeight={600}
-            fontSize={15}
-            lineHeight="22px"
-          >
-            {authorName(author)}
-          </MuiLink>
+          {authorHref ? (
+            <MuiLink
+              component={Link}
+              href={authorHref}
+              underline="hover"
+              color="text.primary"
+              fontWeight={600}
+              fontSize={15}
+              lineHeight="22px"
+            >
+              {authorName(author)}
+            </MuiLink>
+          ) : (
+            <Typography component="span" color="text.primary" fontWeight={600} fontSize={15} lineHeight="22px">
+              {authorName(author)}
+            </Typography>
+          )}
           {(author?.batch || author?.isFaculty) && (
             <>
               <Dot />

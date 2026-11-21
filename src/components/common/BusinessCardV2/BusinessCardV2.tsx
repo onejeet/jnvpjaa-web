@@ -28,6 +28,7 @@ import Image from 'next/image';
 import ProfilePicture from '../ProfilePicture';
 import { paths } from '@/config/paths';
 import { useRouter } from 'next/navigation';
+import { useMemberHref } from '@/hooks/useMemberHref';
 
 type Props = {
   business: Business;
@@ -36,6 +37,7 @@ type Props = {
 
 const BusinessCard: React.FC<Props> = ({ business, loading }) => {
   const router = useRouter();
+  const ownerHref = useMemberHref()(business?.user);
   return (
     <Card
       elevation={2}
@@ -208,8 +210,7 @@ const BusinessCard: React.FC<Props> = ({ business, loading }) => {
                 id={business?.user?.id}
                 loading={loading}
                 size={48}
-                // @ts-expect-error type-error
-                onClick={() => router.push(paths.profile.getProfileUrl(business.user.id as string))}
+                onClick={ownerHref ? () => router.push(ownerHref) : undefined}
                 title={`${business?.user?.firstName || ''} ${business?.user?.lastName || ''}`}
                 summary={
                   business?.user?.batch

@@ -15,6 +15,7 @@ import Button from '@/components/core/Button';
 import { useAlert } from '@/context/AlertContext';
 import { useApolloClient, useMutation } from '@apollo/client';
 import { useAuth } from '@/context/AuthContext';
+import { useMemberHref } from '@/hooks/useMemberHref';
 import { IconCircleCheck, IconStar, IconBan, IconTrash, IconX } from '@tabler/icons-react';
 import FacultyBadge from '@/components/common/FacultyBadge';
 import { PERMISSION_CODES, ROLE_CODES } from '@/constants/access';
@@ -23,6 +24,7 @@ import { REMOVE_MEMBER, SET_MEMBER_DISABLED } from '@/apollo/memberOperations';
 const useMembersTable = () => {
   const client = useApolloClient();
   const { isAdmin, user, can, canForBatch, hasRole } = useAuth();
+  const hrefFor = useMemberHref();
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -136,13 +138,16 @@ const useMembersTable = () => {
             alignItems="center"
             height="100%"
             sx={{
-              cursor: row?.loading || !user?.id ? 'default' : 'pointer',
+              cursor: !row?.loading && hrefFor(row) ? 'pointer' : 'default',
               '&:hover .title-container': {
                 transition: 'color 0.2s ease',
-                color: user?.id ? 'primary.main' : 'inherit',
+                color: hrefFor(row) ? 'primary.main' : 'inherit',
               },
             }}
-            onClick={() => (row?.loading || !user?.id ? () => null : router.push(`/profile/${row?.id}`))}
+            onClick={() => {
+              const href = !row?.loading && hrefFor(row);
+              if (href) router.push(href);
+            }}
           >
             <ProfilePicture
               loading={row.loading}
@@ -451,6 +456,7 @@ const useMembersTable = () => {
 
     setColumns(columns);
   }, [
+    hrefFor,
     canApproveRegistrations,
     canForBatch,
     canManagePendingRegistrations,

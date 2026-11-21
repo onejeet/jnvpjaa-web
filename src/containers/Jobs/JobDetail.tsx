@@ -36,6 +36,7 @@ import { paths } from '@/config/paths';
 import { canonicalUrl } from '@/config/seo.config';
 import { useAlert } from '@/context/AlertContext';
 import { useAuth } from '@/context/AuthContext';
+import { useMemberHref } from '@/hooks/useMemberHref';
 import LayoutModule from '@/layouts/Layout';
 import {
   EXPERIENCE_LABEL,
@@ -59,6 +60,7 @@ const formatDay = (iso: string) =>
 
 const JobDetail: React.FC<{ job: Job }> = ({ job: initial }) => {
   const { user, redirectToSignin } = useAuth();
+  const hrefFor = useMemberHref();
   const { showAlert } = useAlert();
   const [applying, setApplying] = React.useState(false);
   const [confirmWithdraw, setConfirmWithdraw] = React.useState(false);
@@ -74,6 +76,7 @@ const JobDetail: React.FC<{ job: Job }> = ({ job: initial }) => {
   const salary = formatSalary(job.salaryMin, job.salaryMax, job.salaryPeriod);
   const deadline = deadlineLabel(job.deadline);
   const poster = `${job.postedBy.firstName} ${job.postedBy.lastName}`.trim();
+  const posterHref = hrefFor(job.postedBy);
 
   const confirmWithdrawal = async () => {
     try {
@@ -215,9 +218,15 @@ const JobDetail: React.FC<{ job: Job }> = ({ job: initial }) => {
                   ? `Posted by an alumnus who works at ${job.company}`
                   : 'Shared as a lead by an alumnus'}
               </Typography>
-              <Link component={NextLink} href={paths.profile.getProfileUrl(job.postedBy.id)} fontWeight={700}>
-                {poster}
-              </Link>
+              {posterHref ? (
+                <Link component={NextLink} href={posterHref} fontWeight={700}>
+                  {poster}
+                </Link>
+              ) : (
+                <Typography component="span" fontWeight={700}>
+                  {poster}
+                </Typography>
+              )}
               {job.postedBy.batch && (
                 <Typography component="span" color="text.secondary">
                   {' '}

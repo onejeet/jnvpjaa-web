@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { ImageResponse } from 'next/og';
@@ -21,6 +22,53 @@ const fonts = Promise.all(
     style: 'normal' as const,
   }))
 );
+
+// Small in-process caches: a warm instance skips the photo download and the render entirely.
+const remember = <T,>(cache: Map<string, T>, key: string, value: T, max = 200) => {
+  if (cache.size >= max) cache.delete(cache.keys().next().value as string);
+  cache.set(key, value);
+  return value;
+};
+const cards = new Map<string, ArrayBuffer>();
+const photos = new Map<string, Promise<string>>();
+const stamps = new Map<string, Promise<string>>();
+
+const dataUri = async (response: Response) =>
+  `data:${response.headers.get('content-type')};base64,${Buffer.from(await response.arrayBuffer()).toString('base64')}`;
+
+/** The photo at card size via Next's image optimizer (resized and cached there), not the multi-MB original. */
+const photoSrc = (origin: string, url: string) =>
+  photos.get(url) ||
+  remember(
+    photos,
+    url,
+    fetch(`${origin}/_next/image/?url=${encodeURIComponent(url)}&w=384&q=80`, {
+      // satori reads JPEG and PNG, not WebP/AVIF.
+      headers: { Accept: 'image/jpeg,image/png' },
+      signal: AbortSignal.timeout(4000),
+    })
+      .then((response) =>
+        response.ok && /image\/(jpeg|png)/.test(response.headers.get('content-type') || '') ? dataUri(response) : url
+      )
+      .catch(() => {
+        photos.delete(url);
+        return url;
+      })
+  );
+
+const stampSrc = (origin: string, faculty: boolean) => {
+  const path = verifiedStampPath(faculty);
+  return (
+    stamps.get(path) ||
+    remember(
+      stamps,
+      path,
+      readFile(join(process.cwd(), 'public', path.split('?')[0]))
+        .then((file) => `data:image/png;base64,${file.toString('base64')}`)
+        .catch(() => `${origin}${path}`)
+    )
+  );
+};
 
 const initials = (name: string) =>
   name
@@ -47,6 +95,30 @@ export async function GET(request: Request, props: { params: Promise<{ file: str
   if (!profile) return new Response('Not found', { status: 404, headers: { 'Cache-Control': 'no-store' } });
 
   const origin = new URL(request.url).origin;
+  const key = createHash('sha256')
+    .update(
+      JSON.stringify([
+        profile.username,
+        profile.name,
+        profile.profileImage,
+        profile.batch,
+        profile.isFaculty,
+        profile.headline,
+        verifiedStampPath(profile.isFaculty),
+      ])
+    )
+    .digest('hex');
+  const headers = {
+    'Content-Type': 'image/png',
+    // Short CDN life: a member who hides their page should drop out of previews quickly.
+    'Cache-Control': 'public, max-age=300, s-maxage=300',
+  };
+  const cached = cards.get(key);
+  if (cached) return new Response(cached, { headers });
+  const [photoUrl, stampUrl] = await Promise.all([
+    profile.profileImage ? photoSrc(origin, profile.profileImage) : null,
+    stampSrc(origin, profile.isFaculty),
+  ]);
   const address = `${brand.domains.site}${publicProfilePath(profile.username).replace(/\/$/, '')}`;
   const subtitle = [
     profile.isFaculty ? `Faculty, ${brand.institution.shortName}` : profile.batch ? `Batch of ${profile.batch}` : null,
@@ -56,7 +128,7 @@ export async function GET(request: Request, props: { params: Promise<{ file: str
     .join('  ·  ');
   const photo = 340;
 
-  return new ImageResponse(
+  const image = new ImageResponse(
     <div
       style={{
         width: '100%',
@@ -87,10 +159,10 @@ export async function GET(request: Request, props: { params: Promise<{ file: str
             fontSize: 120,
           }}
         >
-          {profile.profileImage ? (
+          {photoUrl ? (
             // eslint-disable-next-line @next/next/no-img-element -- next/og renders plain img only
             <img
-              src={profile.profileImage}
+              src={photoUrl}
               alt=""
               width={photo}
               height={photo}
@@ -102,7 +174,7 @@ export async function GET(request: Request, props: { params: Promise<{ file: str
         </div>
         {/* eslint-disable-next-line @next/next/no-img-element -- next/og renders plain img only */}
         <img
-          src={`${origin}${verifiedStampPath(profile.isFaculty)}`}
+          src={stampUrl}
           alt=""
           width={196}
           height={196}
@@ -153,8 +225,8 @@ export async function GET(request: Request, props: { params: Promise<{ file: str
       width: WIDTH,
       height: HEIGHT,
       fonts: await fonts,
-      // Short CDN life: a member who hides their page should drop out of previews quickly.
-      headers: { 'Cache-Control': 'public, max-age=300, s-maxage=300' },
     }
   );
+  const png = remember(cards, key, await image.arrayBuffer(), 100);
+  return new Response(png, { headers });
 }

@@ -37,12 +37,14 @@ export type RecentMember = {
   lastName?: string | null;
   profileImage?: string | null;
   batch?: number | null;
+  publicUsername?: string | null;
 };
 
 export const RECENT_MEMBERS = gql`
   query RecentMembers($limit: Int) {
     recentMembers(limit: $limit) {
       id
+      publicUsername
       firstName
       lastName
       profileImage

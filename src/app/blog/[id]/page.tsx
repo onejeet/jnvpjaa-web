@@ -48,6 +48,7 @@ export async function generateMetadata(props: { params: Promise<{ id: string }> 
       title,
       description,
       images: [{ url: image, alt: blog.title }],
+      publishedTime: blog.createdAt,
       modifiedTime: blog.updatedAt,
       authors: [`${blog.author?.firstName || ''} ${blog.author?.lastName || ''}`.trim() || SEO_CONFIG.siteName],
     },

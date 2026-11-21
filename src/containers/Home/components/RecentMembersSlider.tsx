@@ -7,13 +7,14 @@ import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, FreeMode } from 'swiper/modules';
 import ProfilePicture from '@/components/common/ProfilePicture';
-import { paths } from '@/config/paths';
+import { useMemberHref } from '@/hooks/useMemberHref';
 import { RECENT_MEMBERS, type RecentMember } from '@/apollo/memberOperations';
 
 /** Newest members, in the same strip style as Upcoming Birthdays; hidden when there are none. */
 const RecentMembersSlider = () => {
   const { data, loading } = useQuery<{ recentMembers: RecentMember[] }>(RECENT_MEMBERS, { variables: { limit: 10 } });
   const theme = useTheme();
+  const hrefFor = useMemberHref();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const members = data?.recentMembers || [];
   const list: Partial<RecentMember>[] = loading ? new Array(8).fill({}) : members;
@@ -74,8 +75,8 @@ const RecentMembersSlider = () => {
             );
             return (
               <SwiperSlide key={m.id || `recent-member-${i}`} style={{ width: 'auto', minWidth: 120 }}>
-                {m.id ? (
-                  <Link href={paths.profile.getProfileUrl(m.id)} style={{ color: 'inherit', textDecoration: 'none' }}>
+                {hrefFor(m) ? (
+                  <Link href={hrefFor(m) as string} style={{ color: 'inherit', textDecoration: 'none' }}>
                     {card}
                   </Link>
                 ) : (

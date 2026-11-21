@@ -92,6 +92,7 @@ export const BATCH_COORDINATOR_ROLE_ASSIGNMENTS_QUERY = gql`
       assignedAt
       user {
         id
+        publicUsername
         firstName
         lastName
         gender
@@ -150,6 +151,7 @@ export const PUBLIC_EXECUTIVE_COMMITTEE_QUERY = gql`
     publicExecutiveCommittee {
       assignmentId
       userId
+      publicUsername
       name
       designation
       batch

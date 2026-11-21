@@ -41,6 +41,7 @@ import {
 import { EventStatus, Maybe, User, UserBasic } from '@/apollo/hooks';
 import { paths } from '@/config/paths';
 import { useRouter } from 'next/navigation';
+import NextLink from 'next/link';
 import CopyContentButton from '@/components/common/CopyContentButton';
 import UserListDialog from '../UserListDialog/UserListDialog';
 import ProfilePicture from '../ProfilePicture';
@@ -226,7 +227,7 @@ const SingleEventView: React.FC<SingleEventViewProps> = ({
             <Typography
               className="event_title"
               variant="h1"
-              component="div"
+              component={showDescription ? 'h1' : 'h2'}
               fontWeight="bold"
               onClick={() => {
                 if (showDescription || !id) return;
@@ -252,7 +253,18 @@ const SingleEventView: React.FC<SingleEventViewProps> = ({
                 },
               }}
             >
-              {title}
+              {!showDescription && id ? (
+                // Real anchor so crawlers can follow listing → event.
+                <NextLink
+                  href={`${paths.events.getEventDetailUrl(id)}/`}
+                  onClick={(e) => e.stopPropagation()}
+                  style={{ color: 'inherit', textDecoration: 'none' }}
+                >
+                  {title}
+                </NextLink>
+              ) : (
+                title
+              )}
               {!showDescription && <ArrowRight />}
             </Typography>
 

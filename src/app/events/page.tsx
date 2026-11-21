@@ -27,6 +27,16 @@ export default async function EventsPage() {
       <JsonLd
         data={generateSchema.collectionPage(`${brand.shortName} Events`, '/events/', metadata.description as string)}
       />
+      {data.getEventList?.data?.length ? (
+        <JsonLd
+          data={generateSchema.itemList(
+            '/events/',
+            data.getEventList.data
+              .filter(Boolean)
+              .map((event) => ({ url: `/events/${event!.id}/`, name: event!.title }))
+          )}
+        />
+      ) : null}
       <Events initialEvents={data.getEventList} />
     </>
   );

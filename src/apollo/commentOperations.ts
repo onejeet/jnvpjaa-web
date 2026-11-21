@@ -31,6 +31,7 @@ export interface ThreadComment {
     profileImage?: string | null;
     batch?: number | null;
     isFaculty?: boolean | null;
+    publicUsername?: string | null;
   } | null;
   reactions: CommentReactionSummary[];
 }
@@ -46,6 +47,7 @@ const COMMENT_FIELDS = gql`
     authorId
     author {
       id
+      publicUsername
       firstName
       lastName
       profileImage

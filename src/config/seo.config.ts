@@ -14,6 +14,11 @@ export const SEO_CONFIG = {
   locale: seo.locale,
 };
 
+// Devanagari text means a Hindi post; everything else uses the tenant language.
+export function contentLanguage(text?: string | null): string {
+  return /[\u0900-\u097F]/.test(text || '') ? 'hi-IN' : seo.language;
+}
+
 export function canonicalUrl(path: string): string {
   const url = new URL(path, SEO_CONFIG.url);
   if (!url.pathname.endsWith('/')) url.pathname += '/';
@@ -128,9 +133,29 @@ export const generateSchema = {
     '@type': 'Organization',
     '@id': `${SEO_CONFIG.url}/#organization`,
     name: SEO_CONFIG.siteName,
+    legalName: brand.legalName,
+    alternateName: brand.tagline,
     url: SEO_CONFIG.url,
     logo: `${SEO_CONFIG.url}/icons/icon-512.png`,
     description: SEO_CONFIG.description,
+    ...(brand.contact?.email ? { email: brand.contact.email } : {}),
+    ...(brand.contact?.address?.length
+      ? { address: { '@type': 'PostalAddress', streetAddress: brand.contact.address.join(' ') } }
+      : {}),
+    ...(Object.values(brand.socials || {}).length ? { sameAs: Object.values(brand.socials || {}) } : {}),
+    // The school the alumni graduated from: strong entity signal for "<school> alumni" searches.
+    parentOrganization: { '@type': 'EducationalOrganization', name: brand.institution.name },
+  }),
+  itemList: (path: string, items: { url: string; name: string }[]) => ({
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    '@id': `${canonicalUrl(path)}#itemlist`,
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      url: canonicalUrl(item.url),
+      name: item.name,
+    })),
   }),
   website: () => ({
     '@context': 'https://schema.org',
@@ -175,6 +200,7 @@ export const generateSchema = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     '@id': `${canonicalUrl(`/blog/${encodeURIComponent(blog.slug)}`)}#article`,
+    url: canonicalUrl(`/blog/${encodeURIComponent(blog.slug)}`),
     headline: blog.title,
     ...(blog.cover?.url ? { image: [blog.cover.url] } : {}),
     author: blog.author?.firstName
@@ -185,16 +211,18 @@ export const generateSchema = {
       : { '@id': `${SEO_CONFIG.url}/#organization` },
     publisher: {
       '@type': 'Organization',
+      '@id': `${SEO_CONFIG.url}/#organization`,
       name: SEO_CONFIG.siteName,
-      logo: {
-        '@type': 'ImageObject',
-        url: `${SEO_CONFIG.url}/icons/icon-512.png`,
-      },
+      logo: { '@type': 'ImageObject', url: `${SEO_CONFIG.url}/icons/icon-512.png` },
     },
+    // The API has no separate publish timestamp; creation is the closest truthful value.
+    datePublished: blog.createdAt,
     dateCreated: blog.createdAt,
     dateModified: blog.updatedAt || blog.createdAt,
     description: blog.summary || undefined,
-    inLanguage: seo.language,
+    inLanguage: contentLanguage(`${blog.title} ${blog.summary || ''}`),
+    isPartOf: { '@id': `${canonicalUrl('/blog/')}#webpage` },
+    about: { '@type': 'EducationalOrganization', name: brand.institution.name },
     mainEntityOfPage: {
       '@type': 'WebPage',
       '@id': canonicalUrl(`/blog/${encodeURIComponent(blog.slug)}`),
@@ -240,11 +268,15 @@ export const generateSchema = {
     // Public event data masks private locations. Never publish a fabricated venue.
     ...(event.location && event.location !== 'protected'
       ? { location: { '@type': 'Place', name: event.location, address: event.location } }
-      : {}),
+      : event.medium === 'online'
+        ? { location: { '@type': 'VirtualLocation', url: canonicalUrl(`/events/${event.id}`) } }
+        : {}),
     ...(event.cover?.url ? { image: [event.cover.url] } : {}),
     description: event.summary || event.description,
+    inLanguage: contentLanguage(`${event.title} ${event.summary || ''}`),
     organizer: {
       '@type': 'Organization',
+      '@id': `${SEO_CONFIG.url}/#organization`,
       name: SEO_CONFIG.siteName,
       url: SEO_CONFIG.url,
     },

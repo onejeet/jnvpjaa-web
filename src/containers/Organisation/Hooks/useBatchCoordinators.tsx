@@ -10,11 +10,13 @@ import ProfilePicture from '@/components/common/ProfilePicture';
 import { Skeleton, Typography } from '@mui/material';
 import VerifiedBadge from '@/components/common/VerifiedBadge';
 import { useAuth } from '@/context/AuthContext';
+import { useMemberHref } from '@/hooks/useMemberHref';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { BatchCoordinatorRoleAssignment } from '@/types/access';
 
 const useBatchCoordinators = (coordinators?: BatchCoordinatorRoleAssignment[]) => {
   const { user } = useAuth();
+  const hrefFor = useMemberHref();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [columns, setColumns] = React.useState<any[]>([]);
@@ -35,13 +37,16 @@ const useBatchCoordinators = (coordinators?: BatchCoordinatorRoleAssignment[]) =
             alignItems="center"
             height="100%"
             sx={{
-              cursor: row?.loading || !user?.id ? 'default' : 'pointer',
+              cursor: !row?.loading && hrefFor(row?.user) ? 'pointer' : 'default',
               '&:hover .title-container': {
                 transition: 'color 0.2s ease',
-                color: 'primary.main',
+                color: hrefFor(row?.user) ? 'primary.main' : 'inherit',
               },
             }}
-            onClick={() => (row?.loading || !user?.id ? () => null : router.push(`/profile/${row?.user?.id}`))}
+            onClick={() => {
+              const href = !row?.loading && hrefFor(row?.user);
+              if (href) router.push(href);
+            }}
           >
             <ProfilePicture
               loading={row.loading}
@@ -221,7 +226,7 @@ const useBatchCoordinators = (coordinators?: BatchCoordinatorRoleAssignment[]) =
     ];
 
     setColumns(columns);
-  }, [router, user]);
+  }, [router, user, hrefFor]);
 
   const searchQuery = searchParams.get('q')?.trim().toLowerCase() || '';
   const batchParam = searchParams.get('batch');

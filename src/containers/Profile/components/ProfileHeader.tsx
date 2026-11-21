@@ -548,6 +548,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
               <ShareProfileButton
                 username={shareUsername}
                 name={`${user?.firstName || ''} ${user?.lastName || ''}`.trim()}
+                photo={user?.profileImage}
                 label="Share"
                 variant="outlined"
                 size="small"

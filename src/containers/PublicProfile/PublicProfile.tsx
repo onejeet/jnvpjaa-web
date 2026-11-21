@@ -234,7 +234,7 @@ const PublicProfileView: React.FC<{ profile: PublicProfile }> = ({ profile }) =>
               {initials(profile.name)}
             </Avatar>
             <Box display={{ xs: 'none', sm: 'block' }} pb={0.5}>
-              <ShareProfileButton username={profile.username} name={profile.name} />
+              <ShareProfileButton username={profile.username} name={profile.name} photo={profile.profileImage} />
             </Box>
           </Stack>
 
@@ -315,7 +315,7 @@ const PublicProfileView: React.FC<{ profile: PublicProfile }> = ({ profile }) =>
           </Stack>
 
           <Box display={{ xs: 'block', sm: 'none' }} mt={3}>
-            <ShareProfileButton username={profile.username} name={profile.name} />
+            <ShareProfileButton username={profile.username} name={profile.name} photo={profile.profileImage} />
           </Box>
         </Box>
       </Paper>

@@ -35,6 +35,16 @@ export default async function BlogPage() {
       <JsonLd
         data={generateSchema.collectionPage(`${brand.shortName} Blog`, '/blog/', metadata.description as string)}
       />
+      {blogData?.data?.length ? (
+        <JsonLd
+          data={generateSchema.itemList(
+            '/blog/',
+            blogData.data
+              .filter((post) => post?.slug)
+              .map((post) => ({ url: `/blog/${encodeURIComponent(post!.slug!)}/`, name: post!.title }))
+          )}
+        />
+      ) : null}
       <Blog data={blogData as BlogListResponse} />
     </>
   );

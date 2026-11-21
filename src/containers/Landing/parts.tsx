@@ -11,6 +11,7 @@ import { assetUrl, brand, landing, seo } from '@/config/tenant';
 import { dmSans, notoSerif, playfairDisplay } from '@/utils/theme/fonts';
 import s from './Landing.module.css';
 import SizedImg from './SizedImg';
+import MemberLink from '@/components/common/MemberLink';
 
 export { s };
 
@@ -177,7 +178,7 @@ export function Birthdays({ people }: { people: UserBirthday[] }) {
     <ul className={s.bdays}>
       {people.map((p) => (
         <li key={p.id}>
-          <Link href={paths.profile.getProfileUrl(p.id as string)}>
+          <MemberLink member={p}>
             <Avatar user={p} />
             <strong>{p.firstName}</strong>
             <br />
@@ -185,7 +186,7 @@ export function Birthdays({ people }: { people: UserBirthday[] }) {
               {p.birthday ? fmt(p.birthday, { day: 'numeric', month: 'short' }) : ''}
               {p.batch ? ` · ${p.batch}` : ''}
             </span>
-          </Link>
+          </MemberLink>
         </li>
       ))}
     </ul>

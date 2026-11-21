@@ -20,21 +20,47 @@ import { publicProfilePath } from '@/utils/publicProfilePath';
 type Props = {
   username: string;
   name: string;
+  /** Part of the card URL, so a new photo gets a fresh card instead of the browser's cached one. */
+  photo?: string | null;
   /** "Share profile" on someone's page; "Share my profile" on your own. */
   label?: string;
   variant?: 'contained' | 'outlined';
   size?: 'small' | 'medium';
 };
 
+const cardUrl = (username: string, name: string, photo?: string | null) => {
+  let hash = 5381;
+  for (const char of `${name}|${photo || ''}`) hash = ((hash * 33) ^ char.charCodeAt(0)) >>> 0;
+  return `/og/profile/${encodeURIComponent(username)}.png?v=${hash.toString(36)}`;
+};
+
 /** Opens a sheet with the profile's share card, its link and the usual places to post it. */
 const ShareProfileButton: React.FC<Props> = ({
   username,
   name,
+  photo,
   label = 'Share profile',
   variant = 'contained',
   size = 'medium',
 }) => {
   const [open, setOpen] = React.useState(false);
+  const image = cardUrl(username, name, photo);
+
+  // Render the card while the page sits idle, so the sheet opens with it already in the browser cache.
+  React.useEffect(() => {
+    const warm = () => {
+      const img = new Image();
+      img.decoding = 'async';
+      img.src = image;
+    };
+    if ('requestIdleCallback' in window) {
+      const id = window.requestIdleCallback(warm, { timeout: 4000 });
+      return () => window.cancelIdleCallback(id);
+    }
+    const id = setTimeout(warm, 1500);
+    return () => clearTimeout(id);
+  }, [image]);
+
   return (
     <>
       <Button
@@ -46,12 +72,17 @@ const ShareProfileButton: React.FC<Props> = ({
         aria-haspopup="dialog"
         sx={{ whiteSpace: 'nowrap', flexShrink: 0 }}
       />
-      {open && <ShareSheet username={username} name={name} onClose={() => setOpen(false)} />}
+      {open && <ShareSheet username={username} name={name} image={image} onClose={() => setOpen(false)} />}
     </>
   );
 };
 
-const ShareSheet: React.FC<{ username: string; name: string; onClose: () => void }> = ({ username, name, onClose }) => {
+const ShareSheet: React.FC<{ username: string; name: string; image: string; onClose: () => void }> = ({
+  username,
+  name,
+  image,
+  onClose,
+}) => {
   const { showAlert } = useAlert();
   const [copied, setCopied] = React.useState(false);
   const [imageState, setImageState] = React.useState<'loading' | 'ready' | 'failed'>('loading');
@@ -59,8 +90,6 @@ const ShareSheet: React.FC<{ username: string; name: string; onClose: () => void
   const path = publicProfilePath(username);
   const url = new URL(path, window.location.origin).toString();
   const display = `${brand.domains.site}/@${username}`;
-  // Opened-at stamp: a photo changed a moment ago must not show the browser's cached card.
-  const [image] = React.useState(() => `/og/profile/${encodeURIComponent(username)}.png?t=${Date.now()}`);
   const shareText = `${name} on ${brand.shortName}`;
   const canNativeShare = typeof navigator !== 'undefined' && typeof navigator.share === 'function';
 

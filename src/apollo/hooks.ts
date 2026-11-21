@@ -1961,6 +1961,7 @@ export type User = {
   nickName?: Maybe<Scalars['String']['output']>;
   positions?: Maybe<Array<Maybe<EffectivePosition>>>;
   profileImage?: Maybe<Scalars['String']['output']>;
+  publicUsername?: Maybe<Scalars['String']['output']>;
   role?: Maybe<Role>;
   roles?: Maybe<Array<Maybe<EffectiveRole>>>;
   socialMedia?: Maybe<Scalars['JSON']['output']>;
@@ -1981,6 +1982,7 @@ export type UserBasic = {
   isVerified?: Maybe<Scalars['Boolean']['output']>;
   lastName?: Maybe<Scalars['String']['output']>;
   profileImage?: Maybe<Scalars['String']['output']>;
+  publicUsername?: Maybe<Scalars['String']['output']>;
   role?: Maybe<Role>;
 };
 
@@ -1996,6 +1998,7 @@ export type UserBirthday = {
   isVerified?: Maybe<Scalars['Boolean']['output']>;
   lastName?: Maybe<Scalars['String']['output']>;
   profileImage?: Maybe<Scalars['String']['output']>;
+  publicUsername?: Maybe<Scalars['String']['output']>;
 };
 
 export type UserListResponse = {
@@ -16735,6 +16738,7 @@ export type GetBlogQuery = {
               isVerified?: boolean | undefined;
               lastName?: string | undefined;
               profileImage?: string | undefined;
+              publicUsername?: string | undefined;
               role?:
                 | { __typename?: 'Role'; code?: string | undefined; id?: string | undefined; name?: string | undefined }
                 | undefined;
@@ -16814,6 +16818,7 @@ export type GetBlogListQuery = {
                         isVerified?: boolean | undefined;
                         lastName?: string | undefined;
                         profileImage?: string | undefined;
+                        publicUsername?: string | undefined;
                         role?:
                           | {
                               __typename?: 'Role';
@@ -16930,6 +16935,7 @@ export type GetBusinessesQuery = {
                         isVerified?: boolean | undefined;
                         lastName?: string | undefined;
                         profileImage?: string | undefined;
+                        publicUsername?: string | undefined;
                         role?:
                           | {
                               __typename?: 'Role';
@@ -23114,6 +23120,7 @@ export type GetUserListQuery = {
                   mobile?: string | undefined;
                   nickName?: string | undefined;
                   profileImage?: string | undefined;
+                  publicUsername?: string | undefined;
                   socialMedia?: any | undefined;
                   updatedAt: any;
                   whatsAppMobile?: string | undefined;
@@ -23385,6 +23392,7 @@ export type UpcomingBirthdaysQuery = {
         isVerified?: boolean | undefined;
         lastName?: string | undefined;
         profileImage?: string | undefined;
+        publicUsername?: string | undefined;
       }
     | undefined
   >;
@@ -39416,6 +39424,7 @@ export const GetBlogDocument = gql`
         isVerified
         lastName
         profileImage
+        publicUsername
         role {
           code
           id
@@ -39518,6 +39527,7 @@ export const GetBlogListDocument = gql`
           isVerified
           lastName
           profileImage
+          publicUsername
           role {
             code
             id
@@ -39710,6 +39720,7 @@ export const GetBusinessesDocument = gql`
           isVerified
           lastName
           profileImage
+          publicUsername
           role {
             code
             id
@@ -46602,6 +46613,7 @@ export const GetUserListDocument = gql`
           validUntil
         }
         profileImage
+        publicUsername
         role {
           code
           id
@@ -47022,6 +47034,7 @@ export const UpcomingBirthdaysDocument = gql`
       isVerified
       lastName
       profileImage
+      publicUsername
     }
   }
 `;
