@@ -331,6 +331,11 @@ const NewsForm: React.FC<{ id?: string; post?: NewsPost | null }> = ({ id, post 
           onChange={(html) => setValue('content', html, { shouldDirty: true })}
           height="clamp(380px, 56vh, 560px)"
           placeholder="Write the news…"
+          ai={{
+            surface: 'news',
+            onTitle: (t) => setValue('title', t, { shouldDirty: true }),
+            onSummary: (s) => setValue('summary', s, { shouldDirty: true }),
+          }}
         />
       </EditorSection>
 

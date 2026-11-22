@@ -98,6 +98,7 @@ export const RichTextInput = ({
               }
               height={height}
               placeholder={placeholder}
+              ai={{ surface: 'page' }}
             />
             {fieldState.error && <FormHelperText error>{fieldState.error.message}</FormHelperText>}
           </div>

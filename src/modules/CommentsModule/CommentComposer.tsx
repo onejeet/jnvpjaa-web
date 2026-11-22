@@ -2,12 +2,16 @@
 
 import React from 'react';
 import dynamic from 'next/dynamic';
-import { Box, IconButton, InputBase, Popover, Tooltip, Typography } from '@mui/material';
-import { IconMoodSmile, IconSend2 } from '@tabler/icons-react';
+import { useMutation, useQuery } from '@apollo/client';
+import { Box, ButtonBase, IconButton, InputBase, Popover, Tooltip, Typography } from '@mui/material';
+import { alpha } from '@mui/material/styles';
+import { IconCheck, IconMoodSmile, IconSend2, IconSparkles } from '@tabler/icons-react';
 import { SkinTones } from 'emoji-picker-react';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import Button from '@/components/core/Button';
 import { COMMENT_MAX_LENGTH } from '@/apollo/commentOperations';
+import { AI_ALLOWANCE, AI_ASSIST, type AiAllowance, type AiResult } from '@/apollo/aiOperations';
+import { aiErrorMessage } from '@/modules/AiAssist/aiCopy';
 
 // The picker is ~300 KB; only load it when someone opens it.
 const EmojiPicker = dynamic(() => import('emoji-picker-react'), { ssr: false });
@@ -40,6 +44,11 @@ const CommentComposer: React.FC<CommentComposerProps> = ({
   const [submitting, setSubmitting] = React.useState(false);
   const [emojiAnchor, setEmojiAnchor] = React.useState<HTMLElement | null>(null);
   const inputRef = React.useRef<HTMLTextAreaElement>(null);
+  const [assist, { loading: improving }] = useMutation<{ aiAssist: AiResult }>(AI_ASSIST);
+  const { data: aiData } = useQuery<{ aiAllowance: AiAllowance }>(AI_ALLOWANCE, { fetchPolicy: 'cache-first' });
+  const aiEnabled = !!aiData?.aiAllowance.enabled;
+  const [suggestion, setSuggestion] = React.useState<{ text: string; from: string } | null>(null);
+  const [aiNote, setAiNote] = React.useState<string | null>(null);
 
   const trimmed = value.trim();
   const remaining = COMMENT_MAX_LENGTH - value.length;
@@ -64,6 +73,18 @@ const CommentComposer: React.FC<CommentComposerProps> = ({
       // The caller already surfaced the error; keep the draft so nothing is lost.
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const improve = async () => {
+    setSuggestion(null);
+    setAiNote(null);
+    try {
+      const res = await assist({ variables: { taskId: 'comment.improve', text: trimmed } });
+      const text = res.data?.aiAssist.result;
+      setSuggestion(text ? { text, from: trimmed } : null);
+    } catch (error) {
+      setAiNote(aiErrorMessage(error));
     }
   };
 
@@ -124,6 +145,61 @@ const CommentComposer: React.FC<CommentComposerProps> = ({
           inputProps={{ 'aria-label': placeholder, maxLength: COMMENT_MAX_LENGTH + 200 }}
           sx={{ px: 2, pt: 1.5, pb: expanded ? 0.5 : 1.5, fontSize: { xs: 16, md: 15 }, lineHeight: 1.6 }}
         />
+        {(suggestion || aiNote) && (
+          <Box
+            aria-live="polite"
+            sx={{
+              mx: 1,
+              mb: 1,
+              p: 1.5,
+              borderRadius: 2,
+              bgcolor: (t) => alpha(t.palette.primary.main, t.palette.mode === 'dark' ? 0.16 : 0.06),
+            }}
+          >
+            <Typography sx={{ fontSize: 15, lineHeight: 1.6, whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>
+              {suggestion?.text || aiNote}
+            </Typography>
+            <Box display="flex" alignItems="center" flexWrap="wrap" gap={1} mt={1}>
+              {suggestion && (
+                <Button
+                  title="Use this"
+                  size="small"
+                  variant="contained"
+                  startIcon={<IconCheck size={16} />}
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => {
+                    // Edited while AI worked: keep the member's words, ask them to retry.
+                    if (suggestion.from !== trimmed) {
+                      setSuggestion(null);
+                      setAiNote('Your comment changed while AI was working. Try again to use your latest text.');
+                      return;
+                    }
+                    setValue(suggestion.text);
+                    setSuggestion(null);
+                    inputRef.current?.focus();
+                  }}
+                  sx={{ borderRadius: 5 }}
+                />
+              )}
+              <Button
+                title={suggestion ? 'Discard' : 'OK'}
+                size="small"
+                variant="text"
+                color="inherit"
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => {
+                  setSuggestion(null);
+                  setAiNote(null);
+                }}
+              />
+              {suggestion && (
+                <Typography variant="caption" color="text.secondary" sx={{ ml: 'auto' }}>
+                  Suggestions are made with Google&apos;s AI.
+                </Typography>
+              )}
+            </Box>
+          </Box>
+        )}
         {expanded && (
           <Box display="flex" alignItems="center" gap={1} px={1} pb={1}>
             <Tooltip title="Emoji">
@@ -137,6 +213,33 @@ const CommentComposer: React.FC<CommentComposerProps> = ({
                 <IconMoodSmile size={26} stroke={1.75} />
               </IconButton>
             </Tooltip>
+            {!!trimmed && aiEnabled && (
+              <ButtonBase
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={improve}
+                disabled={improving || submitting}
+                aria-label="Improve with AI"
+                sx={{
+                  gap: 0.5,
+                  height: 32,
+                  px: 1.25,
+                  borderRadius: 999,
+                  fontSize: 13.5,
+                  fontWeight: 600,
+                  color: 'primary.main',
+                  border: '1px solid',
+                  borderColor: (t) => alpha(t.palette.primary.main, 0.45),
+                  bgcolor: (t) => alpha(t.palette.primary.main, 0.06),
+                  whiteSpace: 'nowrap',
+                  '&:hover': { bgcolor: (t) => alpha(t.palette.primary.main, 0.12) },
+                  '&.Mui-focusVisible': { outline: '2px solid', outlineColor: 'primary.main', outlineOffset: 2 },
+                  '&.Mui-disabled': { opacity: 0.6 },
+                }}
+              >
+                <IconSparkles size={16} stroke={1.75} />
+                {improving ? 'Improving…' : 'Improve with AI'}
+              </ButtonBase>
+            )}
             <Typography
               variant="caption"
               color={remaining < 0 ? 'error.main' : 'text.secondary'}

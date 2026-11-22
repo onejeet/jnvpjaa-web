@@ -20,6 +20,7 @@ import TipTapTextEditorWrapper from './TipTapTextEditorWrapper';
 // import { FontSize } from './utils/extensions';
 // import HeaderMenuItem from '@/layouts/Layout/HeaderMenuItem';
 import { Indentation } from './components/Indentation';
+import AiAssistBar from '@/modules/AiAssist/AiAssistBar';
 
 const TipTapTextEditor = ({
   value = '',
@@ -30,6 +31,7 @@ const TipTapTextEditor = ({
   placeholder = 'Start writing here...',
   id,
   toolbarProps = {},
+  ai,
 }: TipTapTextEditorProps) => {
   // extract color
   const { color: sxColor, ...restSx } = sx || {};
@@ -116,7 +118,10 @@ const TipTapTextEditor = ({
             }),
           ]}
           slotBefore={
-            <EditorToolbarVertical toolsHidden={['chatbot', 'transcribe']} {...toolbarProps} disabled={disabled} />
+            <>
+              {ai && <AiAssistBar {...ai} disabled={disabled} />}
+              <EditorToolbarVertical toolsHidden={['chatbot', 'transcribe']} {...toolbarProps} disabled={disabled} />
+            </>
           }
         >
           <TipTapTextEditorWrapper disabled={disabled} value={value}>

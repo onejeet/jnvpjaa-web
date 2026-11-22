@@ -158,7 +158,7 @@ const JobForm: React.FC<{ job?: Job | null }> = ({ job }) => {
   const router = useRouter();
   const { showAlert } = useAlert();
   const [saveJob, { loading: saving }] = useMutation<{ saveJob: Job }>(SAVE_JOB);
-  const { control, handleSubmit, setValue } = useForm<JobFormValues>({ defaultValues: toFormValues(job) });
+  const { control, handleSubmit, setValue, getValues } = useForm<JobFormValues>({ defaultValues: toFormValues(job) });
   const [type, workMode, description, salaryMin] = useWatch({
     control,
     name: ['type', 'workMode', 'description', 'salaryMin'],
@@ -466,6 +466,14 @@ const JobForm: React.FC<{ job?: Job | null }> = ({ job }) => {
           onChange={(html) => setValue('description', html, { shouldDirty: true })}
           height="clamp(300px, 46vh, 460px)"
           placeholder="Describe the role…"
+          ai={{
+            surface: 'job',
+            onTitle: (t) => setValue('title', t, { shouldDirty: true }),
+            getFields: () => {
+              const v = getValues();
+              return { role: v.title || '', company: v.company || '', location: v.location || '', type: v.type || '' };
+            },
+          }}
         />
       </EditorSection>
     </EditorShell>

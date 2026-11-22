@@ -266,6 +266,7 @@ const NewBlog = () => {
           disabled={saving}
           height="clamp(380px, 56vh, 560px)"
           placeholder="Begin your story…"
+          ai={{ surface: 'blog', onTitle: (t) => setValue('title', t, { shouldDirty: true }) }}
         />
       </EditorSection>
       {selectCoverImage && (

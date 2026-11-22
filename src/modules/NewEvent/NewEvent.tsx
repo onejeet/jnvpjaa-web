@@ -346,6 +346,19 @@ const NewEvent = () => {
           disabled={saving}
           height="clamp(320px, 46vh, 480px)"
           placeholder="Describe the event…"
+          ai={{
+            surface: 'event',
+            onTitle: (t) => setValue('title', t, { shouldDirty: true }),
+            onSummary: (s) => setValue('summary', s, { shouldDirty: true }),
+            getFields: () => {
+              const v = getValues();
+              return {
+                title: v.title || '',
+                date: v.startDate ? new Date(v.startDate as any).toLocaleString('en-IN') : '',
+                venue: v.medium === 'online' ? 'Online' : v.location || '',
+              };
+            },
+          }}
         />
       </EditorSection>
       {selectCoverImage && (
