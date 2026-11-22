@@ -7,6 +7,7 @@ import { JsonLd } from '@/components/JsonLd';
 import MemberLink from '@/components/common/MemberLink';
 import { isEnabled, isPathEnabled } from '@/config/features';
 import { paths } from '@/config/paths';
+import { getAvatarDataUrl } from '@/utils/helpers';
 import { brand, landing } from '@/config/tenant';
 import { celebratingBatches } from './celebrating';
 import type { LandingExtras } from './loadLanding';
@@ -96,7 +97,7 @@ export function NewMembers({
             {shown.map((m: RecentMember) => (
               <li key={m.id}>
                 <MemberLink member={m}>
-                  <Avatar user={m} />
+                  <Avatar user={{ ...m, profileImage: m.profileImage || getAvatarDataUrl(m.id) }} />
                   <strong>{fullName(m) || m.firstName}</strong>
                   {m.batch ? <span className={s.muted}>Batch {m.batch}</span> : null}
                 </MemberLink>
