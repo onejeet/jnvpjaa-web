@@ -25,6 +25,7 @@ import MessageFields from './fields/MessageFields';
 import PeopleListFields from './fields/PeopleListFields';
 import TextSections from './fields/TextSections';
 import type { EditorFormValues } from './fields/shared';
+import { AiAssistantCard, AiAssistantProvider, type AiFormConfig, type AiFormField } from '@/modules/AiAssist';
 
 dayjs.extend(relativeTime);
 
@@ -197,109 +198,180 @@ const EditorForm = ({
       ? `Edited ${dayjs(saved.updatedAt).fromNow()}${editedBy ? ` by ${editedBy}` : ''}.`
       : 'Not saved yet.';
   const Fields = FIELD_EDITORS[type];
+  const ai = pageAssistant(type, label, form, saving);
 
   return (
     <FormProvider {...form}>
-      <Breadcrumbs
-        items={[
-          { label: 'Admin', path: '/admin' },
-          { label: 'Content' },
-          { label: 'Pages', path: '/admin/pages' },
-          { label },
-        ]}
-        sx={{ mb: 1 }}
-      />
-      {conflict && (
-        <Alert
-          severity="warning"
-          sx={{ mb: 2 }}
-          action={
-            <Button
-              title="Reload"
-              size="small"
-              color="inherit"
-              variant="text"
-              onClick={() => (setConflict(null), reload())}
-            />
+      <AiAssistantProvider config={ai}>
+        <Breadcrumbs
+          items={[
+            { label: 'Admin', path: '/admin' },
+            { label: 'Content' },
+            { label: 'Pages', path: '/admin/pages' },
+            { label },
+          ]}
+          sx={{ mb: 1 }}
+        />
+        {conflict && (
+          <Alert
+            severity="warning"
+            sx={{ mb: 2 }}
+            action={
+              <Button
+                title="Reload"
+                size="small"
+                color="inherit"
+                variant="text"
+                onClick={() => (setConflict(null), reload())}
+              />
+            }
+          >
+            {conflict} Reloading discards your unsaved edits on this page.
+          </Alert>
+        )}
+        <EditorShell
+          onSubmit={onSubmit}
+          noValidate
+          inset
+          assistant={<AiAssistantCard below="lg" />}
+          heading={label}
+          description={DESCRIPTIONS[type]}
+          publish={
+            <PublishPanel
+              status={live ? 'Shown on the site' : 'Hidden from the site'}
+              tone={dirty ? 'attention' : live ? 'live' : 'neutral'}
+              note={note}
+            >
+              <Button title="Save" type="submit" disabled={!dirty || saving} loading={saving} />
+              <Button
+                title="View page"
+                variant="text"
+                startIcon={<IconExternalLink size={18} />}
+                disabled={!live}
+                onClick={() => window.open(`${path}/`, '_blank', 'noopener')}
+              />
+            </PublishPanel>
+          }
+          aside={
+            <>
+              <EditorPanel title="Visibility">
+                <Controller
+                  name="visible"
+                  control={control}
+                  render={({ field }) => (
+                    <FormControlLabel
+                      control={<Switch checked={field.value} onChange={(_, checked) => field.onChange(checked)} />}
+                      label="Visible on site"
+                    />
+                  )}
+                />
+              </EditorPanel>
+              <EditorPanel title="Search & sharing" hint="Leave empty to use the default.">
+                <EditorField label="Title" optional htmlFor="seoTitle">
+                  <FormTextField
+                    id="seoTitle"
+                    fullWidth
+                    size="small"
+                    name="seoTitle"
+                    control={control}
+                    helperText={`${seoTitle?.length || 0} / ${SEO_TITLE_MAX}`}
+                    rules={{ maxLength: { value: SEO_TITLE_MAX, message: `Use ${SEO_TITLE_MAX} characters or fewer` } }}
+                  />
+                </EditorField>
+                <EditorField label="Description" optional htmlFor="seoDescription">
+                  <FormTextField
+                    id="seoDescription"
+                    fullWidth
+                    size="small"
+                    multiline
+                    minRows={3}
+                    name="seoDescription"
+                    control={control}
+                    helperText={`${seoDescription?.length || 0} / ${SEO_DESCRIPTION_MAX}`}
+                    rules={{
+                      maxLength: {
+                        value: SEO_DESCRIPTION_MAX,
+                        message: `Use ${SEO_DESCRIPTION_MAX} characters or fewer`,
+                      },
+                    }}
+                  />
+                </EditorField>
+              </EditorPanel>
+            </>
           }
         >
-          {conflict} Reloading discards your unsaved edits on this page.
-        </Alert>
-      )}
-      <EditorShell
-        onSubmit={onSubmit}
-        noValidate
-        inset
-        heading={label}
-        description={DESCRIPTIONS[type]}
-        publish={
-          <PublishPanel
-            status={live ? 'Shown on the site' : 'Hidden from the site'}
-            tone={dirty ? 'attention' : live ? 'live' : 'neutral'}
-            note={note}
-          >
-            <Button title="Save" type="submit" disabled={!dirty || saving} loading={saving} />
-            <Button
-              title="View page"
-              variant="text"
-              startIcon={<IconExternalLink size={18} />}
-              disabled={!live}
-              onClick={() => window.open(`${path}/`, '_blank', 'noopener')}
-            />
-          </PublishPanel>
-        }
-        aside={
-          <>
-            <EditorPanel title="Visibility">
-              <Controller
-                name="visible"
-                control={control}
-                render={({ field }) => (
-                  <FormControlLabel
-                    control={<Switch checked={field.value} onChange={(_, checked) => field.onChange(checked)} />}
-                    label="Visible on site"
-                  />
-                )}
-              />
-            </EditorPanel>
-            <EditorPanel title="Search & sharing" hint="Leave empty to use the default.">
-              <EditorField label="Title" optional htmlFor="seoTitle">
-                <FormTextField
-                  id="seoTitle"
-                  fullWidth
-                  size="small"
-                  name="seoTitle"
-                  control={control}
-                  helperText={`${seoTitle?.length || 0} / ${SEO_TITLE_MAX}`}
-                  rules={{ maxLength: { value: SEO_TITLE_MAX, message: `Use ${SEO_TITLE_MAX} characters or fewer` } }}
-                />
-              </EditorField>
-              <EditorField label="Description" optional htmlFor="seoDescription">
-                <FormTextField
-                  id="seoDescription"
-                  fullWidth
-                  size="small"
-                  multiline
-                  minRows={3}
-                  name="seoDescription"
-                  control={control}
-                  helperText={`${seoDescription?.length || 0} / ${SEO_DESCRIPTION_MAX}`}
-                  rules={{
-                    maxLength: {
-                      value: SEO_DESCRIPTION_MAX,
-                      message: `Use ${SEO_DESCRIPTION_MAX} characters or fewer`,
-                    },
-                  }}
-                />
-              </EditorField>
-            </EditorPanel>
-          </>
-        }
-      >
-        <Fields />
-      </EditorShell>
+          <Fields />
+        </EditorShell>
+      </AiAssistantProvider>
     </FormProvider>
   );
+};
+
+const PAGE_PLACEHOLDER: Record<ContentPageType, string> = {
+  text: 'e.g. Who we are, when the association started, what we do for students and alumni, and how to join.',
+  message:
+    'e.g. Thank alumni for the scholarship drive, mention the new hostel library, invite everyone to the reunion in December.',
+  'people-list': 'e.g. Past presidents of the association since 2005, with their batch and years in office.',
+};
+
+/** What the AI assistant may fill on each kind of page. Photos, people and signer details stay as they are. */
+const pageAssistant = (
+  type: ContentPageType,
+  label: string,
+  form: ReturnType<typeof useForm<EditorFormValues>>,
+  saving: boolean
+): AiFormConfig => {
+  const { getValues, setValue } = form;
+  const dirty = { shouldDirty: true };
+  const field = (key: string, fieldLabel: string, kind: AiFormField['kind'], name: string): AiFormField => ({
+    key,
+    label: fieldLabel,
+    kind,
+    name,
+    get: () => getValues(name as any),
+    set: (v) => setValue(name as any, v as any, dirty),
+  });
+  const seo = [
+    field('seoTitle', 'Search title', 'line', 'seoTitle'),
+    field('seoDescription', 'Search description', 'text', 'seoDescription'),
+  ];
+  const sections: AiFormField = {
+    ...field('sections', 'Sections', 'sections', 'fields.sections'),
+    // AI writes words only: each section keeps the image it had at that position.
+    set: (v) => {
+      const prev: any[] = getValues('fields.sections' as any) || [];
+      const next = (v as any[]).map((s, i) => (prev[i]?.image && !('image' in s) ? { ...s, image: prev[i].image } : s));
+      setValue('fields.sections' as any, next as any, dirty);
+    },
+  };
+  const fields =
+    type === 'text'
+      ? [field('heading', 'Page heading', 'line', 'fields.heading'), sections, ...seo]
+      : type === 'message'
+        ? [
+            field('heading', 'Heading', 'line', 'fields.heading'),
+            field('tagline', 'Tagline', 'line', 'fields.tagline'),
+            field('body', 'Message', 'html', 'fields.body'),
+            ...seo,
+          ]
+        : seo;
+  return {
+    surface: 'page',
+    pageType: type,
+    question: type === 'people-list' ? 'Who is listed on this page?' : 'What should this page say?',
+    placeholder: PAGE_PLACEHOLDER[type],
+    keyphrase: type !== 'people-list',
+    factsNote: type === 'message' ? 'Writes as the signer you named below.' : undefined,
+    busy: saving,
+    facts: () => {
+      const v = getValues('fields' as any) || {};
+      const facts: Record<string, string> = { pageName: label };
+      if (type === 'message' && v.signerName) facts.signerName = String(v.signerName);
+      if (type === 'message' && v.signerRole) facts.signerRole = String(v.signerRole);
+      return facts;
+    },
+    fields,
+  };
 };
 
 const LEAVE_PROMPT = 'You have unsaved changes on this page. Leave without saving?';

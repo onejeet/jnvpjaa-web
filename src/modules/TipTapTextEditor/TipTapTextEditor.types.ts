@@ -2,7 +2,6 @@ import type React from 'react';
 import type { BoxProps } from '@mui/material/Box';
 import type { Editor } from '@tiptap/react';
 import { SxProps } from '@mui/material';
-import type { AiAssistOptions } from '@/modules/AiAssist/AiAssistBar';
 
 export interface TipTapTextEditorProps {
   value: string;
@@ -13,8 +12,8 @@ export interface TipTapTextEditorProps {
   height?: string | number;
   placeholder?: string;
   toolbarProps?: Partial<EditorToolbarProps>;
-  /** Shows the AI writing bar above the toolbar. */
-  ai?: AiAssistOptions;
+  /** Form path of this editor. Inside an AI assistant it adds the Proofread / Upgrade chips and the fill highlight. */
+  aiField?: string;
 }
 
 export interface EditorToolbarProps extends BoxProps {

@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-export type AiSurface = 'blog' | 'news' | 'page' | 'job' | 'event';
+export type AiSurface = 'blog' | 'news' | 'page' | 'job' | 'event' | 'profile';
 
 export interface AiAllowance {
   limit: number;
@@ -11,8 +11,14 @@ export interface AiAllowance {
 }
 
 export interface AiResult {
+  /** Text answer: the improved comment, or the proofread body. */
   result?: string | null;
-  titles?: string[] | null;
+  /** Field values for the form, by field key (draft and polish). */
+  draft?: Record<string, unknown> | null;
+  /** Facts the brief did not give, worth adding by hand. */
+  gaps: string[];
+  /** How many corrections a proofread made. */
+  fixes?: number | null;
   remaining: number;
   resetsAt: string;
 }
@@ -30,10 +36,12 @@ export const AI_ALLOWANCE = gql`
 `;
 
 export const AI_ASSIST = gql`
-  mutation AiAssist($taskId: String!, $text: String!, $fields: JSON, $fresh: Boolean) {
-    aiAssist(taskId: $taskId, text: $text, fields: $fields, fresh: $fresh) {
+  mutation AiAssist($taskId: String!, $text: String, $context: JSON, $fresh: Boolean) {
+    aiAssist(taskId: $taskId, text: $text, context: $context, fresh: $fresh) {
       result
-      titles
+      draft
+      gaps
+      fixes
       remaining
       resetsAt
     }

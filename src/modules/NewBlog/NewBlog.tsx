@@ -38,6 +38,7 @@ import { BLOG_CATEGORIES } from '@/constants/Blog.constants';
 import { useAuth } from '@/context/AuthContext';
 import { UnsplashImageSelector } from '../UnsplashImageSelector/UnsplashImamgeSelector';
 import { brand } from '@/config/tenant';
+import { AiAssistantCard, AiAssistantProvider, type AiFormConfig } from '@/modules/AiAssist';
 
 const NewBlog = () => {
   const router = useRouter();
@@ -195,89 +196,129 @@ const NewBlog = () => {
             }
           : { label: 'Draft', tone: 'neutral' as const, note: 'Only you can see this story.' };
 
+  const dirty = { shouldDirty: true };
+  const ai: AiFormConfig = {
+    surface: 'blog',
+    question: 'What should this story be about?',
+    placeholder:
+      'e.g. Our 2008 batch met in Jaipur after 15 years. 40 of us came, we visited the school and planted trees.',
+    keyphrase: true,
+    busy: saving,
+    fields: [
+      {
+        key: 'title',
+        label: 'Title',
+        kind: 'line',
+        name: 'title',
+        get: () => getValues('title'),
+        set: (v) => setValue('title', v as string, dirty),
+      },
+      {
+        key: 'category',
+        label: 'Category',
+        kind: 'enum',
+        name: 'category',
+        options: BLOG_CATEGORIES,
+        get: () => getValues('category'),
+        set: (v) => setValue('category', v as any, dirty),
+      },
+      {
+        key: 'body',
+        label: 'Story',
+        kind: 'html',
+        name: 'content',
+        get: () => getValues('content'),
+        set: (v) => setValue('content', v as string, dirty),
+      },
+    ],
+  };
+
   return (
-    <EditorShell
-      onSubmit={handleSubmit(onSubmit)}
-      heading={slug ? 'Edit your story' : 'Write a story'}
-      description={`Share an experience, a memory or a lesson with the ${brand.institution.shortName} alumni community.`}
-      publish={
-        <PublishPanel status={state.label} tone={state.tone} note={state.note}>
-          <Button
-            title={isPublishAllowed ? 'Publish' : 'Update'}
-            type="submit"
-            onClick={() => (saveTypeRef.current = 'publish')}
-            disabled={saving}
-            loading={saveTypeRef.current === 'publish' && saving}
-          />
-          <Button
-            title={isLive ? 'Unpublish' : 'Save draft'}
-            type="submit"
-            variant="outlined"
-            color={isLive ? 'error' : 'primary'}
-            onClick={() => (saveTypeRef.current = 'draft')}
-            disabled={saving}
-            loading={saveTypeRef.current === 'draft' && saving}
-          />
-          {blogData?.getBlog?.slug && (
+    <AiAssistantProvider config={ai}>
+      <EditorShell
+        onSubmit={handleSubmit(onSubmit)}
+        assistant={<AiAssistantCard />}
+        heading={slug ? 'Edit your story' : 'Write a story'}
+        description={`Share an experience, a memory or a lesson with the ${brand.institution.shortName} alumni community.`}
+        publish={
+          <PublishPanel status={state.label} tone={state.tone} note={state.note}>
             <Button
-              title="Preview"
-              variant="text"
-              startIcon={<IconEye size={18} />}
-              onClick={() => window.open(paths.blog.getBlogPostUrl(blogData?.getBlog?.slug || ''))}
-            />
-          )}
-        </PublishPanel>
-      }
-      aside={
-        <EditorPanel title="Story settings">
-          <EditorField label="Category">
-            <FormSelectField
-              control={control}
-              name="category"
-              label="Choose a category"
-              selectProps={{ size: 'small', disabled: saving }}
-              options={BLOG_CATEGORIES}
-              rules={{ required: 'Pick a category' }}
-            />
-          </EditorField>
-          <EditorField label="Cover image" optional>
-            <CoverField
-              src={cover?.url || cover?.thumbUrl}
-              alt={cover?.altDescription || undefined}
-              onPick={() => setSelectCoverImage(true)}
+              title={isPublishAllowed ? 'Publish' : 'Update'}
+              type="submit"
+              onClick={() => (saveTypeRef.current = 'publish')}
               disabled={saving}
+              loading={saveTypeRef.current === 'publish' && saving}
             />
-          </EditorField>
-        </EditorPanel>
-      }
-    >
-      <EditorTitleField
-        control={control}
-        name="title"
-        placeholder="Give your story a title"
-        ariaLabel="Story title"
-        disabled={saving}
-        rules={{ required: 'Add a title' }}
-      />
-      <EditorSection title="Your story" hint="Use headings, lists and links to keep it easy to read.">
-        <TipTapTextEditor
-          value={content}
-          onChange={(data) => setValue('content', data, { shouldDirty: true })}
+            <Button
+              title={isLive ? 'Unpublish' : 'Save draft'}
+              type="submit"
+              variant="outlined"
+              color={isLive ? 'error' : 'primary'}
+              onClick={() => (saveTypeRef.current = 'draft')}
+              disabled={saving}
+              loading={saveTypeRef.current === 'draft' && saving}
+            />
+            {blogData?.getBlog?.slug && (
+              <Button
+                title="Preview"
+                variant="text"
+                startIcon={<IconEye size={18} />}
+                onClick={() => window.open(paths.blog.getBlogPostUrl(blogData?.getBlog?.slug || ''))}
+              />
+            )}
+          </PublishPanel>
+        }
+        aside={
+          <EditorPanel title="Story settings">
+            <EditorField label="Category">
+              <FormSelectField
+                control={control}
+                name="category"
+                label="Choose a category"
+                selectProps={{ size: 'small', disabled: saving }}
+                options={BLOG_CATEGORIES}
+                rules={{ required: 'Pick a category' }}
+              />
+            </EditorField>
+            <EditorField label="Cover image" optional>
+              <CoverField
+                src={cover?.url || cover?.thumbUrl}
+                alt={cover?.altDescription || undefined}
+                onPick={() => setSelectCoverImage(true)}
+                disabled={saving}
+              />
+            </EditorField>
+          </EditorPanel>
+        }
+      >
+        <EditorTitleField
+          control={control}
+          name="title"
+          placeholder="Give your story a title"
+          ariaLabel="Story title"
           disabled={saving}
-          height="clamp(380px, 56vh, 560px)"
-          placeholder="Begin your story…"
-          ai={{ surface: 'blog', onTitle: (t) => setValue('title', t, { shouldDirty: true }) }}
+          rules={{ required: 'Add a title' }}
         />
-      </EditorSection>
-      {selectCoverImage && (
-        <UnsplashImageSelector
-          open={selectCoverImage}
-          onClose={() => setSelectCoverImage(false)}
-          defaultKeyword={getValues('title')}
-          onSelect={(image: Photo) => setValue('cover', image, { shouldDirty: true })}
-        />
-      )}
-    </EditorShell>
+        <EditorSection title="Your story" hint="Use headings, lists and links to keep it easy to read.">
+          <TipTapTextEditor
+            value={content}
+            onChange={(data) => setValue('content', data, { shouldDirty: true })}
+            disabled={saving}
+            height="clamp(380px, 56vh, 560px)"
+            placeholder="Begin your story…"
+            aiField="content"
+          />
+        </EditorSection>
+        {selectCoverImage && (
+          <UnsplashImageSelector
+            open={selectCoverImage}
+            onClose={() => setSelectCoverImage(false)}
+            defaultKeyword={getValues('title')}
+            onSelect={(image: Photo) => setValue('cover', image, { shouldDirty: true })}
+          />
+        )}
+      </EditorShell>
+    </AiAssistantProvider>
   );
 };
 

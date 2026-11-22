@@ -24,12 +24,23 @@ type ShellProps = {
   description: string;
   publish: React.ReactNode;
   aside?: React.ReactNode;
+  /** The AI writing assistant: top of the side column; it brings its own phone button and sheet. */
+  assistant?: React.ReactNode;
   children: React.ReactNode;
   /** Set when the shell sits beside another sidebar (admin): keeps one column until there is room for two. */
   inset?: boolean;
 } & Omit<React.ComponentProps<'form'>, 'children'>;
 
-export function EditorShell({ heading, description, publish, aside, children, inset, ...formProps }: ShellProps) {
+export function EditorShell({
+  heading,
+  description,
+  publish,
+  aside,
+  assistant,
+  children,
+  inset,
+  ...formProps
+}: ShellProps) {
   const [two, wide] = inset ? (['lg', 'xl'] as const) : (['md', 'lg'] as const);
   return (
     <Box
@@ -69,6 +80,7 @@ export function EditorShell({ heading, description, publish, aside, children, in
           top: { [two]: 88 },
         }}
       >
+        {assistant}
         <Box sx={{ gridArea: 'publish' }}>{publish}</Box>
         {aside && <Box sx={{ gridArea: 'aside', display: 'flex', flexDirection: 'column', gap: 2 }}>{aside}</Box>}
       </Box>

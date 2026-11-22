@@ -20,7 +20,7 @@ import TipTapTextEditorWrapper from './TipTapTextEditorWrapper';
 // import { FontSize } from './utils/extensions';
 // import HeaderMenuItem from '@/layouts/Layout/HeaderMenuItem';
 import { Indentation } from './components/Indentation';
-import AiAssistBar from '@/modules/AiAssist/AiAssistBar';
+import AiEditorChips from '@/modules/AiAssist/AiEditorChips';
 
 const TipTapTextEditor = ({
   value = '',
@@ -31,13 +31,14 @@ const TipTapTextEditor = ({
   placeholder = 'Start writing here...',
   id,
   toolbarProps = {},
-  ai,
+  aiField,
 }: TipTapTextEditorProps) => {
   // extract color
   const { color: sxColor, ...restSx } = sx || {};
 
   return (
     <Box
+      data-ai-field={aiField}
       sx={{
         '& .tiptap': {
           outline: 'none',
@@ -118,11 +119,9 @@ const TipTapTextEditor = ({
             }),
           ]}
           slotBefore={
-            <>
-              {ai && <AiAssistBar {...ai} disabled={disabled} />}
-              <EditorToolbarVertical toolsHidden={['chatbot', 'transcribe']} {...toolbarProps} disabled={disabled} />
-            </>
+            <EditorToolbarVertical toolsHidden={['chatbot', 'transcribe']} {...toolbarProps} disabled={disabled} />
           }
+          slotAfter={aiField ? <AiEditorChips field={aiField} /> : null}
         >
           <TipTapTextEditorWrapper disabled={disabled} value={value}>
             <SelectionToolbar disabled={disabled} toolsHidden={toolbarProps.toolsHidden} />

@@ -10,7 +10,7 @@ import { useForm, useWatch } from 'react-hook-form';
 import { IPersonalInfoFormInput } from './ProfileSetup.types';
 import { IconChevronLeft, IconChevronRight, IconCircleCheck, IconUser, IconX } from '@tabler/icons-react';
 import FormDateTimeField from '@/components/form/FormDateTimeField';
-import TipTapTextEditor from '@/modules/TipTapTextEditor';
+import { AboutMeField } from '@/modules/AiAssist';
 import dayjs from 'dayjs';
 import { useApolloClient } from '@apollo/client';
 import FormPhoneField from '@/components/form/FormPhoneField';
@@ -46,6 +46,7 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({ user, onNext, onBack, onSuc
   });
 
   const [updateUser, { loading }] = useUpdateUserMutation();
+  const aboutMe = useWatch({ control, name: 'aboutMe' });
 
   const onSubmit = React.useCallback(
     (data: IPersonalInfoFormInput) => {
@@ -305,10 +306,12 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({ user, onNext, onBack, onSuc
         <Grid size={{ xs: 12 }}>
           <Grid size={{ xs: 12 }}>
             <Box display="flex" flexDirection="column">
-              <Typography color="grey.600" variant="body1" fontSize={14}>
-                About Me
-              </Typography>
-              <TipTapTextEditor value={getValues('aboutMe') || ''} onChange={(data) => setValue('aboutMe', data)} />
+              <AboutMeField
+                value={aboutMe || ''}
+                getValue={() => getValues('aboutMe')}
+                onChange={(data) => setValue('aboutMe', data)}
+                busy={loading}
+              />
             </Box>
           </Grid>
         </Grid>

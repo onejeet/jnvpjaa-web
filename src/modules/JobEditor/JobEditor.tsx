@@ -55,6 +55,7 @@ import {
 } from '@/modules/Jobs/jobs.utils';
 import { JobFormSkeleton } from '@/containers/Jobs/JobSkeletons';
 import TipTapTextEditor from '@/modules/TipTapTextEditor';
+import { AiAssistantCard, AiAssistantProvider, type AiFormConfig } from '@/modules/AiAssist';
 
 interface JobFormValues {
   title: string;
@@ -205,43 +206,167 @@ const JobForm: React.FC<{ job?: Job | null }> = ({ job }) => {
     }
   };
 
+  const dirty = { shouldDirty: true };
+  const ai: AiFormConfig = {
+    surface: 'job',
+    question: 'What is the role?',
+    placeholder:
+      'e.g. Data analyst in our Bengaluru team. SQL and Python daily, building sales dashboards. 2–4 years. Hybrid, 3 days in office.',
+    factsNote: "Uses the company, place, job type and salary you've entered.",
+    busy: saving,
+    facts: () => {
+      const v = getValues();
+      const facts: Record<string, string> = {};
+      if (v.company.trim()) facts.company = v.company.trim();
+      if (v.location.trim()) facts.location = v.location.trim();
+      if (v.type) facts.type = JOB_TYPE_LABEL[v.type] || v.type;
+      if (v.workMode) facts.workMode = WORK_MODE_LABEL[v.workMode] || v.workMode;
+      const money = (x: string) => (x ? `₹${Number(x).toLocaleString('en-IN')}` : '');
+      const range = [money(v.salaryMin), money(v.salaryMax)].filter(Boolean).join(' to ');
+      if (range) facts.salary = `${range} per ${v.salaryPeriod === 'MONTH' ? 'month' : 'year'}`;
+      return facts;
+    },
+    fields: [
+      {
+        key: 'title',
+        label: 'Role',
+        kind: 'line',
+        name: 'title',
+        get: () => getValues('title'),
+        set: (v) => setValue('title', v as string, dirty),
+      },
+      {
+        key: 'experience',
+        label: 'Experience',
+        kind: 'enum',
+        name: 'experience',
+        options: options(EXPERIENCE_LABEL),
+        get: () => getValues('experience'),
+        set: (v) => setValue('experience', v as JobExperience, dirty),
+      },
+      {
+        key: 'skills',
+        label: 'Skills',
+        kind: 'list',
+        name: 'skills',
+        get: () => getValues('skills'),
+        set: (v) => setValue('skills', v as string[], dirty),
+      },
+      {
+        key: 'body',
+        label: 'About the role',
+        kind: 'html',
+        name: 'description',
+        get: () => getValues('description'),
+        set: (v) => setValue('description', v as string, dirty),
+      },
+    ],
+  };
+
   return (
-    <EditorShell
-      noValidate
-      onSubmit={handleSubmit(onSubmit)}
-      heading={job ? 'Edit job' : 'Post a job'}
-      description="Share an opening with fellow alumni. Clear details get better applicants."
-      publish={
-        <PublishPanel
-          status={job ? 'Posted' : 'New job'}
-          tone={job ? 'live' : 'neutral'}
-          note={
-            job ? 'Visible to members on the jobs board.' : 'Members see it on the jobs board as soon as you post it.'
-          }
-        >
-          <Button title={job ? 'Save changes' : 'Post job'} type="submit" loading={saving} disabled={saving} />
-          <Button title="Cancel" variant="text" color="inherit" disabled={saving} onClick={() => router.back()} />
-        </PublishPanel>
-      }
-      aside={
-        <>
-          <EditorPanel title="How to apply">
-            <EditorField label="Last day to apply" optional>
-              <FormDateTimeField
+    <AiAssistantProvider config={ai}>
+      <EditorShell
+        noValidate
+        onSubmit={handleSubmit(onSubmit)}
+        assistant={<AiAssistantCard />}
+        heading={job ? 'Edit job' : 'Post a job'}
+        description="Share an opening with fellow alumni. Clear details get better applicants."
+        publish={
+          <PublishPanel
+            status={job ? 'Posted' : 'New job'}
+            tone={job ? 'live' : 'neutral'}
+            note={
+              job ? 'Visible to members on the jobs board.' : 'Members see it on the jobs board as soon as you post it.'
+            }
+          >
+            <Button title={job ? 'Save changes' : 'Post job'} type="submit" loading={saving} disabled={saving} />
+            <Button title="Cancel" variant="text" color="inherit" disabled={saving} onClick={() => router.back()} />
+          </PublishPanel>
+        }
+        aside={
+          <>
+            <EditorPanel title="How to apply">
+              <EditorField label="Last day to apply" optional>
+                <FormDateTimeField
+                  control={control}
+                  name="deadlineDate"
+                  isDateOnly
+                  disablePast
+                  helperText="Closes at the end of this day, India time."
+                  rules={{ validate: (v: Dayjs | null) => !v || dayjs(v).isValid() || 'Pick a valid date' }}
+                  // The picker misbehaves on unmount without a label (MUI v7 section DOM), so it always gets one.
+                  inputProps={{ label: 'Last day', size: 'small', fullWidth: true, disabled: saving }}
+                />
+              </EditorField>
+              <EditorField label="External apply link" optional hint="The company's own job page, if there is one.">
+                <FormTextField
+                  fullWidth
+                  name="applyUrl"
+                  control={control}
+                  disabled={saving}
+                  size="small"
+                  placeholder="https://"
+                  rules={httpsRule}
+                />
+              </EditorField>
+            </EditorPanel>
+            <EditorPanel title="Your connection" hint="Helps applicants know who to ask.">
+              <Controller
                 control={control}
-                name="deadlineDate"
-                isDateOnly
-                disablePast
-                helperText="Closes at the end of this day, India time."
-                rules={{ validate: (v: Dayjs | null) => !v || dayjs(v).isValid() || 'Pick a valid date' }}
-                // The picker misbehaves on unmount without a label (MUI v7 section DOM), so it always gets one.
-                inputProps={{ label: 'Last day', size: 'small', fullWidth: true, disabled: saving }}
+                name="posterRelation"
+                render={({ field }) => (
+                  <RadioGroup {...field} sx={{ gap: 0.5, '& .MuiFormControlLabel-label': { typography: 'body2' } }}>
+                    <FormControlLabel
+                      value="HIRING_AT_COMPANY"
+                      control={<Radio size="small" />}
+                      label="I work at this company"
+                    />
+                    <FormControlLabel
+                      value="REFERRAL_LEAD"
+                      control={<Radio size="small" />}
+                      label="A friend shared this opening"
+                    />
+                  </RadioGroup>
+                )}
               />
-            </EditorField>
-            <EditorField label="External apply link" optional hint="The company's own job page, if there is one.">
+            </EditorPanel>
+          </>
+        }
+      >
+        <EditorTitleField
+          control={control}
+          name="title"
+          placeholder="Job title, e.g. Frontend Developer Intern"
+          ariaLabel="Job title"
+          disabled={saving}
+          rules={{
+            required: 'Add a job title',
+            validate: (v: string) => (v.trim().length >= 5 && v.trim().length <= 120) || 'Use 5 to 120 characters',
+          }}
+        />
+        <Grid container spacing={2.5} sx={{ mt: 3 }}>
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <EditorField label="Company">
               <FormTextField
                 fullWidth
-                name="applyUrl"
+                name="company"
+                control={control}
+                disabled={saving}
+                size="small"
+                placeholder="Company name"
+                rules={{
+                  required: 'Add the company',
+                  validate: (v: string) =>
+                    (v.trim().length >= 2 && v.trim().length <= 120) || 'Use 2 to 120 characters',
+                }}
+              />
+            </EditorField>
+          </Grid>
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <EditorField label="Company website" optional>
+              <FormTextField
+                fullWidth
+                name="companyWebsite"
                 control={control}
                 disabled={saving}
                 size="small"
@@ -249,234 +374,164 @@ const JobForm: React.FC<{ job?: Job | null }> = ({ job }) => {
                 rules={httpsRule}
               />
             </EditorField>
-          </EditorPanel>
-          <EditorPanel title="Your connection" hint="Helps applicants know who to ask.">
-            <Controller
-              control={control}
-              name="posterRelation"
-              render={({ field }) => (
-                <RadioGroup {...field} sx={{ gap: 0.5, '& .MuiFormControlLabel-label': { typography: 'body2' } }}>
-                  <FormControlLabel
-                    value="HIRING_AT_COMPANY"
-                    control={<Radio size="small" />}
-                    label="I work at this company"
-                  />
-                  <FormControlLabel
-                    value="REFERRAL_LEAD"
-                    control={<Radio size="small" />}
-                    label="A friend shared this opening"
-                  />
-                </RadioGroup>
-              )}
-            />
-          </EditorPanel>
-        </>
-      }
-    >
-      <EditorTitleField
-        control={control}
-        name="title"
-        placeholder="Job title, e.g. Frontend Developer Intern"
-        ariaLabel="Job title"
-        disabled={saving}
-        rules={{
-          required: 'Add a job title',
-          validate: (v: string) => (v.trim().length >= 5 && v.trim().length <= 120) || 'Use 5 to 120 characters',
-        }}
-      />
-      <Grid container spacing={2.5} sx={{ mt: 3 }}>
-        <Grid size={{ xs: 12, sm: 6 }}>
-          <EditorField label="Company">
-            <FormTextField
-              fullWidth
-              name="company"
-              control={control}
-              disabled={saving}
-              size="small"
-              placeholder="Company name"
-              rules={{
-                required: 'Add the company',
-                validate: (v: string) => (v.trim().length >= 2 && v.trim().length <= 120) || 'Use 2 to 120 characters',
-              }}
-            />
-          </EditorField>
+          </Grid>
         </Grid>
-        <Grid size={{ xs: 12, sm: 6 }}>
-          <EditorField label="Company website" optional>
-            <FormTextField
-              fullWidth
-              name="companyWebsite"
-              control={control}
-              disabled={saving}
-              size="small"
-              placeholder="https://"
-              rules={httpsRule}
-            />
-          </EditorField>
-        </Grid>
-      </Grid>
 
-      <EditorSection title="Role details">
-        <Grid container spacing={2.5}>
-          <Grid size={{ xs: 12, sm: 4 }}>
-            <EditorField label="Type">
-              <FormSelectField
-                control={control}
-                name="type"
-                label="Type"
-                selectProps={{ size: 'small', disabled: saving }}
-                options={options(JOB_TYPE_LABEL)}
-                rules={{ required: 'Pick a type' }}
-              />
-            </EditorField>
+        <EditorSection title="Role details">
+          <Grid container spacing={2.5}>
+            <Grid size={{ xs: 12, sm: 4 }}>
+              <EditorField label="Type">
+                <FormSelectField
+                  control={control}
+                  name="type"
+                  label="Type"
+                  selectProps={{ size: 'small', disabled: saving }}
+                  options={options(JOB_TYPE_LABEL)}
+                  rules={{ required: 'Pick a type' }}
+                />
+              </EditorField>
+            </Grid>
+            <Grid size={{ xs: 12, sm: 4 }}>
+              <EditorField label="Work mode">
+                <FormSelectField
+                  control={control}
+                  name="workMode"
+                  label="Work mode"
+                  selectProps={{ size: 'small', disabled: saving }}
+                  options={options(WORK_MODE_LABEL)}
+                  rules={{ required: 'Pick a work mode' }}
+                />
+              </EditorField>
+            </Grid>
+            <Grid size={{ xs: 12, sm: 4 }}>
+              <EditorField label="Experience">
+                <FormSelectField
+                  control={control}
+                  name="experience"
+                  label="Experience"
+                  selectProps={{ size: 'small', disabled: saving }}
+                  options={options(EXPERIENCE_LABEL)}
+                  rules={{ required: 'Pick the experience level' }}
+                />
+              </EditorField>
+            </Grid>
+            <Grid size={12}>
+              <EditorField label="Location" optional={workMode === 'REMOTE' ? 'Optional for remote roles' : undefined}>
+                <FormTextField
+                  fullWidth
+                  name="location"
+                  control={control}
+                  disabled={saving}
+                  size="small"
+                  placeholder="City, e.g. Jaipur or Bengaluru"
+                  rules={{
+                    validate: (v: string) =>
+                      workMode === 'REMOTE' || Boolean(v.trim()) || 'Add a location for on-site or hybrid roles',
+                  }}
+                />
+              </EditorField>
+            </Grid>
+            <Grid size={12}>
+              <EditorField label="Skills" optional="Up to 15. Press Enter after each.">
+                <Controller
+                  control={control}
+                  name="skills"
+                  rules={{ validate: (v: string[]) => v.length <= 15 || 'Add at most 15 skills' }}
+                  render={({ field, fieldState }) => (
+                    <Autocomplete
+                      multiple
+                      freeSolo
+                      options={[]}
+                      value={field.value}
+                      disabled={saving}
+                      onChange={(_, value) =>
+                        field.onChange(
+                          Array.from(new Set((value as string[]).map((s) => s.trim().slice(0, 40)).filter(Boolean)))
+                        )
+                      }
+                      renderTags={(value, getTagProps) =>
+                        value.map((option, index) => {
+                          const { key, ...tagProps } = getTagProps({ index });
+                          return <Chip key={key} size="small" label={option} {...tagProps} />;
+                        })
+                      }
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          size="small"
+                          placeholder="e.g. React, Excel, Communication"
+                          error={Boolean(fieldState.error)}
+                          helperText={fieldState.error?.message}
+                        />
+                      )}
+                    />
+                  )}
+                />
+              </EditorField>
+            </Grid>
           </Grid>
-          <Grid size={{ xs: 12, sm: 4 }}>
-            <EditorField label="Work mode">
-              <FormSelectField
-                control={control}
-                name="workMode"
-                label="Work mode"
-                selectProps={{ size: 'small', disabled: saving }}
-                options={options(WORK_MODE_LABEL)}
-                rules={{ required: 'Pick a work mode' }}
-              />
-            </EditorField>
-          </Grid>
-          <Grid size={{ xs: 12, sm: 4 }}>
-            <EditorField label="Experience">
-              <FormSelectField
-                control={control}
-                name="experience"
-                label="Experience"
-                selectProps={{ size: 'small', disabled: saving }}
-                options={options(EXPERIENCE_LABEL)}
-                rules={{ required: 'Pick the experience level' }}
-              />
-            </EditorField>
-          </Grid>
-          <Grid size={12}>
-            <EditorField label="Location" optional={workMode === 'REMOTE' ? 'Optional for remote roles' : undefined}>
-              <FormTextField
-                fullWidth
-                name="location"
-                control={control}
-                disabled={saving}
-                size="small"
-                placeholder="City, e.g. Jaipur or Bengaluru"
-                rules={{
-                  validate: (v: string) =>
-                    workMode === 'REMOTE' || Boolean(v.trim()) || 'Add a location for on-site or hybrid roles',
-                }}
-              />
-            </EditorField>
-          </Grid>
-          <Grid size={12}>
-            <EditorField label="Skills" optional="Up to 15. Press Enter after each.">
-              <Controller
-                control={control}
-                name="skills"
-                rules={{ validate: (v: string[]) => v.length <= 15 || 'Add at most 15 skills' }}
-                render={({ field, fieldState }) => (
-                  <Autocomplete
-                    multiple
-                    freeSolo
-                    options={[]}
-                    value={field.value}
-                    disabled={saving}
-                    onChange={(_, value) =>
-                      field.onChange(
-                        Array.from(new Set((value as string[]).map((s) => s.trim().slice(0, 40)).filter(Boolean)))
-                      )
-                    }
-                    renderTags={(value, getTagProps) =>
-                      value.map((option, index) => {
-                        const { key, ...tagProps } = getTagProps({ index });
-                        return <Chip key={key} size="small" label={option} {...tagProps} />;
-                      })
-                    }
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        size="small"
-                        placeholder="e.g. React, Excel, Communication"
-                        error={Boolean(fieldState.error)}
-                        helperText={fieldState.error?.message}
-                      />
-                    )}
-                  />
-                )}
-              />
-            </EditorField>
-          </Grid>
-        </Grid>
-      </EditorSection>
+        </EditorSection>
 
-      <EditorSection
-        title={isInternship ? 'Stipend' : 'Salary'}
-        hint="Optional, but posts with pay listed get more applicants."
-      >
-        <Grid container spacing={2.5}>
-          <Grid size={{ xs: 6, sm: 4 }}>
-            <EditorField label="From">
-              <AmountField
-                control={control}
-                name="salaryMin"
-                disabled={saving}
-                placeholder={isInternship ? '15,000' : '6,00,000'}
-              />
-            </EditorField>
+        <EditorSection
+          title={isInternship ? 'Stipend' : 'Salary'}
+          hint="Optional, but posts with pay listed get more applicants."
+        >
+          <Grid container spacing={2.5}>
+            <Grid size={{ xs: 6, sm: 4 }}>
+              <EditorField label="From">
+                <AmountField
+                  control={control}
+                  name="salaryMin"
+                  disabled={saving}
+                  placeholder={isInternship ? '15,000' : '6,00,000'}
+                />
+              </EditorField>
+            </Grid>
+            <Grid size={{ xs: 6, sm: 4 }}>
+              <EditorField label="Up to">
+                <AmountField
+                  control={control}
+                  name="salaryMax"
+                  disabled={saving}
+                  placeholder={isInternship ? '25,000' : '9,00,000'}
+                  validate={(v) =>
+                    !v || !salaryMin || Number(v) >= Number(salaryMin) || 'Must be at least the starting amount'
+                  }
+                />
+              </EditorField>
+            </Grid>
+            <Grid size={{ xs: 12, sm: 4 }}>
+              <EditorField label="Per">
+                <FormSelectField
+                  control={control}
+                  name="salaryPeriod"
+                  label="Per"
+                  selectProps={{ size: 'small', disabled: saving }}
+                  options={[
+                    { value: 'MONTH', label: 'Month' },
+                    { value: 'YEAR', label: 'Year' },
+                  ]}
+                />
+              </EditorField>
+            </Grid>
           </Grid>
-          <Grid size={{ xs: 6, sm: 4 }}>
-            <EditorField label="Up to">
-              <AmountField
-                control={control}
-                name="salaryMax"
-                disabled={saving}
-                placeholder={isInternship ? '25,000' : '9,00,000'}
-                validate={(v) =>
-                  !v || !salaryMin || Number(v) >= Number(salaryMin) || 'Must be at least the starting amount'
-                }
-              />
-            </EditorField>
-          </Grid>
-          <Grid size={{ xs: 12, sm: 4 }}>
-            <EditorField label="Per">
-              <FormSelectField
-                control={control}
-                name="salaryPeriod"
-                label="Per"
-                selectProps={{ size: 'small', disabled: saving }}
-                options={[
-                  { value: 'MONTH', label: 'Month' },
-                  { value: 'YEAR', label: 'Year' },
-                ]}
-              />
-            </EditorField>
-          </Grid>
-        </Grid>
-      </EditorSection>
+        </EditorSection>
 
-      <EditorSection
-        title="About the role"
-        hint="What the work involves, who would fit, and anything applicants should know."
-      >
-        {/* Not disabled while saving: toggling TipTap's editable state as the page unmounts throws removeChild. */}
-        <TipTapTextEditor
-          value={description}
-          onChange={(html) => setValue('description', html, { shouldDirty: true })}
-          height="clamp(300px, 46vh, 460px)"
-          placeholder="Describe the role…"
-          ai={{
-            surface: 'job',
-            onTitle: (t) => setValue('title', t, { shouldDirty: true }),
-            getFields: () => {
-              const v = getValues();
-              return { role: v.title || '', company: v.company || '', location: v.location || '', type: v.type || '' };
-            },
-          }}
-        />
-      </EditorSection>
-    </EditorShell>
+        <EditorSection
+          title="About the role"
+          hint="What the work involves, who would fit, and anything applicants should know."
+        >
+          {/* Not disabled while saving: toggling TipTap's editable state as the page unmounts throws removeChild. */}
+          <TipTapTextEditor
+            value={description}
+            onChange={(html) => setValue('description', html, { shouldDirty: true })}
+            height="clamp(300px, 46vh, 460px)"
+            placeholder="Describe the role…"
+            aiField="description"
+          />
+        </EditorSection>
+      </EditorShell>
+    </AiAssistantProvider>
   );
 };
 
