@@ -4,7 +4,8 @@ import { IconArrowRight, IconSearch } from '@tabler/icons-react';
 import { paths } from '@/config/paths';
 import { isEnabled, isPathEnabled } from '@/config/features';
 import { brand, landing } from '@/config/tenant';
-import type { LandingData, LandingNeeds } from './loadLanding';
+import type { LandingNeeds, LandingProps } from './loadLanding';
+import { Celebrating, EmptyPrompt, Faq, NewMembers, OurStory } from './extras';
 import l from './welcome.module.css';
 import { Birthdays, Carousel, EventRow, FeatureStory, heroImages, s, SectionHead } from './parts';
 
@@ -15,7 +16,7 @@ export const needs: LandingNeeds = ['blogs', 'events', 'birthdays'];
  * The "welcome home" pattern of Stanford, WashU and Harvard alumni sites: a campus photo with a classmate finder,
  * three pathways (Brown, RISD), a "lifetime of connections" band (Princeton), then one alumni story told at length.
  */
-export default function Welcome({ blogs, events, birthdays }: LandingData) {
+export default function Welcome({ blogs, events, birthdays, story, members, joinedThisWeek }: LandingProps) {
   const images = heroImages();
   const pic = (i: number) => images[i % images.length];
   const pathways = [
@@ -115,27 +116,43 @@ export default function Welcome({ blogs, events, birthdays }: LandingData) {
         </div>
       </section>
 
-      {blogs[0] && (
-        <section className={s.sec}>
+      <OurStory story={story} />
+
+      {isEnabled('blog') && (
+        <section className={`${s.sec} ${s.surface}`}>
           <div className={s.wrap}>
             <SectionHead title="Alumni spotlight" href={paths.blog.root} more="All stories" />
-            <FeatureStory blog={blogs[0]} fallback={pic(4)} />
+            {blogs[0] ? (
+              <FeatureStory blog={blogs[0]} fallback={pic(4)} />
+            ) : (
+              <EmptyPrompt href={paths.blog.new} cta="Write your story">
+                Every alumnus has a story: the hostel, the teachers, the road since. Be the first to share yours.
+              </EmptyPrompt>
+            )}
           </div>
         </section>
       )}
 
-      {events.length > 0 && (
-        <section className={`${s.sec} ${s.surface}`}>
+      {isEnabled('events') && (
+        <section className={s.sec}>
           <div className={s.wrap}>
             <SectionHead title="Upcoming events" href={paths.events.root} more="All events" />
-            <div className={s.grid}>
-              {events.slice(0, 3).map((e) => (
-                <EventRow key={e.id} event={e} />
-              ))}
-            </div>
+            {events.length > 0 ? (
+              <div className={s.grid}>
+                {events.slice(0, 3).map((e) => (
+                  <EventRow key={e.id} event={e} />
+                ))}
+              </div>
+            ) : (
+              <EmptyPrompt href={paths.events.new} cta="Suggest a meetup">
+                Nothing on the calendar yet. Suggest a meetup in your city and we will help you gather the batch.
+              </EmptyPrompt>
+            )}
           </div>
         </section>
       )}
+
+      <Celebrating surface />
 
       {birthdays.length > 0 && (
         <section className={s.sec}>
@@ -145,6 +162,9 @@ export default function Welcome({ blogs, events, birthdays }: LandingData) {
           </div>
         </section>
       )}
+
+      <NewMembers members={members} joinedThisWeek={joinedThisWeek} surface />
+      <Faq />
     </>
   );
 }

@@ -11,7 +11,8 @@ import {
 import { paths } from '@/config/paths';
 import { isEnabled, isPathEnabled } from '@/config/features';
 import { landing } from '@/config/tenant';
-import type { LandingData, LandingNeeds } from './loadLanding';
+import type { LandingNeeds, LandingProps } from './loadLanding';
+import { Celebrating, EmptyPrompt, Faq, NewMembers, OurStory } from './extras';
 import l from './spotlight.module.css';
 import { coverUrl, EventDate, fullName, heroImages, newsLabel, s, SectionHead, shortDate } from './parts';
 
@@ -22,7 +23,7 @@ export const needs: LandingNeeds = ['news', 'blogs', 'events', 'albums'];
  * The Princeton and Harvard pattern: a short welcome, one alumni story as the hero, a row of quick links,
  * the latest stories beside what is coming up, and Connect / Volunteer / Give before the footer.
  */
-export default function Spotlight({ news, blogs, events, albums }: LandingData) {
+export default function Spotlight({ news, blogs, events, albums, story, members, joinedThisWeek }: LandingProps) {
   const images = heroImages();
   const pic = (i: number) => images[i % images.length];
   const [lead, ...rest] = blogs;
@@ -117,9 +118,9 @@ export default function Spotlight({ news, blogs, events, albums }: LandingData) 
                 ))}
               </ul>
             ) : (
-              <p className={s.muted}>
-                Every alumnus has a story. <Link href={paths.blog.root}>Write yours</Link>.
-              </p>
+              <EmptyPrompt href={paths.blog.new} cta="Write your story">
+                Every alumnus has a story. Be the first to share yours.
+              </EmptyPrompt>
             )}
           </div>
 
@@ -143,7 +144,8 @@ export default function Spotlight({ news, blogs, events, albums }: LandingData) 
                   </ul>
                 ) : (
                   <p className={s.muted}>
-                    Nothing scheduled right now. <Link href={paths.events.root}>See past events</Link>.
+                    Nothing scheduled right now. <Link href={paths.events.new}>Suggest a meetup</Link> or{' '}
+                    <Link href={paths.events.root}>see past events</Link>.
                   </p>
                 )}
               </div>
@@ -167,21 +169,32 @@ export default function Spotlight({ news, blogs, events, albums }: LandingData) 
         </div>
       </section>
 
-      {isEnabled('gallery') && albumsWithCover.length > 0 && (
-        <section className={s.sec} style={{ paddingTop: 0 }}>
+      <OurStory story={story} surface />
+
+      {isEnabled('gallery') && (
+        <section className={s.sec}>
           <div className={s.wrap}>
             <SectionHead title="From the albums" href={paths.gallery.root} more="Gallery" />
-            <div className={l.strip}>
-              {albumsWithCover.map((a) => (
-                <Link key={a.id} href={paths.gallery.getAlbumDetailUrl(a.id as string)}>
-                  <img src={a.coverImage as string} alt="" loading="lazy" />
-                  <span>{a.title}</span>
-                </Link>
-              ))}
-            </div>
+            {albumsWithCover.length > 0 ? (
+              <div className={l.strip}>
+                {albumsWithCover.map((a) => (
+                  <Link key={a.id} href={paths.gallery.getAlbumDetailUrl(a.id as string)}>
+                    <img src={a.coverImage as string} alt="" loading="lazy" />
+                    <span>{a.title}</span>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <EmptyPrompt href={paths.gallery.root} cta="Open the gallery">
+                No albums yet. Reunion, fest or farewell: share the photos sitting on your phone.
+              </EmptyPrompt>
+            )}
           </div>
         </section>
       )}
+
+      <Celebrating surface />
+      <NewMembers members={members} joinedThisWeek={joinedThisWeek} />
 
       {tri.length > 0 && (
         <section className={`${s.sec} ${s.surface}`}>
@@ -198,6 +211,8 @@ export default function Spotlight({ news, blogs, events, albums }: LandingData) 
           </div>
         </section>
       )}
+
+      <Faq />
     </>
   );
 }

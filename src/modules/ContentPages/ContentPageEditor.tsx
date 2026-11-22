@@ -248,7 +248,7 @@ const EditorForm = ({
                 variant="text"
                 startIcon={<IconExternalLink size={18} />}
                 disabled={!live}
-                onClick={() => window.open(`${path}/`, '_blank', 'noopener')}
+                onClick={() => window.open(path.includes('#') ? path : `${path}/`, '_blank', 'noopener')}
               />
             </PublishPanel>
           }

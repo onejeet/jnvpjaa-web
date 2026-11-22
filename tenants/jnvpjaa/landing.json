@@ -37,6 +37,32 @@
     "title": "Your batch is already here.",
     "body": "Sign up with your passing year to find batchmates, hear about reunions first and post jobs to the network."
   },
+  "faq": [
+    {
+      "question": "Who can join JNVPJAA?",
+      "answer": "Anyone who studied at JNV Paota, Jaipur, from any batch, and the school's present and former faculty. Choose your passing year when you sign up."
+    },
+    {
+      "question": "Is membership free?",
+      "answer": "Yes. Joining the network, the member directory, events and stories cost nothing. Donations are always optional."
+    },
+    {
+      "question": "How is my account verified?",
+      "answer": "A batch coordinator or an office bearer checks your name and batch against the school records and approves you, usually within a few days."
+    },
+    {
+      "question": "Who can see my phone number and email?",
+      "answer": "Only signed-in, verified members. You can mark your profile confidential to hide your contact details from everyone except office bearers."
+    },
+    {
+      "question": "How are donations used?",
+      "answer": "Donations fund scholarships, mentoring and campus projects. Every rupee is recorded in the association's public accounts."
+    },
+    {
+      "question": "How can I help without donating?",
+      "answer": "Mentor a student, volunteer as a batch coordinator, post a job for the network, or write a story about your school days."
+    }
+  ],
   "giving": {
     "title": "The school gave us a start. Pay it forward.",
     "body": "Alumni fund scholarships, mentoring and campus projects. Every rupee is recorded in the association's public accounts.",

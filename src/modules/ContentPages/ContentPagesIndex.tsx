@@ -83,7 +83,7 @@ const ContentPagesIndex = () => {
                       variant="text"
                       disabled={!shown}
                       startIcon={<IconExternalLink size={16} />}
-                      onClick={() => window.open(`${path}/`, '_blank', 'noopener')}
+                      onClick={() => window.open(path.includes('#') ? path : `${path}/`, '_blank', 'noopener')}
                     />
                   </span>
                 </Tooltip>

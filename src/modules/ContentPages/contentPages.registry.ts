@@ -9,6 +9,8 @@ export const CONTENT_PAGES = {
   'secretary-message': { type: 'message', label: "Secretary's Message", path: '/secretary-message' },
   vision: { type: 'text', label: 'Vision & Mission', path: '/vision' },
   about: { type: 'text', label: 'About', path: '/about' },
+  // Not a page of its own: the "Our story" section on the home page.
+  'home-story': { type: 'message', label: 'Home page: Our story', path: '/#our-story' },
   'past-presidents': { type: 'people-list', label: 'Past Presidents', path: '/past-presidents' },
   // The slug is a fixed URL; each tenant names the page (e.g. "Distinguished Alumni").
   'bhamashah-pillars': { type: 'people-list', label: t('pages.honourRoll'), path: '/bhamashah-pillars' },

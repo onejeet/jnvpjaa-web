@@ -7,7 +7,32 @@
   },
   "vision": "To keep every alumnus connected, and every student who follows us supported.",
   "stats": [],
-  "join": { "title": "Your batch is already here.", "body": "Sign up with your passing year to find your batchmates." },
+  "join": {
+    "title": "Your batch is already here.",
+    "body": "Sign up with your passing year to find your batchmates."
+  },
+  "faq": [
+    {
+      "question": "Who can join?",
+      "answer": "Anyone who studied at the school, from any batch, and its present and former faculty. Choose your passing year when you sign up."
+    },
+    {
+      "question": "Is membership free?",
+      "answer": "Yes. Joining the network, the member directory, events and stories cost nothing. Donations are always optional."
+    },
+    {
+      "question": "How is my account verified?",
+      "answer": "An office bearer checks your name and batch and approves you, usually within a few days."
+    },
+    {
+      "question": "Who can see my contact details?",
+      "answer": "Only signed-in, verified members. You can mark your profile confidential to hide them."
+    },
+    {
+      "question": "How can I help?",
+      "answer": "Mentor a student, volunteer for your batch, post a job for the network, or write a story about your school days."
+    }
+  ],
   "giving": {
     "title": "Pay it forward.",
     "body": "Alumni fund scholarships, mentoring and campus projects.",

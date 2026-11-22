@@ -102,6 +102,11 @@ export const landingSchema = z
     // The association's own published figures; shown as they are written.
     stats: z.array(z.object({ value: text, label: text }).strict()).max(4),
     join: z.object({ title: text, body: text }).strict(),
+    // Home page FAQ; also published as FAQPage structured data.
+    faq: z
+      .array(z.object({ question: text, answer: text }).strict())
+      .max(8)
+      .optional(),
     giving: z
       .object({
         title: text,

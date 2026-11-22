@@ -4,7 +4,7 @@ import { generateSchema, SEO_CONFIG } from '@/config/seo.config';
 import { brand } from '@/config/tenant';
 import LayoutModule from '@/layouts/Layout';
 import LandingFooter from './LandingFooter';
-import { loadLanding, type LandingData, type LandingNeeds } from './loadLanding';
+import { loadLanding, type LandingNeeds, type LandingProps } from './loadLanding';
 import { rootStyle, s } from './parts';
 
 /** A landing layout with the data it needs and its own footer, inside the site shell. */
@@ -12,7 +12,7 @@ export default async function LandingPage({
   Layout,
   needs,
 }: {
-  Layout: ComponentType<LandingData>;
+  Layout: ComponentType<LandingProps>;
   needs: LandingNeeds;
 }) {
   const data = await loadLanding(needs);

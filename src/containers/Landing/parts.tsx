@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { CSSProperties } from 'react';
 import { IconArrowRight, IconMapPin, IconVideo } from '@tabler/icons-react';
-import type { BlogBasic, EventBasic, UserBasic, UserBirthday } from '@/apollo/hooks';
+import type { BlogBasic, EventBasic, UserBirthday } from '@/apollo/hooks';
 import type { NewsPost } from '@/apollo/newsroomOperations';
 import { NEWS_CATEGORY_LABELS } from '@/modules/Newsroom/newsroom.utils';
 import { paths } from '@/config/paths';
@@ -33,8 +33,9 @@ export const heroImages = () => landing.hero.images.map(assetUrl);
 export const coverUrl = (cover: unknown): string | undefined =>
   typeof cover === 'string' ? cover : ((cover as { url?: string } | null)?.url ?? undefined);
 
-export const fullName = (u?: Pick<UserBasic, 'firstName' | 'lastName'> | null) =>
-  [u?.firstName, u?.lastName].filter(Boolean).join(' ');
+type Named = { firstName?: string | null; lastName?: string | null; profileImage?: string | null };
+
+export const fullName = (u?: Named | null) => [u?.firstName, u?.lastName].filter(Boolean).join(' ');
 
 const fmt = (date: string | Date, o: Intl.DateTimeFormatOptions) =>
   new Intl.DateTimeFormat(seo.language, o).format(new Date(date));
@@ -156,13 +157,7 @@ export function NewsCard({ post, fallback }: { post: NewsPost; fallback: string 
   );
 }
 
-export function Avatar({
-  user,
-  className = s.avatar,
-}: {
-  user: Pick<UserBasic, 'firstName' | 'lastName' | 'profileImage'>;
-  className?: string;
-}) {
+export function Avatar({ user, className = s.avatar }: { user: Named; className?: string }) {
   return user.profileImage ? (
     <SizedImg className={className} src={user.profileImage} size={className === s.avatarSm ? 44 : 64} />
   ) : (

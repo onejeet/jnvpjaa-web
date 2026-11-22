@@ -4,6 +4,7 @@ import { expect, test } from '@playwright/test';
 import { landingSchema, LANDING_LAYOUTS } from './tenant.schema';
 import { landing } from './tenant';
 import { safeList } from '../containers/Landing/safeList';
+import { celebratingBatches } from '../containers/Landing/celebrating';
 
 test('every tenant landing config parses and the live tenant keeps the classic home page', () => {
   expect(LANDING_LAYOUTS).toEqual(['classic', 'homecoming', 'welcome', 'spotlight', 'impact']);
@@ -35,4 +36,17 @@ test('a failing landing query yields an empty list so its section hides', async 
       (d: any) => d.x
     )
   ).toEqual([1, 2]);
+});
+
+test('batches celebrating are the 10, 25 and 50 year batches that exist', () => {
+  expect(celebratingBatches(2026).map((b) => b.batch)).toEqual([2016, 2001]);
+  expect(celebratingBatches(2043).map((b) => b.batch)).toEqual([2033, 2018, 1993]);
+});
+
+test('the FAQ is optional and capped at eight questions', () => {
+  const { faq, ...rest } = landing;
+  expect(landingSchema.safeParse(rest).success).toBe(true);
+  const nine = Array.from({ length: 9 }, (_, i) => ({ question: `Q${i}`, answer: 'A' }));
+  expect(landingSchema.safeParse({ ...landing, faq: nine }).success).toBe(false);
+  expect(faq?.length).toBeGreaterThan(0);
 });

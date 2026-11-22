@@ -2,9 +2,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { IconArrowRight, IconHeartHandshake, IconReceipt } from '@tabler/icons-react';
 import { paths } from '@/config/paths';
-import { isPathEnabled } from '@/config/features';
+import { isEnabled, isPathEnabled } from '@/config/features';
 import { brand, landing } from '@/config/tenant';
-import type { LandingData, LandingNeeds } from './loadLanding';
+import type { LandingNeeds, LandingProps } from './loadLanding';
+import { Celebrating, EmptyPrompt, Faq, NewMembers, OurStory } from './extras';
 import l from './impact.module.css';
 import { FeatureStory, heroImages, s, SectionHead } from './parts';
 
@@ -15,7 +16,7 @@ export const needs: LandingNeeds = ['blogs'];
  * The giving pattern of Vassar, Creighton and Lehigh: purpose first, then what alumni have already done,
  * where support goes, one story that shows it, and a short list of ways to give.
  */
-export default function Impact({ blogs }: LandingData) {
+export default function Impact({ blogs, story, members, joinedThisWeek }: LandingProps) {
   const images = heroImages();
   const pic = (i: number) => images[i % images.length];
   const { giving } = landing;
@@ -72,6 +73,8 @@ export default function Impact({ blogs }: LandingData) {
         </section>
       )}
 
+      <OurStory story={story} surface />
+
       {giving.areas.length > 0 && (
         <section className={`${s.sec} ${s.surface}`}>
           <div className={s.wrap}>
@@ -98,14 +101,23 @@ export default function Impact({ blogs }: LandingData) {
         </section>
       )}
 
-      {blogs[0] && (
+      {isEnabled('blog') && (
         <section className={s.sec}>
           <div className={s.wrap}>
             <SectionHead title="A story from the network" href={paths.blog.root} more="All stories" />
-            <FeatureStory blog={blogs[0]} fallback={pic(1)} />
+            {blogs[0] ? (
+              <FeatureStory blog={blogs[0]} fallback={pic(1)} />
+            ) : (
+              <EmptyPrompt href={paths.blog.new} cta="Write your story">
+                Every alumnus has a story: the hostel, the teachers, the road since. Be the first to share yours.
+              </EmptyPrompt>
+            )}
           </div>
         </section>
       )}
+
+      <Celebrating surface />
+      <NewMembers members={members} joinedThisWeek={joinedThisWeek} />
 
       {ways.length > 0 && (
         <section className={l.imWays}>
@@ -138,6 +150,8 @@ export default function Impact({ blogs }: LandingData) {
           </div>
         </section>
       )}
+
+      <Faq surface />
     </>
   );
 }

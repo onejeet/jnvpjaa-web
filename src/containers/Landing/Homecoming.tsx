@@ -4,7 +4,8 @@ import type { AlbumBasic } from '@/apollo/hooks';
 import { paths } from '@/config/paths';
 import { isEnabled } from '@/config/features';
 import { brand, landing } from '@/config/tenant';
-import type { LandingData, LandingNeeds } from './loadLanding';
+import type { LandingNeeds, LandingProps } from './loadLanding';
+import { Celebrating, EmptyPrompt, Faq, NewMembers, OurStory } from './extras';
 import l from './homecoming.module.css';
 import SizedImg from './SizedImg';
 import { Birthdays, Carousel, EventRow, heroImages, NewsCard, s, SectionHead, StoryCard } from './parts';
@@ -13,7 +14,16 @@ import { Birthdays, Carousel, EventRow, heroImages, NewsCard, s, SectionHead, St
 export const needs: LandingNeeds = ['news', 'blogs', 'events', 'birthdays', 'albums'];
 
 /** Leads with nostalgia: full-bleed campus photos, then the people and plans that bring alumni back. */
-export default function Homecoming({ news, blogs, events, birthdays, albums }: LandingData) {
+export default function Homecoming({
+  news,
+  blogs,
+  events,
+  birthdays,
+  albums,
+  story,
+  members,
+  joinedThisWeek,
+}: LandingProps) {
   const images = heroImages();
   const fallback = (i: number) => images[(i + 1) % images.length];
   return (
@@ -56,18 +66,28 @@ export default function Homecoming({ news, blogs, events, birthdays, albums }: L
         </figure>
       </section>
 
-      {events.length > 0 && (
+      <OurStory story={story} />
+
+      {isEnabled('events') && (
         <section className={`${s.sec} ${s.surface}`}>
           <div className={s.wrap}>
             <SectionHead title="Come back for these" href={paths.events.root} more="All events" />
-            <div className={s.grid}>
-              {events.slice(0, 3).map((e) => (
-                <EventRow key={e.id} event={e} />
-              ))}
-            </div>
+            {events.length > 0 ? (
+              <div className={s.grid}>
+                {events.slice(0, 3).map((e) => (
+                  <EventRow key={e.id} event={e} />
+                ))}
+              </div>
+            ) : (
+              <EmptyPrompt href={paths.events.new} cta="Suggest a meetup">
+                Nothing on the calendar yet. Suggest a meetup in your city and we will help you gather the batch.
+              </EmptyPrompt>
+            )}
           </div>
         </section>
       )}
+
+      <Celebrating />
 
       {news.length > 0 && (
         <section className={s.sec}>
@@ -82,7 +102,7 @@ export default function Homecoming({ news, blogs, events, birthdays, albums }: L
         </section>
       )}
 
-      {blogs.length > 0 && (
+      {isEnabled('blog') && (
         <section className={`${s.sec} ${s.surface}`}>
           <div className={s.wrap}>
             <SectionHead
@@ -91,14 +111,22 @@ export default function Homecoming({ news, blogs, events, birthdays, albums }: L
               href={paths.blog.root}
               more="All stories"
             />
-            <div className={s.grid}>
-              {blogs.slice(0, 3).map((b, i) => (
-                <StoryCard key={b.id} blog={b} fallback={fallback(i + 3)} />
-              ))}
-            </div>
+            {blogs.length > 0 ? (
+              <div className={s.grid}>
+                {blogs.slice(0, 3).map((b, i) => (
+                  <StoryCard key={b.id} blog={b} fallback={fallback(i + 3)} />
+                ))}
+              </div>
+            ) : (
+              <EmptyPrompt href={paths.blog.new} cta="Write your story">
+                Every alumnus has a story: the hostel, the teachers, the road since. Be the first to share yours.
+              </EmptyPrompt>
+            )}
           </div>
         </section>
       )}
+
+      <NewMembers members={members} joinedThisWeek={joinedThisWeek} />
 
       <section className={s.sec}>
         <div className={s.wrap}>
@@ -114,9 +142,14 @@ export default function Homecoming({ news, blogs, events, birthdays, albums }: L
               <Birthdays people={birthdays} />
             </div>
           )}
-          <div style={{ marginTop: 56 }}>
-            <JoinBand />
-          </div>
+        </div>
+      </section>
+
+      <Faq surface />
+
+      <section className={s.sec}>
+        <div className={s.wrap}>
+          <JoinBand />
         </div>
       </section>
     </>

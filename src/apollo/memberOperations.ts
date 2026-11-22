@@ -52,3 +52,9 @@ export const RECENT_MEMBERS = gql`
     }
   }
 `;
+
+export const NEW_MEMBERS_COUNT = gql`
+  query NewMembersCount($days: Int) {
+    newMembersCount(days: $days)
+  }
+`;
