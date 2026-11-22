@@ -13,6 +13,7 @@ import { brand } from '@/config/tenant';
 import { useAuth } from '@/context/AuthContext';
 import ShareProfileButton from './ShareProfileButton';
 import VerifiedSeal from './VerifiedSeal';
+import AlumniMilestoneBadge from '@/components/common/AlumniMilestoneBadge';
 
 const initials = (name: string) =>
   name
@@ -284,6 +285,7 @@ const PublicProfileView: React.FC<{ profile: PublicProfile }> = ({ profile }) =>
                   color="primary"
                   label={profile.isFaculty ? 'Faculty' : profile.batch ? `Batch ${profile.batch}` : 'Alumni'}
                 />
+                {!profile.isFaculty && <AlumniMilestoneBadge batch={profile.batch} />}
                 <Chip size="small" variant="outlined" label={brand.institution.shortName} />
                 {profile.positions.map((position) => (
                   <Chip

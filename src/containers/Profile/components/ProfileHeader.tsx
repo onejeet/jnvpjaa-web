@@ -9,6 +9,7 @@ import SocialLinks from '@/components/common/SocialLinks';
 import { IconPencil, IconLock, IconDotsCircleHorizontal, IconPhotoEdit, IconWorld } from '@tabler/icons-react';
 import { useProfile } from '@/context/ProfileContext';
 import FacultyBadge from '@/components/common/FacultyBadge';
+import AlumniMilestoneBadge from '@/components/common/AlumniMilestoneBadge';
 import Menu from '@/components/core/Menu';
 import React from 'react';
 import { useAlert } from '@/context/AlertContext';
@@ -481,7 +482,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
             <Title
               loading={loading}
               title={
-                <Box display="flex" alignItems="center">
+                <Box display="flex" alignItems="center" flexWrap="wrap" rowGap={0.5}>
                   <Typography
                     variant="body1"
                     fontSize={{
@@ -500,6 +501,9 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
                     />
                   )}
                   {user?.batch === 0 && <FacultyBadge size={26} />}
+                  <Box component="span" ml={{ xs: 0, sm: 1 }} display="inline-flex">
+                    <AlumniMilestoneBadge batch={user?.batch} />
+                  </Box>
                   {user?.isVerified && user?.disabled && (
                     <Chip label="Disabled" color="warning" size="small" sx={{ ml: 1, fontWeight: 600 }} />
                   )}
