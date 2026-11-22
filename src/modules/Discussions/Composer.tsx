@@ -1,10 +1,12 @@
 'use client';
 
 import React from 'react';
+import dynamic from 'next/dynamic';
 import { useMutation, useQuery } from '@apollo/client';
-import { Box, ButtonBase, CircularProgress, IconButton, InputBase, Tooltip, Typography } from '@mui/material';
+import { Box, ButtonBase, CircularProgress, IconButton, InputBase, Popover, Tooltip, Typography } from '@mui/material';
 import { alpha } from '@mui/material/styles';
-import { IconChartBar, IconPhoto, IconPlus, IconX } from '@tabler/icons-react';
+import { IconChartBar, IconMoodSmile, IconPhoto, IconPlus, IconX } from '@tabler/icons-react';
+import { SkinTones } from 'emoji-picker-react';
 import ProfilePicture from '@/components/common/ProfilePicture';
 import Button from '@/components/core/Button';
 import { useAuth } from '@/context/AuthContext';
@@ -29,6 +31,7 @@ import {
 import { EmbedFrame } from './PostMedia';
 import { TAG_COLOR } from './discussion.utils';
 
+const EmojiPicker = dynamic(() => import('emoji-picker-react'), { ssr: false });
 const COUNTER_FROM = 4500;
 const IMAGE_TYPES = 'image/jpeg,image/png,image/webp';
 
@@ -68,6 +71,19 @@ const Composer: React.FC<ComposerProps> = ({ parentId, placeholder, autoFocus, c
   const { user } = useAuth();
   const { showAlert } = useAlert();
   const [body, setBody] = React.useState('');
+  const [emojiAnchor, setEmojiAnchor] = React.useState<HTMLElement | null>(null);
+  const inputRef = React.useRef<HTMLTextAreaElement>(null);
+  const insertEmoji = (emoji: string) => {
+    const input = inputRef.current;
+    const start = input?.selectionStart ?? body.length;
+    const end = input?.selectionEnd ?? body.length;
+    setBody((v) => v.slice(0, start) + emoji + v.slice(end));
+    setEmojiAnchor(null);
+    requestAnimationFrame(() => {
+      input?.focus();
+      input?.setSelectionRange(start + emoji.length, start + emoji.length);
+    });
+  };
   const [tag, setTag] = React.useState<PostTag>('DISCUSSION');
   const [photos, setPhotos] = React.useState<Photo[]>([]);
   const [poll, setPoll] = React.useState<{ options: string[]; days: number } | null>(null);
@@ -198,6 +214,7 @@ const Composer: React.FC<ComposerProps> = ({ parentId, placeholder, autoFocus, c
           autoFocus={autoFocus}
           minRows={compact ? 1 : 2}
           maxRows={14}
+          inputRef={inputRef}
           value={body}
           onChange={(e) => setBody(e.target.value)}
           onKeyDown={(e) => {
@@ -433,6 +450,16 @@ const Composer: React.FC<ComposerProps> = ({ parentId, placeholder, autoFocus, c
               </IconButton>
             </span>
           </Tooltip>
+          <Tooltip title="Emoji">
+            <IconButton
+              aria-label="Insert emoji"
+              sx={toolSx}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={(e) => setEmojiAnchor(e.currentTarget)}
+            >
+              <IconMoodSmile size={20} />
+            </IconButton>
+          </Tooltip>
           <Box ml="auto" display="flex" alignItems="center" gap={1.5}>
             {body.length >= COUNTER_FROM && (
               <Typography
@@ -453,6 +480,21 @@ const Composer: React.FC<ComposerProps> = ({ parentId, placeholder, autoFocus, c
           </Box>
         </Box>
       </Box>
+      <Popover
+        open={!!emojiAnchor}
+        anchorEl={emojiAnchor}
+        onClose={() => setEmojiAnchor(null)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        slotProps={{ paper: { sx: { maxWidth: 'calc(100vw - 24px)' } } }}
+      >
+        <EmojiPicker
+          width="min(350px, calc(100vw - 32px))"
+          lazyLoadEmojis
+          onEmojiClick={({ emoji }) => insertEmoji(emoji)}
+          previewConfig={{ showPreview: false }}
+          defaultSkinTone={SkinTones.MEDIUM_LIGHT}
+        />
+      </Popover>
     </Box>
   );
 };
