@@ -34,7 +34,7 @@ const cardUrl = (username: string, name: string, photo?: string | null) => {
   return `/og/profile/${encodeURIComponent(username)}.png?v=${hash.toString(36)}`;
 };
 
-/** Opens the system share sheet; where there is none, our sheet with the card, link and the usual places to post it. */
+/** Opens our sheet with the card, link, the usual places to post it and, where the device has one, the system share sheet. */
 const ShareProfileButton: React.FC<Props> = ({
   username,
   name,
@@ -61,16 +61,6 @@ const ShareProfileButton: React.FC<Props> = ({
     return () => clearTimeout(id);
   }, [image]);
 
-  // Native share must run straight from the tap (Safari refuses it after an await), so no fetching first.
-  // The link unfurls into the share card; the sheet is only for browsers without native share.
-  const share = () => {
-    if (typeof navigator.share !== 'function') return setOpen(true);
-    const url = new URL(publicProfilePath(username), window.location.origin).toString();
-    navigator.share({ title: `${name} on ${brand.shortName}`, url }).catch((error) => {
-      if (error?.name !== 'AbortError') setOpen(true);
-    });
-  };
-
   return (
     <>
       <Button
@@ -78,7 +68,7 @@ const ShareProfileButton: React.FC<Props> = ({
         variant={variant}
         size={size}
         startIcon={<IconShare3 size={18} />}
-        onClick={share}
+        onClick={() => setOpen(true)}
         sx={{ whiteSpace: 'nowrap', flexShrink: 0 }}
       />
       {open && <ShareSheet username={username} name={name} image={image} onClose={() => setOpen(false)} />}
@@ -96,6 +86,8 @@ const ShareSheet: React.FC<{ username: string; name: string; image: string; onCl
   const [copied, setCopied] = React.useState(false);
   const [imageState, setImageState] = React.useState<'loading' | 'ready' | 'failed'>('loading');
   const [busy, setBusy] = React.useState(false);
+  const [canNativeShare, setCanNativeShare] = React.useState(false);
+  React.useEffect(() => setCanNativeShare(typeof navigator.share === 'function'), []);
   const path = publicProfilePath(username);
   const url = new URL(path, window.location.origin).toString();
   const display = `${brand.domains.site}/@${username}`;
@@ -138,6 +130,12 @@ const ShareSheet: React.FC<{ username: string; name: string; image: string; onCl
       setBusy(false);
     }
   };
+
+  // Straight from the tap, no await first: Safari refuses native share otherwise. The link unfurls into the card.
+  const nativeShare = () =>
+    navigator.share({ title: shareText, url }).catch((error) => {
+      if (error?.name !== 'AbortError') fail('Could not open sharing. Copy the link instead.');
+    });
 
   const encoded = encodeURIComponent(url);
   const targets = [
@@ -244,6 +242,7 @@ const ShareSheet: React.FC<{ username: string; name: string; image: string; onCl
       </Stack>
 
       <Stack direction="row" spacing={1} mt={2} flexWrap="wrap" useFlexGap>
+        {canNativeShare && <Button title="Share" startIcon={<IconShare3 size={18} />} onClick={nativeShare} />}
         <Button
           title="Download image"
           variant="outlined"
