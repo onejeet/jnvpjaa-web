@@ -57,6 +57,7 @@ const PAGE = {
   gallery: { label: 'Photo Gallery', path: '/gallery', description: 'Albums from meets and campus' },
   businesses: { label: 'Business Directory', path: '/businesses', description: 'Businesses run by alumni' },
   jobs: { label: 'Jobs & Internships', path: '/jobs', description: 'Openings shared by alumni' },
+  discussions: { label: 'Discussions', path: '/discussions', description: 'Ask, share and talk with alumni' },
   transactions: { label: 'Billing & Transactions', path: '/billing', description: 'Your payments and receipts' },
   scholarships: {
     label: 'Scholarships',
@@ -76,6 +77,12 @@ const COMMUNITY_MENU: IHeaderMenuItem = {
   label: 'Community',
   path: '/newsroom',
   menu: [PAGE.newsroom, PAGE.events, PAGE.blog],
+};
+
+// Members also get the discussion board, which is closed to visitors.
+const MEMBER_COMMUNITY_MENU: IHeaderMenuItem = {
+  ...COMMUNITY_MENU,
+  menu: [PAGE.discussions, ...COMMUNITY_MENU.menu!],
 };
 
 export const HEADER_MENU: IHeaderMenuItem[] = [
@@ -116,7 +123,7 @@ export const MEMBER_HEADER_MENU: IHeaderMenuItem[] = [
     path: '/donations',
     menu: [PAGE.members, PAGE.gallery, PAGE.businesses, PAGE.jobs, PAGE.scholarships, PAGE.transactions, PAGE.donate],
   },
-  COMMUNITY_MENU,
+  MEMBER_COMMUNITY_MENU,
 ];
 
 const withoutPaths = (items: IHeaderMenuItem[], paths: string[]): IHeaderMenuItem[] =>

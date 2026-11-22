@@ -3,6 +3,7 @@
 import React from 'react';
 import PublicProfilesAdminSettings from './PublicProfilesAdminSettings';
 import AiAdminSettings from './AiAdminSettings';
+import BirthdayEmailAdminSettings from './BirthdayEmailAdminSettings';
 import { useApolloClient, useMutation, useQuery } from '@apollo/client';
 import {
   ACCESS_CATALOG_QUERY,
@@ -1585,6 +1586,7 @@ const AdminPanel = ({ section }: { section: AdminPanelSection }) => {
 
       {selectedTab === 'settings' && isSuperAdmin && <PublicProfilesAdminSettings />}
       {selectedTab === 'settings' && isSuperAdmin && <AiAdminSettings />}
+      {selectedTab === 'settings' && isSuperAdmin && <BirthdayEmailAdminSettings />}
 
       {selectedTab === 'settings' && canSendWelcomeEmail && (
         <Paper

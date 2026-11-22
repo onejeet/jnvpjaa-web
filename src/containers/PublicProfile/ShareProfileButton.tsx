@@ -34,7 +34,7 @@ const cardUrl = (username: string, name: string, photo?: string | null) => {
   return `/og/profile/${encodeURIComponent(username)}.png?v=${hash.toString(36)}`;
 };
 
-/** Opens a sheet with the profile's share card, its link and the usual places to post it. */
+/** Opens the system share sheet; where there is none, our sheet with the card, link and the usual places to post it. */
 const ShareProfileButton: React.FC<Props> = ({
   username,
   name,
@@ -61,6 +61,16 @@ const ShareProfileButton: React.FC<Props> = ({
     return () => clearTimeout(id);
   }, [image]);
 
+  // Native share must run straight from the tap (Safari refuses it after an await), so no fetching first.
+  // The link unfurls into the share card; the sheet is only for browsers without native share.
+  const share = () => {
+    if (typeof navigator.share !== 'function') return setOpen(true);
+    const url = new URL(publicProfilePath(username), window.location.origin).toString();
+    navigator.share({ title: `${name} on ${brand.shortName}`, url }).catch((error) => {
+      if (error?.name !== 'AbortError') setOpen(true);
+    });
+  };
+
   return (
     <>
       <Button
@@ -68,8 +78,7 @@ const ShareProfileButton: React.FC<Props> = ({
         variant={variant}
         size={size}
         startIcon={<IconShare3 size={18} />}
-        onClick={() => setOpen(true)}
-        aria-haspopup="dialog"
+        onClick={share}
         sx={{ whiteSpace: 'nowrap', flexShrink: 0 }}
       />
       {open && <ShareSheet username={username} name={name} image={image} onClose={() => setOpen(false)} />}
@@ -91,7 +100,6 @@ const ShareSheet: React.FC<{ username: string; name: string; image: string; onCl
   const url = new URL(path, window.location.origin).toString();
   const display = `${brand.domains.site}/@${username}`;
   const shareText = `${name} on ${brand.shortName}`;
-  const canNativeShare = typeof navigator !== 'undefined' && typeof navigator.share === 'function';
 
   React.useEffect(() => {
     if (!copied) return;
@@ -114,21 +122,6 @@ const ShareSheet: React.FC<{ username: string; name: string; image: string; onCl
     const response = await fetch(image);
     if (!response.ok) throw new Error('card');
     return new File([await response.blob()], `${username}-${brand.id}.png`, { type: 'image/png' });
-  };
-
-  const nativeShare = async () => {
-    setBusy(true);
-    try {
-      const file = await cardFile().catch(() => null);
-      const withImage = file && navigator.canShare?.({ files: [file] });
-      await navigator.share(
-        withImage ? { files: [file], title: shareText, text: `${shareText}\n${url}` } : { title: shareText, url }
-      );
-    } catch (error: any) {
-      if (error?.name !== 'AbortError') fail('Sharing did not work on this device. Copy the link instead.');
-    } finally {
-      setBusy(false);
-    }
   };
 
   const download = async () => {
@@ -251,15 +244,6 @@ const ShareSheet: React.FC<{ username: string; name: string; image: string; onCl
       </Stack>
 
       <Stack direction="row" spacing={1} mt={2} flexWrap="wrap" useFlexGap>
-        {canNativeShare && (
-          <Button
-            title="Share…"
-            variant="contained"
-            startIcon={<IconShare3 size={18} />}
-            onClick={nativeShare}
-            disabled={busy}
-          />
-        )}
         <Button
           title="Download image"
           variant="outlined"

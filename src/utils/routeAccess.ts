@@ -7,6 +7,7 @@ const EXACT_PROTECTED_ROUTES = [
   '/scholarships',
   '/change-password',
   '/security',
+  '/discussions',
 ];
 
 // Whole path segments only: "/newsroom" or "/blog/new-year" must not count as a "/new" create screen.
